@@ -21,9 +21,6 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import $ from "jquery";
 
 
-import WebSocketService from '../../../../Utils/LiveDataRedisSocket';
-const WEBSOCKET_URI = 'ws://193.239.237.157:6789';
-
 const TradeHistory = () => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -56,7 +53,7 @@ const TradeHistory = () => {
   const [CatagoryData, setCatagoryData] = useState({ loading: true, data: [] });
   const selector = useSelector((state) => state.DashboardSlice);
 
-  useEffect(() => { GetAdminTradingStatus()}, []);
+  useEffect(() => { GetAdminTradingStatus() }, []);
 
   const handleFromDateChange = (e) => { setFromDate(e.target.value); };
   const handleToDateChange = (e) => { setToDate(e.target.value); };
@@ -299,9 +296,9 @@ const TradeHistory = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-       
+
         } else {
-     
+
         }
       });
 
@@ -350,265 +347,263 @@ const TradeHistory = () => {
       }
     });
 
+  const ShowLivePrice = async () => {
 
 
-  // const ShowLivePrice = async () => {
+    let type = { loginType: "API" };
+    let channelList = CreatechannelList;
 
 
-  //   let type = { loginType: "API" };
-  //   let channelList = CreatechannelList;
+    if (UserDetails && UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
+      const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
+      if (res.status === 200) {
+        setSocketState("Ok");
+      }
+      if (res.status === 401 || res.status === '401') {
+        setSocketState("Unauthorized");
 
-  //   if (UserDetails && UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
-  //     const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
+        tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
+          const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
+          calcultateRPL(row, null, previousRow);
+        });
+      }
+      else {
+        if (res.data.stat) {
+          const handleResponse = async (response) => {
 
-  //     if (res.status === 200) {
-  //       setSocketState("Ok");
-  //     }
-  //     if (res.status === 401 || res.status === '401') {
-  //       setSocketState("Unauthorized");
+            $('.BP1_Put_Price_' + response.tk).html();
+            $('.SP1_Call_Price_' + response.tk).html();
+            $(".LivePrice_" + response.tk).html(response.lp);
+            $(".ClosePrice_" + response.tk).html(response.c);
 
-  //       tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
-  //         const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
-  //         calcultateRPL(row, null, previousRow);
-  //       });
-  //     }
-  //     else {
-  //       if (res.data.stat) {
-  //         const handleResponse = async (response) => {
 
-  //           $('.BP1_Put_Price_' + response.tk).html();
-  //           $('.SP1_Call_Price_' + response.tk).html();
-  //           $(".LivePrice_" + response.tk).html(response.lp);
-  //           $(".ClosePrice_" + response.tk).html(response.c);
+            var live_price = response.lp === undefined ? "" : response.lp;
 
+            tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
+              let get_ids = '_id_' + response.tk + '_' + row._id
+              let get_id_token = $('.' + get_ids).html();
 
-  //           var live_price = response.lp === undefined ? "" : response.lp;
+              const get_entry_qty = $(".entry_qty_" + response.tk + '_' + row._id).html();
+              const get_exit_qty = $(".exit_qty_" + response.tk + '_' + row._id).html();
+              const get_exit_price = $(".exit_price_" + response.tk + '_' + row._id).html();
+              const get_entry_price = $(".entry_price_" + response.tk + '_' + row._id).html();
+              const get_entry_type = $(".entry_type_" + response.tk + '_' + row._id).html();
+              const get_exit_type = $(".exit_type_" + response.tk + '_' + row._id).html();
+              const get_Strategy = $(".strategy_" + response.tk + '_' + row._id).html();
 
-  //           tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
-  //             let get_ids = '_id_' + response.tk + '_' + row._id
-  //             let get_id_token = $('.' + get_ids).html();
+              if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
+                if (get_entry_qty !== "" && get_exit_qty !== "") {
 
-  //             const get_entry_qty = $(".entry_qty_" + response.tk + '_' + row._id).html();
-  //             const get_exit_qty = $(".exit_qty_" + response.tk + '_' + row._id).html();
-  //             const get_exit_price = $(".exit_price_" + response.tk + '_' + row._id).html();
-  //             const get_entry_price = $(".entry_price_" + response.tk + '_' + row._id).html();
-  //             const get_entry_type = $(".entry_type_" + response.tk + '_' + row._id).html();
-  //             const get_exit_type = $(".exit_type_" + response.tk + '_' + row._id).html();
-  //             const get_Strategy = $(".strategy_" + response.tk + '_' + row._id).html();
+                  if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
 
-  //             if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
-  //               if (get_entry_qty !== "" && get_exit_qty !== "") {
+                    let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
 
-  //                 if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
+                    if (get_entry_type === "SE") {
+                      rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+                    }
 
-  //                   let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
 
-  //                   if (get_entry_type === "SE") {
-  //                     rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
-  //                   }
+                    if (["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT") {
 
+                      rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
 
-  //                   if (["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT") {
+                      if (get_entry_type === "SE") {
+                        rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                      }
 
-  //                     rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+                    }
 
-  //                     if (get_entry_type === "SE") {
-  //                       rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-  //                     }
 
-  //                   }
 
+                    let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
+                    let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
 
 
-  //                   let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
-  //                   let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
 
 
 
+                    if ((isNaN(finalyupl) || isNaN(rpl))) {
+                      return "-";
+                    } else {
+                      $(".show_rpl_" + response.tk + "_" + get_id_token).html(rpl.toFixed(2));
+                      $(".UPL_" + response.tk + "_" + get_id_token).html(finalyupl.toFixed(2));
+                      $(".TPL_" + response.tk + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
 
+                      ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, rpl.toFixed(2), response.tk, get_id_token);
+                      ShowColor1(".UPL_" + response.tk + "_" + get_id_token, finalyupl.toFixed(2), response.tk, get_id_token);
+                      ShowColor1(".TPL_" + response.tk + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.tk, get_id_token);
+                    }
+                  }
+                }
+              }
 
-  //                   if ((isNaN(finalyupl) || isNaN(rpl))) {
-  //                     return "-";
-  //                   } else {
-  //                     $(".show_rpl_" + response.tk + "_" + get_id_token).html(rpl.toFixed(2));
-  //                     $(".UPL_" + response.tk + "_" + get_id_token).html(finalyupl.toFixed(2));
-  //                     $(".TPL_" + response.tk + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
+              else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
 
-  //                     ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, rpl.toFixed(2), response.tk, get_id_token);
-  //                     ShowColor1(".UPL_" + response.tk + "_" + get_id_token, finalyupl.toFixed(2), response.tk, get_id_token);
-  //                     ShowColor1(".TPL_" + response.tk + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.tk, get_id_token);
-  //                   }
-  //                 }
-  //               }
-  //             }
+                let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
 
-  //             else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
+                if (get_entry_type === "SE") {
+                  abc = ((parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_entry_qty)).toFixed();
+                }
 
-  //               let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
 
-  //               if (get_entry_type === "SE") {
-  //                 abc = ((parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_entry_qty)).toFixed();
-  //               }
+                if (["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT") {
 
+                  abc = (parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_exit_qty);
 
-  //               if (["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT") {
+                  if (get_entry_type === "SE") {
+                    abc = (parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                  }
 
-  //                 abc = (parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_exit_qty);
+                }
 
-  //                 if (get_entry_type === "SE") {
-  //                   abc = (parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-  //                 }
 
-  //               }
 
+                if (isNaN(abc)) {
+                  return "-";
+                } else {
+                  $(".show_rpl_" + response.tk + "_" + get_id_token).html("-");
+                  $(".UPL_" + response.tk + "_" + get_id_token).html(abc);
+                  $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
+                  ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, "-", response.tk, get_id_token);
+                  ShowColor1(".UPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
+                  ShowColor1(".TPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
+                }
+              }
 
+              //  if Only Exist qty Exist
+              else if (
+                (get_entry_type === "" && get_exit_type === "LX") ||
+                (get_entry_type === "" && get_exit_type === "SX")
+              ) {
+              } else {
+              }
+            });
 
-  //               if (isNaN(abc)) {
-  //                 return "-";
-  //               } else {
-  //                 $(".show_rpl_" + response.tk + "_" + get_id_token).html("-");
-  //                 $(".UPL_" + response.tk + "_" + get_id_token).html(abc);
-  //                 $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
-  //                 ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, "-", response.tk, get_id_token);
-  //                 ShowColor1(".UPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
-  //                 ShowColor1(".TPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
-  //               }
-  //             }
 
-  //             //  if Only Exist qty Exist
-  //             else if (
-  //               (get_entry_type === "" && get_exit_type === "LX") ||
-  //               (get_entry_type === "" && get_exit_type === "SX")
-  //             ) {
-  //             } else {
-  //             }
-  //           });
+            // }
+          };
+          await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
+        } else {
+          // $(".UPL_").html("-");
+          // $(".show_rpl_").html("-");
+          // $(".TPL_").html("-");
+        }
+      }
 
 
-  //           // }
-  //         };
-  //         await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
-  //       } else {
-  //         // $(".UPL_").html("-");
-  //         // $(".show_rpl_").html("-");
-  //         // $(".TPL_").html("-");
-  //       }
-  //     }
 
+    }
+    else {
 
+      tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
 
-  //   }
-  //   else {
+        let get_ids = '_id_' + row.token + '_' + row._id
+        let get_id_token = $('.' + get_ids).html();
 
-  //     tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
+        const get_entry_qty = $(".entry_qty_" + row.token + '_' + row._id).html();
+        const get_exit_qty = $(".exit_qty_" + row.token + '_' + row._id).html();
+        const get_exit_price = $(".exit_price_" + row.token + '_' + row._id).html();
+        const get_entry_price = $(".entry_price_" + row.token + '_' + row._id).html();
+        const get_entry_type = $(".entry_type_" + row.token + '_' + row._id).html();
+        const get_exit_type = $(".exit_type_" + row.token + '_' + row._id).html();
+        const get_Strategy = $(".strategy_" + row.token + '_' + row._id).html();
 
-  //       let get_ids = '_id_' + row.token + '_' + row._id
-  //       let get_id_token = $('.' + get_ids).html();
 
-  //       const get_entry_qty = $(".entry_qty_" + row.token + '_' + row._id).html();
-  //       const get_exit_qty = $(".exit_qty_" + row.token + '_' + row._id).html();
-  //       const get_exit_price = $(".exit_price_" + row.token + '_' + row._id).html();
-  //       const get_entry_price = $(".entry_price_" + row.token + '_' + row._id).html();
-  //       const get_entry_type = $(".entry_type_" + row.token + '_' + row._id).html();
-  //       const get_exit_type = $(".exit_type_" + row.token + '_' + row._id).html();
-  //       const get_Strategy = $(".strategy_" + row.token + '_' + row._id).html();
+        if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
 
+          if (get_entry_qty !== "" && get_exit_qty !== "") {
+            if (parseInt(get_entry_qty) == parseInt(get_exit_qty)) {
 
-  //       if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
+              let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+              if (get_entry_type === "SE") {
+                rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+              }
 
-  //         if (get_entry_qty !== "" && get_exit_qty !== "") {
-  //           if (parseInt(get_entry_qty) == parseInt(get_exit_qty)) {
+              if (["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT") {
 
-  //             let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-  //             if (get_entry_type === "SE") {
-  //               rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
-  //             }
+                rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
 
-  //             if (["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT") {
+                if (get_entry_type === "SE") {
+                  rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                }
 
-  //               rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+              }
 
-  //               if (get_entry_type === "SE") {
-  //                 rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-  //               }
 
-  //             }
 
+              let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
+              let finalyupl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * upl;
 
+              if ((isNaN(finalyupl) || isNaN(rpl))) {
+                return "-";
+              } else {
 
-  //             let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
-  //             let finalyupl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * upl;
+                $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+                $(".UPL_" + row.token + "_" + get_id_token).html(finalyupl.toFixed(2));
+                $(".TPL_" + row.token + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
 
-  //             if ((isNaN(finalyupl) || isNaN(rpl))) {
-  //               return "-";
-  //             } else {
+                ShowColor1(".show_rpl_" + row.token + "_" + get_id_token, rpl.toFixed(2), row.token, get_id_token);
+                ShowColor1(".UPL_" + row.token + "_" + get_id_token, finalyupl.toFixed(2), row.token, get_id_token);
+                ShowColor1(".TPL_" + row.token + "_" + get_id_token, (finalyupl + rpl).toFixed(2), row.token, get_id_token);
+              }
+            }
+          }
+        }
+        //  if Only entry qty Exist
+        else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
 
-  //               $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
-  //               $(".UPL_" + row.token + "_" + get_id_token).html(finalyupl.toFixed(2));
-  //               $(".TPL_" + row.token + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
 
-  //               ShowColor1(".show_rpl_" + row.token + "_" + get_id_token, rpl.toFixed(2), row.token, get_id_token);
-  //               ShowColor1(".UPL_" + row.token + "_" + get_id_token, finalyupl.toFixed(2), row.token, get_id_token);
-  //               ShowColor1(".TPL_" + row.token + "_" + get_id_token, (finalyupl + rpl).toFixed(2), row.token, get_id_token);
-  //             }
-  //           }
-  //         }
-  //       }
-  //       //  if Only entry qty Exist
-  //       else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
+          let abc = ((parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
 
+          if (get_entry_type === "SE") {
+            abc = ((parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_entry_qty)).toFixed();
+          }
 
-  //         let abc = ((parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
 
-  //         if (get_entry_type === "SE") {
-  //           abc = ((parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_entry_qty)).toFixed();
-  //         }
+          if (["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT") {
 
+            abc = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
 
-  //         if (["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT") {
+            if (get_entry_type === "SE") {
+              abc = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+            }
 
-  //           abc = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+          }
 
-  //           if (get_entry_type === "SE") {
-  //             abc = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-  //           }
 
-  //         }
 
+          if (isNaN(abc)) {
+            return "-";
+          } else {
+            $(".show_rpl_" + row.token + "_" + get_id_token).html("-");
+            $(".UPL_" + row.token + "_" + get_id_token).html(abc);
+            $(".TPL_" + row.token + "_" + get_id_token).html(abc);
+            ShowColor1(".show_rpl_" + row.token + "_" + get_id_token, "-", row.token, get_id_token);
+            ShowColor1(".UPL_" + row.token + "_" + get_id_token, abc, row.token, get_id_token);
+            ShowColor1(".TPL_" + row.token + "_" + get_id_token, abc, row.token, get_id_token);
+          }
+        }
 
+        //  if Only Exist qty Exist
+        else if (
+          (get_entry_type === "" && get_exit_type === "LX") ||
+          (get_entry_type === "" && get_exit_type === "SX")
+        ) {
+        } else {
+        }
 
-  //         if (isNaN(abc)) {
-  //           return "-";
-  //         } else {
-  //           $(".show_rpl_" + row.token + "_" + get_id_token).html("-");
-  //           $(".UPL_" + row.token + "_" + get_id_token).html(abc);
-  //           $(".TPL_" + row.token + "_" + get_id_token).html(abc);
-  //           ShowColor1(".show_rpl_" + row.token + "_" + get_id_token, "-", row.token, get_id_token);
-  //           ShowColor1(".UPL_" + row.token + "_" + get_id_token, abc, row.token, get_id_token);
-  //           ShowColor1(".TPL_" + row.token + "_" + get_id_token, abc, row.token, get_id_token);
-  //         }
-  //       }
 
-  //       //  if Only Exist qty Exist
-  //       else if (
-  //         (get_entry_type === "" && get_exit_type === "LX") ||
-  //         (get_entry_type === "" && get_exit_type === "SX")
-  //       ) {
-  //       } else {
-  //       }
 
 
 
+      });
 
 
-  //     });
+    }
 
 
-  //   }
-
-
-  // };
+  };
 
   const calcultateRPL = (row, livePrice, pre_row) => {
 
@@ -646,150 +641,9 @@ const TradeHistory = () => {
     }
   };
 
-
-  // useEffect(() => {
-  //   ShowLivePrice();
-  // }, [tradeHistoryData.data, SocketState, UserDetails]);
-
-
- 
-
-   useEffect(() => {
-        const webSocketService = new WebSocketService(WEBSOCKET_URI);
-        const handleMessage = (response) => {
-      //  console.log("response trade history",response)
-    $('.BP1_Put_Price_' + response.token).html();
-    $('.SP1_Call_Price_' + response.token).html();
-    $(".LivePrice_" + response.token).html(response.price);
-    // $(".ClosePrice_" + response.token).html(response.c);
-
-
-    var live_price = response.price === undefined ? "" : response.price;
-    tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
-      let get_ids = '_id_' + response.token + '_' + row._id
-      let get_id_token = $('.' + get_ids).html();
-
-      const get_entry_qty = $(".entry_qty_" + response.token + '_' + row._id).html();
-      const get_exit_qty = $(".exit_qty_" + response.token + '_' + row._id).html();
-      const get_exit_price = $(".exit_price_" + response.token + '_' + row._id).html();
-      const get_entry_price = $(".entry_price_" + response.token + '_' + row._id).html();
-      const get_entry_type = $(".entry_type_" + response.token + '_' + row._id).html();
-      const get_exit_type = $(".exit_type_" + response.token + '_' + row._id).html();
-      const get_Strategy = $(".strategy_" + response.token + '_' + row._id).html();
-
-      if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
-        if (get_entry_qty !== "" && get_exit_qty !== "") {
-
-          if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
-
-            let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-
-            if (get_entry_type === "SE") {
-              rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
-            }
-
-
-            if (["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT") {
-
-              rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
-
-              if (get_entry_type === "SE") {
-                rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-              }
-
-            }
-
-
-
-            let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
-            let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
-
-
-
-
-
-            if ((isNaN(finalyupl) || isNaN(rpl))) {
-              return "-";
-            } else {
-              $(".show_rpl_" + response.token + "_" + get_id_token).html(rpl.toFixed(2));
-              $(".UPL_" + response.token + "_" + get_id_token).html(finalyupl.toFixed(2));
-              $(".TPL_" + response.token + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
-
-              ShowColor1(".show_rpl_" + response.token + "_" + get_id_token, rpl.toFixed(2), response.token, get_id_token);
-              ShowColor1(".UPL_" + response.token + "_" + get_id_token, finalyupl.toFixed(2), response.token, get_id_token);
-              ShowColor1(".TPL_" + response.token + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.token, get_id_token);
-            }
-          }
-        }
-      }
-
-      else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
-
-        let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
-
-        if (get_entry_type === "SE") {
-          abc = ((parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_entry_qty)).toFixed();
-        }
-
-
-        if (["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT") {
-
-          abc = (parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_exit_qty);
-
-          if (get_entry_type === "SE") {
-            abc = (parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-          }
-
-        }
-
-
-
-        if (isNaN(abc)) {
-          return "-";
-        } else {
-          $(".show_rpl_" + response.token + "_" + get_id_token).html("-");
-          $(".UPL_" + response.token + "_" + get_id_token).html(abc);
-          $(".TPL_" + response.token + "_" + get_id_token).html(abc);
-          ShowColor1(".show_rpl_" + response.token + "_" + get_id_token, "-", response.token, get_id_token);
-          ShowColor1(".UPL_" + response.token + "_" + get_id_token, abc, response.token, get_id_token);
-          ShowColor1(".TPL_" + response.token + "_" + get_id_token, abc, response.token, get_id_token);
-        }
-      }
-
-     
-      else if (
-        (get_entry_type === "" && get_exit_type === "LX") ||
-        (get_entry_type === "" && get_exit_type === "SX")
-      ) {
-      } else {
-      }
-    });
-
-
-
-
-
-
-        };
-    
-        const handleOpen = () => {
-          console.log('WebSocket connection opened');
-        };
-    
-        const handleClose = () => {
-          console.log('WebSocket connection closed');
-        };
-    
-        const handleError = (error) => {
-          console.error('WebSocket error:', error);
-        };
-    
-        const disconnect = webSocketService.connect(handleMessage, handleOpen, handleClose, handleError);
-    
-        return () => {
-          disconnect();
-        };
-      }, []);
+  useEffect(() => {
+    ShowLivePrice();
+  }, [tradeHistoryData.data, SocketState, UserDetails]);
 
   const GetAllStrategyName = async (e) => {
     await dispatch(
@@ -922,7 +776,7 @@ const TradeHistory = () => {
       });
   };
 
-// CONDITION  MANAGE TO LIVE PRICE SHOW
+  // CONDITION  MANAGE TO LIVE PRICE SHOW
   if (selector && selector.permission) {
     if (selector.permission && selector.permission.data && selector.permission.data[0]) {
       if (selector.permission.data[0].live_price == 0) {
@@ -930,7 +784,7 @@ const TradeHistory = () => {
       }
     }
   }
-  
+
   const handleInputChange = (e) => {
     const value = e.target.value;
     const isValidNumber = /^\d+$/.test(value);
@@ -1124,12 +978,3 @@ const TradeHistory = () => {
 };
 
 export default TradeHistory;
-
-
-
-
-
-
-
-
-

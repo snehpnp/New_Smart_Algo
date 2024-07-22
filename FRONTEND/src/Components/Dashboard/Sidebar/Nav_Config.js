@@ -242,14 +242,17 @@ export const supper_admin_sidebar = [
         Icon: 'WalletCards',
         Data: []
     },
-    {
-        id: 7,
-        name: 'Query-Update',
-        Icon: 'HelpingHand',
-        route: '/super/query',
-        Data: []
-    }
-];
+
+     {
+        'id': 7,
+        "name": 'Faq',
+        "Icon": "HelpingHand",
+        "route": "/super/update/faq",
+        "Data": []
+    },
+    
+]
+
 
 export const sub_admin_sidebar = [
     {

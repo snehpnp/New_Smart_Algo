@@ -444,7 +444,7 @@ class Employee {
               role: data[0].Role,
               user_id: data[0]._id,
             });
-             res.send({ status: true, msg: "successfully Add!", data: data[0] });
+            res.send({ status: true, msg: "successfully Add!", data: data[0] });
 
 
 
@@ -943,6 +943,7 @@ class Employee {
         demat_userid: req.demat_userid,
         service_given_month: req.service_given_month,
         multiple_strategy_select: req.multiple_strategy_select,
+        Is_Active: "1"
       };
 
       const User_Update = await User_model.updateOne(
@@ -1122,10 +1123,7 @@ class Employee {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
 
-
-
       const getAllClients = await User_model.find(AdminMatch).sort({ CreateDate: -1 });
-
       // IF DATA NOT EXIST
       if (getAllClients.length == 0) {
         return res.send({
@@ -1595,12 +1593,98 @@ class Employee {
       });
 
     } catch (error) {
-      console.error("Error in DawnloadStatusandResponse:", error);
+     console.log("Error in DawnloadStatusandResponse:", error);
       return res.status(500).json({ status: false, msg: "Internal Server Error", error });
     }
   }
 
 
+  async GetAllStarClients(req, res) {
+    try {
+      const { Find_Role, user_ID } = req.body;
+
+      // GET ALL CLIENTS
+      var AdminMatch;
+
+      if (Find_Role == "ADMIN") {
+        AdminMatch = { Role: "USER", starClient: "1" };
+      } else if (Find_Role == "SUBADMIN") {
+        AdminMatch = { Role: "USER", parent_id: user_ID, starClient: "1" };
+      }
+
+      const getAllClients = await User_model.find(AdminMatch).sort({ CreateDate: -1 });
+      // IF DATA NOT EXIST
+      if (getAllClients.length == 0) {
+        return res.send({
+          status: false,
+          msg: "Empty data",
+          data: [],
+          // totalCount: totalCount,
+        });
+      }
+
+      // DATA GET SUCCESSFULLY
+      return res.send({
+        status: true,
+        msg: "Get All Clients",
+        data: getAllClients,
+
+      });
+    } catch (error) {
+      console.log("Error loginClients Error-", error);
+      return res.send({
+        status: false,
+        msg: "Empty data",
+        data: [],
+        // totalCount: totalCount,
+      });
+    }
+  }
+
+
+
+  // CLIENTS ACTIVE INACTIVE STATUS UPDATE
+  async UpdateStarStatus(req, res) {
+    try {
+      const { id, StarStatus } = req.body;
+
+      console.log("id, StarStatus", id, StarStatus);
+
+      // Retrieve the user
+      const getUser = await User_model.findById(id);
+      if (!getUser) {
+        return res.status(404).send({
+          status: false,
+          msg: "User not found",
+          data: [],
+          totalCount: 0,
+        });
+      }
+
+      const filter = { _id: new ObjectId(id) };
+      const updateOperation = {
+        $set: {
+          starClient: StarStatus,
+        },
+      };
+
+      const result = await User_model.updateOne(filter, updateOperation);
+
+      return res.send({
+        status: true,
+        msg: "Update Successfully",
+        data: [],
+      });
+
+      
+    } catch (error) {
+      return res.status(500).send({
+        status: false,
+        msg: "Internal Server Error",
+        error: error.message,
+      });
+    }
+  }
 
 
 

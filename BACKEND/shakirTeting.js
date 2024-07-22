@@ -2466,7 +2466,7 @@ app.get("/remain_get_token",async (req,res)=>{
     ];
 
     const get_view_data = await collection.aggregate(pipeline).toArray();
-    // console.log('Data with selected fields:', get_view_data);
+
     let get_final_data = ""
     if (market_status == "open") {
       get_final_data = get_view_data.map(item => item.open);

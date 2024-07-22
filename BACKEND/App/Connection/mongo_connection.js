@@ -18,7 +18,6 @@ connection.on("error", (error) => {
 
 connection.once("open", () => {
   console.log("Connected to MongoDB");
-  // Add your logic here for a successful connection
 });
 
 

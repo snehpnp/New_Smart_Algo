@@ -42,8 +42,7 @@ module.exports = function (app) {
 
             websocket.onmessage = async (event) => {
                 const message = JSON.parse(event.data);
-                console.log('Received message:', message);
-            console.log('Received message:', message.token);
+           
                 try {
                     if (message.token != undefined) {
                         const currentDate = new Date();
@@ -62,11 +61,8 @@ module.exports = function (app) {
                     } else {
                         console.log('Not token'); // Handle strings without a colon
                     }
-                    // const response = JSON.parse(message);
-                    // console.log('Parsed response:', response);
-                    // Process the response data here
+             
                 } catch (error) {
-                    console.error('Error parsing JSON:', error);
                 }
             };
 

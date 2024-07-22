@@ -15,10 +15,14 @@ async function createViewMotilalOswal() {
 
   // All Client Trading on view
   try {
+    const views = await db.listCollections({ name: 'MotilalOswalView' }).toArray();
 
-    const currentDate = new Date(); // Get the current date and time
+    if (views.length > 0) {
+      console.log('View already exists.');
+      return; 
+    }
 
-    // Define the pipeline to create the view
+    const currentDate = new Date(); 
     const pipeline = [
       {
         $match: {

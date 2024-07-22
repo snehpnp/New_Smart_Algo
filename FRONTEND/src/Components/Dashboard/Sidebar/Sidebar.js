@@ -19,6 +19,8 @@ const Sidebar = ({ ShowSidebar }) => {
     const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
     const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id
     const token = JSON.parse(localStorage.getItem("user_details")).token
+    const user_details = JSON.parse(localStorage.getItem("user_details"))
+
     const goTouser_ID = JSON.parse(localStorage.getItem("user_details_goTo"))
     const [getPermissions, setGetPermissions] = useState([])
     const [admin_permission, setAdmin_permission] = useState([]);
@@ -69,21 +71,29 @@ const Sidebar = ({ ShowSidebar }) => {
     }
 
     const CompanyName = async () => {
-        await dispatch(Get_Company_Logo()).unwrap()
-            .then((response) => {
-                if (response.status) {
-                    $(".logo-abbr").attr('src', response.data && response.data[0].logo);
+        try {
+            const response = await dispatch(Get_Company_Logo()).unwrap();
+            if (response && response.status) {
+                $(".logo-abbr").attr('src', response.data && response.data[0].logo);
 
-                    $(".set_Favicon")
+                let favicon = $("link[rel='icon']").length
+                    ? $("link[rel='icon']")
+                    : $("<link rel='icon' type='image/x-icon' />");
+                favicon.attr('href', response.data && response.data[0].favicon);
+                $('head').append(favicon);
+            }
+        } catch (error) {
+           console.log("Failed to fetch company logo and favicon:", error);
+            $(".logo-abbr").attr('src', 'path/to/default/logo.png');
 
-                    let favicon = $("link[rel='icon']").length
-                        ? $("link[rel='icon']")
-                        : $("<link rel='icon' type='image/x-icon' />");
-                    favicon.attr('href', response.data && response.data[0].favicon);
-                    $('head').append(favicon);
-                }
-            })
+            let favicon = $("link[rel='icon']").length
+                ? $("link[rel='icon']")
+                : $("<link rel='icon' type='image/x-icon' />");
+            favicon.attr('href', 'path/to/default/favicon.ico');
+            $('head').append(favicon);
+        }
     }
+
 
     useEffect(() => {
         data2()
@@ -95,7 +105,6 @@ const Sidebar = ({ ShowSidebar }) => {
         <div className="deznav pt-3" >
             <div className="deznav-scroll">
                 <ul className="metismenu" id="menu">
-
                     {
                         gotodashboard != null ? user_role_goTo === "USER" ? Client && Client.map((item) => {
                             return <>

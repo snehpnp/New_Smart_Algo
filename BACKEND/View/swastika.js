@@ -17,10 +17,15 @@ async function createViewSwastika() {
 console.log("111")
   // All Client Trading on view
   try {
+    const views = await db.listCollections({ name: 'swastikaView' }).toArray();
 
-    const currentDate = new Date(); // Get the current date and time
+    if (views.length > 0) {
+      console.log('View already exists.');
+      return; 
+    }
 
-    // Define the pipeline to create the view
+
+    const currentDate = new Date(); 
     const pipeline = [
       {
         $match: {
@@ -299,8 +304,7 @@ console.log("111")
       }
     ];
    
-    console.log("pipeline",pipeline)
-    // Create the view
+
     await db.createCollection('swastikaView', { viewOn: 'users', pipeline });
 
     console.log('View dhanView created successfully.');

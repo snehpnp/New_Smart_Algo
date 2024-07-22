@@ -18,11 +18,16 @@ module.exports = function (app) {
     });
     
 
-    cron.schedule('15 7 * * *', () => {
+    cron.schedule('15 6 * * *', () => {
         console.log('Run First Time');
         downloadKotakNeotoken();
     });
 
+
+    cron.schedule('15 18 * * *', () => {
+        console.log('Run First Time');
+        downloadKotakNeotoken();
+    });
 
     cron.schedule('20 7 * * *', () => {
         console.log('Run First Time');
@@ -155,7 +160,7 @@ module.exports = function (app) {
                 console.log('Download and extraction completed successfully');
             });
         } catch (err) {
-            console.error('Error:', err);
+           console.log('Error:', err);
         }
     }
 
@@ -256,7 +261,7 @@ module.exports = function (app) {
 
     
         } catch (err) {
-            console.error('Error:', err);
+           console.log('Error:', err);
         }  
 
     }
@@ -318,7 +323,7 @@ module.exports = function (app) {
                     });
                 })
                 .catch(function (error) {
-                    console.error('Error downloading file:', error);
+                   console.log('Error downloading file:', error);
                 });
         })
 
@@ -352,7 +357,7 @@ module.exports = function (app) {
             // Send a response to indicate success
             console.log('Download and extraction completed successfully');
         } catch (err) {
-            console.error('Error:', err);
+           console.log('Error:', err);
         }
     }
 

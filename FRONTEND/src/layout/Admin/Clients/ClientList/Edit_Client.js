@@ -212,7 +212,7 @@ const EditClient = () => {
     for (let index = 1; index <= 1; index++) {
 
       const currentDate = UserData.data.data !== undefined
-        ? new Date(UserData.data.data[0].EndDate)
+        ? new Date(UserData.data.data[0].license_type == 2 ? UserData.data.data[0].EndDate:new Date())
         : new Date();
       const currentYear = currentDate.getFullYear();
       const currentMonth = currentDate.getMonth();
@@ -227,14 +227,7 @@ const EditClient = () => {
     setfirst(Service_Month_Arr);
   }, [UserData.data.data]);
 
-  const brokerOptions = [
-    { label: 'Alice Blue', value: '2' },
-    { label: 'Angel', value: '12' },
-    { label: '5 Paisa', value: '14' },
-    { label: 'Zerodha', value: '15' },
 
-
-  ];
 
 
   let fields = [

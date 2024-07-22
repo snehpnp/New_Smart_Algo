@@ -12,11 +12,17 @@ const db = client.db(process.env.DB_NAME);
 
 async function createViewAngel() {
 
-
-  // All Client Trading on view
   try {
-    // Replace with your actual database name
-    const currentDate = new Date(); // Get the current date and time
+  
+    const views = await db.listCollections({ name: 'angelView' }).toArray();
+
+    if (views.length > 0) {
+      console.log('View already exists.');
+      return; 
+    }
+
+
+    const currentDate = new Date(); 
 
     // Define the pipeline to create the view
     const pipeline = [

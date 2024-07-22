@@ -4,6 +4,8 @@ const panel_model = db.panel_model;
 const User = db.user;
 const ApiCreateInfo = db.api_create_info;
 const Superadmin_History = db.Superadmin_History;
+const Faq_Data = db.Faq_Data;
+
 
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
@@ -16,7 +18,7 @@ class Panel {
     // ADD PANEL IN A COLLECTION
     async AddPanel(req, res) {
         try {
-            const { panel_name, domain, port, key, ip_address, theme_id, backend_rul, parent_id, Create_Strategy, Option_chain, Strategy_plan, broker_id, UserName ,db_url} = req.body.req
+            const { panel_name, domain, port, key, ip_address, theme_id, backend_rul, parent_id, Create_Strategy, Option_chain, Strategy_plan, broker_id, UserName, db_url } = req.body.req
 
             // FIND PANEL NAME DUPLICATE
             const panel_data = await panel_model.findOne({ panel_name: panel_name });
@@ -38,11 +40,10 @@ class Panel {
                 broker_id: broker_id,
                 backend_rul: backend_rul,
                 is_active: 0,
-                db_url:db_url
+                db_url: db_url
             });
             AddPanel.save()
                 .then(async (data) => {
-                    // logger.info('Panel Add successfully', { role: "SUPERADMIN", user_id: parent_id });
 
                     const filter = { panal_name: "111" };
                     const update = {
@@ -64,7 +65,7 @@ class Panel {
                             const response = await axios.get(backend_rul + 'all/brokerview');
                             return response.data;
                         } catch (error) {
-                            console.error('Error fetching broker view data:', error.message);
+                           console.log('Error fetching broker view data:', error.message);
                             throw error;
                         }
                     };
@@ -80,7 +81,7 @@ class Panel {
                                 "client_key": key,
                                 backend_rul: backend_rul,
                                 domain: domain,
-                                db_url:db_url
+                                db_url: db_url
                             });
 
                             let config = {
@@ -100,7 +101,7 @@ class Panel {
                                     console.log(error);
                                 });
                         } catch (error) {
-                            console.error('Error fetching broker view data:', error.message);
+                           console.log('Error fetching broker view data:', error.message);
                             throw error;
                         }
                     };
@@ -130,7 +131,7 @@ class Panel {
                                     console.log(error);
                                 });
                         } catch (error) {
-                            console.error('Error fetching broker view data:', error.message);
+                           console.log('Error fetching broker view data:', error.message);
                             throw error;
                         }
                     };
@@ -317,7 +318,7 @@ class Panel {
                         Strategy_plan: 1,
                         Option_chain: 1,
                         Create_Strategy: 1,
-                        db_url:1
+                        db_url: 1
                     }
                 },
                 {
@@ -346,9 +347,6 @@ class Panel {
             return res.status(500).send({ status: false, msg: "Internal Server Error" });
         }
     }
-
-
-
 
     // Create APi Infor
     async CreateAPiInfo(req, res) {
@@ -392,8 +390,6 @@ class Panel {
             return res.send({ status: false, msg: 'Internal server error', error: error.keyValue });
         }
     }
-
-
 
     // Get All APi Infor
     async GetAllAPiInfo(req, res) {
@@ -470,7 +466,6 @@ class Panel {
         }
     }
 
-
     // Get All APi Infor
     async GetAllAPiInfo_Super(req, res) {
         try {
@@ -504,7 +499,6 @@ class Panel {
         }
     }
 
-
     // Update APi Info
     async UpdateAPiInfo(req, res) {
         try {
@@ -537,20 +531,10 @@ class Panel {
     }
 
 
-
     // GET ONE PANEL AND HIS 
     async GetPanlebroker(req, res) {
         try {
             const { domain } = req.body
-
-            // FIND PANEL NAME DUPLICATE
-            // var domain1 = "http://localhost:3000"
-
-            // if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
-            //     domain1 = "https://trade.pandpinfotech.com"
-            // } else {
-            //     domain1 = domain
-            // }
 
             const Panel_information = await panel_model.findOne({ domain: domain }, 'broker_id');
 
@@ -558,13 +542,12 @@ class Panel {
             if (!Panel_information) {
                 return res.status(409).send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
-            return  res.send({ status: true, msg: "Get Panel Broker", data: Panel_information })
+            return res.send({ status: true, msg: "Get Panel Broker", data: Panel_information })
 
         } catch (error) {
             // console.log("Theme error-", error);
         }
     }
-
 
     // GET SUPER ADMIN HISTORY     
     async GetHistoryData(req, res) {
@@ -605,8 +588,6 @@ class Panel {
             console.log("Error Get all Panels error-", error);
         }
     }
-
-
 
     // UPDAYE QUERY IN ALL PANEL 
     async updateQuery(req, res) {
@@ -652,16 +633,12 @@ class Panel {
             if (!Panel_information) {
                 return res.status(409).send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
-            return  res.send({ status: true, msg: "Get Panel Broker", data: Panel_information, Error: ErrorArray })
+            return res.send({ status: true, msg: "Get Panel Broker", data: Panel_information, Error: ErrorArray })
 
         } catch (error) {
             // console.log("Theme error-", error);
         }
     }
-
-
-
-
 
     async createView(req, res) {
         try {
@@ -700,11 +677,11 @@ class Panel {
                     if (result.ok === 1) {
                         successResults.push({ db_url: url.db_url, status: 'success' });
                     } else {
-                        console.error('Error creating view:', result);
+                       console.log('Error creating view:', result);
                         errorArray.push({ db_url: url.db_url, status: 'failed', error: result });
                     }
                 } catch (error) {
-                    console.error('Error creating view:', error);
+                   console.log('Error creating view:', error);
                     errorArray.push({ db_url: url.db_url, status: 'failed', error: error.message });
                 } finally {
                     await client.close();
@@ -719,15 +696,89 @@ class Panel {
             });
 
         } catch (error) {
-            console.error('View creation error:', error);
+           console.log('View creation error:', error);
             res.status(500).send({ status: false, msg: 'Internal Server Error' });
         }
     }
 
+    async AddFaq(req, res) {
+        try {
+            const { question, answer, answer1, type, image1, image2 } = req.body;
 
+            const AddPanel = new Faq_Data({
+                question,
+                answer,
+                answer1,
+                type,
+                img1: image1,
+                img2: image2
+            });
 
+            const savedData = await AddPanel.save();
+            res.status(201).json({ status: true, msg: "FAQ successfully added!", data: savedData });
+        } catch (error) {
+            if (error.code === 11000) {
+                res.status(409).json({ status: false, msg: 'Duplicate key error', error });
+            } else {
+               console.log('Error adding FAQ:', error);
+                res.status(500).json({ status: false, msg: 'Server error', error });
+            }
+        }
+    }
 
+    async GetAllFaq(req, res) {
+        try {
+            const faqData = await Faq_Data.find();
 
+            res.status(200).json({ status: true, msg: "FAQs retrieved successfully", data: faqData });
+        } catch (error) {
+           console.log('Error retrieving FAQs:', error);
+            res.status(500).json({ status: false, msg: 'Server error', error });
+        }
+    }
+
+    async DeleteFaq(req, res) {
+        const { faqId } = req.body; // Assuming you get the FAQ ID from request parameters
+
+        try {
+            const deletedFaq = await Faq_Data.findByIdAndDelete(faqId);
+
+            if (!deletedFaq) {
+                return res.status(404).json({ status: false, msg: 'FAQ not found' });
+            }
+
+            res.status(200).json({ status: true, msg: 'FAQ deleted successfully', data: deletedFaq });
+        } catch (error) {
+           console.log('Error deleting FAQ:', error);
+            res.status(500).json({ status: false, msg: 'Server error', error });
+        }
+    }
+
+    async UpdateFaq(req, res) {
+        const { id, question, answer, answer1, type, image1, image2 } = req.body;
+
+        try {
+            const existingFaq = await Faq_Data.findById(new ObjectId(id));
+
+            if (!existingFaq) {
+                return res.status(404).json({ status: false, msg: 'FAQ not found' });
+            }
+
+            if (question) existingFaq.question = question;
+            if (answer) existingFaq.answer = answer;
+            if (answer1) existingFaq.answer1 = answer1;
+            if (type) existingFaq.type = type;
+            if (image1) existingFaq.img1 = image1;
+            if (image2) existingFaq.img2 = image2;
+
+            const updatedFaq = await existingFaq.save();
+
+            res.status(200).json({ status: true, msg: 'FAQ updated successfully', data: updatedFaq });
+        } catch (error) {
+           console.log('Error updating FAQ:', error);
+            res.status(500).json({ status: false, msg: 'Server error', error });
+        }
+    }
 
 }
 

@@ -1,37 +1,23 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from 'react'
-import Content from "../../../Components/Dashboard/Content/Content"
-import FullDataTable from '../../../Components/ExtraComponents/Datatable/FullDataTable'
+import Content from "../../../Components/Dashboard/Content/Content";
 import BasicDataTable from '../../../Components/ExtraComponents/Datatable/BasicDataTable'
-import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
-import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content"
-import { Pencil, Trash2 } from 'lucide-react';
+import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice';
+import { Pencil } from 'lucide-react';
 import ToastButton from '../../../Components/ExtraComponents/Alert_Toast'
 import toast from 'react-hot-toast'
 import $ from "jquery"
-import { DisclaimerMessage } from '../../../ReduxStore/Slice/Admin/SystemSlice'
-import { SquarePlus, CirclePlus } from 'lucide-react';
-import { Button, Container, Row, Col, Form } from 'react-bootstrap';
+import { DisclaimerMessage } from '../../../ReduxStore/Slice/Admin/SystemSlice';
+import { Button, Row, Col, Form } from 'react-bootstrap';
 import UpdateCompanyInfo from './UpdateCompanyInfo';
 import UpdateImages from './UpdateImages';
 import UpdateSmptDetails from './UpdateSmptDetails';
-
 import { useDispatch } from "react-redux";
 
 
-import WebSocketService from '../../../Utils/LiveDataRedisSocket';
-import WebSocketServiceForexCrypto from '../../../Utils/LiveDataForexCryptoSocket';
-const WEBSOCKET_URI = 'ws://193.239.237.157:6789';
-
-const WEBSOCKET_URI_FOREX = 'wss://api.tiingo.com/fx';
-const API_KEY = 'bfb6173acfc17ce2afbc73a44015944789678341';
-
 const System = () => {
     const dispatch = useDispatch();
-
     const [diss, setDiss] = useState('');
-    const [messages, setMessages] = useState([]);
-    const [dissArr, setDissArr] = useState([]);
     const [inputs, setInputs] = useState([]);
     const [refresh, setRefresh] = useState(false);
     const [getDissStatus, setDissStatus] = useState('');
@@ -45,7 +31,6 @@ const System = () => {
             .then((response) => {
                 if (response.status) {
                     setDiss(response.data[0].disclaimer);
-                    setDissArr(response.data[0].dissArr);
                     setDissStatus(response.data[0].disclaimer_status);
                     console.log("response.data[0].dissArr", response.data[0].disclaimer_status)
                     setInputs(response.data[0].dissArr);

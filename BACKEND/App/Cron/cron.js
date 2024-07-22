@@ -23,8 +23,6 @@ const live_price = db.live_price;
 const UserMakeStrategy = db.UserMakeStrategy;
 const Get_Option_Chain_modal = db.option_chain_symbols;
 const MainSignals_modal = db.MainSignals
-
-
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const MongoClient = require('mongodb').MongoClient;
@@ -32,12 +30,27 @@ const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const db_main = client.db(process.env.DB_NAME);
 const token_chain_collection = db_main.collection('token_chain');
-
-
-
 const { DashboardView, deleteDashboard } = require('../../View/DashboardData')
-
 const { createView } = require('../../View/Open_position')
+
+const { createViewAlice } = require('../../View/Alice_blue')
+const { createViewAngel } = require('../../View/Angel')
+const { createViewDhan } = require('../../View/dhan')
+const { createViewFivepaisa } = require('../../View/fivepaisa')
+const { createViewFyers } = require('../../View/fyers')
+const { createViewIifl } = require('../../View/Iifl')
+const { createViewKotakNeo } = require('../../View/KotakNeo')
+const { createViewMarketHub } = require('../../View/markethub')
+const { createViewMastertrust } = require('../../View/Mastertrust')
+const { createViewMotilalOswal } = require('../../View/MotilalOswal')
+const { createViewSwastika } = require('../../View/swastika')
+const { createViewUpstox } = require('../../View/Upstox')
+const { createViewZebul } = require('../../View/Zebul')
+const { createViewZerodha } = require('../../View/zerodha')
+const { createViewIcicidirect } = require('../../View/Icicidirectview')
+
+
+
 
 // shedule delete symbol
 cron.schedule('10 23 * * *', () => {
@@ -45,20 +58,17 @@ cron.schedule('10 23 * * *', () => {
     DeleteTokenAliceToken()
 });
 
-
 cron.schedule('0 1 * * *', () => {
     console.log('Delte Dashboard Data');
     deleteDashboard()
     dropOpenPosition()
 });
 
-
 cron.schedule('0 6 * * *', () => {
     console.log('Create Dashboard view');
     DashboardView()
     createView()
 });
-
 
 cron.schedule('5 2 * * *', () => {
     console.log('Run First Time');
@@ -70,32 +80,17 @@ cron.schedule('5 5 * * *', () => {
     LogoutAllUsers()
 });
 
-// cron.schedule('0 8 * * *', () => {
-//     console.log('Run Second Time');
-//     Get_Option_All_Token_Chain()
-// });
-
-
 cron.schedule('1 1 * * *', () => {
     console.log('running a task every minute');
-    //TruncateTable()
     numberOfTrade_count_trade();
 });
-
-// Accelpix Token Update Symbol Update
-// cron.schedule('5 6 * * *', () => {
-//     console.log('running a task every minute');
-//     AccelpixTokenUpdate();
-// });
 
 cron.schedule('10 2 * * *', () => {
     console.log('running TokenSymbolUpdate Cron');
     TokenSymbolUpdate()
 });
 
-
 cron.schedule('*/30 * * * *', () => {
-    //console.log("okk")
     GetStrickPriceFromSheet();
 });
 
@@ -110,12 +105,32 @@ cron.schedule('30 6 * * *', () => {
     TruncateTableTokenChain();
 });
 
+cron.schedule('*/5 * * * *', async () => {
+    await TruncateTableTokenChainAdd_fiveMinute()
+});
 
 
+cron.schedule('* 9 * * *', async () => {
+    Console.log("Run Every 09:00 ", new Date())
+    createViewAlice()
+    createViewAngel()
+    createViewDhan()
+    createViewFivepaisa()
+    createViewFyers()
+    createViewIifl()
+    createViewKotakNeo()
+    createViewMarketHub()
+    createViewMastertrust()
+    createViewMotilalOswal()
+    createViewSwastika()
+    createViewUpstox()
+    createViewZebul()
+    createViewZerodha()
+    createViewIcicidirect()
+});
 
 
 // ========================================================================================================================= START TOEN CHAIN
-
 
 const MainSignalsRemainToken = async () => {
 
@@ -217,6 +232,7 @@ const MainSignalsRemainToken = async () => {
     ]
 
 
+
     const result = await MainSignals_modal.aggregate(pipeline)
 
     result.forEach(async (element) => {
@@ -229,20 +245,15 @@ const MainSignalsRemainToken = async () => {
     });
 
 
-    
+
 
 
 
 
 }
 
-cron.schedule('*/5 * * * *', async () => {
-    await TruncateTableTokenChainAdd_fiveMinute()
-});
-
 const TruncateTableTokenChainAdd_fiveMinute = async () => {
 
-    // console.log("TESTTTTT")
 
     const drop = await db_main.collection('token_chain').deleteMany({});
 
@@ -255,7 +266,6 @@ const TruncateTableTokenChainAdd_fiveMinute = async () => {
     await Alice_Socket();
 
 }
-
 
 const TruncateTableTokenChainAdd = async () => {
 
@@ -273,7 +283,6 @@ const TruncateTableTokenChainAdd = async () => {
 
 
 }
-
 
 const TruncateTableTokenChain = async () => {
 
@@ -489,7 +498,6 @@ const Get_Option_All_Token_Chain = async () => {
     }
 }
 
-
 const Get_Option_All_Token_Chain_stock = async () => {
 
     try {
@@ -700,7 +708,6 @@ const Get_Option_All_Token_Chain_stock = async () => {
     }
 }
 
-
 // =========================================================================================================================
 
 // 1. LOGOUT AND TRADING OFF ALL USER 
@@ -713,7 +720,7 @@ const LogoutAllUsers = async () => {
     if (AppLoginUser.length > 0) {
         AppLoginUser.map(async (user) => {
 
-            const updateValues = { AppLoginStatus: '0',app_login_token:null};
+            const updateValues = { AppLoginStatus: '0', app_login_token: null };
             const updatedDocument = await User.findByIdAndUpdate(user._id, updateValues, {
                 new: true, // To return the updated document
             });
@@ -732,7 +739,7 @@ const LogoutAllUsers = async () => {
     const WebLoginUser = await User.find({ WebLoginStatus: '1' });
     if (WebLoginUser.length > 0) {
         WebLoginUser.map(async (user) => {
-            const updateValues = { WebLoginStatus: '0',web_login_token:null };
+            const updateValues = { WebLoginStatus: '0', web_login_token: null };
             const updatedDocument = await User.findByIdAndUpdate(user._id, updateValues, {
                 new: true, // To return the updated document
             });
@@ -1332,7 +1339,6 @@ const TokenSymbolUpdate = () => {
 
 }
 
-
 const tokenFind = async () => {
     try {
 
@@ -1485,7 +1491,6 @@ const twodaysclient = async () => {
     return UniqueDataArr
 }
 
-
 // Update numberOfTrade_count_trade 0
 const numberOfTrade_count_trade = async () => {
     const update_trade_off = {
@@ -1550,7 +1555,6 @@ const AccelpixTokenUpdate = async () => {
             console.log(error);
         });
 }
-
 
 const GetStrickPriceFromSheet = async () => {
 

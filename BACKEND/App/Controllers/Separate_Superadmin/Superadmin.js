@@ -122,7 +122,7 @@ class SuperAdmin {
             }
 
             // DATA GET SUCCESSFULLY
-            return  res.send({
+            return res.send({
                 status: true,
                 msg: "Get All Subadmins",
                 data: getAllSubAdmins,
@@ -274,7 +274,7 @@ class SuperAdmin {
             return res.send({ status: false, msg: "server side error", data: [] })
         }
     }
-    
+
     async deletedSignal(req, res) {
 
         try {
@@ -322,7 +322,7 @@ class SuperAdmin {
     async DeleteSignal(req, res) {
 
         try {
-            const { id , superadmin_name , panel_name } = req.body;
+            const { id, superadmin_name, panel_name } = req.body;
 
             if (!id) {
                 return res.send({
@@ -382,7 +382,7 @@ class SuperAdmin {
                             await Signals.deleteOne({ _id: sigId });
                         }
                     } catch (error) {
-                        console.error(`Error processing signal id ${sigId}:`, error);
+                        console.log(`Error processing signal id ${sigId}:`, error);
                     }
                 }));
             }
@@ -402,7 +402,7 @@ class SuperAdmin {
                 data: findData
             });
         } catch (error) {
-            console.error("Error in DeleteSignal:", error);
+            console.log("Error in DeleteSignal:", error);
             res.status(500).send({
                 status: false,
                 msg: "An error occurred",
@@ -414,7 +414,7 @@ class SuperAdmin {
 
     async backupSignal(req, res) {
         try {
-            const { id , superadmin_name , panel_name } = req.body;
+            const { id, superadmin_name, panel_name } = req.body;
 
             if (!id) {
                 return res.send({
@@ -473,15 +473,15 @@ class SuperAdmin {
 
                         await Old_MainSignals.deleteOne({ _id: id });
 
-                        
+
                         const superadmin_History = new Superadmin_History({
                             superadmin_name: superadmin_name,
                             panal_name: panel_name,
-                            msg: "Super admin Delete signal" 
+                            msg: "Super admin Delete signal"
                         })
-                        
+
                         await superadmin_History.save()
-                        
+
                         return res.send({
                             status: true,
                             msg: "Data found and backed up successfully",
@@ -489,7 +489,7 @@ class SuperAdmin {
                         });
 
                     } catch (err) {
-                        console.error(`Error finding signal with backup_id ${sglId}:`, err);
+                        console.log(`Error finding signal with backup_id ${sglId}:`, err);
                     }
                 });
             }
@@ -498,7 +498,7 @@ class SuperAdmin {
 
 
         } catch (err) {
-            console.error("Error finding data:", err);
+            console.log("Error finding data:", err);
             res.status(500).send({
                 status: false,
                 msg: "Internal Server Error",
@@ -541,7 +541,7 @@ class SuperAdmin {
     async UpdateUser(req, res) {
 
         try {
-            const { id, FullName, UserName, Email, PhoneNo , superadmin_name , panel_name } = req.body
+            const { id, FullName, UserName, Email, PhoneNo, superadmin_name, panel_name } = req.body
 
             const data = {
                 FullName: FullName,
@@ -578,7 +578,7 @@ class SuperAdmin {
 
     async UserDelete(req, res) {
         try {
-            const { id , panel_name , superadmin_name } = req.body
+            const { id, panel_name, superadmin_name } = req.body
             if (!id) {
                 return res.send({ status: false, msg: "Id is Not Found", data: [] })
             }
@@ -598,7 +598,7 @@ class SuperAdmin {
             const superadmin_History = new Superadmin_History({
                 superadmin_name: superadmin_name,
                 panal_name: panel_name,
-                msg: "Super admin delete User" 
+                msg: "Super admin delete User"
             })
 
             await superadmin_History.save()
@@ -625,7 +625,7 @@ class SuperAdmin {
                 return res.send({ status: false, msg: "Id Not Found", data: [] });
             }
 
-    
+
 
             const getToMonth = await user.aggregate([
                 { $match: { _id: new ObjectId(id) } },
@@ -661,12 +661,16 @@ class SuperAdmin {
                         StartDate: 1
                     }
                 }
-            ]).exec();  
-        
-            return res.send({ status: true, msg: "Get Data", data: getToMonth });
+            ]).exec();
+
+
+
+            const GetCountLicenceDAta = await count_licenses.find({ user_id: id }).sort({ createdAt: -1 })
+
+            return res.send({ status: true, msg: "Get Data", data: getToMonth ,data1:GetCountLicenceDAta});
 
         } catch (err) {
-            console.error(err);  // Log the error for debugging
+            console.log(err);  // Log the error for debugging
             return res.send({ status: false, msg: 'Internal server error', data: [] });
         }
     }

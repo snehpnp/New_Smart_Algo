@@ -12,15 +12,18 @@ const db = client.db(process.env.DB_NAME); // Replace with your actual database 
 
 
 async function createViewMarketHub() {
-
-
-
-  // All Client Trading on view
   try {
 
-    const currentDate = new Date(); // Get the current date and time
+    const views = await db.listCollections({ name: 'markethubView' }).toArray();
 
-    // Define the pipeline to create the view
+    if (views.length > 0) {
+      console.log('View already exists.');
+      return; 
+    }
+
+
+    const currentDate = new Date();
+
     const pipeline = [
       {
         $match: {

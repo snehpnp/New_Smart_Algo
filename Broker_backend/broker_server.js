@@ -242,7 +242,6 @@ app.get('/r', (req, res) => {
 
 // BROKER REQUIRES
 const aliceblue = require('./Broker/aliceblue')
-
 const angel = require('./Broker/angel')
 const fivepaisa = require('./Broker/fivepaisa')
 const zerodha = require('./Broker/zerodha')
@@ -253,7 +252,6 @@ const markethub = require('./Broker/markethub')
 const swastika = require('./Broker/swastika')
 const mastertrust = require('./Broker/mastertrust')
 const kotakneo = require('./Broker/kotakneo')
-
 const iiflView = require('./Broker/Iifl')
 const Motilaloswal = require('./Broker/Motilaloswal')
 const Zebull = require('./Broker/Zebull')
@@ -1277,7 +1275,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
-            
+
             //Process Tading View Client icicidirect
             try {
               const IciciDirectlCollection = db1.collection('icicidirectview');
@@ -1298,17 +1296,6 @@ app.post('/broker-signals', async (req, res) => {
               console.log("Error Get icicidirect Client In view", error);
             }
             //End Process Tading View Client icicidirect 
-
-
-
-
-
-
-
-
-
-
-
 
 
           }
@@ -1340,6 +1327,24 @@ app.post('/broker-signals', async (req, res) => {
           // STRICK
           var strike;
           if (strike == undefined || strike == '') { strike = "0" } else { strike = strike }
+          const Filter_user = db1.collection('Cilents_service_stg');
+          const pipeline = [
+            {
+              $match: {
+                strategy_name: strategy,
+                service_name: input_symbol
+              }
+            },
+            {
+              $group: {
+                _id: "$user_id"
+              }
+            }
+          ];
+
+          const Filter_users = await Filter_user.aggregate(pipeline).toArray();
+
+          const uniqueUserIds = Filter_users.map(user => user._id);
 
 
 
@@ -1369,7 +1374,8 @@ app.post('/broker-signals', async (req, res) => {
               lot_size: find_lot_size,
               MakeStartegyName: MakeStartegyName,
               exit_status: ExitStatus,
-              ft_time: ft_time
+              ft_time: ft_time,
+              users_id: uniqueUserIds ? uniqueUserIds : []
             }
 
             let Signal_req1 = new Signals(Signal_req)
@@ -1422,7 +1428,8 @@ app.post('/broker-signals', async (req, res) => {
               exit_time1: 0,
               complete_trade: 0,
               sl_status: sl_status,
-              MakeStartegyName: MakeStartegyName
+              MakeStartegyName: MakeStartegyName,
+              Entry_users_id: uniqueUserIds ? uniqueUserIds : []
 
             }
             const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
@@ -1494,7 +1501,8 @@ app.post('/broker-signals', async (req, res) => {
                   exit_qty_percent: exit_qty_percent1,
                   exit_qty: result,
                   exit_dt_date: current_date,
-                  exit_status: ExitStatus
+                  exit_status: ExitStatus,
+                  Exit_users_id: uniqueUserIds ? uniqueUserIds : []
                 }
                 updatedData.$addToSet = { signals_id: SignalSave._id };
 
@@ -1516,7 +1524,8 @@ app.post('/broker-signals', async (req, res) => {
                     exit_qty_percent: (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent))),
                     exit_qty: result,
                     exit_dt_date: current_date,
-                    exit_status: ExitStatus
+                    exit_status: ExitStatus,
+                    Exit_users_id: uniqueUserIds ? uniqueUserIds : []
                   }
                   updatedData.$addToSet = { signals_id: SignalSave._id };
 

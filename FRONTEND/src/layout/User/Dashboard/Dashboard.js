@@ -27,47 +27,50 @@ const BrokerResponse = () => {
   const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
   const [updatedData, setUpdatedData] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
-  const [refresh, setrefresh] = useState(false);
+
 
 
   const handleCloseStartegyModal = () => {
     setShowStartegyModal(false);
     setModalsingleValue({})
   }
+
   const handleShowStartegyModal = (data) => {
     setModalsingleValue(data)
     setShowStartegyModal(true);
   }
 
+  const getservice = async () => {
+    await dispatch(
+      User_Dashboard_Data({
+        user_Id: gotodashboard ? GoToDahboard_id.user_id : user_details.user_id,
+        AdminToken: user_details.token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+
+          setDashboardData({
+            loading: false,
+            data: response.services,
+          });
+
+          setStrategy({
+            loading: false,
+            data: response.strategy,
+          });
+
+          setGetServiceStrategy(response.GetServiceStrategy);
+          setStatusStartegy(response.status_startegy);
+        }
+      });
+  };
+
   useEffect(() => {
-    const getservice = async () => {
-      await dispatch(
-        User_Dashboard_Data({
-          user_Id: gotodashboard ? GoToDahboard_id.user_id : user_details.user_id,
-          AdminToken: user_details.token,
-        })
-      )
-        .unwrap()
-        .then((response) => {
-          if (response.status) {
 
-            setDashboardData({
-              loading: false,
-              data: response.services,
-            });
-
-            setStrategy({
-              loading: false,
-              data: response.strategy,
-            });
-
-            setGetServiceStrategy(response.GetServiceStrategy);
-            setStatusStartegy(response.status_startegy);
-          }
-        });
-    };
     getservice();
-  }, [refresh]);
+  }, []);
 
 
 
@@ -232,7 +235,7 @@ const BrokerResponse = () => {
         setIsUpdating(false);
         if (response.status) {
           toast.success(response.msg);
-          window.location.reload()
+          getservice()
 
         } else {
           toast.error(response.msg);
@@ -439,7 +442,6 @@ const BrokerResponse = () => {
               <ToastButton />
 
             </tbody>}
-
         </table>
       </div>
 

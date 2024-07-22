@@ -175,19 +175,19 @@ const Header = ({ ChatBox }) => {
     try {
       const userId = gotodashboard ? UserNamego_localstg.user_id : user_details.user_id;
       const token = gotodashboard ? UserNamego_localstg.token : user_details.token;
-  
+
       const response = await dispatch(
         User_Profile({
           id: userId,
           token: token,
         })
       ).unwrap();
-  
+
       if (response.status) {
         setUserDetails(response.data);
       } else {
         if ((response.msg === "Unauthorized!" || response.msg === "No token provided!!") && !gotodashboard) {
-      
+
           localStorage.clear();
           window.location.reload();
         } else {
@@ -195,11 +195,11 @@ const Header = ({ ChatBox }) => {
         }
       }
     } catch (error) {
-      console.error('Failed to fetch user profile:', error);
+      console.log('Failed to fetch user profile:', error);
       // Handle error accordingly, e.g., show an error message to the user
     }
   };
-  
+
 
   //  GET_USER_DETAILS
   const message_brod = async () => {
@@ -253,7 +253,6 @@ const Header = ({ ChatBox }) => {
 
     if (decoded.exp * 1000 < new Date().getTime()) {
 
-
       const request = {
         userId: user_details.user_id,
         Device: CheckUser,
@@ -294,14 +293,12 @@ const Header = ({ ChatBox }) => {
       .then((response) => {
         if (response.status) {
           $(".Company_logo").html(response.data && response.data[0].panel_name);
-
           $(".set_Favicon")
         }
       })
   }
 
   useEffect(() => {
-
     CompanyName()
   }, []);
 
@@ -313,11 +310,41 @@ const Header = ({ ChatBox }) => {
           <nav className="navbar navbar-expand">
             <div className="collapse navbar-collapse justify-content-between">
               <div className="header-left">
+                {user_role === "USER" && UserDetails.license_type != 1 ? (
+                  <>
+                    <div className="headaer-title">
+                      <h3 className="font-w400 mb-0 pe-1">Api Login </h3>
+                    </div>
 
+                    <div className="Api Login">
+                      <label className="switch mb-0">
+                        <input
+                          type="checkbox"
+                          className="bg-primary"
+                          checked={
+                            UserDetails.TradingStatus === "on" ? true : false
+                          }
+                          onClick={(e) =>
+                            LogIn_WIth_Api(
+                              e.target.checked,
+                              UserDetails.broker,
+                              UserDetails.TradingStatus,
+                              UserDetails
+                            )
+                          }
+                        />
+                        <span className="slider round"></span>
+                      </label>
+                    </div>
+                  </>
+                ) : ("")}
               </div>
+
+
               <ul className="navbar-nav header-right">
-                <li className="nav-item dropdown header-profile ms-2 ">
-                  {user_role === "USER" && UserDetails.license_type != 1 ? (
+
+                <li className="nav-item dropdown header-profile">
+                  {/* {user_role === "USER" && UserDetails.license_type != 1 ? (
                     <>
                       <div className="headaer-title">
                         <h3 className="font-w400 mb-0 pe-1">Api Login </h3>
@@ -344,7 +371,7 @@ const Header = ({ ChatBox }) => {
                         </label>
                       </div>
                     </>
-                  ) : ("")}
+                  ) : ("")} */}
 
                   {gotodashboard != null ? (
                     <>
@@ -360,7 +387,7 @@ const Header = ({ ChatBox }) => {
                     </>
                   ) : ("")}
                 </li>
-                {/* GO TO DASHBOARD */}
+
 
                 <>
                   {user_role === "ADMIN" || user_role === "USER" || (gotodashboard && user_role_goTo == "USER") ?
@@ -389,7 +416,7 @@ const Header = ({ ChatBox }) => {
 
                 </>
 
-                {/*  For Show Notification Box */}
+
                 {user_role === "ADMIN" ? (
                   <>
                     <Notification status="1" NotificationData={getAllClients} />
@@ -405,9 +432,12 @@ const Header = ({ ChatBox }) => {
                   )
                 )}
 
+
                 <li className="nav-item dropdown header-profile ">
                   <DropDown />
                 </li>
+
+
               </ul>
             </div>
           </nav>

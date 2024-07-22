@@ -13,14 +13,15 @@ const db = client.db(process.env.DB_NAME); // Replace with your actual database 
 
 
 async function createViewKotakNeo() {
-
-console.log("111")
-  // All Client Trading on view
   try {
 
-    const currentDate = new Date(); // Get the current date and time
+    const views = await db.listCollections({ name: 'kotakneoView' }).toArray();
 
-    // Define the pipeline to create the view
+    if (views.length > 0) {
+      console.log('View already exists.');
+      return; 
+    }
+
     const pipeline = [
       {
         $match: {
@@ -323,9 +324,7 @@ console.log("111")
         }
       }
     ];
-   
-    console.log("pipeline",pipeline)
-    // Create the view
+
     await db.createCollection('kotakneoView', { viewOn: 'users', pipeline });
 
     console.log('View dhanView created successfully.');

@@ -48,7 +48,7 @@ const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
           toast.error(response.msg);
         }
       } catch (error) {
-        console.error('Error adding licence:', error);
+       console.log('Error adding licence:', error);
         toast.error('Failed to add licence. Please try again.');
       } finally {
         setSubmitting(false); // Reset submitting state regardless of success or failure

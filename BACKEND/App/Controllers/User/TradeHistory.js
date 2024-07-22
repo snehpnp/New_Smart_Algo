@@ -13,8 +13,8 @@ class TradeHistory {
     async GetUserTradeHistory(req, res) {
         try {
 
-           // console.log("req.body ",req.body)
-            const { user_id, startDate, endDate , serviceIndex ,selectStrategy} = req.body;
+            const { user_id, startDate, endDate, serviceIndex, selectStrategy, getType } = req.body;
+
 
             const objectId = new ObjectId(user_id);
 
@@ -57,7 +57,6 @@ class TradeHistory {
                 {
                     $unwind: '$strategys',
                 },
-
                 {
                     $project: {
                         'service.name': 1,
@@ -70,8 +69,10 @@ class TradeHistory {
                 },
             ];
 
+
             const GetAllClientServices = await client_services.aggregate(pipeline)
 
+            console.log("GetAllClientServices", GetAllClientServices)
 
             var abc = [];
             var abc1 = [];
@@ -87,34 +88,44 @@ class TradeHistory {
                     }
 
                     try {
-                        // console.log("client_persnal_key1", item.quantity);
 
-
-                           if (serviceIndex === "null") {
+                        if (serviceIndex === "null") {
                             serIndex = item.service.name
-                            } else {
+                        } else {
                             serIndex = serviceIndex
-                            }
+                        }
 
-                            if (selectStrategy === "null") {
+                        if (selectStrategy === "null") {
                             strategyset = item.strategys.strategy_name
-                            } else {
+                        } else {
                             strategyset = selectStrategy
-                            }
+                        }
+                        console.log("strategyset", strategyset)
 
-                          var data = await MainSignals.aggregate([
+
+                        var MatchPipeline = {
+                            symbol: serIndex,
+                            // strategy: strategyset,
+                            createdAt: {
+                                $gte: new Date(startDate),
+                                $lte: new Date(endDate)
+                            },
+                            client_persnal_key: client_persnal_key1,
+                        };
+
+                        if(getType != "Trade"){
+                        MatchPipeline.strategy = strategyset
+                        }
+
+                        if (getType == "Trade") {
+                            MatchPipeline.$or = [
+                                { Entry_users_id: objectId },
+                            ];
+                        }
+
+                        var data = await MainSignals.aggregate([
                             {
-                                $match: {
-                                   // symbol: item.service.name,
-                                    symbol: serIndex,
-                                    strategy: strategyset,
-                                   // strategy: item.strategys.strategy_name,
-                                    dt_date: {
-                                        $gte: startDate,
-                                        $lte: endDate,
-                                    },
-                                    client_persnal_key: client_persnal_key1
-                                }
+                                $match: MatchPipeline
                             },
                             {
                                 $lookup: {
@@ -126,65 +137,52 @@ class TradeHistory {
                             },
                             {
                                 $sort: {
-                                    _id: -1 // Sort in ascending order. Use -1 for descending.
+                                    _id: -1
                                 }
                             }
-                          ]);
+                        ]);
 
-                          var data1 = await MainSignals.aggregate([
-                            {
-                                $match: {
-                                     symbol: item.service.name,
-                                    strategy: item.strategys.strategy_name,
-                                    dt_date: {
-                                        $gte: startDate,
-                                        $lte: endDate,
-                                    },
-                                    client_persnal_key: client_persnal_key1
-                                }
-                            },
-                            {
-                                $lookup: {
-                                    from: "signals",
-                                    localField: "signals_id",
-                                    foreignField: "_id",
-                                    as: "result",
-                                },
-                            },
-                            {
-                                $sort: {
-                                    _id: -1 // Sort in ascending order. Use -1 for descending.
-                                }
-                            }
-                          ]);
+console.log("data",data)
 
-                          if (data.length > 0) {
-                          //  console.log("data ",data.length)
+
+                        var data1 = data
+
+                        if (data.length > 0) {
+
                             data.forEach(function (item) {
-                          
+
                                 var findstg = GetAllClientServices.find((data) => data.service.name == item.symbol && data.strategys.strategy_name == item.strategy)
-                               // console.log("findstg ",findstg)
-                               //  console.log("item.result ",item.result)
-                              if(findstg != undefined){
-                                item.result.forEach(function (signal) {
+                                if (findstg != undefined) {
+                                    item.result.forEach(function (signal) {
+                                        signal.qty_percent = findstg.quantity * (Math.ceil(Number(signal.qty_percent) / 100) * 100) * 0.01
+                                    });
 
-                                    signal.qty_percent = findstg.quantity * (Math.ceil(Number(signal.qty_percent) / 100) * 100) * 0.01
+                                    item.entry_qty_percent = findstg.quantity * (Math.ceil(Number(item.entry_qty_percent) / 100) * 100) * 0.01,
+                                        item.exit_qty_percent = findstg.quantity * (Math.ceil(Number(item.exit_qty_percent) / 100) * 100) * 0.01
+                                }
 
-                                });
+                                if (item.Exit_users_id.length != 0 && getType == "Trade") {
 
-                                item.entry_qty_percent = findstg.quantity * (Math.ceil(Number(item.entry_qty_percent) / 100) * 100) * 0.01,
-                                    item.exit_qty_percent = findstg.quantity * (Math.ceil(Number(item.exit_qty_percent) / 100) * 100) * 0.01
-                              }
+                                    var matchData = item.Exit_users_id.toString().includes(objectId.toString())
+
+                                    if (matchData) {
+                                        item.exit_type = "";
+                                        item.exit_price = "";
+                                        item.exit_qty_percent = "";
+                                        item.exit_qty = "";
+                                        item.exit_dt_date = "";
+                                    }
+
+                                }
 
                             });
 
                             abc.push(data)
-                          }
+                        }
 
-                          if(data1.length > 0){
-                        //    console.log("data1 ",data1.length)
+                        if (data1.length > 0) {
                             abc1.push(data1)
-                          }
+                        }
 
                     } catch (error) {
                         console.log("Error fetching data:", error);
@@ -193,42 +191,30 @@ class TradeHistory {
 
                 }
             } else {
-                return  res.send({ status: false, data: GetAllClientServices, msg: "Data Empty" })
+                return res.send({ status: false, data: GetAllClientServices, msg: "Data Empty" })
             }
-            
-            //console.log("abc.flat()1 ",abc1.flat())
-             var trade_strategy_filter
-             if(abc1.length >0){
 
-              //  console.log("abc1 ",abc1.flat())
+            var trade_strategy_filter
+            if (abc1.length > 0) {
+
 
                 const groupedDataStrategy = abc1.flat().reduce((acc, curr) => {
                     if (!acc[curr.strategy]) {
-                      acc[curr.strategy] = 1;
+                        acc[curr.strategy] = 1;
                     } else {
-                      acc[curr.strategy]++;
+                        acc[curr.strategy]++;
                     }
                     return acc;
-                  }, {});
-                  
-             trade_strategy_filter = Object.keys(groupedDataStrategy);
-             //console.log("trade_strategy_filter ",trade_strategy_filter)
-    
-             }
+                }, {});
 
-            if (abc.length > 0) {
-               
-                
-               // console.log("trade_strategy_filter ",trade_strategy_filter)
-               return res.send({ status: true, data: abc.flat(), msg: "Get Signals" ,trade_strategy_filter:trade_strategy_filter})
-            } else {
-                return res.send({ status: false, data: [], msg: "Data Empty" })
-
+                trade_strategy_filter = Object.keys(groupedDataStrategy);
             }
 
-
-
-
+            if (abc.length > 0) {
+                return res.send({ status: true, data: abc.flat(), msg: "Get Signals", trade_strategy_filter: trade_strategy_filter })
+            } else {
+                return res.send({ status: false, data: [], msg: "Data Empty" })
+            }
 
         } catch (error) {
             console.log("Error get user trading Status error -", error);

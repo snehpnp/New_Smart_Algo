@@ -60,6 +60,8 @@ module.exports = {
     open_position_excute:open_position_excute,
     dbTradeTools:dbTradeTools,
     Store_all_redis_key : require('./Store_all_redis_key.model'),
+    Faq_Data : require('./Faq.model'),
+
 
 
 };

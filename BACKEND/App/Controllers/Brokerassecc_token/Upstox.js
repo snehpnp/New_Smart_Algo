@@ -110,7 +110,7 @@ class Upstox {
             
                       })
                       .catch(error => {
-                        console.error('Error:', error);
+                       console.log('Error:', error);
                         return res.redirect(redirect_uri);
                       });
 

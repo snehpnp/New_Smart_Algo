@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import Loader from "../../../../Utils/Loader";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
-import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
-import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS, DELETE_USER_SERVICES } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
+import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS, DELETE_USER_SERVICES, UpdateStarClientStatus } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 import * as Config from "../../../../Utils/Config";
 import { useDispatch } from "react-redux";
 import { fa_time, fDateTime } from "../../../../Utils/Date_formet";
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 import { DawnloadDataUser } from "../../../../ReduxStore/Slice/Admin/userSlice";
 import { Download } from 'lucide-react';
@@ -23,56 +22,27 @@ const AllClients = () => {
   const location = useLocation();
   var dashboard_filter = location.search.split("=")[1];
   const dispatch = useDispatch();
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role;
-  const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id;
-  const token = JSON.parse(localStorage.getItem("user_details")).token;
+  const user_details = JSON.parse(localStorage.getItem("user_details"));
 
   const [refresh, setrefresh] = useState(false);
   const [originalData, setOriginalData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [PanelStatus, setPanelStatus] = useState("2");
   const [ClientStatus, setClientStatus] = useState("null");
-  const [SwitchButton, setSwitchButton] = useState(true);
   const [selectBroker, setSelectBroker] = useState("null");
   const [BrokerDetails, setBrokerDetails] = useState([]);
   const [ForGetCSV, setForGetCSV] = useState([])
   const [getAllClients, setAllClients] = useState({ loading: true, data: [] });
-  const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [] });
-
-
-  const GetAllStrategyName = async (e) => {
-    await dispatch(
-      Get_All_Service_for_Client({
-        req: {},
-        token: token,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setAllStrategyName({
-            loading: false,
-            data: response.data,
-          });
-        }
-      });
-  };
-
 
   const Brokerdata = async () => {
 
-    await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain, brokerId: -1, key: 1 })).unwrap()
+    await dispatch(All_Api_Info_List({ token: user_details && user_details.token, url: Config.react_domain, brokerId: -1, key: 1 })).unwrap()
       .then((response) => {
         if (response.status) {
           setBrokerDetails(response.data);
         }
       })
   }
-
-  useEffect(() => {
-    GetAllStrategyName();
-  }, []);
-
 
   const Delete_user = async (id) => {
     var req1 = {
@@ -99,8 +69,8 @@ const AllClients = () => {
   var headerName = "All Clients"
   const data = async () => {
     var req1 = {
-      Find_Role: Role,
-      user_ID: user_ID,
+      Find_Role: user_details && user_details.Role,
+      user_ID: user_details && user_details.user_id,
     };
     await dispatch(GET_ALL_CLIENTS(req1))
       .unwrap()
@@ -205,7 +175,6 @@ const AllClients = () => {
   };
 
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -292,6 +261,41 @@ const AllClients = () => {
     }
   };
 
+  const StarClientFormatter = ({ cell, row }) => {
+    const [isStarred, setIsStarred] = useState(cell === "1");
+
+    const handleToggle = async (e, data) => {
+      const newStarStatus = !isStarred;
+      let req = {
+        id: data._id,
+        StarStatus: newStarStatus ? "1" : "0",
+      };
+      await dispatch(UpdateStarClientStatus(req))
+        .unwrap()
+        .then((response) => {
+
+          if (response.status) {
+            setIsStarred(newStarStatus ? "1" : "0");
+            setrefresh(!refresh)
+            // toast.success(response.msg);
+          } else {
+            // toast.error(response.msg);
+          }
+        });
+    };
+
+    return (
+      <div style={{ width: "100px" }}>
+        <div onClick={(e) => handleToggle(e, row)} style={{ cursor: "pointer" }}>
+          <span data-toggle="tooltip" data-placement="top" title="Trading Status">
+            {isStarred ? <i className="bi bi-star-fill"></i> : <i className="bi bi-star"></i>}
+          </span>
+        </div>
+      </div>
+    );
+  };
+
+
   const columns = [
     {
       dataField: "index",
@@ -306,7 +310,6 @@ const AllClients = () => {
       dataField: "Email",
       text: "Email",
     },
-
     {
       dataField: "FullName",
       text: "Full Name",
@@ -319,7 +322,6 @@ const AllClients = () => {
       dataField: "PhoneNo",
       text: "Phone Number",
     },
-
     {
       dataField: "broker",
       text: "Broker",
@@ -332,7 +334,6 @@ const AllClients = () => {
     },
     {
       dataField: "ActiveStatus",
-
       text: "Status",
       formatter: (cell, row) => (
         <>
@@ -346,7 +347,6 @@ const AllClients = () => {
                 checked={row.ActiveStatus === "1" ? true : false}
                 onChange={(e) => {
                   activeUser(e, row);
-                  setSwitchButton(e.target.checked)
                 }}
               />
               <div className={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
@@ -422,7 +422,6 @@ const AllClients = () => {
       text: "End Date",
       formatter: (cell, row) => row.EndDate ? fa_time(row.EndDate) : "-",
     },
-
     {
       dataField: "actions",
       text: "Actions",
@@ -457,7 +456,6 @@ const AllClients = () => {
         </div>
       ),
     },
-
     {
       dataField: "Downloads",
       text: "Downloads",
@@ -488,7 +486,12 @@ const AllClients = () => {
           </div>
         </div>
       ),
-    }
+    },
+    {
+      dataField: "starClient",
+      text: "Favorite",
+      formatter: (cell, row) => <StarClientFormatter cell={cell} row={row} />,
+    },
   ];
 
   const showBrokerName = (value1, licence_type) => {
@@ -577,7 +580,7 @@ const AllClients = () => {
     await dispatch(
       DawnloadDataUser({
         req: { id: id, key: key },
-        token: token,
+        token: user_details && user_details.token,
       })
     )
       .unwrap()
@@ -600,6 +603,7 @@ const AllClients = () => {
         }
       });
   }
+
 
   return (
     <>

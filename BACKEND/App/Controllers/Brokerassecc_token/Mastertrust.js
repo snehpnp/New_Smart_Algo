@@ -88,8 +88,7 @@ class Mastertrust {
                     axios(config)
                     .then(async function(response) {
                         const accessToken = response.data.access_token;
-                        // console.log('Access Token:', accessToken);
-                        if (accessToken !== undefined) {
+                      if (accessToken !== undefined) {
             
                             let result = await User.findByIdAndUpdate(
                                 Get_User[0]._id,
@@ -116,13 +115,12 @@ class Mastertrust {
                             }
             
                         } else {
-                          // console.log("response", response);
                           return res.redirect(redirect_uri);
                         }
             
                       })
                       .catch(error => {
-                        console.error('Error:', error);
+                       console.log('Error:', error);
                         return res.redirect(redirect_uri);
                       });
 

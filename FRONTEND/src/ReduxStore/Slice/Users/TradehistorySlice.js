@@ -9,9 +9,9 @@ import { GET_TRADE_HISTORY } from "../../../Service/user.service";
 export const Get_Tradehisotry = createAsyncThunk("user/tradhistory", async (apireq) => {
  
     
-    const { user_id, startDate, endDate, serviceIndex, selectStrategy , token } = apireq
+    const { user_id, startDate, endDate, serviceIndex, selectStrategy , token,getType } = apireq
     try {
-        const res = await GET_TRADE_HISTORY({ user_id: user_id, startDate: startDate, endDate: endDate ,serviceIndex:serviceIndex ,selectStrategy:selectStrategy }, token);
+        const res = await GET_TRADE_HISTORY({ user_id: user_id, startDate: startDate, endDate: endDate ,serviceIndex:serviceIndex ,selectStrategy:selectStrategy,getType:getType }, token);
         return await res;
     } catch (err) {
         return err;

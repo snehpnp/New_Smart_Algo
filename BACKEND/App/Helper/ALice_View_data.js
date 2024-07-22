@@ -56,7 +56,7 @@ async function connectToDB(collectionName, response, dbTradeTools) {
             }
         }
     } catch (err) {
-        console.error(err);
+       console.log(err);
     }
 }
 
@@ -102,7 +102,7 @@ async function createView(collectionName, dbTradeTools) {
             });
         }
     } catch (err) {
-        console.error(err);
+       console.log(err);
     }
 }
 
@@ -148,7 +148,7 @@ async function createView1(collectionName, dbTradeTools) {
             });
         }
     } catch (err) {
-        console.error(err);
+       console.log(err);
     }
 }
 
@@ -204,7 +204,7 @@ async function createViewM3(collectionName, dbTradeTools) {
             });
         }
     } catch (err) {
-        console.error(err);
+       console.log(err);
     }
 }
 
@@ -260,7 +260,7 @@ async function createViewM5(collectionName, dbTradeTools) {
             });
         }
     } catch (err) {
-        console.error(err);
+       console.log(err);
     }
 }
 
@@ -316,7 +316,7 @@ async function createViewM10(collectionName, dbTradeTools) {
             });
         }
     } catch (err) {
-        console.error(err);
+       console.log(err);
     }
 }
 
@@ -372,7 +372,7 @@ async function createViewM15(collectionName, dbTradeTools) {
             });
         }
     } catch (err) {
-        console.error(err);
+       console.log(err);
     }
 }
 
@@ -428,7 +428,7 @@ async function createViewM30(collectionName, dbTradeTools) {
             });
         }
     } catch (err) {
-        console.error(err);
+       console.log(err);
     }
 }
 
@@ -484,7 +484,7 @@ async function createViewM60(collectionName, dbTradeTools) {
             });
         }
     } catch (err) {
-        console.error(err);
+       console.log(err);
     }
 }
 
@@ -540,7 +540,7 @@ async function createViewM1DAY(collectionName, dbTradeTools) {
             });
         }
     } catch (err) {
-        console.error(err);
+       console.log(err);
     }
 }
 

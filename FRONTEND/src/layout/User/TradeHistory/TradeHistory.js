@@ -12,35 +12,41 @@ import { Eye, } from "lucide-react";
 import DetailsView from "./DetailsView";
 import { GetAccessToken } from "../../../Service/Alice_Socket";
 import { FunctionForLivePriceCalculation } from "./tradehistoryCalculation";
+import DatePicker from "react-datepicker";
+import Loader from "../../../Utils/Loader";
 
+
+import "react-datepicker/dist/react-datepicker.css";
 
 const TradeHistory = () => {
   const dispatch = useDispatch();
   const token = JSON.parse(localStorage.getItem("user_details")).token;
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
-  const gotodashboard_Details = JSON.parse(localStorage.getItem('user_details_goTo'))
+  const gotodashboard_Details = JSON.parse(localStorage.getItem('user_details_goTo'));
   const [showModal, setshowModal] = useState(false);
   const [SocketState, setSocketState] = useState("null");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const [disableFromDate, setDisableFromDate] = useState(false);
   const [UserDetails, setUserDetails] = useState([]);
   const [rowData, setRowData] = useState("");
   const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
   const [selectStrategy, setSelectStrategy] = useState("null");
   const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
-  const [tradeHistoryData1, setTradeHistoryData1] = useState({ loading: true, data: [] });
-  const [startegyFilterData, setStartegyFilterData] = useState({ loading: true, data: [] });
+  const [getType, setType] = useState("Strategy");
 
-  const handleFromDateChange = (e) => {
-    setFromDate(e.target.value);
+
+  const USerStartDate = useSelector((state) => state.CommonSlice?.profiledata?.data?.CreateDate);
+  const formattedStartDate = USerStartDate ? new Date(USerStartDate).toISOString().split('T')[0] : "";
+
+
+
+  const handleFromDateChange = (data) => {
+    setFromDate(data);
   };
 
-  const handleToDateChange = (e) => {
-    setToDate(e.target.value);
-
-    setDisableFromDate(true);
+  const handleToDateChange = (data) => {
+    setToDate(data);
   };
 
   //  GET BROKER DETAILS
@@ -52,20 +58,30 @@ const TradeHistory = () => {
 
   };
 
+
+
   const getsignals11 = async (e) => {
     let abc = new Date();
-    let month = abc.getMonth() + 1;
-    let date = abc.getDate();
-    let year = abc.getFullYear();
-    let full = `${year}/${month}/${date}`;
+
+    let startDate1 = new Date(abc);
+    startDate1.setHours(0, 1, 0, 0);
+
+    // End of the day
+    let endDate1 = new Date(abc);
+    endDate1.setHours(23, 59, 59, 999);
+
+    const formattedFromDate = fromDate ? fromDate : startDate1;
+    const formattedToDate = toDate ? toDate.setHours(23, 59, 59, 999) : endDate1;
+
     await dispatch(
       Get_Tradehisotry({
         user_id: gotodashboard ? gotodashboard_Details.user_id : user_id,
-        startDate: full,
-        endDate: full,
+        startDate: formattedFromDate,
+        endDate: formattedToDate,
         serviceIndex: SelectServiceIndex,
         selectStrategy: selectStrategy,
         token: token,
+        getType: getType,
       })
     )
       .unwrap()
@@ -76,20 +92,14 @@ const TradeHistory = () => {
             loading: false,
             data: response.data,
           });
-          setTradeHistoryData1({
+
+        } else {
+
+          setTradeHistoryData({
             loading: false,
             data: response.data,
           });
-
-          setStartegyFilterData({
-            loading: false,
-            data: response.trade_strategy_filter,
-          });
         }
-        setTradeHistoryData({
-          loading: false,
-          data: response.data,
-        });
       });
   };
 
@@ -98,10 +108,8 @@ const TradeHistory = () => {
     {
       dataField: "index",
       text: "S.No.",
-      // hidden: true,
       formatter: (cell, row, rowIndex) => rowIndex + 1,
     },
-
     {
       dataField: "createdAt",
       text: "Signals Entry time",
@@ -223,12 +231,19 @@ const TradeHistory = () => {
 
 
 
-  //  SHOW lIVE PRICE
+
   const ShowLivePrice = async () => {
     await FunctionForLivePriceCalculation(CreatechannelList, UserDetails, setSocketState, tradeHistoryData.data &&
       tradeHistoryData.data)
-
   };
+
+
+  const ResetAllData = (e) => {
+    setFromDate("");
+    setToDate("");
+    setType("Strategy");
+  };
+
 
   useEffect(() => {
     data();
@@ -236,13 +251,14 @@ const TradeHistory = () => {
 
   useEffect(() => {
     getsignals11();
-  }, [SelectServiceIndex, selectStrategy]);
+  }, [fromDate, toDate, getType]);
 
   useEffect(() => {
     ShowLivePrice();
   }, [tradeHistoryData.data, SocketState, UserDetails]);
 
 
+  // ========================================================================
   let total = 0;
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
@@ -266,87 +282,108 @@ const TradeHistory = () => {
 
 
   return (
-    <>
-      <Content Page_title="Trade History" button_status={false} button_status1={true}>
-        {gotodashboard === "true" || gotodashboard === true ? (
-          <>
-            <div className="row d-flex  align-items-center justify-content-start">
-              <div className="col-lg-3 d-none">
-                <div className="form-check custom-checkbox mb-3">
-                  <label className="col-lg-6" htmlFor="fromdate">
-                    From Date
-                  </label>
-                  <input
-                    type="date"
-                    name="fromdate"
-                    className="form-control"
-                    id="fromdate"
-                    value={fromDate}
-                    onChange={handleFromDateChange}
+    <Content Page_title="Trade History" button_status={false} button_status1={true}>
 
-                  />
-                </div>
-              </div>
-              <div className="col-lg-3 d-none">
-                <div className="form-check custom-checkbox mb-3">
-                  <label className="col-lg-6" htmlFor="endDate">
-                    To Date
-                  </label>
-                  <input
-                    type="date"
-                    name="endDate"
-                    className="form-control"
-                    id="endDate"
-                    value={toDate}
-                    onChange={handleToDateChange}
-                    min={fromDate}
-                  />
-                </div>
-              </div>
+      <div className="row d-flex  align-items-center justify-content-start">
+        <div className="col-lg-2 px-1">
+          <div className="form-check custom-checkbox mb-3 ps-0">
+            <label className="col-lg-12" htmlFor="fromdate">
+              From Date
+            </label>
 
-              <div className="col-lg-3 d-flex">
+            <DatePicker
+              selected={fromDate}
+              onChange={(date) => handleFromDateChange(date)}
+              minDate={formattedStartDate}
+              maxDate={new Date()}
 
-              </div>
-            </div>
-          </>
-        ) : (
-          ""
-        )}
-
-        {tradeHistoryData.data && tradeHistoryData.data.length === 0 ? (
-          <FullDataTable
-            TableColumns={columns}
-            tableData={tradeHistoryData.data}
-          />
-        ) : (
-          <>
-            <div className="table-responsive">
-              {tradeHistoryData.data.length > 0 ?
-                total >= 0 ?
-                  <h4 >Total Realised P/L : <span style={{ color: "green" }}> {total.toFixed(2)}</span> </h4> :
-                  <h4 >Total Realised P/L : <span style={{ color: "red" }}> {total.toFixed(2)}</span> </h4> : ""
-              }
-            </div>
-            <FullDataTable
-              TableColumns={columns}
-              tableData={tradeHistoryData.data}
+              placeholderText="Select a date"
+              dateFormat="yyyy-MM-dd"
+              className="form-control"
+              id="fromdate"
             />
-          </>
-        )}
+          </div>
+        </div>
 
-        {/*  For Detailed View  */}
-        <DetailsView
-          showModal={showModal}
-          setshowModal={() => setshowModal(false)}
-          tradeHistoryData={rowData}
-        />
-        <br />
-        <br />
-        <h6><b>THIS RESULTS IS VALID FOR TODAY ONLY, WE DO NOT DIRECTLY OR INDIRECTLY MAKE ANY REFERENCE TO THE PAST OR EXPECTED FUTURE RETURN/PERFORMANCE OF THE ALGORITHM.</b></h6>
-        <br />
-        <h6><b>सभी प्रतिभूतियां एल्गो ट्रेडिंग सिस्टम बाजार जोखिमों के अधीन हैं और इस बात का कोई आश्वासन नहीं दिया जा सकता है कि उपयोगकर्ता के उद्देश्यों को आज के प्रदर्शन के आधार पर प्राप्त किया जाएगा। यह परिणाम केवल आज के लिए मान्य है।</b></h6>
-      </Content>
-    </>
+        <div className="col-lg-2  px-1">
+          <div className="form-check custom-checkbox mb-3 ps-0">
+            <label className="col-lg-12" htmlFor="endDate">
+              To Date
+            </label>
+
+
+            <DatePicker
+              selected={toDate}
+              onChange={(date) => handleToDateChange(date)}
+              minDate={fromDate ? fromDate : formattedStartDate}
+              maxDate={new Date()}
+              placeholderText="Select a date"
+              dateFormat="yyyy-MM-dd"
+              className="form-control"
+              id="fromdate"
+            />
+
+          </div>
+        </div>
+
+        <div className="col-lg-2 px-1">
+          <div className="mb-3">
+            <label for="select" className="form-label">
+              Type
+            </label>
+            <select
+              className="default-select wide form-control"
+              aria-label="Default select example"
+              id="select"
+              onChange={(e) => setType(e.target.value)}
+              value={getType}
+            >
+              <option value="Strategy" selected>Starategy</option>z
+              <option value="Trade" selected>Trade</option>
+
+            </select>
+          </div>
+        </div>
+
+
+        <div className="col-lg-2  px-1">
+          <div className="mb-3">
+            <button className="btn btn-primary" onClick={(e) => ResetAllData(e)}>
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <div className="table-responsive">
+        {tradeHistoryData.data && tradeHistoryData.data.length > 0 ?
+          total >= 0 ?
+            <h4 >Total Realised P/L : <span style={{ color: "green" }}> {total.toFixed(2)}</span> </h4> :
+            <h4 >Total Realised P/L : <span style={{ color: "red" }}> {total.toFixed(2)}</span> </h4> : ""
+        }
+      </div>
+
+
+      {tradeHistoryData && tradeHistoryData.loading ? <Loader /> :
+        <FullDataTable
+          TableColumns={columns}
+          tableData={tradeHistoryData.data}
+        />}
+
+
+
+      <DetailsView
+        showModal={showModal}
+        setshowModal={() => setshowModal(false)}
+        tradeHistoryData={rowData}
+      />
+      <br />
+      <br />
+      <h6><b>THIS RESULTS IS VALID FOR TODAY ONLY, WE DO NOT DIRECTLY OR INDIRECTLY MAKE ANY REFERENCE TO THE PAST OR EXPECTED FUTURE RETURN/PERFORMANCE OF THE ALGORITHM.</b></h6>
+      <br />
+      <h6><b>सभी प्रतिभूतियां एल्गो ट्रेडिंग सिस्टम बाजार जोखिमों के अधीन हैं और इस बात का कोई आश्वासन नहीं दिया जा सकता है कि उपयोगकर्ता के उद्देश्यों को आज के प्रदर्शन के आधार पर प्राप्त किया जाएगा। यह परिणाम केवल आज के लिए मान्य है।</b></h6>
+    </Content>
   );
 };
 

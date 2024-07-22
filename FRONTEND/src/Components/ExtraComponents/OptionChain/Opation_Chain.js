@@ -23,8 +23,7 @@ import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useNavigate } from 'react-router-dom';
 
 
-import WebSocketService from '../../../Utils/LiveDataRedisSocket';
-const WEBSOCKET_URI = 'ws://193.239.237.157:6789';
+
 const HelpCenter = () => {
 
     const dispatch = useDispatch()
@@ -464,9 +463,8 @@ const HelpCenter = () => {
     // ------------------------------------ REMOVE SELECTED------------------------------------
 
 
-    const Done_For_Trade = async (id) => {
+    const Done_For_Trade = (id) => {
         handleClickDisabled();
-
 
         const currentTimestamp = Math.floor(Date.now() / 1000);
 
@@ -484,7 +482,6 @@ const HelpCenter = () => {
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                // url: 'http://localhost:8000/broker-signals',
                 url: `${getBrokerUrl && getBrokerUrl}`,
                 headers: {
                     'Content-Type': 'text/plain'
@@ -535,16 +532,7 @@ const HelpCenter = () => {
 
         })
 
-        await dispatch(
-            Update_Subscribe_token({
-                data: ExecuteTradeData.data,
-                token: token,
-            })
 
-        ).unwrap()
-            .then((response) => {
-                //  console.log("response subscribe token",response) 
-            });
 
     }
 
@@ -708,160 +696,68 @@ const HelpCenter = () => {
 
 
     //  SHOW lIVE PRICE
-    // const ShowLivePrice = async () => {
-    //     let type = { loginType: "API" };
-    //     let channelList = TokenSymbolChain && TokenSymbolChain;
+    const ShowLivePrice = async () => {
+        let type = { loginType: "API" };
+        let channelList = TokenSymbolChain && TokenSymbolChain;
 
-    //     if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
-
-
-    //         const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
-
-    //         if (res.data.stat) {
-    //             const handleResponse = async (response) => {
-
-    //                 const old_val_call = $('.Call_Price_' + response.tk).html();
-    //                 const old_val_put = $('.Put_Price_' + response.tk).html();
-
-    //                 $('.SP1_Call_Price_' + response.tk).html(response.sp1 ? response.sp1 : response.lp);
-    //                 $('.BP1_Put_Price_' + response.tk).html(response.bp1 ? response.bp1 : response.lp);
-
-    //                 if (response.tk) {
-    //                     if (response.lp !== undefined) {
-
-    //                         $(".Call_Price_" + response.tk).html(response.lp);
-    //                         $(".Put_Price_" + response.tk).html(response.lp);
-
-    //                         const new_val_call = $('.Call_Price_' + response.tk).html();
-    //                         const new_val_put = $('.Put_Price_' + response.tk).html();
-
-    //                         if (new_val_call > old_val_call || new_val_put > old_val_put) {
-    //                             $('.Call_Price_' + response.tk).css({ "color": "green" });
-    //                             $('.Put_Price_' + response.tk).css({ "color": "green" });
-    //                             $('.Call_Price_' + response.tk).append('&#8593;')
-    //                             $('.Put_Price_' + response.tk).append('&#8593;')
-    //                             $('.Put_Price_' + response.tk).css({ "font-weight": "900" });
-    //                             $('.Call_Price_' + response.tk).css({ "font-weight": "900" });
-    //                         } else if (new_val_call < old_val_call || new_val_put < old_val_put) {
-    //                             $('.Call_Price_' + response.tk).css({ "color": "red" });
-    //                             $('.Put_Price_' + response.tk).css({ "color": "red" });
-    //                             $('.Call_Price_' + response.tk).append('&#8595;')
-    //                             $('.Put_Price_' + response.tk).append('&#8595;')
-    //                             $('.Put_Price_' + response.tk).css({ "font-weight": "900" });
-    //                             $('.Call_Price_' + response.tk).css({ "font-weight": "900" });
-    //                         } else if (new_val_call === old_val_call || new_val_put === old_val_put) {
-    //                             $('.Call_Price_' + response.tk).css({ "color": "black" });
-    //                             $('.Put_Price_' + response.tk).css({ "color": "black" });
-
-    //                         }
-    //                     };
-    //                 };
-    //             }
-    //             await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
-    //         }
-
-    //     }
+        if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
 
 
-    // };
+            const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
-    // useEffect(() => {
-    //     ShowLivePrice();
-    // }, [UserDetails, TokenSymbolChain, showModal]);
+            if (res.data.stat) {
+                const handleResponse = async (response) => {
 
-    // --------------- FOR GET OPTIONS SYMBOLS ENDS-----------------------
+                    const old_val_call = $('.Call_Price_' + response.tk).html();
+                    const old_val_put = $('.Put_Price_' + response.tk).html();
+
+                    $('.SP1_Call_Price_' + response.tk).html(response.sp1 ? response.sp1 : response.lp);
+                    $('.BP1_Put_Price_' + response.tk).html(response.bp1 ? response.bp1 : response.lp);
+
+                    if (response.tk) {
+                        if (response.lp !== undefined) {
+
+                            $(".Call_Price_" + response.tk).html(response.lp);
+                            $(".Put_Price_" + response.tk).html(response.lp);
+
+                            const new_val_call = $('.Call_Price_' + response.tk).html();
+                            const new_val_put = $('.Put_Price_' + response.tk).html();
+
+                            if (new_val_call > old_val_call || new_val_put > old_val_put) {
+                                $('.Call_Price_' + response.tk).css({ "color": "green" });
+                                $('.Put_Price_' + response.tk).css({ "color": "green" });
+                                // $('.Call_Price_' + response.tk).append('&#8593;')
+                                // $('.Put_Price_' + response.tk).append('&#8593;')
+                                $('.Put_Price_' + response.tk).css({ "font-weight": "900" });
+                                $('.Call_Price_' + response.tk).css({ "font-weight": "900" });
+                            } else if (new_val_call < old_val_call || new_val_put < old_val_put) {
+                                $('.Call_Price_' + response.tk).css({ "color": "red" });
+                                $('.Put_Price_' + response.tk).css({ "color": "red" });
+                                // $('.Call_Price_' + response.tk).append('&#8595;')
+                                // $('.Put_Price_' + response.tk).append('&#8595;')
+                                $('.Put_Price_' + response.tk).css({ "font-weight": "900" });
+                                $('.Call_Price_' + response.tk).css({ "font-weight": "900" });
+                            } else if (new_val_call === old_val_call || new_val_put === old_val_put) {
+                                $('.Call_Price_' + response.tk).css({ "color": "black" });
+                                $('.Put_Price_' + response.tk).css({ "color": "black" });
+
+                            }
+                        };
+                    };
+                }
+                await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
+            }
+
+        }
 
 
+    };
 
-    // --------------- FOR LIVE DATA REDIS FOR SYMBOLS  -----------------------
 
 
     useEffect(() => {
-        // alert("okk")
-        const webSocketService = new WebSocketService(WEBSOCKET_URI);
-        const handleMessage = (response) => {
-            // console.log("response option chain",response)
-
-
-
-            $('.SP1_Call_Price_' + response.token).html(response.price);
-            $('.BP1_Put_Price_' + response.token).html(response.price);
-
-            if (response.token) {
-
-                const old_val_call = $('.Call_Price_' + response.token).html();
-                const old_val_put = $('.Put_Price_' + response.token).html();
-
-                if (response.price !== undefined) {
-
-                    $(".Call_Price_" + response.token).html(response.price);
-                    $(".Put_Price_" + response.token).html(response.price);
-
-                    const new_val_call = $('.Call_Price_' + response.token).html();
-                    const new_val_put = $('.Put_Price_' + response.token).html();
-
-                    if (new_val_call > old_val_call || new_val_put > old_val_put) {
-                        $('.Call_Price_' + response.token).css({ "color": "green" });
-                        $('.Put_Price_' + response.token).css({ "color": "green" });
-                        $('.Call_Price_' + response.token).append('&#8593;')
-                        $('.Put_Price_' + response.token).append('&#8593;')
-                        $('.Put_Price_' + response.token).css({ "font-weight": "900" });
-                        $('.Call_Price_' + response.token).css({ "font-weight": "900" });
-                    } else if (new_val_call < old_val_call || new_val_put < old_val_put) {
-                        $('.Call_Price_' + response.token).css({ "color": "red" });
-                        $('.Put_Price_' + response.token).css({ "color": "red" });
-                        $('.Call_Price_' + response.token).append('&#8595;')
-                        $('.Put_Price_' + response.token).append('&#8595;')
-                        $('.Put_Price_' + response.token).css({ "font-weight": "900" });
-                        $('.Call_Price_' + response.token).css({ "font-weight": "900" });
-                    } else if (new_val_call === old_val_call || new_val_put === old_val_put) {
-                        $('.Call_Price_' + response.token).css({ "color": "black" });
-                        $('.Put_Price_' + response.token).css({ "color": "black" });
-
-                    }
-                };
-            };
-
-
-        };
-
-        const handleOpen = () => {
-            console.log('WebSocket connection opened');
-        };
-
-        const handleClose = () => {
-            console.log('WebSocket connection closed');
-        };
-
-        const handleError = (error) => {
-            console.error('WebSocket error:', error);
-        };
-
-        const disconnect = webSocketService.connect(handleMessage, handleOpen, handleClose, handleError);
-
-        return () => {
-            disconnect();
-        };
-    }, [TokenSymbolChain]);
-
-
-
-    // --------------- FOR LIVE DATA REDIS FOR SYMBOLS  ENDS-----------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        ShowLivePrice();
+    }, [UserDetails, TokenSymbolChain, showModal]);
 
 
 
