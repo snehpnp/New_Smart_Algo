@@ -122,79 +122,80 @@ export const admin_sidebar = [
         ]
     },
     {
+        id: 8,
+        name: 'License',
+        Icon: 'Copyright',
+        Data: [
+            {
+                id: 721,
+                name: 'Transaction License',
+                route: '/admin/allLicence',
+            },
+            {
+                id: 722,
+                name: 'Expired License',
+                route: '/admin/expiredlicence',
+            }
+        ]
+    },
+    {
         id: 7,
         name: 'More',
         Icon: 'MoreHorizontal',
         Data: [
+            // {
+            //     id: 71,
+            //     name: 'Support',
+            //     Icon: 'HelpingHand',
+            //     Data: [
             {
-                id: 71,
-                name: 'Support',
-                Icon: 'HelpingHand',
-                Data: [
-                    {
-                        id: 711,
-                        name: 'Help Center',
-                        route: '/admin/helpcenter',
-                    },
-                    {
-                        id: 712,
-                        name: 'Message Broadcast',
-                        route: '/admin/msgbroadcast',
-                    },
-                    {
-                        id: 713,
-                        name: 'Api Create Info',
-                        Icon: 'WalletCards',
-                        route: '/admin/apicreateinfo',
-                        Data: []
-                    },
-                    {
-                        id: 714,
-                        name: 'Broker Information',
-                        Icon: 'Info',
-                        route: '/admin/brokerinfo',
-                        Data: []
-                    }
-                ]
+                id: 711,
+                name: 'Help Center',
+                route: '/admin/helpcenter',
             },
             {
-                id: 72,
-                name: 'License',
-                Icon: 'Copyright',
-                Data: [
-                    {
-                        id: 721,
-                        name: 'Transaction License',
-                        route: '/admin/allLicence',
-                    },
-                    {
-                        id: 722,
-                        name: 'Expired License',
-                        route: '/admin/expiredlicence',
-                    }
-                ]
+                id: 712,
+                name: 'Message Broadcast',
+                route: '/admin/msgbroadcast',
             },
             {
-                id: 73,
-                name: 'Make Strategy',
-                Icon: 'Boxes',
-                Data: [
-                    {
-                        id: 731,
-                        name: 'Create Strategy',
-                        route: '/admin/createstrategy',
-                    },
-                    {
-                        id: 732,
-                        name: 'All Strategies',
-                        route: '/admin/AllMakeStrategy',
-                    }
-                ]
+                id: 713,
+                name: 'Api Create Info',
+                Icon: 'WalletCards',
+                route: '/admin/apicreateinfo',
+                Data: []
+            },
+            {
+                id: 714,
+                name: 'Broker Information',
+                Icon: 'Info',
+                route: '/admin/brokerinfo',
+                Data: []
+            },
+            //     ]
+            // },
+
+            // {
+            // id: 73,
+            // name: 'Make Strategy',
+            // Icon: 'Boxes',
+            // Data: [
+            {
+                id: 731,
+                name: 'Create Strategy',
+                route: '/admin/createstrategy',
+            },
+            {
+                id: 732,
+                name: 'All Strategies',
+                route: '/admin/AllMakeStrategy',
             }
-            
+            // ]
+            // }
+
         ]
     }
-    
+
 ];
 
 

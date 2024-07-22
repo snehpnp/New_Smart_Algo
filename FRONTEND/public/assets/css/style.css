@@ -46648,3 +46648,21 @@ body {
   justify-content: center !important;
 
 }
+
+.export button.btn.btn-primary.float-end {
+  position: absolute;
+  right: 63px;
+  top: 38px;
+}
+
+
+.react-bootstrap-table {
+  height: 400px !important;
+  overflow-y: auto !important;
+}
+
+.header-class {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}

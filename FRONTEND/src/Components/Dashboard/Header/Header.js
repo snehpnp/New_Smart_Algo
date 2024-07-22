@@ -380,9 +380,9 @@ const Header = ({ ChatBox }) => {
 
                   <li className="nav-item dropdown header-profile user-name me-2">
                     {UserNamego_localstg != null ?
-                      <h4 className="text-white border-1 mb-0">{UserNamego_localstg.UserName}</h4>
+                      <h4 className="text-primary border-1 mb-0">{UserNamego_localstg.UserName}</h4>
                       :
-                      <h4 className="text-white border-1 mb-0">{user_details.UserName}</h4>
+                      <h4 className="text-primary border-1 mb-0">{user_details.UserName}</h4>
                     }
                   </li>
 

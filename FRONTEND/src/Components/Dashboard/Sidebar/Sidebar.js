@@ -95,9 +95,7 @@ const Sidebar = ({ ShowSidebar }) => {
         <div className="deznav pt-3" >
             <div className="deznav-scroll">
                 <ul className="metismenu" id="menu">
-                    <div className='sidebar-logo'>
-                        <Logo />
-                    </div>
+
                     {
                         gotodashboard != null ? user_role_goTo === "USER" ? Client && Client.map((item) => {
                             return <>

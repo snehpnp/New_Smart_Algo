@@ -603,7 +603,7 @@ const AllClients = () => {
 
   return (
     <>
-
+   <div className="export">
       <Content
         Page_title={headerName}
         button_title="Add Client"
@@ -721,7 +721,7 @@ const AllClients = () => {
         <ToastButton />
 
       </Content>
-
+      </div>
 
     </>
   );

@@ -10,7 +10,7 @@ import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicD
 import Modal from "../../../Components/ExtraComponents/Modal";
 import { Trash2, X } from 'lucide-react';
 import Holidays from "date-holidays"
-import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token, Option_Symbols_Update_status ,Update_Subscribe_token} from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
+import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token, Option_Symbols_Update_status, Update_Subscribe_token } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
 import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
 import { CreateSocketSession, ConnctSocket, GetAccessToken, } from "../../../Service/Alice_Socket";
@@ -66,7 +66,7 @@ const HelpCenter = () => {
         data: [],
     });
 
-    const [PanelKey, setPanelKey] = useState('');    
+    const [PanelKey, setPanelKey] = useState('');
 
     const [TokenSymbolChain, setTokenSymbolChain] = useState('')
     const [UserDetails, setUserDetails] = useState([]);
@@ -317,8 +317,8 @@ const HelpCenter = () => {
 
 
     const ExcuteTradeButton = () => {
-    
-        
+
+
         ///////////////////////////////////////////////////////////////////
 
         const currentDate = new Date();
@@ -467,7 +467,7 @@ const HelpCenter = () => {
     const Done_For_Trade = async (id) => {
         handleClickDisabled();
 
-        
+
         const currentTimestamp = Math.floor(Date.now() / 1000);
 
         ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {
@@ -542,9 +542,9 @@ const HelpCenter = () => {
             })
 
         ).unwrap()
-        .then((response) => { 
-          //  console.log("response subscribe token",response) 
-        });
+            .then((response) => {
+                //  console.log("response subscribe token",response) 
+            });
 
     }
 
@@ -771,83 +771,83 @@ const HelpCenter = () => {
 
     // --------------- FOR GET OPTIONS SYMBOLS ENDS-----------------------
 
- 
 
-      // --------------- FOR LIVE DATA REDIS FOR SYMBOLS  -----------------------
 
-      
-      useEffect(() => {
+    // --------------- FOR LIVE DATA REDIS FOR SYMBOLS  -----------------------
+
+
+    useEffect(() => {
         // alert("okk")
         const webSocketService = new WebSocketService(WEBSOCKET_URI);
         const handleMessage = (response) => {
-       // console.log("response option chain",response)
-        
-       
+            // console.log("response option chain",response)
 
-        $('.SP1_Call_Price_' + response.token).html(response.price);
-        $('.BP1_Put_Price_' + response.token).html(response.price);
 
-        if (response.token) {
 
-            const old_val_call = $('.Call_Price_' + response.token).html();
-            const old_val_put = $('.Put_Price_' + response.token).html();
+            $('.SP1_Call_Price_' + response.token).html(response.price);
+            $('.BP1_Put_Price_' + response.token).html(response.price);
 
-            if (response.price !== undefined) {
+            if (response.token) {
 
-                $(".Call_Price_" + response.token).html(response.price);
-                $(".Put_Price_" + response.token).html(response.price);
+                const old_val_call = $('.Call_Price_' + response.token).html();
+                const old_val_put = $('.Put_Price_' + response.token).html();
 
-                const new_val_call = $('.Call_Price_' + response.token).html();
-                const new_val_put = $('.Put_Price_' + response.token).html();
+                if (response.price !== undefined) {
 
-                if (new_val_call > old_val_call || new_val_put > old_val_put) {
-                    $('.Call_Price_' + response.token).css({ "color": "green" });
-                    $('.Put_Price_' + response.token).css({ "color": "green" });
-                    $('.Call_Price_' + response.token).append('&#8593;')
-                    $('.Put_Price_' + response.token).append('&#8593;')
-                    $('.Put_Price_' + response.token).css({ "font-weight": "900" });
-                    $('.Call_Price_' + response.token).css({ "font-weight": "900" });
-                } else if (new_val_call < old_val_call || new_val_put < old_val_put) {
-                    $('.Call_Price_' + response.token).css({ "color": "red" });
-                    $('.Put_Price_' + response.token).css({ "color": "red" });
-                    $('.Call_Price_' + response.token).append('&#8595;')
-                    $('.Put_Price_' + response.token).append('&#8595;')
-                    $('.Put_Price_' + response.token).css({ "font-weight": "900" });
-                    $('.Call_Price_' + response.token).css({ "font-weight": "900" });
-                } else if (new_val_call === old_val_call || new_val_put === old_val_put) {
-                    $('.Call_Price_' + response.token).css({ "color": "black" });
-                    $('.Put_Price_' + response.token).css({ "color": "black" });
+                    $(".Call_Price_" + response.token).html(response.price);
+                    $(".Put_Price_" + response.token).html(response.price);
 
-                }
+                    const new_val_call = $('.Call_Price_' + response.token).html();
+                    const new_val_put = $('.Put_Price_' + response.token).html();
+
+                    if (new_val_call > old_val_call || new_val_put > old_val_put) {
+                        $('.Call_Price_' + response.token).css({ "color": "green" });
+                        $('.Put_Price_' + response.token).css({ "color": "green" });
+                        $('.Call_Price_' + response.token).append('&#8593;')
+                        $('.Put_Price_' + response.token).append('&#8593;')
+                        $('.Put_Price_' + response.token).css({ "font-weight": "900" });
+                        $('.Call_Price_' + response.token).css({ "font-weight": "900" });
+                    } else if (new_val_call < old_val_call || new_val_put < old_val_put) {
+                        $('.Call_Price_' + response.token).css({ "color": "red" });
+                        $('.Put_Price_' + response.token).css({ "color": "red" });
+                        $('.Call_Price_' + response.token).append('&#8595;')
+                        $('.Put_Price_' + response.token).append('&#8595;')
+                        $('.Put_Price_' + response.token).css({ "font-weight": "900" });
+                        $('.Call_Price_' + response.token).css({ "font-weight": "900" });
+                    } else if (new_val_call === old_val_call || new_val_put === old_val_put) {
+                        $('.Call_Price_' + response.token).css({ "color": "black" });
+                        $('.Put_Price_' + response.token).css({ "color": "black" });
+
+                    }
+                };
             };
-        };
 
 
         };
-    
+
         const handleOpen = () => {
-          console.log('WebSocket connection opened');
+            console.log('WebSocket connection opened');
         };
-    
-        const handleClose = () => {
-          console.log('WebSocket connection closed');
-        };
-    
-        const handleError = (error) => {
-          console.error('WebSocket error:', error);
-        };
-    
-        const disconnect = webSocketService.connect(handleMessage, handleOpen, handleClose, handleError);
-    
-        return () => {
-          disconnect();
-        };
-      }, [TokenSymbolChain]);
 
- 
+        const handleClose = () => {
+            console.log('WebSocket connection closed');
+        };
+
+        const handleError = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+        const disconnect = webSocketService.connect(handleMessage, handleOpen, handleClose, handleError);
+
+        return () => {
+            disconnect();
+        };
+    }, [TokenSymbolChain]);
+
+
 
     // --------------- FOR LIVE DATA REDIS FOR SYMBOLS  ENDS-----------------------
-    
+
 
 
 
@@ -1085,9 +1085,9 @@ const HelpCenter = () => {
                                 </div>
 
 
-                                <div className="col-md-2">
+                                <div className="col-md-2 d-flex justify-content-end align-items-center text-secondary mt-4">
                                     <button
-                                        className="btn btn-primary me-2"
+                                        className="btn btn-primary"
                                         onClick={(e) => SelectOptionStock()}
                                     >
                                         Select Option Stock
@@ -1097,7 +1097,7 @@ const HelpCenter = () => {
 
 
 
-                                <div className="col-md-2 d-flex justify-content-end align-items-center text-secondary ">
+                                <div className="col-md-2 d-flex justify-content-end align-items-center text-secondary mt-4">
                                     <button
                                         className="btn btn-primary me-2"
                                         onClick={(e) => ExcuteTradeButton()}
