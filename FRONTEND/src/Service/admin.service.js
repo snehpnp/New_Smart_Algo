@@ -985,3 +985,18 @@ export async function UpdateStarStatus(user_id, token) {
         return await err
     }
 }
+
+
+
+export async function GetAllReferalUser(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/referaluser`, data, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}

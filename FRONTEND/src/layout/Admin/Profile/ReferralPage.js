@@ -4,35 +4,39 @@ import Imag from './Refer.png';
 import Modal from '../../../Components/ExtraComponents/Modal';
 import Formikform1 from "../../../Components/ExtraComponents/Form/Formik_form1";
 import { useFormik } from 'formik';
-import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice';
+import { GET_COMPANY_INFOS,GettAllUSerReferal } from '../../../ReduxStore/Slice/Admin/AdminSlice';
 import { useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
 import { Update_smtp_details } from '../../../ReduxStore/Slice/Admin/SystemSlice';
 import toast from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
-import {
-    FacebookShareButton,
-    WhatsappShareButton,
-    TelegramShareButton,
-    FacebookIcon,
-    WhatsappIcon,
-    TelegramIcon,
-    EmailShareButton,
-    EmailIcon
-} from 'react-share';
-import { FaCopy, FaSms, FaInstagram } from 'react-icons/fa';
+import { fDate, get_year_and_month_only, fDateTimeSuffix } from "../../../Utils/Date_formet";
+
+
+// import {
+//     FacebookShareButton,
+//     WhatsappShareButton,
+//     TelegramShareButton,
+//     FacebookIcon,
+//     WhatsappIcon,
+//     TelegramIcon,
+//     EmailShareButton,
+//     EmailIcon
+// } from 'react-share';
+// import { FaCopy, FaSms, FaInstagram } from 'react-icons/fa';
 
 
 const ReferralPage = () => {
     const [iframeUrl, setIframeUrl] = useState("http://localhost:3000/#/newsignup");
     const [showModal, setShowModal] = useState(false);
     const [getCompanyName, setCompanyName] = useState({ loading: true, data: [] });
+    const [getReferalUsers, setReferalUsers] = useState({ loading: true, data: [] });
+
     const dispatch = useDispatch();
     const user_token = JSON.parse(localStorage.getItem('user_details')).token;
 
-    const handleUrlChange = (event) => {
-        setIframeUrl(event.target.value);
-    };
+
+   
 
     const columns = [
         {
@@ -41,27 +45,30 @@ const ReferralPage = () => {
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
-            dataField: 'panel_name',
-            text: 'Name'
+            dataField: 'UserName',
+            text: 'UserName'
         },
         {
-            dataField: 'panel_short_name',
-            text: 'Company Short Name'
+            dataField: 'Email',
+            text: 'Email'
         },
         {
-            dataField: 'prefix',
-            text: 'Version'
+            dataField: 'refer_code',
+            text: 'refer code'
         },
         {
-            dataField: 'Action',
-            text: 'Action',
-            formatter: (cell, row) => (
-                <div>
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        {/* Add edit functionality here */}
-                    </span>
-                </div>
-            ),
+            dataField: 'refer_points',
+            text: 'Refer Points'
+        },
+        {
+            dataField: 'createdAt',
+            text: 'createdAt',
+            formatter: (cell, row, rowIndex) => fDateTimeSuffix(cell),
+
+        },
+        {
+            dataField: 'ActiveStatus',
+            text: 'Status'
         },
     ];
 
@@ -120,7 +127,21 @@ const ReferralPage = () => {
             });
     };
 
+    const AllReferalUser = async () => {
+        await dispatch(GettAllUSerReferal({Find_Role:"ADMIN",username:"sneh"})).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    console.log("response",response)
+                    setReferalUsers({
+                        loading: false,
+                        data: response.data,
+                    });
+                }
+            });
+    };
+
     useEffect(() => {
+        AllReferalUser()
         CompanyName();
     }, []);
 
@@ -284,7 +305,7 @@ const ReferralPage = () => {
 
 
                                     <h2 className="mt-5 mb-3">Refer Information</h2>
-                                    <BasicDataTable tableData={[]} TableColumns={columns} dropdown={false} />
+                                    <BasicDataTable tableData={getReferalUsers.data} TableColumns={columns} dropdown={false} />
                                 </div>
                             </div>
                         </div>

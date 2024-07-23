@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import $ from "jquery";
 
 
-const Logo = ({ ShowSidebar }) => {
+const Logo = ({ data , ShowSidebar }) => {
 
     const [togglesidebar, settogglesidebar] = useState(false)
     const ShowSidebar123 = () => {
@@ -15,6 +15,8 @@ const Logo = ({ ShowSidebar }) => {
     } else {
         $('#root').removeClass("menu-toggle")
     }
+
+// console.log("data",data)
 
     return (
         <div>

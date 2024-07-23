@@ -416,7 +416,6 @@ class Employee {
               user_type: license_type == 2 ? "Live Account" : license_type == 0 ? "2 Days Free Live Account" : "Free Demo Account"
             };
 
-            // UPDATE STATUS OF THE USER_SIGNUP COLLECTION WHEN CLICK ON ADD CLIENT
 
             const existingUser = await user_SignUp.findOne({
               $or: [
@@ -1682,6 +1681,52 @@ class Employee {
         status: false,
         msg: "Internal Server Error",
         error: error.message,
+      });
+    }
+  }
+
+
+  async GetAllReferalClients(req, res) {
+    try {
+      const { Find_Role, username } = req.body;
+
+      // GET ALL CLIENTS
+      var AdminMatch;
+
+      if (Find_Role == "ADMIN") {
+        AdminMatch = {
+          $and: [
+              { refer_code: { $ne: null } },
+              { refer_code: { $ne: "" } }
+          ]
+      }
+      } else if (Find_Role == "SUBADMIN") {
+        AdminMatch =  { refer_code:username}
+      }
+
+      const getAllClients = await user_SignUp.find(AdminMatch).sort({ CreateDate: -1 });
+
+      if (getAllClients.length == 0) {
+        return res.send({
+          status: false,
+          msg: "Empty data",
+          data: [],
+        });
+      }
+
+      return res.send({
+        status: true,
+        msg: "Get All Clients",
+        data: getAllClients,
+
+      });
+    } catch (error) {
+      console.log("Error loginClients Error-", error);
+      return res.send({
+        status: false,
+        msg: "Empty data",
+        data: [],
+        // totalCount: totalCount,
       });
     }
   }

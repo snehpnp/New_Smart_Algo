@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { ALL_SERVICES, ALL_CATAGORY, ALL_SIGNUP_CLIENTS, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_EXPIRED_CLIENTS, ALL_CLIENTS, GET_COMPANY_LOGO, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS, DELETE_ALL_SIGNUP_CLIENT, DELETE_USERAND_ALLSERVICES , FIND_ONE_USER, UPDATE_USER, FIND_ONE_SIGNUP_CLIENT ,GetAllStarClients,UpdateStarStatus} from "../../../Service/admin.service";
+import { ALL_SERVICES, ALL_CATAGORY, ALL_SIGNUP_CLIENTS, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_EXPIRED_CLIENTS, ALL_CLIENTS, GET_COMPANY_LOGO, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS, DELETE_ALL_SIGNUP_CLIENT, DELETE_USERAND_ALLSERVICES, FIND_ONE_USER, UPDATE_USER, FIND_ONE_SIGNUP_CLIENT, GetAllStarClients, UpdateStarStatus, GetAllReferalUser } from "../../../Service/admin.service";
 
 
 
 export const Get_All_Service = createAsyncThunk("admin/getallservice", async (data) => {
     try {
         const res = await ALL_SERVICES(data);
-       
+
         return await res;
     } catch (err) {
         return err;
@@ -16,7 +16,7 @@ export const Get_All_Service = createAsyncThunk("admin/getallservice", async (da
 export const Get_All_Catagory = createAsyncThunk("admin/catagory", async (data) => {
     try {
         const res = await ALL_CATAGORY(data);
-        
+
         return await res;
     } catch (err) {
         return err;
@@ -25,7 +25,7 @@ export const Get_All_Catagory = createAsyncThunk("admin/catagory", async (data) 
 export const Service_By_Catagory = createAsyncThunk("admin/catogory", async (data) => {
     try {
         const res = await SERVICE_BY_CATAGORY(data);
-        
+
         return await res;
     } catch (err) {
         return err;
@@ -36,7 +36,7 @@ export const Service_By_Catagory = createAsyncThunk("admin/catogory", async (dat
 export const GET_ALL_CLIENTS = createAsyncThunk("getall/clients", async (data) => {
     try {
         const res = await ALL_CLIENTS(data);
-     
+
         return await res;
     } catch (err) {
         return err;
@@ -49,7 +49,7 @@ export const GET_ALL_CLIENTS = createAsyncThunk("getall/clients", async (data) =
 export const GET_ALL_SIGNUP_CLIENTS = createAsyncThunk("showuserdata", async (data) => {
     try {
         const res = await ALL_SIGNUP_CLIENTS(data);
-      
+
         return await res;
     } catch (err) {
         return err;
@@ -60,7 +60,7 @@ export const GET_ALL_SIGNUP_CLIENTS = createAsyncThunk("showuserdata", async (da
 export const GET_ALL_EXPIRED_CLIENTS = createAsyncThunk("getall/clients", async (data) => {
     try {
         const res = await ALL_EXPIRED_CLIENTS(data);
-       
+
         return await res;
     } catch (err) {
         return err;
@@ -72,7 +72,7 @@ export const GET_ALL_EXPIRED_CLIENTS = createAsyncThunk("getall/clients", async 
 export const GET_ALL_GROUP_SERVICES = createAsyncThunk("getall/groupservices", async (data) => {
     try {
         const res = await ALL_GROUP_SERVICES(data);
-    
+
         return await res;
     } catch (err) {
         return err;
@@ -83,7 +83,7 @@ export const GET_ALL_GROUP_SERVICES = createAsyncThunk("getall/groupservices", a
 export const GET_COMPANY_INFOS = createAsyncThunk("get/company", async (data) => {
     try {
         const res = await GET_COMPANY_INFO(data);
-      
+
         return await res;
     } catch (err) {
         return err;
@@ -93,7 +93,7 @@ export const GET_COMPANY_INFOS = createAsyncThunk("get/company", async (data) =>
 export const Get_Company_Logo = createAsyncThunk("get/company", async (data) => {
     try {
         const res = await GET_COMPANY_LOGO(data);
-       
+
         return await res;
     } catch (err) {
         return err;
@@ -104,7 +104,7 @@ export const Get_Company_Logo = createAsyncThunk("get/company", async (data) => 
 export const GET_ALL_TRADING_STATUS = createAsyncThunk("getall/tadingstatus", async (data) => {
     try {
         const res = await GET_ALL_TRADINGSTATUS(data);
-       
+
         return await res;
     } catch (err) {
         return err;
@@ -117,7 +117,7 @@ export const GET_ALL_TRADING_STATUS = createAsyncThunk("getall/tadingstatus", as
 export const GO_TO_DASHBOARDS = createAsyncThunk("goToDashboard", async (data) => {
     try {
         const res = await GO_TO_DASHBOARD(data);
-        
+
         return await res;
     } catch (err) {
         return err;
@@ -130,10 +130,10 @@ export const GO_TO_DASHBOARDS = createAsyncThunk("goToDashboard", async (data) =
 export const UPDATE_USER_ACTIVE_STATUS = createAsyncThunk("update/useractive/status", async (data) => {
     try {
         const res = await UPDATE_USERACTIVE_STATUS(data);
-    
+
         return await res;
     } catch (err) {
-        
+
         return err;
     }
 });
@@ -144,10 +144,10 @@ export const Find_One_User = createAsyncThunk("update/useractive/status", async 
     try {
         const { id } = data
         const res = await FIND_ONE_USER({ id: id });
-     
+
         return await res;
     } catch (err) {
-        
+
         return err;
     }
 });
@@ -156,10 +156,10 @@ export const Find_One_Signup_Client = createAsyncThunk("update/useractive/status
     try {
         const { id } = data
         const res = await FIND_ONE_SIGNUP_CLIENT({ id: id });
-     
+
         return await res;
     } catch (err) {
-        
+
         return err;
     }
 });
@@ -169,10 +169,10 @@ export const Update_User = createAsyncThunk("update/useractive/status", async (d
     try {
         const { req, token } = data
         const res = await UPDATE_USER({ req: req }, token);
-        
+
         return await res;
     } catch (err) {
-        
+
         return err;
     }
 });
@@ -183,10 +183,10 @@ export const Update_User = createAsyncThunk("update/useractive/status", async (d
 export const DELETE_USER_SERVICES = createAsyncThunk("delete/user", async (data) => {
     try {
         const res = await DELETE_USERAND_ALLSERVICES(data);
-      
+
         return await res;
     } catch (err) {
-        
+
         return err;
     }
 });
@@ -195,10 +195,10 @@ export const DELETE_USER_SERVICES = createAsyncThunk("delete/user", async (data)
 export const DELETE_ALL_SIGNUP = createAsyncThunk("deletesignupclients", async (data) => {
     try {
         const res = await DELETE_ALL_SIGNUP_CLIENT(data);
-        
+
         return await res;
     } catch (err) {
-        
+
         return err;
     }
 });
@@ -206,10 +206,10 @@ export const DELETE_ALL_SIGNUP = createAsyncThunk("deletesignupclients", async (
 export const GetAllStarClient = createAsyncThunk("getall/star/clients", async (data) => {
     try {
         const res = await GetAllStarClients(data);
-        
+
         return await res;
     } catch (err) {
-        
+
         return err;
     }
 });
@@ -219,10 +219,22 @@ export const GetAllStarClient = createAsyncThunk("getall/star/clients", async (d
 export const UpdateStarClientStatus = createAsyncThunk("update/star/status", async (data) => {
     try {
         const res = await UpdateStarStatus(data);
-        
+
         return await res;
     } catch (err) {
-        
+
+        return err;
+    }
+});
+
+
+export const GettAllUSerReferal = createAsyncThunk("getall/referaluser", async (data) => {
+    try {
+        const res = await GetAllReferalUser(data);
+
+        return await res;
+    } catch (err) {
+
         return err;
     }
 });
@@ -249,8 +261,10 @@ const AdminSlice = createSlice({
         updateuser: [],
         oneuser: [],
         logos: [],
-        startClients:[],
-        startClientStatus:[]
+        startClients: [],
+        startClientStatus: [],
+        gettAlluserrefral: [],
+
 
     },
 
@@ -258,7 +272,7 @@ const AdminSlice = createSlice({
     extraReducers: {
 
         // [Get_All_Service.pending]: (state, action) => {
-        
+
         // },
         [Get_All_Service.fulfilled]: (state, { payload }) => {
             return { ...state, allService: payload, isLoading: false };
@@ -309,7 +323,7 @@ const AdminSlice = createSlice({
             // state.isLoading = false;
             return { ...state, activeStatus: payload, isLoading: false };
         },
-         
+
         [Update_User.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, updateuser: payload, isLoading: false };
@@ -326,7 +340,12 @@ const AdminSlice = createSlice({
             // state.isLoading = false;
             return { ...state, startClientStatus: payload, isLoading: false };
         },
+        [GettAllUSerReferal.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, startClientStatus: payload, isLoading: false };
+        },
     },
+
 });
 
 
