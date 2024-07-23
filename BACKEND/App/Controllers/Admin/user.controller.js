@@ -1700,7 +1700,7 @@ class Employee {
               { refer_code: { $ne: "" } }
           ]
       }
-      } else if (Find_Role == "SUBADMIN") {
+      } else {
         AdminMatch =  { refer_code:username}
       }
 
