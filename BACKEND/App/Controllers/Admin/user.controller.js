@@ -999,8 +999,7 @@ class Employee {
 
         if (multy_stgfind.length > 0) {
           multy_stgfind.forEach(async (data) => {
-            console.log("data", data)
-            console.log("strategFind", strategFind[0].strategy_id)
+        
 
             if (data.strategy_id.length == 0) {
               const filter = { _id: data._id };
@@ -1026,8 +1025,7 @@ class Employee {
 
         if (multy_stgfind.length > 0) {
           multy_stgfind.forEach(async (data) => {
-            console.log("data", data)
-            console.log("strategFind", strategFind[0].strategy_id)
+         
 
             if (data.strategy_id.length == 0) {
               const filter = { _id: data._id };
@@ -1578,7 +1576,6 @@ class Employee {
       }
 
 
-      console.log("data", data);
 
 
       if (!data.length) {

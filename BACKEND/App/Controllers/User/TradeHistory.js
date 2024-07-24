@@ -99,7 +99,6 @@ class TradeHistory {
                         } else {
                             strategyset = selectStrategy
                         }
-                        console.log("strategyset", strategyset)
 
 
                         var MatchPipeline = {
@@ -141,7 +140,6 @@ class TradeHistory {
                             }
                         ]);
 
-console.log("data",data)
 
 
                         var data1 = data

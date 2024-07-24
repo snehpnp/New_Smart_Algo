@@ -998,7 +998,6 @@ let config = {
 
 axios.request(config)
 .then((response) => {
- // console.log("data  -",response.data);
 
   if (Array.isArray(response.data)) {
     if(response.data.length){

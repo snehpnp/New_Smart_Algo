@@ -2085,8 +2085,6 @@ app.get("/remain_get_token",async (req,res)=>{
     // console.log("value", data[value]);
     //const numericValue = parseFloat(value);
     const numericValue = parseFloat(data[value]);
-    console.log("data[variable", data[variable]);
-    console.log("numericValue", numericValue);
     switch (operator) {
       case ">":
         return data[variable] > numericValue;

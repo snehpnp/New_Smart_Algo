@@ -16,7 +16,7 @@ const Logo = ({ data , ShowSidebar }) => {
         $('#root').removeClass("menu-toggle")
     }
 
-// console.log("data",data)
+
 
     return (
         <div>

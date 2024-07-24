@@ -277,7 +277,7 @@ const ReferralPage = () => {
 
     const Payment = async (status, data) => {
         console.log("status", status);
-        console.log("data", data);
+
 
         await dispatch(UPDATE_REEDEEM({ status: status, user_id: data.user_id, id: data._id, reedeem_points: data.reedeem_points })).unwrap()
             .then((response) => {

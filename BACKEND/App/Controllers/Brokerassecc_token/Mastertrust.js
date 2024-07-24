@@ -181,7 +181,6 @@ const GetAllBrokerResponse = async (user_info,res) => {
     
             FindUserBrokerResponse.forEach((data1) => {    
               
-                console.log("data1 data1.order_id",data1.order_id)
                 
                 var config = {
                     method: 'get',
