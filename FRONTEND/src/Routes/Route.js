@@ -22,7 +22,6 @@ const Routing = () => {
   const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
 
 
-console.log("location.pathname",location.pathname)
   useEffect(() => {
     if (location.pathname === "/forget") {
       navigate("/forget");

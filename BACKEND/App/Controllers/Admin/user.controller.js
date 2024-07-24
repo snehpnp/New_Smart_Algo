@@ -1690,18 +1690,17 @@ class Employee {
     try {
         const { Find_Role, username } = req.body;
 
-        // Determine the match criteria based on the role
+
         const AdminMatch = Find_Role === "ADMIN" 
             ? { refer_code: { $ne: null, $ne: "" } } 
             : { refer_code: username };
 
-        // Fetch all clients matching the criteria
         const getAllClients = await user_SignUp.find(AdminMatch).sort({ CreateDate: -1 });
      
 
         if (getAllClients.length > 0) {
             const updatePromises = getAllClients.map(async (data) => {
-                const GetUser = await User_model.findOne({ UserName: data.UserName }).select('license_type');
+                const GetUser = await User_model.findOne({ UserName: data.UserName }).select('license_type refer_points');
                 if (GetUser) {
                     let updatestatus = 0;
                     if (GetUser.license_type == 1 || GetUser.license_type == 0) {
@@ -1732,11 +1731,26 @@ class Employee {
             });
         }
 
-        return res.send({
+        if(Find_Role == "USER"){
+          const GetUser = await User_model.findOne({ UserName: username }).select('license_type refer_points');
+          return res.send({
+            status: true,
+            msg: "Get All Clients",
+            data: getAllClients1,
+            data1: GetUser,
+
+        });
+        }else{
+          return res.send({
             status: true,
             msg: "Get All Clients",
             data: getAllClients1,
         });
+        }
+
+
+
+     
     } catch (error) {
         console.log("Error in GetAllReferalClients:", error);
         return res.status(500).send({

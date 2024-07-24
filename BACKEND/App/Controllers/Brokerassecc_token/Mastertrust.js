@@ -176,7 +176,6 @@ const GetAllBrokerResponse = async (user_info,res) => {
        // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId , order_view_status : "0" })
 
-        console.log("GetAllBrokerResponse ",FindUserBrokerResponse)
      
         if (FindUserBrokerResponse.length > 0) {
     

@@ -157,7 +157,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                             };
                             axios(config)
                                 .then(async (response) => {
-                                    // console.log("response", response.data)
                                     // fs.appendFile(filePath, 'TIME ' + new Date() + ' ZERODHA POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
                                     //     if (err) {
                                     //         return console.log(err);

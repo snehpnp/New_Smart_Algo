@@ -2363,12 +2363,9 @@ app.get("/remain_get_token",async (req,res)=>{
         console.log("okk socket open  1 ", response)
 
         if (response.tk) {
-          // console.log("response", response.tk)
           connectToDB(response.tk, response);
 
-          // TriggerCollection(response.tk)
-
-          //getTokenStrategy(response.tk)
+      
         }
 
 

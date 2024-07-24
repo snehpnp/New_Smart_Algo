@@ -14,18 +14,25 @@ import { FaCopy, FaSms, FaEnvelope, FaInstagram, FaTelegram } from 'react-icons/
 import StatusButton from './Statusbtn';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { REEDEEM_USER_DATA ,UPDATE_REEDEEM} from '../../../ReduxStore/Slice/Auth/AuthSlice';
-
+import { REEDEEM_USER_DATA, UPDATE_REEDEEM } from '../../../ReduxStore/Slice/Auth/AuthSlice';
+import Swal from 'sweetalert2';
 
 const ReferralPage = () => {
+    const dispatch = useDispatch();
     const [iframeUrl, setIframeUrl] = useState("http://localhost:3000/#/newsignup");
     const [showModal, setShowModal] = useState(false);
+    const [tab, setTab] = useState("home");
+
     const [getCompanyName, setCompanyName] = useState({ loading: true, data: [] });
     const [getReferalUsers, setReferalUsers] = useState({ loading: true, data: [] });
     const [getReferalUsersData, setReferalUsersData] = useState({ loading: true, data: [] });
-
-    const dispatch = useDispatch();
     const user_details = JSON.parse(localStorage.getItem('user_details'));
+
+
+    const handleSelect = (selectedTab) => {
+        setTab(selectedTab);
+        console.log('Selected tab:', selectedTab);
+    };
 
     const handleCopyUrl = () => {
         navigator.clipboard.writeText(iframeUrl);
@@ -128,7 +135,7 @@ const ReferralPage = () => {
                     {row.ActiveStatus == 0 ?
                         <>
                             <button
-                                onclick="approvePayment(1)"
+                                onClick={() => Payment(2, row)}
                                 style={{
                                     backgroundColor: "green",
                                     color: "white",
@@ -140,7 +147,7 @@ const ReferralPage = () => {
                                 Approve
                             </button>
                             <button
-                                onclick="rejectPayment(1)"
+                                onClick={() => Payment(1, row)}
                                 style={{
                                     backgroundColor: "red",
                                     color: "white",
@@ -152,6 +159,7 @@ const ReferralPage = () => {
                                 Reject
                             </button>
                         </>
+
                         : null}
 
                 </>
@@ -189,6 +197,7 @@ const ReferralPage = () => {
                 if (response.status === 409) {
                     toast.error(response.data.msg);
                 } else if (response.status) {
+                    CompanyName()
                     toast.success(response.msg);
                     setShowModal(false);
                 } else if (!response.status) {
@@ -214,7 +223,6 @@ const ReferralPage = () => {
         await dispatch(GettAllUSerReferal({ Find_Role: "ADMIN", username: "sneh" })).unwrap()
             .then((response) => {
                 if (response.status) {
-                    console.log("response", response);
                     setReferalUsers({
                         loading: false,
                         data: response.data,
@@ -227,7 +235,6 @@ const ReferralPage = () => {
         await dispatch(REEDEEM_USER_DATA({ Role: "ADMIN" })).unwrap()
             .then((response) => {
                 if (response.status) {
-                    console.log("response", response);
                     setReferalUsersData({
                         loading: false,
                         data: response.data,
@@ -237,10 +244,16 @@ const ReferralPage = () => {
     };
 
     useEffect(() => {
-        GetAllReedeemData()
-        AllReferalUser();
         CompanyName();
     }, []);
+
+    useEffect(() => {
+        if (tab == "profile") {
+            GetAllReedeemData()
+        } else {
+            AllReferalUser();
+        }
+    }, [tab]);
 
     useEffect(() => {
         if (getCompanyName.data && getCompanyName.data[0]) {
@@ -253,17 +266,44 @@ const ReferralPage = () => {
     const totalReferrals = getReferalUsers.data && getReferalUsers.data.length;
     const inProcessReferrals = getReferalUsers.data && getReferalUsers.data.filter(user => user.ActiveStatus == 1).length;
     const successfulReferrals = getReferalUsers.data && getReferalUsers.data.filter(user => user.ActiveStatus == 2).length;
-    const ReferralsPoints = getReferalUsers.data && getReferalUsers.data
-        .filter(user => user.refer_points)
-        .reduce((sum, user) => sum + user.refer_points, 0);
+    const ReferralsPoints = getReferalUsers.data
+        ? getReferalUsers.data
+            .filter(user => user.ActiveStatus == 0)
+            .reduce((sum, user) => sum + user.refer_points, 0)
+        : 0;
 
 
 
 
+    const Payment = async (status, data) => {
+        console.log("status", status);
+        console.log("data", data);
+
+        await dispatch(UPDATE_REEDEEM({ status: status, user_id: data.user_id, id: data._id, reedeem_points: data.reedeem_points })).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    GetAllReedeemData()
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Redeem request processed successfully!'
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'There was an error processing the redeem request.'
+                });
+            });
+    };
 
 
     return (
         <div className="content-body">
+
             <div className="container-fluid">
                 <div className="row page-titles">
                     <div className="row mb-3">
@@ -324,35 +364,25 @@ const ReferralPage = () => {
                                             </div>
                                         </div>
                                     </div>
-
-
-
                                 </div>
 
 
-
                                 <Tabs
-                                    defaultActiveKey="profile"
+                                    activeKey={tab}
+                                    onSelect={handleSelect}
                                     id="justify-tab-example"
                                     className="mb-3"
                                     justify
                                 >
                                     <Tab eventKey="home" title="Refer Information">
-
                                         <h2 className="mt-5 mb-3">Refer Information</h2>
                                         <BasicDataTable tableData={getReferalUsers.data} TableColumns={columns} dropdown={false} />
-
                                     </Tab>
                                     <Tab eventKey="profile" title="Reedeem Request">
-
-
                                         <h2 className="mt-5 mb-3">Reedeem Request</h2>
                                         <BasicDataTable tableData={getReferalUsersData.data} TableColumns={columns1} dropdown={false} />
                                     </Tab>
-
                                 </Tabs>
-
-
                                 <div className="iframe-container mb-3 d-flex align-items-center">
                                     <input
                                         type="text"
@@ -367,16 +397,16 @@ const ReferralPage = () => {
                                     <FaInstagram size={32} onClick={() => shareUrl('instagram')} style={{ cursor: 'pointer', marginLeft: '10px' }} />
                                     <FaTelegram size={32} onClick={() => shareUrl('telegram')} style={{ cursor: 'pointer', marginLeft: '10px' }} />
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
+
             <Modal isOpen={showModal} size="lg" title="Set Refer Point" hideBtn={true} handleClose={() => setShowModal(false)}>
                 <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update" />
             </Modal>
-
             <ToastButton />
         </div>
     );

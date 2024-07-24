@@ -890,16 +890,18 @@ class Login {
 
     async updatereedeemRequest(req, res) {
         try {
-            const { user_id, id, reedeem_points } = req.body;
-
+            const { user_id, id, reedeem_points, status } = req.body;
+    
+            console.log("req.body", req.body);
+    
             // Validate input
-            if (!user_id || !id) {
+            if (!user_id || !id || !status) {
                 return res.status(400).send({
                     status: false,
-                    msg: "user_id and id are required"
+                    msg: "user_id, id, and status are required"
                 });
             }
-
+    
             // Check if user exists
             const user = await User.findById(user_id);
             if (!user) {
@@ -908,24 +910,36 @@ class Login {
                     msg: "User not found"
                 });
             }
-
-            // Check if user has enough points to redeem
-            if (user.refer_points < reedeem_points) {
-                return res.status(400).send({
+    
+            // Check if redeem request exists
+            const user_reedeem = await userReedeem_modal.findById(id);
+            if (!user_reedeem) {
+                return res.status(404).send({
                     status: false,
-                    msg: "Insufficient points to redeem"
+                    msg: "Redeem request not found"
                 });
             }
-
-            user.refer_points -= reedeem_points;
-            await user.save();
-
-
-            const user_reedeem = await userReedeem_modal.findById(id);
-
-            user.ActiveStatus = 2;
-            await user_reedeem.save();
-
+    
+            if (status == 1) {
+                user_reedeem.ActiveStatus = 1;
+                await user_reedeem.save();
+    
+            } else if (status == 2) {
+                // Check if user has enough points to redeem
+                if (user.refer_points < reedeem_points) {
+                    return res.status(400).send({
+                        status: false,
+                        msg: "Insufficient points to redeem"
+                    });
+                }
+    
+                user_reedeem.ActiveStatus = 2;
+                await user_reedeem.save();
+    
+                user.refer_points -= reedeem_points;
+                await user.save();
+            }
+    
             return res.send({
                 status: true,
                 msg: "Redeem request processed successfully",
@@ -942,6 +956,7 @@ class Login {
             });
         }
     }
+    
 
 
 }

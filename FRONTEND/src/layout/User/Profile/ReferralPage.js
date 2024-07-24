@@ -3,7 +3,6 @@ import BasicDataTable from '../../../Components/ExtraComponents/Datatable/BasicD
 import Imag from './Refer.png';
 import { GET_COMPANY_INFOS, GettAllUSerReferal } from '../../../ReduxStore/Slice/Admin/AdminSlice';
 import { REEDEEM_POINTS_USER } from '../../../ReduxStore/Slice/Auth/AuthSlice';
-
 import { useDispatch } from "react-redux";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import { FacebookShareButton, WhatsappShareButton, TelegramShareButton, FacebookIcon, WhatsappIcon, TelegramIcon, EmailShareButton, EmailIcon } from 'react-share';
@@ -21,7 +20,7 @@ const ReferralPage = () => {
     const user_details = JSON.parse(localStorage.getItem('user_details'));
     const [iframeUrl, setIframeUrl] = useState("http://localhost:3000/#/newsignup");
     const [getCompanyName, setCompanyName] = useState({ loading: true, data: [] });
-    const [getReferalUsers, setReferalUsers] = useState({ loading: true, data: [] });
+    const [getReferalUsers, setReferalUsers] = useState({ loading: true, data: [],data1:[] });
     const [copied, setCopied] = useState(false);
     const [getReferalUsersData, setReferalUsersData] = useState({ loading: true, data: [] });
 
@@ -64,6 +63,8 @@ const ReferralPage = () => {
                     setReferalUsers({
                         loading: false,
                         data: response.data,
+                        data1: response.data1,
+
                     });
                 }
             });
@@ -73,7 +74,6 @@ const ReferralPage = () => {
         await dispatch(REEDEEM_USER_DATA({ Role: "ADMIN" })).unwrap()
             .then((response) => {
                 if (response.status) {
-                    console.log("response", response);
                     setReferalUsersData({
                         loading: false,
                         data: response.data,
@@ -92,14 +92,13 @@ const ReferralPage = () => {
         }
     }, []);
 
-    const companyReferPoints = getCompanyName.data.length > 0 ? getCompanyName.data[0].refer_points : 0;
 
+    const companyReferPoints = getCompanyName.data.length > 0 ? getCompanyName.data[0].refer_points : 0;
     const totalReferrals = getReferalUsers.data && getReferalUsers.data.length;
     const inProcessReferrals = getReferalUsers.data && getReferalUsers.data.filter(user => user.ActiveStatus === 1).length;
     const successfulReferrals = getReferalUsers.data && getReferalUsers.data.filter(user => user.ActiveStatus === 2).length;
-    const ReferralsPoints = getReferalUsers.data && getReferalUsers.data
-        .filter(user => user.refer_points)
-        .reduce((sum, user) => sum + user.refer_points, 0);
+    const ReferralsPoints = getReferalUsers.data && getReferalUsers.data1.refer_points
+       
 
     const columns = [
         { dataField: 'index', text: 'Company ID', formatter: (cell, row, rowIndex) => rowIndex + 1 },
@@ -172,21 +171,11 @@ const ReferralPage = () => {
                 console.error("Error redeeming points:", error);
             });
     };
+
     return (
         <div className="content-body">
             <div className="container-fluid">
-                <div className="row page-titles">
-                    <div className="row mb-3">
-                        <div className="col-lg-6"></div>
-                    </div>
-                    <ol className="breadcrumb">
-                        <div className="col-lg-6">
-                            <li className="breadcrumb-item">
-                                <h4 className="font-w500 mb-0">Referral Program</h4>
-                            </li>
-                        </div>
-                    </ol>
-                </div>
+             
                 <div className="row">
                     <div className="col-xl-12">
                         <div className="card form-card">
@@ -292,26 +281,20 @@ const ReferralPage = () => {
                                         </div>
                                     </div>
                                     <Tabs
-                                    defaultActiveKey="profile"
+                                    defaultActiveKey="home"
                                     id="justify-tab-example"
                                     className="mb-3"
                                     justify
                                 >
                                     <Tab eventKey="home" title="Refer Information">
-
                                         <h2 className="mt-5 mb-3">Refer Information</h2>
                                         <BasicDataTable tableData={getReferalUsers.data} TableColumns={columns} dropdown={false} />
-
                                     </Tab>
                                     <Tab eventKey="profile" title="Reedeem Request">
-
-
                                         <h2 className="mt-5 mb-3">Reedeem Request</h2>
                                         <BasicDataTable tableData={getReferalUsersData.data} TableColumns={columns1} dropdown={false} />
                                     </Tab>
-
                                 </Tabs>
-
                                 </div>
                             </div>
                         </div>
