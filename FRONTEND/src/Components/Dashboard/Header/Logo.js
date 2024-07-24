@@ -24,6 +24,7 @@ const Logo = ({ data , ShowSidebar }) => {
                 <span className="brand-logo">
 
                     <img className="logo-abbr1" src="/assets/images/download2.png" alt="logo" />
+                    <img className="brand-title" src="/assets/images/download1.png" alt="logo" />
                 </span>
 
 
