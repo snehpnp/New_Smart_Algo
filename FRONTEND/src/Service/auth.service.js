@@ -220,8 +220,50 @@ export async function LOGOUT_FROM_OTHER_DEVICE(data, token) {
 
 }
 
+export async function REEDEEM_POINTS(data, token) {
+    try {
+        
+        const res = await axios.post(`${Config.base_url}reedeem/points`, data, {
+            // headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+      }
+
+}
+
+
+export async function GET_REEDEEM_DATA(data, token) {
+    try {
+        
+        const res = await axios.post(`${Config.base_url}get/reedeem`, data, {
+            // headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+      }
+
+}
 
 
 
+export async function UPDATE_REEDEEM_DATA(data, token) {
+    try {
+        
+        const res = await axios.post(`${Config.base_url}update/reedeem`, data, {
+            // headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+      }
 
-
+}

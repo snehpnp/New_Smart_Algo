@@ -1592,7 +1592,7 @@ class Employee {
       });
 
     } catch (error) {
-     console.log("Error in DawnloadStatusandResponse:", error);
+      console.log("Error in DawnloadStatusandResponse:", error);
       return res.status(500).json({ status: false, msg: "Internal Server Error", error });
     }
   }
@@ -1675,7 +1675,7 @@ class Employee {
         data: [],
       });
 
-      
+
     } catch (error) {
       return res.status(500).send({
         status: false,
@@ -1688,48 +1688,64 @@ class Employee {
 
   async GetAllReferalClients(req, res) {
     try {
-      const { Find_Role, username } = req.body;
+        const { Find_Role, username } = req.body;
 
-      // GET ALL CLIENTS
-      var AdminMatch;
+        // Determine the match criteria based on the role
+        const AdminMatch = Find_Role === "ADMIN" 
+            ? { refer_code: { $ne: null, $ne: "" } } 
+            : { refer_code: username };
 
-      if (Find_Role == "ADMIN") {
-        AdminMatch = {
-          $and: [
-              { refer_code: { $ne: null } },
-              { refer_code: { $ne: "" } }
-          ]
-      }
-      } else {
-        AdminMatch =  { refer_code:username}
-      }
+        // Fetch all clients matching the criteria
+        const getAllClients = await user_SignUp.find(AdminMatch).sort({ CreateDate: -1 });
+     
 
-      const getAllClients = await user_SignUp.find(AdminMatch).sort({ CreateDate: -1 });
+        if (getAllClients.length > 0) {
+            const updatePromises = getAllClients.map(async (data) => {
+                const GetUser = await User_model.findOne({ UserName: data.UserName }).select('license_type');
+                if (GetUser) {
+                    let updatestatus = 0;
+                    if (GetUser.license_type == 1 || GetUser.license_type == 0) {
+                        updatestatus = 1;
+                    } else if (GetUser.license_type == 2) {
+                        updatestatus = 2;
+                    }
 
-      if (getAllClients.length == 0) {
+                    await user_SignUp.updateOne(
+                        { _id: data._id },
+                        { $set: { ActiveStatus: updatestatus } }
+                    );
+                }
+            });
+
+            // Await all update operations
+            await Promise.all(updatePromises);
+        }
+
+        // Fetch all clients again after the update
+        const getAllClients1 = await user_SignUp.find(AdminMatch).sort({ CreateDate: -1 });
+
+        if (getAllClients1.length === 0) {
+            return res.send({
+                status: false,
+                msg: "Empty data",
+                data: [],
+            });
+        }
+
         return res.send({
-          status: false,
-          msg: "Empty data",
-          data: [],
+            status: true,
+            msg: "Get All Clients",
+            data: getAllClients1,
         });
-      }
-
-      return res.send({
-        status: true,
-        msg: "Get All Clients",
-        data: getAllClients,
-
-      });
     } catch (error) {
-      console.log("Error loginClients Error-", error);
-      return res.send({
-        status: false,
-        msg: "Empty data",
-        data: [],
-        // totalCount: totalCount,
-      });
+        console.log("Error in GetAllReferalClients:", error);
+        return res.status(500).send({
+            status: false,
+            msg: "Internal Server Error",
+            data: [],
+        });
     }
-  }
+}
 
 
 

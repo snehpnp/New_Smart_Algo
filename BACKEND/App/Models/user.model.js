@@ -226,7 +226,9 @@ const userModel = Schema({
         enum: ['0', '1'],
         default: '0'
     },
-
+    refer_points: {
+        type: Number
+    },
 },
     {
         timestamps: true

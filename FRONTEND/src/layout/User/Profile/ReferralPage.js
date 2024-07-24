@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import BasicDataTable from '../../../Components/ExtraComponents/Datatable/BasicDataTable';
 import Imag from './Refer.png';
 import { GET_COMPANY_INFOS, GettAllUSerReferal } from '../../../ReduxStore/Slice/Admin/AdminSlice';
+import { REEDEEM_POINTS_USER } from '../../../ReduxStore/Slice/Auth/AuthSlice';
+
 import { useDispatch } from "react-redux";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import { FacebookShareButton, WhatsappShareButton, TelegramShareButton, FacebookIcon, WhatsappIcon, TelegramIcon, EmailShareButton, EmailIcon } from 'react-share';
@@ -9,15 +11,20 @@ import { FaCopy, FaCheck, FaSms, FaInstagram } from 'react-icons/fa';
 import * as Config from "../../../Utils/Config";
 import { fDateTimeSuffix } from "../../../Utils/Date_formet";
 import StatusButton from './Statusbtn';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+import { REEDEEM_USER_DATA } from '../../../ReduxStore/Slice/Auth/AuthSlice';
+import Swal from 'sweetalert2'
 
 const ReferralPage = () => {
     const dispatch = useDispatch();
-    const user_token = JSON.parse(localStorage.getItem('user_details')).token;
     const user_details = JSON.parse(localStorage.getItem('user_details'));
     const [iframeUrl, setIframeUrl] = useState("http://localhost:3000/#/newsignup");
     const [getCompanyName, setCompanyName] = useState({ loading: true, data: [] });
     const [getReferalUsers, setReferalUsers] = useState({ loading: true, data: [] });
     const [copied, setCopied] = useState(false);
+    const [getReferalUsersData, setReferalUsersData] = useState({ loading: true, data: [] });
+
 
     const handleUrlChange = (event) => {
         setIframeUrl(event.target.value);
@@ -32,10 +39,6 @@ const ReferralPage = () => {
 
     const handleSmsShare = () => {
         window.location.href = `sms:?body=Join us and earn rewards! ${iframeUrl}`;
-    };
-
-    const handleEmailShare = () => {
-        window.location.href = `mailto:?subject=Join us and earn rewards!&body=Sign up using this link: ${iframeUrl}`;
     };
 
     const handleInstagramShare = () => {
@@ -66,7 +69,21 @@ const ReferralPage = () => {
             });
     };
 
+    const GetAllReedeemData = async () => {
+        await dispatch(REEDEEM_USER_DATA({ Role: "ADMIN" })).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    console.log("response", response);
+                    setReferalUsersData({
+                        loading: false,
+                        data: response.data,
+                    });
+                }
+            });
+    };
+
     useEffect(() => {
+        GetAllReedeemData()
         CompanyName();
         AllReferalUser();
         if (Config.base_url) {
@@ -91,9 +108,70 @@ const ReferralPage = () => {
         { dataField: 'refer_code', text: 'Refer Code' },
         { dataField: 'refer_points', text: 'Refer Points' },
         { dataField: 'createdAt', text: 'Created At', formatter: (cell) => fDateTimeSuffix(cell) },
-        { dataField: 'ActiveStatus', text: 'Status', formatter: (cell) => <StatusButton status={cell} /> },
+        { dataField: 'ActiveStatus', text: 'Status', formatter: (cell) => <StatusButton status={cell} type={1} /> },
+    ];
+    const columns1 = [
+        {
+            dataField: 'index',
+            text: 'Company ID',
+            formatter: (cell, row, rowIndex) => rowIndex + 1,
+        },
+        {
+            dataField: 'UserName',
+            text: 'UserName'
+        },
+        {
+            dataField: 'reedeem_points',
+            text: 'reedeem_points'
+        },
+
+        {
+            dataField: 'createdAt',
+            text: 'Created At',
+            formatter: (cell, row, rowIndex) => fDateTimeSuffix(cell),
+        },
+        {
+            dataField: 'ActiveStatus',
+            text: 'Status',
+            formatter: (cell, row, rowIndex) => (
+                <StatusButton status={cell} type={2} />
+            ),
+        },
+      
     ];
 
+    const handleRedeemPoints = async () => {
+        const req = {
+            user_id: user_details.user_id,
+            reedeem_points: ReferralsPoints && ReferralsPoints
+        }
+
+        await dispatch(REEDEEM_POINTS_USER(req)).unwrap()
+            .then((response) => {
+                if (response.status) {
+
+
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Your work has been saved",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
+            .catch((error) => {
+                // Handle error case
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: "Error redeeming points",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                console.error("Error redeeming points:", error);
+            });
+    };
     return (
         <div className="content-body">
             <div className="container-fluid">
@@ -181,19 +259,30 @@ const ReferralPage = () => {
                                                                     <h3>Referral points <p className='mb-0'>{ReferralsPoints}</p></h3>
                                                                 </div>
                                                             </div>
-                                                            <div className="col-md-3">
+                                                            <div className="col-md-2">
                                                                 <div className="rpWrp2">
                                                                     <h3>Total Referrals <p className='mb-0'>{totalReferrals}</p></h3>
                                                                 </div>
                                                             </div>
-                                                            <div className="col-md-3">
+                                                            <div className="col-md-2">
                                                                 <div className="rpWrp3">
-                                                                    <h3>In-Process Referrals <p className='mb-0'>{inProcessReferrals}</p></h3>
+                                                                    <h3>In-Process  <p className='mb-0'>{inProcessReferrals}</p></h3>
                                                                 </div>
                                                             </div>
+                                                            <div className="col-md-2">
+                                                                <div className="rpWrp4">
+                                                                    <h3>Successful <p className='mb-0'>{successfulReferrals}</p></h3>
+                                                                </div>
+                                                            </div>
+
                                                             <div className="col-md-3">
                                                                 <div className="rpWrp4">
-                                                                    <h3>Successful Referrals <p className='mb-0'>{successfulReferrals}</p></h3>
+                                                                    <h3>Redeem points</h3>
+                                                                    <p className='mb-0'>
+                                                                        <button className="btn btn-primary" onClick={handleRedeemPoints}>
+                                                                            Redeem Points
+                                                                        </button>
+                                                                    </p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -202,8 +291,27 @@ const ReferralPage = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <h2 className="mt-5 mb-3">Refer Information</h2>
-                                    <BasicDataTable tableData={getReferalUsers.data} TableColumns={columns} dropdown={false} />
+                                    <Tabs
+                                    defaultActiveKey="profile"
+                                    id="justify-tab-example"
+                                    className="mb-3"
+                                    justify
+                                >
+                                    <Tab eventKey="home" title="Refer Information">
+
+                                        <h2 className="mt-5 mb-3">Refer Information</h2>
+                                        <BasicDataTable tableData={getReferalUsers.data} TableColumns={columns} dropdown={false} />
+
+                                    </Tab>
+                                    <Tab eventKey="profile" title="Reedeem Request">
+
+
+                                        <h2 className="mt-5 mb-3">Reedeem Request</h2>
+                                        <BasicDataTable tableData={getReferalUsersData.data} TableColumns={columns1} dropdown={false} />
+                                    </Tab>
+
+                                </Tabs>
+
                                 </div>
                             </div>
                         </div>

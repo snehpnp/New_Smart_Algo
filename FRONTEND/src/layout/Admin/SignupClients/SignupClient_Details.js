@@ -88,9 +88,6 @@ const AllSignUpClients = () => {
             .unwrap()
             .then((response) => {
 
-
-
-
                 if (response.status) {
                     setAllSignUpClients({
                         loading: false,
@@ -144,7 +141,7 @@ const AllSignUpClients = () => {
             formatter: (cell, row) => (
                 <>
 
-                    {row.ActiveStatus === '1' ? <span
+                    {row.ActiveStatus === '1'|| row.ActiveStatus === '2'  ? <span
                         style={
                             cell == "off" || cell === null
                                 ? { color: "#FF0000", fontSize: "15px" }
@@ -158,12 +155,12 @@ const AllSignUpClients = () => {
                                 <input
                                     className="toggle-checkbox bg-primary"
                                     type="checkbox"
-                                    checked={row.ActiveStatus === "1" ? true : false}
+                                    checked={row.ActiveStatus == "1"|| row.ActiveStatus == "2" ? true : false}
                                     onChange={(e) => {
 
                                     }}
                                 />
-                                <div className={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
+                                <div className={`toggle-switch  ${row.ActiveStatus == "1" || row.ActiveStatus == "2" ? 'bg-success' : 'bg-danger'}`}></div>
                             </label>
                         </Link>
                     }
@@ -215,12 +212,12 @@ const AllSignUpClients = () => {
                         >
                             <Tab eventKey="home" title="Active Client">
                                 {
-                                    getAllSignUpClients.data.filter((client) => client.ActiveStatus == 1)
+                                    getAllSignUpClients.data.filter((client) => client.ActiveStatus == 1 || client.ActiveStatus == 2)
                                         .length > 0 && (
                                         <FullDataTable
                                             TableColumns={columns}
                                             tableData={getAllSignUpClients.data.filter(
-                                                (client) => client.ActiveStatus == 1
+                                                (client) => client.ActiveStatus == 1 || client.ActiveStatus == 2
                                             )}
                                         />
                                     )}

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { SIGN_IN_USER,SIGN_UP_USER, VARIFY_USER_DEVICE, LOG_OUT_USER, SET_THEME_DETAILS, RESET_PASSWORD, UPDATE_PASSWORD, FORGET_PASSWORD, GET_PANEL_INFORMATION, OTP_SEND_USEHERE, LOGOUT_FROM_OTHER_DEVICE } from "../../../Service/auth.service";
+import { SIGN_IN_USER,SIGN_UP_USER, VARIFY_USER_DEVICE, LOG_OUT_USER, SET_THEME_DETAILS, RESET_PASSWORD, UPDATE_PASSWORD, FORGET_PASSWORD, GET_PANEL_INFORMATION, OTP_SEND_USEHERE, LOGOUT_FROM_OTHER_DEVICE ,REEDEEM_POINTS,GET_REEDEEM_DATA,UPDATE_REEDEEM_DATA} from "../../../Service/auth.service";
 
 
 
@@ -126,6 +126,36 @@ export const Logout_From_Other_Device = createAsyncThunk("/session/clear", async
 
 
 
+export const REEDEEM_POINTS_USER = createAsyncThunk("reedeem/points", async (data) => {
+  try {
+    const res = await REEDEEM_POINTS(data)
+    return res;
+  }
+  catch (err) {
+    return err;
+  }
+});
+
+export const REEDEEM_USER_DATA = createAsyncThunk("get/reedeem", async (data) => {
+  try {
+    const res = await GET_REEDEEM_DATA(data)
+    return res;
+  }
+  catch (err) {
+    return err;
+  }
+});
+
+export const UPDATE_REEDEEM = createAsyncThunk("update/reedeem", async (data) => {
+  try {
+    const res = await UPDATE_REEDEEM_DATA(data)
+    return res;
+  }
+  catch (err) {
+    return err;
+  }
+});
+
 
 
 
@@ -143,7 +173,12 @@ const AuthSlice = createSlice({
     resetpassword: [],
     panel_details: [],
     otpStore: [],
-    logout: []
+    logout: [],
+    reedeem_points:[],
+    reedeem_data:[],
+    reedeem_update:[],
+
+
   },
 
   recuders: {},
@@ -203,7 +238,16 @@ const AuthSlice = createSlice({
   [Get_Panel_Informtion.fulfilled]: (state, { payload }) => {
     return { ...state, panel_details: payload, isLoading: false };
   },
-
+  [REEDEEM_POINTS_USER.fulfilled]: (state, { payload }) => {
+    return { ...state, reedeem_points: payload, isLoading: false };
+  },
+  [REEDEEM_USER_DATA.fulfilled]: (state, { payload }) => {
+    return { ...state, reedeem_data: payload, isLoading: false };
+  },
+  [UPDATE_REEDEEM.fulfilled]: (state, { payload }) => {
+    return { ...state, reedeem_update: payload, isLoading: false };
+  },
+  
    
 });
 

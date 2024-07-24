@@ -72,7 +72,6 @@ class TradeHistory {
 
             const GetAllClientServices = await client_services.aggregate(pipeline)
 
-            console.log("GetAllClientServices", GetAllClientServices)
 
             var abc = [];
             var abc1 = [];

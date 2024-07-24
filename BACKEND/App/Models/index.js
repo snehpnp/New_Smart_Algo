@@ -62,6 +62,7 @@ module.exports = {
     Store_all_redis_key : require('./Store_all_redis_key.model'),
     Faq_Data : require('./Faq.model'),
 
+    userReedeem_modal : require('./User_reedeem'),
 
 
 };

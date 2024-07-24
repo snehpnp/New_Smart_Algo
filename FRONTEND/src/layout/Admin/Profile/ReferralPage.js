@@ -12,14 +12,20 @@ import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import { fDateTimeSuffix } from "../../../Utils/Date_formet";
 import { FaCopy, FaSms, FaEnvelope, FaInstagram, FaTelegram } from 'react-icons/fa';
 import StatusButton from './Statusbtn';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+import { REEDEEM_USER_DATA ,UPDATE_REEDEEM} from '../../../ReduxStore/Slice/Auth/AuthSlice';
+
 
 const ReferralPage = () => {
     const [iframeUrl, setIframeUrl] = useState("http://localhost:3000/#/newsignup");
     const [showModal, setShowModal] = useState(false);
     const [getCompanyName, setCompanyName] = useState({ loading: true, data: [] });
     const [getReferalUsers, setReferalUsers] = useState({ loading: true, data: [] });
+    const [getReferalUsersData, setReferalUsersData] = useState({ loading: true, data: [] });
+
     const dispatch = useDispatch();
-    const user_token = JSON.parse(localStorage.getItem('user_details')).token;
+    const user_details = JSON.parse(localStorage.getItem('user_details'));
 
     const handleCopyUrl = () => {
         navigator.clipboard.writeText(iframeUrl);
@@ -82,7 +88,73 @@ const ReferralPage = () => {
             dataField: 'ActiveStatus',
             text: 'Status',
             formatter: (cell, row, rowIndex) => (
-                <StatusButton status={cell} />
+                <StatusButton status={cell} type={1} />
+            ),
+        },
+    ];
+
+    const columns1 = [
+        {
+            dataField: 'index',
+            text: 'Company ID',
+            formatter: (cell, row, rowIndex) => rowIndex + 1,
+        },
+        {
+            dataField: 'UserName',
+            text: 'UserName'
+        },
+        {
+            dataField: 'reedeem_points',
+            text: 'reedeem_points'
+        },
+
+        {
+            dataField: 'createdAt',
+            text: 'Created At',
+            formatter: (cell, row, rowIndex) => fDateTimeSuffix(cell),
+        },
+        {
+            dataField: 'ActiveStatus',
+            text: 'Status',
+            formatter: (cell, row, rowIndex) => (
+                <StatusButton status={cell} type={2} />
+            ),
+        },
+        {
+            dataField: 'Action',
+            text: 'Action',
+            formatter: (cell, row, rowIndex) => (
+                <>
+                    {row.ActiveStatus == 0 ?
+                        <>
+                            <button
+                                onclick="approvePayment(1)"
+                                style={{
+                                    backgroundColor: "green",
+                                    color: "white",
+                                    padding: "5px 10px",
+                                    border: "none",
+                                    cursor: "pointer"
+                                }}
+                            >
+                                Approve
+                            </button>
+                            <button
+                                onclick="rejectPayment(1)"
+                                style={{
+                                    backgroundColor: "red",
+                                    color: "white",
+                                    padding: "5px 10px",
+                                    border: "none",
+                                    cursor: "pointer"
+                                }}
+                            >
+                                Reject
+                            </button>
+                        </>
+                        : null}
+
+                </>
             ),
         },
     ];
@@ -113,7 +185,7 @@ const ReferralPage = () => {
                 }
             };
 
-            await dispatch(Update_smtp_details({ req, token: user_token })).unwrap().then((response) => {
+            await dispatch(Update_smtp_details({ req, token: user_details.token })).unwrap().then((response) => {
                 if (response.status === 409) {
                     toast.error(response.data.msg);
                 } else if (response.status) {
@@ -151,7 +223,21 @@ const ReferralPage = () => {
             });
     };
 
+    const GetAllReedeemData = async () => {
+        await dispatch(REEDEEM_USER_DATA({ Role: "ADMIN" })).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    console.log("response", response);
+                    setReferalUsersData({
+                        loading: false,
+                        data: response.data,
+                    });
+                }
+            });
+    };
+
     useEffect(() => {
+        GetAllReedeemData()
         AllReferalUser();
         CompanyName();
     }, []);
@@ -168,8 +254,13 @@ const ReferralPage = () => {
     const inProcessReferrals = getReferalUsers.data && getReferalUsers.data.filter(user => user.ActiveStatus == 1).length;
     const successfulReferrals = getReferalUsers.data && getReferalUsers.data.filter(user => user.ActiveStatus == 2).length;
     const ReferralsPoints = getReferalUsers.data && getReferalUsers.data
-    .filter(user => user.refer_points)
-    .reduce((sum, user) => sum + user.refer_points, 0);
+        .filter(user => user.refer_points)
+        .reduce((sum, user) => sum + user.refer_points, 0);
+
+
+
+
+
 
     return (
         <div className="content-body">
@@ -234,24 +325,49 @@ const ReferralPage = () => {
                                         </div>
                                     </div>
 
-                                    <h2 className="mt-5 mb-3">Refer Information</h2>
-                                    <BasicDataTable tableData={getReferalUsers.data} TableColumns={columns} dropdown={false} />
 
-                                    <div className="iframe-container mb-3 d-flex align-items-center">
-                                        <input
-                                            type="text"
-                                            id="urlInput"
-                                            className="form-control"
-                                            value={iframeUrl}
-                                            readOnly
-                                        />
-                                        <FaCopy size={32} onClick={handleCopyUrl} style={{ cursor: 'pointer', marginLeft: '10px' }} />
-                                        <FaSms size={32} onClick={() => shareUrl('sms')} style={{ cursor: 'pointer', marginLeft: '10px' }} />
-                                        <FaEnvelope size={32} onClick={() => shareUrl('email')} style={{ cursor: 'pointer', marginLeft: '10px' }} />
-                                        <FaInstagram size={32} onClick={() => shareUrl('instagram')} style={{ cursor: 'pointer', marginLeft: '10px' }} />
-                                        <FaTelegram size={32} onClick={() => shareUrl('telegram')} style={{ cursor: 'pointer', marginLeft: '10px' }} />
-                                    </div>
+
                                 </div>
+
+
+
+                                <Tabs
+                                    defaultActiveKey="profile"
+                                    id="justify-tab-example"
+                                    className="mb-3"
+                                    justify
+                                >
+                                    <Tab eventKey="home" title="Refer Information">
+
+                                        <h2 className="mt-5 mb-3">Refer Information</h2>
+                                        <BasicDataTable tableData={getReferalUsers.data} TableColumns={columns} dropdown={false} />
+
+                                    </Tab>
+                                    <Tab eventKey="profile" title="Reedeem Request">
+
+
+                                        <h2 className="mt-5 mb-3">Reedeem Request</h2>
+                                        <BasicDataTable tableData={getReferalUsersData.data} TableColumns={columns1} dropdown={false} />
+                                    </Tab>
+
+                                </Tabs>
+
+
+                                <div className="iframe-container mb-3 d-flex align-items-center">
+                                    <input
+                                        type="text"
+                                        id="urlInput"
+                                        className="form-control"
+                                        value={iframeUrl}
+                                        readOnly
+                                    />
+                                    <FaCopy size={32} onClick={handleCopyUrl} style={{ cursor: 'pointer', marginLeft: '10px' }} />
+                                    <FaSms size={32} onClick={() => shareUrl('sms')} style={{ cursor: 'pointer', marginLeft: '10px' }} />
+                                    <FaEnvelope size={32} onClick={() => shareUrl('email')} style={{ cursor: 'pointer', marginLeft: '10px' }} />
+                                    <FaInstagram size={32} onClick={() => shareUrl('instagram')} style={{ cursor: 'pointer', marginLeft: '10px' }} />
+                                    <FaTelegram size={32} onClick={() => shareUrl('telegram')} style={{ cursor: 'pointer', marginLeft: '10px' }} />
+                                </div>
+
                             </div>
                         </div>
                     </div>
