@@ -287,11 +287,11 @@ const ReferralPage = () => {
                                     justify
                                 >
                                     <Tab eventKey="home" title="Refer Information">
-                                        <h2 className="mt-5 mb-3">Refer Information</h2>
+                                        <h2 className="mt-5 mb-3 nav1">Refer Information</h2>
                                         <BasicDataTable tableData={getReferalUsers.data} TableColumns={columns} dropdown={false} />
                                     </Tab>
                                     <Tab eventKey="profile" title="Reedeem Request">
-                                        <h2 className="mt-5 mb-3">Reedeem Request</h2>
+                                        <h2 className="mt-5 mb-3 nav1">Reedeem Request</h2>
                                         <BasicDataTable tableData={getReferalUsersData.data} TableColumns={columns1} dropdown={false} />
                                     </Tab>
                                 </Tabs>

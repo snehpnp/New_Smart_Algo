@@ -46657,7 +46657,7 @@ body {
 
 
   .react-bootstrap-table {
-    height: 500px !important;
+    height: auto !important;
     overflow-y: auto !important;
   }
 
@@ -46673,3 +46673,16 @@ body {
     top: 0;
     z-index: 1;
   }
+
+  .nav1{
+    height: 46px !important;
+  }
+
+
+  .nav-fill .nav-item .nav-link, .nav-justified .nav-item .nav-link {
+    font-weight: 700 !important;
+    /* font-style: normal; */
+    width: 100%;
+    height: 51px !important;
+    font-size: 20px !important;
+}
