@@ -176,13 +176,11 @@ const GetAllBrokerResponse = async (user_info,res) => {
        // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId , order_view_status : "0" })
 
-        console.log("GetAllBrokerResponse ",FindUserBrokerResponse)
      
         if (FindUserBrokerResponse.length > 0) {
     
             FindUserBrokerResponse.forEach((data1) => {    
               
-                console.log("data1 data1.order_id",data1.order_id)
                 
                 var config = {
                     method: 'get',

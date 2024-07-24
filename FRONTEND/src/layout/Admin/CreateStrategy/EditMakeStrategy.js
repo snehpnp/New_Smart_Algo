@@ -1618,7 +1618,6 @@ const EditMakeStrategy = () => {
         "maxProfit": singleMakeStrategyData.maxProfit,
         "maxLoss": singleMakeStrategyData.maxLoss
       }
-      console.log("data request sell", data)
 
       await dispatch(Update_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
         if (response.status === 409) {

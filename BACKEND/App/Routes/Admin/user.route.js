@@ -5,7 +5,7 @@ const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 const { upload } = require('../../Helper/imgUpload');
 
-const { AddEmployee, UpdateUser, GetAllClients, GetAllExpiredClients ,loginClients, tradingOnClients, GetclientKey , GetTradingStatus, UpdateActiveStatus, DeleteUser, GetUserInfo, Update_Broker_Keys,GetDuplicateData ,DawnloadStatusandResponse,GetAllStarClients,UpdateStarStatus} = require('../../Controllers/Admin/user.controller')
+const { AddEmployee, UpdateUser, GetAllClients, GetAllExpiredClients ,loginClients, tradingOnClients, GetclientKey , GetTradingStatus, UpdateActiveStatus, DeleteUser, GetUserInfo, Update_Broker_Keys,GetDuplicateData ,DawnloadStatusandResponse,GetAllStarClients,UpdateStarStatus,GetAllReferalClients} = require('../../Controllers/Admin/user.controller')
 const { EditCompany, GetCompanyInfo, GetCompany_logo, EditEmailInfo , UpdateDisclaimer } = require('../../Controllers/Admin/company.controller')
 const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy, DeleteStragegy, GetAllStrategyForClient, ClientsAccordingToStrategy ,GetAddRemoveStrategy ,UpdateAddRemoveStrategy } = require('../../Controllers/Admin/strategy.controller')
 
@@ -89,6 +89,7 @@ router.get('/get/duplicatedata', GetDuplicateData);
 router.post('/dawnload/data', DawnloadStatusandResponse);
 
 
+router.post('/getall/referaluser', GetAllReferalClients);
 
 
 

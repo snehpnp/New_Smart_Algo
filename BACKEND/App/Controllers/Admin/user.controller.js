@@ -416,7 +416,6 @@ class Employee {
               user_type: license_type == 2 ? "Live Account" : license_type == 0 ? "2 Days Free Live Account" : "Free Demo Account"
             };
 
-            // UPDATE STATUS OF THE USER_SIGNUP COLLECTION WHEN CLICK ON ADD CLIENT
 
             const existingUser = await user_SignUp.findOne({
               $or: [
@@ -1000,8 +999,7 @@ class Employee {
 
         if (multy_stgfind.length > 0) {
           multy_stgfind.forEach(async (data) => {
-            console.log("data", data)
-            console.log("strategFind", strategFind[0].strategy_id)
+        
 
             if (data.strategy_id.length == 0) {
               const filter = { _id: data._id };
@@ -1027,8 +1025,7 @@ class Employee {
 
         if (multy_stgfind.length > 0) {
           multy_stgfind.forEach(async (data) => {
-            console.log("data", data)
-            console.log("strategFind", strategFind[0].strategy_id)
+         
 
             if (data.strategy_id.length == 0) {
               const filter = { _id: data._id };
@@ -1579,7 +1576,6 @@ class Employee {
       }
 
 
-      console.log("data", data);
 
 
       if (!data.length) {
@@ -1593,7 +1589,7 @@ class Employee {
       });
 
     } catch (error) {
-     console.log("Error in DawnloadStatusandResponse:", error);
+      console.log("Error in DawnloadStatusandResponse:", error);
       return res.status(500).json({ status: false, msg: "Internal Server Error", error });
     }
   }
@@ -1676,7 +1672,7 @@ class Employee {
         data: [],
       });
 
-      
+
     } catch (error) {
       return res.status(500).send({
         status: false,
@@ -1685,6 +1681,82 @@ class Employee {
       });
     }
   }
+
+
+  async GetAllReferalClients(req, res) {
+    try {
+        const { Find_Role, username } = req.body;
+
+
+        const AdminMatch = Find_Role === "ADMIN" 
+            ? { refer_code: { $ne: null, $ne: "" } } 
+            : { refer_code: username };
+
+        const getAllClients = await user_SignUp.find(AdminMatch).sort({ CreateDate: -1 });
+     
+
+        if (getAllClients.length > 0) {
+            const updatePromises = getAllClients.map(async (data) => {
+                const GetUser = await User_model.findOne({ UserName: data.UserName }).select('license_type refer_points');
+                if (GetUser) {
+                    let updatestatus = 0;
+                    if (GetUser.license_type == 1 || GetUser.license_type == 0) {
+                        updatestatus = 1;
+                    } else if (GetUser.license_type == 2) {
+                        updatestatus = 2;
+                    }
+
+                    await user_SignUp.updateOne(
+                        { _id: data._id },
+                        { $set: { ActiveStatus: updatestatus } }
+                    );
+                }
+            });
+
+            // Await all update operations
+            await Promise.all(updatePromises);
+        }
+
+        // Fetch all clients again after the update
+        const getAllClients1 = await user_SignUp.find(AdminMatch).sort({ CreateDate: -1 });
+
+        if (getAllClients1.length === 0) {
+            return res.send({
+                status: false,
+                msg: "Empty data",
+                data: [],
+            });
+        }
+
+        if(Find_Role == "USER"){
+          const GetUser = await User_model.findOne({ UserName: username }).select('license_type refer_points');
+          return res.send({
+            status: true,
+            msg: "Get All Clients",
+            data: getAllClients1,
+            data1: GetUser,
+
+        });
+        }else{
+          return res.send({
+            status: true,
+            msg: "Get All Clients",
+            data: getAllClients1,
+        });
+        }
+
+
+
+     
+    } catch (error) {
+        console.log("Error in GetAllReferalClients:", error);
+        return res.status(500).send({
+            status: false,
+            msg: "Internal Server Error",
+            data: [],
+        });
+    }
+}
 
 
 

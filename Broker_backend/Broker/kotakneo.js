@@ -381,7 +381,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                 };
                 axios(config)
                     .then(async (response) => {
-                        // console.log("response", response.data)
                        
     
     

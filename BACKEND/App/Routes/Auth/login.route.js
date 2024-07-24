@@ -4,7 +4,7 @@
 const router = require("express").Router()
 const {verifyToken}= require('../../Middleware/authjwt')
 
-const { login, signup,deletesignupclients, showuserdata ,verifyUser,logoutUser,ForgetPassword ,UpdatePassword , ResetPassword,goToDashboard,sessionClearmail,logout_other_device,DisclaimerMailSend} = require('../../Controllers/Auth/login.controller')
+const { login, signup,deletesignupclients, showuserdata ,verifyUser,logoutUser,ForgetPassword ,UpdatePassword , ResetPassword,goToDashboard,sessionClearmail,logout_other_device,DisclaimerMailSend,reedeemRequest,GetreedeemRequest,updatereedeemRequest} = require('../../Controllers/Auth/login.controller')
 
 
 
@@ -22,6 +22,12 @@ router.post('/session/clear', sessionClearmail)
 router.post('/logout/other/device', logout_other_device) 
 
 router.get('/send/mail', DisclaimerMailSend) 
+
+
+router.post('/reedeem/points', reedeemRequest) 
+router.post('/get/reedeem', GetreedeemRequest) 
+
+router.post('/update/reedeem', updatereedeemRequest) 
 
 
 

@@ -55,6 +55,8 @@ import { Get_Pmermission } from "../ReduxStore/Slice/Users/DashboardSlice";
 import Faq from '../layout/Admin/Faq/Faq';
 
 import Starclients from '../layout/Admin/Clients/Starclients/Starclients'
+import ReferralPage  from '../layout/Admin/Profile/ReferralPage'
+
 
 import { useDispatch } from "react-redux";
 
@@ -148,6 +150,8 @@ const Admin = () => {
                 <Route exact path="/chart" element={<ChartDetail />} />
                 <Route exact path="/allstarclients" element={<Starclients />} />
                 <Route exact path="/faq" element={<Faq />} />
+                <Route exact path="/refer-earn" element={<ReferralPage />} />
+
 
 
 

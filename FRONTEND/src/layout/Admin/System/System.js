@@ -13,7 +13,8 @@ import UpdateCompanyInfo from './UpdateCompanyInfo';
 import UpdateImages from './UpdateImages';
 import UpdateSmptDetails from './UpdateSmptDetails';
 import { useDispatch } from "react-redux";
-
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 
 const System = () => {
     const dispatch = useDispatch();
@@ -231,66 +232,85 @@ const System = () => {
     return (
         <Content Page_title="System" button_status={false}>
 
-            <h2>Company Information</h2>
-            <BasicDataTable tableData={getCompanyName.data} TableColumns={Company_columns} dropdown={false} />
-            <br />
 
-            <h2>Email Information</h2>
-            <BasicDataTable tableData={getCompanyName.data} TableColumns={Email_columns} dropdown={false} />
-            <br />
+            <Tabs
+                defaultActiveKey="1"
+                id="fill-tab-example"
+                className="mb-3"
+                fill
+            >
+                <Tab eventKey="1" title="Company Information" >
+                    <h2>Company Information</h2>
+                    <BasicDataTable tableData={getCompanyName.data} TableColumns={Company_columns} dropdown={false} />
 
-            <h2>Background Images</h2>
-            <BasicDataTable tableData={getCompanyName.data} TableColumns={background_images} dropdown={false} />
+                </Tab>
+                <Tab eventKey="2" title="Email Information">
 
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <h2 style={{ marginRight: "10px" }}>Disclaimer Message</h2>
+                    <h2>Email Information</h2>
+                    <BasicDataTable tableData={getCompanyName.data} TableColumns={Email_columns} dropdown={false} />
 
-                <div className='toogle-new'>
-                    <input type="checkbox"
-                        id="switch"
-                        checked={Number(getDissStatus) === 1}
-                        onChange={(e) => updateDiscStatus(e)}
-                    />
-                    <label htmlFor="switch">Toggle</label>
-                </div>
-            </div>
+                </Tab>
+                <Tab eventKey="3" title="Background Images">
+                    <h2>Background Images</h2>
+                    <BasicDataTable tableData={getCompanyName.data} TableColumns={background_images} dropdown={false} />
+                </Tab>
+                <Tab eventKey="4" title="Disclaimer Message" >
 
+                    <div className='Disclamer'>
 
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                            <h2 style={{ marginRight: "10px" }}>Disclaimer Message</h2>
 
+                            <div className='toogle-new'>
+                                <input type="checkbox"
+                                    id="switch"
+                                    checked={Number(getDissStatus) === 1}
+                                    onChange={(e) => updateDiscStatus(e)}
+                                />
+                                <label htmlFor="switch">Toggle</label>
+                            </div>
+                        </div>
 
-            <textarea
-                className='col-lg-12 mb-3 p-2'
-                rows="5"
-                placeholder='Enter your disclaimer message'
-                onChange={(e) => setDiss(e.target.value)}
-                value={diss}
-            />
-
-            {inputs.map((input, index) => (
-                <Row key={index} className="mb-3">
-                    <Col>
-                        <Form.Control
-                            type="text"
-                            value={input.value}
-                            onChange={(e) => handleInputChange(index, e)}
+                        <textarea
+                            className='col-lg-12 mb-3 p-2'
+                            rows="5"
                             placeholder='Enter your disclaimer message'
+                            onChange={(e) => setDiss(e.target.value)}
+                            value={diss}
                         />
-                    </Col>
-                </Row>
-            ))}
-            <Button variant="primary" onClick={handleAddInput}>
-                +
-            </Button>{' '}
-            <Button variant="danger" onClick={handleRemoveInput}>
-                -
-            </Button>
 
-            <button type='submit' className='btn btn-primary mx-2' onClick={handleSubmit}>Submit</button>
+                        {inputs.map((input, index) => (
+                            <Row key={index} className="mb-3">
+                                <Col>
+                                    <Form.Control
+                                        type="text"
+                                        value={input.value}
+                                        onChange={(e) => handleInputChange(index, e)}
+                                        placeholder='Enter your disclaimer message'
+                                    />
+                                </Col>
+                            </Row>
+                        ))}
+                        <Button variant="primary" onClick={handleAddInput}>
+                            +
+                        </Button>{' '}
+                        <Button variant="danger" onClick={handleRemoveInput}>
+                            -
+                        </Button>
+
+                        <button type='submit' className='btn btn-primary mx-2' onClick={handleSubmit}>Submit</button>
+
+                    </div>
+                </Tab>
+            </Tabs>
+
+
+
 
             <UpdateCompanyInfo data={getCompanyName && getCompanyName.data} showModal={PanelDetailsModal} setshowModal={() => setPanelDetailsModal(false)} />
             <UpdateSmptDetails data={getCompanyName && getCompanyName.data} showModal={ShowEmailModal} setshowModal={() => setShowEmailModal(false)} />
             <UpdateImages data={getCompanyName && getCompanyName.data} showModal={showImgModal} setshowModal={() => setshowImgModal(false)} />
-            <br />
+
             <ToastButton />
         </Content>
     );

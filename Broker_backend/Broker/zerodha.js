@@ -157,7 +157,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                             };
                             axios(config)
                                 .then(async (response) => {
-                                    // console.log("response", response.data)
                                     // fs.appendFile(filePath, 'TIME ' + new Date() + ' ZERODHA POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
                                     //     if (err) {
                                     //         return console.log(err);
@@ -446,12 +445,11 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
     var client_key = signals.Key;
     var demo = signals.Demo;
 
-    // console.log("item.postdata -",item.postdata)
 
 
     let data = 'tradingsymbol=' + item.postdata.tradingsymbol + '&exchange=' + item.postdata.exchange + '&transaction_type=' + item.postdata.transaction_type + '&quantity=' + item.postdata.quantity + '&order_type=' + item.postdata.order_type + '&product=' + item.postdata.product + '&price=' + item.postdata.price + '&trigger_price=' + item.postdata.trigger_price + '&validity=' + item.postdata.validity;
 
-    // console.log("data request ",data)
+
 
 
     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');

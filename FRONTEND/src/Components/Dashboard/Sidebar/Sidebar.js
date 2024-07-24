@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { admin_sidebar, supper_admin_sidebar, sub_admin_sidebar, Client } from './Nav_Config'
-import { Signal, Users, Wrench, Link2, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Boxes, Rocket, Paintbrush, Vote, Info } from 'lucide-react';
+import { Signal, Users, Wrench, Link2, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Boxes, Rocket, Paintbrush, Vote, Info, LayoutList  } from 'lucide-react';
 import $ from "jquery";
 import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Subadminslice';
 import { useDispatch } from "react-redux";
@@ -82,7 +82,7 @@ const Sidebar = ({ ShowSidebar }) => {
                 $('head').append(favicon);
             }
         } catch (error) {
-           console.log("Failed to fetch company logo and favicon:", error);
+            console.log("Failed to fetch company logo and favicon:", error);
             $(".logo-abbr").attr('src', 'path/to/default/logo.png');
 
             let favicon = $("link[rel='icon']").length
@@ -101,7 +101,7 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
     return (
-        <div className="deznav pt-3" >
+        <div className="deznav " >
             <div className="deznav-scroll">
                 <ul className="metismenu" id="menu">
                     {
@@ -177,8 +177,6 @@ const Sidebar = ({ ShowSidebar }) => {
 
                             }) : "" :
                             roles === 'ADMIN' ? admin_sidebar && admin_sidebar.map((item) => {
-
-
 
                                 if ((item.id === 9 || item.name === "Make Strategy") && admin_permission.data && admin_permission.data[0].Create_Strategy === 0) {
                                 } else {
@@ -447,11 +445,7 @@ export default Sidebar
 
 
 
-
-
-
 const IconComponent = ({ icon }) => {
-    // Render the icon based on the provided icon name
     const renderIcon = () => {
         switch (icon) {
             case 'Signal':
@@ -460,10 +454,8 @@ const IconComponent = ({ icon }) => {
                 return <Users className='me-3' />;
             case 'Wrench':
                 return <Wrench className='me-3' />;
-
             case 'Frame':
                 return <Frame className='me-3' />;
-
             case 'CandlestickChart':
                 return <CandlestickChart className='me-3' />;
             case 'Activity':
@@ -498,7 +490,8 @@ const IconComponent = ({ icon }) => {
                 return <Info className='me-3' />;
             case 'Link2':
                 return <Link2 className='me-3' />;
-
+            case 'MoreHorizontal':
+                return <LayoutList  className='me-3' />;
             default:
                 return null;
         }

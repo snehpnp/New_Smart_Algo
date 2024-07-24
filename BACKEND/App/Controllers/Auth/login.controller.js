@@ -11,6 +11,8 @@ const company_information = db.company_information;
 const User = db.user;
 const Subadmin_Permission = db.Subadmin_Permission;
 const user_SignUp = db.UserSignUp;
+const userReedeem_modal = db.userReedeem_modal;
+
 
 
 const formattedDateTime = require('../../Helper/time.helper')
@@ -128,14 +130,14 @@ class Login {
 
             try {
                 logger.info('Login Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
-                return  res.send({ status: true, msg: "Login Succesfully", data: msg })
+                return res.send({ status: true, msg: "Login Succesfully", data: msg })
             } catch (error) {
                 console.log("Error Some Error in a login", error);
             }
         }
         catch (error) {
 
-            return   res.send({ status: false, msg: "Server Side error", data: error })
+            return res.send({ status: false, msg: "Server Side error", data: error })
         }
 
     }
@@ -178,7 +180,7 @@ class Login {
             }
             var DeleteUser = await user_SignUp.deleteOne({ _id: get_user[0]._id });
 
-            return  res.send({
+            return res.send({
                 status: true,
                 msg: "Delete Successfully",
                 data: DeleteUser,
@@ -194,78 +196,81 @@ class Login {
     // User SignUp
     async signup(req, res) {
         try {
-            const { UserName, FullName, Email, PhoneNo } = req.body;
+            const { UserName, FullName, Email, PhoneNo, refer_code } = req.body;
 
+            // Log the request body for debugging
+            console.log("Received signup request with refer_code:", refer_code);
+
+            // Fetch company information
+            const companyInfo = await company_information.findOne();
+            const referPoints = companyInfo?.refer_points || 0;
+
+            // Combined query to check for existing users in both collections
             const searchQuery = {
                 $or: [
-                    { UserName: UserName },
-                    { Email: Email },
-                    { PhoneNo: PhoneNo }
+                    { UserName },
+                    { Email },
+                    { PhoneNo }
                 ]
             };
 
-            const existingUser_DB = await User.findOne(searchQuery);
-            const existingSignupUser_DB = await user_SignUp.findOne(searchQuery);
+            // Check for existing users in both collections
+            const [existingUser, existingSignupUser] = await Promise.all([
+                User.findOne(searchQuery),
+                user_SignUp.findOne(searchQuery)
+            ]);
 
-            if (existingUser_DB) {
-                const errorMsg = [];
-                if (existingUser_DB.UserName === UserName) {
+            // Collect error messages if any existing user is found
+            const errorMsg = [];
+            if (existingUser || existingSignupUser) {
+                if ((existingUser && existingUser.UserName === UserName) || (existingSignupUser && existingSignupUser.UserName === UserName)) {
                     errorMsg.push("Username already exists");
                 }
-                if (existingUser_DB.Email === Email) {
+                if ((existingUser && existingUser.Email === Email) || (existingSignupUser && existingSignupUser.Email === Email)) {
                     errorMsg.push("Email already exists");
                 }
-                if (existingUser_DB.PhoneNo === PhoneNo) {
+                if ((existingUser && existingUser.PhoneNo === PhoneNo) || (existingSignupUser && existingSignupUser.PhoneNo === PhoneNo)) {
                     errorMsg.push("Phone Number already exists");
                 }
 
                 if (errorMsg.length > 0) {
                     return res.status(400).json({
                         status: false,
-                        msg: errorMsg.join(', '), // Combine error messages
+                        msg: errorMsg.join(', '),
                         data: errorMsg,
                     });
                 }
             }
 
-            if (existingSignupUser_DB) {
-                const errorMsg = [];
-                if (existingSignupUser_DB.UserName === UserName) {
-                    errorMsg.push("Username already exists");
-                }
-                if (existingSignupUser_DB.Email === Email) {
-                    errorMsg.push("Email ID already exists");
-                }
-                if (existingSignupUser_DB.PhoneNo === PhoneNo) {
-                    errorMsg.push("Phone Number already exists");
-                }
-
-                if (errorMsg.length > 0) {
-                    return res.status(400).json({
-                        status: false,
-                        msg: errorMsg.join(', '), // Combine error messages
-                        data: errorMsg,
-                    });
-                }
-            }
-
-
-            // If no existing user found, proceed with user creation
+            // Create new user if no existing user is found
             const newUser = new user_SignUp({
-                UserName: req.body.UserName,
-                FullName: req.body.FullName,
-                Email: req.body.Email,
-                PhoneNo: req.body.PhoneNo
+                UserName,
+                FullName,
+                Email,
+                PhoneNo,
+                refer_code,
+                refer_points: referPoints
             });
 
-
             await newUser.save();
+
+            // Update referral points if refer_code is valid
+            const referUser = await User.findOne({ UserName: refer_code });
+            if (referUser) {
+                const newReferPoints = (referUser.refer_points || 0) + referPoints;
+                await User.updateOne({ _id: referUser._id }, { $set: { refer_points: newReferPoints } });
+
+                console.log("Updated refer points for user:", referUser.UserName, "New points:", newReferPoints);
+            }
+
             return res.status(201).json({ status: true, msg: 'Sign Up successful!' });
+
         } catch (error) {
-            console.log('Error saving user:', error);
+            console.error('Error during signup process:', error);
             return res.status(500).json({ status: false, error: 'Internal Server Error' });
         }
     }
+
 
     // Verify user
     async verifyUser(req, res) {
@@ -447,7 +452,7 @@ class Login {
 
 
             logger.info('Logout Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-            return   res.send({ status: true, msg: "Logout Succesfully", data: [] })
+            return res.send({ status: true, msg: "Logout Succesfully", data: [] })
 
 
         } catch (error) {
@@ -481,14 +486,14 @@ class Login {
             console.log("Error in Login controller", error)
         }
 
-        return   res.send({ status: true, msg: "Mail send successfully", data: redirectUrl })
+        return res.send({ status: true, msg: "Mail send successfully", data: redirectUrl })
     }
 
 
     // Update Password
     async UpdatePassword(req, res) {
         try {
-            const { userid, newpassword, confirmpassword } = req.body;       
+            const { userid, newpassword, confirmpassword } = req.body;
             const EmailCheck = await User.findById(userid);
 
             if (!EmailCheck) {
@@ -516,7 +521,7 @@ class Login {
 
 
             logger.info('Password Update Successfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-            return  res.send({ status: true, msg: "Password Update Successfully" });
+            return res.send({ status: true, msg: "Password Update Successfully" });
         } catch (error) {
 
         }
@@ -555,7 +560,7 @@ class Login {
             }
 
 
-           return res.send({ status: true, message: "Password Update Successfully" });
+            return res.send({ status: true, message: "Password Update Successfully" });
 
             // res.send({ status: true, message: "Password Update Successfully" });
         } catch (error) {
@@ -591,13 +596,13 @@ class Login {
 
             try {
                 logger.info('Go To Dashboard Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
-                return   res.send({ status: true, msg: "Go To Dashboard Succesfully", data: msg })
+                return res.send({ status: true, msg: "Go To Dashboard Succesfully", data: msg })
             } catch (error) {
                 console.log("Error Some Error in a login", error);
             }
         }
         catch (error) {
-            return  res.send({ status: false, msg: "Server Side error", data: error })
+            return res.send({ status: false, msg: "Server Side error", data: error })
         }
 
     }
@@ -632,11 +637,11 @@ class Login {
 
             CommonEmail(toEmail, subjectEmail, htmlEmail, textEmail)
 
-            return   res.send({ status: true, msg: "Send mail Successfully", data: OTP })
+            return res.send({ status: true, msg: "Send mail Successfully", data: OTP })
 
         }
         catch (error) {
-            return   res.send({ status: false, msg: "Server Side error", data: error })
+            return res.send({ status: false, msg: "Server Side error", data: error })
         }
 
     }
@@ -713,7 +718,7 @@ class Login {
             );
 
 
-      
+
 
             const user_login = new user_logs({
                 user_Id: EmailCheck._id,
@@ -761,7 +766,197 @@ class Login {
 
     }
 
+    async reedeemRequest(req, res) {
+        try {
+            const { user_id, reedeem_points } = req.body;
 
+            // Validate input
+            if (!user_id || !reedeem_points) {
+                return res.status(400).send({
+                    status: false,
+                    msg: "user_id and reedeem_points are required"
+                });
+            }
+
+            // Check if user exists
+            const user = await User.findById(user_id);
+            if (!user) {
+                return res.status(404).send({
+                    status: false,
+                    msg: "User not found"
+                });
+            }
+
+            // Check if user has enough points to redeem
+            if (user.refer_points < reedeem_points) {
+                return res.status(400).send({
+                    status: false,
+                    msg: "Insufficient points to redeem"
+                });
+            }
+
+            // Deduct points from user's account
+            // user.refer_points -= reedeem_points;
+            // await user.save();
+
+            // Save redeem request
+            const redeemRequest = new userReedeem_modal({
+                user_id,
+                reedeem_points
+            });
+            await redeemRequest.save();
+
+            return res.send({
+                status: true,
+                msg: "Redeem request processed successfully",
+                data: {
+                    user_id,
+                    reedeem_points
+                }
+            });
+        } catch (error) {
+            console.log("Error in reedeemRequest controller", error);
+            return res.status(500).send({
+                status: false,
+                msg: "Internal Server Error"
+            });
+        }
+    }
+
+
+
+
+    async GetreedeemRequest(req, res) {
+        try {
+            const { Role, user_id } = req.body;
+
+            // Construct match condition based on Role
+            let matchCondition = {};
+            if (Role === "USER") {
+                matchCondition = { user_id: mongoose.Types.ObjectId(user_id) };
+            }
+
+            // Aggregation pipeline to lookup and fetch the necessary details
+            const redeemRequests = await userReedeem_modal.aggregate([
+                { $match: matchCondition },
+                {
+                    $lookup: {
+                        from: 'users', // Collection name for users
+                        localField: 'user_id',
+                        foreignField: '_id',
+                        as: 'user_details'
+                    }
+                },
+                { $unwind: '$user_details' },
+                {
+                    $addFields: {
+                        UserName: '$user_details.UserName'
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        reedeem_points: 1,
+                        user_id: 1,
+                        createdAt: 1,
+                        UserName: 1,
+                        ActiveStatus: 1
+                    }
+                }
+            ]);
+
+            if (redeemRequests.length === 0) {
+                return res.send({
+                    status: false,
+                    msg: "No redeem requests found",
+                    data: []
+                });
+            }
+
+            return res.send({
+                status: true,
+                msg: "Redeem requests fetched successfully",
+                data: redeemRequests
+            });
+        } catch (error) {
+            console.log("Error in GetreedeemRequest controller", error);
+            return res.status(500).send({
+                status: false,
+                msg: "Internal Server Error"
+            });
+        }
+    }
+
+
+    async updatereedeemRequest(req, res) {
+        try {
+            const { user_id, id, reedeem_points, status } = req.body;
+    
+            console.log("req.body", req.body);
+    
+            // Validate input
+            if (!user_id || !id || !status) {
+                return res.status(400).send({
+                    status: false,
+                    msg: "user_id, id, and status are required"
+                });
+            }
+    
+            // Check if user exists
+            const user = await User.findById(user_id);
+            if (!user) {
+                return res.status(404).send({
+                    status: false,
+                    msg: "User not found"
+                });
+            }
+    
+            // Check if redeem request exists
+            const user_reedeem = await userReedeem_modal.findById(id);
+            if (!user_reedeem) {
+                return res.status(404).send({
+                    status: false,
+                    msg: "Redeem request not found"
+                });
+            }
+    
+            if (status == 1) {
+                user_reedeem.ActiveStatus = 1;
+                await user_reedeem.save();
+    
+            } else if (status == 2) {
+                // Check if user has enough points to redeem
+                if (user.refer_points < reedeem_points) {
+                    return res.status(400).send({
+                        status: false,
+                        msg: "Insufficient points to redeem"
+                    });
+                }
+    
+                user_reedeem.ActiveStatus = 2;
+                await user_reedeem.save();
+    
+                user.refer_points -= reedeem_points;
+                await user.save();
+            }
+    
+            return res.send({
+                status: true,
+                msg: "Redeem request processed successfully",
+                data: {
+                    user_id,
+                    reedeem_points
+                }
+            });
+        } catch (error) {
+            console.log("Error in reedeemRequest controller", error);
+            return res.status(500).send({
+                status: false,
+                msg: "Internal Server Error"
+            });
+        }
+    }
+    
 
 
 }

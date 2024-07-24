@@ -72,7 +72,6 @@ class TradeHistory {
 
             const GetAllClientServices = await client_services.aggregate(pipeline)
 
-            console.log("GetAllClientServices", GetAllClientServices)
 
             var abc = [];
             var abc1 = [];
@@ -100,7 +99,6 @@ class TradeHistory {
                         } else {
                             strategyset = selectStrategy
                         }
-                        console.log("strategyset", strategyset)
 
 
                         var MatchPipeline = {
@@ -142,7 +140,6 @@ class TradeHistory {
                             }
                         ]);
 
-console.log("data",data)
 
 
                         var data1 = data

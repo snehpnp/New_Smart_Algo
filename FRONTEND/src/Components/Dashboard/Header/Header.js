@@ -36,6 +36,7 @@ const Header = ({ ChatBox }) => {
   const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
   const user_role = JSON.parse(localStorage.getItem("user_role"));
   const UserNamego_localstg = JSON.parse(localStorage.getItem("user_details_goTo"))
+  const [getLogo, setLogo] = useState("");
 
 
   if (theme_id != null) {
@@ -292,6 +293,8 @@ const Header = ({ ChatBox }) => {
     await dispatch(Get_Company_Logo()).unwrap()
       .then((response) => {
         if (response.status) {
+       
+          setLogo(response.data[0].logo)
           $(".Company_logo").html(response.data && response.data[0].panel_name);
           $(".set_Favicon")
         }
@@ -304,7 +307,7 @@ const Header = ({ ChatBox }) => {
 
   return (
     <div className="header-container">
-      <Logo />
+      <Logo  data={getLogo && getLogo}/>
       <div className="header" style={{position:"fixed"}}>
         <div className="header-content">
           <nav className="navbar navbar-expand">
