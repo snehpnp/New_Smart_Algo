@@ -6,6 +6,8 @@ import { Get_Panel_History } from '../../../ReduxStore/Slice/Superadmin/SuperAdm
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import Loader from '../../../Utils/Loader';
 import { Form } from "react-bootstrap";
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
 
 const History = () => {
     const dispatch = useDispatch();
@@ -100,11 +102,30 @@ const History = () => {
         setFilteredData(filtered);
     };
 
+    const exportToCSV = () => {
+        const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+        const fileExtension = '.xlsx';
+
+        const dataToExport = filteredData.map((item, index) => ({
+            "SR. No.": index + 1,
+            "Panel Name": item.panal_name,
+            "Super Admin Name": item.superadmin_name,
+            "Client Id": item.client_id == null ? "-" : item.client_id,
+            "Message": item.msg,
+            "Date & Time": fDateTimeSuffix(item.createdAt)
+        }));
+
+        const ws = XLSX.utils.json_to_sheet(dataToExport);
+        const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const data = new Blob([excelBuffer], { type: fileType });
+        FileSaver.saveAs(data, "History" + fileExtension);
+    };
+
     return (
         <Theme_Content Page_title="History" button_status={false}>
             <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: '1rem', gap: '10px', alignItems: 'center' }}>
                 <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column' }}>
-                   
                     <input
                         type="text"
                         placeholder="Search..."
@@ -113,7 +134,6 @@ const History = () => {
                         value={searchInput}
                     />
                 </div>
-                
                 <div style={{ flex: '1 1 300px', display: 'flex', gap: '10px' }}>
                     <input
                         ref={dayRef}
@@ -136,12 +156,28 @@ const History = () => {
                         }}
                     />
                 </div>
-                
-                <Form.Check
-                    type="switch"
-                    onClick={() => setLicAdd(!licAdd)}
-                    style={{ marginLeft: 'auto',width: '100px' }}
-                />
+                <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+                    <Form.Check
+                        type="switch"
+                        label="License Add"
+                        checked={licAdd}
+                        onChange={() => setLicAdd(!licAdd)}
+                        style={{ width: '100px', marginRight: '10px' }}
+                    />
+                    <button
+                        onClick={exportToCSV}
+                        style={{
+                            backgroundColor: "blue",
+                            color: "white",
+                            padding: "5px 10px",
+                            border: "none",
+                            cursor: "pointer",
+                            marginLeft: 'auto'
+                        }}
+                    >
+                        Export Data
+                    </button>
+                </div>
             </div>
 
             {allData.loading ? <Loader /> : <FullDataTable TableColumns={columns} tableData={filteredData} />}

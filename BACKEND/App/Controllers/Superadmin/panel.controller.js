@@ -286,7 +286,6 @@ class Panel {
 
             const totalCount = await panel_model.countDocuments();
 
-            // THEME LIST DATA with lookup to get theme_name
             const getAllpanel = await panel_model.aggregate([
                 {
                     $lookup: {

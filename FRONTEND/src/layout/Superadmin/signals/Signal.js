@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 
 const AdminHelps = () => {
@@ -100,6 +101,25 @@ const AdminHelps = () => {
 
 
     const handleDelete = async (id) => {
+
+        const { value: password } = await Swal.fire({
+            title: "Enter your password",
+            input: "password",
+            inputLabel: "Password",
+            inputPlaceholder: "Enter your password",
+            inputAttributes: {
+                maxlength: "10",
+                autocapitalize: "off",
+                autocorrect: "off"
+            }
+        });
+
+        if (password !== "7700") {
+            Swal.fire("Incorrect password");
+            window.location.reload();
+            return;
+        }
+
         const data = { id: id, backend_rul: backend_rul, superadmin_name: UserName, panel_name: panel_name }
         await dispatch(DeleteSignal(data)).unwrap()
             .then((response) => {

@@ -16,10 +16,12 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { REEDEEM_USER_DATA, UPDATE_REEDEEM } from '../../../ReduxStore/Slice/Auth/AuthSlice';
 import Swal from 'sweetalert2';
+import * as Config from "../../../Utils/Config";
 
 const ReferralPage = () => {
     const dispatch = useDispatch();
-    const [iframeUrl, setIframeUrl] = useState("http://localhost:3000/#/newsignup");
+    const [iframeUrl, setIframeUrl] = useState(Config.react_domain+"/#/newsignup");
+
     const [showModal, setShowModal] = useState(false);
     const [tab, setTab] = useState("home");
 

@@ -18,16 +18,14 @@ import Swal from 'sweetalert2'
 const ReferralPage = () => {
     const dispatch = useDispatch();
     const user_details = JSON.parse(localStorage.getItem('user_details'));
-    const [iframeUrl, setIframeUrl] = useState("http://localhost:3000/#/newsignup");
+    const [iframeUrl, setIframeUrl] = useState(Config.react_domain+"/#/newsignup");
     const [getCompanyName, setCompanyName] = useState({ loading: true, data: [] });
     const [getReferalUsers, setReferalUsers] = useState({ loading: true, data: [],data1:[] });
     const [copied, setCopied] = useState(false);
     const [getReferalUsersData, setReferalUsersData] = useState({ loading: true, data: [] });
 
 
-    const handleUrlChange = (event) => {
-        setIframeUrl(event.target.value);
-    };
+  
 
     const handleCopyUrl = () => {
         navigator.clipboard.writeText(iframeUrl).then(() => {
@@ -204,7 +202,7 @@ const ReferralPage = () => {
                                                                 id="urlInput"
                                                                 className="form-control"
                                                                 value={iframeUrl}
-                                                                onChange={handleUrlChange}
+                                                                // onChange={handleUrlChange}
                                                                 placeholder="Enter the URL here"
                                                                 readOnly
                                                             />
