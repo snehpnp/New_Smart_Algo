@@ -26,22 +26,17 @@ const AddClient = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
+  const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
 
 
-  const user_token = JSON.parse(localStorage.getItem("user_details")).token
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role
-  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
-
+  const user_details = JSON.parse(localStorage.getItem("user_details"))
 
   const [UserData, setUserData] = useState({ loading: true, data: [] });
   const [selectedStrategies, setSelectedStrategies] = useState([]);
-
   const [first, setfirst] = useState([])
   const [getPermissions, setGetPermissions] = useState([])
   const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
   const [AllGroupServices, setAllGroupServices] = useState({ loading: true, data: [] });
-
-  // const [Addsubadmin, setAddsubadmin] = useState({ loading: true, data: [] });
   const [AllStrategy, setAllStrategy] = useState({ loading: true, data: [] });
   const [GetServices, setGetServices] = useState({ loading: true, data: [] });
 
@@ -74,7 +69,7 @@ const AddClient = () => {
       })
 
 
-    await dispatch(All_Api_Info_List({ token: user_token, url: Config.react_domain, brokerId: -1, key: 1 })).unwrap()
+    await dispatch(All_Api_Info_List({ token: user_details.token, url: Config.react_domain, brokerId: -1, key: 1 })).unwrap()
       .then((response) => {
         if (response.status) {
           setGetBrokerInfo(
@@ -94,7 +89,7 @@ const AddClient = () => {
 
   //  SUBADMIN PERMISSION
   const data2 = async () => {
-    await dispatch(Get_Sub_Admin_Permissions({ id: user_id })).unwrap()
+    await dispatch(Get_Sub_Admin_Permissions({ id: user_details.user_id })).unwrap()
       .then((response) => {
         if (response.status) {
           setGetPermissions(response.data[0])
@@ -163,17 +158,11 @@ const AddClient = () => {
         if (!values.broker) {
           errors.broker = valid_err.BROKER_ERROR;
         }
-        // if (!values.tomonth) {
-        //   errors.tomonth = valid_err.LICENCE_ERROR;
-        // }
       }
       else if (values.licence === '0' || values.licence === 0) {
         if (!values.broker) {
           errors.broker = valid_err.BROKER_ERROR;
         }
-        // if (!values.tomonth) {
-        //   errors.tomonth = valid_err.LICENCE_ERROR;
-        // }
       }
       else if (values.licence === '1' || values.licence === 1) {
         if (!values.fromDate) {
@@ -183,9 +172,6 @@ const AddClient = () => {
           errors.todate = valid_err.FROMDATE_ERROR;
         }
       }
-
-
-
       if (!values.groupservice) {
         errors.groupservice = valid_err.GROUPSELECT_ERROR;
       }
@@ -203,8 +189,6 @@ const AddClient = () => {
     },
     onSubmit: async (values) => {
 
-
-
       const req = {
         "FullName": values.fullName,
         "UserName": values.username,
@@ -217,7 +201,7 @@ const AddClient = () => {
         "todate": values.todate,
         "service_given_month": values.service_given_month,
         "broker": values.broker,
-        "parent_id": values.parent_id != null ? values.parent_id : user_id,
+        "parent_id": values.parent_id != null ? values.parent_id : user_details.user_id,
         "parent_role": values.parent_id != null ? "SUBADMIN" : "ADMIN",
         "api_secret": values.api_secret,
         "app_id": values.app_id,
@@ -228,15 +212,13 @@ const AddClient = () => {
         "demat_userid": values.demat_userid,
         "group_service": values.groupservice,
         "licence": values.licence1,
-        "Editor_role": Role,
+        "Editor_role": user_details.Role,
         "device": check_Device(),
         "multiple_strategy_select": UserData.data.data[0].multiple_strategy_select
 
       }
 
-
-
-      await dispatch(Update_User({ req: req, token: user_token })).unwrap().then((response) => {
+      await dispatch(Update_User({ req: req, token: user_details.token })).unwrap().then((response) => {
 
         if (response.status === 409) {
           toast.error(response.data.msg);
@@ -585,8 +567,6 @@ const AddClient = () => {
   }, [formik.values.broker, formik.values.licence]);
 
 
-
-
   const getGroupeServics = async () => {
     if (formik.values.groupservice) {
       await dispatch(Get_Service_By_Group_Id({ _id: formik.values.groupservice })).unwrap()
@@ -630,7 +610,7 @@ const AddClient = () => {
 
     await dispatch(Get_All_Service_for_Client({
       req: {
-      }, token: user_token
+      }, token: user_details.token
     })).unwrap().then((response) => {
       if (response.status) {
 
@@ -689,7 +669,7 @@ const AddClient = () => {
   return (
     <>
       <Content Page_title="Edit  Client" button_title='Back' route="/subadmin/clients" showEdit={true} show_Stat_End_date={UserData.data.data !== undefined && UserData.data.data[0]}>
-        <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
+        <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name={isgotodashboard && isgotodashboard ? null :"Update"}
           fromDate={formik.values.fromDate}
           toDate={formik.values.todate}
           additional_field={
@@ -705,7 +685,7 @@ const AddClient = () => {
               ))}
               <label className="toggle mt-3">
                 <input className="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
-                  // setShowAllStratagy(e.target.checked)
+           
                 }} />
 
               </label>
@@ -716,8 +696,6 @@ const AddClient = () => {
                 <>
                   <h5> All Strategy </h5>
                   {selectedStrategies.map((strategy) => (
-
-
                     <div className={`col-lg-2 mt-2`} key={strategy.id}>
                       <div className="row ">
                         <div className="col-lg-12 ">
@@ -739,8 +717,6 @@ const AddClient = () => {
                     </div>
                   ))}
                 </>}
-
-
             </>
           }
         />

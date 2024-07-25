@@ -381,13 +381,10 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
         </div >
         {additional_field}
         <div className="form-group mb-0">
-          {/* <button className={`btn btn-primary  ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">
-            {btn_name}
-          </button> */}
-
+    {btn_name && btn_name?
           <button className={`btn btn-primary ${location.pathname === 'resetpassword' ? 'col-md-11' : ''}`} type="submit" disabled={formik.isSubmitting}>
             {btn_name}
-          </button>
+          </button>:null}
         </div>
       </div>
 
