@@ -26,7 +26,7 @@ module.exports = function (app) {
   
       websocket.onmessage = async (event) => {
         const message = JSON.parse(event.data);
-        //console.log('Received message:', message);
+        console.log('Received message:', message);
         try {
           if (message.token != undefined) {
             const currentDate = new Date();

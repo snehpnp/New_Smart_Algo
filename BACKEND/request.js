@@ -272,7 +272,6 @@ module.exports = function (app) {
    res.send({ STAT: "OKKK" })
     });
 
-
     app.get("/logicStrategyView1", async (req, res) => {
         // const conditions = [
         //     "(data.close[1]>data.emaclose3[1])&&((data.close[6]<data.emaclose3[2])||(data.close[9]<data.emaclose2[3]))"
@@ -291,6 +290,35 @@ module.exports = function (app) {
         res.send({ status: true, condition: matchStage });
 
     })
+
+
+    app.get("/triggerview",async(req,res)=>{
+
+    try {
+
+    const collection = dbTest.collection('usermakestrategies');
+    const changeStream = collection.watch();
+
+    changeStream.on('change', async (change) => {
+      console.log('Change detected:', change);
+        //  const documents = await dbTest.collection('usermakestrategies').find({ isCondition: true }).toArray();
+        //  if (documents.length > 0) {
+        //     console.log(' condition to be inserted Trigger');
+        //    // const insertResult = await db.collection(targetCollectionName).insertMany(documents);
+        //    // console.log(`${insertResult.insertedCount} documents inserted into the target collection`);
+        //   } else {
+        //     console.log('No documents met the condition to be inserted');
+        //   }
+      // Here, add logic to handle the change, e.g., query the view and insert documents into another collection
+    });
+
+  } catch (error) {
+    console.error(error);
+  }
+
+
+      res.send("Doneeeeeeeee")    
+    });
 
     // function parseConditionString(conditionString) {
     //     const conditionRegex = /data\.(\w+)\[(\d+)\]([><])data\.(\w+)\[(\d+)\]/g;
@@ -1770,26 +1798,7 @@ module.exports = function (app) {
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         return res.send("Donee")
-
-
-
 
 
     })
@@ -1797,38 +1806,34 @@ module.exports = function (app) {
 }
 
 
+// const db = require('./App/Models');
+// const dbTest = db.dbTest;
+// async function main() {
 
-
-// const MongoClient = require('mongodb').MongoClient;
-
-// async function watchChanges() {
-//   const client = new MongoClient('your_mongodb_uri', { useNewUrlParser: true, useUnifiedTopology: true });
-
-//   try {
-//     await client.connect();
-//     const db = client.db('your_database_name');
-//     const collection = db.collection('your_collection_name');
-
-//     const changeStream = collection.watch();
-
+//     const viewCollection = dbTest.collection('usermakestrategies');
+//     //const targetCollection = dbTest.collection('your_target_collection_name');
+  
+//     const changeStream = viewCollection.watch();
+  
 //     changeStream.on('change', (change) => {
-//       console.log('Change detected:', change);
-        //  const documents = await db.collection(viewName).find({ isCondition: true }).toArray();
-        //  if (documents.length > 0) {
-        //     const insertResult = await db.collection(targetCollectionName).insertMany(documents);
-        //     console.log(`${insertResult.insertedCount} documents inserted into the target collection`);
-        //   } else {
-        //     console.log('No documents met the condition to be inserted');
-        //   }
-//       // Here, add logic to handle the change, e.g., query the view and insert documents into another collection
+//       if (change.operationType === 'update' || change.operationType === 'insert') {
+//         const updatedDocument = change.fullDocument;
+            
+//         // Define your condition to check if the 'action' field has changed
+//         if (updatedDocument.action) {
+//             console.log("change stream detect")
+//           // Insert the document into the target collection
+//         //   targetCollection.insertOne(updatedDocument)
+//         //     .then(() => console.log('Document inserted into target collection'))
+//         //     .catch(err => console.error('Error inserting document:', err));
+//         }
+//       }
 //     });
-
-//   } catch (error) {
-//     console.error(error);
+  
+//     console.log('Listening for changes...');
 //   }
-// }
-
-// watchChanges();
+  
+//   main().catch(err => console.error(err));
 
 
 
