@@ -149,15 +149,14 @@ class KotakNeo {
                                                 },
                                                 data: data1
                                             };
-                                            // return
+                                    
                                             axios(config1)
                                                 .then(async function (response) {
                                                      console.log("OTP APIIIII", response);
-                                                    // return
+                                                  
                                                     if (response.status == 201) {
     
                                                      
-
 
                                                         let result = await User.findByIdAndUpdate(
                                                             Get_User[0]._id,

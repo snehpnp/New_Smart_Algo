@@ -793,15 +793,7 @@ class Employee {
 
           const GroupclientNAme = await serviceGroupName.find({ _id: GrpId });
 
-          const user_activity = new user_activity_logs({
-            user_id: existingUsername._id,
-            message: "Update Group ",
-            Strategy: GroupclientNAme[0].name,
-            role: req.Editor_role.toUpperCase(),
-            system_ip: getIPAddress(),
-            device: req.device,
-          });
-          await user_activity.save();
+        
 
           const GroupServices = await serviceGroup_services_id.aggregate([
             {
@@ -842,9 +834,9 @@ class Employee {
             user_id: existingUsername._id,
           });
 
-          // var client_servicesDelete = await client_services.deleteMany({
-          //   user_id: existingUsername._id,
-          // });
+          var client_servicesDelete = await client_services.deleteMany({
+            user_id: existingUsername._id,
+          });
 
 
           GroupServices.forEach((data) => {
@@ -861,6 +853,16 @@ class Employee {
 
             User_client_services.save();
           });
+
+          const user_activity = new user_activity_logs({
+            user_id: existingUsername._id,
+            message: "Update Group ",
+            Strategy: GroupclientNAme[0].name,
+            role: req.Editor_role.toUpperCase(),
+            system_ip: getIPAddress(),
+            device: req.device,
+          });
+          await user_activity.save();
         } else {
 
         }
@@ -905,16 +907,6 @@ class Employee {
           }
         }
       }
-
-
-
-
-
-
-
-
-
-
 
 
       // USER GET ALL TYPE OF DATA

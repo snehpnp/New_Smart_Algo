@@ -37,7 +37,7 @@ class Login {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });
             }
 
-            if (EmailCheck.Role == "USER" || EmailCheck.Role == "SUBADMIN") {
+            if (EmailCheck.Role == "USER" ) {
                 // WHERE LOGIN CHECKgetIPAddress
                 if (device == "APP") {                  //App Login Check
                     if (EmailCheck.AppLoginStatus == 1) {
@@ -129,7 +129,6 @@ class Login {
 
 
             try {
-                logger.info('Login Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
                 return res.send({ status: true, msg: "Login Succesfully", data: msg })
             } catch (error) {
                 console.log("Error Some Error in a login", error);

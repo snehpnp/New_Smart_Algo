@@ -13,28 +13,25 @@ class Theme {
     // ADD THEMEcdccddcfdfdfkdl;gmdklgmdmsl;kdmsklfmdk
     async AddTheme(req, res) {
         try {
-            const { theme_name, theme_version, primary_col, nav_head_col, header_col, sidebar_col
-                , sidebar, header_position, sidebar_position, layout, container, body_font, dashboard, image } = req.body
+            const {
+                theme_name, theme_version, primary_col, nav_head_col, header_col, sidebar_col,
+                sidebar, header_position, sidebar_position, layout, container, body_font,
+                dashboard, image
+            } = req.body;
 
-            const exist_strategy = await Theme_list.findOne({ theme_name: theme_name });
-            if (exist_strategy) {
+            // Check if theme name already exists
+            const existingTheme = await Theme_list.findOne({ theme_name: theme_name });
+            if (existingTheme) {
                 return res.status(409).json({ status: false, msg: 'Theme Name already exists', data: [] });
             }
 
+            // Get the last theme ID and increment it
+            const themeList = await Theme_list.find().sort({ themeId: 1 });
+            const newThemeId = themeList.length !== 0 ? themeList[themeList.length - 1].themeId + 1 : 1;
 
-            var lastElement;
-            // FIND TABLE THEME DATA LAST INDEX
-            const theme_list = await Theme_list.find().sort({ themeId: 1 })
-
-            if (theme_list.length != 0) {
-                lastElement = (theme_list[theme_list.length - 1]).themeId + 1;
-            } else {
-                lastElement = 1;
-            }
-
-            // THEME CREATE SNEH
-            const AddTheme = new Theme_list({
-                themeId: lastElement,
+            // Create a new theme
+            const newTheme = new Theme_list({
+                themeId: newThemeId,
                 theme_name: theme_name,
                 theme_version: theme_version,
                 primary_col: primary_col,
@@ -51,25 +48,17 @@ class Theme {
                 image: image,
             });
 
-
-            AddTheme.save()
-                .then(async (data) => {
-                  return  res.send({ status: true, msg: "successfully Add!", data: data });
-                })
-                .catch((err) => {
-                    if (err.keyValue) {
-                      return  res.send({ status: false, msg: "Duplicate data", data: err.keyValue });
-                    }
-
-                })
-
-
+            // Save the new theme
+            const savedTheme = await newTheme.save();
+            return res.send({ status: true, msg: "Theme successfully added!", data: savedTheme });
 
         } catch (error) {
-            console.log("Error Theme error-", error);
+            console.error("Error in AddTheme:", error);
+            return res.status(500).json({ status: false, msg: "Internal Server Error", data: error });
         }
     }
 
+    
     // GET THEME
     async GetAllTheme(req, res) {
         try {
