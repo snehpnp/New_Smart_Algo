@@ -339,22 +339,22 @@ const ReferralPage = () => {
                                                 <div className="card-body">
                                                     <div className="container-fluid pt-3">
                                                         <div className="row">
-                                                            <div className="col-md-3">
+                                                            {/* <div className="col-md-3">
                                                                 <div className="rpWrp2">
                                                                     <h3>Referral points <p className='mb-0'>{ReferralsPoints && ReferralsPoints}</p></h3>
                                                                 </div>
-                                                            </div>
-                                                            <div className="col-md-3">
+                                                            </div> */}
+                                                            <div className="col-md-4">
                                                                 <div className="rpWrp2">
                                                                     <h3>Total Referrals <p className='mb-0'>{totalReferrals && totalReferrals}</p></h3>
                                                                 </div>
                                                             </div>
-                                                            <div className="col-md-3 ">
+                                                            <div className="col-md-4">
                                                                 <div className="rpWrp3">
                                                                     <h3>In-Process Referrals <p className='mb-0'>{inProcessReferrals && inProcessReferrals}</p></h3>
                                                                 </div>
                                                             </div>
-                                                            <div className="col-md-3 ">
+                                                            <div className="col-md-4 ">
                                                                 <div className="rpWrp4">
                                                                     <h3> Successful Referrals <p className='mb-0'>{successfulReferrals && successfulReferrals}</p></h3>
                                                                 </div>

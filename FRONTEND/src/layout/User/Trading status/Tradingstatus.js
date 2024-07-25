@@ -134,7 +134,7 @@ const TradingStatus = () => {
     },
     {
       dataField: "Strategy",
-      text: "Strategy",
+      text: "Strategy / Group",
       formatter: (cell, row) => <div>{cell ? cell : "-"}</div>,
     },
     {

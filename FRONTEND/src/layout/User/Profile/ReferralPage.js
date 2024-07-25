@@ -18,14 +18,14 @@ import Swal from 'sweetalert2'
 const ReferralPage = () => {
     const dispatch = useDispatch();
     const user_details = JSON.parse(localStorage.getItem('user_details'));
-    const [iframeUrl, setIframeUrl] = useState(Config.react_domain+"/#/newsignup");
+    const [iframeUrl, setIframeUrl] = useState(Config.react_domain + "/#/newsignup");
     const [getCompanyName, setCompanyName] = useState({ loading: true, data: [] });
-    const [getReferalUsers, setReferalUsers] = useState({ loading: true, data: [],data1:[] });
+    const [getReferalUsers, setReferalUsers] = useState({ loading: true, data: [], data1: [] });
     const [copied, setCopied] = useState(false);
     const [getReferalUsersData, setReferalUsersData] = useState({ loading: true, data: [] });
 
 
-  
+
 
     const handleCopyUrl = () => {
         navigator.clipboard.writeText(iframeUrl).then(() => {
@@ -85,7 +85,7 @@ const ReferralPage = () => {
         CompanyName();
         AllReferalUser();
         if (Config.base_url) {
-            const redirectUrl = `${Config.base_url.split('backend')[0]}newsignup/${user_details.UserName}`;
+            const redirectUrl = `${Config.base_url.split('backend')[0]}#/newsignup/${user_details.UserName}`;
             setIframeUrl(redirectUrl);
         }
     }, []);
@@ -96,7 +96,7 @@ const ReferralPage = () => {
     const inProcessReferrals = getReferalUsers.data && getReferalUsers.data.filter(user => user.ActiveStatus === 1).length;
     const successfulReferrals = getReferalUsers.data && getReferalUsers.data.filter(user => user.ActiveStatus === 2).length;
     const ReferralsPoints = getReferalUsers.data && getReferalUsers.data1.refer_points
-       
+
 
     const columns = [
         { dataField: 'index', text: 'Company ID', formatter: (cell, row, rowIndex) => rowIndex + 1 },
@@ -134,7 +134,7 @@ const ReferralPage = () => {
                 <StatusButton status={cell} type={2} />
             ),
         },
-      
+
     ];
 
     const handleRedeemPoints = async () => {
@@ -266,9 +266,10 @@ const ReferralPage = () => {
                                                                 <div className="rpWrp4">
                                                                     <h3>Redeem points</h3>
                                                                     <p className='mb-0'>
-                                                                        <button className="btn btn-primary" onClick={handleRedeemPoints}>
+
+                                                                    {ReferralsPoints && ReferralsPoints   ? <button className="btn btn-primary" onClick={handleRedeemPoints}>
                                                                             Redeem Points
-                                                                        </button>
+                                                                        </button>:""}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -300,7 +301,7 @@ const ReferralPage = () => {
                 </div>
             </div>
             <ToastButton />
-        </div>
+        </div >
     );
 };
 

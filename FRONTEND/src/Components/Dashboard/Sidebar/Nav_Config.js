@@ -305,16 +305,25 @@ export const Client = [
         id: 2,
         name: 'Signals',
         Icon: 'Signal',
-        route: '/client/signals',
-        Data: []
+        // route: '/client/signals',
+        Data: [
+            {
+                id: 2,
+                name: 'Signals',
+                Icon: 'Signal',
+                route: '/client/signals',
+                Data: []
+            },
+            {
+                id: 3,
+                name: 'Trade History',
+                Icon: 'FolderClock',
+                route: '/client/tradehistory',
+                Data: []
+            },
+        ]
     },
-    {
-        id: 3,
-        name: 'Trade History',
-        Icon: 'FolderClock',
-        route: '/client/tradehistory',
-        Data: []
-    },
+   
     {
         id: 4,
         name: 'Trading Status',

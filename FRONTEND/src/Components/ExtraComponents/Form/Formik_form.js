@@ -15,21 +15,21 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = () => {
-      const base64Preview = reader.result; 
-      const newPreviews = [...previews]; 
-      newPreviews[index] = base64Preview; 
+      const base64Preview = reader.result;
+      const newPreviews = [...previews];
+      newPreviews[index] = base64Preview;
 
       setPreviews(newPreviews);
     };
     reader.readAsDataURL(file);
   }
 
-  const sneh = (index, name) => {}
+  const sneh = (index, name) => { }
 
   const fun = () => {
     navigate('/newsignup')
   }
-  
+
   const fun1 = () => {
     navigate('/login')
   }
@@ -284,8 +284,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                               </div>
 
                             </> :
-
-
                               field.type === "number" ? (
                                 <div className="col-lg-3">
                                   <div className="row d-flex">
@@ -304,10 +302,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                                   </div>
                                 </div>
                               ) :
-
-
-
-
                                 field.type === "file" ? <>
                                   <div className="col-lg-6">
                                     <div className="row d-flex">
@@ -341,13 +335,15 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                                           <span className="text-danger">*</span>
                                         </label>
                                         <div className={`col-lg-${title === "forlogin1" ? 12 : title === "forResetPassword" || "forUpdatePassword" ? 12 : 7} `}>
-                                          <input
+                                        <input
                                             type="text"
                                             className="form-control"
+                                            style={{ background: field.disable ? '#eeeeee' : "" }}
                                             id={field.name}
                                             placeholder={`Enter ${field.label}`}
                                             {...formik.getFieldProps(field.name)}
-                                            required=""
+
+                                            readOnly={field.disable}
                                           />
                                           <div className="invalid-feedback">
                                             Please enter {field.label}
@@ -362,6 +358,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                                     :
                                     <div className={`col-lg-${title === "forlogin" || title === "brokerkey" ? 12 : title === "forResetPassword" ? 12 : title === "forUpdatePassword" ? 12 : 6} `}>
                                       <div className="mb-3 row">
+                                        {console.log("field",field)}
                                         <label
                                           className={`col-lg-${title === "forlogin" ? 3 : title === "brokerkey" ? 6 : 4} col-form-label `}
                                           htmlFor={field.name}
@@ -370,14 +367,26 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                                           <span className="text-danger">*</span>
                                         </label>
                                         <div className={`col-lg-${title === "forlogin" ? 8 : title === "forResetPassword" || "forUpdatePassword" ? 12 : 7} `}>
-                                          <input
+                                          {/* <input
                                             type="text"
                                             className="form-control"
                                             id={field.name}
                                             placeholder={`Enter ${field.label}`}
                                             {...formik.getFieldProps(field.name)}
                                             required=""
+                                          /> */}
+
+                                          <input
+                                            type="text"
+                                            className="form-control"
+                                            style={{ background: field.disable ? '#eeeeee' : "" }}
+                                            id={field.name}
+                                            placeholder={`Enter ${field.label}`}
+                                            {...formik.getFieldProps(field.name)}
+
+                                            readOnly={field.disable}
                                           />
+
                                           <div className="invalid-feedback">
                                             Please enter {field.label}
                                           </div>
@@ -399,9 +408,9 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
           <div className="form-group mb-0">
             {btn_name == 'sneh' ? "" : btn_name == 'Sign In' ?
               < >
-          
+
                 <button className={`btn btn-primary col-lg-12 btn-rounded ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit" disabled={btnStatusloading} >
-                  {btn_name} 
+                  {btn_name}
                 </button>
               </ > : <>
                 <button className={`btn btn-primary col-lg-12 btn-rounded ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">

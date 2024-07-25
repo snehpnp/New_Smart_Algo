@@ -999,7 +999,7 @@ class Employee {
 
         if (multy_stgfind.length > 0) {
           multy_stgfind.forEach(async (data) => {
-        
+
 
             if (data.strategy_id.length == 0) {
               const filter = { _id: data._id };
@@ -1025,7 +1025,7 @@ class Employee {
 
         if (multy_stgfind.length > 0) {
           multy_stgfind.forEach(async (data) => {
-         
+
 
             if (data.strategy_id.length == 0) {
               const filter = { _id: data._id };
@@ -1685,78 +1685,92 @@ class Employee {
 
   async GetAllReferalClients(req, res) {
     try {
-        const { Find_Role, username } = req.body;
+      const { Find_Role, username } = req.body;
+
+      const AdminMatch = Find_Role === "ADMIN"
+        ? { refer_code: { $ne: null, $ne: "" } }
+        : { refer_code: username };
+
+      let getAllClients = await user_SignUp.find(AdminMatch).sort({ CreateDate: -1 });
+
+      if (getAllClients.length > 0) {
+        const updatePromises = getAllClients.map(async (data) => {
+          const GetUser = await User_model.findOne({ UserName: data.UserName }).select('license_type refer_points');
+          if (GetUser) {
+            let updatestatus = 0;
+            
+            if (GetUser.license_type == 1 || GetUser.license_type == 0) {
+              updatestatus = 1;
+            } else if (GetUser.license_type == 2) {
+              const GetUserSignup = await user_SignUp.findOne({ UserName: data.UserName });
+              if (GetUserSignup.ActiveStatus == 2) {
+                updatestatus = 2;
+              } else {
+
+                const refer_pointsData = await User_model.findOne({ UserName: data.refer_code }).select('refer_points');
+
+                console.log("refer_pointsData", refer_pointsData.refer_points)
+                console.log("refer_pointsData", data.refer_points)
 
 
-        const AdminMatch = Find_Role === "ADMIN" 
-            ? { refer_code: { $ne: null, $ne: "" } } 
-            : { refer_code: username };
+                updatestatus = 2;
 
-        const getAllClients = await user_SignUp.find(AdminMatch).sort({ CreateDate: -1 });
-     
+                await User_model.updateOne(
+                  { _id: refer_pointsData._id },
+                  { $set: { refer_points: refer_pointsData.refer_points + data.refer_points } }
+                );
 
-        if (getAllClients.length > 0) {
-            const updatePromises = getAllClients.map(async (data) => {
-                const GetUser = await User_model.findOne({ UserName: data.UserName }).select('license_type refer_points');
-                if (GetUser) {
-                    let updatestatus = 0;
-                    if (GetUser.license_type == 1 || GetUser.license_type == 0) {
-                        updatestatus = 1;
-                    } else if (GetUser.license_type == 2) {
-                        updatestatus = 2;
-                    }
+              }
+            }
 
-                    await user_SignUp.updateOne(
-                        { _id: data._id },
-                        { $set: { ActiveStatus: updatestatus } }
-                    );
-                }
-            });
+            await user_SignUp.updateOne(
+              { _id: data._id },
+              { $set: { ActiveStatus: updatestatus } }
+            );
+          }
+        });
 
-            // Await all update operations
-            await Promise.all(updatePromises);
-        }
+        // Await all update operations
+        await Promise.all(updatePromises);
 
         // Fetch all clients again after the update
-        const getAllClients1 = await user_SignUp.find(AdminMatch).sort({ CreateDate: -1 });
+        getAllClients = await user_SignUp.find(AdminMatch).sort({ CreateDate: -1 });
+      }
 
-        if (getAllClients1.length === 0) {
-            return res.send({
-                status: false,
-                msg: "Empty data",
-                data: [],
-            });
-        }
-
-        if(Find_Role == "USER"){
-          const GetUser = await User_model.findOne({ UserName: username }).select('license_type refer_points');
-          return res.send({
-            status: true,
-            msg: "Get All Clients",
-            data: getAllClients1,
-            data1: GetUser,
-
+      if (getAllClients.length === 0) {
+        return res.send({
+          status: false,
+          msg: "Empty data",
+          data: [],
         });
-        }else{
-          return res.send({
-            status: true,
-            msg: "Get All Clients",
-            data: getAllClients1,
+      }
+
+      if (Find_Role === "USER") {
+        const GetUser = await User_model.findOne({ UserName: username }).select('license_type refer_points');
+        return res.send({
+          status: true,
+          msg: "Get All Clients",
+          data: getAllClients,
+          data1: GetUser,
         });
-        }
+      } else {
+        return res.send({
+          status: true,
+          msg: "Get All Clients",
+          data: getAllClients,
+        });
+      }
 
-
-
-     
     } catch (error) {
-        console.log("Error in GetAllReferalClients:", error);
-        return res.status(500).send({
-            status: false,
-            msg: "Internal Server Error",
-            data: [],
-        });
+      console.log("Error in GetAllReferalClients:", error);
+      return res.status(500).send({
+        status: false,
+        msg: "Internal Server Error",
+        data: [],
+      });
     }
-}
+  }
+
 
 
 

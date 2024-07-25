@@ -133,14 +133,15 @@ const SignUp = () => {
     },
   });
 
-  const fields = [
-    { name: "fullname", label: "FullName", type: 'text' },
-    { name: "username", label: "UserName", type: 'text' },
-    { name: "email", label: "Email", type: "email" },
-    { name: "phone", label: "Phone", type: "text" },
-    { name: "refer_code", label: "Refrel", type: "text" },
 
+  const fields = [
+      { name: "fullname", label: "FullName", type: 'text' },
+      { name: "username", label: "UserName", type: 'text' },
+      { name: "email", label: "Email", type: "email" },
+      { name: "phone", label: "Phone", type: "text" },
+      { name: "refer_code", label: "Refrel", type: "text", disable: ReferalCode.length == 3  ? true : false }
   ];
+  
 
   useEffect(() => {
     getPanelDetails()
@@ -149,6 +150,7 @@ const SignUp = () => {
     formik.setFieldValue('refer_code', ReferalCode && ReferalCode[2]);
 
   }, [])
+console.log("-",ReferalCode)
 
   return (
     <>
