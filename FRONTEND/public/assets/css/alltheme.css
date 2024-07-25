@@ -158,7 +158,7 @@ body.theme-1 .col-form-label {
 }
 
 body.theme-1 .col-form-label {
-    color: #000;
+    color: #fff;
     font-size: 14px;
 }
 
@@ -1800,14 +1800,13 @@ button.button_sell.active {
   }
    */
 
-    /* .react-bootstrap-table {
+/* .react-bootstrap-table {
     height: 700px !important;
     overflow-y: auto !important;
   }  */
 
-  .header-class
-  {
+.header-class {
     position: sticky;
     top: 0;
     z-index: 1;
-  }
+}
