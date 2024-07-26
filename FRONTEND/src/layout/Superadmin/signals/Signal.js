@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
+import { fa_time, fDateTime } from "../../../Utils/Date_formet";
 
 
 const AdminHelps = () => {
@@ -182,7 +183,9 @@ const AdminHelps = () => {
             dataField: 'createdAt',
             text: 'Date',
             formatter: (cell, row) => (
-                <><div>{cell.split('T')[0] + "   " + cell.split('T')[1].split('.')[0]}</div> </>
+                // <><div>{cell.split('T')[0] + "   " + cell.split('T')[1].split('.')[0]}</div> </>
+                <><div>{fDateTime(cell)}</div> </>
+
             ),
         },
         {
