@@ -86,15 +86,10 @@ class AliceBlue {
 
                                 const result = await live_price.updateOne(filter, updateOperation);
 
-
-
-                                //  For Update Live Token List
                                 Alice_Socket();
 
 
                                 return res.redirect(redirect_uri);
-
-
 
                             } else {
 

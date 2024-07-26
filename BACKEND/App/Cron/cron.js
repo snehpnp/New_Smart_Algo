@@ -110,24 +110,24 @@ cron.schedule('*/5 * * * *', async () => {
 });
 
 
-cron.schedule('* 9 * * *', async () => {
-    Console.log("Run Every 09:00 ", new Date())
-    createViewAlice()
-    createViewAngel()
-    createViewDhan()
-    createViewFivepaisa()
-    createViewFyers()
-    createViewIifl()
-    createViewKotakNeo()
-    createViewMarketHub()
-    createViewMastertrust()
-    createViewMotilalOswal()
-    createViewSwastika()
-    createViewUpstox()
-    createViewZebul()
-    createViewZerodha()
-    createViewIcicidirect()
-});
+// cron.schedule('* 9 * * *', async () => {
+//     Console.log("Run Every 09:00 ", new Date())
+//     createViewAlice()
+//     createViewAngel()
+//     createViewDhan()
+//     createViewFivepaisa()
+//     createViewFyers()
+//     createViewIifl()
+//     createViewKotakNeo()
+//     createViewMarketHub()
+//     createViewMastertrust()
+//     createViewMotilalOswal()
+//     createViewSwastika()
+//     createViewUpstox()
+//     createViewZebul()
+//     createViewZerodha()
+//     createViewIcicidirect()
+// });
 
 
 // ========================================================================================================================= START TOEN CHAIN

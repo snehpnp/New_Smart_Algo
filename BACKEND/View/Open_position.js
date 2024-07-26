@@ -22,7 +22,7 @@ async function createView() {
                         $cond: {
                             if: {
                                 $or: [
-        
+
                                     { $eq: ['$target', 0] },
                                     { $eq: ['$target', "0"] },
                                     { $eq: ['$target', '0'] },
@@ -30,10 +30,10 @@ async function createView() {
                             },
                             then: 0,
                             else: {
-                                
+
                                 //$add: [{ $toDouble: '$target' }, { $toDouble: '$entry_price' }]
                                 $add: [{ $toDouble: '$target' }]
-        
+
                             },
                         },
                     },
@@ -52,9 +52,9 @@ async function createView() {
                                 // $subtract: [{ $toDouble: '$entry_price' }, { $toDouble: '$stop_loss' }]
 
                                 $add: [{ $toDouble: '$stop_loss' }]
-        
+
                             },
-        
+
                         },
                     },
                     entry_qty_percent: {
@@ -68,7 +68,7 @@ async function createView() {
                                             { $eq: ['$exit_qty_percent', "0"] },
                                             { $eq: ['$exit_qty_percent', '0'] }, // Check if stop_loss is the string "0"
                                             { $eq: ['$exit_qty_percent', ''] }, // Check if stop_loss is the string "0"
-        
+
                                         ],
                                     },
                                     then: 0,
@@ -120,7 +120,7 @@ async function createView() {
                     ],
                 },
             },
-        
+
             {
                 $lookup: {
                     from: 'stock_live_price',
@@ -161,7 +161,7 @@ async function createView() {
                             0
                         ]
                     },
-                 
+
                     isLpInRangeTarget: {
                         $cond: {
                             if: {
@@ -179,7 +179,7 @@ async function createView() {
                                         ],
                                     },
                                 ],
-        
+
                             },
                             then: false,
                             else: {
@@ -195,7 +195,7 @@ async function createView() {
                                             '$target',
                                         ],
                                     },
-                                  
+
                                 ],
                             },
                         },
@@ -218,7 +218,7 @@ async function createView() {
                                         ],
                                     },
                                 ],
-        
+
                             },
                             then: false,
                             else: {
@@ -234,14 +234,14 @@ async function createView() {
                                             '$stop_loss',
                                         ],
                                     },
-                                  
+
                                 ],
                             },
                         },
                     },
                 },
             },
-        
+
             {
                 $addFields: {
                     exit_time_test: {
@@ -252,7 +252,7 @@ async function createView() {
                     }
                 }
             },
-        
+
             {
                 $lookup: {
                     from: 'companies',
@@ -289,7 +289,7 @@ async function createView() {
                             else: '$client_persnal_key' // Keep the existing value if not empty or null
                         }
                     },
-        
+
                     TradeType: 1,
                     token: 1,
                     lot_size: 1,
@@ -305,10 +305,10 @@ async function createView() {
                     stockInfo_curtime: 1,
                     stockInfo_lp: 1,
                     MakeStartegyName: 1,
-        
-                   // isLpInRange1: 1,
-                    isLpInRangeTarget:1,
-                    isLpInRangeStoploss:1,
+
+                    // isLpInRange1: 1,
+                    isLpInRangeTarget: 1,
+                    isLpInRangeStoploss: 1,
                     isLpInRange: {
                         $cond: {
                             if: {
@@ -329,8 +329,8 @@ async function createView() {
                     },
                 },
             }
-        
-        
+
+
         ]
 
         const viewName = 'open_position';
@@ -346,7 +346,7 @@ async function createView() {
         console.log('Connection closed.');
     }
 }
- 
+
 // open_position_excute
 async function dropOpenPosition() {
     try {
@@ -354,33 +354,32 @@ async function dropOpenPosition() {
         const db = client.db(process.env.DB_NAME); // Replace with your actual database name
         await db.collection('open_position').drop();
         await db.collection('open_position_excute').drop();
-       
+
     } catch (error) {
         // Handle any errors if the view doesn't exist
-       console.log('Error:', error);
+        console.log('Error:', error);
     }
 }
-
 
 // open_position_excute
 async function dropExistingView1() {
     try {
-        // await client.connect();
-        const db = client.db(process.env.DB_NAME); // Replace with your actual database name
+
+        const db = client.db(process.env.DB_NAME);
         await db.collection('open_position_excute').drop();
-       
+
     } catch (error) {
         // Handle any errors if the view doesn't exist
-       console.log('Error:', error);
+        console.log('Error:', error);
     }
 }
 
 async function open_position_excute(req, res) {
- 
+
     try {
         const sourceViewName = 'open_position';
         const destinationViewName = 'open_position_excute';
-    
+
         const pipeline = [
             {
                 $match: {
@@ -393,27 +392,26 @@ async function open_position_excute(req, res) {
                 }
             }
         ];
-    
+
         // Create the destination view with the specified pipeline
         await client.db(dbName).createCollection(destinationViewName, {
             viewOn: sourceViewName,
             pipeline: pipeline,
         });
-    
+
         console.log('Destination view created successfully');
     } catch (error) {
-       console.log('Error:', error);
+        console.log('Error:', error);
     } finally {
         // Ensure the client is closed even if an error occurs
         await client.close();
     }
-    
-    
+
+
 }
 
 
-
-module.exports = { dropExistingView1, open_position_excute,createView,dropOpenPosition}
+module.exports = { dropExistingView1, open_position_excute, createView, dropOpenPosition }
 
 
 

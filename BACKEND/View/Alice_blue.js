@@ -2,40 +2,39 @@ const MongoClient = require('mongodb').MongoClient;
 const mongoose = require('mongoose');
 
 const uri = process.env.MONGO_URI;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true});
-
-client.connect();
-
-const db = client.db(process.env.DB_NAME); 
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 async function createViewAlice() {
   try {
- 
+    await client.connect();
+    const db = client.db(process.env.DB_NAME);
+
+   
     const views = await db.listCollections({ name: 'aliceblueView' }).toArray();
 
     if (views.length > 0) {
       console.log('View already exists.');
-      return; 
+      return;
     }
 
-    const currentDate = new Date(); 
+    const currentDate = new Date();
 
     const pipeline = [
       {
         $match: {
           broker: "2",
-          TradingStatus: 'on', 
+          TradingStatus: 'on',
           $or: [
-            { EndDate: { $gte: currentDate } }, 
-            { EndDate: null } 
+            { EndDate: { $gte: currentDate } },
+            { EndDate: null }
           ]
         }
       },
       {
         $lookup: {
           from: 'client_services',
-          localField: '_id', 
-          foreignField: 'user_id', 
+          localField: '_id',
+          foreignField: 'user_id',
           as: 'client_services'
         }
       },
@@ -115,7 +114,7 @@ async function createViewAlice() {
             discqty: '0',
             exch: {
               $cond: {
-                if: { $eq: ['$category.segment', 'C'] }, 
+                if: { $eq: ['$category.segment', 'C'] },
                 then: 'NSE',
                 else: {
                   $cond: {
@@ -258,7 +257,7 @@ async function createViewAlice() {
   } catch (error) {
     console.log('Error:', error);
   } finally {
-    client.close();
+    await client.close();
   }
 }
 

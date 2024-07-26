@@ -470,10 +470,9 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
         },
         data: data
     };
-    // console.log(config);
     axios(config)
         .then(async (response) => {
-            // console.log("respose ENTRY", response.data)
+
             fs.appendFile(filePath, 'TIME ' + new Date() + ' ZERODHA AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
@@ -684,7 +683,6 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
     axios(config)
         .then(async (response) => {
-            // console.log("respose Exit", response.data)
 
             fs.appendFile(filePath, 'TIME ' + new Date() + ' ZERODHA AFTER PLACE ORDER USER EXIT- ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
                 if (err) {

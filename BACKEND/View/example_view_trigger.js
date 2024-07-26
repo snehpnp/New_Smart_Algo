@@ -15,7 +15,6 @@ async function createViewAndMonitor() {
 
     const database = client.db(dbName);
     const viewName = 'your_view';
-  //  const viewPipeline = [...]; // Your aggregation pipeline here
 
     // Create or update the view
     await database.createCollection(viewName, { viewOn: 'your_source_collection', pipeline: viewPipeline });
