@@ -60,7 +60,7 @@ const TradeHistory = () => {
 
 
 
-  const getsignals11 = async (e) => {
+  const getsignals11 = async () => {
     let abc = new Date();
 
     let startDate1 = new Date(abc);
@@ -134,7 +134,7 @@ const TradeHistory = () => {
     {
       dataField: "2",
       text: "Entry Type",
-      formatter: (cell, row, rowIndex) => (
+      formatter: (cell, row) => (
         <div>
           <span>{row.entry_type === "LE" ? "BUY ENTRY" : "SELL ENTRY"}</span>
         </div>
@@ -143,7 +143,7 @@ const TradeHistory = () => {
     {
       dataField: "entry_qty",
       text: "Entry Qty",
-      formatter: (cell, row, rowIndex) => {
+      formatter: (cell, row) => {
         return (
           <div>
             <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span>
@@ -181,7 +181,7 @@ const TradeHistory = () => {
     {
       dataField: "entry_price",
       text: "Entry Price",
-      formatter: (cell, row, rowIndex) => (
+      formatter: (cell) => (
         <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}
         </div>
       ),
@@ -189,7 +189,7 @@ const TradeHistory = () => {
     {
       dataField: "exit_price",
       text: "Exit Price",
-      formatter: (cell, row, rowIndex) => (
+      formatter: (cell) => (
         <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
       ),
     },
@@ -197,7 +197,7 @@ const TradeHistory = () => {
     {
       dataField: "TPL",
       text: "Total",
-      formatter: (cell, row, rowIndex) => (
+      formatter: (cell, row) => (
         <div>
           <span className={`fw-bold  TPL_${row.token}_${row._id}`}></span>
         </div>
@@ -207,7 +207,7 @@ const TradeHistory = () => {
     {
       dataField: "",
       text: "Details View",
-      formatter: (cell, row, rowIndex) => (
+      formatter: (cell, row) => (
         <div>
           <Eye
             className="mx-2"
@@ -238,7 +238,7 @@ const TradeHistory = () => {
   };
 
 
-  const ResetAllData = (e) => {
+  const ResetAllData = () => {
     setFromDate("");
     setToDate("");
     setType("Strategy");
@@ -347,7 +347,7 @@ const TradeHistory = () => {
 
 
         <div className="col-lg-2  px-1">
-          <div className="mb-3">
+          <div className="mt-2">
             <button className="btn btn-primary" onClick={(e) => ResetAllData(e)}>
               Reset
             </button>
