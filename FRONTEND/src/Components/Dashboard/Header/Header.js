@@ -296,8 +296,8 @@ const Header = ({ ChatBox }) => {
        
           setLogo(response.data[0].logo)
           $(".Company_logo").html(response.data && response.data[0].panel_name);
-          $(".logo-abbr1").html(response.data && response.data[0].logo);
-          $(".brand-title").html(response.data && response.data[0].logo);
+          // $(".logo-abbr1").html(response.data && response.data[0].logo);
+          // $(".brand-title").html(response.data && response.data[0].logo);
 
 
           $(".set_Favicon")
