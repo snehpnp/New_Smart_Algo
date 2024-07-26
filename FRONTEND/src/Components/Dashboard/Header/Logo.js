@@ -17,14 +17,13 @@ const Logo = ({ data , ShowSidebar }) => {
     }
 
 
-
     return (
         <div>
             <div className="nav-header">
                 <span className="brand-logo">
 
-                    <img className="logo-abbr1" src="/assets/images/download2.png" alt="logo" />
-                    <img className="brand-title" src="/assets/images/download1.png" alt="logo" />
+                    <img className="logo-abbr1" src={data ? data :"/assets/images/download2.png"} alt="logo" />
+                    <img className="brand-title" src={data ? data : "/assets/images/download1.png"} alt="logo" />
                 </span>
 
 

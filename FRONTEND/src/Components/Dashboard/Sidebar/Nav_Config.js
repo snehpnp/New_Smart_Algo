@@ -190,6 +190,13 @@ export const admin_sidebar = [
                 route: '/admin/brokerinfo',
                 Data: []
             },
+            {
+                id: 715,
+                name: 'Faq',
+                Icon: 'Info',
+                route: '/admin/faq',
+                Data: []
+            },
 
 
 
@@ -305,7 +312,6 @@ export const Client = [
         id: 2,
         name: 'Signals',
         Icon: 'Signal',
-        // route: '/client/signals',
         Data: [
             {
                 id: 2,
@@ -357,6 +363,13 @@ export const Client = [
         name: 'Strategy Desc.',
         Icon: 'ScatterChart',
         route: '/client/strategydesc',
+        Data: []
+    },
+    {
+        id: 8,
+        name: 'faq',
+        Icon: 'ScatterChart',
+        route: '/client/faq',
         Data: []
     }
 ];

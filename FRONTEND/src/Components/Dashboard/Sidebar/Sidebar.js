@@ -401,7 +401,6 @@ const Sidebar = ({ ShowSidebar }) => {
 
                                                         <Link
                                                             className="has-arrow "
-                                                            // href="javascript:void()"
                                                             aria-expanded="false"
                                                         >
                                                             <IconComponent key={item.id} icon={item.Icon} />
