@@ -308,28 +308,42 @@ export const Client = [
         route: '/client/dashboard',
         Data: []
     },
+    // {
+    //     id: 2,
+    //     name: 'Signals',
+    //     Icon: 'Signal',
+    //     Data: [
+    //         {
+    //             id: 1000,
+    //             name: 'Signals',
+    //             Icon: 'Signal',
+    //             route: '/client/signals',
+    //             Data: []
+    //         },
+    //         {
+    //             id: 1001,
+    //             name: 'Trade History',
+    //             Icon: 'FolderClock',
+    //             route: '/client/tradehistory',
+    //             Data: []
+    //         },
+    //     ]
+    // },
     {
         id: 2,
         name: 'Signals',
         Icon: 'Signal',
-        Data: [
-            {
-                id: 2,
-                name: 'Signals',
-                Icon: 'Signal',
-                route: '/client/signals',
-                Data: []
-            },
-            {
-                id: 3,
-                name: 'Trade History',
-                Icon: 'FolderClock',
-                route: '/client/tradehistory',
-                Data: []
-            },
-        ]
+        route: '/client/signals',
+        Data: []
     },
-   
+    {
+        id: 3,
+        name: 'Trade History',
+        Icon: 'FolderClock',
+        route: '/client/tradehistory',
+        Data: []
+    },
+
     {
         id: 4,
         name: 'Trading Status',
@@ -366,7 +380,7 @@ export const Client = [
         Data: []
     },
     {
-        id: 8,
+        id: 9,
         name: 'faq',
         Icon: 'ScatterChart',
         route: '/client/faq',
