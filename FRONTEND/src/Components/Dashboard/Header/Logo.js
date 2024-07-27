@@ -21,7 +21,7 @@ const Logo = ({ data, ShowSidebar }) => {
         <div>
             <div className="nav-header">
                 <span className="brand-logo">
-                    {togglesidebar ? <img className="logo-abbr1" style={{width:"48px"}} src={data ? data : "/assets/images/download2.png"} alt="logo" /> : <img className="brand-title" src={data ? data : "/assets/images/download1.png"} alt="logo" />}
+                    {togglesidebar ? <img className="logo-abbr1" style={{width:"48px"}} src={data ? data : ""} alt="logo" /> : <img className="brand-title" src={data ? data : ""} alt="logo" />}
              
 
                 </span>

@@ -50,7 +50,7 @@ module.exports = function (app) {
             }
 
             try {
-                const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+                const client = new MongoClient(uri.db_url, { useNewUrlParser: true, useUnifiedTopology: true });
                 await client.connect();
 
                 const db = client.db(databaseName);
