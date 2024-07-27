@@ -20,7 +20,7 @@ import * as Config from "../../../Utils/Config";
 
 const ReferralPage = () => {
     const dispatch = useDispatch();
-    const [iframeUrl, setIframeUrl] = useState(Config.react_domain+"/#/newsignup");
+    const [iframeUrl, setIframeUrl] = useState(Config.react_domain + "/#/newsignup");
 
     const [showModal, setShowModal] = useState(false);
     const [tab, setTab] = useState("home");
@@ -29,6 +29,9 @@ const ReferralPage = () => {
     const [getReferalUsers, setReferalUsers] = useState({ loading: true, data: [] });
     const [getReferalUsersData, setReferalUsersData] = useState({ loading: true, data: [] });
     const user_details = JSON.parse(localStorage.getItem('user_details'));
+
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm1, setSearchTerm1] = useState("");
 
 
     const handleSelect = (selectedTab) => {
@@ -213,6 +216,7 @@ const ReferralPage = () => {
         await dispatch(GET_COMPANY_INFOS()).unwrap()
             .then((response) => {
                 if (response.status) {
+
                     setCompanyName({
                         loading: false,
                         data: response.data,
@@ -225,21 +229,32 @@ const ReferralPage = () => {
         await dispatch(GettAllUSerReferal({ Find_Role: "ADMIN", username: "sneh" })).unwrap()
             .then((response) => {
                 if (response.status) {
+                    const filteredData = searchTerm
+                        ? response.data.filter(user => user.UserName.toLowerCase().includes(searchTerm.toLowerCase()))
+                        : response.data;
+
                     setReferalUsers({
                         loading: false,
-                        data: response.data,
+                        data: filteredData,
                     });
                 }
             });
     };
 
+
     const GetAllReedeemData = async () => {
         await dispatch(REEDEEM_USER_DATA({ Role: "ADMIN" })).unwrap()
             .then((response) => {
+
+
                 if (response.status) {
+                    const filteredData = searchTerm1
+                        ? response.data.filter(user => user.UserName.toLowerCase().includes(searchTerm1.toLowerCase()))
+                        : response.data;
+
                     setReferalUsersData({
                         loading: false,
-                        data: response.data,
+                        data: filteredData,
                     });
                 }
             });
@@ -255,7 +270,7 @@ const ReferralPage = () => {
         } else {
             AllReferalUser();
         }
-    }, [tab]);
+    }, [tab, searchTerm, searchTerm1]);
 
     useEffect(() => {
         if (getCompanyName.data && getCompanyName.data[0]) {
@@ -339,11 +354,7 @@ const ReferralPage = () => {
                                                 <div className="card-body">
                                                     <div className="container-fluid pt-3">
                                                         <div className="row">
-                                                            {/* <div className="col-md-3">
-                                                                <div className="rpWrp2">
-                                                                    <h3>Referral points <p className='mb-0'>{ReferralsPoints && ReferralsPoints}</p></h3>
-                                                                </div>
-                                                            </div> */}
+
                                                             <div className="col-md-4">
                                                                 <div className="rpWrp2">
                                                                     <h3>Total Referrals <p className='mb-0'>{totalReferrals && totalReferrals}</p></h3>
@@ -378,10 +389,32 @@ const ReferralPage = () => {
                                 >
                                     <Tab eventKey="home" title="Refer Information">
                                         <h2 className="mt-5 mb-3">Refer Information</h2>
+
+                                        <div className="mb-3">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                placeholder="Search..."
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                            />
+                                        </div>
+
                                         <BasicDataTable tableData={getReferalUsers.data} TableColumns={columns} dropdown={false} />
                                     </Tab>
                                     <Tab eventKey="profile" title="Reedeem Request">
                                         <h2 className="mt-5 mb-3">Reedeem Request</h2>
+
+                                        <div className="mb-3">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                placeholder="Search..."
+                                                value={searchTerm1}
+                                                onChange={(e) => setSearchTerm1(e.target.value)}
+                                            />
+                                        </div>
+
                                         <BasicDataTable tableData={getReferalUsersData.data} TableColumns={columns1} dropdown={false} />
                                     </Tab>
                                 </Tabs>
