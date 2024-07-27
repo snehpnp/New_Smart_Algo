@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { admin_sidebar as originalAdminSidebar, supper_admin_sidebar, sub_admin_sidebar, Client } from './Nav_Config';
-import { Signal, Users, Wrench, Link2, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Boxes, Rocket, Paintbrush, Vote, Info, MoreHorizontal } from 'lucide-react';
+import { Signal, Users, Wrench, Link2, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Boxes, Rocket, Paintbrush, Vote, Info, MoreHorizontal, BetweenHorizontalStart  } from 'lucide-react';
 import $ from "jquery";
 import Logo from '../Header/Logo';
 import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Subadminslice';
@@ -198,6 +198,8 @@ const IconComponent = ({ icon }) => {
                 return <Info className='me-3' />;
             case 'Link2':
                 return <Link2 className='me-3' />;
+            case 'BetweenHorizontalStart':
+                return <BetweenHorizontalStart  className='me-3' />;
             case 'MoreHorizontal':
                 return <MoreHorizontal className='me-3' />;
             default:

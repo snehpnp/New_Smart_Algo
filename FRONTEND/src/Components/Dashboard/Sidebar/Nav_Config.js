@@ -308,41 +308,41 @@ export const Client = [
         route: '/client/dashboard',
         Data: []
     },
-    // {
-    //     id: 2,
-    //     name: 'Signals',
-    //     Icon: 'Signal',
-    //     Data: [
-    //         {
-    //             id: 1000,
-    //             name: 'Signals',
-    //             Icon: 'Signal',
-    //             route: '/client/signals',
-    //             Data: []
-    //         },
-    //         {
-    //             id: 1001,
-    //             name: 'Trade History',
-    //             Icon: 'FolderClock',
-    //             route: '/client/tradehistory',
-    //             Data: []
-    //         },
-    //     ]
-    // },
     {
         id: 2,
         name: 'Signals',
         Icon: 'Signal',
-        route: '/client/signals',
-        Data: []
+        Data: [
+            {
+                id: 1000,
+                name: 'Signals',
+                Icon: 'Signal',
+                route: '/client/signals',
+                Data: []
+            },
+            {
+                id: 1001,
+                name: 'Trade History',
+                Icon: 'FolderClock',
+                route: '/client/tradehistory',
+                Data: []
+            },
+        ]
     },
-    {
-        id: 3,
-        name: 'Trade History',
-        Icon: 'FolderClock',
-        route: '/client/tradehistory',
-        Data: []
-    },
+    // {
+    //     id: 2,
+    //     name: 'Signals',
+    //     Icon: 'Signal',
+    //     route: '/client/signals',
+    //     Data: []
+    // },
+    // {
+    //     id: 3,
+    //     name: 'Trade History',
+    //     Icon: 'FolderClock',
+    //     route: '/client/tradehistory',
+    //     Data: []
+    // },
 
     {
         id: 4,
@@ -382,7 +382,7 @@ export const Client = [
     {
         id: 9,
         name: 'faq',
-        Icon: 'ScatterChart',
+        Icon: 'Info',
         route: '/client/faq',
         Data: []
     }
