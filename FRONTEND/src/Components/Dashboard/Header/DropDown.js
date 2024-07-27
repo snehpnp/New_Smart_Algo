@@ -76,12 +76,12 @@ const DropDown = () => {
                         Profile
                     </Link>
                 </li>
-                {/* {Role === "USER" || Role === "ADMIN" ? <li>
+                {Role === "USER" || Role === "ADMIN" ? <li>
                     <Link to={Role === "USER" ? "/client/refer-earn" : "/admin/refer-earn"} className="dropdown-item d-flex align-items-center my-2">
                         <Award className="me-2" size={16} />
                         Refer And Earn
                     </Link>
-                </li> : null} */}
+                </li> : null}
                 {gotodashboard == null && (
                     <li>
                         <button className="dropdown-item d-flex align-items-center" onClick={(e) => LogoutUser(e)}>
