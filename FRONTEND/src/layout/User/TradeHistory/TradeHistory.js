@@ -146,7 +146,7 @@ const TradeHistory = () => {
       formatter: (cell, row) => {
         return (
           <div>
-            <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span>
+            <span className="text">{cell !== "" ? parseInt(row.entry_qty) : "-"}</span>
 
 
             <span className={`d-none entry_qty_${row.token}_${row._id}`}>

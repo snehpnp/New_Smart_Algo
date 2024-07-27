@@ -48,10 +48,10 @@ const CommonEmail = async (toEmail, subjectEmail, htmlEmail, textEmail, res) => 
             transport.sendMail(mailOptions, function (err, info) {
                 if (err) {
                     console.log("Error ", err);
-                    return res.send({ status: 'Failed!!!' })
+                    // return res.send({ status: 'Failed!!!' })
                 } else {
-                    // console.log("Email has been sent", info.response);
-                    return res.send({ status: 'success', msg: "Mail send successfully", data: info.response })
+                    console.log("Email has been sent", info.response);
+                    // return res.send({ status: 'success', msg: "Mail send successfully", data: info.response })
                 }
             });
         }

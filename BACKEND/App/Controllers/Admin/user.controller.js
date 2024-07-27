@@ -8,6 +8,7 @@ const user_SignUp = db.UserSignUp;
 const user_logs = db.user_logs;
 const Role_model = db.role;
 const BrokerResponse = db.BrokerResponse;
+const userReedeem_modal = db.userReedeem_modal;
 
 const Company_info = db.company_information;
 const strategy_client = db.strategy_client;
@@ -1698,7 +1699,7 @@ class Employee {
           const GetUser = await User_model.findOne({ UserName: data.UserName }).select('license_type refer_points');
           if (GetUser) {
             let updatestatus = 0;
-            
+
             if (GetUser.license_type == 1 || GetUser.license_type == 0) {
               updatestatus = 1;
             } else if (GetUser.license_type == 2) {
@@ -1709,8 +1710,7 @@ class Employee {
 
                 const refer_pointsData = await User_model.findOne({ UserName: data.refer_code }).select('refer_points');
 
-                console.log("refer_pointsData", refer_pointsData.refer_points)
-                console.log("refer_pointsData", data.refer_points)
+
 
 
                 updatestatus = 2;
@@ -1747,11 +1747,23 @@ class Employee {
 
       if (Find_Role === "USER") {
         const GetUser = await User_model.findOne({ UserName: username }).select('license_type refer_points');
+        const UserReedeemPoint = await userReedeem_modal.find({ user_id: GetUser._id, ActiveStatus: "0" }).select('reedeem_points ActiveStatus');
+
+        const sumReedeemPoints = UserReedeemPoint.reduce((total, item) => total + item.reedeem_points, 0);
+
+        var AllPoints = GetUser.refer_points - sumReedeemPoints;
+
+
+        if (AllPoints < 0) {
+          AllPoints = 0;
+        }
+
+
         return res.send({
           status: true,
           msg: "Get All Clients",
           data: getAllClients,
-          data1: GetUser,
+          data1: AllPoints,
         });
       } else {
         return res.send({

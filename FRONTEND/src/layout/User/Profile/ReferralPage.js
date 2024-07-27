@@ -20,7 +20,7 @@ const ReferralPage = () => {
     const user_details = JSON.parse(localStorage.getItem('user_details'));
     const [iframeUrl, setIframeUrl] = useState(Config.react_domain + "/#/newsignup");
     const [getCompanyName, setCompanyName] = useState({ loading: true, data: [] });
-    const [getReferalUsers, setReferalUsers] = useState({ loading: true, data: [], data1: [] });
+    const [getReferalUsers, setReferalUsers] = useState({ loading: true, data: [], data1:0 });
     const [copied, setCopied] = useState(false);
     const [getReferalUsersData, setReferalUsersData] = useState({ loading: true, data: [] });
 
@@ -95,7 +95,7 @@ const ReferralPage = () => {
     const totalReferrals = getReferalUsers.data && getReferalUsers.data.length;
     const inProcessReferrals = getReferalUsers.data && getReferalUsers.data.filter(user => user.ActiveStatus === 1).length;
     const successfulReferrals = getReferalUsers.data && getReferalUsers.data.filter(user => user.ActiveStatus === 2).length;
-    const ReferralsPoints = getReferalUsers.data && getReferalUsers.data1.refer_points
+    const ReferralsPoints = getReferalUsers.data && getReferalUsers.data1
 
 
     const columns = [
@@ -155,6 +155,7 @@ const ReferralPage = () => {
                         showConfirmButton: false,
                         timer: 1500
                     });
+                    window.location.reload();
                 }
             })
             .catch((error) => {

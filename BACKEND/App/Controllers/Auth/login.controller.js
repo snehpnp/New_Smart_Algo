@@ -255,12 +255,12 @@ class Login {
 
             // Update referral points if refer_code is valid
             const referUser = await User.findOne({ UserName: refer_code });
-            if (referUser) {
-                const newReferPoints = (referUser.refer_points || 0) + referPoints;
-                await User.updateOne({ _id: referUser._id }, { $set: { refer_points: newReferPoints } });
+            // if (referUser) {
+            //     const newReferPoints = (referUser.refer_points || 0) + referPoints;
+            //     await User.updateOne({ _id: referUser._id }, { $set: { refer_points: newReferPoints } });
 
-                console.log("Updated refer points for user:", referUser.UserName, "New points:", newReferPoints);
-            }
+            //     console.log("Updated refer points for user:", referUser.UserName, "New points:", newReferPoints);
+            // }
 
             return res.status(201).json({ status: true, msg: 'Sign Up successful!' });
 

@@ -27,13 +27,14 @@ const System = () => {
     const [getCompanyName, setCompanyName] = useState({ loading: true, data: [] });
     const [PanelDetailsModal, setPanelDetailsModal] = useState(false);
 
+
+
     const CompanyName = async () => {
         await dispatch(GET_COMPANY_INFOS()).unwrap()
             .then((response) => {
                 if (response.status) {
                     setDiss(response.data[0].disclaimer);
                     setDissStatus(response.data[0].disclaimer_status);
-                    console.log("response.data[0].dissArr", response.data[0].disclaimer_status)
                     setInputs(response.data[0].dissArr);
 
                     setCompanyName({
@@ -229,15 +230,23 @@ const System = () => {
         CompanyName();
     }, []);
 
+    const setPageStatus = (k) => {
+        localStorage.setItem("pageStatus", k);
+    }
+
+
+    var PageStatus = localStorage.getItem("pageStatus") || 1
+
     return (
         <Content Page_title="System" button_status={false}>
 
 
             <Tabs
-                defaultActiveKey="1"
+                defaultActiveKey={PageStatus}
                 id="fill-tab-example"
                 className="mb-3"
                 fill
+                onSelect={(k) => setPageStatus(k)}
             >
                 <Tab eventKey="1" title="Company Information" >
                     <h2>Company Information</h2>
@@ -254,6 +263,7 @@ const System = () => {
                     <h2>Background Images</h2>
                     <BasicDataTable tableData={getCompanyName.data} TableColumns={background_images} dropdown={false} />
                 </Tab>
+
                 <Tab eventKey="4" title="Disclaimer Message" >
 
                     <div className='Disclamer'>
@@ -302,6 +312,7 @@ const System = () => {
 
                     </div>
                 </Tab>
+
             </Tabs>
 
 
