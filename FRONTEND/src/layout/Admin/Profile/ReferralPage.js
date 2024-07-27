@@ -165,7 +165,7 @@ const ReferralPage = () => {
                             </button>
                         </>
 
-                        : null}
+                        : "-"}
 
                 </>
             ),
