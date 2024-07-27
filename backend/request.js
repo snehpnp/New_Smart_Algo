@@ -54,7 +54,7 @@ module.exports = function (app) {
                 await client.connect();
 
                 const db = client.db(databaseName);
-                await db.createCollection('dummy'); // Create a dummy collection to initialize the database
+                await db.createCollection('dummy');
 
                 await client.close();
                 console.log(`Database ${databaseName} created successfully`);
