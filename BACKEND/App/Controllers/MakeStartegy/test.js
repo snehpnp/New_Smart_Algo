@@ -151,6 +151,37 @@ db.createView("M_48123_makeStrategyData", "usermakestrategies",
 
 
 
+db.createView("strategyViewNames", "usermakestrategies",
+    [
+        {
+          $match: {
+            status: "1",
+          }
+        },
+        {
+          $addFields: {
+            viewName: { 
+              $concat: [
+                "M", 
+                "$timeframe", 
+                "_",
+                "$tokensymbol", 
+                "_make_", 
+                "$name"
+              ]
+            }
+          }
+        },
+        {
+          $project: {
+            viewName: 1, 
+          }
+        }   
+      ]
+)  
+
+
+
   
 
 // Yahan pe hum $arrayElemAt operator ka use kar rahe hain taaki specific indexes ko access kiya ja sake arrays se.

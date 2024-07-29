@@ -4285,3 +4285,74 @@ try {
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+db.createView("M_48123_makeStrategyData", "usermakestrategies",
+  [
+      {
+        $match: {
+          status: "1",
+          timeframe: "",
+          tokensymbol: "48123",
+        }
+      },
+      {
+        $lookup: {
+          from: "M_48123",
+          pipeline: [
+          ],
+          as: "timeFrameData"
+        }
+      },
+      {
+          $lookup: {
+            from: "emaclose3_M_48123",
+            pipeline: [
+            ],
+            as: "emaclose3Data"
+          }
+        }
+        
+    ]
+)    
+
+
+
+db.createView("strategyViewNames", "usermakestrategies",
+  [
+      {
+        $match: {
+          status: "1",
+        }
+      },
+      {
+        $addFields: {
+          viewName: { 
+            $concat: [
+              "M", 
+              "$timeframe", 
+              "_",
+              "$tokensymbol", 
+              "_make_", 
+              "$name"
+            ]
+          }
+        }
+      },
+      {
+        $project: {
+          viewName: 1, 
+        }
+      }   
+    ]
+)  
+

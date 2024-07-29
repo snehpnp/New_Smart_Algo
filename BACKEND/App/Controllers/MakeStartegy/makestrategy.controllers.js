@@ -207,7 +207,6 @@ class MakeStartegy {
 
   //Update Strategy..
   async UpdateMakeStartegy(req, res) {
-     
     let channelList = "";
     try {
 
@@ -401,8 +400,11 @@ class MakeStartegy {
 
         let viewName = 'M' + req.body.timeframe + '_' + req.body.tokensymbol + '_make_' + req.body.name;
 
+        let ExistviewName = 'M' + req.body.existtimeframe + '_' + req.body.tokensymbol + '_make_' + req.body.name;
+
            try {
-              await dbTest.collection(viewName).drop();
+
+              await dbTest.collection(ExistviewName).drop();
               const collections = await dbTest.listCollections().toArray();
               const collectionExists = collections.some(coll => coll.name === viewName);
 
@@ -461,8 +463,10 @@ class MakeStartegy {
 
         let viewName = 'M' + req.body.timeframe + '_' + req.body.tokensymbol + '_make_' + req.body.name;
 
+        let ExistviewName = 'M' + req.body.existtimeframe + '_' + req.body.tokensymbol + '_make_' + req.body.name;
+
         try {
-           await dbTest.collection(viewName).drop();
+           await dbTest.collection(ExistviewName).drop();
            const collections = await dbTest.listCollections().toArray();
            const collectionExists = collections.some(coll => coll.name === viewName);
 
@@ -483,7 +487,7 @@ class MakeStartegy {
       // }
 
 
-      res.send({ status: true, msg: "Update successfully!", data: [] });
+     return res.send({ status: true, msg: "Update successfully!", data: [] });
 
     } catch (error) {
 
@@ -493,8 +497,7 @@ class MakeStartegy {
 
   /// Make Startegy
   async AddMakeStartegy(req, res) {
-
-
+  
     var _id = new ObjectId(req.body.user_id);
 
     let user_panel_key = await user.findOne({ _id: _id }).select('client_key').lean();
@@ -811,6 +814,8 @@ class MakeStartegy {
     } catch (e) {
     }
   }
+
+  
 
 
 }

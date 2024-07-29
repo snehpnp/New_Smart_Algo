@@ -1126,7 +1126,7 @@ const CreateStrategy = () => {
   }
 
   const saveStrategy = async (e) => {
-
+   
     if (strategyName == "") {
       //alert("Please select a strategy name");
       toast.error('Please select a strategy name');
@@ -1271,7 +1271,7 @@ const CreateStrategy = () => {
 
         strategy_name: selectStrategy,
 
-        timeframe: timeFrameVal,
+        timeframe: timeFrameVal=="1"?"":timeFrameVal,
         type: "BUY",
         indicator: "MA",
         price_source: "open",
@@ -1326,7 +1326,7 @@ const CreateStrategy = () => {
 
         strategy_name: selectStrategy,
 
-        timeframe: timeFrameVal,
+        timeframe: timeFrameVal=="1"?"":timeFrameVal,
         type: "SELL",
         indicator: "MA",
         price_source: "open",

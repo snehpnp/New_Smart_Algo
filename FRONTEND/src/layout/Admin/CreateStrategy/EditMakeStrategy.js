@@ -105,6 +105,8 @@ const EditMakeStrategy = () => {
   const [selectStrategy, setSelectStrategy] = useState("");
 
   const [timeFrameVal, setTimeFrameVal] = useState("");
+ 
+  const [existtimeFrameVal, setExistTimeFrameVal] = useState("");
 
   const [tokensymbol, setTokensymbol] = useState("");
 
@@ -202,6 +204,7 @@ const EditMakeStrategy = () => {
           console.log("shakkkkkkkkk --- ", response.data)
           setSingleMakeStrategyData(response.data);
           setTimeFrameVal(response.data.timeframe)
+          setExistTimeFrameVal(response.data.timeframe)
           setTokensymbol(response.data.tokensymbol)
 
           setStrategyName(response.data.name)
@@ -1688,7 +1691,8 @@ const EditMakeStrategy = () => {
         // "strike_price":"19300",
         // "option_type":"CE",
         //  "expiry":"26102023",
-        "timeframe": timeFrameVal,
+        "timeframe": timeFrameVal=="1"?"":timeFrameVal,
+        "existtimeframe": existtimeFrameVal,
         "type": "BUY",
         "indicator": "MA",
         "price_source": "open",
@@ -1755,7 +1759,8 @@ const EditMakeStrategy = () => {
         // "strike_price":"19300",
         // "option_type":"CE",
         //  "expiry":"26102023",
-        "timeframe": timeFrameVal,
+        "timeframe": timeFrameVal=="1"?"":timeFrameVal,
+        "existtimeframe": existtimeFrameVal,
         "type": "SELL",
         "indicator": "MA",
         "price_source": "open",
