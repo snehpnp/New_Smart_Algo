@@ -17,6 +17,7 @@ import { useFormik } from "formik";
 import * as valid_err from "../../Utils/Common_Messages";
 import { Email_regex } from "../../Utils/Common_regex";
 import { Get_Company_Logo } from '../../ReduxStore/Slice/Admin/AdminSlice'
+import { GET_IP } from "../../Service/common.service";
 
 
 const Login = () => {
@@ -37,6 +38,15 @@ const Login = () => {
   const [UserData, setUserData] = useState("");
   const [signInBtn, setSignInBtn] = useState(false);
 
+
+  const [ip, setIp] = useState('');
+
+  useEffect(() => {
+    GET_IP().then((response) => {
+      console.log("GET_IP",response.data.ip)
+      setIp(response.data.ip)
+    })
+  }, []);
 
 
   let SetTheme = async () => {
@@ -202,6 +212,7 @@ const Login = () => {
         Email: values.email,
         Password: values.password,
         device: CheckUser,
+        network_ip:ip
       };
 
       await dispatch(SignIn(req))
@@ -271,11 +282,12 @@ const Login = () => {
       Email: UserData.Email,
       Device: CheckUser,
       Otp: typeOtp,
+      network_ip:ip
+
     };
 
     await dispatch(Verify_User_Device(req)).unwrap()
       .then((res) => {
-        console.log("res", res);
 
         if (res.firstlogin === "0") {
           setDesclaimerModal(true)
@@ -380,6 +392,8 @@ const Login = () => {
         Email: UserData.Email,
         device: CheckUser,
         otp: typeOtp1,
+        network_ip:ip
+
       };
 
       await dispatch(Logout_From_Other_Device(req))

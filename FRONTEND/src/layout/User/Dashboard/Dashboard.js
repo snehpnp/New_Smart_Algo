@@ -9,6 +9,7 @@ import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import { check_Device } from "../../../Utils/find_device";
 import { User_Dashboard_Data, Update_Dashboard_Data } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 import Loader from "../../../Utils/Loader";
+import { GET_IP } from "../../../Service/common.service";
 
 
 const BrokerResponse = () => {
@@ -28,7 +29,14 @@ const BrokerResponse = () => {
   const [updatedData, setUpdatedData] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
 
+  const [ip, setIp] = useState('');
 
+  useEffect(() => {
+    GET_IP().then((response) => {
+      console.log("GET_IP",response.data.ip)
+      setIp(response.data.ip)
+    })
+  }, []);
 
   const handleCloseStartegyModal = () => {
     setShowStartegyModal(false);
@@ -225,6 +233,8 @@ const BrokerResponse = () => {
           GetServiceStrategy: GetServiceStrategy,
           user_id: user_details.user_id,
           data: { Editor_role: Role, device: check_Device() },
+          network_ip:ip
+
         },
         AdminToken: user_details.token,
       })

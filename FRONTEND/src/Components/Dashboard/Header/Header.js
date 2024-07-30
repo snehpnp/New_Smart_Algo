@@ -18,6 +18,9 @@ import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import { TRADING_OFF_USER } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 import { Get_Company_Logo } from '../../../ReduxStore/Slice/Admin/AdminSlice';
 import jwt_decode from "jwt-decode";
+import { GET_IP } from "../../../Service/common.service";
+
+
 
 const Header = ({ ChatBox }) => {
   const dispatch = useDispatch();
@@ -37,7 +40,14 @@ const Header = ({ ChatBox }) => {
   const user_role = JSON.parse(localStorage.getItem("user_role"));
   const UserNamego_localstg = JSON.parse(localStorage.getItem("user_details_goTo"))
   const [getLogo, setLogo] = useState("");
+  const [ip, setIp] = useState('');
 
+  useEffect(() => {
+    GET_IP().then((response) => {
+      console.log("GET_IP", response.data.ip)
+      setIp(response.data.ip)
+    })
+  }, []);
 
   if (theme_id != null) {
     let themedata = JSON.parse(theme_id);
@@ -157,7 +167,10 @@ const Header = ({ ChatBox }) => {
     if (check) {
       loginWithApi(brokerid, UserDetails);
     } else {
-      dispatch(TRADING_OFF_USER({ user_id: user_details.user_id, device: CheckUser, token: user_details.token }))
+      dispatch(TRADING_OFF_USER({
+        user_id: user_details.user_id, device: CheckUser, network_ip: ip
+        , token: user_details.token
+      }))
         .unwrap()
         .then((response) => {
           if (response.status) {

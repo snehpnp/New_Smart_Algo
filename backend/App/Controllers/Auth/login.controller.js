@@ -27,7 +27,7 @@ class Login {
     // Login User
     async login(req, res) {
         try {
-            const { Email, Password, device } = req.body;
+            const { Email, Password, device,network_ip } = req.body;
             // IF Login Time Email CHECK
 
 
@@ -274,7 +274,7 @@ class Login {
     // Verify user
     async verifyUser(req, res) {
         try {
-            const { Email, Otp, Device } = req.body;
+            const { Email, Otp, Device ,network_ip} = req.body;
             var addData = {}
 
             // IF Login Time Email CHECK
@@ -358,7 +358,7 @@ class Login {
                 login_status: "Panel On",
                 role: EmailCheck.Role,
                 device: Device,
-                system_ip: getIPAddress()
+                system_ip:network_ip
             })
             await user_login.save();
 

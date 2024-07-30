@@ -203,7 +203,10 @@ class Dashboard {
     // UPDATE CLIENT SERVICES
     async updateClientServices(req, res) {
         try {
-            const { user_id, servicesData, data, statusStartegyUser, GetServiceStrategy } = req.body;
+            const { user_id, servicesData, data, statusStartegyUser, GetServiceStrategy,network_ip } = req.body;
+
+            console.log("network_ip",network_ip)
+
 
             if (statusStartegyUser == "1") {
                 const isEmpty = Object.keys(servicesData).length === 0;
@@ -295,7 +298,7 @@ class Dashboard {
                                 message: Service_name[0].name + " quantity Update",
                                 quantity: matchedObject.quantity,
                                 role: data.Editor_role,
-                                system_ip: getIPAddress(),
+                                system_ip: network_ip,
                                 device: data.device
                             })
                         await user_activity.save()
@@ -312,7 +315,7 @@ class Dashboard {
                                     message: Service_name[0].name + " Update Strategy ",
                                     Strategy: Strategieclient[0].strategy_name,
                                     role: data.Editor_role,
-                                    system_ip: getIPAddress(),
+                                    system_ip: network_ip,
                                     device: data.device
                                 })
                             await user_activity.save()
@@ -331,7 +334,7 @@ class Dashboard {
                                 message: Service_name[0].name + " Service " + msg,
                                 quantity: matchedObject.quantity,
                                 role: data.Editor_role,
-                                system_ip: getIPAddress(),
+                                system_ip: network_ip,
                                 device: data.device
                             })
                         await user_activity.save()
@@ -348,7 +351,7 @@ class Dashboard {
                                 message: Service_name[0].name + "  order_type " + msg + " Update",
 
                                 role: data.Editor_role,
-                                system_ip: getIPAddress(),
+                                system_ip: network_ip,
                                 device: data.device
                             })
                         await user_activity.save()
@@ -365,7 +368,7 @@ class Dashboard {
                                 message: Service_name[0].name + "  product_type " + msg + " Update",
 
                                 role: data.Editor_role,
-                                system_ip: getIPAddress(),
+                                system_ip: network_ip,
                                 device: data.device
                             })
                         await user_activity.save()
@@ -389,7 +392,9 @@ class Dashboard {
     // Trading OFF USER
     async TradingOff(req, res) {
         try {
-            const { user_id, device } = req.body
+            const { user_id, device,network_ip } = req.body
+
+            console.log("network_ip",network_ip)
 
             var User_information = await User_model.find({ _id: user_id });
 
@@ -414,7 +419,7 @@ class Dashboard {
                     login_status: "Trading off",
                     role: User_information[0].Role,
                     device: device,
-                    system_ip: getIPAddress()
+                    system_ip: network_ip
 
 
                 })
@@ -436,7 +441,7 @@ class Dashboard {
                 user_Id: User_information[0]._id,
                 login_status: "Trading off",
                 role: User_information[0].Role,
-                system_ip: getIPAddress(),
+                system_ip: network_ip,
                 device: device
             })
             await user_login.save();
