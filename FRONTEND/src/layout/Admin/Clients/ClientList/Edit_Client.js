@@ -17,11 +17,21 @@ import "../../../../App.css"
 import { f_time } from '../../../../Utils/Date_formet';
 import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 import * as Config from "../../../../Utils/Config";
+import { GET_IP } from "../../../../Service/common.service";
 
 const EditClient = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
+
+  const [ip, setIp] = useState('');
+
+  useEffect(() => {
+    GET_IP().then((response) => {
+      console.log("GET_IP",response.data.ip)
+      setIp(response.data.ip)
+    })
+  }, []);
 
   const selector = useSelector((state) => state.DashboardSlice);
 
@@ -97,7 +107,8 @@ const EditClient = () => {
       parent_role: null,
       Strategy: false,
       licence1: 'null',
-      multiple_strategy_select: false
+      multiple_strategy_select: false,
+      network_ip:ip
     },
 
 
@@ -180,7 +191,8 @@ const EditClient = () => {
         "licence": values.licence1,
         "Editor_role": Role,
         "device": check_Device(),
-        "multiple_strategy_select": values.multiple_strategy_select === false ? '0' : '1'
+        "multiple_strategy_select": values.multiple_strategy_select === false ? '0' : '1',
+        "network_ip":ip
       }
 
 
@@ -371,7 +383,6 @@ const EditClient = () => {
   ];
 
 
-
   useEffect(() => {
 
 
@@ -534,7 +545,6 @@ const EditClient = () => {
 
 
 
-
   const getGroupeServics = async () => {
     if (formik.values.groupservice) {
       await dispatch(Get_Service_By_Group_Id({ _id: formik.values.groupservice })).unwrap()
@@ -551,7 +561,6 @@ const EditClient = () => {
   useEffect(() => {
     getGroupeServics();
   }, [formik.values.groupservice]);
-
 
 
   // GET ALL GROUP SERVICES NAME / GET ALL SUBAMDIN / STRATEGY
@@ -606,12 +615,9 @@ const EditClient = () => {
 
   }
 
-
   useEffect(() => {
     data()
   }, [])
-
-
 
   //  For Checked Strategy
   const handleStrategyChange = (event) => {
@@ -623,9 +629,6 @@ const EditClient = () => {
       );
     });
   };
-
-
-
 
 
   useEffect(() => {
@@ -656,8 +659,6 @@ const EditClient = () => {
   }, [UserData.data]);
 
 
-
-
   useEffect(() => {
     if (UserData.data.strategy) {
       const initialSelectedStrategies = AllStrategy.data.map((strategy) => ({
@@ -670,11 +671,6 @@ const EditClient = () => {
       setSelectedStrategies(initialSelectedStrategies);
     }
   }, [UserData.data.strategy, AllStrategy.data]);
-
-
-
-
-
 
 
 

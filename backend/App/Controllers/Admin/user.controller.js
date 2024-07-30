@@ -471,6 +471,8 @@ class Employee {
 
       var req = req.body.req;
 
+console.log("req",req.network_ip)
+
       var StartDate1 = "";
       var EndDate1 = "";
 
@@ -747,7 +749,7 @@ class Employee {
             message: "Strategy Add",
             Strategy: Strategieclient[0].strategy_name,
             role: req.Editor_role,
-            system_ip: getIPAddress(),
+            system_ip: req.network_ip,
             device: req.device,
           });
           await user_activity.save();
@@ -770,7 +772,7 @@ class Employee {
             message: "Strategy Delete",
             Strategy: Strategieclient[0].strategy_name,
             role: req.Editor_role,
-            system_ip: getIPAddress(),
+            system_ip: req.network_ip,
             device: req.device,
           });
           await user_activity.save();
@@ -854,7 +856,7 @@ class Employee {
             message: "Update Group ",
             Strategy: GroupclientNAme[0].name,
             role: req.Editor_role.toUpperCase(),
-            system_ip: getIPAddress(),
+            system_ip: req.network_ip,
             device: req.device,
           });
           await user_activity.save();
@@ -1195,15 +1197,10 @@ class Employee {
         });
       }
 
-      // DATA GET SUCCESSFULLY
       return res.send({
         status: true,
         msg: "Get All trading Clients",
         data: getAllTradingClients,
-        // page: Number(page),
-        // limit: Number(limit),
-        // totalCount: totalCount,
-        // totalPages: Math.ceil(totalCount / Number(limit)),
       });
     } catch (error) {
       console.log("Error trading Clients Error-", error);
@@ -1255,7 +1252,7 @@ class Employee {
   // CLIENTS ACTIVE INACTIVE STATUS UPDATE
   async UpdateActiveStatus(req, res) {
     try {
-      const { id, user_active_status } = req.body;
+      const { id, user_active_status,network_ip } = req.body;
 
       // Retrieve the user
       const get_user = await User_model.find({ _id: id });
@@ -1291,7 +1288,7 @@ class Employee {
           user_Id: new ObjectId(id),
           login_status: "Trading Off By System you are Inactive by admin",
           role: "USER",
-          system_ip: getIPAddress()
+          system_ip: network_ip
         });
         await user_login1.save();
       }
@@ -1301,7 +1298,7 @@ class Employee {
         login_status: "Admin " + (user_active_status == 0 ? "InActive" : "Active") + " User",
         role: "USER",
         device: "",
-        system_ip: getIPAddress()
+        system_ip: network_ip
       });
       await user_login.save();
 
@@ -1644,8 +1641,7 @@ class Employee {
   async UpdateStarStatus(req, res) {
     try {
       const { id, StarStatus } = req.body;
-
-      console.log("id, StarStatus", id, StarStatus);
+console.log("StarStatus")
 
       // Retrieve the user
       const getUser = await User_model.findById(id);

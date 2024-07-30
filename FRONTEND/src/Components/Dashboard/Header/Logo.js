@@ -9,7 +9,6 @@ const Logo = ({ data, ShowSidebar }) => {
         settogglesidebar(!togglesidebar)
 
     }
-    console.group("togglesidebar", togglesidebar)
     if (togglesidebar) {
         $('#root').addClass("menu-toggle")
     } else {

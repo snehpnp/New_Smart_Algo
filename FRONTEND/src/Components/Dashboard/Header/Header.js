@@ -168,7 +168,7 @@ const Header = ({ ChatBox }) => {
     }
 
 
-  
+
   };
 
   //  GET_USER_DETAILS
@@ -185,6 +185,15 @@ const Header = ({ ChatBox }) => {
       ).unwrap();
 
       if (response.status) {
+        console.log(response.data.ActiveStatus)
+
+        if (response.data.ActiveStatus == "0") {
+          localStorage.clear();
+          window.location.reload();
+
+        }
+
+
         setUserDetails(response.data);
       } else {
         if ((response.msg === "Unauthorized!" || response.msg === "No token provided!!") && !gotodashboard) {
@@ -293,7 +302,7 @@ const Header = ({ ChatBox }) => {
     await dispatch(Get_Company_Logo()).unwrap()
       .then((response) => {
         if (response.status) {
-       
+
           setLogo(response.data[0].logo)
           $(".Company_logo").html(response.data && response.data[0].panel_name);
           // $(".logo-abbr1").html(response.data && response.data[0].logo);
@@ -311,8 +320,8 @@ const Header = ({ ChatBox }) => {
 
   return (
     <div className="header-container">
-      <Logo  data={getLogo && getLogo}/>
-      <div className="header" style={{position:"fixed"}}>
+      <Logo data={getLogo && getLogo} />
+      <div className="header" style={{ position: "fixed" }}>
         <div className="header-content">
           <nav className="navbar navbar-expand">
             <div className="collapse navbar-collapse justify-content-between">

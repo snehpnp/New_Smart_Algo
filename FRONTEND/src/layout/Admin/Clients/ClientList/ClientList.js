@@ -15,8 +15,21 @@ import { DawnloadDataUser } from "../../../../ReduxStore/Slice/Admin/userSlice";
 import { Download } from 'lucide-react';
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
+import { GET_IP } from "../../../../Service/common.service";
+
 
 const AllClients = () => {
+
+
+  const [ip, setIp] = useState('');
+
+  useEffect(() => {
+    GET_IP().then((response) => {
+      console.log("GET_IP",response.data.ip)
+      setIp(response.data.ip)
+    })
+  }, []);
+
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -221,23 +234,19 @@ const AllClients = () => {
       let req = {
         id: data._id,
         user_active_status: e.target.checked === true ? "1" : "0",
+        network_ip: ip
       };
       await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
         .unwrap()
         .then((response) => {
 
-
-          setrefresh(!refresh)
-          window.location.reload();
-
           if (response.status) {
 
-            setrefresh(!refresh)
             toast.success(response.msg);
+            setrefresh(!refresh)
 
-            window.location.reload()
             setTimeout(() => {
-            }, 500);
+            }, 1000);
           } else {
             toast.error(response.msg);
           }
@@ -607,124 +616,124 @@ const AllClients = () => {
 
   return (
     <>
-   <div className="export">
-      <Content
-        Page_title={headerName}
-        button_title="Add Client"
-        route="/admin/client/add"
-        show_csv_button={true} csv_data={ForGetCSV} csv_title="Client-List"
-      >
+      <div className="export">
+        <Content
+          Page_title={headerName}
+          button_title="Add Client"
+          route="/admin/client/add"
+          show_csv_button={true} csv_data={ForGetCSV} csv_title="Client-List"
+        >
 
-        <div className="row">
-          <div className="col-lg-3">
-            <div className="mb-3">
-              <label for="exampleFormControlInput1" className="form-label">
-                Search Something Here
-              </label>
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                className="form-control"
-                id="exampleFormControlInput1"
-              />
+          <div className="row">
+            <div className="col-lg-3">
+              <div className="mb-3">
+                <label for="exampleFormControlInput1" className="form-label">
+                  Search Something Here
+                </label>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  className="form-control"
+                  id="exampleFormControlInput1"
+                />
+              </div>
             </div>
-          </div>
-          <div className="col-lg-2 ">
-            <div className="mb-3">
-              <label for="select" className="form-label">
-                Client Type
-              </label>
+            <div className="col-lg-2 ">
+              <div className="mb-3">
+                <label for="select" className="form-label">
+                  Client Type
+                </label>
 
-              <select
-                className="default-select wide form-control"
-                aria-label="Default select example"
-                id="select"
-                onChange={(e) => setClientStatus(e.target.value)}
-                value={ClientStatus}
+                <select
+                  className="default-select wide form-control"
+                  aria-label="Default select example"
+                  id="select"
+                  onChange={(e) => setClientStatus(e.target.value)}
+                  value={ClientStatus}
+                >
+                  <option value="null">All</option>
+                  <option value="2">Live</option>
+                  <option value="1">Demo</option>
+                  <option value="0">2 Days Only</option>
+                </select>
+              </div>
+            </div>
+            <div className="col-lg-2">
+              <div className="mb-3">
+                <label for="select" className="form-label">
+                  Trading Type
+                </label>
+
+                <select
+                  className="default-select wide form-control"
+                  aria-label="Default select example"
+                  id="select"
+                  onChange={(e) => setPanelStatus(e.target.value)}
+                  value={PanelStatus}
+                >
+                  <option value="2">All</option>
+                  <option value="1">On</option>
+                  <option value="0">OFf</option>
+                </select>
+              </div>
+            </div>
+
+
+            <div className="col-lg-2">
+
+              <div className="mb-3">
+
+                <label for="select" className="form-label">
+
+                  Broker Type
+                </label>
+                <select
+                  className="default-select wide form-control"
+                  aria-label="Default select example"
+                  id="select"
+                  onChange={(e) => setSelectBroker(e.target.value)}
+                  value={selectBroker}
+                >
+                  <option value="null">All</option>
+
+
+                  {BrokerDetails && BrokerDetails.map((element) => (
+                    <option key={element.broker_id} value={element.broker_id}>
+                      {element.title}
+                    </option>
+                  ))}
+
+                </select>
+              </div>
+            </div>
+
+
+
+            <div className="col-lg-2 mt-4">
+              <button
+                className="btn btn-primary mt-1"
+                onClick={(e) => ResetDate(e)}
               >
-                <option value="null">All</option>
-                <option value="2">Live</option>
-                <option value="1">Demo</option>
-                <option value="0">2 Days Only</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-lg-2">
-            <div className="mb-3">
-              <label for="select" className="form-label">
-                Trading Type
-              </label>
-
-              <select
-                className="default-select wide form-control"
-                aria-label="Default select example"
-                id="select"
-                onChange={(e) => setPanelStatus(e.target.value)}
-                value={PanelStatus}
-              >
-                <option value="2">All</option>
-                <option value="1">On</option>
-                <option value="0">OFf</option>
-              </select>
+                Reset
+              </button>
             </div>
           </div>
 
+          {!getAllClients.loading ? (
+            <FullDataTable
+              TableColumns={columns}
+              tableData={getAllClients.data}
+            />
 
-          <div className="col-lg-2">
+          ) : (<Loader />)
 
-            <div className="mb-3">
+          }
 
-              <label for="select" className="form-label">
+          <ToastButton />
 
-                Broker Type
-              </label>
-              <select
-                className="default-select wide form-control"
-                aria-label="Default select example"
-                id="select"
-                onChange={(e) => setSelectBroker(e.target.value)}
-                value={selectBroker}
-              >
-                <option value="null">All</option>
-
-
-                {BrokerDetails && BrokerDetails.map((element) => (
-                  <option key={element.broker_id} value={element.broker_id}>
-                    {element.title}
-                  </option>
-                ))}
-
-              </select>
-            </div>
-          </div>
-
-
-
-          <div className="col-lg-2 mt-4">
-            <button
-              className="btn btn-primary mt-1"
-              onClick={(e) => ResetDate(e)}
-            >
-              Reset
-            </button>
-          </div>
-        </div>
-
-        {!getAllClients.loading ? (
-          <FullDataTable
-            TableColumns={columns}
-            tableData={getAllClients.data}
-          />
-
-        ) : (<Loader />)
-
-        }
-
-        <ToastButton />
-
-      </Content>
+        </Content>
       </div>
 
     </>
