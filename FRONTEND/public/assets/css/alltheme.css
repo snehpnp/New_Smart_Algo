@@ -522,13 +522,23 @@ body.theme-10 .card.form-card {
 }
 
 /* --------------media Query--------------- */
-@media screen and (max-width: 991px) {
-    /* [data-sidebar-style="full"][data-layout="vertical"] .deznav {
-            width: 6.5rem;
-            overflow: visible;
-            position: absolute;
-        } */
+@media screen and (max-width: 1441px) {
+.export button.btn.btn-primary.float-end {
+        right: 34px !important;
+        top: 39px !important;
+    }
+    
 }
+
+@media screen and (min-width: 1441px) {
+    .export button.btn.btn-primary.float-end {
+        right: 38px !important;
+        top: 38px !important;
+    }
+
+}
+
+
 
 img.profile-img {
     width: 200px;
