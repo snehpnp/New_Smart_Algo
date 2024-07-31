@@ -217,7 +217,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
                 axios(config)
                     .then(async (response) => {                       
                          if(response.data.IsError != true){
-                            const result_order = response.data.Result.Data.find(item2 => item2.norenordno === data1.order_id);
+                            const result_order = response.data.Result.Data.find(item2 => item2.norenordno == data1.order_id);
                             if(result_order != undefined){
                                 const message = (JSON.stringify(result_order));    
                                 let result = await BrokerResponse.findByIdAndUpdate(

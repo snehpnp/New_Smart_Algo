@@ -192,7 +192,7 @@ const GetAllBrokerResponse = async (user_info, res) => {
                 axios(config)
                     .then(async (response) => {
                         if (response) {
-                            const result_order = response.data.body.OrderBookDetail.find(item2 => parseInt(item2.BrokerOrderId) === parseInt(data1.order_id));
+                            const result_order = response.data.body.OrderBookDetail.find(item2 => parseInt(item2.BrokerOrderId) == parseInt(data1.order_id));
 
                             if (result_order != undefined) {
 

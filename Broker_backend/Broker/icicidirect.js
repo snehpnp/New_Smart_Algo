@@ -212,7 +212,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                                         if (segment.toUpperCase() == 'C') {
                                             Exist_entry_order = response.data.Success.find(item1 => item1.exchange_code === item.exchange_code);
                                         } else {
-                                            Exist_entry_order = response.data.Success.find(item1 => item1.exchange_code === item.exchange_code && item1.product_type.toLowerCase() == product || convertToISO8601(item1.expiry_date) == convertToISO8601(expiry_date));
+                                            Exist_entry_order = response.data.Success.find(item1 => item1.strike_price == StrikePrice &&  item1.stock_code == ShortName &&  item1.exchange_code === item.exchange_code && item1.product_type.toLowerCase() == product || convertToISO8601(item1.expiry_date) == convertToISO8601(expiry_date));
 
                                         }
 
