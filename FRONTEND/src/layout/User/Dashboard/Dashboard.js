@@ -246,9 +246,12 @@ const BrokerResponse = () => {
         if (response.status) {
           toast.success(response.msg);
           getservice()
+          window.location.reload();
 
         } else {
           toast.error(response.msg);
+          window.location.reload();
+
         }
       });
   };
