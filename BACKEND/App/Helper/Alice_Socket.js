@@ -19,6 +19,9 @@ const minutes = currentDate.getMinutes().toString().padStart(2, '0');
 
 
 let socketObject = null;
+let reconnectAttempt = 0;
+const maxReconnectAttempts = 10;
+const reconnectInterval = 5000; // Initial reconnect interval in ms
 
 const Alice_Socket = async () => {
     // console.log("ddddddddddddddddddd")
@@ -81,19 +84,20 @@ const Alice_Socket = async () => {
                                 source: "API"
                             }
                             socket.send(JSON.stringify(initCon))
+                            reconnectAttempt = 0; // Reset reconnect attempts on successful connection
                         }
                         socket.onmessage = async function (msg) {
 
                             var response = JSON.parse(msg.data)
 
-                       //  console.log("response - ",response.tk)
+                       //console.log("response - ",response.tk)
 
                             if (response.tk) {
 
                                 const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk });
                              //   console.log("Make_startegy_token - ",Make_startegy_token)
                                 if (Make_startegy_token) {
-                                   // console.log("IFFFFF - ",response.tk)
+                                    console.log("IFFFFF - ",response.tk)
                                     await connectToDB(response.tk,response)
                                   //  ALice_View_data(response.tk, response,dbTradeTools);
                                 }else{
@@ -149,7 +153,7 @@ const Alice_Socket = async () => {
                           });
                       
                          socket.on('close', () => {
-                            console.log('Disconnected from the server, attempting to reconnect...');
+                            console.log('Disconnected from the server, attempting to  Alice Socket...');
                           //  setTimeout(socketRestart, 30000);
                           });
 
@@ -175,9 +179,23 @@ const Alice_Socket = async () => {
 
 }
 
+
+const attemptReconnect = () => {
+  if (reconnectAttempt < maxReconnectAttempts) {
+      reconnectAttempt++;
+      setTimeout(() => {
+          console.log(`Reconnection attempt #${reconnectAttempt}`);
+          Alice_Socket();
+      }, reconnectInterval * reconnectAttempt); // Exponential backoff
+  } else {
+      console.log("Maximum reconnection attempts reached. Giving up.");
+  }
+};
+
 async function connectToDB(collectionName,response) {
     try {
-
+      console.log("collectionName ",collectionName)
+      console.log("response ",response)
 
         const collections = await dbTest.listCollections().toArray();
         // let collectionName = message.token
@@ -196,6 +214,7 @@ async function connectToDB(collectionName,response) {
             //     const insertResult = await collection.insertOne(singleDocument);
             // }
             if (response.lp != undefined && response.v != undefined) {
+              console.log("IFFF INSERT ",collectionName)
                 const customTimestamp = new Date();
                 let singleDocument = {
                   _id: customTimestamp,
@@ -231,6 +250,7 @@ async function connectToDB(collectionName,response) {
             //     const insertResult = await collection.insertOne(singleDocument);
             // }
             if (response.lp != undefined && response.v != undefined) {
+              console.log("IFFF ELSE ",collectionName)
                 const customTimestamp = new Date();
                 let singleDocument = {
                   _id: customTimestamp,

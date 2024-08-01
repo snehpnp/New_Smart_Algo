@@ -10,7 +10,7 @@ const get_open_position_view = db_GET_VIEW.collection('open_position');
 const aliceblueView = db_GET_VIEW.collection('aliceblueView');
 const token_chain = db_GET_VIEW.collection('token_chain');
 const stock_live_price = db_GET_VIEW.collection('stock_live_price');
-const open_position = db_GET_VIEW.collection('open_posiśtion');
+const open_position = db_GET_VIEW.collection('open_position');
 const open_position_excute = db_GET_VIEW.collection('open_position_excute');
 
 

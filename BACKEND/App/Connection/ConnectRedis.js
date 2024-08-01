@@ -11,7 +11,7 @@ client.on('connect', function () {
     console.log('Connected to Redis');
 });
 
-client.connect();
+// client.connect();
 
 
 

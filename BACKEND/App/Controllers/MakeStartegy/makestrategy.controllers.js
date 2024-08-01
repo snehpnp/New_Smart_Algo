@@ -278,13 +278,13 @@ class MakeStartegy {
       };
       // UPDATE STRATEGY INFORMATION
       const result = await UserMakeStrategy.updateOne(filter, update_make_strategy);
-    
+
       let arraySource = []
 
       condition_array.forEach(async (condition) => {
         ['first_element', 'second_element'].forEach(async (element) => {
           if (condition[element].source !== 'close' && condition[element].source !== 'open' && condition[element].source !== 'high' && condition[element].source !== 'low' && condition[element].source !== 'number') {
-            
+
 
             if (!arraySource.includes(condition[element].source)) {
               arraySource.push(condition[element].source)
@@ -295,7 +295,7 @@ class MakeStartegy {
             // console.log(`Working on offset: ${condition[element].offset}`);
             // console.log(`Working on indicator_field: ${condition[element].indicator_field}`);
             // console.log(`Working on period: ${condition[element].period}`);
-      
+
             let viewName = condition[element].source + '_M' + timeframe + '_' + tokensymbol;
             let collectionViewName = 'M' + timeframe + '_' + tokensymbol;
             let expMovingAvg = { input: "$" + condition[element].indicator_field, N: parseInt(condition[element].period) }; // Convert period to integer
@@ -315,18 +315,18 @@ class MakeStartegy {
               },
               { $project: { ema: 1, _id: 1 } } // Projecting only the ema field, excluding _id
             ];
-      
+
             try {
               const collections = await dbTradeTools.listCollections().toArray();
               const collectionExists = collections.some(coll => coll.name === viewName);
-      
+
               if (!collectionExists) {
                 await dbTradeTools.createCollection(viewName, {
                   viewOn: collectionViewName,
                   pipeline: pipelineIndicatorView
                 });
                 console.log(`View ${viewName} created successfully`);
-              }else{
+              } else {
                 console.log(`View ${viewName} already exists`);
               }
             } catch (error) {
@@ -334,67 +334,67 @@ class MakeStartegy {
             }
 
 
-            
+
           }
         });
       });
 
       let collectionViewName = "usermakestrategies"
       if (arraySource.length > 0) {
-               
+
         let timeFrameView = 'M' + req.body.timeframe + '_' + req.body.tokensymbol
         let pipeline = [];
 
         const conditions = await parseConditionString(req.body.condition);
 
         const matchStage = await generateMongoCondition(conditions);
-        console.log("req.body.status ",req.body.status);
-        console.log("req.body.timeframe ",req.body.timeframe);
-        console.log("req.body.tokensymbol ",req.body.tokensymbol);
-        console.log("req.body.name ",req.body.name);
-        console.log("req.body.condition ",req.body.condition);
-       
+        console.log("req.body.status ", req.body.status);
+        console.log("req.body.timeframe ", req.body.timeframe);
+        console.log("req.body.tokensymbol ", req.body.tokensymbol);
+        console.log("req.body.name ", req.body.name);
+        console.log("req.body.condition ", req.body.condition);
+
 
         pipeline.push({
-            $match: {
-                status: '1',
-                timeframe: req.body.timeframe,
-                tokensymbol: req.body.tokensymbol,
-                name: req.body.name,
-            }
+          $match: {
+            status: '1',
+            timeframe: req.body.timeframe,
+            tokensymbol: req.body.tokensymbol,
+            name: req.body.name,
+          }
         });
 
         pipeline.push({
-            $lookup: {
-                from: timeFrameView,
-                pipeline: [
-                    {
-                        $sort: { _id: -1 }
-                    }
-                ],
-                as: "timeFrameViewData"
-            }
+          $lookup: {
+            from: timeFrameView,
+            pipeline: [
+              {
+                $sort: { _id: -1 }
+              }
+            ],
+            as: "timeFrameViewData"
+          }
         });
 
         arraySource.forEach(async (source) => {
-            pipeline.push({
-                $lookup: {
-                    from: source + '_M' + req.body.timeframe + '_' + req.body.tokensymbol,
-                    pipeline: [
-                        {
-                            $sort: { _id: -1 }
-                        }
-                    ],
-                    as: source+'Data'
+          pipeline.push({
+            $lookup: {
+              from: source + '_M' + req.body.timeframe + '_' + req.body.tokensymbol,
+              pipeline: [
+                {
+                  $sort: { _id: -1 }
                 }
-            });
+              ],
+              as: source + 'Data'
+            }
+          });
         });
 
 
-         pipeline.push({
-            $addFields: {
-                isCondition: matchStage
-            }
+        pipeline.push({
+          $addFields: {
+            isCondition: matchStage
+          }
         });
 
 
@@ -402,63 +402,63 @@ class MakeStartegy {
 
         let ExistviewName = 'M' + req.body.existtimeframe + '_' + req.body.tokensymbol + '_make_' + req.body.name;
 
-           try {
+        try {
 
-              await dbTest.collection(ExistviewName).drop();
-              const collections = await dbTest.listCollections().toArray();
-              const collectionExists = collections.some(coll => coll.name === viewName);
+          await dbTest.collection(ExistviewName).drop();
+          const collections = await dbTest.listCollections().toArray();
+          const collectionExists = collections.some(coll => coll.name === viewName);
 
-              if (!collectionExists) {
-                await dbTest.createCollection(viewName, {
-                  viewOn: collectionViewName,
-                  pipeline: pipeline
-                });
-                console.log(`View ${viewName} created successfully`);
-              }else{
-                console.log(`View ${viewName} already exists`);
-              }
-            } catch (error) {
-              console.error(`Error creating view ${viewName}:`, error);
-            }
+          if (!collectionExists) {
+            await dbTest.createCollection(viewName, {
+              viewOn: collectionViewName,
+              pipeline: pipeline
+            });
+            console.log(`View ${viewName} created successfully`);
+          } else {
+            console.log(`View ${viewName} already exists`);
+          }
+        } catch (error) {
+          console.error(`Error creating view ${viewName}:`, error);
+        }
 
-    } else {
-      console.log("else req.body.status ",req.body.status);
-      console.log("else req.body.timeframe ",req.body.timeframe);
-      console.log("else req.body.tokensymbol ",req.body.tokensymbol);
-      console.log("else req.body.name ",req.body.name);
-      console.log("else req.body.condition ",req.body.condition);
-        const conditions =await parseConditionString(req.body.condition);
+      } else {
+        console.log("else req.body.status ", req.body.status);
+        console.log("else req.body.timeframe ", req.body.timeframe);
+        console.log("else req.body.tokensymbol ", req.body.tokensymbol);
+        console.log("else req.body.name ", req.body.name);
+        console.log("else req.body.condition ", req.body.condition);
+        const conditions = await parseConditionString(req.body.condition);
 
-        const matchStage =await generateMongoCondition(conditions);
+        const matchStage = await generateMongoCondition(conditions);
 
         let timeFrameView = 'M' + req.body.timeframe + '_' + req.body.tokensymbol
         let pipeline = [];
 
         pipeline.push({
-            $match: {
-                status: '1',
-                timeframe: req.body.timeframe,
-                tokensymbol: req.body.tokensymbol,
-                name: req.body.name,
-            }
+          $match: {
+            status: '1',
+            timeframe: req.body.timeframe,
+            tokensymbol: req.body.tokensymbol,
+            name: req.body.name,
+          }
         });
 
         pipeline.push({
-            $lookup: {
-                from: timeFrameView,
-                pipeline: [
-                    {
-                        $sort: { _id: -1 }
-                    }
-                ],
-                as: "timeFrameViewData"
-            }
+          $lookup: {
+            from: timeFrameView,
+            pipeline: [
+              {
+                $sort: { _id: -1 }
+              }
+            ],
+            as: "timeFrameViewData"
+          }
         });
 
         pipeline.push({
-            $addFields: {
-                isCondition: matchStage
-            }
+          $addFields: {
+            isCondition: matchStage
+          }
         });
 
         let viewName = 'M' + req.body.timeframe + '_' + req.body.tokensymbol + '_make_' + req.body.name;
@@ -466,28 +466,28 @@ class MakeStartegy {
         let ExistviewName = 'M' + req.body.existtimeframe + '_' + req.body.tokensymbol + '_make_' + req.body.name;
 
         try {
-           await dbTest.collection(ExistviewName).drop();
-           const collections = await dbTest.listCollections().toArray();
-           const collectionExists = collections.some(coll => coll.name === viewName);
+          await dbTest.collection(ExistviewName).drop();
+          const collections = await dbTest.listCollections().toArray();
+          const collectionExists = collections.some(coll => coll.name === viewName);
 
-           if (!collectionExists) {
-             await dbTest.createCollection(viewName, {
-               viewOn: collectionViewName,
-               pipeline: pipeline
-             });
-             console.log(`View ${viewName} created successfully`);
-           }else{
-             console.log(`View ${viewName} already exists`);
-           }
-         } catch (error) {
-           console.error(`Error creating view ${viewName}:`, error);
-         }
-    }
+          if (!collectionExists) {
+            await dbTest.createCollection(viewName, {
+              viewOn: collectionViewName,
+              pipeline: pipeline
+            });
+            console.log(`View ${viewName} created successfully`);
+          } else {
+            console.log(`View ${viewName} already exists`);
+          }
+        } catch (error) {
+          console.error(`Error creating view ${viewName}:`, error);
+        }
+      }
 
       // }
 
 
-     return res.send({ status: true, msg: "Update successfully!", data: [] });
+      return res.send({ status: true, msg: "Update successfully!", data: [] });
 
     } catch (error) {
 
@@ -497,7 +497,7 @@ class MakeStartegy {
 
   /// Make Startegy
   async AddMakeStartegy(req, res) {
-  
+
     var _id = new ObjectId(req.body.user_id);
 
     let user_panel_key = await user.findOne({ _id: _id }).select('client_key').lean();
@@ -562,7 +562,7 @@ class MakeStartegy {
         }
 
 
-          await UserMakeStrategy.create({
+        await UserMakeStrategy.create({
           name: req.body.name + req.body.user_id + req.body.type + tokensymbol,
 
           user_id: user_id,
@@ -598,32 +598,32 @@ class MakeStartegy {
           numberOfTrade: numberOfTrade,
           maxProfit: maxProfit,
           maxLoss: maxLoss
-          })
+        })
           .then(async (createUserMakeStrategy) => {
-             console.log("createUserMakeStrategy ",createUserMakeStrategy)
-             
+            console.log("createUserMakeStrategy ", createUserMakeStrategy)
+
             //console.log('condition_array:', condition_array);
-            
+
             let arraySource = []
-           await condition_array.forEach(async (condition) => {
+            await condition_array.forEach(async (condition) => {
               ['first_element', 'second_element'].forEach(async (element) => {
                 if (condition[element].source !== 'close' && condition[element].source !== 'open' && condition[element].source !== 'high' && condition[element].source !== 'low' && condition[element].source !== 'number') {
 
                   if (!arraySource.includes(condition[element].source)) {
                     arraySource.push(condition[element].source)
                   }
-                  
+
                   // console.log(`Working on timeframe: ${timeframe}`);
                   // console.log(`Working on tokensymbol: ${tokensymbol}`);
                   // console.log(`Working on source: ${condition[element].source}`);
                   // console.log(`Working on offset: ${condition[element].offset}`);
                   // console.log(`Working on indicator_field: ${condition[element].indicator_field}`);
                   // console.log(`Working on period: ${condition[element].period}`);
-            
+
                   let viewName = condition[element].source + '_M' + timeframe + '_' + tokensymbol;
                   let collectionViewName = 'M' + timeframe + '_' + tokensymbol;
                   let expMovingAvg = { input: "$" + condition[element].indicator_field, N: parseInt(condition[element].period) }; // Convert period to integer
-      
+
                   const pipelineIndicatorView = [
                     { $sort: { _id: -1 } }, // Sorting to get the latest prices first
                     // { $limit: 2 },         // Limiting to the period (adjust this based on your period)
@@ -639,18 +639,18 @@ class MakeStartegy {
                     },
                     { $project: { ema: 1, _id: 1 } } // Projecting only the ema field, excluding _id
                   ];
-            
+
                   try {
                     const collections = await dbTradeTools.listCollections().toArray();
                     const collectionExists = collections.some(coll => coll.name === viewName);
-            
+
                     if (!collectionExists) {
                       await dbTradeTools.createCollection(viewName, {
                         viewOn: collectionViewName,
                         pipeline: pipelineIndicatorView
                       });
                       console.log(`View ${viewName} created successfully`);
-                    }else{
+                    } else {
                       console.log(`View ${viewName} already exists`);
                     }
                   } catch (error) {
@@ -658,7 +658,7 @@ class MakeStartegy {
                   }
 
 
-                  
+
                 }
               });
             });
@@ -667,7 +667,7 @@ class MakeStartegy {
             let collectionViewName = "usermakestrategies"
 
             if (arraySource.length > 0) {
-               
+
               let timeFrameView = 'M' + createUserMakeStrategy.timeframe + '_' + createUserMakeStrategy.tokensymbol
               let pipeline = [];
 
@@ -676,125 +676,125 @@ class MakeStartegy {
               const matchStage = await generateMongoCondition(conditions);
 
               pipeline.push({
-                  $match: {
-                      status: createUserMakeStrategy.status,
-                      timeframe: createUserMakeStrategy.timeframe,
-                      tokensymbol: createUserMakeStrategy.tokensymbol,
-                      name: createUserMakeStrategy.name,
-                  }
+                $match: {
+                  status: createUserMakeStrategy.status,
+                  timeframe: createUserMakeStrategy.timeframe,
+                  tokensymbol: createUserMakeStrategy.tokensymbol,
+                  name: createUserMakeStrategy.name,
+                }
               });
 
               pipeline.push({
-                  $lookup: {
-                      from: timeFrameView,
-                      pipeline: [
-                          {
-                              $sort: { _id: -1 }
-                          }
-                      ],
-                      as: "timeFrameViewData"
-                  }
+                $lookup: {
+                  from: timeFrameView,
+                  pipeline: [
+                    {
+                      $sort: { _id: -1 }
+                    }
+                  ],
+                  as: "timeFrameViewData"
+                }
               });
 
               arraySource.forEach(async (source) => {
-                  pipeline.push({
-                      $lookup: {
-                          from: source + '_M' + createUserMakeStrategy.timeframe + '_' + createUserMakeStrategy.tokensymbol,
-                          pipeline: [
-                              {
-                                  $sort: { _id: -1 }
-                              }
-                          ],
-                          as: source+'Data'
+                pipeline.push({
+                  $lookup: {
+                    from: source + '_M' + createUserMakeStrategy.timeframe + '_' + createUserMakeStrategy.tokensymbol,
+                    pipeline: [
+                      {
+                        $sort: { _id: -1 }
                       }
-                  });
-              });
-
-
-               pipeline.push({
-                  $addFields: {
-                      isCondition: matchStage
+                    ],
+                    as: source + 'Data'
                   }
+                });
               });
-      
+
+
+              pipeline.push({
+                $addFields: {
+                  isCondition: matchStage
+                }
+              });
+
 
               let viewName = 'M' + createUserMakeStrategy.timeframe + '_' + createUserMakeStrategy.tokensymbol + '_make_' + createUserMakeStrategy.name;
 
-                 try {
-                    const collections = await dbTest.listCollections().toArray();
-                    const collectionExists = collections.some(coll => coll.name === viewName);
+              try {
+                const collections = await dbTest.listCollections().toArray();
+                const collectionExists = collections.some(coll => coll.name === viewName);
 
-                    if (!collectionExists) {
-                      await dbTest.createCollection(viewName, {
-                        viewOn: collectionViewName,
-                        pipeline: pipeline
-                      });
-                      console.log(`View ${viewName} created successfully`);
-                    }else{
-                      console.log(`View ${viewName} already exists`);
-                    }
-                  } catch (error) {
-                    console.error(`Error creating view ${viewName}:`, error);
-                  }
+                if (!collectionExists) {
+                  await dbTest.createCollection(viewName, {
+                    viewOn: collectionViewName,
+                    pipeline: pipeline
+                  });
+                  console.log(`View ${viewName} created successfully`);
+                } else {
+                  console.log(`View ${viewName} already exists`);
+                }
+              } catch (error) {
+                console.error(`Error creating view ${viewName}:`, error);
+              }
 
-          } else {
-              
-              const conditions =await parseConditionString(createUserMakeStrategy.condition);
+            } else {
 
-              const matchStage =await generateMongoCondition(conditions);
+              const conditions = await parseConditionString(createUserMakeStrategy.condition);
+
+              const matchStage = await generateMongoCondition(conditions);
 
               let timeFrameView = 'M' + createUserMakeStrategy.timeframe + '_' + createUserMakeStrategy.tokensymbol
               let pipeline = [];
 
               pipeline.push({
-                  $match: {
-                      status: createUserMakeStrategy.status,
-                      timeframe: createUserMakeStrategy.timeframe,
-                      tokensymbol: createUserMakeStrategy.tokensymbol,
-                      name: createUserMakeStrategy.name,
-                  }
+                $match: {
+                  status: createUserMakeStrategy.status,
+                  timeframe: createUserMakeStrategy.timeframe,
+                  tokensymbol: createUserMakeStrategy.tokensymbol,
+                  name: createUserMakeStrategy.name,
+                }
               });
 
               pipeline.push({
-                  $lookup: {
-                      from: timeFrameView,
-                      pipeline: [
-                          {
-                              $sort: { _id: -1 }
-                          }
-                      ],
-                      as: "timeFrameViewData"
-                  }
+                $lookup: {
+                  from: timeFrameView,
+                  pipeline: [
+                    {
+                      $sort: { _id: -1 }
+                    }
+                  ],
+                  as: "timeFrameViewData"
+                }
               });
 
               pipeline.push({
-                  $addFields: {
-                      isCondition: matchStage
-                  }
+                $addFields: {
+                  isCondition: matchStage
+                }
               });
 
               let viewName = 'M' + createUserMakeStrategy.timeframe + '_' + createUserMakeStrategy.tokensymbol + '_make_' + createUserMakeStrategy.name;
 
               try {
-                 const collections = await dbTest.listCollections().toArray();
-                 const collectionExists = collections.some(coll => coll.name === viewName);
+                const collections = await dbTest.listCollections().toArray();
+                const collectionExists = collections.some(coll => coll.name === viewName);
 
-                 if (!collectionExists) {
-                   await dbTest.createCollection(viewName, {
-                     viewOn: collectionViewName,
-                     pipeline: pipeline
-                   });
-                   console.log(`View ${viewName} created successfully`);
-                 }else{
-                   console.log(`View ${viewName} already exists`);
-                 }
-               } catch (error) {
-                 console.error(`Error creating view ${viewName}:`, error);
-               }
-          }
+                if (!collectionExists) {
+                  await dbTest.createCollection(viewName, {
+                    viewOn: collectionViewName,
+                    pipeline: pipeline
+                  });
+                  console.log(`View ${viewName} created successfully`);
+                } else {
+                  console.log(`View ${viewName} already exists`);
+                }
+              } catch (error) {
+                console.error(`Error creating view ${viewName}:`, error);
+              }
+            }
 
 
-            
+
 
             //res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
 
@@ -815,7 +815,7 @@ class MakeStartegy {
     }
   }
 
-  
+
 
 
 }
@@ -834,22 +834,22 @@ async function parseConditionString(conditionString) {
   // Handle the && and || parts
   const andParts = conditionString.split('&&');
   andParts.forEach(part => {
-      const orParts = part.split('||');
-      orParts.forEach((subPart, index) => {
-          let match;
-          while ((match = conditionRegex.exec(subPart)) !== null) {
-              const [_, field1, index1, operator, field2, index2] = match;
-              conditions.push({
-                  operator: operator.length === 2 ? operator : operator + '=', // Normalize operator
-                  field1,
-                  index1: parseInt(index1),
-                  field2,
-                  index2: parseInt(index2),
-                  type: index === 0 && andFlag ? 'and' : 'or'
-              });
-          }
-      });
-      andFlag = true;
+    const orParts = part.split('||');
+    orParts.forEach((subPart, index) => {
+      let match;
+      while ((match = conditionRegex.exec(subPart)) !== null) {
+        const [_, field1, index1, operator, field2, index2] = match;
+        conditions.push({
+          operator: operator.length === 2 ? operator : operator + '=', // Normalize operator
+          field1,
+          index1: parseInt(index1),
+          field2,
+          index2: parseInt(index2),
+          type: index === 0 && andFlag ? 'and' : 'or'
+        });
+      }
+    });
+    andFlag = true;
   });
 
   return conditions;
@@ -860,137 +860,137 @@ const generateMongoCondition = async (conditions) => {
   let orArray = [];
 
   conditions.forEach(condition => {
-      const { operator, field1, index1, field2, index2, type } = condition;
-      // const mongoOperator = operator === '>' ? '$gt' : '$lt';
+    const { operator, field1, index1, field2, index2, type } = condition;
+    // const mongoOperator = operator === '>' ? '$gt' : '$lt';
 
-      let mongoOperator;
-      switch (operator) {
-          case '>':
-              mongoOperator = '$gt';
-              break;
-          case '<':
-              mongoOperator = '$lt';
-              break;
-          case '>=':
-              mongoOperator = '$gte';
-              break;
-          case '<=':
-              mongoOperator = '$lte';
-              break;
-          case '==': // Handle equality operator
-          case '===': // Handle strict equality operator
-              mongoOperator = '$eq';
-              break;
-          default:
-              mongoOperator = '$lt'; // Default to less than
-              break;
-      }
+    let mongoOperator;
+    switch (operator) {
+      case '>':
+        mongoOperator = '$gt';
+        break;
+      case '<':
+        mongoOperator = '$lt';
+        break;
+      case '>=':
+        mongoOperator = '$gte';
+        break;
+      case '<=':
+        mongoOperator = '$lte';
+        break;
+      case '==': // Handle equality operator
+      case '===': // Handle strict equality operator
+        mongoOperator = '$eq';
+        break;
+      default:
+        mongoOperator = '$lt'; // Default to less than
+        break;
+    }
 
-      console.log("operator ",operator)
-      console.log("field1 ",field1)
-      console.log("index1 ",index1)
-      console.log("field2 ",field2)
-      console.log("index2 ",index2)
-      console.log("type ",type)
-      console.log("mongoOperator ",mongoOperator)
-
-
-      // let condition_one
-      // ['close','open','high','low','number'].includes(field1) ?
-      // condition_one = { $arrayElemAt: [`$timeFrameViewData.${field1}`, index1] }
-      // :condition_one = { $arrayElemAt: [`$${field1}Data.${field1}`, index1] }
-
-    
-      // let condition_two
-      // ['close','open','high','low','number'].includes(field2) ?
-      // condition_two =  { $arrayElemAt: [`$timeFrameViewData.${field2}`, index2] }
-      // :condition_two =  { $arrayElemAt: [`$${field2}Data.${field2}`, index2] }
+    console.log("operator ", operator)
+    console.log("field1 ", field1)
+    console.log("index1 ", index1)
+    console.log("field2 ", field2)
+    console.log("index2 ", index2)
+    console.log("type ", type)
+    console.log("mongoOperator ", mongoOperator)
 
 
-      let condition_one
-      ['close','open','high','low','number'].includes(field1) ?
+    // let condition_one
+    // ['close','open','high','low','number'].includes(field1) ?
+    // condition_one = { $arrayElemAt: [`$timeFrameViewData.${field1}`, index1] }
+    // :condition_one = { $arrayElemAt: [`$${field1}Data.${field1}`, index1] }
+
+
+    // let condition_two
+    // ['close','open','high','low','number'].includes(field2) ?
+    // condition_two =  { $arrayElemAt: [`$timeFrameViewData.${field2}`, index2] }
+    // :condition_two =  { $arrayElemAt: [`$${field2}Data.${field2}`, index2] }
+
+
+    let condition_one
+    ['close', 'open', 'high', 'low', 'number'].includes(field1) ?
       condition_one = { $arrayElemAt: [`$timeFrameViewData.${field1}`, index1] }
-      :condition_one = { $arrayElemAt: [`$${field1}Data.ema`, index1] }
-
-    
-      let condition_two
-      ['close','open','high','low','number'].includes(field2) ?
-      condition_two =  { $arrayElemAt: [`$timeFrameViewData.${field2}`, index2] }
-      :condition_two =  { $arrayElemAt: [`$${field2}Data.ema`, index2] }
+      : condition_one = { $arrayElemAt: [`$${field1}Data.ema`, index1] }
 
 
-      // const conditionObj = {
-      //     [mongoOperator]: [
-      //         { $arrayElemAt: [`$timeFrameViewData.${field1}`, index1] },
-      //         { $arrayElemAt: [`$timeFrameViewData.${field2}`, index2] }
-      //     ]
-      // };
+    let condition_two
+    ['close', 'open', 'high', 'low', 'number'].includes(field2) ?
+      condition_two = { $arrayElemAt: [`$timeFrameViewData.${field2}`, index2] }
+      : condition_two = { $arrayElemAt: [`$${field2}Data.ema`, index2] }
 
-      const conditionObj = {
-          [mongoOperator]: [
-              condition_one,
-              condition_two
-          ]
-      };
 
-      console.log("conditionObj ",conditionObj)
+    // const conditionObj = {
+    //     [mongoOperator]: [
+    //         { $arrayElemAt: [`$timeFrameViewData.${field1}`, index1] },
+    //         { $arrayElemAt: [`$timeFrameViewData.${field2}`, index2] }
+    //     ]
+    // };
 
-      // if (type === 'and') {
-      //     andArray.push(conditionObj);
-      // } else if (type === 'or') {
-      //     orArray.push(conditionObj);
-      // }
+    const conditionObj = {
+      [mongoOperator]: [
+        condition_one,
+        condition_two
+      ]
+    };
 
-       if (type === 'and') {
+    console.log("conditionObj ", conditionObj)
+
+    // if (type === 'and') {
+    //     andArray.push(conditionObj);
+    // } else if (type === 'or') {
+    //     orArray.push(conditionObj);
+    // }
+
+    if (type === 'and') {
       if (orArray.length > 0) {
-          andArray.push({ $or: orArray });
-          orArray = []; // Reset orArray after adding it to andArray
+        andArray.push({ $or: orArray });
+        orArray = []; // Reset orArray after adding it to andArray
       }
       andArray.push(conditionObj);
-  } else if (type === 'or') {
+    } else if (type === 'or') {
       orArray.push(conditionObj);
-  }
+    }
 
   });
 
-//     const finalExpr = {};
-//     if (andArray.length > 0) {
-//         finalExpr.$and = andArray;
-//     }
-//     if (orArray.length > 0) {
-//         finalExpr.$or = orArray;
-//     }
+  //     const finalExpr = {};
+  //     if (andArray.length > 0) {
+  //         finalExpr.$and = andArray;
+  //     }
+  //     if (orArray.length > 0) {
+  //         finalExpr.$or = orArray;
+  //     }
 
-//   //  return { $cond: finalExpr };
-//     return {
-//         $cond: {
-//             if: finalExpr,
-//             then: true,
-//             else: false
-//         }
-//     };
+  //   //  return { $cond: finalExpr };
+  //     return {
+  //         $cond: {
+  //             if: finalExpr,
+  //             then: true,
+  //             else: false
+  //         }
+  //     };
 
 
 
-console.log("andArray ",andArray)
-console.log("orArray ",orArray)
-const finalExpr = {};
-if (andArray.length > 0 && orArray.length > 0) {
-finalExpr.$and = andArray;
-finalExpr.$or = orArray;
-} else if (andArray.length > 0) {
-finalExpr.$and = andArray;
-} else if (orArray.length > 0) {
-finalExpr.$or = orArray;
-}
+  console.log("andArray ", andArray)
+  console.log("orArray ", orArray)
+  const finalExpr = {};
+  if (andArray.length > 0 && orArray.length > 0) {
+    finalExpr.$and = andArray;
+    finalExpr.$or = orArray;
+  } else if (andArray.length > 0) {
+    finalExpr.$and = andArray;
+  } else if (orArray.length > 0) {
+    finalExpr.$or = orArray;
+  }
 
-return {
-$cond: {
-if: finalExpr,
-then: true,
-else: false
-}
-};
+  return {
+    $cond: {
+      if: finalExpr,
+      then: true,
+      else: false
+    }
+  };
 
 
 };
@@ -1051,304 +1051,382 @@ let rr = 1
 
 
 
+// async function run() {
+
+
+//   try {
+
+//     // Define the function to be executed
+//     const executeFunction = async () => {
+//       console.log("DONEEE executeFunction")
+//       const data = await dbTest.collection('strategyViewNames').find({ }).toArray();
+//        fetchDataFromViews(data);
+
+//     };
+
+//     const exitOpentrade = async () => {
+//       //console.log("DONEEE exitOpentrade")
+//       if (weekday != 'Sunday' && weekday != 'Saturday') {
+//         try {
+
+//           var openPosition = await open_position_excute.find().toArray();
+//           // console.log("openPosition ",openPosition)
+//           if (openPosition.length > 0) {
+
+//             openPosition && openPosition.map((item) => {
+
+//               let ExitStatus = 'TS'
+//               if (item.isLpInRangeTarget == true) {
+//                 ExitStatus = "TARGET"
+//               } else if (item.isLpInRangeStoploss == true) {
+//                 ExitStatus = "STOPLOSS"
+//               } else if (item.isLpInRange == 1) {
+//                 ExitStatus = "EXIT TIME"
+//               }
+//               else if (item.isLpInRange == 0) {
+//                 ExitStatus = "EXIT TIME"
+//               }
+
+//               const currentTimestamp = Math.floor(Date.now() / 1000);
+//               let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${item.client_persnal_key}|TradeType:${item.TradeType}|ExitStatus:${ExitStatus}|Demo:demo`
+
+
+
+
+//               //console.log("req ",req)
+
+//               //console.log("process.env.BROKER_URL ",process.env.BROKER_URL)
+
+//               let config = {
+//                 method: 'post',
+//                 maxBodyLength: Infinity,
+//                 // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+//                 url: `${process.env.BROKER_URL}`,
+//                 headers: {
+//                   'Content-Type': 'text/plain'
+//                 },
+//                 data: req
+//               };
+
+//               axios.request(config)
+//                 .then(async (response) => {
+
+//                   let tradeSymbol;
+//                   if (item.segment.toLowerCase() == 'o' || item.segment.toLowerCase() == 'co' || item.segment.toLowerCase() == 'fo' || item.segment.toLowerCase() == 'mo') {
+//                     tradeSymbol = item.symbol + "  " + item.expiry + "  " + item.strike + "  " + item.option_type + "  " + " [ " + item.segment + " ] ";
+//                   }
+//                   else if (item.segment.toLowerCase() == 'f' || item.segment.toLowerCase() == 'cf' || item.segment.toLowerCase() == 'mf') {
+//                     tradeSymbol = item.symbol + "  " + item.expiry + "  " + " [ " + item.segment + " ] ";
+//                   }
+//                   else {
+//                     tradeSymbol = item.symbol + "  " + " [ " + item.segment + " ] ";
+//                   }
+//                   const io = await getIO();
+//                   io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: tradeSymbol });
+
+//                   console.log("response Trade Excuted - ", response.data)
+
+//                 })
+//                 .catch((error) => {
+//                   // console.log(error.response.data);
+//                 });
+
+
+//             })
+
+//           } else {
+//             return
+//           }
+//         } catch (error) {
+//           console.log("Error in Open Position", error);
+//         }
+
+//       } else {
+//         //console.log('The stock market is Closed!');
+//       }
+
+
+
+//     }
+
+
+//     // Run the function initially
+//     // await executeFunction();
+
+//     // Use a while loop with setTimeout for a delay
+//     while (true) {
+//       // Delay for 1000 milliseconds (1 second)
+//       await new Promise(resolve => setTimeout(resolve, 1000));
+//        await executeFunction();
+//       //await exitOpentrade()
+//     }
+
+//     // setInterval(async () => {
+//     //   await executeFunction();
+//     // }, 1000);
+
+//   } finally {
+//     // Close the client when you're done
+//   }
+
+// }
+
 async function run() {
-
   try {
-
     // Define the function to be executed
     const executeFunction = async () => {
-
-      console.log("DONEEE executeFunction")
-      // if (condition) {
-      //   let entry_type = 'LE';
-      //   if (val.type === 'BUY') {
-      //     entry_type = 'SE';
-      //   }
-      //   let condition_check_previous_trade = {
-      //     strategy: val.strategy_name,
-      //     symbol: val.symbol_name,
-      //     entry_type: entry_type,
-      //     segment: val.segment,
-      //     client_persnal_key: val.panelKey,
-      //     MakeStartegyName: val.show_strategy,
-      //     TradeType: 'MAKE_STRATEGY',
-      //   };
-      //   if (['O', 'FO', 'MO', 'CO'].includes(val.segment.toUpperCase())) {
-      //     let option_type = 'CALL';
-      //     if (val.option_type === 'PE') {
-      //       option_type = 'PUT';
-      //     }
-      //     condition_check_previous_trade = {
-      //       strategy: val.strategy_name,
-      //       symbol: val.symbol_name,
-      //       entry_type: entry_type,
-      //       segment: val.segment,
-      //       strike: val.strike_price,
-      //       option_type: option_type,
-      //       expiry: val.expiry,
-      //       client_persnal_key: val.panelKey,
-      //       MakeStartegyName: val.show_strategy,
-      //       TradeType: 'MAKE_STRATEGY',
-      //     };
-      //   }
-      //   else if (['F', 'MF', 'CF'].includes(val.segment.toUpperCase())) {
-      //     condition_check_previous_trade = {
-      //       strategy: val.strategy_name,
-      //       symbol: val.symbol_name,
-      //       entry_type: entry_type,
-      //       segment: val.segment,
-      //       expiry: val.expiry,
-      //       client_persnal_key: val.panelKey,
-      //       MakeStartegyName: val.show_strategy,
-      //       TradeType: 'MAKE_STRATEGY',
-      //     };
-      //   }
-      //   var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
-      //   const collection_last_price = dbTradeTools.collection(val.tokensymbol);
-      //   const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
-      //   let price_lp = last_price[0].lp;
-      //   if (checkPreviousTrade != null) {
-      //     const currentTimestamp = Math.floor(Date.now() / 1000);
-      //     let type = 'LX';
-      //     let price = checkPreviousTrade.stockInfo_bp1;
-      //     if (checkPreviousTrade.entry_type.toUpperCase() === 'SE') {
-      //       type = 'SX';
-      //       price = checkPreviousTrade.stockInfo_sp1;
-      //     }
-      //     let strike = checkPreviousTrade.strike;
-      //     if (checkPreviousTrade.strike_price === 'NaN') {
-      //       strike = '100';
-      //     }
-      //     let option_type = 'CALL';
-      //     if (checkPreviousTrade.option_type.toUpperCase() === 'PUT') {
-      //       option_type = 'PUT';
-      //     }
-      //     let Quntity = checkPreviousTrade.entry_qty_percent;
-      //     let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
-      //     let config = {
-      //       method: 'post',
-      //       maxBodyLength: Infinity,
-      //       // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-      //       url: `${process.env.BROKER_URL}`,
-      //       headers: {
-      //         'Content-Type': 'text/plain'
-      //       },
-      //       data: req
-      //     };
-      //     await axios.request(config)
-      //       .then((response) => {
-      //         // console.log("response Trade Excuted - ",response)
-      //       })
-      //       .catch((error) => {
-      //         console.log('Error ', error);
-      //       });
-      //   }
-      //   const update = {
-      //     $set: {
-      //       status: '2',
-      //     },
-      //     $inc: {
-      //       numberOfTrade_count_trade: 1, // Increment by 1, you can change this value based on your requirement
-      //     },
-      //   };
-      //   const filter = { _id: val._id };
-      //   let Res = await UserMakeStrategy.updateOne(filter, update);
-      //   let Check_same_trade_type = 'BUY';
-      //   if (val.type === 'BUY') {
-      //     Check_same_trade_type = 'SELL';
-      //   }
-      //   const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
-      //   if (Check_same_trade_data) {
-      //     let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
-      //       $set: {
-      //         status: '1',
-      //       },
-      //     });
-      //   }
-      //   const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
-      //     {
-      //       $match: {
-      //         show_strategy: val.show_strategy,
-      //         numberOfTrade: { $ne: '' }
-      //       }
-      //     },
-      //     {
-      //       $group: {
-      //         _id: null,
-      //         totalNumberOfTrade_count_trade: { $sum: '$numberOfTrade_count_trade' },
-      //       }
-      //     },
-      //     {
-      //       $project: {
-      //         _id: 0,
-      //         totalNumberOfTrade_count_trade: 1,
-      //         anotherField: '$numberOfTrade',
-      //         isTotalSmall: { $lt: ['$totalNumberOfTrade_count_trade', parseInt(val.numberOfTrade)] }
-      //       }
-      //     }
-      //   ]);
-      //   if (numberOfTrade_count_trade_count.length > 0) {
-      //     if (numberOfTrade_count_trade_count[0].isTotalSmall === false) {
-      //       const update_trade_off = {
-      //         $set: {
-      //           status: '2',
-      //         },
-      //       };
-      //       const filter_trade_off = { show_strategy: val.show_strategy };
-      //       let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
-      //     }
-      //   }
-      //   const currentTimestamp = Math.floor(Date.now() / 1000);
-      //   let type = 'LE';
-      //   if (val.type.toUpperCase() === 'SELL') {
-      //     type = 'SE';
-      //   }
-      //   let price = 0;
-      //   let strike = val.strike_price;
-      //   if (val.strike_price === 'NaN') {
-      //     strike = '100';
-      //   }
-      //   let option_type = 'CALL';
-      //   if (val.option_type.toUpperCase() === 'PE') {
-      //     option_type = 'PUT';
-      //   }
-      //   let Quntity = '100';
-      //   const dateObject = new Date(val.exitTime);
-      //   const hours = ('0' + dateObject.getUTCHours()).slice(-2);
-      //   const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
-      //   const ExitTime = `${hours}-${minutes}`;
-      //   let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
-      //   let config = {
-      //     method: 'post',
-      //     maxBodyLength: Infinity,
-      //     // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-      //     url: `${process.env.BROKER_URL}`,
-      //     headers: {
-      //       'Content-Type': 'text/plain'
-      //     },
-      //     data: req
-      //   };
-      //   await axios.request(config)
-      //     .then((response) => {
-      //       // console.log("response Trade Excuted - ", response)
-      //     })
-      //     .catch((error) => {
-      //       console.log('Error ', error);
-      //     });
-      // } else {
-
-      // }
-
+      console.log("DONEEE executeFunction");
+      const data = await dbTest.collection('strategyViewNames').find({}).toArray();
+      fetchDataFromViews(data);
     };
 
-    const exitOpentrade = async () => {
-      //console.log("DONEEE exitOpentrade")
-      if (weekday != 'Sunday' && weekday != 'Saturday') {
-        try {
+    // Array to keep track of ongoing operations
+    let ongoingOperations = [];
 
-          var openPosition = await open_position_excute.find().toArray();
-          // console.log("openPosition ",openPosition)
-          if (openPosition.length > 0) {
-
-            openPosition && openPosition.map((item) => {
-
-              let ExitStatus = 'TS'
-              if (item.isLpInRangeTarget == true) {
-                ExitStatus = "TARGET"
-              } else if (item.isLpInRangeStoploss == true) {
-                ExitStatus = "STOPLOSS"
-              } else if (item.isLpInRange == 1) {
-                ExitStatus = "EXIT TIME"
-              }
-              else if (item.isLpInRange == 0) {
-                ExitStatus = "EXIT TIME"
-              }
-
-              const currentTimestamp = Math.floor(Date.now() / 1000);
-              let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${item.client_persnal_key}|TradeType:${item.TradeType}|ExitStatus:${ExitStatus}|Demo:demo`
-
-
-
-
-              //console.log("req ",req)
-
-              //console.log("process.env.BROKER_URL ",process.env.BROKER_URL)
-
-              let config = {
-                method: 'post',
-                maxBodyLength: Infinity,
-                // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-                url: `${process.env.BROKER_URL}`,
-                headers: {
-                  'Content-Type': 'text/plain'
-                },
-                data: req
-              };
-
-              axios.request(config)
-                .then(async (response) => {
-
-                  let tradeSymbol;
-                  if (item.segment.toLowerCase() == 'o' || item.segment.toLowerCase() == 'co' || item.segment.toLowerCase() == 'fo' || item.segment.toLowerCase() == 'mo') {
-                    tradeSymbol = item.symbol + "  " + item.expiry + "  " + item.strike + "  " + item.option_type + "  " + " [ " + item.segment + " ] ";
-                  }
-                  else if (item.segment.toLowerCase() == 'f' || item.segment.toLowerCase() == 'cf' || item.segment.toLowerCase() == 'mf') {
-                    tradeSymbol = item.symbol + "  " + item.expiry + "  " + " [ " + item.segment + " ] ";
-                  }
-                  else {
-                    tradeSymbol = item.symbol + "  " + " [ " + item.segment + " ] ";
-                  }
-                  const io = await getIO();
-                  io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: tradeSymbol });
-
-                  console.log("response Trade Excuted - ", response.data)
-
-                })
-                .catch((error) => {
-                  // console.log(error.response.data);
-                });
-
-
-            })
-
-          } else {
-            return
-          }
-        } catch (error) {
-          console.log("Error in Open Position", error);
-        }
-
-      } else {
-        //console.log('The stock market is Closed!');
-      }
-
-
-
-    }
-
-
-    // Run the function initially
-    // await executeFunction();
-
-    // Use a while loop with setTimeout for a delay
     while (true) {
       // Delay for 1000 milliseconds (1 second)
       await new Promise(resolve => setTimeout(resolve, 1000));
-     // await executeFunction();
-      //await exitOpentrade()
+
+      // Schedule the execution of the function
+      const operation = executeFunction().catch(console.error);
+
+      // Store the ongoing operation
+      ongoingOperations.push(operation);
+
+      // Clean up finished operations to prevent memory leaks
+      ongoingOperations = ongoingOperations.filter(p => !p.isSettled);
+
+      // Mark completed operations
+      Promise.allSettled(ongoingOperations).then(results => {
+        results.forEach((result, index) => {
+          if (result.status === "fulfilled" || result.status === "rejected") {
+            ongoingOperations[index].isSettled = true;
+          }
+        });
+      });
     }
 
-    // setInterval(async () => {
-    //   await executeFunction();
-    // }, 1000);
-
-    } finally {
-    // Close the client when you're done
-    }
-
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 run().catch(console.error);
+
+
+async function fetchDataFromViews(viewNames) {
+  console.log("viewNames - ", viewNames.length)
+  try {
+    if (viewNames.length > 0) {
+      for (let valView of viewNames) {
+        // const data = await dbTest.collection(valView.viewName).find({ isCondition: true }).toArray();
+        const data = await dbTest.collection(valView.viewName).find({
+          isCondition: true,
+          timeFrameViewData: { $ne: null, $ne: [] }
+        }).toArray();
+
+        console.log(`Data from view ${valView.viewName}:`, data);
+        if (data.length > 0) {
+          //console.log(`Data from view ${valView.viewName}:`, data);
+          let val = data[0];
+
+          let entry_type = 'LE';
+          if (val.type === 'BUY') {
+            entry_type = 'SE';
+          }
+          let condition_check_previous_trade = {
+            strategy: val.strategy_name,
+            symbol: val.symbol_name,
+            entry_type: entry_type,
+            segment: val.segment,
+            client_persnal_key: val.panelKey,
+            MakeStartegyName: val.show_strategy,
+            TradeType: 'MAKE_STRATEGY',
+          };
+          if (['O', 'FO', 'MO', 'CO'].includes(val.segment.toUpperCase())) {
+            let option_type = 'CALL';
+            if (val.option_type === 'PE') {
+              option_type = 'PUT';
+            }
+            condition_check_previous_trade = {
+              strategy: val.strategy_name,
+              symbol: val.symbol_name,
+              entry_type: entry_type,
+              segment: val.segment,
+              strike: val.strike_price,
+              option_type: option_type,
+              expiry: val.expiry,
+              client_persnal_key: val.panelKey,
+              MakeStartegyName: val.show_strategy,
+              TradeType: 'MAKE_STRATEGY',
+            };
+          }
+          else if (['F', 'MF', 'CF'].includes(val.segment.toUpperCase())) {
+            condition_check_previous_trade = {
+              strategy: val.strategy_name,
+              symbol: val.symbol_name,
+              entry_type: entry_type,
+              segment: val.segment,
+              expiry: val.expiry,
+              client_persnal_key: val.panelKey,
+              MakeStartegyName: val.show_strategy,
+              TradeType: 'MAKE_STRATEGY',
+            };
+          }
+
+          console.log("condition_check_previous_trade",condition_check_previous_trade)
+          var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
+
+          console.log("checkPreviousTrade ",checkPreviousTrade)
+
+          const collection_last_price = dbTest.collection(val.tokensymbol);
+          const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
+          let price_lp = last_price[0].lp;
+          if (checkPreviousTrade != null) {
+            const currentTimestamp = Math.floor(Date.now() / 1000);
+            let type = 'LX';
+            let price = checkPreviousTrade.stockInfo_bp1;
+            if (checkPreviousTrade.entry_type.toUpperCase() === 'SE') {
+              type = 'SX';
+              price = checkPreviousTrade.stockInfo_sp1;
+            }
+            let strike = checkPreviousTrade.strike;
+            if (checkPreviousTrade.strike_price === 'NaN') {
+              strike = '100';
+            }
+            let option_type = 'CALL';
+            if (checkPreviousTrade.option_type.toUpperCase() === 'PUT') {
+              option_type = 'PUT';
+            }
+            let Quntity = checkPreviousTrade.entry_qty_percent;
+            let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+            let config = {
+              method: 'post',
+              maxBodyLength: Infinity,
+              // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+              url: `${process.env.BROKER_URL}`,
+              headers: {
+                'Content-Type': 'text/plain'
+              },
+              data: req
+            };
+            await axios.request(config)
+              .then((response) => {
+                 console.log("response Trade Excuted - ",response)
+              })
+              .catch((error) => {
+                console.log('Error ', error);
+              });
+          }
+          const update = {
+            $set: {
+              status: '2',
+            },
+            $inc: {
+              numberOfTrade_count_trade: 1, // Increment by 1, you can change this value based on your requirement
+            },
+          };
+          const filter = { _id: val._id };
+          let Res = await UserMakeStrategy.updateOne(filter, update);
+          let Check_same_trade_type = 'BUY';
+          if (val.type === 'BUY') {
+            Check_same_trade_type = 'SELL';
+          }
+          const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
+          if (Check_same_trade_data) {
+
+            console.log("INSIDEEE UPDATE" ,Check_same_trade_data.name)
+            let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
+              $set: {
+                status: "1",
+                tsl:"2"
+              },
+            });
+
+            console.log("Res",Res)
+          }
+          const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
+            {
+              $match: {
+                show_strategy: val.show_strategy,
+                numberOfTrade: { $ne: '' }
+              }
+            },
+            {
+              $group: {
+                _id: null,
+                totalNumberOfTrade_count_trade: { $sum: '$numberOfTrade_count_trade' },
+              }
+            },
+            {
+              $project: {
+                _id: 0,
+                totalNumberOfTrade_count_trade: 1,
+                anotherField: '$numberOfTrade',
+                isTotalSmall: { $lt: ['$totalNumberOfTrade_count_trade', parseInt(val.numberOfTrade)] }
+              }
+            }
+          ]);
+          if (numberOfTrade_count_trade_count.length > 0) {
+            if (numberOfTrade_count_trade_count[0].isTotalSmall === false) {
+              const update_trade_off = {
+                $set: {
+                  status: '2',
+                },
+              };
+              const filter_trade_off = { show_strategy: val.show_strategy };
+              let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
+            }
+          }
+          const currentTimestamp = Math.floor(Date.now() / 1000);
+          let type = 'LE';
+          if (val.type.toUpperCase() === 'SELL') {
+            type = 'SE';
+          }
+          let price = 0;
+          let strike = val.strike_price;
+          if (val.strike_price === 'NaN') {
+            strike = '100';
+          }
+          let option_type = 'CALL';
+          if (val.option_type.toUpperCase() === 'PE') {
+            option_type = 'PUT';
+          }
+          let Quntity = '100';
+          const dateObject = new Date(val.exitTime);
+          const hours = ('0' + dateObject.getUTCHours()).slice(-2);
+          const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
+          const ExitTime = `${hours}-${minutes}`;
+          let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+          let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+            url: `${process.env.BROKER_URL}`,
+            headers: {
+              'Content-Type': 'text/plain'
+            },
+            data: req
+          };
+          await axios.request(config)
+            .then((response) => {
+              // console.log("response Trade Excuted - ", response)
+            })
+            .catch((error) => {
+              console.log('Error ', error);
+            });
+
+        }
+      }
+
+    } else {
+      console.log("No view names provided");
+    }
+
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
 
 
 
