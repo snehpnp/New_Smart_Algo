@@ -821,7 +821,7 @@ console.log("req",req.network_ip)
 
               // Wait for all update operations to complete
               const results = await Promise.all(updatePromises);
-              console.log(results);
+             
             }
 
 

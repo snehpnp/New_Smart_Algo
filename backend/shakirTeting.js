@@ -612,7 +612,6 @@ const MainSignals_modal = db.MainSignals
                 axios.request(config)
                   .then((response) => { })
                   .catch((error) => {
-                    console.log(error);
                   });
 
               }

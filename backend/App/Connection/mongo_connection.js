@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 
 const db_connect = process.env.MONGO_URI;
 
+
+
 mongoose.connect(db_connect, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -32,6 +34,7 @@ connection.on("error", (error) => {
 
 connection.once("open", () => {
   console.log("Connected to MongoDB");
+
 });
 
 // Handling disconnection

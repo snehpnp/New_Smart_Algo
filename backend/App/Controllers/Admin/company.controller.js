@@ -63,7 +63,6 @@ class Company {
     
             return res.send({ status: true, msg: 'Update Successfully.', data: [] });
         } catch (error) {
-            console.log("Error Edit Company Api -", error);
             return res.status(500).send({ status: false, msg: 'Server Error', data: [] });
         }
     }

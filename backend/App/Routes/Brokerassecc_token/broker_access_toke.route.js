@@ -92,7 +92,7 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
 
 
     const broker = result[0].broker;
-    console.log("broker", broker)
+   
 
 
     // Market Hub   -  1
