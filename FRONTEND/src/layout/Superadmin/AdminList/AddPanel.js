@@ -155,13 +155,7 @@ const Add_Panel = () => {
             col_size: 6,
             placeholderdata:"https://newpenal.pandpinfotech.com"
         },
-        // {
-        //     name: "port",
-        //     label: "Port",
-        //     type: "placehoder",
-        //     label_size: 12,
-        //     col_size: 6,
-        // },
+      
         {
             name: "key",
             label: "key",
@@ -186,8 +180,7 @@ const Add_Panel = () => {
             label: 'Theme Id',
             type: 'select',
             options: getAllThemeName && getAllThemeName.map((item) => ({ label: item.theme_name, value: item._id })),
-            // showWhen: values => values.licence === '2'
-            // , label_size: 12, col_size: 6, disable: false, isSelected: true
+            label_size: 12,
         },
         {
             name: "db_url",
@@ -199,23 +192,7 @@ const Add_Panel = () => {
             
         },
       
-        // {
-        //     name: "db_name",
-        //     label: "Database Name",
-        //     type: "placehoder",
-        //     label_size: 12,
-        //     col_size: 6,
-        // },
-
-        // {
-        //     name: "backend_rul",
-        //     label: "Backend Url",
-        //     type: "placehoder",
-        //     label_size: 12,
-        //     col_size: 12,
-        //     placeholderdata:"https://newpenal.pandpinfotech.com/backend/"
-
-        // },
+     
         {
             name: "Create_Strategy",
             label: "Create Strategy",

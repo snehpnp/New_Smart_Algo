@@ -6,7 +6,7 @@
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import Loader from '../../../Utils/Loader'
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
@@ -14,11 +14,10 @@ import { All_Api_Info_List } from '../../../ReduxStore/Slice/Superadmin/ApiCreat
 import * as Config from "../../../Utils/Config";
 import { DELETE_USER_SERVICES } from '../../../ReduxStore/Slice/Subadmin/userSlice'
 import { useDispatch, useSelector } from "react-redux";
-import Modal from '../../../Components/ExtraComponents/Modal';
-import { fDate, fDateTimeSuffix } from '../../../Utils/Date_formet';
+import {  fDateTimeSuffix } from '../../../Utils/Date_formet';
 import { maskEmail, maskNumber } from "../../../Utils/HideWIthStart";
 import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Subadminslice';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 
@@ -31,23 +30,19 @@ const AllClients = () => {
     const [ClientStatus, setClientStatus] = useState("null");
     const [PanelStatus, setPanelStatus] = useState("2");
     const dispatch = useDispatch()
-    const Role = JSON.parse(localStorage.getItem("user_details")).Role
-    const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id
-    const Subadmin_permision = JSON.parse(localStorage.getItem('user_details')).Subadmin_permision
-    const token = JSON.parse(localStorage.getItem("user_details")).token;
+    const user_details = JSON.parse(localStorage.getItem("user_details"))
     const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
     const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
-    const [first, setfirst] = useState('all')
-    const [btncolor, setbtncolor] = useState(false)
     const [refresh, setrefresh] = useState(false)
     const [getPermissions, setGetPermissions] = useState([])
-    const [getAllClients, setAllClients] = useState({loading: true,data: [] });
+    const [getAllClients, setAllClients] = useState({ loading: true, data: [] });
     const [BrokerDetails, setBrokerDetails] = useState([]);
+
 
 
     const Brokerdata = async () => {
 
-        await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain, brokerId: -1 ,key:1})).unwrap()
+        await dispatch(All_Api_Info_List({ token: user_details.token, url: Config.react_domain, brokerId: -1, key: 1 })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setBrokerDetails(response.data);
@@ -63,7 +58,7 @@ const AllClients = () => {
         if (window.confirm("Do you want to delete this User ?")) {
             await dispatch(DELETE_USER_SERVICES(req1)).unwrap()
                 .then((response) => {
-                    
+
                     if (response.status) {
                         setrefresh(!refresh)
                     }
@@ -74,12 +69,11 @@ const AllClients = () => {
     }
 
 
-    // GET ALL CLIENTS
 
     const data = async () => {
         var req1 = {
-            Find_Role: isgotodashboard ? gotodashboard.Role : Role,
-            user_ID: isgotodashboard ? gotodashboard.user_id : user_ID
+            Find_Role: isgotodashboard ? gotodashboard.Role : user_details.Role,
+            user_ID: isgotodashboard ? gotodashboard.user_id : user_details.user_id
         }
         await dispatch(GET_ALL_CLIENTS(req1)).unwrap()
             .then((response) => {
@@ -99,19 +93,13 @@ const AllClients = () => {
     }
 
 
-    // useEffect(() => {
-    //     data()
-    // }, [])
-
-
     useEffect(() => {
         const fetchData = async () => {
             try {
                 await Brokerdata();
                 await data();
             } catch (error) {
-                // Handle errors appropriately
-                console.error('Error fetching data:', error);
+                console.log('Error fetching data:', error);
             }
         };
 
@@ -119,10 +107,8 @@ const AllClients = () => {
     }, [refresh]);
 
 
-
-
     const data2 = async () => {
-        await dispatch(Get_Sub_Admin_Permissions({ id: user_ID })).unwrap()
+        await dispatch(Get_Sub_Admin_Permissions({ id: user_details.user_id })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setGetPermissions(response.data[0])
@@ -174,7 +160,7 @@ const AllClients = () => {
                 .unwrap()
                 .then((response) => {
                     if (response.status) {
-                     
+
                         toast.success(response.msg);
                         setTimeout(() => {
                             setrefresh(!refresh)
@@ -190,8 +176,6 @@ const AllClients = () => {
         }
 
     }
-
-
 
 
 
@@ -213,6 +197,9 @@ const AllClients = () => {
         });
 
     }, [searchInput, originalData, PanelStatus, ClientStatus])
+
+
+
     const ResetDate = (e) => {
         e.preventDefault();
         setSearchInput("");
@@ -232,63 +219,17 @@ const AllClients = () => {
     const showBrokerName = (value1, licence_type) => {
         let value = parseInt(value1);
 
-        // if (licence_type === "0") {
-        //   return "2 Days Only";
-        // } 
         if (licence_type === "1") {
             return "Demo";
         } else {
 
             const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
-          
+
             if (foundNumber != undefined) {
                 return foundNumber.title
             } else {
                 return ""
             }
-
-            //   if (value === 1) {
-            //     return "markethub";
-            //   }
-            //   if (value === 1) {
-            //     return "Markethub";
-            //   } else if (value === 2) {
-            //     return "Alice Blue";
-            //   } else if (value === 3) {
-            //     return "Master Trust";
-            //   } else if (value === 4) {
-            //     return "Motilal Oswal";
-            //   } else if (value === 5) {
-            //     return "Zebull";
-            //   } else if (value === 6) {
-            //     return "IIFl";
-            //   } else if (value === 7) {
-            //     return "Kotak";
-            //   } else if (value === 8) {
-            //     return "Mandot";
-            //   } else if (value === 9) {
-            //     return "Choice";
-            //   } else if (value === 10) {
-            //     return "Anand Rathi";
-            //   } else if (value === 11) {
-            //     return "B2C";
-            //   } else if (value === 12) {
-            //     return "Angel";
-            //   } else if (value === 13) {
-            //     return "Fyers";
-            //   } else if (value === 14) {
-            //     return "5-Paisa";
-            //   } else if (value === 15) {
-            //     return "Zerodha";
-            //   } else if (value === 19) {
-            //     return "Upstox";
-            //   }
-            //   else if (value === 20) {
-            //     return "Dhan";
-            //   }
-
-
-
         }
     };
 
@@ -401,38 +342,58 @@ const AllClients = () => {
         {
             dataField: 'actions',
             text: 'Actions',
-            hidden: (isgotodashboard ? true : false),
+            // hidden: (isgotodashboard ? true : false),
 
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
 
-                    {row.Is_Active == 1 ? <div>
+                    {
+                        isgotodashboard && isgotodashboard == true ?
+                            <div>
+                                <Link to={`/subadmin/client/edit/${row._id}`} state={row}>
+                                    <span data-toggle="tooltip" data-placement="top" title="Edit">
+                                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                                    </span>
 
-                        {(getPermissions && getPermissions.client_edit === 1) || (getPermissions && getPermissions.Update_Api_Key === 1 && row.license_type !== "1" && row.Is_Active === "1") ? <>
-
-                            <Link to={`/subadmin/client/edit/${row._id}`} state={row}>
-                                <span data-toggle="tooltip" data-placement="top" title="Edit">
-                                    <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                                </span>
-
-                            </Link>
-
-                            {row.license_type == "1" && (getPermissions && getPermissions.Update_Api_Key === 0) ? <>
-                                <Link>
+                                </Link>
+                                {/* <Link>
 
                                     <span data-toggle="tooltip" data-placement="top" title="Delete">
                                         <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={(e) => Delete_user(row._id)} />
                                     </span>
-                                </Link>
-                            </> : ""}
-                        </> : ""}
-                    </div> : null}
+                                </Link> */}
+                            </div>
+                            : row.Is_Active == 1 ? <div>
+
+                                {(getPermissions && getPermissions.client_edit === 1) || (getPermissions && getPermissions.Update_Api_Key === 1 && row.license_type !== "1" && row.Is_Active === "1") ? <>
+
+                                    <Link to={`/subadmin/client/edit/${row._id}`} state={row}>
+                                        <span data-toggle="tooltip" data-placement="top" title="Edit">
+                                            <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                                        </span>
+
+                                    </Link>
+
+                                    {row.license_type == "1" && (getPermissions && getPermissions.Update_Api_Key === 0) ? <>
+                                        <Link>
+
+                                            <span data-toggle="tooltip" data-placement="top" title="Delete">
+                                                <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={(e) => Delete_user(row._id)} />
+                                            </span>
+                                        </Link>
+                                    </> : ""}
+                                </> : ""}
+                            </div> : null
+                    }
+
+
+                    { }
                 </div>
             ),
         },
     ];
 
-   
+
     return (
         <>
             {

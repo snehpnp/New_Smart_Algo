@@ -354,24 +354,7 @@ const AllSubadmin = () => {
             name: 'Strategy', label: 'Strategy Permission', type: 'checkbox', label_size: 12, col_size: 3,
             check_box_true: formik.values.all || formik.values.Strategy ? true : false,
         },
-        // {
-        //     name: "optionchain",
-        //     label: "Option Chain",
-        //     type: "checkbox",
-        //     label_size: 12,
-        //     col_size: 3,
-        //     check_box_true:
-        //       formik.values.all || formik.values.optionchain ? true : false,
-        // },
-        // {
-        //     name: "makestrategy",
-        //     label: "Make Strategy",
-        //     type: "checkbox",
-        //     label_size: 12,
-        //     col_size: 3,
-        //     check_box_true:
-        //       formik.values.all || formik.values.makestrategy ? true : false,
-        // },
+     
         {
             name: "updateapikeys",
             label: "Update Client API Key",

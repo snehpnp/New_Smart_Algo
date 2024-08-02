@@ -27,18 +27,19 @@ const BasicDataTable = ({ tableData, TableColumns, tableoptions, rowStyle }) => 
     };
 
     return <>
-        <div className='table-responsive'>
-            <BootstrapTable
-                keyField="id"
-                data={tableData}
-                columns={TableColumns}
-                // pagination={paginationFactory(options)}
-                noDataIndication={() => <NoDataIndication />}
-                headerClasses="bg-primary text-primary text-center header-class"
-                rowClasses={`text-center ${rowStyle}`}
+        <div className='table-container'>
+            <div className='table-responsive'>
+                <BootstrapTable
+                    keyField="id"
+                    data={tableData}
+                    columns={TableColumns}
+                    // pagination={paginationFactory(options)}
+                    noDataIndication={() => <NoDataIndication />}
+                    headerClasses="bg-primary text-primary text-center header-class fiXed-header"
+                    rowClasses={`text-center ${rowStyle}`}
 
-            />
-
+                />
+            </div>
         </div>
     </>
 }

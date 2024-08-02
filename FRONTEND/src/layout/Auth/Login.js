@@ -1,28 +1,23 @@
 /* eslint-disable react/jsx-pascal-case */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  SignIn,
-  Verify_User_Device,
-  Get_Panel_Informtion,
-  OTP_SEND_USEHERES,
-  Logout_From_Other_Device,
-} from "../../ReduxStore/Slice/Auth/AuthSlice";
+import { useDispatch } from "react-redux";
+import { SignIn, Verify_User_Device,Get_Panel_Informtion, OTP_SEND_USEHERES, Logout_From_Other_Device} from "../../ReduxStore/Slice/Auth/AuthSlice";
 import Modal from "../../Components/ExtraComponents/Modal";
 import OtpInput from "react-otp-input";
 import { check_Device } from "../../Utils/find_device";
 import { getLastFourDigits } from "../../Utils/common_Functions";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import $ from "jquery";
 import ToastButton from "../../Components/ExtraComponents/Alert_Toast";
 import * as Config from "../../Utils/Config";
 import Formikform from "../../Components/ExtraComponents/Form/Formik_form";
 import { useFormik } from "formik";
 import * as valid_err from "../../Utils/Common_Messages";
-import { Email_regex, Mobile_regex } from "../../Utils/Common_regex";
+import { Email_regex } from "../../Utils/Common_regex";
 import { Get_Company_Logo } from '../../ReduxStore/Slice/Admin/AdminSlice'
+import { GET_IP } from "../../Service/common.service";
 
 
 const Login = () => {
@@ -41,25 +36,30 @@ const Login = () => {
   const [typeOtp, setTypeOtp] = useState("");
   const [typeOtp1, setTypeOtp1] = useState("");
   const [UserData, setUserData] = useState("");
+  const [signInBtn, setSignInBtn] = useState(false);
+
+
+  const [ip, setIp] = useState('');
+
+  useEffect(() => {
+    GET_IP().then((response) => {
+      console.log("GET_IP",response.data.ip)
+      setIp(response.data.ip)
+    })
+  }, []);
 
 
   let SetTheme = async () => {
-    let domain = window.location.host
     const req = {
       domain: Config.react_domain
     };
-
     await dispatch(Get_Panel_Informtion(req))
       .unwrap()
       .then((response) => {
         let themedata = response.data[0].theme_data[0];
         localStorage.setItem("theme", JSON.stringify(themedata));
 
-       
-
-     
-
-        if (themedata != undefined) {
+        if (themedata !== undefined) {
 
           $("body").removeClass(
             "theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8 theme-9 theme-10"
@@ -152,8 +152,6 @@ const Login = () => {
       });
   }
 
-
-
   //  FOR SET COMPANY LOGO
   const CompanyName = async () => {
     await dispatch(Get_Company_Logo()).unwrap()
@@ -183,7 +181,6 @@ const Login = () => {
   }
 
 
-
   const isValidEmail = (email) => {
     return Email_regex(email);
   };
@@ -209,10 +206,13 @@ const Login = () => {
     },
 
     onSubmit: async (values) => {
+      setSignInBtn(true);
+
       let req = {
         Email: values.email,
         Password: values.password,
         device: CheckUser,
+        network_ip:ip
       };
 
       await dispatch(SignIn(req))
@@ -221,8 +221,8 @@ const Login = () => {
 
 
           if (response.status) {
-            await SetTheme()
-
+            // await SetTheme()
+            setSignInBtn(false);
             if (response.data.Role !== "SUPERADMIN") {
               setshowModal(true);
               setUserData(response.data);
@@ -243,10 +243,12 @@ const Login = () => {
           } else {
 
             toast.error(response.msg);
+            setSignInBtn(false);
           }
         })
         .catch((error) => {
           console.log("Error in login page", error);
+          setSignInBtn(false);
         });
     },
   });
@@ -258,22 +260,21 @@ const Login = () => {
   ];
 
 
-
-
-
-
-
   // ------------------ For Otp Varify --------------------------
 
-
-
   const verifyOTP = async () => {
+    setSignInBtn(true);
+
     if (typeOtp === "") {
       alert("enter otp");
+      setSignInBtn(false);
+
       return;
     }
     if (typeOtp.length < 4) {
-      alert("please enter valid otp");
+      alert("please enter valid otp")
+      setSignInBtn(false);
+      ;
       return;
     }
 
@@ -281,16 +282,20 @@ const Login = () => {
       Email: UserData.Email,
       Device: CheckUser,
       Otp: typeOtp,
+      network_ip:ip
+
     };
 
-    await dispatch(Verify_User_Device(req))
+    await dispatch(Verify_User_Device(req)).unwrap()
       .then((res) => {
 
-        if (res.payload.firstlogin === "0") {
+        if (res.firstlogin === "0") {
           setDesclaimerModal(true)
+          setSignInBtn(false);
+
         }
         else {
-          if (res.payload.status) {
+          if (res.status) {
             const roles = ["ADMIN", "USER", "SUBADMIN", "SUPERADMIN"];
             const userData = UserData;
 
@@ -301,10 +306,11 @@ const Login = () => {
             );
 
             if (roles.includes(role) && mobileNo === true) {
-        
+              setSignInBtn(false);
+
               localStorage.setItem("user_details", JSON.stringify(userData));
               localStorage.setItem("user_role", JSON.stringify(role));
-              toast.success(res.payload.msg);
+              toast.success(res.msg);
               let redirectPath = `/${role === "USER"
                 ? "client/dashboard"
                 : role === "SUBADMIN"
@@ -317,38 +323,44 @@ const Login = () => {
                 }
            `;
 
-              setTimeout(() => {
-                setshowModal(false);
-                navigate(redirectPath);
-                window.location.reload();
-              }, 1000);
+           setshowModal(false);
+           navigate(redirectPath);
+           window.location.reload();
+              // setTimeout(() => {
+              // }, 1000);
             } else {
               toast.error(mobileNo);
+              setSignInBtn(false);
+
             }
           } else {
-            if (res.payload.msg === "You are already logged in on the Web.") {
-              toast.error(res.payload.msg);
+            if (res.msg === "You are already logged in on the Web.") {
+              toast.error(res.msg);
               setshowModal(false);
               setshowModal1(true);
+              setSignInBtn(false);
+
             }
-            else if (res.payload.msg === "You are already logged in on the phone.") {
-              toast.error(res.payload.msg);
+            else if (res.msg === "You are already logged in on the phone.") {
+              toast.error(res.msg);
               setshowModal(false);
               setshowModal1(true);
+              setSignInBtn(false);
+
             }
 
 
             else {
-              toast.error(res.payload.msg);
+              toast.error(res.msg);
               setTimeout(() => {
-                // setshowModal(false);
+                setSignInBtn(false);
               }, 1000);
             }
           }
         }
 
       })
-      .catch((error) =>{
+      .catch((error) => {
 
       });
   };
@@ -364,18 +376,15 @@ const Login = () => {
     setshowModal1(false);
     setshowModal2(false);
     setshowModal(false);
-
     setgetOtpStatus(false);
   };
+
+
   // CLOSE THE MODAL
   const verifyOTP_login = async () => {
 
-    if (getOtp && getOtp == typeOtp1) {
-      // const socket = socketIOClient(`${Config.base_url}`);
-      // socket.emit("logout_user_from_other_device_req", {
-      //   CheckUser: CheckUser,
-      //   usedata: UserData,
-      // });
+    if (getOtp && getOtp === typeOtp1) {
+    
     }
 
     setTimeout(async () => {
@@ -383,6 +392,8 @@ const Login = () => {
         Email: UserData.Email,
         device: CheckUser,
         otp: typeOtp1,
+        network_ip:ip
+
       };
 
       await dispatch(Logout_From_Other_Device(req))
@@ -390,19 +401,14 @@ const Login = () => {
         .then((res) => {
           if (res.status) {
             const roles = ["ADMIN", "USER", "SUBADMIN"];
-
             const userData = UserData;
-
             const role = userData && userData.Role;
 
             if (roles.includes(role)) {
               localStorage.setItem("user_details", JSON.stringify(userData));
               localStorage.setItem("user_role", JSON.stringify(role));
               toast.success(res.msg);
-              // let redirectPath = `/${
-              //   role === "USER" ? "client" : role.toLowerCase()
-              // }/dashboard`;
-
+             
               let redirectPath = `/${role === "USER"
                 ? "client/dashboard"
                 : role === "SUBADMIN"
@@ -491,7 +497,6 @@ const Login = () => {
 
         setTimeout(() => {
           navigate(redirectPath);
-          // window.location.reload();
         }, 1000);
       }
     }
@@ -501,8 +506,9 @@ const Login = () => {
 
 
   useEffect(() => {
-    // getPanelDetails();
+    SetTheme()
     CompanyName()
+    setCheckUser(check_Device())
   }, []);
 
 
@@ -510,8 +516,8 @@ const Login = () => {
 
 
   return (
-    <div className="vh-100" style={{ 
-      backgroundImage: `url(${backgroundImage})` ,backgroundSize:'cover'
+    <div className="vh-100" style={{
+      backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover'
     }}>
 
       <div className="authincation h-100">
@@ -536,8 +542,8 @@ const Login = () => {
                         )}
                         formik={formik}
                         btn_name="Sign In"
-                        //  btn_name_signUp="Sign Up"
                         title="forlogin1"
+                        btnStatusloading={signInBtn}
                       />
                       <div className="form-row mt-4 mb-2">
                         <div className="mb-3 mt-1  d-flex justify-content-between ">
@@ -568,8 +574,9 @@ const Login = () => {
             btn_name="Verify"
             btn_name1="Verify1"
             Submit_Function={verifyOTP}
+            disabled_submit= {signInBtn}
           >
-             
+
             <form onSubmit={verifyOTP}>
 
               <OtpInput
@@ -585,8 +592,8 @@ const Login = () => {
                     autoFocus={index === 0}
                     onKeyPress={(event) => {
                       if (event.key === 'Enter') {
-                        event.preventDefault();  
-                        verifyOTP();  
+                        event.preventDefault();
+                        verifyOTP();
                       }
                     }}
                   />
@@ -632,7 +639,6 @@ const Login = () => {
         <>
           <Modal
             isOpen={showModal2}
-            // handleClose={!showModal2}
             handleClose={() => setshowModal2(false)}
             backdrop="static"
             size="sm"
@@ -672,7 +678,7 @@ const Login = () => {
 
 
 
-      {/*  for Desclaimer    */}
+
       {desclaimerModal ? (
         <>
           <Modal

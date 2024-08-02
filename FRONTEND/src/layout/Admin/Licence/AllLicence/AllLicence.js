@@ -125,7 +125,7 @@ const AllLicence = () => {
 
         if (searchInput) {
           filteredData = filteredData.filter(item =>
-            item.user.UserName.toLowerCase().includes(searchInput.toLowerCase()) 
+            item.user.UserName.toLowerCase().includes(searchInput.toLowerCase())
           );
         }
 
@@ -139,21 +139,21 @@ const AllLicence = () => {
           data: filteredData,
         });
 
-      }else{
+      } else {
         setAllClients({
           loading: false,
           data: [],
         });
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.log('Error fetching data:', error);
       setAllClients({ loading: false, data: null });
     }
   };
 
   useEffect(() => {
     data();
-  }, [searchInput]); 
+  }, [searchInput]);
 
 
 
@@ -162,31 +162,31 @@ const AllLicence = () => {
 
 
     // if (dashboard_filter === undefined) {
-      if (getAllClients1.data !== undefined) {
-        let filteredData = getAllClients1.data
+    if (getAllClients1.data !== undefined) {
+      let filteredData = getAllClients1.data
 
-        if (val) {
-          filteredData = filteredData.filter(item => {
-            const getMonthAndYear = get_year_and_month_only(item.createdAt);
-            return getMonthAndYear == val;
-          });
-
-
-        } else {
-          filteredData = getAllClients1.data
-        }
-
-        setAllClients({ loading: false, data: filteredData });
+      if (val) {
+        filteredData = filteredData.filter(item => {
+          const getMonthAndYear = get_year_and_month_only(item.createdAt);
+          return getMonthAndYear == val;
+        });
 
 
-
-        const totalLicenses = filteredData.reduce((accumulator, currentValue) => {
-          return accumulator + (parseInt(currentValue.license) || 0);
-        }, 0);
-
-
-        setUsedLicence(totalLicenses);
+      } else {
+        filteredData = getAllClients1.data
       }
+
+      setAllClients({ loading: false, data: filteredData });
+
+
+
+      const totalLicenses = filteredData.reduce((accumulator, currentValue) => {
+        return accumulator + (parseInt(currentValue.license) || 0);
+      }, 0);
+
+
+      setUsedLicence(totalLicenses);
+    }
     // }
   };
 
@@ -202,10 +202,10 @@ const AllLicence = () => {
     setUsedLicence("");
     setSearchInput("")
     // if (dashboard_filter === undefined) {
-      setAllClients({
-        loading: false,
-        data: getAllClients1.data,
-      });
+    setAllClients({
+      loading: false,
+      data: getAllClients1.data,
+    });
     // }
   };
 
@@ -300,7 +300,7 @@ const AllLicence = () => {
                   <div className="col-2 mx-auto  border border-dark text-center rounded-3">
                     <h6 >Remaining Licence</h6>
                     <h6>
-                      {ForShowTotalLicence && ForShowUsedLicence ? ForShowTotalLicence - ForShowUsedLicence : 0}
+                      {Number.isFinite(ForShowTotalLicence) && Number.isFinite(ForShowUsedLicence) ? ForShowTotalLicence - ForShowUsedLicence : 0}
                     </h6>
 
 

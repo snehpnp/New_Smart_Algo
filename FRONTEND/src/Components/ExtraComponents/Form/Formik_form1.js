@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 
-const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isSelected, fieldtype, formik, btn_name, forlogin, title, label_size, col_size, disable, check_box_true, row_size, additional_field, showImagePreview, placeholderdata,disabled }) => {
+const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isSelected, fieldtype, formik, btn_name, forlogin, title, label_size, col_size, disable, check_box_true, row_size, additional_field, showImagePreview, placeholderdata, disabled }) => {
 
 
   const location = useLocation()
@@ -17,14 +17,14 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
     }
     else {
       const file = event.target.files[0];
-      const newPreviews = [...previews]; 
+      const newPreviews = [...previews];
 
       newPreviews[index] = URL.createObjectURL(file);
-      setPreviews(newPreviews); 
+      setPreviews(newPreviews);
 
       const reader = new FileReader();
       reader.onload = () => {
-        formik.setFieldValue(name, reader.result); 
+        formik.setFieldValue(name, reader.result);
       };
 
 
@@ -381,13 +381,11 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
         </div >
         {additional_field}
         <div className="form-group mb-0">
-          {/* <button className={`btn btn-primary  ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">
-            {btn_name}
-          </button> */}
-
-          <button className={`btn btn-primary ${location.pathname === 'resetpassword' ? 'col-md-11' : ''}`} type="submit" disabled={formik.isSubmitting}>
-            {btn_name}
-          </button>
+         
+            <button className={`btn btn-primary ${location.pathname === 'resetpassword' ? 'col-md-11' : ''}`} type="submit" >
+              {btn_name}
+            </button> 
+           
         </div>
       </div>
 

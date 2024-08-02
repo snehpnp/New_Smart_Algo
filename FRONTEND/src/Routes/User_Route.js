@@ -17,6 +17,10 @@ import StrategyDesc from '../layout/User/StrategyDesc/StrategyDesc';
 import Opation_Chain from '../layout/User/OptionChain/Opation_Chain';
 import Open_Positions from '../layout/User/OptionChain/Open_Positions';
 
+import Userreferal from '../layout/User/Profile/ReferralPage';
+import Faq from '../layout/Admin/Faq/Faq';
+
+
 
 // strategydesc
 
@@ -43,7 +47,9 @@ const Admin = () => {
                 <Route exact path="/helpcenter" element={<HelpCenter />} />
                 <Route exact path="/strategydesc" element={<StrategyDesc />} />
                 <Route exact path="/optionchain" element={<Opation_Chain />} />
-                <Route exact path="/openpostion" element={<Open_Positions />} />
+                <Route exact path="/refer-earn" element={<Userreferal />} />
+                <Route exact path="/faq" element={<Faq />} />
+
             </Routes>
 
 

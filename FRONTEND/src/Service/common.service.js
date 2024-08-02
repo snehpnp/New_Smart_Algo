@@ -32,7 +32,7 @@ export async function GET_ALL_SERVICE_FOR_CLIENTS(data, token) {
             headers: header(token),
             data: {},
         })
-        
+
         return await res?.data;
     }
     catch (err) {
@@ -57,7 +57,7 @@ export async function GET_OPTION_SYMBOLS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
     }
 
 }
@@ -73,7 +73,7 @@ export async function GET_OPTION_SYMBOLS_EXPIRY(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
     }
 
 }
@@ -89,7 +89,7 @@ export async function OPTION_SYMBOLS_UPDATE_STATUS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
     }
 
 }
@@ -105,7 +105,7 @@ export async function GET_OPTION_ALL_ROUND_TOKEN(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
     }
 
 }
@@ -121,7 +121,7 @@ export async function GET_PANEL_KEY(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
     }
 
 }
@@ -137,7 +137,7 @@ export async function GET_OPEN_POSITION(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
     }
 
 }
@@ -152,7 +152,7 @@ export async function UPDATE_SIGNALS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
     }
 
 }
@@ -167,7 +167,7 @@ export async function UPDATE_SUBSCRIBE_TOKEN(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
     }
 
 }
@@ -184,7 +184,7 @@ export async function GET_MESSAGE_BROD(id) {
         return await res?.data;
     }
     catch (err) {
-        
+
     }
 
 }
@@ -203,7 +203,7 @@ export async function GET_INSTRUMENT(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
 
     }
 }
@@ -220,7 +220,7 @@ export async function GET_CANDLE_DATA(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
 
     }
 }
@@ -236,7 +236,7 @@ export async function GET_TIMEFRAME(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
 
     }
 }
@@ -252,7 +252,7 @@ export async function GET_SOURCE(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
 
     }
 }
@@ -268,7 +268,7 @@ export async function GET_COMPARATORS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
 
     }
 }
@@ -284,7 +284,7 @@ export async function ADD_MAKE_STRATEGY(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
 
     }
 }
@@ -300,7 +300,7 @@ export async function GET_ALL_MAKE_STRATEGY(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
 
     }
 }
@@ -316,7 +316,7 @@ export async function DELETE_MAKE_STRATEGY(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
 
     }
 }
@@ -332,7 +332,7 @@ export async function EDIT_MAKE_STRATEGY(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
 
     }
 }
@@ -348,7 +348,7 @@ export async function UPDATE_MAKE_STRATEGY(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
 
     }
 }
@@ -363,7 +363,7 @@ export async function DELETE_MAKE_STRATEGY_SELECTED(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
 
     }
 }
@@ -379,12 +379,23 @@ export async function CANCEL_ORDER_BY_ADMIN(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
 
     }
 }
 
 
+export async function GET_IP(data, token) {
+
+    try {
+        const res = await axios.get(`https://api.ipify.org?format=json`)
+        return await res;
+    }
+    catch (err) {
+
+
+    }
+}
 
 
 

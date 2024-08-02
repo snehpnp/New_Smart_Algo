@@ -1,37 +1,33 @@
 import React, { useEffect } from 'react'
 import Formikform from '../../Components/ExtraComponents/Form/Formik_form'
 import ToastButton from '../../Components/ExtraComponents/Alert_Toast'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useFormik } from "formik";
 import { Email_regex, Mobile_regex } from '../../Utils/Common_regex'
 import { check_Device } from "../../Utils/find_device"
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { SignUpUser, Get_Panel_Informtion } from '../../ReduxStore/Slice/Auth/AuthSlice'
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import * as valid_err from '../../Utils/Common_Messages'
 import * as Config from "../../Utils/Config";
 import { Get_Company_Logo } from '../../ReduxStore/Slice/Admin/AdminSlice'
 import $ from "jquery";
 
 
-
 const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
-  const [showModal, setshowModal] = useState(false);
-  const [UserData, setUserData] = useState("");
-  const [getCompanyName, setGetCompanyName] = useState("");
+  const locationData = useLocation()
+  const [referCode, setReferCode] = useState('');
   const [CheckUser, setCheckUser] = useState(check_Device());
 
-
+  var ReferalCode = locationData.pathname.split('/');
 
 
   const getPanelDetails = async () => {
-    let domain = window.location.host
     const req = {
       domain: Config.react_domain
-      // domain: "sneh.com",
     };
 
     await dispatch(Get_Panel_Informtion(req))
@@ -41,11 +37,11 @@ const SignUp = () => {
         localStorage.setItem("theme", JSON.stringify(res));
       });
   };
+
   const CompanyName = async () => {
     await dispatch(Get_Company_Logo()).unwrap()
       .then((response) => {
         if (response.status) {
-          setGetCompanyName(response.data && response.data[0].panel_name)
 
           $(".logo-abbr").attr('src', response.data && response.data[0].logo);
           $(".Company_logo").html(response.data && response.data[0].panel_name);
@@ -62,11 +58,10 @@ const SignUp = () => {
       })
   }
 
-
-
   const isValidEmail = (email) => {
     return Email_regex(email);
   };
+
   const isValidContact = (phone) => {
     return Mobile_regex(phone)
   }
@@ -77,6 +72,8 @@ const SignUp = () => {
       username: "",
       phone: "",
       email: "",
+      refer_code: "",
+
     },
     validate: (values) => {
       const errors = {};
@@ -108,6 +105,8 @@ const SignUp = () => {
         Email: values.email,
         PhoneNo: values.phone,
         device: CheckUser,
+        refer_code: referCode || values.refer_code,
+
       };
 
 
@@ -134,18 +133,25 @@ const SignUp = () => {
     },
   });
 
+
   const fields = [
-    { name: "fullname", label: "FullName", type: 'text' },
-    { name: "username", label: "UserName", type: 'text' },
-    { name: "email", label: "Email", type: "email" },
-    { name: "phone", label: "Phone", type: "text" },
+      { name: "fullname", label: "FullName", type: 'text' },
+      { name: "username", label: "UserName", type: 'text' },
+      { name: "email", label: "Email", type: "email" },
+      { name: "phone", label: "Phone", type: "text" },
+      { name: "refer_code", label: "Refrel", type: "text", disable: ReferalCode.length == 3  ? true : false }
   ];
+  
 
   useEffect(() => {
     getPanelDetails()
     CompanyName();
+    setReferCode(ReferalCode && ReferalCode[2]);
+    formik.setFieldValue('refer_code', ReferalCode && ReferalCode[2]);
 
   }, [])
+console.log("-",ReferalCode)
+
   return (
     <>
       <div className="vh-100">

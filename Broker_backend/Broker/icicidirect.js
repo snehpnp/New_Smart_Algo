@@ -20,7 +20,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
         var segment = signals.Segment.toUpperCase();
         var option_type = signals.OType;
         var strategy = signals.Strategy;
-        
+
 
         if (token != 0) {
 
@@ -136,7 +136,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                                 item.postdata.price = price
                             }
 
-                        
+
 
                             EntryPlaceOrder(item, filePath, signals, signal_req)
                         });
@@ -151,7 +151,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                     }
 
                     else if (type == 'SX' || type == 'LX') {
-  
+
                         const requestPromises = AllClientData.map(async (item) => {
 
                             if (segment.toLowerCase() === 'c') {
@@ -212,7 +212,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                                         if (segment.toUpperCase() == 'C') {
                                             Exist_entry_order = response.data.Success.find(item1 => item1.exchange_code === item.exchange_code);
                                         } else {
-                                            Exist_entry_order = response.data.Success.find(item1 => item1.exchange_code === item.exchange_code && item1.product_type.toLowerCase() == product || convertToISO8601(item1.expiry_date) == convertToISO8601(expiry_date));
+                                            Exist_entry_order = response.data.Success.find(item1 => item1.strike_price == strike_price &&
+                                                item1.stock_code == stock_code &&
+                                                item1.exchange_code == exchange_code &&
+                                                convertToISO8601(item1.expiry_date) == convertToISO8601(expiry_date));
 
                                         }
 
@@ -470,7 +473,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
 
                 })
                     .then((BrokerResponseCreate) => {
-                        
+
                     })
                     .catch((err) => {
                         try {
@@ -505,11 +508,11 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
 
 const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
-   
+
     var input_symbol = signals.Symbol;
     var type = signals.TType.toUpperCase();
     var strategy = signals.Strategy;
-    
+
     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
 
@@ -540,7 +543,6 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
     console.log(config);
     axios(config)
         .then(async (response) => {
-            console.log("respose ENTRY", response.data)
 
             fs.appendFile(filePath, 'TIME ' + new Date() + ' ICICI AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
                 if (err) {
@@ -658,7 +660,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                
+
                             })
                             .catch((err) => {
                                 try {
@@ -685,23 +687,23 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
 const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req) => {
 
-   
+
     var input_symbol = signals.Symbol;
     var type = signals.TType.toUpperCase();
-    
 
-    
-    
-    
+
+
+
+
     var segment = signals.Segment.toUpperCase();
-    
-    
+
+
     var option_type = signals.OType;
-    
+
     var strategy = signals.Strategy;
-    
-    
-    
+
+
+
 
     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
@@ -823,7 +825,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                
+
                             })
                             .catch((err) => {
                                 try {
@@ -851,7 +853,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                
+
                             })
                             .catch((err) => {
                                 try {

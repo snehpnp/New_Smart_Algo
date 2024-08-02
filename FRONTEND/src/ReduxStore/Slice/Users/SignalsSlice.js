@@ -4,10 +4,10 @@ import { GET_SIGNALS } from "../../../Service/user.service";
 
 
 export const Get_Signals = createAsyncThunk("user/tradehistory", async (data) => {
-    const { _id, token } = data
+    const { _id,type, token } = data
 
     try {
-        const res = await GET_SIGNALS({ user_id: _id }, token);
+        const res = await GET_SIGNALS({ user_id: _id ,type:type}, token);
         return await res;
     } catch (err) {
         return err;

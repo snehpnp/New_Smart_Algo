@@ -5,7 +5,7 @@ import Content from "../../../Components/Dashboard/Content/Content"
 const BasicTable = () => {
 
     return <>
-
+<div className='table-container'>
             <div className="table-responsive">
                 <table className="table table-responsive-sm ">
                     <thead>
@@ -47,6 +47,7 @@ const BasicTable = () => {
                         </tr>
                     </tbody>
                 </table>
+            </div>
             </div>
     </>
 }

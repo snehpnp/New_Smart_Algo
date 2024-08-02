@@ -34,7 +34,7 @@ export async function UPDATE_PANEL_THEME(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
     }
 
 }
@@ -52,7 +52,7 @@ export async function CREATE_API_INFORMATION(data, token) {
     catch (err) {
         return err
 
-        
+
     }
 
 }
@@ -76,7 +76,7 @@ export async function UPDATE_API_INFORMATION(data, token) {
 
 // GET_API_INFORMATION
 export async function GET_API_INFORMATION(data, token) {
-    
+
     try {
         const res = await axios.post(`${Config.smartAlogUrl}getall/apicreateinfo`, data, {
             headers: header(token),
@@ -86,7 +86,7 @@ export async function GET_API_INFORMATION(data, token) {
     }
     catch (err) {
         return err
-        
+
     }
 
 }
@@ -103,7 +103,7 @@ export async function GET_API_INFORMATION_SUPERADMIN(data, token) {
     }
     catch (err) {
         return err
-        
+
     }
 
 }
@@ -120,14 +120,14 @@ export async function GET_PANEL_INFORMATION(id, token) {
     }
     catch (err) {
         return err
-        
+
     }
 
 }
 
 // FIND ALL PANEL DATA
 export async function GET_ALL_ADMIN_CLIENT(id, token) {
-   
+
     try {
 
         const res = await axios.post(`${Config.base_url}getall/panel/clients`, id, {
@@ -138,7 +138,7 @@ export async function GET_ALL_ADMIN_CLIENT(id, token) {
     }
     catch (err) {
         return err
-        
+
     }
 
 }
@@ -155,7 +155,7 @@ export async function GET_ALL_SUBADMIN_CLIENT(id, token) {
     }
     catch (err) {
         return err
-        
+
     }
 
 }
@@ -172,7 +172,7 @@ export async function ADD_LICENCE_TO_COMPANY(id, token) {
     }
     catch (err) {
         return err
-        
+
     }
 
 }
@@ -189,7 +189,7 @@ export async function GET_ADMIN_HELPS(id, token) {
     }
     catch (err) {
         return err
-        
+
     }
 
 }
@@ -197,7 +197,7 @@ export async function GET_ADMIN_HELPS(id, token) {
 
 export async function UPDATE_ADMIN_PERMISSION(id, token) {
     try {
-      
+
         const res = await axios.post(`${Config.smartAlogUrl}update/permission`, id, {
             headers: header(token),
             data: {},
@@ -206,7 +206,7 @@ export async function UPDATE_ADMIN_PERMISSION(id, token) {
     }
     catch (err) {
         return err
-        
+
     }
 
 }
@@ -224,7 +224,7 @@ export async function GET_PANEL_BROKER(domain) {
     }
     catch (err) {
         return err
-        
+
     }
 
 }
@@ -243,7 +243,7 @@ export async function CLOSE_ADMIN_PANEL(domain, token) {
     }
     catch (err) {
         return err
-        
+
     }
 
 }
@@ -251,7 +251,7 @@ export async function CLOSE_ADMIN_PANEL(domain, token) {
 // GET ALL BROKERS
 export async function ALL_BROKERS(domain, token) {
     try {
-         
+
 
         const res = await axios.post(`${Config.base_url}getall/brokers`, domain, {
             headers: header(token),
@@ -261,7 +261,7 @@ export async function ALL_BROKERS(domain, token) {
     }
     catch (err) {
         return err
-        
+
     }
 
 }
@@ -279,7 +279,7 @@ export async function UPDATE_BROKERS(domain, token) {
     }
     catch (err) {
         return err
-        
+
     }
 
 }
@@ -297,7 +297,7 @@ export async function ADD_PANEL(data, token) {
     }
     catch (err) {
         return err
-        
+
     }
 
 }
@@ -312,7 +312,7 @@ export async function UPDATE_PANEL(data, token) {
         return await res?.data;
     }
     catch (err) {
-        
+
     }
 
 }
@@ -320,7 +320,7 @@ export async function UPDATE_PANEL(data, token) {
 
 
 // GET PANEL INFORMATION TO DOMAIN FIND
-export async function GET_PANEL_HISTORY( token) {
+export async function GET_PANEL_HISTORY(token) {
     try {
 
         const res = await axios.get(`${Config.base_url}getall/history`, {
@@ -331,7 +331,7 @@ export async function GET_PANEL_HISTORY( token) {
     }
     catch (err) {
         return err
-        
+
     }
 
 }
@@ -347,8 +347,8 @@ export async function UPDATE_QUERY(data) {
         return await res?.data;
     }
     catch (err) {
-        
-       
+
+
     }
 
 }
@@ -363,8 +363,8 @@ export async function GET_ALL_SIGNAL(data) {
         return await res?.data;
     }
     catch (err) {
-        
-       
+
+
     }
 
 }
@@ -379,7 +379,7 @@ export async function UPDATE_PRICE(data) {
         return await res?.data;
     }
     catch (err) {
-         
+
     }
 
 }
@@ -393,7 +393,7 @@ export async function DELETE_SIGNAL(data) {
         return await res?.data;
     }
     catch (err) {
-         
+
     }
 
 }
@@ -407,8 +407,8 @@ export async function GET_ALL_DELETED_SIGNAL(data) {
         return await res?.data;
     }
     catch (err) {
-        
-       
+
+
     }
 
 }
@@ -422,7 +422,7 @@ export async function BACKUP_SIGNAL(data) {
         return await res?.data;
     }
     catch (err) {
-         
+
     }
 
 }
@@ -435,7 +435,7 @@ export async function GET_ONE_USER(data) {
         return await res?.data;
     }
     catch (err) {
-         
+
     }
 
 }
@@ -448,7 +448,7 @@ export async function SUPER_UPDATE_USER(data) {
         return await res?.data;
     }
     catch (err) {
-         
+
     }
 
 }
@@ -463,7 +463,7 @@ export async function USER_DELETE(data) {
         return await res?.data;
     }
     catch (err) {
-         
+
     }
 
 }
@@ -478,7 +478,79 @@ export async function GET_USER(data) {
         return await res?.data;
     }
     catch (err) {
-         
+
     }
 
 }
+
+
+
+
+export async function GET_FAQ_DATA() {
+
+    try {
+        // const res = await axios.post(`${Config.smartAlogUrl}getll/faq`, data, {
+        const res = await axios.get(`${Config.smartAlogUrl}getll/faq`, {
+
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+
+    }
+
+}
+
+
+export async function DELETE_FAQ_DATA(data) {
+
+    try {
+        // const res = await axios.post(`${Config.smartAlogUrl}getll/faq`, data, {
+        const res = await axios.post(`${Config.smartAlogUrl}delete/faq`, data,{
+
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+
+    }
+
+}
+
+export async function ADD_FAQ_DATA(data) {
+
+    try {
+        // const res = await axios.post(`${Config.smartAlogUrl}getll/faq`, data, {
+        const res = await axios.post(`${Config.smartAlogUrl}add/faq`, data,{
+
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+
+    }
+
+}
+
+export async function UPDATE_FAQ_DATA(data) {
+    
+        try {
+            // const res = await axios.post(`${Config.smartAlogUrl}getll/faq`, data, {
+            const res = await axios.post(`${Config.smartAlogUrl}update/faq`, data,{
+    
+                // headers: header(token),
+                data: {},
+            })
+            return await res?.data;
+        }
+        catch (err) {
+    
+        }
+    
+    }

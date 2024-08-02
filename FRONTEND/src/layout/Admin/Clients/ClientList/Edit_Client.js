@@ -17,11 +17,21 @@ import "../../../../App.css"
 import { f_time } from '../../../../Utils/Date_formet';
 import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 import * as Config from "../../../../Utils/Config";
+import { GET_IP } from "../../../../Service/common.service";
 
 const EditClient = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
+
+  const [ip, setIp] = useState('');
+
+  useEffect(() => {
+    GET_IP().then((response) => {
+      console.log("GET_IP",response.data.ip)
+      setIp(response.data.ip)
+    })
+  }, []);
 
   const selector = useSelector((state) => state.DashboardSlice);
 
@@ -97,7 +107,8 @@ const EditClient = () => {
       parent_role: null,
       Strategy: false,
       licence1: 'null',
-      multiple_strategy_select: false
+      multiple_strategy_select: false,
+      network_ip:ip
     },
 
 
@@ -180,7 +191,8 @@ const EditClient = () => {
         "licence": values.licence1,
         "Editor_role": Role,
         "device": check_Device(),
-        "multiple_strategy_select": values.multiple_strategy_select === false ? '0' : '1'
+        "multiple_strategy_select": values.multiple_strategy_select === false ? '0' : '1',
+        "network_ip":ip
       }
 
 
@@ -202,17 +214,12 @@ const EditClient = () => {
     }
   });
 
-
-
-
-
-
   useEffect(() => {
     let Service_Month_Arr = [];
     for (let index = 1; index <= 1; index++) {
 
       const currentDate = UserData.data.data !== undefined
-        ? new Date(UserData.data.data[0].EndDate)
+        ? new Date(UserData.data.data[0].license_type == 2 ? UserData.data.data[0].EndDate:new Date())
         : new Date();
       const currentYear = currentDate.getFullYear();
       const currentMonth = currentDate.getMonth();
@@ -226,15 +233,6 @@ const EditClient = () => {
     }
     setfirst(Service_Month_Arr);
   }, [UserData.data.data]);
-
-  const brokerOptions = [
-    { label: 'Alice Blue', value: '2' },
-    { label: 'Angel', value: '12' },
-    { label: '5 Paisa', value: '14' },
-    { label: 'Zerodha', value: '15' },
-
-
-  ];
 
 
   let fields = [
@@ -292,8 +290,8 @@ const EditClient = () => {
     },
     {
       name: 'api_key',
-      label: formik.values.broker == 20 ? "ACCESS TOKEN " : formik.values.broker == 19 ? "Api Key" : formik.values.broker == 4 ? 'App Key' : formik.values.broker == 7 ? "Consumer Key" : formik.values.broker == 9 ? "Vendor Key" : formik.values.broker == 8 ? 'App Key' : formik.values.broker == 10 ? 'App Key' : formik.values.broker == 26 ? 'App Key' : "'Api Key", type: 'text',
-      showWhen: values => values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6' || values.broker === '19' || values.broker === '20' || values.broker === '26',
+      label: formik.values.broker == 20 ? "ACCESS TOKEN " : formik.values.broker == 19 ? "Api Key" : formik.values.broker == 4 ? 'App Key' : formik.values.broker == 7 ? "Consumer Key" : formik.values.broker == 9 ? "Vendor Key" : formik.values.broker == 8 ? 'App Key' : formik.values.broker == 10 ? 'App Key' : formik.values.broker == 26 ? 'App Key' : formik.values.broker == 25 ? 'Api Key' : "'Api Key", type: 'text',
+      showWhen: values => values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6' || values.broker === '19' || values.broker === '20' || values.broker === '26' || values.broker === '25',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -323,8 +321,8 @@ const EditClient = () => {
 
     {
       name: 'api_secret',
-      label: formik.values.broker == 1 ? 'Password Code' : formik.values.broker == 5 ? 'DOB' : formik.values.broker == 7 ? 'Consumer Secret' : formik.values.broker == 9 ? 'Encryption Secret Key' : formik.values.broker == 10 ? 'Api Secret Key' : formik.values.broker == 11 ? '2FA' : formik.values.broker == 14 ? 'Encryption Key' : formik.values.broker == 26 ? 'Api Secret' : 'Api Secret', type: 'text',
-      showWhen: values => values.broker === '1' || values.broker === '3' || values.broker == '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15' || values.broker === '19' || values.broker === '26',
+      label: formik.values.broker == 1 ? 'Password Code' : formik.values.broker == 5 ? 'DOB' : formik.values.broker == 7 ? 'Consumer Secret' : formik.values.broker == 9 ? 'Encryption Secret Key' : formik.values.broker == 10 ? 'Api Secret Key' : formik.values.broker == 11 ? '2FA' : formik.values.broker == 14 ? 'Encryption Key' : formik.values.broker == 26 ? 'Api Secret' : formik.values.broker == 25 ? 'Api Secret' : 'Api Secret', type: 'text',
+      showWhen: values => values.broker === '1' || values.broker === '3' || values.broker == '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15' || values.broker === '19' || values.broker === '26' || values.broker === '25',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -383,7 +381,6 @@ const EditClient = () => {
       name: 'multiple_strategy_select', label: 'Mutiple Selection Strategy', type: 'checkbox', label_size: 12, col_size: 6, disable: false, check_box_true: formik.values.multiple_strategy_select ? true : false,
     },
   ];
-
 
 
   useEffect(() => {
@@ -548,7 +545,6 @@ const EditClient = () => {
 
 
 
-
   const getGroupeServics = async () => {
     if (formik.values.groupservice) {
       await dispatch(Get_Service_By_Group_Id({ _id: formik.values.groupservice })).unwrap()
@@ -565,7 +561,6 @@ const EditClient = () => {
   useEffect(() => {
     getGroupeServics();
   }, [formik.values.groupservice]);
-
 
 
   // GET ALL GROUP SERVICES NAME / GET ALL SUBAMDIN / STRATEGY
@@ -620,12 +615,9 @@ const EditClient = () => {
 
   }
 
-
   useEffect(() => {
     data()
   }, [])
-
-
 
   //  For Checked Strategy
   const handleStrategyChange = (event) => {
@@ -637,9 +629,6 @@ const EditClient = () => {
       );
     });
   };
-
-
-
 
 
   useEffect(() => {
@@ -670,8 +659,6 @@ const EditClient = () => {
   }, [UserData.data]);
 
 
-
-
   useEffect(() => {
     if (UserData.data.strategy) {
       const initialSelectedStrategies = AllStrategy.data.map((strategy) => ({
@@ -684,11 +671,6 @@ const EditClient = () => {
       setSelectedStrategies(initialSelectedStrategies);
     }
   }, [UserData.data.strategy, AllStrategy.data]);
-
-
-
-
-
 
 
 

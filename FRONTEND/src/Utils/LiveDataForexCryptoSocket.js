@@ -17,10 +17,7 @@ class WebSocketServiceForexCrypto {
       this.socket.onmessage = (event) => onMessage(JSON.parse(event.data));
       this.socket.onerror = onError;
       this.socket.onclose = onClose;
-    //   this.socket.onclose = () => {
-    //     if (onClose) onClose();
-    //     setTimeout(() => this.connect(onMessage, onOpen, onClose, onError), 15000);
-    //   };
+
   
       return () => {
         if (this.socket) {

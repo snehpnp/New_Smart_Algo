@@ -100,7 +100,6 @@ const AllMakeStrategy = () => {
                 <div><CandlestickChart
                     onClick={() => {
                         setshowChartModal(true)
-
                         setSelectedRowData(row)
                     }
                     } />

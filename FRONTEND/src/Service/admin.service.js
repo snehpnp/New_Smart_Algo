@@ -955,3 +955,48 @@ export async function DawnloadData(user_id, token) {
         return await err
     }
 }
+
+
+// GET ALL STAR CLIENTS
+export async function GetAllStarClients(user_id, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/star/clients`, user_id, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}
+
+
+// Update STAR CLIENTS Status
+export async function UpdateStarStatus(user_id, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/star/status`, user_id, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}
+
+
+
+export async function GetAllReferalUser(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/referaluser`, data, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}

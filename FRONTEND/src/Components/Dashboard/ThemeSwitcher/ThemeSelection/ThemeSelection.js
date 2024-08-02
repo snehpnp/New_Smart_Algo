@@ -12,7 +12,7 @@ const ThemeSelection = () => {
     const [toggleSelection, setToggleSelection] = useState(false)
     const [ThemeData, setThemeData] = useState([])
 
-    const Role = JSON.parse(localStorage.getItem("user_details")).Role
+    const user_details = JSON.parse(localStorage.getItem("user_details"))
 
     const AddClassName = (id) => {
         localStorage.setItem("theme_id", id)
@@ -27,16 +27,12 @@ const ThemeSelection = () => {
 
                 $('body').removeClass('theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8 theme-9  theme-10');
                 $('body').addClass(themedata.dashboard)
-
                 $('body').attr('data-dashboard', `${themedata.dashboard}-dashboard`);
-
-
                 $('body').attr('data-theme-version', themedata.theme_version);
                 $('body').attr('data-primary', themedata.primary_col);
                 $('body').attr('data-nav-headerbg', themedata.nav_head_col);
                 $('body').attr('data-headerbg', themedata.header_col);
                 $('body').attr('data-sibebarbg', themedata.sidebar_col);
-
 
                 if ($('body').attr('data-sidebar-style') === 'overlay') {
                     $('body').attr('data-sidebar-style', 'full');
@@ -105,7 +101,7 @@ const ThemeSelection = () => {
 
 
     const GetAllThemes = () => {
-        if (Role === "SUPERADMIN") {
+        if (user_details && user_details.Role === "SUPERADMIN") {
 
             axios.get(`${Config.smartAlogUrl}getall/theme`).then((res) => {
                 setThemeData(res.data.data)

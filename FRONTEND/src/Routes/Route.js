@@ -7,12 +7,10 @@ import Client from "./User_Route"
 import Login from "../layout/Auth/Login"
 import ForgetPassword from '../layout/Auth/ForgetPassword';
 import UpdatePassword from '../layout/Auth/UpdatePassword.js';
-
 import Deactivate_Company from '../layout/Auth/Deactivate_Company';
 import NotFound from '../layout/Auth/Not_Found';
 import SignUp from '../layout/Sign_Up_Users/Main';
 import NewSignUp from '../layout/Sign_Up_Users/signUp'
-
 
 
 const Routing = () => {
@@ -22,7 +20,6 @@ const Routing = () => {
   const roles = JSON.parse(localStorage.getItem('user_role'))
   const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
   const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
-
 
 
   useEffect(() => {
@@ -38,8 +35,8 @@ const Routing = () => {
     if (location.pathname === "/") {
       navigate("/login");
     }
-    if (location.pathname === "/newsignup") {
-      navigate("/newsignup");
+    if (location.pathname.startsWith('/newsignup')) {
+      navigate(location.pathname);
       return
     }
 
@@ -89,7 +86,10 @@ const Routing = () => {
       <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
       <Route path="/client/*" element={gotodashboard != null ? <Client /> : (roles === "USER") ? <Client /> : <Login />} />
       <Route path="/login" element={<Login />} />
+      
+      <Route path="/newsignup/:id" element={<NewSignUp />} />
       <Route path="/newsignup" element={<NewSignUp />} />
+
       <Route path="/forget" element={<ForgetPassword />} />
       <Route path="/profile" element={<ForgetPassword />} />
       <Route path="/update/:id" element={<UpdatePassword />} />
