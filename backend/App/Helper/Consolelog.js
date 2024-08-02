@@ -6,7 +6,7 @@ function logToFile(message) {
     const filePath = path.join(__dirname, 'app.log');  
     fs.appendFile(filePath, message + '\n', function (err) {
         if (err) {
-            console.error('Error logging to file', err);
+            console.log('Error logging to file', err);
         }
     });
 }

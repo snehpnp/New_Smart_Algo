@@ -53,7 +53,7 @@ class Theme {
             return res.send({ status: true, msg: "Theme successfully added!", data: savedTheme });
 
         } catch (error) {
-            console.error("Error in AddTheme:", error);
+            console.log("Error in AddTheme:", error);
             return res.status(500).json({ status: false, msg: "Internal Server Error", data: error });
         }
     }

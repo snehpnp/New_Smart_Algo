@@ -59,7 +59,7 @@ module.exports = function (app) {
                 await client.close();
                 console.log(`Database ${databaseName} created successfully`);
             } catch (error) {
-                console.error(error);
+                console.log(error);
 
             }
         }
@@ -178,7 +178,7 @@ module.exports = function (app) {
             const savedData = await Broker_informationData.save();
             return savedData;
         } catch (error) {
-            console.error('Error saving broker information:', error);
+            console.log('Error saving broker information:', error);
             // throw error; // Rethrow the error if you want it to be handled by the calling function
             return null
         }
@@ -350,7 +350,7 @@ module.exports = function (app) {
 
             return res.send("DONE");
         } catch (error) {
-            console.error("Error in /all/tabel route:", error);
+            console.log("Error in /all/tabel route:", error);
             res.status(500).send("Internal Server Error");
         }
     });
@@ -414,13 +414,13 @@ module.exports = function (app) {
     
             results.forEach((result, index) => {
                 if (result.status === "rejected") {
-                    console.error(`Error saving user${index + 1}:`, result.reason);
+                    console.log(`Error saving user${index + 1}:`, result.reason);
                 }
             });
     
             res.status(201).send("Admin creation attempted. Check logs for details.");
         } catch (error) {
-            console.error("Unexpected error:", error);
+            console.log("Unexpected error:", error);
             res.status(500).send("Unexpected error occurred during admin creation.");
         }
     });
@@ -535,7 +535,7 @@ module.exports = function (app) {
                             .then((createdServices) => { })
                             .catch((err) => {
                                 try {
-                                    console.error('Error creating and saving user:', err);
+                                    console.log('Error creating and saving user:', err);
                                 } catch (e) {
                                 }
 

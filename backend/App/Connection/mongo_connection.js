@@ -18,7 +18,7 @@ mongoose.connect(db_connect, {
 const connection = mongoose.connection;
 
 connection.on("error", (error) => {
-  console.error("MongoDB Connection Error:", error);
+  console.log("MongoDB Connection Error:", error);
   // Retry logic can be implemented here if needed
   setTimeout(() => {
     mongoose.connect(db_connect, {

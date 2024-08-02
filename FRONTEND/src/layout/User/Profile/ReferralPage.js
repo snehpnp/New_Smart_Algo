@@ -167,7 +167,7 @@ const ReferralPage = () => {
                     showConfirmButton: false,
                     timer: 1500
                 });
-                console.error("Error redeeming points:", error);
+                console.log("Error redeeming points:", error);
             });
     };
 

@@ -308,7 +308,7 @@ const ReferralPage = () => {
                 }
             })
             .catch((error) => {
-                console.error("Error:", error);
+                console.log("Error:", error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',

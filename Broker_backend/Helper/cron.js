@@ -317,11 +317,11 @@ module.exports = function (app) {
                         });
                     })
                     .catch(function (error) {
-                        console.error(`Error downloading file from ${fileUrl}:`, error);
+                        console.log(`Error downloading file from ${fileUrl}:`, error);
                     });
             });
         } catch (error) {
-            console.error('An unexpected error occurred:', error);
+            console.log('An unexpected error occurred:', error);
         }
     };
     

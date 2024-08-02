@@ -265,7 +265,7 @@ class Login {
             return res.status(201).json({ status: true, msg: 'Sign Up successful!' });
 
         } catch (error) {
-            console.error('Error during signup process:', error);
+            console.log('Error during signup process:', error);
             return res.status(500).json({ status: false, error: 'Internal Server Error' });
         }
     }
