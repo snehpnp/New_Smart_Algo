@@ -269,11 +269,7 @@ const TruncateTableTokenChainAdd_fiveMinute = async () => {
 
 const TruncateTableTokenChainAdd = async () => {
 
-    // console.log("TESTTTTT")
-
     const drop = await db_main.collection('token_chain').deleteMany({});
-
-    //const drop1 = await db_main.collection('stock_live_price').deleteMany({}); 
 
     await Get_Option_All_Token_Chain()
 

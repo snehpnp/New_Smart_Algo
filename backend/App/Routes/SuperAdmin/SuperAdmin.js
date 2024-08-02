@@ -9,7 +9,6 @@ const { AddLicenseinPanle,GetAllClients ,getallSubadmin,GetAllMsges} = require('
 
 
 
-// router.post('/add/panel',verifyToken, AddPanel)
 router.post('/license/add', AddLicenseinPanle)
 router.post('/clients/get', GetAllClients)
 router.post('/subadmin/get', getallSubadmin)

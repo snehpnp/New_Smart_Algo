@@ -40,7 +40,9 @@ class Panel {
                 broker_id: broker_id,
                 backend_rul: backend_rul,
                 is_active: 0,
-                db_url: db_url
+                db_url: db_url,
+                live_price:1,
+                Two_day_client:1
             });
             AddPanel.save()
                 .then(async (data) => {
