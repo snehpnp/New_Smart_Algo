@@ -931,8 +931,25 @@ const TradeHistory = () => {
               </select>
             </div>
           </div>
-          <div className="col-lg-2">
-            <div class="mt-2">
+          <div className="col-lg-2  px-1">
+            <div className="form-check custom-checkbox mb-3 ps-0">
+              <label className="col-lg-12" >
+                Lots
+              </label>
+              <input
+                type="number"
+                className="default-select wide form-control"
+                value={lotMultypaly}
+                onChange={(e) => handleInputChange(e)}
+              />
+            </div>
+
+
+
+
+          </div>
+          <div className="col-lg-2  px-1">
+            <div className="mb-3">
               <button className="btn btn-primary" onClick={(e) => ResetAllData(e)}>
                 Reset
               </button>

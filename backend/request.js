@@ -54,7 +54,7 @@ module.exports = function (app) {
    
    
          async function fetchDataFromViews(viewNames) {
-            console.log("viewNames - ",viewNames.length)
+            // console.log("viewNames - ",viewNames.length)
            try {
             if(viewNames.length > 0){
              for (let valView of viewNames) {
