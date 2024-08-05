@@ -1577,9 +1577,9 @@ class Employee {
 
 
 
-      if (!data.length) {
-        return res.status(404).json({ status: false, msg: "No data found for the provided ID" });
-      }
+      // if (data.length == 0) {
+      //   return res.status(404).json({ status: false, msg: "No data found for the provided ID" });
+      // }
 
       return res.status(200).json({
         status: true,

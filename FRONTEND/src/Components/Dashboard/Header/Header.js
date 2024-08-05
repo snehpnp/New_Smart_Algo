@@ -373,34 +373,7 @@ const Header = ({ ChatBox }) => {
               <ul className="navbar-nav header-right">
 
                 <li className="nav-item dropdown header-profile">
-                  {/* {user_role === "USER" && UserDetails.license_type != 1 ? (
-                    <>
-                      <div className="headaer-title">
-                        <h3 className="font-w400 mb-0 pe-1">Api Login </h3>
-                      </div>
 
-                      <div className="Api Login">
-                        <label className="switch mb-0">
-                          <input
-                            type="checkbox"
-                            className="bg-primary"
-                            checked={
-                              UserDetails.TradingStatus === "on" ? true : false
-                            }
-                            onClick={(e) =>
-                              LogIn_WIth_Api(
-                                e.target.checked,
-                                UserDetails.broker,
-                                UserDetails.TradingStatus,
-                                UserDetails
-                              )
-                            }
-                          />
-                          <span className="slider round"></span>
-                        </label>
-                      </div>
-                    </>
-                  ) : ("")} */}
 
                   {gotodashboard != null ? (
                     <>
@@ -436,9 +409,13 @@ const Header = ({ ChatBox }) => {
 
                   <li className="nav-item dropdown header-profile user-name me-2">
                     {UserNamego_localstg != null ?
-                      <h4 className="text-primary border-1 mb-0">{UserNamego_localstg.UserName}</h4>
+                      // <h4 className="text-dark border-1 mb-0">{UserNamego_localstg.UserName}</h4>
+
+                      <button className=" btn btn-primary px-2">{UserNamego_localstg.UserName}</button>
                       :
-                      <h4 className="text-primary border-1 mb-0">{user_details.UserName}</h4>
+                      // <h4 className="text-dark border-1 mb-0">{user_details.UserName}</h4>
+                      <button className=" btn btn-primary px-2">{user_details.UserName}</button>
+
                     }
                   </li>
 
