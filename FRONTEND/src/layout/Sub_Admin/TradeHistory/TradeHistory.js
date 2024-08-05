@@ -4,7 +4,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useEffect, useState ,useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Content from "../../../Components/Dashboard/Content/Content";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { Get_Tradehisotry } from "../../../ReduxStore/Slice/Admin/TradehistorySlice";
@@ -39,7 +39,7 @@ const TradeHistory = () => {
   const [toDate, setToDate] = useState("");
   const [CheckUser, setCheckUser] = useState(check_Device());
   const [refresh, setrefresh] = useState(false);
-  
+
 
 
   const handleFromDateChange = (e) => {
@@ -54,26 +54,15 @@ const TradeHistory = () => {
   const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [], });
   const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
   const [ServiceData, setServiceData] = useState({ loading: true, data: [] });
-
-
-
-  const [CatagoryData, setCatagoryData] = useState({
-    loading: true,
-    data: []
-  });
-
-
-
+  const [CatagoryData, setCatagoryData] = useState({ loading: true, data: [] });
   const [UserDetails, setUserDetails] = useState([]);
   const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
   const [SelectSegment, setSelectSegment] = useState("null");
   const [SelectService, setSelectService] = useState("null");
-
   const [SocketState, setSocketState] = useState("null");
-
   const [ForGetCSV, setForGetCSV] = useState([])
- 
   const [adminTradingStatus, setAdminTradingStatus] = useState(false);
+
 
 
   const checkStatusReff = useRef(false);
@@ -95,7 +84,7 @@ const TradeHistory = () => {
     let endDate = getActualDateFormate(toDate);
 
     await dispatch(
-      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus,serviceIndex:null,  type: "ADMIN", token: token })
+      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, serviceIndex: null, type: "ADMIN", token: token })
     ).unwrap()
       .then((response) => {
         if (response.status) {
@@ -130,7 +119,7 @@ const TradeHistory = () => {
     )}/${parseInt(dateParts[2], 10)}`;
     return formattedDate;
   };
-  
+
 
   const ResetDate = (e) => {
     e.preventDefault();
@@ -153,13 +142,13 @@ const TradeHistory = () => {
       // hidden: true,
       formatter: (cell, row, rowIndex) => rowIndex + 1,
     },
-    
+
     {
       dataField: "createdAt",
       text: "Signals time",
       formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
-   
+
     {
       dataField: "trade_symbol",
       text: "Symbol",
@@ -264,8 +253,8 @@ const TradeHistory = () => {
         </div>
       ),
     },
-  
-    
+
+
 
     {
       dataField: "",
@@ -285,14 +274,14 @@ const TradeHistory = () => {
   ];
 
 
-  let total=0;
+  let total = 0;
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
 
 
-      if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
-      total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty);
+      if (parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price != '' && item.exit_price) {
+        total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty);
       }
     });
 
@@ -304,7 +293,7 @@ const TradeHistory = () => {
   const SquareOff = (rowdata, rowIndex) => {
     // $('.BP1_Put_Price_' + item.token).html();
     // $('.SP1_Call_Price_' + item.token).html();
-  
+
 
     var pre_tag = {
       option_type: rowdata.option_type,
@@ -454,12 +443,12 @@ const TradeHistory = () => {
         }
       }
     }
-    else{
-    
+    else {
+
 
 
       tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
-        
+
 
         let get_ids = '_id_' + row.token + '_' + row._id
         let get_id_token = $('.' + get_ids).html();
@@ -478,10 +467,10 @@ const TradeHistory = () => {
 
             if (parseInt(get_entry_qty) == parseInt(get_exit_qty)) {
 
-            
+
               let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-             
- 
+
+
               let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
               let finalyupl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * upl;
 
@@ -708,9 +697,6 @@ const TradeHistory = () => {
   }
   useEffect(() => {
     getservice()
-
-
-    
   }, [])
 
 
@@ -720,9 +706,10 @@ const TradeHistory = () => {
         if (response.status) {
           //setAdminTradingStatus(response.data)
           checkStatusReff.current = true
-        } 
+        }
       });
   };
+
 
 
 
@@ -732,7 +719,7 @@ const TradeHistory = () => {
         show_csv_button={true} csv_data={ForGetCSV} csv_title="TradeHistory"
       >
         <div className="row d-flex  align-items-center justify-content-start">
-           
+
           <div className="col-lg-2 px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
               <label className="col-lg-12" htmlFor="fromdate">
@@ -745,7 +732,7 @@ const TradeHistory = () => {
                 id="fromdate"
                 value={fromDate}
                 onChange={handleFromDateChange}
-              
+
               />
             </div>
           </div>
@@ -777,9 +764,9 @@ const TradeHistory = () => {
                 onChange={(e) => setSelectService(e.target.value)}
                 value={SelectService}
               >
-                 
+
                 <option value="null" selected>All</option>
-                
+
                 {ServiceData.data &&
                   ServiceData.data.map((item) => {
                     // return (
@@ -793,7 +780,7 @@ const TradeHistory = () => {
                         {item}
                       </option>
                     );
-                    
+
                   })}
               </select>
             </div>
@@ -857,20 +844,20 @@ const TradeHistory = () => {
             </button>
           </div>
         </div>
-        
+
 
         <div className="table-responsive">
 
 
-          {tradeHistoryData.data.length>0 ? 
+          {tradeHistoryData.data.length > 0 ?
 
-          total >= 0 ? 
-            <h4 >Total Realised P/L : <span style={{color:"green"}}> {total.toFixed(2)}</span> </h4>  : 
-            <h4 >Total Realised P/L : <span style={{  color:"red"}}> {total.toFixed(2)}</span> </h4>  : ""
-          
-        }
-        
-           
+            total >= 0 ?
+              <h4 >Total Realised P/L : <span style={{ color: "green" }}> {total.toFixed(2)}</span> </h4> :
+              <h4 >Total Realised P/L : <span style={{ color: "red" }}> {total.toFixed(2)}</span> </h4> : ""
+
+          }
+
+
         </div>
 
         <FullDataTable
