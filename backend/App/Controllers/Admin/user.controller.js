@@ -471,7 +471,6 @@ class Employee {
 
       var req = req.body.req;
 
-console.log("req",req.network_ip)
 
       var StartDate1 = "";
       var EndDate1 = "";
@@ -731,6 +730,8 @@ console.log("req",req.network_ip)
           delete_startegy.push(item);
         }
       });
+
+ 
 
       // ADD STRATEGY IN STRATEGY CLIENT
       if (add_startegy.length > 0) {

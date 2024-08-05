@@ -337,8 +337,8 @@ const AddClient = () => {
     },
     {
       name: 'api_key',
-      label:  formik.values.broker == 20 ? "ACCESS TOKEN " : formik.values.broker == 19 ? "Api Key" : formik.values.broker == 4 ? 'App Key' : formik.values.broker == 7 ? "Consumer Key" : formik.values.broker == 9 ? "Vendor Key" : formik.values.broker == 8 ? 'App Key' : formik.values.broker == 10 ? 'App Key' : "'Api Key", type: 'text',
-      showWhen: values => values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6' || values.broker === '19'|| values.broker === '20',
+      label: formik.values.broker == 20 ? "ACCESS TOKEN " : formik.values.broker == 19 ? "Api Key" : formik.values.broker == 4 ? 'App Key' : formik.values.broker == 7 ? "Consumer Key" : formik.values.broker == 9 ? "Vendor Key" : formik.values.broker == 8 ? 'App Key' : formik.values.broker == 10 ? 'App Key' : "'Api Key", type: 'text',
+      showWhen: values => values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6' || values.broker === '19' || values.broker === '20',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -373,7 +373,7 @@ const AddClient = () => {
       showWhen: values => values.broker === '1'
         ||
         // values.broker === '2' ||
-        values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15'|| values.broker === '19',
+        values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15' || values.broker === '19',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -615,8 +615,12 @@ const AddClient = () => {
       if (response.status) {
 
         if (getPermissions && getPermissions.strategy !== undefined) {
-          let abc = response.data && response.data.filter(item => getPermissions.strategy !== undefined && getPermissions.strategy.includes(item._id))
-
+          let abc = response.data.map(item => ({
+            ...item,
+            status: getPermissions.strategy !== undefined && getPermissions.strategy.includes(item._id)
+        }));
+        
+        
 
           if (abc.length > 0) {
             setAllStrategy({
@@ -656,6 +660,7 @@ const AddClient = () => {
       const initialSelectedStrategies = AllStrategy.data.map((strategy) => ({
         id: strategy._id,
         name: strategy.strategy_name,
+        status: strategy.status,
         checked: UserData.data.strategy.some(
           (item) => item.strategy_id === strategy._id
         ),
@@ -666,10 +671,11 @@ const AddClient = () => {
 
 
 
+
   return (
     <>
       <Content Page_title="Edit  Client" button_title='Back' route="/subadmin/clients" showEdit={true} show_Stat_End_date={UserData.data.data !== undefined && UserData.data.data[0]}>
-        <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name={isgotodashboard && isgotodashboard ? null :"Update"}
+        <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name={isgotodashboard && isgotodashboard ? null : "Update"}
           fromDate={formik.values.fromDate}
           toDate={formik.values.todate}
           additional_field={
@@ -685,7 +691,7 @@ const AddClient = () => {
               ))}
               <label className="toggle mt-3">
                 <input className="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
-           
+
                 }} />
 
               </label>
@@ -707,6 +713,7 @@ const AddClient = () => {
                               value={strategy.id}
                               onChange={(e) => handleStrategyChange(e)}
                               checked={strategy.checked}
+                              disabled={!strategy.status}
                             />
                             <label className="form-check-label" htmlFor={strategy.name}>
                               {strategy.name}

@@ -407,7 +407,7 @@ class Employee {
           }
         });
     } catch (error) {
-      return  res.send({ msg: "Error=>", error });
+      return res.send({ msg: "Error=>", error });
     }
   }
 
@@ -667,11 +667,14 @@ class Employee {
         db_exist_startegy.forEach(function (item, index) {
           if (!insert_startegy.includes(item)) {
             if (get_user[0].strategy.includes(item)) {
-         
+
               delete_startegy.push(item);
             }
           }
         });
+
+
+
 
         if (add_startegy.length > 0) {
           add_startegy.forEach(async (data) => {
@@ -697,8 +700,6 @@ class Employee {
             await user_activity.save();
           });
         }
-
- 
 
 
         if (delete_startegy.length > 0) {
@@ -730,16 +731,25 @@ class Employee {
 
             var deleteStrategy = await strategy_client.find({
               user_id: existingUsername._id,
+              strategy_id: { $ne: stgId }
             });
 
 
             if (req.multiple_strategy_select == 0) {
               if (delete_startegy.length > 0) {
 
-                var update_services = await client_services.updateMany(
-                  { user_id: existingUsername._id, strategy_id: stgId },
-                  { $set: { strategy_id: deleteStrategy[0].strategy_id } }
-                );
+                if (deleteStrategy.length > 0) {
+                  var update_services = await client_services.updateMany(
+                    { user_id: existingUsername._id, strategy_id: stgId },
+                    { $set: { strategy_id: deleteStrategy[0].strategy_id } }
+                  );
+                } else {
+                  var update_services = await client_services.updateMany(
+                    { user_id: existingUsername._id, strategy_id: stgId },
+                    { $set: { strategy_id: add_startegy[0] } }
+                  );
+                }
+
 
               } else {
                 var update_stg = new ObjectId(add_startegy[0]);
@@ -762,9 +772,8 @@ class Employee {
                   )
                 );
 
-                // Wait for all update operations to complete
                 const results = await Promise.all(updatePromises);
-            
+
               }
 
 
@@ -793,7 +802,7 @@ class Employee {
 
           const GroupclientNAme = await serviceGroupName.find({ _id: GrpId });
 
-        
+
 
           const GroupServices = await serviceGroup_services_id.aggregate([
             {
@@ -1024,7 +1033,7 @@ class Employee {
         return res.send({ status: false, msg: "No Dat Found", data: [] });
       }
 
-     return res.send({
+      return res.send({
         status: true,
         msg: "Get Users",
         data: get_user,
@@ -1294,7 +1303,7 @@ class Employee {
         user_id: get_user[0]._id,
       });
 
-      return  res.send({
+      return res.send({
         status: true,
         msg: "Delete Successfully",
         data: DeleteUser,
