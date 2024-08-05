@@ -1053,7 +1053,7 @@ async function run() {
     // Define the function to be executed
     const executeFunction = async () => {
 
-      console.log("DONEEE executeFunction")
+      // console.log("DONEEE executeFunction")
       let rr = 1
         if (rr) {
      // if (holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {

@@ -249,7 +249,7 @@ module.exports = function (app) {
              }
 
             }else{
-                console.log("No view names provided");
+                // console.log("No view names provided");
             }
          
            } catch (error) {
