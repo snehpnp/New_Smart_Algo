@@ -328,7 +328,7 @@ class Panel {
             }
 
             // DATA GET SUCCESSFULLY
-            return  res.send({
+            return res.send({
                 status: true,
                 msg: "Get All Api Info",
                 data: getAllpanel,
@@ -401,10 +401,10 @@ class Panel {
             // if (domain == "http://localhost:3000" ) {
             //     domain1 = "https://trade.pandpinfotech.com"
             // } else {
-                domain1 = domain
+            domain1 = domain
             // }
-
-            const Panle_information = await panel_model.find({ domain: domain1 }).select('broker_id Create_Strategy Option_chain Strategy_plan is_active Two_day_client live_price')
+     
+            const Panle_information = await panel_model.find({ domain: domain1 }).select('broker_id Create_Strategy Option_chain Strategy_plan is_active Two_day_client live_price Refer_Earn')
 
 
 

@@ -80,6 +80,11 @@ const panelSchema = new mongoose.Schema({
         enum: [0, 1],
         default: 0
     },
+    Refer_Earn: {
+        type: Number,
+        enum: [0, 1],
+        default: 0
+    },
     backend_rul: {
         type: String,
        
