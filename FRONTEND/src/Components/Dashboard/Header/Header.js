@@ -139,10 +139,21 @@ const Header = ({ ChatBox }) => {
   const redirectToAdmin = () => {
 
     if (page != null) {
-      navigate("/admin/groupservices")
-      localStorage.removeItem("page")
-    } else {
 
+
+
+      navigate("/admin/"+page)
+      localStorage.removeItem("page")
+      window.location.reload();
+      localStorage.removeItem("gotodashboard");
+      localStorage.removeItem("user_details_goTo");
+      localStorage.removeItem("user_role_goTo");
+      localStorage.removeItem("route");
+      setTimeout(() => {
+        localStorage.removeItem("user_details_goTo");
+        localStorage.removeItem("user_role_goTo");
+      }, 1000);
+    } else {
 
       navigate(routePath)
 
@@ -156,8 +167,6 @@ const Header = ({ ChatBox }) => {
         localStorage.removeItem("user_role_goTo");
       }, 1000);
     }
-
-
 
   };
 
@@ -369,14 +378,14 @@ const Header = ({ ChatBox }) => {
 
               <ul className="navbar-nav header-right">
 
-                <li className="nav-item dropdown header-profile">
+                {gotodashboard != null ? (
 
 
-                  {gotodashboard != null ? (
+                  <li className="nav-item dropdown header-profile">
                     <>
                       <li className="nav-item dropdown gotodashboard">
                         <button
-                          onClick={redirectToAdmin}
+                          onClick={() => redirectToAdmin()}
                           type="button"
                           className="btn btn-primary text-white"
                         >
@@ -384,8 +393,8 @@ const Header = ({ ChatBox }) => {
                         </button>
                       </li>
                     </>
-                  ) : ("")}
-                </li>
+                  </li>
+                ) : ("")}
 
 
                 <>

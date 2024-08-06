@@ -2,7 +2,9 @@
 const db = require('../../Models');
 const strategy_model = db.strategy;
 const User = db.user;
-const strategy_client_model = db.strategy_client
+const strategy_client_model = db.strategy_client;
+const client_services = db.client_services
+
 const { formattedDateTime } = require('../../Helper/time.helper')
 const mongoose = require('mongoose');
 
@@ -151,12 +153,12 @@ class strategy {
 
             // IF DATA NOT EXIST
             if (getAllstrategy.length == 0) {
-                return  res.send({ status: false, msg: "Empty data", data: getAllstrategy })
+                return res.send({ status: false, msg: "Empty data", data: getAllstrategy })
                 return
             }
 
             // DATA GET SUCCESSFULLY
-            return   res.send({
+            return res.send({
                 status: true,
                 msg: "Get All Startegy",
                 data: getAllstrategy,
@@ -186,11 +188,11 @@ class strategy {
 
             // IF DATA NOT EXIST
             if (getAllstrategy.length == 0) {
-               return res.send({ status: false, msg: "Empty data", data: getAllstrategy })
+                return res.send({ status: false, msg: "Empty data", data: getAllstrategy })
             }
 
             // DATA GET SUCCESSFULLY
-           return res.send({
+            return res.send({
                 status: true,
                 msg: "Get All Startegy",
                 data: getAllstrategy,
@@ -233,10 +235,26 @@ class strategy {
         }
     }
 
+    // [
+    //     {
+    //         "_id": "66b0cbce2b5213c4015fad66",
+    //         "FullName": "Himanshu Soni",
+    //         "UserName": "Himanshu Soni",
+    //         "license_type": "1",
+    //         "WebLoginStatus": "0",
+    //         "AppLoginStatus": "1",
+    //         "TradingStatus": "off",
+    //         "Email": "himanshusoni034@gmail.com"
+    //     }
+    // ]
+
+
+
+
     async ClientsAccordingToStrategy(req, res) {
         try {
             const { _id } = req.body;
-         
+
             const objectId = new ObjectId(_id);
             const pipeline = [
                 {
@@ -273,7 +291,8 @@ class strategy {
                 },
             ];
 
-            const GetAllClientServices = await strategy_client_model.aggregate(pipeline)
+            const GetAllClientServices = await client_services.aggregate(pipeline)
+
 
 
             // // IF DATA NOT EXIST
@@ -281,10 +300,22 @@ class strategy {
                 return res.send({ status: false, msg: "Empty data", data: [] })
             }
 
+            const uniqueUsersArray = [];
+            const emailSet = new Set();
+
+            for (const user of GetAllClientServices) {
+                if (!emailSet.has(user.users.Email)) {
+                    emailSet.add(user.users.Email);
+                    uniqueUsersArray.push(user);
+                }
+            }
+
+
+
             return res.send({
                 status: true,
                 msg: "Get All Startegy",
-                data: GetAllClientServices,
+                data: uniqueUsersArray,
             })
 
 

@@ -302,7 +302,7 @@ const ServicesList = () => {
           localStorage.setItem("gotodashboard", JSON.stringify(true));
           localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
           localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
-          localStorage.setItem("page", "groupservices");
+          localStorage.setItem("page", "strategies");
 
           navigate("/client/dashboard")
 
