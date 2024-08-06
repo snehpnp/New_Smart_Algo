@@ -82,7 +82,6 @@ const Sidebar = ({ ShowSidebar }) => {
                 $('head').append(favicon);
             }
         } catch (error) {
-            console.log("Failed to fetch company logo and favicon:", error);
             $(".logo-abbr").attr('src', 'path/to/default/logo.png');
 
             let favicon = $("link[rel='icon']").length

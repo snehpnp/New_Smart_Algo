@@ -1143,7 +1143,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
     } catch (err) {
-      //console.error('Error View Create:', err);
+
     }
 
 
@@ -2577,11 +2577,7 @@ app.get("/remain_get_token",async (req,res)=>{
     const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
     if (allStrategyResult.length > 0) {
       for (const val of allStrategyResult) {
-        console.log("startegy", val.condition)
-        console.log("timeframe", val.timeframe)
-        console.log("tokensymbol", val.tokensymbol)
-
-        //console.log("condition_source",val.condition_source.split(','))
+   
 
         let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
 
@@ -2594,18 +2590,14 @@ app.get("/remain_get_token",async (req,res)=>{
           const get_view_data = await collection.aggregate([{ $sort: { _id: 1 } }]).toArray();
 
 
-          console.log("get_view_data", get_view_data)
-
-
 
           let checkData = {}
           if (val.condition_source != null) {
             let condition_source = val.condition_source.split(',');
-            console.log("condition_source", condition_source)
+      
             if (condition_source.length > 0) {
               for (const source of condition_source) {
 
-                console.log("condition_source", source)
 
                 const matches = source.match(/(\w+)\((\d+)\)/);
 
@@ -2616,8 +2608,6 @@ app.get("/remain_get_token",async (req,res)=>{
 
                   const OFFSET_KEY = matches[2]; //
 
-                  console.log("OFFSET_KEY", OFFSET_KEY)
-                  console.log("OFFSET_KEY", parseInt(OFFSET_KEY) + 1)
 
                   const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY) + 1)];
 

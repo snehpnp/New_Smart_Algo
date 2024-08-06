@@ -26,7 +26,7 @@ module.exports = function (app) {
   
       websocket.onmessage = async (event) => {
         const message = JSON.parse(event.data);
-        console.log('Received message:', message);
+        // console.log('Received message:', message);
         try {
           if (message.token != undefined) {
             const currentDate = new Date();
@@ -47,7 +47,7 @@ module.exports = function (app) {
             console.log('Not token'); // Handle strings without a colon
           }
         } catch (error) {
-          console.error('Error parsing JSON:', error);
+          console.log('Error parsing JSON:', error);
         }
       };
   
@@ -69,9 +69,9 @@ module.exports = function (app) {
       let tkr = "FINNIFTY2470924000PE";
       let set_redis_token_key = `ST_${tkr}_${t}`;
       const rr = await client_redis.get(set_redis_token_key);
-      console.log('rr:', rr);
+    
       let keyss = await client_redis.keys('*');
-      console.log('All keyss:', keyss);
+      
       return res.send("okkkkkk");
     });
    
@@ -127,7 +127,7 @@ module.exports = function (app) {
               }
           }
       } catch (err) {
-          console.error(err);
+          console.log(err);
       }
   }
   
@@ -186,7 +186,6 @@ module.exports = function (app) {
   
   
     } catch (err) {
-      //console.error('Error View Create:', err);
     }
   
   
@@ -351,7 +350,7 @@ module.exports = function (app) {
           pipeline: pipeline,
         });
   
-        console.log(`View "${viewName}" created successfully.`);
+        // console.log(`View "${viewName}" created successfully.`);
   
       }
   

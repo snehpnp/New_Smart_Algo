@@ -86,7 +86,6 @@ const DropDown = () => {
         Permmision()
     }, []);
 
-    console.log("admin_permission", gotodashboard);
 
 
 

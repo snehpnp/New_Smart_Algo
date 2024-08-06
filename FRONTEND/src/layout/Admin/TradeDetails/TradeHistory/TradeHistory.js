@@ -811,9 +811,6 @@ const TradeHistory = () => {
   };
 
 
-  console.log("selectedOptions", selectedOptions)
-
-
 
   if (selectedOptions && selectedOptions.length > 0) {
     columns = columns.filter((data) => !selectedOptions.includes(data.text));

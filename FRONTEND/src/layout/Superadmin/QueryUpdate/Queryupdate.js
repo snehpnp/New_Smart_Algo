@@ -129,7 +129,7 @@ const QueryUpdate = () => {
 
            } catch (error) {
             setError('An error occurred while updating the data.');
-           console.log(error);
+        //    console.log(error);
         } finally {
             setLoading(false);
         }

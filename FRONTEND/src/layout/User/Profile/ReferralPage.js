@@ -69,7 +69,7 @@ const ReferralPage = () => {
     };
 
     const GetAllReedeemData = async () => {
-        await dispatch(REEDEEM_USER_DATA({ Role: "ADMIN" })).unwrap()
+        await dispatch(REEDEEM_USER_DATA({ Role: "USER" })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setReferalUsersData({

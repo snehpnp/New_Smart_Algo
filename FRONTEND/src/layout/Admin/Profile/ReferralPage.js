@@ -36,7 +36,6 @@ const ReferralPage = () => {
 
     const handleSelect = (selectedTab) => {
         setTab(selectedTab);
-        console.log('Selected tab:', selectedTab);
     };
 
     const handleCopyUrl = () => {
@@ -188,8 +187,7 @@ const ReferralPage = () => {
             return errors;
         },
         onSubmit: async (values) => {
-            console.log("values", values);
-            console.log("getCompanyName.data", getCompanyName.data[0]);
+  
 
             const req = {
                 id: getCompanyName.data[0]._id,
@@ -293,7 +291,7 @@ const ReferralPage = () => {
 
 
     const Payment = async (status, data) => {
-        console.log("status", status);
+
 
 
         await dispatch(UPDATE_REEDEEM({ status: status, user_id: data.user_id, id: data._id, reedeem_points: data.reedeem_points })).unwrap()
@@ -308,7 +306,6 @@ const ReferralPage = () => {
                 }
             })
             .catch((error) => {
-                console.log("Error:", error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',

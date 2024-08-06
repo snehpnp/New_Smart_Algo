@@ -7,30 +7,30 @@ module.exports = function (app) {
     const AdmZip = require('adm-zip');
     // 1. LOGOUT AND TRADING OFF ALL USER 
     cron.schedule('* 1 * * *', () => {
-        console.log('Run First Time');
+  
         downloadAlicetoken();
         downloadFyerstoken();
     });
     
     cron.schedule('10 7 * * *', () => {
-        console.log('Run First Time');
+  
         downloadAndSwastika(); 
     });
     
 
     cron.schedule('15 6 * * *', () => {
-        console.log('Run First Time');
+  
         downloadKotakNeotoken();
     });
 
 
     cron.schedule('15 18 * * *', () => {
-        console.log('Run First Time');
+  
         downloadKotakNeotoken();
     });
 
     cron.schedule('20 7 * * *', () => {
-        console.log('Run First Time');
+  
         downloadZerodhatoken();
         downloadAndExtractUpstox();
         downloadAndExtractICICIDirect();
@@ -77,7 +77,7 @@ module.exports = function (app) {
                     response.data.pipe(fs.createWriteStream(filePath));
     
                     response.data.on('end', function () {
-                        console.log(`File downloaded to ${filePath}`);
+                       
                     });
                 })
                 .catch(function (error) {
@@ -114,7 +114,7 @@ module.exports = function (app) {
                     response.data.pipe(fs.createWriteStream(filePath));
     
                     response.data.on('end', function () {
-                        console.log(`File downloaded to ${filePath}`);
+                       
                     });
                 })
                 .catch(function (error) {
@@ -206,7 +206,7 @@ module.exports = function (app) {
                     response.data.pipe(fs.createWriteStream(filePath));
     
                     response.data.on('end', function () {
-                        console.log(`File downloaded to ${filePath}`);
+                       
                     });
                 })
                 .catch(function (error) {
@@ -255,13 +255,13 @@ module.exports = function (app) {
                  fs.unlinkSync(zipFilePath);
     
     
-            console.log('Download and extraction completed successfully '+item.url + " filename ",item.filename);
+            // console.log('Download and extraction completed successfully '+item.url + " filename ",item.filename);
     
             });
 
     
         } catch (err) {
-           console.log('Error:', err);
+     
         }  
 
     }
@@ -313,7 +313,7 @@ module.exports = function (app) {
                         response.data.pipe(fs.createWriteStream(filePath));
     
                         response.data.on('end', function () {
-                            console.log(`File downloaded to ${filePath}`);
+                           
                         });
                     })
                     .catch(function (error) {
@@ -353,7 +353,7 @@ module.exports = function (app) {
             // Send a response to indicate success
             console.log('Download and extraction completed successfully');
         } catch (err) {
-           console.log('Error:', err);
+         
         }
     }
 

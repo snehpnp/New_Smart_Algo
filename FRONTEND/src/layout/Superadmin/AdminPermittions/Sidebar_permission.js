@@ -95,9 +95,6 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
     const fields = [];
 
 
-
-console.log("showPanelName.rowdata",showPanelName.rowdata)
-
     return (
         <div>
             <Modal isOpen={showModal} backdrop="static" size="md" title="Sidebar Permission" hideBtn={true}

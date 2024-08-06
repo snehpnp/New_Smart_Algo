@@ -358,7 +358,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                                     :
                                     <div className={`col-lg-${title === "forlogin" || title === "brokerkey" ? 12 : title === "forResetPassword" ? 12 : title === "forUpdatePassword" ? 12 : 6} `}>
                                       <div className="mb-3 row">
-                                        {console.log("field",field)}
                                         <label
                                           className={`col-lg-${title === "forlogin" ? 3 : title === "brokerkey" ? 6 : 4} col-form-label `}
                                           htmlFor={field.name}

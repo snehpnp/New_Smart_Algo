@@ -150,7 +150,6 @@ const SignUp = () => {
     formik.setFieldValue('refer_code', ReferalCode && ReferalCode[2]);
 
   }, [])
-console.log("-",ReferalCode)
 
   return (
     <>

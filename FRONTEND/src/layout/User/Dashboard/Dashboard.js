@@ -33,7 +33,6 @@ const BrokerResponse = () => {
 
   useEffect(() => {
     GET_IP().then((response) => {
-      console.log("GET_IP",response.data.ip)
       setIp(response.data.ip)
     })
   }, []);

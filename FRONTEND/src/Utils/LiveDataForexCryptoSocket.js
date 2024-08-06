@@ -7,7 +7,6 @@ class WebSocketServiceForexCrypto {
   
     connect(onMessage, onOpen, onClose, onError) {
 
-        console.log('Connected to Tiingo FX WebSocket',onOpen);
       this.socket = new WebSocket(this.uri);
   
       // this.socket.onopen = onOpen;

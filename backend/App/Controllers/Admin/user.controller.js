@@ -252,7 +252,6 @@ class Employee {
         var TotalLicense = 0;
       }
 
-      console.log("parseInt(TotalLicense)", (parseInt(TotalLicense) + parseInt(licence)))
       if (Number(licence) > 0) {
 
 
@@ -1642,7 +1641,6 @@ class Employee {
   async UpdateStarStatus(req, res) {
     try {
       const { id, StarStatus } = req.body;
-console.log("StarStatus")
 
       // Retrieve the user
       const getUser = await User_model.findById(id);

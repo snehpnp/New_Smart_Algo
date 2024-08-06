@@ -2926,14 +2926,7 @@ const EditMakeStrategy = () => {
             <Modal.Title>EMA Indicator</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {
-              //console.log("modalPropsindicators inside -- ", modalPropsindicators)
-              // console.log("modalPropsindicators inside -- ", modalPropsindicators.e != null ? modalPropsindicators.e.target.value +"  "+modalPropsindicators.index 
-              //   : "")
-              //  console.log("modalPropsindicators index -- ", modalPropsindicators.element_first_second)
-              // console.log("modalPropsindicators inside -- ", coditionRequestArr[modalPropsindicators.index])
-
-            }
+        
 
             {
               modalPropsindicators.index != null ?

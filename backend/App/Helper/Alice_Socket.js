@@ -261,7 +261,7 @@ async function connectToDB(collectionName,response) {
               }
         }
     } catch (err) {
-        console.error(err);
+        console.log("Alice Socket",err);
     }
 }
 
@@ -320,7 +320,7 @@ async function createView(collectionName) {
 
 
   } catch (err) {
-    //console.error('Error View Create:', err);
+
   }
 
 

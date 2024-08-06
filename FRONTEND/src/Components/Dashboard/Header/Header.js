@@ -44,7 +44,6 @@ const Header = ({ ChatBox }) => {
 
   useEffect(() => {
     GET_IP().then((response) => {
-      console.log("GET_IP", response.data.ip)
       setIp(response.data.ip)
     })
   }, []);
@@ -198,7 +197,6 @@ const Header = ({ ChatBox }) => {
       ).unwrap();
 
       if (response.status) {
-        console.log(response.data.ActiveStatus)
 
         if (response.data.ActiveStatus == "0") {
           localStorage.clear();
@@ -218,8 +216,7 @@ const Header = ({ ChatBox }) => {
         }
       }
     } catch (error) {
-      console.log('Failed to fetch user profile:', error);
-      // Handle error accordingly, e.g., show an error message to the user
+
     }
   };
 
