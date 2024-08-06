@@ -1,7 +1,5 @@
 import React, { useEffect,useState } from 'react';
 import Content from "../../../Components/Dashboard/Content/Content";
-import Loader from '../../../Utils/Loader';
-import axios from 'axios';
 import { UPDATE_QUERY_PANEL} from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch } from 'react-redux';
 
@@ -54,104 +52,103 @@ const submitButtonStyle = {
 };
 
 const QueryUpdate = () => {
-    const [data, setData] = useState([{}]);
-    const [loading1, setLoading1] = useState(false);
-    const [error1, setError1] = useState(null);
-    const [collectionName1, setCollectionName1] = useState('');
+    // const [data, setData] = useState([{}]);
+    // const [loading1, setLoading1] = useState(false);
+    // const [error1, setError1] = useState(null);
+    // const [collectionName1, setCollectionName1] = useState('');
 
-    const [data2, setData2] = useState([{}]);
-    const [loading2, setLoading2] = useState(false);
-    const [error2, setError2] = useState(null);
-    const [collectionName2, setCollectionName2] = useState('');
-    const [getPipeline, setPipeline] = useState('');
-    const [getViewName, setViewName] = useState('');
+    // const [loading2, setLoading2] = useState(false);
+    // const [error2, setError2] = useState(null);
+    // const [collectionName2, setCollectionName2] = useState('');
+    // const [getPipeline, setPipeline] = useState('');
+    // const [getViewName, setViewName] = useState('');
 
-    const [refresh, setrefresh] = useState(false);
-
-
-    const dispatch = useDispatch();
+    // const [refresh, setrefresh] = useState(false);
 
 
-    const handleAddInput = (setData) => {
-        setData([...data, {}]);
-    };
-
-    const handleInputChange = (index, inputType, value, setData) => {
-        const newData = [...data];
-        newData[index][inputType] = value;
-        setData(newData);
-    };
-
-    const handleQuerySubmit = async (setData, setLoading, setError, collectionName) => {
-        setLoading(true);
-        setError(null);
-
-        function arrayToObject(array) {
-            return array.reduce((obj, item) => {
-                obj[item.key] = item.value;
-                return obj;
-            }, {});
-        }
-
-        const convertedObject = arrayToObject(data);
+    // const dispatch = useDispatch();
 
 
-        try {
+    // const handleAddInput = (setData) => {
+    //     setData([...data, {}]);
+    // };
+
+    // const handleInputChange = (index, inputType, value, setData) => {
+    //     const newData = [...data];
+    //     newData[index][inputType] = value;
+    //     setData(newData);
+    // };
+
+    // const handleQuerySubmit = async (setData, setLoading, setError, collectionName) => {
+    //     setLoading(true);
+    //     setError(null);
+
+    //     function arrayToObject(array) {
+    //         return array.reduce((obj, item) => {
+    //             obj[item.key] = item.value;
+    //             return obj;
+    //         }, {});
+    //     }
+
+    //     const convertedObject = arrayToObject(data);
+
+
+    //     try {
             
-            if (collectionName == "") {
-                alert("Please Enter Collection Name")
-                return
-            }
-            if (convertedObject == "") {
-                alert("Please Enter query")
-                return
-            }
+    //         if (collectionName == "") {
+    //             alert("Please Enter Collection Name")
+    //             return
+    //         }
+    //         if (convertedObject == "") {
+    //             alert("Please Enter query")
+    //             return
+    //         }
 
 
 
-            let data = {
-                "collection_name": collectionName,
-                "query": convertedObject
-            }
+    //         let data = {
+    //             "collection_name": collectionName,
+    //             "query": convertedObject
+    //         }
 
 
-                await dispatch(UPDATE_QUERY_PANEL(data)).unwrap()
-                    .then((response) => {
-                        if(response.status){
+    //             await dispatch(UPDATE_QUERY_PANEL(data)).unwrap()
+    //                 .then((response) => {
+    //                     if(response.status){
                             
-                            setrefresh(!refresh)
-                        }else{
+    //                         setrefresh(!refresh)
+    //                     }else{
                             
-                        }
-                    })
+    //                     }
+    //                 })
             
 
 
-           } catch (error) {
-            setError('An error occurred while updating the data.');
-        //    console.log(error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    //        } catch (error) {
+    //         setError('An error occurred while updating the data.');
+   
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
-    const createView = () => {
+    // const createView = () => {
     
-        alert("Create View =>")
-    }
+    //     alert("Create View =>")
+    // }
 
 
-    useEffect(() => {
+    // useEffect(() => {
         
-    }, [refresh])
+    // }, [refresh])
 
 
 
 
     return (
         <Content Page_title="Query Update">
-            <div style={cardContainerStyle}>
-                <div className='card1' style={cardStyle}>
+            {/* <div style={cardContainerStyle}> */}
+                {/* <div className='card1' style={cardStyle}>
 
                     <h2 style={titleStyle}>Collection Update</h2>
                     <label>Collection Name</label>
@@ -190,9 +187,9 @@ const QueryUpdate = () => {
                         {loading1 ? 'Submitting...' : 'Submit'}
                     </button>
                     {error1 && <div style={{ color: 'red', textAlign: 'center' }}>{error1}</div>}
-                </div>
+                </div> */}
 
-                <div className='card2' style={cardStyle}>
+                {/* <div className='card2' style={cardStyle}>
 
                     <h2 style={titleStyle}>View Create</h2>
                     <label>View Name</label>
@@ -223,8 +220,8 @@ const QueryUpdate = () => {
                         {loading2 ? 'Submitting...' : 'Submit'}
                     </button>
                     {error2 && <div style={{ color: 'red', textAlign: 'center' }}>{error2}</div>}
-                </div>
-            </div>
+                </div> */}
+            {/* </div> */}
         </Content>
     );
 };

@@ -1,6 +1,8 @@
 "use strict";
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
 const { CommonEmail } = require('../../Helper/CommonEmail')
@@ -832,7 +834,7 @@ class Login {
             // Construct match condition based on Role
             let matchCondition = {};
             if (Role === "USER") {
-                matchCondition = { user_id: mongoose.Types.ObjectId(user_id) };
+                matchCondition = { user_id:new ObjectId(user_id) };
             }
 
             // Aggregation pipeline to lookup and fetch the necessary details

@@ -30,6 +30,8 @@ const ReferralPage = () => {
     const [getReferalUsersData, setReferalUsersData] = useState({ loading: true, data: [] });
     const user_details = JSON.parse(localStorage.getItem('user_details'));
 
+    const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
+    const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
     const [searchTerm, setSearchTerm] = useState("");
     const [searchTerm1, setSearchTerm1] = useState("");
 
@@ -187,7 +189,7 @@ const ReferralPage = () => {
             return errors;
         },
         onSubmit: async (values) => {
-  
+
 
             const req = {
                 id: getCompanyName.data[0]._id,
@@ -224,7 +226,7 @@ const ReferralPage = () => {
     };
 
     const AllReferalUser = async () => {
-        await dispatch(GettAllUSerReferal({ Find_Role: "ADMIN", username: "sneh" })).unwrap()
+        await dispatch(GettAllUSerReferal({ Find_Role: gotodashboard ? "USER" : "ADMIN", username: gotodashboard ? GoToDahboard_id.UserName : "sneh" })).unwrap()
             .then((response) => {
                 if (response.status) {
                     const filteredData = searchTerm
@@ -241,7 +243,7 @@ const ReferralPage = () => {
 
 
     const GetAllReedeemData = async () => {
-        await dispatch(REEDEEM_USER_DATA({ Role: "ADMIN" })).unwrap()
+        await dispatch(REEDEEM_USER_DATA({ Role: gotodashboard ? "USER" : "ADMIN", user_id: gotodashboard ? GoToDahboard_id.user_id : "sneh" })).unwrap()
             .then((response) => {
 
 

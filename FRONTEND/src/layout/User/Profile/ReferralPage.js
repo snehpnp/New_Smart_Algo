@@ -18,9 +18,12 @@ import Swal from 'sweetalert2'
 const ReferralPage = () => {
     const dispatch = useDispatch();
     const user_details = JSON.parse(localStorage.getItem('user_details'));
+    const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
+    const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
+
     const [iframeUrl, setIframeUrl] = useState(Config.react_domain + "/#/newsignup");
     const [getCompanyName, setCompanyName] = useState({ loading: true, data: [] });
-    const [getReferalUsers, setReferalUsers] = useState({ loading: true, data: [], data1:0 });
+    const [getReferalUsers, setReferalUsers] = useState({ loading: true, data: [], data1: 0 });
     const [copied, setCopied] = useState(false);
     const [getReferalUsersData, setReferalUsersData] = useState({ loading: true, data: [] });
 
@@ -55,7 +58,7 @@ const ReferralPage = () => {
     };
 
     const AllReferalUser = async () => {
-        await dispatch(GettAllUSerReferal({ Find_Role: "USER", username: user_details.UserName })).unwrap()
+        await dispatch(GettAllUSerReferal({ Find_Role: "USER", username: gotodashboard ? GoToDahboard_id.UserName : user_details.UserName })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setReferalUsers({
@@ -69,7 +72,7 @@ const ReferralPage = () => {
     };
 
     const GetAllReedeemData = async () => {
-        await dispatch(REEDEEM_USER_DATA({ Role: "USER" })).unwrap()
+        await dispatch(REEDEEM_USER_DATA({ Role: "USER" , user_id: gotodashboard ? GoToDahboard_id.user_id : user_details.user_id })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setReferalUsersData({
@@ -174,7 +177,7 @@ const ReferralPage = () => {
     return (
         <div className="content-body">
             <div className="container-fluid">
-             
+
                 <div className="row">
                     <div className="col-xl-12">
                         <div className="card form-card">
@@ -268,9 +271,9 @@ const ReferralPage = () => {
                                                                     <h3>Redeem points</h3>
                                                                     <p className='mb-0'>
 
-                                                                    {ReferralsPoints && ReferralsPoints   ? <button className="btn btn-primary" onClick={handleRedeemPoints}>
+                                                                        {ReferralsPoints && ReferralsPoints ? <button className="btn btn-primary" onClick={handleRedeemPoints}>
                                                                             Redeem Points
-                                                                        </button>:""}
+                                                                        </button> : ""}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -281,20 +284,20 @@ const ReferralPage = () => {
                                         </div>
                                     </div>
                                     <Tabs
-                                    defaultActiveKey="home"
-                                    id="justify-tab-example"
-                                    className="mb-3"
-                                    justify
-                                >
-                                    <Tab eventKey="home" title="Refer Information">
-                                        <h2 className="mt-5 mb-3 nav1">Refer Information</h2>
-                                        <BasicDataTable tableData={getReferalUsers.data} TableColumns={columns} dropdown={false} />
-                                    </Tab>
-                                    <Tab eventKey="profile" title="Reedeem Request">
-                                        <h2 className="mt-5 mb-3 nav1">Reedeem Request</h2>
-                                        <BasicDataTable tableData={getReferalUsersData.data} TableColumns={columns1} dropdown={false} />
-                                    </Tab>
-                                </Tabs>
+                                        defaultActiveKey="home"
+                                        id="justify-tab-example"
+                                        className="mb-3"
+                                        justify
+                                    >
+                                        <Tab eventKey="home" title="Refer Information">
+                                            <h2 className="mt-5 mb-3 nav1">Refer Information</h2>
+                                            <BasicDataTable tableData={getReferalUsers.data} TableColumns={columns} dropdown={false} />
+                                        </Tab>
+                                        <Tab eventKey="profile" title="Reedeem Request">
+                                            <h2 className="mt-5 mb-3 nav1">Reedeem Request</h2>
+                                            <BasicDataTable tableData={getReferalUsersData.data} TableColumns={columns1} dropdown={false} />
+                                        </Tab>
+                                    </Tabs>
                                 </div>
                             </div>
                         </div>
