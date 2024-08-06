@@ -130,7 +130,7 @@ const AddStrategy = () => {
         onSubmit: async (values) => {
 
             const req = {
-                "strategy_name": values.strategyname,
+                "strategy_name": values.strategyname.trim(),
                 "strategy_amount": values.perlot,
                 "strategy_category": values.Catagory,
                 "strategy_indicator": values.indecator,

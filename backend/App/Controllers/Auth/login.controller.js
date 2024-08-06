@@ -70,6 +70,12 @@ class Login {
                 if (new Date(EmailCheck.EndDate) <= new Date()) {
                     return res.send({ status: false, msg: 'your service is terminated please contact to admin', data: [] });
                 }
+
+
+                  // USER EXPIRY CHECK
+                  if (new Date(EmailCheck.StartDate) >= new Date()) {
+                    return res.send({ status: false, msg: 'your service is Not Started please contact to admin', data: [] });
+                }
             }
 
             if (EmailCheck.Role == "SUBADMIN") {
