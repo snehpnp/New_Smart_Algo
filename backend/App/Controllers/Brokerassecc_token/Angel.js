@@ -122,7 +122,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
      
         if (FindUserBrokerResponse.length > 0) {
     
-            FindUserBrokerResponse.forEach((data1) => {    
+            FindUserBrokerResponse.forEach(async(data1) => {    
                 var config = {
                     method: 'get',
                     url: 'https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getOrderBook',
@@ -138,7 +138,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
                         'X-PrivateKey': user_info[0].api_key
                     },
                 };
-                axios(config)
+               await axios(config)
                     .then(async (response) => {
                        
                         if(response.data.data.length > 0){
@@ -202,6 +202,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
 
     } catch (error) {
         console.log("Error in broker response in order Id".error);
+        return  res.send({status:false,msg:error})
     }
     
  

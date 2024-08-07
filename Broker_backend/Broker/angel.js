@@ -68,11 +68,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
 
                         EntryPlaceOrder(item, filePath, signals, signal_req)
 
-
-
-
-
-
                         // console.log("OPTION")
                     } else {
                         // console.log("CASH")
@@ -162,6 +157,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
                     var keyStatus = 0;
+
+
+                    
+
 
                     const checkPosition = async (item, token, signal_req, strategy, type, input_symbol, send_rr, filePath, signals, ExistExitSignal, segment) => {
                         try {
@@ -307,10 +306,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                             }
                         }
                     })();
-
-
-
-
 
 
 
