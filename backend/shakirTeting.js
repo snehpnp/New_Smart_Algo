@@ -74,6 +74,33 @@ const MainSignals_modal = db.MainSignals
     "mongodb://thrivinginfotech:TGw%26k5RT56%267GsRy%26nP@185.209.75.182:27017/",
     "mongodb://firstalgo:Taw%26k5RT56%267GsRy%26nP@185.209.75.183:27017/",
     "mongodb://visioncodesoftware:TGw%26k5RT56%267GsRy%26HR@185.209.75.184:27017/",
+    "mongodb://brightextech:T5wP%26k5T56%267GsRy%26M@185.209.75.185:27017/",
+    "mongodb://shinesofttrade:T5wP%26k56T56%267GsRy%26H@185.209.75.186:27017/",
+    "mongodb://algoruns:Tw%26k5RT56%267GsRy%26HR@185.209.75.187:27017/",
+    "mongodb://techoceantechnologies:P5wP%26k6T5M%26L7GsRy%26H@185.209.75.189:27017/",
+    "mongodb://brillianttechit:T5wP&k5T567GsRy&M@185.209.75.251:27017/",
+    "mongodb://newtimetechnologies:H5wP%26k5T567GsRy%26MT@185.209.75.252:27017/",
+    "mongodb://darixosolution:M5wP%26k5T567GsRy%26MT@185.209.75.254:27017/",
+    "mongodb://magmamultitrade:M5P%26k5T567GsRy%26MT@185.209.75.253:27017/",
+    "mongodb://intravisor:M5RP%26k5T567GsRy%26MT@185.209.75.191:27017/",
+    "mongodb://procodetechnology:M5RP%26k5T567GRy%26MT@185.209.75.192:27017/",
+    "mongodb://unitythesmartalgo:M5RP%26k5T567GsRy%26MT@185.209.75.190:27017/",
+    "mongodb://smartstox:MM5RP%26k5T567GRy%26MT@185.209.75.193:27017/",
+    "mongodb://visionmatictechnology:MM5P%26k5T567GRy%26MT@185.209.75.194:27017/",
+    "mongodb://winwaysoftwares:MM5P%26k5T567Gy%26MT@185.209.75.195:27017/",
+    "mongodb://onealgo:MM5P&k5T567Gy&Ma@185.209.75.196:27017/",
+    "mongodb://unityhubitsolution:MM5P%26k5T567Gy%26MTa@185.209.75.197:27017/",
+    "mongodb://wealthcrafttechnology:M5P%26k5T567Gy%26Ma@185.209.75.199:27017/",
+    "mongodb://techelitesolution:MWQ5RP%26k5T567Gy%26Ma@193.239.237.31:27017/",
+    "mongodb://algosparks:MW5R%26k5FT567Gy%26Ma@193.239.237.129:27017/",
+    "mongodb://ssfintech:MW5RP%26k5T567Gy%26Ma@193.239.237.114:27017/",
+    "mongodb://rainfotech:MWQ5RP%26k5T567Gy%26Ma@193.239.237.38:27017/",
+    "mongodb://technofin:MWQ5RP%26k5T567Gy%26Ma@193.239.237.44:27017/",
+    "mongodb://vittsurge:M5RP%26k5T567Gy%26Ma@193.239.237.128:27017/",
+    "mongodb://growwayalgo:MWQ5RP%26kT567Gy%26Maa@185.209.75.87:27017/",
+    "mongodb://cashwealth:AMWQ5RP&kT567Gy&Maa@185.209.75.88:27017/",
+    "mongodb://growonntechnologies:AaMWQ5RP%26kT567Gy%26Maa@185.209.75.89:27017/",
+    "mongodb://tradejockey:AaMWQ5RP%26kT567Gy%26Ma@185.209.75.90:27017/",
   ];
   //testtt
 
@@ -428,7 +455,7 @@ const MainSignals_modal = db.MainSignals
   app.get("/AllViewCreate", async (req, res) => {
     //  createViewsAllDatabase();
     // deleteViewsAllDatabase();
-    // RunQueryUpdateAllDatabase()
+  //  RunQueryUpdateAllDatabase()
     // RunQueryAddAllDatabase()
     // RunQueryManulTaskAllDatabase(res)
     return res.send("OKK DONE FF")
@@ -473,17 +500,19 @@ const MainSignals_modal = db.MainSignals
   async function RunQueryUpdateAllDatabase() {
     for (const server of servers) {
       const client = new MongoClient(server);
-
+      db.option_chain_symbols.updateOne({symbol:"MIDCPNIFTY"},{$set : {price : "12400"}})
       try {
         await client.connect();
         const database = "test";
         const db = client.db(database);
 
-        const collectionName = "mainsignals";
+        const collectionName = "option_chain_symbols";
 
-        const fliter = {};
+       // const fliter = {};
+        const fliter = {symbol:"MIDCPNIFTY"};
 
-        const updates = { $set: { exit_time: "0", target: "0", stop_loss: "0" } };
+       // const updates = { $set: { exit_time: "0", target: "0", stop_loss: "0" } };
+        const updates = {$set : {price : "12500"}};
 
         const options = { multi: true };
 
@@ -493,7 +522,7 @@ const MainSignals_modal = db.MainSignals
 
           // Run the updateMany query
           const result = await db.collection(collectionName).updateMany(fliter, updates, options);
-          console.log(`Updated ${result.modifiedCount} documents in 'mainsignals' collection on '${server}'`);
+          console.log(`Updated ${result.modifiedCount} documents in ${collectionName} collection on '${server}'`);
 
         } else {
           console.log(`Collection Not exists in 'test' on '${server}'`);

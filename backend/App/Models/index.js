@@ -63,7 +63,10 @@ module.exports = {
     dbTest:dbTest,
     Store_all_redis_key : require('./Store_all_redis_key.model'),
     Faq_Data : require('./Faq.model'),
-    userReedeem_modal : require('./User_reedeem')
+    userReedeem_modal : require('./User_reedeem'),
+    position_data_store : require('./position_data_store.model'),
+
+
 
 
 };
