@@ -94,7 +94,6 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
     const broker = result[0].broker;
    
 
-
     // Market Hub   -  1
     if (broker == 1) {
       GetOrderFullInformationMarkethub(req, res, result);

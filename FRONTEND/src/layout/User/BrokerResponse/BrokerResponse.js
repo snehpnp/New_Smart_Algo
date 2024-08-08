@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import Accordion from 'react-bootstrap/Accordion';
 import { Get_Broker_Response, UpdateBrokerResponse, GET_ALL_BROKER_RESPONSES } from "../../../ReduxStore/Slice/Users/BrokerResponseSlice"
+import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable"
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../Components/ExtraComponents/Modal';
@@ -15,11 +16,18 @@ import OrderPending from "./OrderPending"
 
 const BrokerResponse = () => {
   const dispatch = useDispatch()
+  const user_details = JSON.parse(localStorage.getItem("user_details"));
 
   const [refresh, setrefresh] = useState(false)
   const [showModal, setshowModal] = useState(false)
+  const [shouldAddNewColumn, setShouldAddNewColumn] = useState(false)
+  
   const [BrokerResponseId, setBrokerResponseId] = useState([])
   const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
+
+
+  console.log("BrokerResponseId",BrokerResponseId)
+  console.log("DashboardData",DashboardData)
 
 
   const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
@@ -27,6 +35,39 @@ const BrokerResponse = () => {
   const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
   const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
   const user_details_goTo = JSON.parse(localStorage.getItem("user_details_goTo"))
+
+
+  const [UserDetails, setUserDetails] = useState({
+    loading: true,
+    data: [],
+  });
+
+ console.log("UserDetails",UserDetails)
+  const data = async () => {
+
+    const userId = isgotodashboard ? gotodashboard.user_id : user_details.user_id;
+    const token = isgotodashboard ? gotodashboard.token : user_details.token;
+
+    await dispatch(User_Profile({
+      id: userId,
+      token: token,
+    }))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setUserDetails({
+            loading: false,
+            data: response.data,
+          });
+         if(response.data.broker == "12"){
+           setShouldAddNewColumn(true)
+          }
+        }
+      });
+  };
+  useEffect(() => {
+    data();
+  }, []);
 
 
   //  for Add Licence
@@ -89,6 +130,23 @@ const BrokerResponse = () => {
         </>
     },
     // {
+     
+    //     dataField: '',
+    //     text: 'Refresh',
+    //     formatter: (cell, row, rowIndex) => (
+    //       <>
+          
+    //         {row.order_id != "" && row.order_view_status == "0" ? (
+    //           <button onClick={() => console.log('Button clicked at row:', rowIndex)}>BUTTON</button>
+    //         ) : (
+    //           ""
+    //         )}
+    //       </>
+    //     ),
+    //   }
+      
+    
+    // {
     //   dataField: 'order_view_status',
     //   text: 'order ',
     //   formatter: (cell, row, rowIndex) =>
@@ -135,6 +193,47 @@ const BrokerResponse = () => {
     // },
 
   ];
+
+// Conditionally add the new column
+if (shouldAddNewColumn) {
+  columns.push({
+    dataField: '',
+    text: 'Refresh',
+    formatter: (cell, row, rowIndex) => (
+      <>
+        {row.order_id !== '' && row.order_view_status === '0' ? (
+          <button 
+          className='btn btn-primary d-flex ms-auto mb-3' 
+          type="reset" 
+          style={{  height: '40px'}}
+          onClick={(e) => Singlerefresh(e,row)
+          
+          }>Refresh</button>
+        ) : (
+          ''
+        )}
+      </>
+    ),
+  });
+}
+
+
+ const Singlerefresh =async (e,row) => {
+ 
+ await dispatch(GET_ALL_BROKER_RESPONSES({ user_id: isgotodashboard ? gotodashboard.user_id : user_Id ,broker_response_id: row._id , order_id : row.order_id})).unwrap()
+      .then((response) => {
+        if (response.status) {
+          setrefresh(!refresh)
+          window.location.reload();
+        }else{
+          setrefresh(!refresh)
+        }
+   })
+
+
+ }
+  
+ 
 
 
 
@@ -211,7 +310,14 @@ const BrokerResponse = () => {
 
     <Content Page_title="Broker Response" button_status={false}>
 
-      <button className='btn btn-primary d-flex ms-auto mb-3' type="reset" onClick={(e) => setrefresh(!refresh)}>Refresh</button>
+      
+      {
+        UserDetails.data && UserDetails.data.broker == "12" ? "":
+        <button className='btn btn-primary d-flex ms-auto mb-3' type="reset" onClick={(e) => setrefresh(!refresh)}>Refresh</button>
+      }
+      
+
+
       <FullDataTable TableColumns={columns} tableData={DashboardData.data} />
 
 
@@ -264,6 +370,8 @@ const BrokerResponse = () => {
                     <td className="bg-table"> Order Data</td>
                     <td className="order-date-cell">{BrokerResponseId.order_view_date}</td>
                   </tr>
+                 
+                 
                 </table>
               </div>
             </Modal >
