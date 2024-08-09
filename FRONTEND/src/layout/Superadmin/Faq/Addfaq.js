@@ -48,7 +48,6 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
                         image1: image1,
                         image2: image2
                     })).unwrap();
-                    console.log('Add Data', addData);
                     window.location.reload();
 
                 } else if (mode === 'edit' && initialValues) {
@@ -61,7 +60,6 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
                         image1: image1,
                         image2: image2
                     })).unwrap();
-                    console.log('Update Data', updateData);
                     window.location.reload();
 
                 }

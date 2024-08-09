@@ -17,6 +17,8 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
     const [getStrategy_plan, setGetStrategy_plan] = useState(false);
     const [live_price, setLive_price] = useState(false);
     const [Two_day_client, setTwo_day_client] = useState(false);
+    const [getReferAndEarn, setReferAndEarn] = useState(false);
+
 
     const formik = useFormik({
         initialValues: {
@@ -44,9 +46,12 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
                 "db_name": showPanelName.db_name,
                 "key": showPanelName.key,
                 "domain": showPanelName.rowdata.domain,
+                "Refer_Earn": getReferAndEarn ? 1 : 0,
+
             };
 
             await dispatch(Update_Admin_Permissions({ req: req, token: token })).unwrap().then((response) => {
+                
                 if (response.status === 409) {
                     toast.error(response.data.msg);
                 } else if (response.status) {
@@ -73,6 +78,8 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
         setGetOption_chain(!!showPanelName.rowdata?.Option_chain);
         setLive_price(!!showPanelName.rowdata?.live_price);
         setTwo_day_client(!!showPanelName.rowdata?.Two_day_client);
+        setReferAndEarn(!!showPanelName.rowdata?.Refer_Earn);
+
     };
 
     const clearData = () => {
@@ -81,9 +88,12 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
         setGetStrategy_plan(false);
         setLive_price(false);
         setTwo_day_client(false);
+        setReferAndEarn(false);
+
     };
 
     const fields = [];
+
 
     return (
         <div>
@@ -152,6 +162,19 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
                                         />
                                         <label className="form-check-label" htmlFor='Two_day_client'>
                                             Two Day Client
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div className={`col-lg-6 my-2`}>
+                                    <div className="col-lg-12 ">
+                                        <input type='checkbox' className="form-check-input"
+                                            name="Two_day_client"
+                                            checked={getReferAndEarn}
+                                            onChange={(e) => setReferAndEarn(e.target.checked)}
+                                        />
+                                        <label className="form-check-label" htmlFor='Two_day_client'>
+                                            Refer & Earn
                                         </label>
                                     </div>
                                 </div>

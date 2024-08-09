@@ -30,13 +30,14 @@ const ReferralPage = () => {
     const [getReferalUsersData, setReferalUsersData] = useState({ loading: true, data: [] });
     const user_details = JSON.parse(localStorage.getItem('user_details'));
 
+    const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
+    const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
     const [searchTerm, setSearchTerm] = useState("");
     const [searchTerm1, setSearchTerm1] = useState("");
 
 
     const handleSelect = (selectedTab) => {
         setTab(selectedTab);
-        console.log('Selected tab:', selectedTab);
     };
 
     const handleCopyUrl = () => {
@@ -188,8 +189,7 @@ const ReferralPage = () => {
             return errors;
         },
         onSubmit: async (values) => {
-            console.log("values", values);
-            console.log("getCompanyName.data", getCompanyName.data[0]);
+
 
             const req = {
                 id: getCompanyName.data[0]._id,
@@ -226,7 +226,7 @@ const ReferralPage = () => {
     };
 
     const AllReferalUser = async () => {
-        await dispatch(GettAllUSerReferal({ Find_Role: "ADMIN", username: "sneh" })).unwrap()
+        await dispatch(GettAllUSerReferal({ Find_Role: gotodashboard ? "USER" : "ADMIN", username: gotodashboard ? GoToDahboard_id.UserName : "sneh" })).unwrap()
             .then((response) => {
                 if (response.status) {
                     const filteredData = searchTerm
@@ -243,7 +243,7 @@ const ReferralPage = () => {
 
 
     const GetAllReedeemData = async () => {
-        await dispatch(REEDEEM_USER_DATA({ Role: "ADMIN" })).unwrap()
+        await dispatch(REEDEEM_USER_DATA({ Role: gotodashboard ? "USER" : "ADMIN", user_id: gotodashboard ? GoToDahboard_id.user_id : "sneh" })).unwrap()
             .then((response) => {
 
 
@@ -293,7 +293,7 @@ const ReferralPage = () => {
 
 
     const Payment = async (status, data) => {
-        console.log("status", status);
+
 
 
         await dispatch(UPDATE_REEDEEM({ status: status, user_id: data.user_id, id: data._id, reedeem_points: data.reedeem_points })).unwrap()
@@ -308,7 +308,6 @@ const ReferralPage = () => {
                 }
             })
             .catch((error) => {
-                console.log("Error:", error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',

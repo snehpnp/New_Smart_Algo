@@ -252,7 +252,6 @@ class Employee {
         var TotalLicense = 0;
       }
 
-      console.log("parseInt(TotalLicense)", (parseInt(TotalLicense) + parseInt(licence)))
       if (Number(licence) > 0) {
 
 
@@ -471,7 +470,6 @@ class Employee {
 
       var req = req.body.req;
 
-console.log("req",req.network_ip)
 
       var StartDate1 = "";
       var EndDate1 = "";
@@ -731,6 +729,8 @@ console.log("req",req.network_ip)
           delete_startegy.push(item);
         }
       });
+
+ 
 
       // ADD STRATEGY IN STRATEGY CLIENT
       if (add_startegy.length > 0) {
@@ -1576,9 +1576,9 @@ console.log("req",req.network_ip)
 
 
 
-      if (!data.length) {
-        return res.status(404).json({ status: false, msg: "No data found for the provided ID" });
-      }
+      // if (data.length == 0) {
+      //   return res.status(404).json({ status: false, msg: "No data found for the provided ID" });
+      // }
 
       return res.status(200).json({
         status: true,
@@ -1641,7 +1641,6 @@ console.log("req",req.network_ip)
   async UpdateStarStatus(req, res) {
     try {
       const { id, StarStatus } = req.body;
-console.log("StarStatus")
 
       // Retrieve the user
       const getUser = await User_model.findById(id);

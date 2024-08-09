@@ -3,7 +3,7 @@ async function run() {
   try {
     // Define the function to be executed
     const executeFunction = async () => {
-      console.log("DONEEE executeFunction");
+      // console.log("DONEEE executeFunction");
       const data = await dbTest.collection('strategyViewNames').find({}).toArray();
       fetchDataFromViews(data);
     };
@@ -34,7 +34,7 @@ async function run() {
   try {
     // Define the function to be executed
     const executeFunction = async () => {
-      console.log("DONEEE executeFunction");
+      // console.log("DONEEE executeFunction");
       const data = await dbTest.collection('strategyViewNames').find({}).toArray();
       fetchDataFromViews(data);
     };
@@ -73,7 +73,7 @@ async function run() {
 run().catch(console.error);
 
 async function fetchDataFromViews(viewNames) {
-  console.log("viewNames - ", viewNames.length);
+  // console.log("viewNames - ", viewNames.length);
   try {
     if (viewNames.length > 0) {
       for (let valView of viewNames) {
@@ -206,7 +206,7 @@ async function fetchDataFromViews(viewNames) {
         }
       }
     } else {
-      console.log("No view names provided");
+      // console.log("No view names provided");
     }
 
   } catch (error) {

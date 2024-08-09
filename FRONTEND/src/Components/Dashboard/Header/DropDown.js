@@ -1,12 +1,15 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import { useDispatch } from "react-redux";
 import { check_Device } from "../../../Utils/find_device";
 import toast from 'react-hot-toast';
 import { User, LogOut, Settings, Award } from 'lucide-react';
+import { Get_Pmermission } from "../../../ReduxStore/Slice/Users/DashboardSlice";
+import * as Config from "../../../Utils/Config";
+
 
 const DropDown = () => {
     const dispatch = useDispatch();
@@ -15,6 +18,9 @@ const DropDown = () => {
     const Role = JSON.parse(localStorage.getItem('user_details')).Role;
     const [CheckUser, setCheckUser] = useState(check_Device());
     const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'));
+    const [admin_permission, setAdmin_permission] = useState(0);
+    const token = JSON.parse(localStorage.getItem("user_details")).token;
+
 
     const LogoutUser = async () => {
         const request = {
@@ -52,6 +58,38 @@ const DropDown = () => {
         }
     };
 
+
+    const Permmision = async () => {
+
+        await dispatch(
+            Get_Pmermission({
+                "domain": Config.react_domain,
+                token: token,
+            })
+        ).unwrap()
+            .then((response) => {
+                if (response.status) {
+
+                    if (response.data.length === 0) {
+                        setAdmin_permission(0);
+                    } else {
+                        setAdmin_permission(response.data[0].Refer_Earn);
+                    }
+                } else {
+                    setAdmin_permission(0);
+                }
+            });
+
+    }
+
+    useEffect(() => {
+        Permmision()
+    }, []);
+
+
+
+
+
     return (
         <div className="mb-0 dropdown custom-dropdown">
             <button
@@ -64,7 +102,7 @@ const DropDown = () => {
                 <i className="fa fa-angle-down ms-1" />
             </button>
             <ul className="dropdown-menu dropdown-menu-end" style={{ margin: 0, padding: "10px", minWidth: "150px" }}>
-                {Role === "ADMIN" ? <li>
+                {Role === "ADMIN" && gotodashboard == null ? <li>
                     <Link to="/admin/system" className="dropdown-item d-flex align-items-center">
                         <Settings className="me-2" size={16} />
                         System
@@ -76,12 +114,23 @@ const DropDown = () => {
                         Profile
                     </Link>
                 </li>
-                {/* {Role === "USER" || Role === "ADMIN" ? <li>
-                    <Link to={Role === "USER" ? "/client/refer-earn" : "/admin/refer-earn"} className="dropdown-item d-flex align-items-center my-2">
-                        <Award className="me-2" size={16} />
-                        Refer And Earn
-                    </Link>
-                </li> : null} */}
+
+
+                {admin_permission && admin_permission == 1 ?
+
+                    Role === "USER" || Role === "ADMIN" ? (
+                        <li>
+                            <Link to={Role === "USER" ? "/client/refer-earn" : "/admin/refer-earn"} className="dropdown-item d-flex align-items-center my-2">
+                                <Award className="me-2" size={16} />
+                                Refer And Earn
+                            </Link>
+                        </li>
+                    ) : null
+
+                    : ""}
+
+
+
                 {gotodashboard == null && (
                     <li>
                         <button className="dropdown-item d-flex align-items-center" onClick={(e) => LogoutUser(e)}>

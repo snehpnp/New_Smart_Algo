@@ -935,7 +935,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }, {
       key: "_showError",
       value: function _showError(msg) {
-        console.log(msg);
+       
       } // PUBLIC FUNCTIONS
 
     }, {

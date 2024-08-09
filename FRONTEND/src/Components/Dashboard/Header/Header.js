@@ -44,7 +44,6 @@ const Header = ({ ChatBox }) => {
 
   useEffect(() => {
     GET_IP().then((response) => {
-      console.log("GET_IP", response.data.ip)
       setIp(response.data.ip)
     })
   }, []);
@@ -140,10 +139,21 @@ const Header = ({ ChatBox }) => {
   const redirectToAdmin = () => {
 
     if (page != null) {
-      navigate("/admin/groupservices")
-      localStorage.removeItem("page")
-    } else {
 
+
+
+      navigate("/admin/"+page)
+      localStorage.removeItem("page")
+      window.location.reload();
+      localStorage.removeItem("gotodashboard");
+      localStorage.removeItem("user_details_goTo");
+      localStorage.removeItem("user_role_goTo");
+      localStorage.removeItem("route");
+      setTimeout(() => {
+        localStorage.removeItem("user_details_goTo");
+        localStorage.removeItem("user_role_goTo");
+      }, 1000);
+    } else {
 
       navigate(routePath)
 
@@ -157,8 +167,6 @@ const Header = ({ ChatBox }) => {
         localStorage.removeItem("user_role_goTo");
       }, 1000);
     }
-
-
 
   };
 
@@ -198,7 +206,6 @@ const Header = ({ ChatBox }) => {
       ).unwrap();
 
       if (response.status) {
-        console.log(response.data.ActiveStatus)
 
         if (response.data.ActiveStatus == "0") {
           localStorage.clear();
@@ -218,8 +225,7 @@ const Header = ({ ChatBox }) => {
         }
       }
     } catch (error) {
-      console.log('Failed to fetch user profile:', error);
-      // Handle error accordingly, e.g., show an error message to the user
+
     }
   };
 
@@ -372,41 +378,14 @@ const Header = ({ ChatBox }) => {
 
               <ul className="navbar-nav header-right">
 
-                <li className="nav-item dropdown header-profile">
-                  {/* {user_role === "USER" && UserDetails.license_type != 1 ? (
-                    <>
-                      <div className="headaer-title">
-                        <h3 className="font-w400 mb-0 pe-1">Api Login </h3>
-                      </div>
+                {gotodashboard != null ? (
 
-                      <div className="Api Login">
-                        <label className="switch mb-0">
-                          <input
-                            type="checkbox"
-                            className="bg-primary"
-                            checked={
-                              UserDetails.TradingStatus === "on" ? true : false
-                            }
-                            onClick={(e) =>
-                              LogIn_WIth_Api(
-                                e.target.checked,
-                                UserDetails.broker,
-                                UserDetails.TradingStatus,
-                                UserDetails
-                              )
-                            }
-                          />
-                          <span className="slider round"></span>
-                        </label>
-                      </div>
-                    </>
-                  ) : ("")} */}
 
-                  {gotodashboard != null ? (
+                  <li className="nav-item dropdown header-profile">
                     <>
                       <li className="nav-item dropdown gotodashboard">
                         <button
-                          onClick={redirectToAdmin}
+                          onClick={() => redirectToAdmin()}
                           type="button"
                           className="btn btn-primary text-white"
                         >
@@ -414,8 +393,8 @@ const Header = ({ ChatBox }) => {
                         </button>
                       </li>
                     </>
-                  ) : ("")}
-                </li>
+                  </li>
+                ) : ("")}
 
 
                 <>
@@ -436,9 +415,13 @@ const Header = ({ ChatBox }) => {
 
                   <li className="nav-item dropdown header-profile user-name me-2">
                     {UserNamego_localstg != null ?
-                      <h4 className="text-primary border-1 mb-0">{UserNamego_localstg.UserName}</h4>
+                      // <h4 className="text-dark border-1 mb-0">{UserNamego_localstg.UserName}</h4>
+
+                      <button className=" btn btn-primary px-2">{UserNamego_localstg.UserName}</button>
                       :
-                      <h4 className="text-primary border-1 mb-0">{user_details.UserName}</h4>
+                      // <h4 className="text-dark border-1 mb-0">{user_details.UserName}</h4>
+                      <button className=" btn btn-primary px-2">{user_details.UserName}</button>
+
                     }
                   </li>
 

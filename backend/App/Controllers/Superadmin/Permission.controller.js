@@ -328,7 +328,7 @@ class Panel {
             }
 
             // DATA GET SUCCESSFULLY
-            return  res.send({
+            return res.send({
                 status: true,
                 msg: "Get All Api Info",
                 data: getAllpanel,
@@ -346,7 +346,7 @@ class Panel {
 
             // console.log("req body check sidebar codition ",req.body)
             // const { id, license } = req.body
-            const { db_name, db_url, key, domain, Create_Strategy, Option_chain, Strategy_plan, live_price, Two_day_client } = req.body
+            const { db_name, db_url, key, domain, Create_Strategy, Option_chain, Strategy_plan, live_price, Two_day_client,Refer_Earn } = req.body
 
 
 
@@ -368,7 +368,8 @@ class Panel {
                     Option_chain: Option_chain,
                     Strategy_plan: Strategy_plan,
                     live_price: live_price,
-                    Two_day_client: Two_day_client
+                    Two_day_client: Two_day_client,
+                    Refer_Earn:Refer_Earn
 
                 },
             };
@@ -377,8 +378,6 @@ class Panel {
 
 
 
-
-            // If you want to send the retrieved data as a response
             return res.send({
                 status: true,
                 msg: "Update Permission Successfully",
@@ -401,10 +400,10 @@ class Panel {
             // if (domain == "http://localhost:3000" ) {
             //     domain1 = "https://trade.pandpinfotech.com"
             // } else {
-                domain1 = domain
+            domain1 = domain
             // }
-
-            const Panle_information = await panel_model.find({ domain: domain1 }).select('broker_id Create_Strategy Option_chain Strategy_plan is_active Two_day_client live_price')
+     
+            const Panle_information = await panel_model.find({ domain: domain1 }).select('broker_id Create_Strategy Option_chain Strategy_plan is_active Two_day_client live_price Refer_Earn')
 
 
 

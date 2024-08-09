@@ -52,6 +52,9 @@ const TradeHistory = () => {
   const [lotMultypaly, SetlotMultypaly] = useState(1);
   const [CatagoryData, setCatagoryData] = useState({ loading: true, data: [] });
   const selector = useSelector((state) => state.DashboardSlice);
+  const [getColumnDaynamic, setColumnDaynamic] = useState([]);
+
+
 
   useEffect(() => { GetAdminTradingStatus() }, []);
 
@@ -301,13 +304,6 @@ const TradeHistory = () => {
 
         }
       });
-
-
-
-
-
-
-
   }
 
   const StatusEntry = (row) => {
@@ -785,6 +781,10 @@ const TradeHistory = () => {
     }
   }
 
+
+
+
+
   const handleInputChange = (e) => {
     const value = e.target.value;
     const isValidNumber = /^\d+$/.test(value);
@@ -796,6 +796,45 @@ const TradeHistory = () => {
     }
   };
 
+
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const handleCheckboxChange = (event, option) => {
+    let updatedOptions = [...selectedOptions];
+    if (event.target.checked) {
+      updatedOptions.push(option);
+    } else {
+      updatedOptions = updatedOptions.filter((item) => item !== option);
+    }
+    setSelectedOptions(updatedOptions);
+    // Get_TradHistory(updatedOptions);
+  };
+
+
+
+  if (selectedOptions && selectedOptions.length > 0) {
+    columns = columns.filter((data) => !selectedOptions.includes(data.text));
+  }
+  
+  const columnTexts = [
+    "S.No.",
+    "Signals Entry time",
+    "Signals Exit time",
+    "Symbol",
+    "Strategy",
+    "Entry Type",
+    "Entry Qty",
+    "Exit Qty",
+    "Live Price",
+    "Entry Price",
+    "Exit Price",
+    "Total",
+    "Entry Status",
+    "Exit Status",
+    "Details View",
+    // "Cancel Order", // Uncomment if you want to include this as well
+  ];
+  
   return (
     <>
 
@@ -829,6 +868,8 @@ const TradeHistory = () => {
               </div>
             </div>
           }
+
+
 
           <div className="col-lg-2 px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
@@ -931,8 +972,55 @@ const TradeHistory = () => {
               </select>
             </div>
           </div>
-          <div className="col-lg-2">
-            <div class="mt-2">
+          <div className="col-lg-2  px-1">
+            <div className="form-check custom-checkbox mb-3 ps-0">
+              <label className="col-lg-12" >
+                Lots
+              </label>
+              <input
+                type="number"
+                className="default-select wide form-control"
+                value={lotMultypaly}
+                onChange={(e) => handleInputChange(e)}
+              />
+            </div>
+
+
+
+
+          </div>
+
+          <div className="col-lg-2 px-1">
+            <div className="form-check custom-checkbox mb-3 ps-0">
+              <div className="custom-dropdown">
+                <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Select options
+                </button>
+                <div className="dropdown-menu">
+                  <div className="row">
+                    {columnTexts.length > 0 && columnTexts.map((data, index) => (
+                      <div key={index} className="col-3">
+                        <li className="dropdown-item d-flex align-items-center">
+                          <input
+                            type="checkbox"
+                            className="form-check-input me-2"
+                            value={data}
+                            onChange={(e) => handleCheckboxChange(e, data)}
+                          />
+                          <label className="form-check-label">{data}</label>
+                        </li>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div className="col-lg-2  px-1">
+            <div className="mb-3">
               <button className="btn btn-primary" onClick={(e) => ResetAllData(e)}>
                 Reset
               </button>

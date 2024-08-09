@@ -1,6 +1,8 @@
 "use strict";
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
 const { CommonEmail } = require('../../Helper/CommonEmail')
@@ -67,6 +69,12 @@ class Login {
                 // USER EXPIRY CHECK
                 if (new Date(EmailCheck.EndDate) <= new Date()) {
                     return res.send({ status: false, msg: 'your service is terminated please contact to admin', data: [] });
+                }
+
+
+                  // USER EXPIRY CHECK
+                  if (new Date(EmailCheck.StartDate) >= new Date()) {
+                    return res.send({ status: false, msg: 'your service is Not Started please contact to admin', data: [] });
                 }
             }
 
@@ -832,7 +840,7 @@ class Login {
             // Construct match condition based on Role
             let matchCondition = {};
             if (Role === "USER") {
-                matchCondition = { user_id: mongoose.Types.ObjectId(user_id) };
+                matchCondition = { user_id:new ObjectId(user_id) };
             }
 
             // Aggregation pipeline to lookup and fetch the necessary details

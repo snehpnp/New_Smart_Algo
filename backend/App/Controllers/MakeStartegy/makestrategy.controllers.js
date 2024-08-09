@@ -1174,11 +1174,96 @@ let rr = 1
 async function run() {
   try {
     // Define the function to be executed
-    const executeFunction = async () => {
-      console.log("DONEEE executeFunction");
-      const data = await dbTest.collection('strategyViewNames').find({}).toArray();
-      fetchDataFromViews(data);
-    };
+    // const executeFunction = async () => {
+    //   // console.log("DONEEE executeFunction");
+    //   const data = await dbTest.collection('strategyViewNames').find({}).toArray();
+    //   fetchDataFromViews(data);
+    // };
+
+    const exitOpentrade = async () => {
+      //console.log("DONEEE exitOpentrade")
+      if (weekday != 'Sunday' && weekday != 'Saturday') {
+        try {
+
+          var openPosition = await open_position_excute.find().toArray();
+          // console.log("openPosition ",openPosition)
+          if (openPosition.length > 0) {
+
+            openPosition && openPosition.map((item) => {
+
+              let ExitStatus = 'TS'
+              if (item.isLpInRangeTarget == true) {
+                ExitStatus = "TARGET"
+              } else if (item.isLpInRangeStoploss == true) {
+                ExitStatus = "STOPLOSS"
+              } else if (item.isLpInRange == 1) {
+                ExitStatus = "EXIT TIME"
+              }
+              else if (item.isLpInRange == 0) {
+                ExitStatus = "EXIT TIME"
+              }
+
+              const currentTimestamp = Math.floor(Date.now() / 1000);
+              let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${item.client_persnal_key}|TradeType:${item.TradeType}|ExitStatus:${ExitStatus}|Demo:demo`
+
+
+
+
+              //console.log("req ",req)
+
+              //console.log("process.env.BROKER_URL ",process.env.BROKER_URL)
+
+              let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                url: `${process.env.BROKER_URL}`,
+                headers: {
+                  'Content-Type': 'text/plain'
+                },
+                data: req
+              };
+
+              axios.request(config)
+                .then(async (response) => {
+
+                  let tradeSymbol;
+                  if (item.segment.toLowerCase() == 'o' || item.segment.toLowerCase() == 'co' || item.segment.toLowerCase() == 'fo' || item.segment.toLowerCase() == 'mo') {
+                    tradeSymbol = item.symbol + "  " + item.expiry + "  " + item.strike + "  " + item.option_type + "  " + " [ " + item.segment + " ] ";
+                  }
+                  else if (item.segment.toLowerCase() == 'f' || item.segment.toLowerCase() == 'cf' || item.segment.toLowerCase() == 'mf') {
+                    tradeSymbol = item.symbol + "  " + item.expiry + "  " + " [ " + item.segment + " ] ";
+                  }
+                  else {
+                    tradeSymbol = item.symbol + "  " + " [ " + item.segment + " ] ";
+                  }
+                  const io = await getIO();
+                  io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: tradeSymbol });
+
+                  console.log("response Trade Excuted - ", response.data)
+
+                })
+                .catch((error) => {
+                  // console.log(error.response.data);
+                });
+
+
+            })
+
+          } else {
+            return
+          }
+        } catch (error) {
+          console.log("Error in Open Position", error);
+        }
+
+      } else {
+        //console.log('The stock market is Closed!');
+      }
+
+
+
+    }
 
     // Array to keep track of ongoing operations
     let ongoingOperations = [];
@@ -1188,7 +1273,9 @@ async function run() {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Schedule the execution of the function
-      const operation = executeFunction().catch(console.error);
+     // const operation = executeFunction().catch(console.error);
+      const operation = exitOpentrade().catch(console.error);
+   
 
       // Store the ongoing operation
       ongoingOperations.push(operation);
@@ -1215,7 +1302,7 @@ async function run() {
 
 
 async function fetchDataFromViews(viewNames) {
-  console.log("viewNames - ", viewNames.length)
+  // console.log("viewNames - ", viewNames.length)
   try {
     if (viewNames.length > 0) {
       for (let valView of viewNames) {
@@ -1225,7 +1312,7 @@ async function fetchDataFromViews(viewNames) {
           timeFrameViewData: { $ne: null, $ne: [] }
         }).toArray();
 
-        console.log(`Data from view ${valView.viewName}:`, data);
+        // console.log(`Data from view ${valView.viewName}:`, data);
         if (data.length > 0) {
           //console.log(`Data from view ${valView.viewName}:`, data);
           let val = data[0];
@@ -1274,10 +1361,10 @@ async function fetchDataFromViews(viewNames) {
             };
           }
 
-          console.log("condition_check_previous_trade",condition_check_previous_trade)
+          // console.log("condition_check_previous_trade",condition_check_previous_trade)
           var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
 
-          console.log("checkPreviousTrade ",checkPreviousTrade)
+          // console.log("checkPreviousTrade ",checkPreviousTrade)
 
           const collection_last_price = dbTest.collection(val.tokensymbol);
           const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
@@ -1420,7 +1507,7 @@ async function fetchDataFromViews(viewNames) {
       }
 
     } else {
-      console.log("No view names provided");
+      // console.log("No view names provided");
     }
 
   } catch (error) {

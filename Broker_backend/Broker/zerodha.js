@@ -113,7 +113,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         // Send all requests concurrently using Promise.all
                         Promise.all(requestPromises)
                             .then(responses => {
-                                // console.log("Response:", responses.data);
+                        
 
                             })
                             .catch(errors => {
@@ -124,8 +124,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     } else if (type == 'SX' || type == 'LX') {
                         const requestPromises = AllClientData.map(async (item) => {
 
-                            // console.log("user id ", item.demat_userid)
-                            // console.log("postdata before", item.postdata)
 
                             if (segment.toUpperCase() != "C") {
                                 item.postdata.tradingsymbol = tradingsymbol;
@@ -137,8 +135,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                             } else if (type == 'SE' || type == 'LX') {
                                 item.postdata.transaction_type = 'SELL';
                             }
-
-                            // console.log("price", price)
 
 
                             if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
@@ -157,11 +153,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                             };
                             axios(config)
                                 .then(async (response) => {
-                                    // fs.appendFile(filePath, 'TIME ' + new Date() + ' ZERODHA POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
-                                    //     if (err) {
-                                    //         return console.log(err);
-                                    //     }
-                                    // });
+                               
 
 
                                     if (response) {
@@ -171,9 +163,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                         if (Exist_entry_order != undefined) {
 
                                             const possition_qty = parseInt(Exist_entry_order.buy_quantity) - parseInt(Exist_entry_order.sell_quantity);
-                                            // console.log("possition_qty Cash", possition_qty);
+                                        
                                             if (possition_qty == 0) {
-                                                // console.log("possition_qty Not Available", possition_qty);
+                                              
                                                 BrokerResponse.create({
                                                     user_id: item._id,
                                                     receive_signal: signal_req,
@@ -354,7 +346,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         // Send all requests concurrently using Promise.all
                         Promise.all(requestPromises)
                             .then(responses => {
-                                // console.log("Response:", responses.data);
 
                             })
                             .catch(errors => {
@@ -624,25 +615,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
 const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req) => {
 
-    // console.log("INSIDE EXIT FUNCTION")
-    // console.log("INSIDE EXIT FUNCTION possition_qty",possition_qty)
 
-    // var dt = splitArray[0]
-    // var input_symbol = splitArray[1]
-    // var type = splitArray[2]
-    // var tr_price = splitArray[3]
-    // var price = splitArray[4]
-    // var sq_value = splitArray[5]
-    // var sl_value = splitArray[6]
-    // var tsl = splitArray[7]
-    // var segment = splitArray[8]
-    // var strike = splitArray[9]
-    // var option_type = splitArray[10]
-    // var expiry = splitArray[11]
-    // var strategy = splitArray[12]
-    // var qty_percent = splitArray[13]
-    // var client_key = splitArray[14]
-    // var demo = splitArray[15]
 
     var dt = signals.DTime;
     var input_symbol = signals.Symbol;

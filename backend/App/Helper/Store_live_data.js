@@ -198,7 +198,7 @@ socket.on('connect', () => {
 
 
     } catch (err) {
-      //console.error('Error View Create:', err);
+  
     }
 
 
@@ -260,7 +260,7 @@ socket.on('connect', () => {
 
 
     } catch (err) {
-      //console.error('Error View Create:', err);
+   
     }
 
 

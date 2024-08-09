@@ -54,7 +54,7 @@ module.exports = function (app) {
    
    
          async function fetchDataFromViews(viewNames) {
-            console.log("viewNames - ",viewNames.length)
+            // console.log("viewNames - ",viewNames.length)
            try {
             if(viewNames.length > 0){
              for (let valView of viewNames) {
@@ -64,7 +64,7 @@ module.exports = function (app) {
             timeFrameViewData: { $ne: null, $ne: [] }
           }).toArray();
 
-          console.log(`Data from view ${valView.viewName}:`, data);
+        //   console.log(`Data from view ${valView.viewName}:`, data);
       if(data.length > 0){
          //console.log(`Data from view ${valView.viewName}:`, data);
         let val = data[0];
@@ -249,11 +249,11 @@ module.exports = function (app) {
              }
 
             }else{
-                console.log("No view names provided");
+                // console.log("No view names provided");
             }
          
            } catch (error) {
-             console.error('Error fetching data:', error);
+             console.log('Error fetching data:', error);
            }
          }
     ///////////////////////////---------runStrategy END-------------/////////////////////////
@@ -271,7 +271,7 @@ module.exports = function (app) {
 
         ]
         const result = await UserMakeStrategy.aggregate(pipeline)
-        console.log("result - length ", result.length)
+        // console.log("result - length ", result.length)
 
         result.forEach(async (ele) => {
             let collectionViewName = "usermakestrategies"
@@ -332,7 +332,7 @@ module.exports = function (app) {
                         //     console.log(`View ${viewName} already exists`);
                         //   }
                         // } catch (error) {
-                        //   console.error(`Error creating view ${viewName}:`, error);
+                        //   console.log(`Error creating view ${viewName}:`, error);
                         // }
 
 
@@ -413,7 +413,7 @@ module.exports = function (app) {
                         console.log(`View ${viewName} already exists`);
                       }
                     } catch (error) {
-                      console.error(`Error creating view ${viewName}:`, error);
+                      console.log(`Error creating view ${viewName}:`, error);
                     }
 
             } else {
@@ -468,13 +468,13 @@ module.exports = function (app) {
                      console.log(`View ${viewName} already exists`);
                    }
                  } catch (error) {
-                   console.error(`Error creating view ${viewName}:`, error);
+                   console.log(`Error creating view ${viewName}:`, error);
                  }
             }
 
         });
 
-   res.send({ STAT: "OKKK" })
+  return res.send({ STAT: "OKKK" })
     });
 
     app.get("/logicStrategyView1", async (req, res) => {
@@ -485,14 +485,14 @@ module.exports = function (app) {
 
         const conditions = parseConditionString("(((data.close[1]>data.emaclose3[1])||(data.close[1]<data.emaclose3[1]))&&(data.close[1]<data.emaclose3[1]))");
 
-        console.log(JSON.stringify(conditions, null, 2));
+        // console.log(JSON.stringify(conditions, null, 2));
 
         const matchStage = generateMongoCondition(conditions);
-        console.log(JSON.stringify(matchStage, null, 2));
+        // console.log(JSON.stringify(matchStage, null, 2));
 
-        console.log(matchStage);
+        // console.log(matchStage);
 
-        res.send({ status: true, condition: matchStage });
+      return res.send({ status: true, condition: matchStage });
 
     })
 
@@ -518,7 +518,6 @@ module.exports = function (app) {
     });
 
   } catch (error) {
-    console.error(error);
   }
 
 
@@ -587,8 +586,8 @@ module.exports = function (app) {
         const andArray = [];
         let orArray = [];
 
-        console.log("ele inside",ele.condition)
-        console.log("conditions",conditions)
+        // console.log("ele inside",ele.condition)
+        // console.log("conditions",conditions)
       
         conditions.forEach(condition => {
             const { operator, field1, index1, field2, index2, type } = condition;
@@ -617,13 +616,13 @@ module.exports = function (app) {
                     break;
             }
 
-            console.log("operator ",operator)
-            console.log("field1 ",field1)
-            console.log("index1 ",index1)
-            console.log("field2 ",field2)
-            console.log("index2 ",index2)
-            console.log("type ",type)
-            console.log("mongoOperator ",mongoOperator)
+            // console.log("operator ",operator)
+            // console.log("field1 ",field1)
+            // console.log("index1 ",index1)
+            // console.log("field2 ",field2)
+            // console.log("index2 ",index2)
+            // console.log("type ",type)
+            // console.log("mongoOperator ",mongoOperator)
 
 
             // let condition_one
@@ -664,7 +663,7 @@ module.exports = function (app) {
                 ]
             };
 
-            console.log("conditionObj ",conditionObj)
+            // console.log("conditionObj ",conditionObj)
 
             // if (type === 'and') {
             //     andArray.push(conditionObj);
@@ -703,8 +702,8 @@ module.exports = function (app) {
   
 
       
-    console.log("andArray ",andArray)
-    console.log("orArray ",orArray)
+    // console.log("andArray ",andArray)
+    // console.log("orArray ",orArray)
     const finalExpr = {};
   if (andArray.length > 0 && orArray.length > 0) {
     finalExpr.$and = andArray;
@@ -797,13 +796,13 @@ module.exports = function (app) {
             }
 
             CreateDataBase(req.body)
-            console.log("SNEH")
+            // console.log("SNEH")
 
 
             return res.send("DONE");
         } catch (error) {
-            console.error("Error in /all/tabel route:", error);
-            res.status(500).send("Internal Server Error");
+  
+           return res.status(500).send("Internal Server Error");
         }
     });
 
