@@ -40,10 +40,6 @@ class Zebull {
                     var DOB = Get_User[0].api_secret;
                     var uid = Get_User[0].client_code;
 
-                    console.log(password)
-                    console.log(appkey)
-                    console.log(DOB)
-                    console.log(uid)
 
 
                     var pwd_sha256 = sha256(password);

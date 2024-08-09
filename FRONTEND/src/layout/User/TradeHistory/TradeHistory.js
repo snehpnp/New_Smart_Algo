@@ -14,8 +14,6 @@ import { GetAccessToken } from "../../../Service/Alice_Socket";
 import { FunctionForLivePriceCalculation } from "./tradehistoryCalculation";
 import DatePicker from "react-datepicker";
 import Loader from "../../../Utils/Loader";
-
-
 import "react-datepicker/dist/react-datepicker.css";
 
 const TradeHistory = () => {
@@ -34,11 +32,8 @@ const TradeHistory = () => {
   const [selectStrategy, setSelectStrategy] = useState("null");
   const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
   const [getType, setType] = useState("Strategy");
-
-
   const USerStartDate = useSelector((state) => state.CommonSlice?.profiledata?.data?.CreateDate);
   const formattedStartDate = USerStartDate ? new Date(USerStartDate).toISOString().split('T')[0] : "";
-
 
 
   const handleFromDateChange = (data) => {
@@ -49,15 +44,13 @@ const TradeHistory = () => {
     setToDate(data);
   };
 
-  //  GET BROKER DETAILS
+
   const data = async () => {
     const response = await GetAccessToken({ broker_name: "aliceblue" });
     if (response.status) {
       setUserDetails(response.data[0]);
     }
-
   };
-
 
 
   const getsignals11 = async () => {
@@ -66,7 +59,6 @@ const TradeHistory = () => {
     let startDate1 = new Date(abc);
     startDate1.setHours(0, 1, 0, 0);
 
-    // End of the day
     let endDate1 = new Date(abc);
     endDate1.setHours(23, 59, 59, 999);
 
@@ -146,7 +138,9 @@ const TradeHistory = () => {
       formatter: (cell, row) => {
         return (
           <div>
-            <span className="text">{cell !== "" ? parseInt(row.entry_qty) : "-"}</span>
+            {console.log("row", row)}
+
+            <span className="text">{cell !== "" ? parseInt(row.exit_qty_percent) : "-"}</span>
 
 
             <span className={`d-none entry_qty_${row.token}_${row._id}`}>

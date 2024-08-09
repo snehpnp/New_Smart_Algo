@@ -75,7 +75,7 @@ class Upstox {
                     axios.post(url, qs.stringify(requestData), { headers })
                       .then(async(response) => {
                         const accessToken = response.data.access_token;
-                        // console.log('Access Token:', accessToken);
+                    
             
                         if (accessToken !== undefined) {
             
@@ -109,7 +109,7 @@ class Upstox {
             
                       })
                       .catch(error => {
-                       console.log('Error:', error);
+                
                         return res.redirect(redirect_uri);
                       });
 
@@ -149,7 +149,7 @@ class Upstox {
 
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
+
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }

@@ -82,7 +82,7 @@ class TradeHistory {
                     }
 
                     try {
-                        // console.log("client_persnal_key1", item.quantity);
+                      
 
                         var data = await MainSignals.aggregate([
                             {

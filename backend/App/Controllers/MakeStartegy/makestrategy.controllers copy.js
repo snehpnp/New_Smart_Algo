@@ -290,12 +290,7 @@ class MakeStartegy {
             if (!arraySource.includes(condition[element].source)) {
               arraySource.push(condition[element].source)
             }
-            // console.log(`Working on timeframe: ${timeframe}`);
-            // console.log(`Working on tokensymbol: ${tokensymbol}`);
-            // console.log(`Working on source: ${condition[element].source}`);
-            // console.log(`Working on offset: ${condition[element].offset}`);
-            // console.log(`Working on indicator_field: ${condition[element].indicator_field}`);
-            // console.log(`Working on period: ${condition[element].period}`);
+      
       
             let viewName = condition[element].source + '_M' + timeframe + '_' + tokensymbol;
             let collectionViewName = 'M' + timeframe + '_' + tokensymbol;

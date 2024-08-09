@@ -43,11 +43,7 @@ class Motilaloswal {
             var authtoken = usernamestr.split('?authtoken=')[1];
 
 
-            console.log("email", email)
-            console.log("authtoken", authtoken)
-
-
-
+    
             const Get_User = await User.find({ Email: email })
 
             if (Get_User.length > 0) {
@@ -109,7 +105,7 @@ class Motilaloswal {
 
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
+   
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }

@@ -105,7 +105,7 @@ class Angel {
 
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
+    
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }
@@ -201,7 +201,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
          }
 
     } catch (error) {
-        console.log("Error in broker response in order Id".error);
+
         return  res.send({status:false,msg:error})
     }
     

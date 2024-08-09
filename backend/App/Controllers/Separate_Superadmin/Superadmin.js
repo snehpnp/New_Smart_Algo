@@ -670,7 +670,7 @@ class SuperAdmin {
             return res.send({ status: true, msg: "Get Data", data: getToMonth ,data1:GetCountLicenceDAta});
 
         } catch (err) {
-            console.log(err);  // Log the error for debugging
+
             return res.send({ status: false, msg: 'Internal server error', data: [] });
         }
     }

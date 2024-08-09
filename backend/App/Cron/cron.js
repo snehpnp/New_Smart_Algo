@@ -54,39 +54,39 @@ const { createViewIcicidirect } = require('../../View/Icicidirectview')
 
 // shedule delete symbol
 cron.schedule('10 23 * * *', () => {
-    console.log('Run DeleteTokenAliceToken Cron');
+   
     DeleteTokenAliceToken()
 });
 
 cron.schedule('0 1 * * *', () => {
-    console.log('Delte Dashboard Data');
+  
     deleteDashboard()
     dropOpenPosition()
 });
 
 cron.schedule('0 6 * * *', () => {
-    console.log('Create Dashboard view');
+    
     DashboardView()
     createView()
 });
 
 cron.schedule('5 2 * * *', () => {
-    console.log('Run First Time');
+   
     LogoutAllUsers()
 });
 
 cron.schedule('5 5 * * *', () => {
-    console.log('Run Second Time');
+  
     LogoutAllUsers()
 });
 
 cron.schedule('1 1 * * *', () => {
-    console.log('running a task every minute');
+   
     numberOfTrade_count_trade();
 });
 
 cron.schedule('10 2 * * *', () => {
-    console.log('running TokenSymbolUpdate Cron');
+    
     TokenSymbolUpdate()
 });
 
@@ -96,12 +96,12 @@ cron.schedule('*/30 * * * *', () => {
 
 
 cron.schedule('5 23 * * *', () => {
-    console.log('Run Every 1 Second');
+   
     twodaysclient();
 });
 
 cron.schedule('30 6 * * *', () => {
-    console.log('Run Every 1 Second');
+   
     TruncateTableTokenChain();
 });
 
@@ -886,7 +886,7 @@ const TokenSymbolUpdate = () => {
 
                 let count = 0
                 response.data.forEach(async (element) => {
-                    //count++
+                   
                     //console.log("Count ",count , " symbol ",element.symbol )
                     var option_type = element.symbol.slice(-2);
                     var expiry_s = element.expiry

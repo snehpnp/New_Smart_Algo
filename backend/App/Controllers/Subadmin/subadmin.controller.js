@@ -18,7 +18,6 @@ class Subadmin {
     async AddSubadmin(req, res) {
         try {
 
-            console.log("SubadminPermision :")
             
             const { FullName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role } = req.body;
 
@@ -77,7 +76,7 @@ class Subadmin {
                 Is_First_login: "1"
 
             });
-            console.log("SubadminPermision :")
+     
             const userinfo = User.save()
                 .then(async (data) => {
 
@@ -97,7 +96,6 @@ class Subadmin {
                         user_id: data._id
                     })
 
-                    console.log("SubadminPermision :", SubadminPermision)
 
                     const SuperadminInfo = SubadminPermision.save()
                         .then(async (data) => {
@@ -130,7 +128,7 @@ class Subadmin {
 
     // EDIT SUBADMIN
     async EditSubadmin(req, res) {
-        console.log("SubadminPermision :")
+  
         try {
             const { id, FullName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role } = req.body;
 

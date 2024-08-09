@@ -198,7 +198,6 @@ class Theme {
     async UpdatetThemeImage(req, res) {
         try {
 
-            // console.log("res ",req.body)
             var objectId = new ObjectId(req.body.theme_id);
 
 

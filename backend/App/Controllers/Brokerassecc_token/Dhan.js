@@ -27,7 +27,6 @@ class Dhan {
     // Get GetAccessToken ANGEL
     async GetAccessTokenDhan(req, res) {
        
-        console.log("req ",req.body.Email)
        
         var user_email = req.body.Email;
          
@@ -56,8 +55,6 @@ class Dhan {
                     if(ClientId==""|| ClientId==null){
                         return res.send({ status: false, msg: "Please Update CLIENT ID in Broker key..."});
                     }
-
-                    console.log("req ",req.body.Email)
             
                     
                     //check fund Api
@@ -74,7 +71,6 @@ class Dhan {
                       await axios.request(config)
                       .then(async(response) => {
                        
-                        console.log(JSON.stringify(response.data.dhanClientId));
 
                         if(response.data.dhanClientId == ClientId){
                             
@@ -109,7 +105,6 @@ class Dhan {
 
                       })
                       .catch((error) => {
-                        //console.log(error.response.data.errorCode);
                         
                         if(error){
                          if(error.response.data.errorCode == "UNAUTHORIZED"){
@@ -150,7 +145,7 @@ class Dhan {
 
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
+     
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }

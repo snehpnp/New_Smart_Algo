@@ -193,7 +193,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                             </> : ""}
                                             {item.Data.length !== 0 ?
                                                 <>
-                                                    <ul aria-expanded='false'>
+                                                    <ul aria-expanded='false' className='mm-collapse'>
                                                         {item.Data.length > 0 ?
                                                             item.Data.map((nested_item) => {
 

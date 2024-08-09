@@ -297,12 +297,12 @@ class Panel {
                 .catch((error) => {
                     try {
 
-                        console.log("Error", error);
+                  
                         return res.send({ status: false, msg: 'User Not Get', data: error });
 
 
                     } catch (error) {
-                        console.log("Error error", error);
+        
                         return res.send({ status: false, msg: 'User Not Get', data: error });
 
                     }
@@ -344,8 +344,7 @@ class Panel {
     async Admin_Permissions(req, res) {
         try {
 
-            // console.log("req body check sidebar codition ",req.body)
-            // const { id, license } = req.body
+    
             const { db_name, db_url, key, domain, Create_Strategy, Option_chain, Strategy_plan, live_price, Two_day_client,Refer_Earn } = req.body
 
 
@@ -386,7 +385,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Update Permission error-", error);
+        
         }
     }
 
@@ -415,7 +414,7 @@ class Panel {
             return res.send({ status: true, msg: "Get Panel Permissions", data: Panle_information })
 
         } catch (error) {
-            // console.log("Theme error-", error);
+
         }
     }
 
@@ -468,7 +467,7 @@ class Panel {
             return res.send({ status: true, msg: "Close Panel SuccessFully", data: update_token })
 
         } catch (error) {
-            // console.log("Theme error-", error);
+    
         }
     }
 
@@ -492,7 +491,7 @@ class Panel {
             return res.send({ status: true, msg: "Broker Update SuccessFully", data: update_token })
 
         } catch (error) {
-            // console.log("Theme error-", error);
+          
         }
     }
 
@@ -517,7 +516,7 @@ class Panel {
             };
             axios(config)
                 .then(async (response) => {
-                    console.log("hello", response)
+              
                     if (response.data.status) {
 
                         return res.send({ status: true, msg: 'Get Data', data: response.data });

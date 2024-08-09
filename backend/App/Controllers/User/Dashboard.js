@@ -205,7 +205,7 @@ class Dashboard {
         try {
             const { user_id, servicesData, data, statusStartegyUser, GetServiceStrategy,network_ip } = req.body;
 
-            console.log("network_ip",network_ip)
+
 
 
             if (statusStartegyUser == "1") {
@@ -375,7 +375,7 @@ class Dashboard {
                     }
 
                 } else {
-                    // console.log("No match found for Service ID:", key);
+
                 }
             }
 
@@ -394,7 +394,7 @@ class Dashboard {
         try {
             const { user_id, device,network_ip } = req.body
 
-            console.log("network_ip",network_ip)
+    
 
             var User_information = await User_model.find({ _id: user_id });
 

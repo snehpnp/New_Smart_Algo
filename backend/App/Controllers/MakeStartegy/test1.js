@@ -70,7 +70,6 @@ async function executeTrade(val, data, latestMarketData) {
     // Add your trade execution logic here...
     // e.g., make HTTP request, update database, etc.
 
-    console.log('Executing trade for strategy:', val.strategy_name);
     let config = {
         method: 'post',
         maxBodyLength: Infinity,

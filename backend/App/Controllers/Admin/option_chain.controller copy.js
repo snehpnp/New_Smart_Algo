@@ -125,7 +125,7 @@ class OptionChain {
             return res.json({ status: true, msg: 'Data found', data: result });
 
         } catch (error) {
-            console.log("Error:", error);
+   
             return res.status(500).json({ status: false, msg: 'Server error', data: [] });
         }
 
@@ -171,7 +171,7 @@ class OptionChain {
             }
 
         } catch (error) {
-            console.log("Error:", error);
+
             return res.status(500).json({ status: false, msg: 'Server error', data: [] });
         }
 
@@ -179,7 +179,7 @@ class OptionChain {
 
     // GET All ROUND TOKEN
     async Get_Option_All_Round_Token(req, res) {
-        console.log("Get_Option_All_Round_Token", req.body.symbol, req.body.expiry)
+
         try {
             const symbol = req.body.symbol;
             const expiry = req.body.expiry;

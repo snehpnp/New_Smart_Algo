@@ -54,7 +54,7 @@ module.exports = function (app) {
    
    
          async function fetchDataFromViews(viewNames) {
-            // console.log("viewNames - ",viewNames.length)
+        
            try {
             if(viewNames.length > 0){
              for (let valView of viewNames) {
@@ -64,9 +64,8 @@ module.exports = function (app) {
             timeFrameViewData: { $ne: null, $ne: [] }
           }).toArray();
 
-        //   console.log(`Data from view ${valView.viewName}:`, data);
       if(data.length > 0){
-         //console.log(`Data from view ${valView.viewName}:`, data);
+    
         let val = data[0];
             
         let entry_type = 'LE';
@@ -146,10 +145,10 @@ module.exports = function (app) {
           };
           await axios.request(config)
             .then((response) => {
-              // console.log("response Trade Excuted - ",response)
+    
             })
             .catch((error) => {
-              console.log('Error ', error);
+          
             });
         }
         const update = {
@@ -238,18 +237,12 @@ module.exports = function (app) {
           data: req
         };
         await axios.request(config)
-          .then((response) => {
-            // console.log("response Trade Excuted - ", response)
-          })
-          .catch((error) => {
-            console.log('Error ', error);
-          });
+          .then((response) => {  })
+          .catch((error) => {});
       
            }
              }
 
-            }else{
-                // console.log("No view names provided");
             }
          
            } catch (error) {
@@ -271,8 +264,7 @@ module.exports = function (app) {
 
         ]
         const result = await UserMakeStrategy.aggregate(pipeline)
-        // console.log("result - length ", result.length)
-
+   
         result.forEach(async (ele) => {
             let collectionViewName = "usermakestrategies"
             let arraySource = []
@@ -394,8 +386,7 @@ module.exports = function (app) {
                 });
         
 
-                
-                console.log("timeframedataView plus incator view IFF", pipeline)
+                   
 
                 let viewName = 'M' + ele.timeframe + '_' + ele.tokensymbol + '_make_' + ele.name;
 
@@ -485,12 +476,9 @@ module.exports = function (app) {
 
         const conditions = parseConditionString("(((data.close[1]>data.emaclose3[1])||(data.close[1]<data.emaclose3[1]))&&(data.close[1]<data.emaclose3[1]))");
 
-        // console.log(JSON.stringify(conditions, null, 2));
 
         const matchStage = generateMongoCondition(conditions);
-        // console.log(JSON.stringify(matchStage, null, 2));
-
-        // console.log(matchStage);
+   
 
       return res.send({ status: true, condition: matchStage });
 
@@ -504,18 +492,7 @@ module.exports = function (app) {
     const collection = dbTest.collection('usermakestrategies');
     const changeStream = collection.watch();
 
-    changeStream.on('change', async (change) => {
-      console.log('Change detected:', change);
-        //  const documents = await dbTest.collection('usermakestrategies').find({ isCondition: true }).toArray();
-        //  if (documents.length > 0) {
-        //     console.log(' condition to be inserted Trigger');
-        //    // const insertResult = await db.collection(targetCollectionName).insertMany(documents);
-        //    // console.log(`${insertResult.insertedCount} documents inserted into the target collection`);
-        //   } else {
-        //     console.log('No documents met the condition to be inserted');
-        //   }
-      // Here, add logic to handle the change, e.g., query the view and insert documents into another collection
-    });
+    changeStream.on('change', async (change) => { });
 
   } catch (error) {
   }
@@ -585,9 +562,6 @@ module.exports = function (app) {
     const generateMongoCondition = (conditions ,ele) => {
         const andArray = [];
         let orArray = [];
-
-        // console.log("ele inside",ele.condition)
-        // console.log("conditions",conditions)
       
         conditions.forEach(condition => {
             const { operator, field1, index1, field2, index2, type } = condition;
@@ -616,27 +590,7 @@ module.exports = function (app) {
                     break;
             }
 
-            // console.log("operator ",operator)
-            // console.log("field1 ",field1)
-            // console.log("index1 ",index1)
-            // console.log("field2 ",field2)
-            // console.log("index2 ",index2)
-            // console.log("type ",type)
-            // console.log("mongoOperator ",mongoOperator)
-
-
-            // let condition_one
-            // ['close','open','high','low','number'].includes(field1) ?
-            // condition_one = { $arrayElemAt: [`$timeFrameViewData.${field1}`, index1] }
-            // :condition_one = { $arrayElemAt: [`$${field1}Data.${field1}`, index1] }
-
-          
-            // let condition_two
-            // ['close','open','high','low','number'].includes(field2) ?
-            // condition_two =  { $arrayElemAt: [`$timeFrameViewData.${field2}`, index2] }
-            // :condition_two =  { $arrayElemAt: [`$${field2}Data.${field2}`, index2] }
-
-
+ 
             let condition_one
             ['close','open','high','low','number'].includes(field1) ?
             condition_one = { $arrayElemAt: [`$timeFrameViewData.${field1}`, index1] }
@@ -649,12 +603,6 @@ module.exports = function (app) {
             :condition_two =  { $arrayElemAt: [`$${field2}Data.ema`, index2] }
 
 
-            // const conditionObj = {
-            //     [mongoOperator]: [
-            //         { $arrayElemAt: [`$timeFrameViewData.${field1}`, index1] },
-            //         { $arrayElemAt: [`$timeFrameViewData.${field2}`, index2] }
-            //     ]
-            // };
 
             const conditionObj = {
                 [mongoOperator]: [
@@ -663,13 +611,6 @@ module.exports = function (app) {
                 ]
             };
 
-            // console.log("conditionObj ",conditionObj)
-
-            // if (type === 'and') {
-            //     andArray.push(conditionObj);
-            // } else if (type === 'or') {
-            //     orArray.push(conditionObj);
-            // }
 
              if (type === 'and') {
             if (orArray.length > 0) {
@@ -683,27 +624,7 @@ module.exports = function (app) {
 
         });
 
-    //     const finalExpr = {};
-    //     if (andArray.length > 0) {
-    //         finalExpr.$and = andArray;
-    //     }
-    //     if (orArray.length > 0) {
-    //         finalExpr.$or = orArray;
-    //     }
 
-    //   //  return { $cond: finalExpr };
-    //     return {
-    //         $cond: {
-    //             if: finalExpr,
-    //             then: true,
-    //             else: false
-    //         }
-    //     };
-  
-
-      
-    // console.log("andArray ",andArray)
-    // console.log("orArray ",orArray)
     const finalExpr = {};
   if (andArray.length > 0 && orArray.length > 0) {
     finalExpr.$and = andArray;

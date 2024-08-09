@@ -78,9 +78,7 @@ class KotakNeo {
                     if(username==""|| username==null){
                         return res.send({ status: false, msg: "Please Update User Name in Broker key..."});
                     }
-                    // if(dematepassword==""|| dematepassword==null){
-                    //     return res.send({ status: false, msg: "Please Update Demat Password in Broker key..."});
-                    // }
+                   
                     if(consumerSecret==""|| consumerSecret==null){
                         return res.send({ status: false, msg: "Please Update Consumer Secret in Broker key..."});
                     }
@@ -89,7 +87,6 @@ class KotakNeo {
                     }
                     
                     
-                    //console.log("req ",req.body.Email)
 
                     const url = 'https://napi.kotaksecurities.com/oauth2/token';
                     const data = 'grant_type=client_credentials';

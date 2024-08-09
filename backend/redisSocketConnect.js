@@ -11,13 +11,12 @@ module.exports = function (app) {
     const WebSocket = require('ws');
     const client_redis = require('./App/Connection/ConnectRedis');
   
-    const uri = 'ws://193.239.237.157:6789'; // The WebSocket server URI
+    const uri = 'ws://193.239.237.157:6789'; 
   
     let websocket;
   
     async function connect() {
-      console.log('INSIDE ');
-      console.log('URI:', await abc());
+
       websocket = new WebSocket(uri);
   
       websocket.on('open', () => {
@@ -26,7 +25,7 @@ module.exports = function (app) {
   
       websocket.onmessage = async (event) => {
         const message = JSON.parse(event.data);
-        // console.log('Received message:', message);
+
         try {
           if (message.token != undefined) {
             const currentDate = new Date();
@@ -76,11 +75,7 @@ module.exports = function (app) {
     });
    
   
-    //Create All View
-    async function abc() {
-      return "okkkkkk";
-    }
-  
+ 
     async function connectToDB(message) {
       try {
           const collections = await dbTest.listCollections().toArray();
@@ -271,7 +266,7 @@ module.exports = function (app) {
   
   
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+
     }
   
   
@@ -350,14 +345,14 @@ module.exports = function (app) {
           pipeline: pipeline,
         });
   
-        // console.log(`View "${viewName}" created successfully.`);
+
   
       }
   
   
   
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+
     }
   
   
