@@ -16,7 +16,7 @@ const { CancelorderByAdmin } = require('../../Controllers/Brokerassecc_token/Can
 const { GetAccessToken, GetLivePrice, Cancel_order, GetOrderFullInformationAll, backendRunSocket } = require('../../Controllers/Brokerassecc_token/Alice')
 
 // ANGEL CONTROLLER FILE
-const { GetAccessTokenAngel, GetOrderFullInformationAngel } = require('../../Controllers/Brokerassecc_token/Angel')
+const { GetAccessTokenAngel, GetOrderFullInformationAngel,SingleOrderFullInformationAngel } = require('../../Controllers/Brokerassecc_token/Angel')
 
 // 5 PAISA CONTROLLER FILE
 const { GetAccessTokenFivepaisa, GetOrderFullInformationFivepaisa } = require('../../Controllers/Brokerassecc_token/Fivepaisa')
@@ -114,7 +114,14 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
     }
     // ANGEL   -  12
     else if (broker == 12) {
-      GetOrderFullInformationAngel(req, res, result);
+      let broker_response_id = req.body.broker_response_id;
+      let order_id = req.body.order_id;
+   
+      if(order_id != "" && order_id != undefined){
+      SingleOrderFullInformationAngel(req, res, result,broker_response_id , order_id);
+      }else{
+        return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+      }
     }
 
     // 5 PAISA   -  13

@@ -113,6 +113,106 @@ class Angel {
 
     }
 
+      // UPDATE SINGLE CLIENT BROKER RESPONSE
+      async SingleOrderFullInformationAngel(req, res, user_info, broker_response_id, order_id) {
+
+        try {
+
+            const { user_id } = req.body
+            if (!user_id) {
+                return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+            }
+
+
+            var config = {
+                method: 'get',
+                url: 'https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getOrderBook',
+                headers: {
+                    'Authorization': 'Bearer ' + user_info[0].access_token,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-UserType': 'USER',
+                    'X-SourceID': 'WEB',
+                    'X-ClientLocalIP': 'CLIENT_LOCAL_IP',
+                    'X-ClientPublicIP': 'CLIENT_PUBLIC_IP',
+                    'X-MACAddress': 'MAC_ADDRESS',
+                    'X-PrivateKey': user_info[0].api_key
+                },
+            };
+            axios(config)
+                .then(async (response) => {
+                    if (response.data.data.length > 0) {
+
+                        const result_order = response.data.data.find(item2 => item2.orderid == order_id);
+
+                        if (result_order != undefined) {
+
+                            var reject_reason;
+                            if (result_order.text) {
+                                reject_reason = result_order.text;
+                            } else {
+                                reject_reason = '';
+                            }
+
+                            const message = (JSON.stringify(result_order));
+
+                            let result = await BrokerResponse.findByIdAndUpdate(
+                                { _id: broker_response_id },
+                                {
+                                    order_view_date: message,
+                                    order_view_status: '1',
+                                    order_view_response: result_order.status,
+                                    reject_reason: reject_reason
+
+                                },
+                                { new: true }
+                            )
+
+                            return res.send({ status: true, msg: "broker response updated successfully" })
+
+                        } else {
+
+
+                            const message = (JSON.stringify(result_order));
+
+                            let result = await BrokerResponse.findByIdAndUpdate(
+                                { _id: data1._id },
+                                {
+                                    order_view_date: message,
+                                    order_view_status: '1',
+
+                                },
+                                { new: true }
+                            )
+
+                            return res.send({ status: false, msg: 'result order undefined', data: [] });
+
+
+                        }
+
+
+                    } else {
+                        return res.send({ status: false, msg: 'No data Available', data: [] });
+                    }
+
+
+                })
+                .catch(async (error) => {
+                    console.log("error", error)
+                    return res.send({ status: false, msg: 'Order Api Err .', data: [] });
+                });
+
+
+
+        } catch (error) {
+            console.log("Error Some Error In Order information get -", error);
+            return res.send({ status: false, msg: 'error in Server side', data: error });
+
+        }
+
+
+    }
+
 }
 
 const GetAllBrokerResponse = async (user_info,res) => {

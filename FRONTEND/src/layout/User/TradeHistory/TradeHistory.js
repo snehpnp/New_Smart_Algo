@@ -138,11 +138,9 @@ const TradeHistory = () => {
       formatter: (cell, row) => {
         return (
           <div>
-            {console.log("row", row)}
+            
 
-            <span className="text">{cell !== "" ? parseInt(row.exit_qty_percent) : "-"}</span>
-
-
+            <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span>
             <span className={`d-none entry_qty_${row.token}_${row._id}`}>
               {row.entry_qty_percent}
             </span>
@@ -258,7 +256,7 @@ const TradeHistory = () => {
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
 
-      if (parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price != '' && item.exit_price) {
+      if (parseInt(item.exit_qty_percent) == parseInt(item.exit_qty_percent) && item.entry_price != '' && item.exit_price) {
 
         if (item.entry_type === "LE") {
           let total1 = (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
