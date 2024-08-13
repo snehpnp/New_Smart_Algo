@@ -230,8 +230,12 @@ const ReferralPage = () => {
             .then((response) => {
                 if (response.status) {
                     const filteredData = searchTerm
-                        ? response.data.filter(user => user.UserName.toLowerCase().includes(searchTerm.toLowerCase()))
+                        ? response.data.filter(user =>
+                            user.UserName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            user.refer_code.toLowerCase().includes(searchTerm.toLowerCase())
+                        )
                         : response.data;
+
 
                     setReferalUsers({
                         loading: false,
