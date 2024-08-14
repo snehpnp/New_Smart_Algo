@@ -140,11 +140,11 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                             if (response.data.result.positionList.length > 0) {
 
-                                fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
+                                fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.result.positionList.length) + '\n', function (err) {
                                     if (err) { }
                                 });
 
-                                const Exist_entry_order = response.data.result.positionList.find(item1 => item1.ExchangeInstrumentID === token[0].instrument_token);
+                                const Exist_entry_order = response.data.result.positionList.find(item1 => item1.ExchangeInstrumentId === token[0].instrument_token);
 
                                 if (Exist_entry_order != undefined) {
 
