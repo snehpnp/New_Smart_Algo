@@ -1,5 +1,4 @@
 export const react_domain = `${window.location.origin}`;
-// export const react_domain = `https://software.corebizinfotech.com`;
 
 
 export const smartAlogUrl = `https://newpenal.pandpinfotech.com/backend/`;
