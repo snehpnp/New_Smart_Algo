@@ -289,7 +289,7 @@ class Login {
             }
 
             try {
-                if (EmailCheck.Role == "USER" || EmailCheck.Role == "SUBADMIN") {
+                if (EmailCheck.Role == "USER" ) {
 
                     // WHERE LOGIN CHECK
                     if (Device.toUpperCase() == "APP") {                  //App Login Check

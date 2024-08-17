@@ -784,7 +784,7 @@ const TradeHistory = () => {
               <input
                 type="number"
                 className="default-select wide form-control"
-                value={lotMultypaly}
+                defaultValue={lotMultypaly}
                 onChange={(e) => handleInputChange(e)}
               />
             </div>

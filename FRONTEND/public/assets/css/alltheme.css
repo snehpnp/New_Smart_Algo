@@ -1820,3 +1820,7 @@ button.button_sell.active {
     top: 0;
     z-index: 1;
 }
+.react-datepicker-popper {
+    z-index: 9 !important;
+    
+}
