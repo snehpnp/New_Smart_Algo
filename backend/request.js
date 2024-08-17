@@ -1983,7 +1983,7 @@ module.exports = function (app) {
 //           // Insert the document into the target collection
 //         //   targetCollection.insertOne(updatedDocument)
 //         //     .then(() => console.log('Document inserted into target collection'))
-//         //     .catch(err => console.error('Error inserting document:', err));
+//         //     .catch(err => console.log('Error inserting document:', err));
 //         }
 //       }
 //     });
@@ -1991,7 +1991,7 @@ module.exports = function (app) {
 //     console.log('Listening for changes...');
 //   }
   
-//   main().catch(err => console.error(err));
+//   main().catch(err => console.log(err));
 
 
 

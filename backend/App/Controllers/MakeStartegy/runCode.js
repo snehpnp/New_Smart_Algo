@@ -3,7 +3,7 @@ async function run() {
   try {
     // Define the function to be executed
     const executeFunction = async () => {
-      // console.log("DONEEE executeFunction");
+   
       const data = await dbTest.collection('strategyViewNames').find({}).toArray();
       fetchDataFromViews(data);
     };
@@ -34,7 +34,7 @@ async function run() {
   try {
     // Define the function to be executed
     const executeFunction = async () => {
-      // console.log("DONEEE executeFunction");
+     
       const data = await dbTest.collection('strategyViewNames').find({}).toArray();
       fetchDataFromViews(data);
     };
@@ -73,7 +73,7 @@ async function run() {
 run().catch(console.error);
 
 async function fetchDataFromViews(viewNames) {
-  // console.log("viewNames - ", viewNames.length);
+
   try {
     if (viewNames.length > 0) {
       for (let valView of viewNames) {
@@ -82,7 +82,6 @@ async function fetchDataFromViews(viewNames) {
           timeFrameViewData: { $ne: null, $ne: [] }
         }).toArray();
 
-        console.log(`Data from view ${valView.viewName}:`, data);
         if (data.length > 0) {
           let val = data[0];
           let entry_type = val.type === 'BUY' ? 'SE' : 'LE';
@@ -108,10 +107,8 @@ async function fetchDataFromViews(viewNames) {
             condition_check_previous_trade.expiry = val.expiry;
           }
 
-          console.log("condition_check_previous_trade", condition_check_previous_trade);
           var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
-          console.log("checkPreviousTrade ", checkPreviousTrade);
-
+       
           const collection_last_price = dbTest.collection(val.tokensymbol);
           const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
           let price_lp = last_price[0].lp;
@@ -138,10 +135,10 @@ async function fetchDataFromViews(viewNames) {
 
             await axios.request(config)
               .then((response) => {
-                console.log("response Trade Excuted - ", response);
+    
               })
               .catch((error) => {
-                console.log('Error ', error);
+              return;
               });
           }
 
@@ -156,7 +153,6 @@ async function fetchDataFromViews(viewNames) {
           const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
 
           if (Check_same_trade_data) {
-            console.log("INSIDEEE UPDATE", Check_same_trade_data.name);
             await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
               $set: { status: "1", tsl: "2" }
             });
@@ -198,15 +194,14 @@ async function fetchDataFromViews(viewNames) {
 
           await axios.request(config)
             .then((response) => {
-              console.log("response Trade Excuted - ", response);
             })
             .catch((error) => {
-              console.log('Error ', error);
+         return;
             });
         }
       }
     } else {
-      // console.log("No view names provided");
+  
     }
 
   } catch (error) {

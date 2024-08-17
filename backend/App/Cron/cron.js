@@ -54,39 +54,39 @@ const { createViewIcicidirect } = require('../../View/Icicidirectview')
 
 // shedule delete symbol
 cron.schedule('10 23 * * *', () => {
-   
+
     DeleteTokenAliceToken()
 });
 
 cron.schedule('0 1 * * *', () => {
-  
+
     deleteDashboard()
     dropOpenPosition()
 });
 
 cron.schedule('0 6 * * *', () => {
-    
+
     DashboardView()
     createView()
 });
 
 cron.schedule('5 2 * * *', () => {
-   
+
     LogoutAllUsers()
 });
 
 cron.schedule('5 5 * * *', () => {
-  
+
     LogoutAllUsers()
 });
 
 cron.schedule('1 1 * * *', () => {
-   
+
     numberOfTrade_count_trade();
 });
 
 cron.schedule('10 2 * * *', () => {
-    
+
     TokenSymbolUpdate()
 });
 
@@ -96,12 +96,12 @@ cron.schedule('*/30 * * * *', () => {
 
 
 cron.schedule('5 23 * * *', () => {
-   
+
     twodaysclient();
 });
 
 cron.schedule('30 6 * * *', () => {
-   
+
     TruncateTableTokenChain();
 });
 
@@ -110,27 +110,6 @@ cron.schedule('*/5 * * * *', async () => {
 });
 
 
-// cron.schedule('* 9 * * *', async () => {
-//     Console.log("Run Every 09:00 ", new Date())
-//     createViewAlice()
-//     createViewAngel()
-//     createViewDhan()
-//     createViewFivepaisa()
-//     createViewFyers()
-//     createViewIifl()
-//     createViewKotakNeo()
-//     createViewMarketHub()
-//     createViewMastertrust()
-//     createViewMotilalOswal()
-//     createViewSwastika()
-//     createViewUpstox()
-//     createViewZebul()
-//     createViewZerodha()
-//     createViewIcicidirect()
-// });
-
-
-// ========================================================================================================================= START TOEN CHAIN
 
 const MainSignalsRemainToken = async () => {
 
@@ -241,7 +220,7 @@ const MainSignalsRemainToken = async () => {
             $set: { _id: element.token, exch: element.exch_seg },
         };
         const update_token = await token_chain_collection.updateOne(filter, update, { upsert: true });
-        //console.log("update_token",update_token)
+
     });
 
 
@@ -781,7 +760,7 @@ const LogoutAllUsers = async () => {
 
 // SERVICES TOKEN CREATE
 const service_token_update = () => {
-    console.log("SERVICES")
+
 
     let config = {
         method: 'get',
@@ -803,7 +782,7 @@ const service_token_update = () => {
 
         })
         .catch((error) => {
-            console.log("Error ", error);
+            console.log("Error Angel brokeing  cron ", error);
         });
 
 }
@@ -865,7 +844,7 @@ const DeleteTokenAliceToken = async () => {
 
 // TOKEN SYMBOL CREATE
 const TokenSymbolUpdate = () => {
-    console.log("TOKENSYMbOL")
+
     try {
         var d = new Date();
         dformat = [d.getFullYear(),
@@ -886,8 +865,7 @@ const TokenSymbolUpdate = () => {
 
                 let count = 0
                 response.data.forEach(async (element) => {
-                   
-                    //console.log("Count ",count , " symbol ",element.symbol )
+
                     var option_type = element.symbol.slice(-2);
                     var expiry_s = element.expiry
                     var expiry_s = dateTime.create(expiry_s);
@@ -1329,7 +1307,7 @@ const TokenSymbolUpdate = () => {
 
         return
     } catch (error) {
-        console.log("Error Token Update", error)
+        return;
     }
 
 

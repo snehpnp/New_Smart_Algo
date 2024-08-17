@@ -10,6 +10,7 @@ const https = require('https');
 const socketIo = require("socket.io");
 const cors = require('cors');
 const bodyparser = require('body-parser')
+const { Client } = require('ssh2');
 
 
 const corsOpts = {
@@ -95,6 +96,46 @@ setIO(io).then(() => {
   io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: "okkkk" });
   res.send("DONE")
  });
+
+
+
+
+
+ app.post('/pm2/update', async (req, res) => {
+  const { host, password } = req.body;
+
+  if (!password) {
+    return res.status(400).send('Password is required');
+  }
+
+  const conn = new Client();
+
+  conn.on('ready', () => {
+    console.log(`Connected to ${host}`);
+
+    // Run pm2 update command
+    conn.exec('pm2 update', (err, stream) => {
+      if (err) throw err;
+
+      stream.on('close', (code, signal) => {
+        console.log(`Closed connection to ${host} with code ${code}`);
+        conn.end();
+      }).on('data', (data) => {
+        console.log(`STDOUT: ${data}`);
+      }).stderr.on('data', (data) => {
+        console.log(`STDERR: ${data}`);
+      });
+    });
+  }).connect({
+    host: host,
+    port: 22,
+    username: 'root',
+    password: password
+  });
+
+
+  return res.send({ status: true, msg: 'PM2 update initiated on all servers.' });
+});
 
 
 

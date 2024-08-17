@@ -92,11 +92,7 @@ async function executeTrade(val, data, latestMarketData) {
         TradeType: 'MAKE_STRATEGY',
     };
 
-    // Add your trade execution logic here...
-    // e.g., make HTTP request, update database, etc.
 
-    console.log('Executing trade for strategy:', val.strategy_name);
-    // Example HTTP request (replace with actual URL and request data):
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
@@ -109,7 +105,7 @@ async function executeTrade(val, data, latestMarketData) {
 
     await axios.request(config)
         .then((response) => {
-            console.log("Trade executed successfully:", response.data);
+        
         })
         .catch((error) => {
             console.log('Error in trade execution:', error);

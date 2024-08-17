@@ -53,7 +53,7 @@ async function run(conditionString) {
 
     // Iterate over the cursor to process results
     await cursor.forEach(doc => {
-      console.log(doc);
+  
     });
 
   } finally {

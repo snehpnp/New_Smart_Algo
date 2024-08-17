@@ -320,7 +320,8 @@ class Panel {
                         Option_chain: 1,
                         Create_Strategy: 1,
                         db_url: 1,
-                        Refer_Earn:1
+                        Refer_Earn:1,
+                        ip_address:1
                     }
                 },
                 {
