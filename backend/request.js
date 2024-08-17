@@ -43,213 +43,211 @@ module.exports = function (app) {
 
 
 
-   
-    ///////////////////////////-------runStrategy START---------------/////////////////////////
-       app.get("/runStrategy",async(req,res)=>{
-       const data = await dbTest.collection('strategyViewNames').find({ }).toArray();
-       
-       fetchDataFromViews(data);
-        res.send({data:data})
-       });
-   
-   
-         async function fetchDataFromViews(viewNames) {
-        
-           try {
-            if(viewNames.length > 0){
-             for (let valView of viewNames) {
-        // const data = await dbTest.collection(valView.viewName).find({ isCondition: true }).toArray();
-        const data = await dbTest.collection(valView.viewName).find({
-            isCondition: true,
-            timeFrameViewData: { $ne: null, $ne: [] }
-          }).toArray();
+    app.get("/runStrategy", async (req, res) => {
+        const data = await dbTest.collection('strategyViewNames').find({}).toArray();
 
-      if(data.length > 0){
-    
-        let val = data[0];
-            
-        let entry_type = 'LE';
-        if (val.type === 'BUY') {
-          entry_type = 'SE';
-        }
-        let condition_check_previous_trade = {
-          strategy: val.strategy_name,
-          symbol: val.symbol_name,
-          entry_type: entry_type,
-          segment: val.segment,
-          client_persnal_key: val.panelKey,
-          MakeStartegyName: val.show_strategy,
-          TradeType: 'MAKE_STRATEGY',
-        };
-        if (['O', 'FO', 'MO', 'CO'].includes(val.segment.toUpperCase())) {
-          let option_type = 'CALL';
-          if (val.option_type === 'PE') {
-            option_type = 'PUT';
-          }
-          condition_check_previous_trade = {
-            strategy: val.strategy_name,
-            symbol: val.symbol_name,
-            entry_type: entry_type,
-            segment: val.segment,
-            strike: val.strike_price,
-            option_type: option_type,
-            expiry: val.expiry,
-            client_persnal_key: val.panelKey,
-            MakeStartegyName: val.show_strategy,
-            TradeType: 'MAKE_STRATEGY',
-          };
-        }
-        else if (['F', 'MF', 'CF'].includes(val.segment.toUpperCase())) {
-          condition_check_previous_trade = {
-            strategy: val.strategy_name,
-            symbol: val.symbol_name,
-            entry_type: entry_type,
-            segment: val.segment,
-            expiry: val.expiry,
-            client_persnal_key: val.panelKey,
-            MakeStartegyName: val.show_strategy,
-            TradeType: 'MAKE_STRATEGY',
-          };
-        }
-        var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
-        const collection_last_price = dbTest.collection(val.tokensymbol);
-        const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
-        let price_lp = last_price[0].lp;
-        if (checkPreviousTrade != null) {
-          const currentTimestamp = Math.floor(Date.now() / 1000);
-          let type = 'LX';
-          let price = checkPreviousTrade.stockInfo_bp1;
-          if (checkPreviousTrade.entry_type.toUpperCase() === 'SE') {
-            type = 'SX';
-            price = checkPreviousTrade.stockInfo_sp1;
-          }
-          let strike = checkPreviousTrade.strike;
-          if (checkPreviousTrade.strike_price === 'NaN') {
-            strike = '100';
-          }
-          let option_type = 'CALL';
-          if (checkPreviousTrade.option_type.toUpperCase() === 'PUT') {
-            option_type = 'PUT';
-          }
-          let Quntity = checkPreviousTrade.entry_qty_percent;
-          let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
-          let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-            url: `${process.env.BROKER_URL}`,
-            headers: {
-              'Content-Type': 'text/plain'
-            },
-            data: req
-          };
-          await axios.request(config)
-            .then((response) => {
-    
-            })
-            .catch((error) => {
-          
-            });
-        }
-        const update = {
-          $set: {
-            status: '2',
-          },
-          $inc: {
-            numberOfTrade_count_trade: 1, // Increment by 1, you can change this value based on your requirement
-          },
-        };
-        const filter = { _id: val._id };
-        let Res = await UserMakeStrategy.updateOne(filter, update);
-        let Check_same_trade_type = 'BUY';
-        if (val.type === 'BUY') {
-          Check_same_trade_type = 'SELL';
-        }
-        const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
-        if (Check_same_trade_data) {
-          let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
-            $set: {
-              status: '1',
-            },
-          });
-        }
-        const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
-          {
-            $match: {
-              show_strategy: val.show_strategy,
-              numberOfTrade: { $ne: '' }
-            }
-          },
-          {
-            $group: {
-              _id: null,
-              totalNumberOfTrade_count_trade: { $sum: '$numberOfTrade_count_trade' },
-            }
-          },
-          {
-            $project: {
-              _id: 0,
-              totalNumberOfTrade_count_trade: 1,
-              anotherField: '$numberOfTrade',
-              isTotalSmall: { $lt: ['$totalNumberOfTrade_count_trade', parseInt(val.numberOfTrade)] }
-            }
-          }
-        ]);
-        if (numberOfTrade_count_trade_count.length > 0) {
-          if (numberOfTrade_count_trade_count[0].isTotalSmall === false) {
-            const update_trade_off = {
-              $set: {
-                status: '2',
-              },
-            };
-            const filter_trade_off = { show_strategy: val.show_strategy };
-            let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
-          }
-        }
-        const currentTimestamp = Math.floor(Date.now() / 1000);
-        let type = 'LE';
-        if (val.type.toUpperCase() === 'SELL') {
-          type = 'SE';
-        }
-        let price = 0;
-        let strike = val.strike_price;
-        if (val.strike_price === 'NaN') {
-          strike = '100';
-        }
-        let option_type = 'CALL';
-        if (val.option_type.toUpperCase() === 'PE') {
-          option_type = 'PUT';
-        }
-        let Quntity = '100';
-        const dateObject = new Date(val.exitTime);
-        const hours = ('0' + dateObject.getUTCHours()).slice(-2);
-        const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
-        const ExitTime = `${hours}-${minutes}`;
-        let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
-        let config = {
-          method: 'post',
-          maxBodyLength: Infinity,
-          // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-          url: `${process.env.BROKER_URL}`,
-          headers: {
-            'Content-Type': 'text/plain'
-          },
-          data: req
-        };
-        await axios.request(config)
-          .then((response) => {  })
-          .catch((error) => {});
-      
-           }
-             }
+        fetchDataFromViews(data);
+        res.send({ data: data })
+    });
+
+
+    async function fetchDataFromViews(viewNames) {
+
+        try {
+            if (viewNames.length > 0) {
+                for (let valView of viewNames) {
+                    // const data = await dbTest.collection(valView.viewName).find({ isCondition: true }).toArray();
+                    const data = await dbTest.collection(valView.viewName).find({
+                        isCondition: true,
+                        timeFrameViewData: { $ne: null, $ne: [] }
+                    }).toArray();
+
+                    if (data.length > 0) {
+
+                        let val = data[0];
+
+                        let entry_type = 'LE';
+                        if (val.type === 'BUY') {
+                            entry_type = 'SE';
+                        }
+                        let condition_check_previous_trade = {
+                            strategy: val.strategy_name,
+                            symbol: val.symbol_name,
+                            entry_type: entry_type,
+                            segment: val.segment,
+                            client_persnal_key: val.panelKey,
+                            MakeStartegyName: val.show_strategy,
+                            TradeType: 'MAKE_STRATEGY',
+                        };
+                        if (['O', 'FO', 'MO', 'CO'].includes(val.segment.toUpperCase())) {
+                            let option_type = 'CALL';
+                            if (val.option_type === 'PE') {
+                                option_type = 'PUT';
+                            }
+                            condition_check_previous_trade = {
+                                strategy: val.strategy_name,
+                                symbol: val.symbol_name,
+                                entry_type: entry_type,
+                                segment: val.segment,
+                                strike: val.strike_price,
+                                option_type: option_type,
+                                expiry: val.expiry,
+                                client_persnal_key: val.panelKey,
+                                MakeStartegyName: val.show_strategy,
+                                TradeType: 'MAKE_STRATEGY',
+                            };
+                        }
+                        else if (['F', 'MF', 'CF'].includes(val.segment.toUpperCase())) {
+                            condition_check_previous_trade = {
+                                strategy: val.strategy_name,
+                                symbol: val.symbol_name,
+                                entry_type: entry_type,
+                                segment: val.segment,
+                                expiry: val.expiry,
+                                client_persnal_key: val.panelKey,
+                                MakeStartegyName: val.show_strategy,
+                                TradeType: 'MAKE_STRATEGY',
+                            };
+                        }
+                        var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
+                        const collection_last_price = dbTest.collection(val.tokensymbol);
+                        const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
+                        let price_lp = last_price[0].lp;
+                        if (checkPreviousTrade != null) {
+                            const currentTimestamp = Math.floor(Date.now() / 1000);
+                            let type = 'LX';
+                            let price = checkPreviousTrade.stockInfo_bp1;
+                            if (checkPreviousTrade.entry_type.toUpperCase() === 'SE') {
+                                type = 'SX';
+                                price = checkPreviousTrade.stockInfo_sp1;
+                            }
+                            let strike = checkPreviousTrade.strike;
+                            if (checkPreviousTrade.strike_price === 'NaN') {
+                                strike = '100';
+                            }
+                            let option_type = 'CALL';
+                            if (checkPreviousTrade.option_type.toUpperCase() === 'PUT') {
+                                option_type = 'PUT';
+                            }
+                            let Quntity = checkPreviousTrade.entry_qty_percent;
+                            let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+                            let config = {
+                                method: 'post',
+                                maxBodyLength: Infinity,
+                                // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                                url: `${process.env.BROKER_URL}`,
+                                headers: {
+                                    'Content-Type': 'text/plain'
+                                },
+                                data: req
+                            };
+                            await axios.request(config)
+                                .then((response) => {
+
+                                })
+                                .catch((error) => {
+
+                                });
+                        }
+                        const update = {
+                            $set: {
+                                status: '2',
+                            },
+                            $inc: {
+                                numberOfTrade_count_trade: 1, // Increment by 1, you can change this value based on your requirement
+                            },
+                        };
+                        const filter = { _id: val._id };
+                        let Res = await UserMakeStrategy.updateOne(filter, update);
+                        let Check_same_trade_type = 'BUY';
+                        if (val.type === 'BUY') {
+                            Check_same_trade_type = 'SELL';
+                        }
+                        const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
+                        if (Check_same_trade_data) {
+                            let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
+                                $set: {
+                                    status: '1',
+                                },
+                            });
+                        }
+                        const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
+                            {
+                                $match: {
+                                    show_strategy: val.show_strategy,
+                                    numberOfTrade: { $ne: '' }
+                                }
+                            },
+                            {
+                                $group: {
+                                    _id: null,
+                                    totalNumberOfTrade_count_trade: { $sum: '$numberOfTrade_count_trade' },
+                                }
+                            },
+                            {
+                                $project: {
+                                    _id: 0,
+                                    totalNumberOfTrade_count_trade: 1,
+                                    anotherField: '$numberOfTrade',
+                                    isTotalSmall: { $lt: ['$totalNumberOfTrade_count_trade', parseInt(val.numberOfTrade)] }
+                                }
+                            }
+                        ]);
+                        if (numberOfTrade_count_trade_count.length > 0) {
+                            if (numberOfTrade_count_trade_count[0].isTotalSmall === false) {
+                                const update_trade_off = {
+                                    $set: {
+                                        status: '2',
+                                    },
+                                };
+                                const filter_trade_off = { show_strategy: val.show_strategy };
+                                let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
+                            }
+                        }
+                        const currentTimestamp = Math.floor(Date.now() / 1000);
+                        let type = 'LE';
+                        if (val.type.toUpperCase() === 'SELL') {
+                            type = 'SE';
+                        }
+                        let price = 0;
+                        let strike = val.strike_price;
+                        if (val.strike_price === 'NaN') {
+                            strike = '100';
+                        }
+                        let option_type = 'CALL';
+                        if (val.option_type.toUpperCase() === 'PE') {
+                            option_type = 'PUT';
+                        }
+                        let Quntity = '100';
+                        const dateObject = new Date(val.exitTime);
+                        const hours = ('0' + dateObject.getUTCHours()).slice(-2);
+                        const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
+                        const ExitTime = `${hours}-${minutes}`;
+                        let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+                        let config = {
+                            method: 'post',
+                            maxBodyLength: Infinity,
+                            // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                            url: `${process.env.BROKER_URL}`,
+                            headers: {
+                                'Content-Type': 'text/plain'
+                            },
+                            data: req
+                        };
+                        await axios.request(config)
+                            .then((response) => { })
+                            .catch((error) => { });
+
+                    }
+                }
 
             }
-         
-           } catch (error) {
-             console.log('Error fetching data:', error);
-           }
-         }
-    ///////////////////////////---------runStrategy END-------------/////////////////////////
+
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    }
+
 
 
     app.get("/logicStrategyView", async (req, res) => {
@@ -264,7 +262,7 @@ module.exports = function (app) {
 
         ]
         const result = await UserMakeStrategy.aggregate(pipeline)
-   
+
         result.forEach(async (ele) => {
             let collectionViewName = "usermakestrategies"
             let arraySource = []
@@ -280,7 +278,7 @@ module.exports = function (app) {
                         // await dbTest.collection(viewName).drop();
                         // console.log(`View ${viewName} dropped successfully`);
 
-                       // console.log("ele - id 2", ele._id, "condition[element].source ", condition[element].source)
+                        // console.log("ele - id 2", ele._id, "condition[element].source ", condition[element].source)
 
 
                         // console.log(`Working on timeframe: ${timeframe}`);
@@ -335,13 +333,13 @@ module.exports = function (app) {
 
 
             if (arraySource.length > 0) {
-               
+
                 let timeFrameView = 'M' + ele.timeframe + '_' + ele.tokensymbol
                 let pipeline = [];
 
                 const conditions = parseConditionString(ele.condition);
 
-                const matchStage = generateMongoCondition(conditions ,ele);
+                const matchStage = generateMongoCondition(conditions, ele);
 
                 pipeline.push({
                     $match: {
@@ -373,45 +371,45 @@ module.exports = function (app) {
                                     $sort: { _id: -1 }
                                 }
                             ],
-                            as: source+'Data'
+                            as: source + 'Data'
                         }
                     });
                 });
 
 
-                 pipeline.push({
+                pipeline.push({
                     $addFields: {
                         isCondition: matchStage
                     }
                 });
-        
 
-                   
+
+
 
                 let viewName = 'M' + ele.timeframe + '_' + ele.tokensymbol + '_make_' + ele.name;
 
-                   try {
-                      const collections = await dbTest.listCollections().toArray();
-                      const collectionExists = collections.some(coll => coll.name === viewName);
+                try {
+                    const collections = await dbTest.listCollections().toArray();
+                    const collectionExists = collections.some(coll => coll.name === viewName);
 
-                      if (!collectionExists) {
+                    if (!collectionExists) {
                         await dbTest.createCollection(viewName, {
-                          viewOn: collectionViewName,
-                          pipeline: pipeline
+                            viewOn: collectionViewName,
+                            pipeline: pipeline
                         });
                         console.log(`View ${viewName} created successfully`);
-                      }else{
+                    } else {
                         console.log(`View ${viewName} already exists`);
-                      }
-                    } catch (error) {
-                      console.log(`Error creating view ${viewName}:`, error);
                     }
+                } catch (error) {
+                    console.log(`Error creating view ${viewName}:`, error);
+                }
 
             } else {
-                
+
                 const conditions = parseConditionString(ele.condition);
 
-                const matchStage = generateMongoCondition(conditions ,ele);
+                const matchStage = generateMongoCondition(conditions, ele);
 
                 let timeFrameView = 'M' + ele.timeframe + '_' + ele.tokensymbol
                 let pipeline = [];
@@ -446,26 +444,26 @@ module.exports = function (app) {
                 let viewName = 'M' + ele.timeframe + '_' + ele.tokensymbol + '_make_' + ele.name;
 
                 try {
-                   const collections = await dbTest.listCollections().toArray();
-                   const collectionExists = collections.some(coll => coll.name === viewName);
+                    const collections = await dbTest.listCollections().toArray();
+                    const collectionExists = collections.some(coll => coll.name === viewName);
 
-                   if (!collectionExists) {
-                     await dbTest.createCollection(viewName, {
-                       viewOn: collectionViewName,
-                       pipeline: pipeline
-                     });
-                     console.log(`View ${viewName} created successfully`);
-                   }else{
-                     console.log(`View ${viewName} already exists`);
-                   }
-                 } catch (error) {
-                   console.log(`Error creating view ${viewName}:`, error);
-                 }
+                    if (!collectionExists) {
+                        await dbTest.createCollection(viewName, {
+                            viewOn: collectionViewName,
+                            pipeline: pipeline
+                        });
+                        console.log(`View ${viewName} created successfully`);
+                    } else {
+                        console.log(`View ${viewName} already exists`);
+                    }
+                } catch (error) {
+                    console.log(`Error creating view ${viewName}:`, error);
+                }
             }
 
         });
 
-  return res.send({ STAT: "OKKK" })
+        return res.send({ STAT: "OKKK" })
     });
 
     app.get("/logicStrategyView1", async (req, res) => {
@@ -478,27 +476,27 @@ module.exports = function (app) {
 
 
         const matchStage = generateMongoCondition(conditions);
-   
 
-      return res.send({ status: true, condition: matchStage });
+
+        return res.send({ status: true, condition: matchStage });
 
     })
 
 
-    app.get("/triggerview",async(req,res)=>{
+    app.get("/triggerview", async (req, res) => {
 
-    try {
+        try {
 
-    const collection = dbTest.collection('usermakestrategies');
-    const changeStream = collection.watch();
+            const collection = dbTest.collection('usermakestrategies');
+            const changeStream = collection.watch();
 
-    changeStream.on('change', async (change) => { });
+            changeStream.on('change', async (change) => { });
 
-  } catch (error) {
-  }
+        } catch (error) {
+        }
 
 
-      res.send("Doneeeeeeeee")    
+        res.send("Doneeeeeeeee")
     });
 
     // function parseConditionString(conditionString) {
@@ -533,7 +531,7 @@ module.exports = function (app) {
         const conditionRegex = /data\.(\w+)\[(\d+)\]([><=]{1,2})data\.(\w+)\[(\d+)\]/g;
         const conditions = [];
         let andFlag = false;
-    
+
         // Handle the && and || parts
         const andParts = conditionString.split('&&');
         andParts.forEach(part => {
@@ -554,15 +552,15 @@ module.exports = function (app) {
             });
             andFlag = true;
         });
-    
+
         return conditions;
     }
-    
 
-    const generateMongoCondition = (conditions ,ele) => {
+
+    const generateMongoCondition = (conditions, ele) => {
         const andArray = [];
         let orArray = [];
-      
+
         conditions.forEach(condition => {
             const { operator, field1, index1, field2, index2, type } = condition;
             // const mongoOperator = operator === '>' ? '$gt' : '$lt';
@@ -590,17 +588,17 @@ module.exports = function (app) {
                     break;
             }
 
- 
-            let condition_one
-            ['close','open','high','low','number'].includes(field1) ?
-            condition_one = { $arrayElemAt: [`$timeFrameViewData.${field1}`, index1] }
-            :condition_one = { $arrayElemAt: [`$${field1}Data.ema`, index1] }
 
-          
+            let condition_one
+            ['close', 'open', 'high', 'low', 'number'].includes(field1) ?
+                condition_one = { $arrayElemAt: [`$timeFrameViewData.${field1}`, index1] }
+                : condition_one = { $arrayElemAt: [`$${field1}Data.ema`, index1] }
+
+
             let condition_two
-            ['close','open','high','low','number'].includes(field2) ?
-            condition_two =  { $arrayElemAt: [`$timeFrameViewData.${field2}`, index2] }
-            :condition_two =  { $arrayElemAt: [`$${field2}Data.ema`, index2] }
+            ['close', 'open', 'high', 'low', 'number'].includes(field2) ?
+                condition_two = { $arrayElemAt: [`$timeFrameViewData.${field2}`, index2] }
+                : condition_two = { $arrayElemAt: [`$${field2}Data.ema`, index2] }
 
 
 
@@ -612,36 +610,36 @@ module.exports = function (app) {
             };
 
 
-             if (type === 'and') {
-            if (orArray.length > 0) {
-                andArray.push({ $or: orArray });
-                orArray = []; // Reset orArray after adding it to andArray
+            if (type === 'and') {
+                if (orArray.length > 0) {
+                    andArray.push({ $or: orArray });
+                    orArray = []; // Reset orArray after adding it to andArray
+                }
+                andArray.push(conditionObj);
+            } else if (type === 'or') {
+                orArray.push(conditionObj);
             }
-            andArray.push(conditionObj);
-        } else if (type === 'or') {
-            orArray.push(conditionObj);
-        }
 
         });
 
 
-    const finalExpr = {};
-  if (andArray.length > 0 && orArray.length > 0) {
-    finalExpr.$and = andArray;
-    finalExpr.$or = orArray;
-  } else if (andArray.length > 0) {
-    finalExpr.$and = andArray;
-  } else if (orArray.length > 0) {
-    finalExpr.$or = orArray;
-  }
+        const finalExpr = {};
+        if (andArray.length > 0 && orArray.length > 0) {
+            finalExpr.$and = andArray;
+            finalExpr.$or = orArray;
+        } else if (andArray.length > 0) {
+            finalExpr.$and = andArray;
+        } else if (orArray.length > 0) {
+            finalExpr.$or = orArray;
+        }
 
-  return {
-    $cond: {
-      if: finalExpr,
-      then: true,
-      else: false
-    }
-  };
+        return {
+            $cond: {
+                if: finalExpr,
+                then: true,
+                else: false
+            }
+        };
 
 
     };
@@ -652,82 +650,7 @@ module.exports = function (app) {
 
     // ========================================================================================================
 
-    app.get("/all/brokerview", (req, res) => {
 
-        createViewAlice()
-        createViewAngel()
-        createViewDhan()
-        createViewFivepaisa()
-        createViewFyers()
-        createViewIifl()
-        createViewKotakNeo()
-        createViewMarketHub()
-        createViewMastertrust()
-        createViewMotilalOswal()
-        createViewSwastika()
-        createViewUpstox()
-        createViewZebul()
-        createViewZerodha()
-        createViewIcicidirect()
-        DashboardView()
-        createView()
-        return res.send("DONEE")
-    })
-
-    app.post("/all/tabel", async (req, res) => {
-        try {
-
-            const roles = await Roledata.find();
-            if (roles.length !== 4) {
-                RoleCreate();
-            }
-
-
-            const companies = await company.find();
-            if (companies.length == 0) {
-                CompanyCreate(req.body);
-            }
-
-
-            const categories = await categorie.find();
-            if (categories.length == 0) {
-                categorys();
-            }
-
-
-            const brokers = await Broker_information.find();
-            if (brokers.length == 0) {
-                CreateBrokerinfo();
-            }
-
-            const servicesData = await services.find();
-            if (servicesData.length == 0) {
-                service_token_update();
-            }
-
-
-            const Alice_tokenData = await Alice_token.find();
-            if (Alice_tokenData.length == 0) {
-                TokenSymbolUpdate();
-            }
-
-            const live_price_data = await live_price.find();
-            if (live_price_data.length == 0) {
-                live_price_data_create();
-            }
-
-            CreateDataBase(req.body)
-            // console.log("SNEH")
-
-            DawnloadOptionChainSymbol()
-
-
-            return res.send("DONE");
-        } catch (error) {
-  
-           return res.status(500).send("Internal Server Error");
-        }
-    });
 
     var CreateDataBase = async (data) => {
         const uri = data;
@@ -965,7 +888,6 @@ module.exports = function (app) {
     };
 
 
-    
     app.get("/all/brokerview", (req, res) => {
 
         createViewAlice()
@@ -1033,25 +955,27 @@ module.exports = function (app) {
             }
 
             CreateDataBase(req.body)
-            console.log("SNEH")
+            // console.log("SNEH")
+
+            DawnloadOptionChainSymbol()
 
 
             return res.send("DONE");
         } catch (error) {
-            console.log("Error in /all/tabel route:", error);
-            res.status(500).send("Internal Server Error");
+
+            return res.status(500).send("Internal Server Error");
         }
     });
 
     app.post("/add/admin", async (req, res) => {
         const { panelname, client_key } = req.body;
-    
+
         if (!panelname || !client_key) {
             return res.status(400).send("Panel name and client key are required.");
         }
-    
+
         const Email = `${panelname}@gmail.com`;
-    
+
         const commonUserData = {
             FullName: "admin",
             Password: "$2b$08$x3Sm7wmIGOaUPnjxZulVXeYZaZCg8LsRBZQDrvzhui8gqeXEAcJGK",
@@ -1084,7 +1008,7 @@ module.exports = function (app) {
             client_key: client_key,
             Is_First_login: "1"
         };
-    
+
         const createUserData = (UserName, email, PhoneNo) => {
             return new User({
                 ...commonUserData,
@@ -1093,26 +1017,26 @@ module.exports = function (app) {
                 UserName: UserName,
             });
         };
-    
+
         const userData1 = createUserData("admin", Email, "9999999999");
         const userData2 = createUserData("admin1", "PNP@gmail.com", "5499999999");
-    
+
         try {
             const results = await Promise.allSettled([userData1.save(), userData2.save()]);
-    
+
             results.forEach((result, index) => {
                 if (result.status === "rejected") {
                     console.log(`Error saving user${index + 1}:`, result.reason);
                 }
             });
-    
+
             res.status(201).send("Admin creation attempted. Check logs for details.");
         } catch (error) {
             console.log("Unexpected error:", error);
             res.status(500).send("Unexpected error occurred during admin creation.");
         }
     });
-    
+
     app.get("/UpdateServicesToken", async (req, res) => {
         TokenSymbolUpdate()
     })
@@ -1958,42 +1882,3 @@ module.exports = function (app) {
 
 }
 
-
-// const db = require('./App/Models');
-// const dbTest = db.dbTest;
-// async function main() {
-
-//     const viewCollection = dbTest.collection('usermakestrategies');
-//     //const targetCollection = dbTest.collection('your_target_collection_name');
-  
-//     const changeStream = viewCollection.watch();
-  
-//     changeStream.on('change', (change) => {
-//       if (change.operationType === 'update' || change.operationType === 'insert') {
-//         const updatedDocument = change.fullDocument;
-  
-
-         
-
-
-
-            
-//         // Define your condition to check if the 'action' field has changed
-//         if (updatedDocument.action) {
-//             console.log("change stream detect")
-//           // Insert the document into the target collection
-//         //   targetCollection.insertOne(updatedDocument)
-//         //     .then(() => console.log('Document inserted into target collection'))
-//         //     .catch(err => console.log('Error inserting document:', err));
-//         }
-//       }
-//     });
-  
-//     console.log('Listening for changes...');
-//   }
-  
-//   main().catch(err => console.log(err));
-
-
-
-// text-transform: capitalize;
