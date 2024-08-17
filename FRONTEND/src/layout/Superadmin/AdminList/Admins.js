@@ -3,7 +3,7 @@ import Content from "../../../Components/Dashboard/Content/Content";
 import * as valid_err from "../../../Utils/Common_Messages";
 import axios from 'axios';
 import Loader from '../../../Utils/Loader';
-import { Pencil, Trash2, Pointer } from 'lucide-react';
+import { Pencil, Trash2, Pointer, RefreshCcw, BadgePlus } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice';
 import { useDispatch } from "react-redux";
@@ -26,6 +26,7 @@ const AdminsList = () => {
     const [themeData, setThemeData] = useState({ loading: true, data: [] });
     const [filteredData, setFilteredData] = useState([]);
 
+
     const GetAllThemes = async () => {
         try {
             const response = await dispatch(Get_All_Theme()).unwrap();
@@ -33,7 +34,7 @@ const AdminsList = () => {
                 setThemeList(response.data);
             }
         } catch (error) {
-            console.log('Error fetching themes:', error.message);
+            return;
         }
     };
 
@@ -54,7 +55,6 @@ const AdminsList = () => {
                 setFilteredData([]); // Initialize filteredData with empty array
             }
         } catch (error) {
-            console.log('Error fetching panels:', error.message);
             setThemeData({
                 loading: false,
                 data: [],
@@ -71,16 +71,49 @@ const AdminsList = () => {
 
     const fetchBrokerView = async (row) => {
         try {
+            const { value: password } = await Swal.fire({
+                title: "Enter your password",
+                input: "password",
+                inputLabel: "Password",
+                inputPlaceholder: "Enter your password",
+                inputAttributes: {
+                    maxlength: "10",
+                    autocapitalize: "off",
+                    autocorrect: "off"
+                }
+            });
+
+            if (password !== "7700") {
+                Swal.fire("Incorrect password");
+                window.location.reload();
+                return;
+            }
             const response = await axios.get(row.domain + '/backend/all/brokerview');
             return response.data;
         } catch (error) {
-            console.log('Error fetching broker view data:', error.message);
             return null;
         }
     };
 
     const fetchBrokerView1 = async (row) => {
         try {
+            const { value: password } = await Swal.fire({
+                title: "Enter your password",
+                input: "password",
+                inputLabel: "Password",
+                inputPlaceholder: "Enter your password",
+                inputAttributes: {
+                    maxlength: "10",
+                    autocapitalize: "off",
+                    autocorrect: "off"
+                }
+            });
+
+            if (password !== "7700") {
+                Swal.fire("Incorrect password");
+                window.location.reload();
+                return;
+            }
             let data = JSON.stringify({
                 "panelname": row.panel_name,
                 "client_key": row.key,
@@ -101,7 +134,6 @@ const AdminsList = () => {
 
             await axios.request(config);
         } catch (error) {
-            console.log('Error fetching broker view data:', error.message);
             throw error;
         }
     };
@@ -116,10 +148,10 @@ const AdminsList = () => {
             dataField: 'domain',
             text: 'Domain Name'
         },
-        {
-            dataField: 'key',
-            text: 'Key'
-        },
+        // {
+        //     dataField: 'key',
+        //     text: 'Key'
+        // },
         {
             dataField: 'theme_name',
             text: 'Set theme',
@@ -153,7 +185,7 @@ const AdminsList = () => {
             dataField: 'actions',
             text: 'Actions',
             formatter: (cell, row) => (
-                <div style={{ width: "120px" }}>
+                <div style={{ width: "60px" }}>
                     <div>
                         <Link to={`/super/panel/edit/${row._id}`} state={row}>
                             <span data-toggle="tooltip" data-placement="top" title="Edit">
@@ -165,36 +197,17 @@ const AdminsList = () => {
                                 />
                             </span>
                         </Link>
-                        {false && (
-                            <Link>
-                                <span data-toggle="tooltip" data-placement="top" title="Delete">
-                                    <Trash2
-                                        size={20}
-                                        color="#d83131"
-                                        strokeWidth={2}
-                                        className="mx-1"
-                                    />
-                                </span>
-                            </Link>
-                        )}
+
                     </div>
                 </div>
             ),
         },
         {
             dataField: 'a',
-            text: 'Update Broker & Table',
+            text: 'Tabels',
             formatter: (cell, row) => (
                 <span style={{ display: "flex" }}>
-                    <div className="tooltip-wrapper" title="All Brokers View Create">
-                        <Pointer
-                            size={20}
-                            color="#198754"
-                            strokeWidth={2}
-                            className="mx-2 pointer-icon"
-                            onClick={() => fetchBrokerView(row)}
-                        />
-                    </div>
+
                     <div className="tooltip-wrapper" title="All Tables Update">
                         <Pointer
                             size={20}
@@ -204,10 +217,124 @@ const AdminsList = () => {
                             onClick={() => fetchBrokerView1(row)}
                         />
                     </div>
+
+                </span>
+            ),
+        },
+        {
+            dataField: 'a',
+            text: 'Brokers',
+            formatter: (cell, row) => (
+                <span style={{ display: "flex" }}>
+
+                    <div className="tooltip-wrapper" title="All Brokers View Create">
+                        <BadgePlus
+                            size={20}
+                            color="#198754"
+                            strokeWidth={2}
+                            className="mx-2 pointer-icon"
+                            onClick={() => fetchBrokerView(row)}
+                        />
+                    </div>
+
+                </span>
+            ),
+        },
+        {
+            dataField: 'a',
+            text: 'Reload Panel',
+            formatter: (cell, row) => (
+                <span style={{ display: "flex" }}>
+
+                    <div className="tooltip-wrapper" title="All Tables Update">
+                        <RefreshCcw
+                            size={20}
+                            color="#198754"
+                            strokeWidth={2}
+                            className="mx-1 pointer-icon"
+                            onClick={() => PanelReload(row)}
+                        />
+                    </div>
+
                 </span>
             ),
         },
     ];
+
+    const PanelReload = async (row) => {
+        try {
+            const { value: password } = await Swal.fire({
+                title: "Enter your Server password",
+                input: "text",
+                inputLabel: "Server Password",
+                inputPlaceholder: "Enter your Server password",
+                inputAttributes: {
+                    autocomplete: 'off'
+                },
+                confirmButtonText: 'Submit',
+                cancelButtonText: 'Cancel',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Password is required!';
+                    }
+                    return null;
+                }
+            });
+
+            if (!password) {
+                return;
+            }
+
+            if (!row.ip_address) {
+                Swal.fire({
+                    icon: 'Error',
+                    title: 'Error',
+                    text: 'Server IP address not found.',
+                });
+                return;
+            }
+
+            let req = {
+                "password": password,
+                "host": row.ip_address
+            };
+
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'https://newpenal.pandpinfotech.com/backend/pm2/update',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: req
+            };
+
+            const response = await axios.request(config);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Server update was successful.',
+            });
+
+            console.log(response.data);
+
+        } catch (error) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Information',
+                text: 'An issue occurred during the server update. The UI will remain unaffected.',
+            });
+
+            console.log('Error during server update:', error);
+
+        }
+    }
+
+
+
+
 
     const formik = useFormik({
         initialValues: {
@@ -286,7 +413,7 @@ const AdminsList = () => {
             }
         } catch (error) {
             toast.error("An error occurred while closing the panel");
-            console.log('Error closing company:', error.message);
+
         }
     };
 

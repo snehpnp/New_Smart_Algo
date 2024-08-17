@@ -730,7 +730,7 @@ class Employee {
         }
       });
 
- 
+
 
       // ADD STRATEGY IN STRATEGY CLIENT
       if (add_startegy.length > 0) {
@@ -821,7 +821,7 @@ class Employee {
 
               // Wait for all update operations to complete
               const results = await Promise.all(updatePromises);
-             
+
             }
 
 
@@ -1252,7 +1252,7 @@ class Employee {
   // CLIENTS ACTIVE INACTIVE STATUS UPDATE
   async UpdateActiveStatus(req, res) {
     try {
-      const { id, user_active_status,network_ip } = req.body;
+      const { id, user_active_status, network_ip } = req.body;
 
       // Retrieve the user
       const get_user = await User_model.find({ _id: id });
@@ -1569,16 +1569,10 @@ class Employee {
       if (key == 1) {
         data = await user_logs.find({ user_Id: id });
       } else {
-        data = await BrokerResponse.find({ user_Id: id });
+        data = await BrokerResponse.find({ user_id: id });
 
       }
 
-
-
-
-      // if (data.length == 0) {
-      //   return res.status(404).json({ status: false, msg: "No data found for the provided ID" });
-      // }
 
       return res.status(200).json({
         status: true,
@@ -1731,6 +1725,15 @@ class Employee {
         // Fetch all clients again after the update
         getAllClients = await user_SignUp.find(AdminMatch).sort({ CreateDate: -1 });
       }
+
+      if (getAllClients.length > 0) {
+        getAllClients = getAllClients.filter((data) => {
+          return data.refer_code !== null && data.refer_code !== "null" && data.refer_code !== "";
+        });
+      
+    
+      }
+      
 
       if (getAllClients.length === 0) {
         return res.send({

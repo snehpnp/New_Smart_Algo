@@ -27,7 +27,6 @@ class Swastika {
     // Get GetAccessToken ANGEL
     async GetAccessTokenSwastika(req, res) {
        
-        //console.log("req ",req.body.Email)
        
         var user_email = req.body.Email;
         var totp = req.body.totp;
@@ -65,7 +64,6 @@ class Swastika {
                     }
                     
                     
-                    //console.log("req ",req.body.Email)
                     
                     var data = JSON.stringify({
                         "Totp": totp,
@@ -88,7 +86,6 @@ class Swastika {
                       await axios.request(config)
                       .then(async(response) => {
 
-                        //console.log("req ",response.data.token)
                        
                        
 
@@ -126,7 +123,7 @@ class Swastika {
 
                       })
                       .catch((error) => {
-                        // console.log("error -- ",error.response.data);
+                  
                         
                      if(error){
                          if(error.response.data.ResponseException.ExceptionMessage != undefined){
@@ -176,7 +173,7 @@ class Swastika {
             
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
+        
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }

@@ -109,7 +109,7 @@ class Fyers {
                         })
                         .catch(function (error) {
 
-                          console.log("error",error)
+                 
                           return res.send(redirect_uri);
 
                         });
@@ -150,7 +150,7 @@ class Fyers {
 
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
+      
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }

@@ -289,12 +289,7 @@ class MakeStartegy {
             if (!arraySource.includes(condition[element].source)) {
               arraySource.push(condition[element].source)
             }
-            // console.log(`Working on timeframe: ${timeframe}`);
-            // console.log(`Working on tokensymbol: ${tokensymbol}`);
-            // console.log(`Working on source: ${condition[element].source}`);
-            // console.log(`Working on offset: ${condition[element].offset}`);
-            // console.log(`Working on indicator_field: ${condition[element].indicator_field}`);
-            // console.log(`Working on period: ${condition[element].period}`);
+          
 
             let viewName = condition[element].source + '_M' + timeframe + '_' + tokensymbol;
             let collectionViewName = 'M' + timeframe + '_' + tokensymbol;
@@ -422,11 +417,7 @@ class MakeStartegy {
         }
 
       } else {
-        console.log("else req.body.status ", req.body.status);
-        console.log("else req.body.timeframe ", req.body.timeframe);
-        console.log("else req.body.tokensymbol ", req.body.tokensymbol);
-        console.log("else req.body.name ", req.body.name);
-        console.log("else req.body.condition ", req.body.condition);
+
         const conditions = await parseConditionString(req.body.condition);
 
         const matchStage = await generateMongoCondition(conditions);
@@ -886,13 +877,7 @@ const generateMongoCondition = async (conditions) => {
         break;
     }
 
-    console.log("operator ", operator)
-    console.log("field1 ", field1)
-    console.log("index1 ", index1)
-    console.log("field2 ", field2)
-    console.log("index2 ", index2)
-    console.log("type ", type)
-    console.log("mongoOperator ", mongoOperator)
+
 
 
     // let condition_one

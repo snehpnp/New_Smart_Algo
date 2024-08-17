@@ -62,6 +62,7 @@ const TradeHistory = () => {
   const [SocketState, setSocketState] = useState("null");
   const [ForGetCSV, setForGetCSV] = useState([])
   const [adminTradingStatus, setAdminTradingStatus] = useState(false);
+  const [lotMultypaly, SetlotMultypaly] = useState(1);
 
 
 
@@ -70,6 +71,19 @@ const TradeHistory = () => {
   useEffect(() => {
     GetAdminTradingStatus()
   }, []);
+
+
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    const isValidNumber = /^\d+$/.test(value);
+
+    if (isValidNumber) {
+      SetlotMultypaly(value === "" || value == 0 ? 1 : Number(value));
+    } else {
+      SetlotMultypaly(1);
+    }
+  };
 
 
 
@@ -84,7 +98,7 @@ const TradeHistory = () => {
     let endDate = getActualDateFormate(toDate);
 
     await dispatch(
-      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, serviceIndex: null, type: "ADMIN", token: token })
+      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, serviceIndex: null, type: "ADMIN", lotMultypaly: lotMultypaly, token: token })
     ).unwrap()
       .then((response) => {
         if (response.status) {
@@ -109,7 +123,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     Get_TradHistory();
-  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter]);
+  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter,lotMultypaly]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");
@@ -127,6 +141,8 @@ const TradeHistory = () => {
     setStrategyClientStatus("null");
     setSelectService("null");
     setToDate("");
+    SetlotMultypaly(1)
+
     setTradeHistoryData({
       loading: false,
       data: tradeHistoryData.data,
@@ -284,46 +300,6 @@ const TradeHistory = () => {
         total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty);
       }
     });
-
-
-  const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
-
-  // ----------------------------- SQUARE OFF ----------------------------
-
-  const SquareOff = (rowdata, rowIndex) => {
-    // $('.BP1_Put_Price_' + item.token).html();
-    // $('.SP1_Call_Price_' + item.token).html();
-
-
-    var pre_tag = {
-      option_type: rowdata.option_type,
-      type: rowdata.entry_type === "LE" ? "LX" : rowdata.entry_type === "SE" ? 'SX' : "",
-      token: rowdata.token,
-      indexcallput: rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`,
-      indexing: rowIndex,
-      segment: rowdata.segment,
-      strike: rowdata.strike_price,
-    };
-
-    if (rowdata.entry_type === "") {
-      setCreateSignalRequest(oldValues => {
-        return oldValues.filter(item => item.token !== rowdata.token)
-      })
-    }
-    else {
-      setCreateSignalRequest(oldValues => {
-        return oldValues.filter(item => item.indexcallput !== (rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`))
-      })
-
-      setCreateSignalRequest((oldArray) => [pre_tag, ...oldArray]);
-    }
-
-
-  }
-
-
-  // ----------------------------- SQUARE OFF ----------------------------
-
 
 
 
@@ -612,22 +588,7 @@ const TradeHistory = () => {
 
 
 
-  //  LOG IN FOR GET LIVE PRICE 
-  const LogIn_WIth_Api = async (check, brokerid, tradingstatus, UserDetails) => {
 
-    if (check) {
-      loginWithApi(brokerid, UserDetails);
-    } else {
-      dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
-        .unwrap()
-        .then((response) => {
-          if (response.status) {
-            setrefresh(!refresh)
-          }
-        });
-
-    }
-  };
 
 
   const forCSVdata = () => {
@@ -663,25 +624,7 @@ const TradeHistory = () => {
 
 
 
-  const getSymbols = async (e) => {
-    await dispatch(Get_All_Service({})).unwrap()
-      .then((response) => {
-        if (response.status) {
-          setServiceData({
-            loading: false,
-            data: response.data,
-          });
-          setServiceData({
-            loading: false,
-            data: response.data,
-          });
-        }
-      });
-  };
 
-  // useEffect(() => {
-  //   getSymbols();
-  // }, []);
 
 
   const getservice = async () => {
@@ -831,6 +774,26 @@ const TradeHistory = () => {
               </select>
             </div>
           </div> */}
+
+
+          <div className="col-lg-2  px-1">
+            <div className="form-check custom-checkbox mb-3 ps-0">
+              <label className="col-lg-12" >
+                Lots
+              </label>
+              <input
+                type="number"
+                className="default-select wide form-control"
+                defaultValue={lotMultypaly}
+                onChange={(e) => handleInputChange(e)}
+              />
+            </div>
+
+
+
+
+          </div>
+
 
           <div className="col-lg-2 px-1 mt-2">
             {/* <button

@@ -27,7 +27,7 @@ class Markethub {
     // Get GetAccessToken ANGEL
     async GetAccessTokenMarkethub(req, res) {
        
-        console.log("req ",req.body.Email)
+   
        
         var user_email = req.body.Email;
 
@@ -67,8 +67,7 @@ class Markethub {
                     }
 
                      
-                    
-                    //console.log("req ",req.body.Email)
+            
 
                     
                     //check fund Api
@@ -80,9 +79,7 @@ class Markethub {
                       await axios.request(config)
                       .then(async(response) => {
 
-                        //console.log("req ",response.data.token)
                        
-                        console.log(JSON.stringify(response.data.token));
 
                         if(response.data.token != undefined){
                            let AccessToken = response.data.token;
@@ -118,7 +115,7 @@ class Markethub {
 
                       })
                       .catch((error) => {
-                        // console.log("error -- ",error.response.data);
+                  
                         
                         if(error){
                          if(error.response.data == ""){
@@ -162,7 +159,7 @@ class Markethub {
             
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
+           
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }
@@ -177,8 +174,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
  
     try {
         const objectId = new ObjectId(user_info[0]._id);
-       // console.log("objectId ",objectId)
-
+    
        // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId , order_view_status : "0" })
 

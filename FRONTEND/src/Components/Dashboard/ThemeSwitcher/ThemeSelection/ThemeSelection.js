@@ -95,7 +95,7 @@ const ThemeSelection = () => {
 
 
         }).catch((err) => {
-            console.log("Error In Theme Selection Page", err);
+            return;
         })
     }
 
@@ -106,7 +106,7 @@ const ThemeSelection = () => {
             axios.get(`${Config.smartAlogUrl}getall/theme`).then((res) => {
                 setThemeData(res.data.data)
             }).catch((err) => {
-                console.log("Error In Theme Selection Page", err);
+                return;
             })
         }
     }

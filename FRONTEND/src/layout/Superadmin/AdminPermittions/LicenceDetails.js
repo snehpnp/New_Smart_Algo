@@ -33,7 +33,7 @@ const LicenceDetails = ({ showModal, setshowModal, id }) => {
                     }
                 })
                 .catch((error) => {
-                    console.log("Error in License Page",error);
+                    return;
                 });
 
 

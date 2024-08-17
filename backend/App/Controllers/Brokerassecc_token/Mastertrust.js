@@ -120,7 +120,7 @@ class Mastertrust {
             
                       })
                       .catch(error => {
-                       console.log('Error:', error);
+         
                         return res.redirect(redirect_uri);
                       });
 
@@ -160,7 +160,7 @@ class Mastertrust {
 
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
+
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }

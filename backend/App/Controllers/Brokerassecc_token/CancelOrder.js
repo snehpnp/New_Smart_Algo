@@ -98,9 +98,7 @@ class CancelOrder {
             // Send all requests concurrently using Promise.all
             Promise.all(requestPromises)
             .then(responses => {  })
-            .catch(errors => {
-                console.log("errors:", errors);
-              });
+            .catch(errors => {});
          
             return res.send({ status: true, msg: "Ok" })
 
@@ -116,7 +114,7 @@ class CancelOrder {
 
 
  const CancelOrderAliceBlue = (item) => {
-  console.log("DONEEEE OKKKK")
+
  }
 
 

@@ -78,9 +78,7 @@ class KotakNeo {
                     if(username==""|| username==null){
                         return res.send({ status: false, msg: "Please Update User Name in Broker key..."});
                     }
-                    // if(dematepassword==""|| dematepassword==null){
-                    //     return res.send({ status: false, msg: "Please Update Demat Password in Broker key..."});
-                    // }
+                   
                     if(consumerSecret==""|| consumerSecret==null){
                         return res.send({ status: false, msg: "Please Update Consumer Secret in Broker key..."});
                     }
@@ -89,7 +87,6 @@ class KotakNeo {
                     }
                     
                     
-                    //console.log("req ",req.body.Email)
 
                     const url = 'https://napi.kotaksecurities.com/oauth2/token';
                     const data = 'grant_type=client_credentials';
@@ -119,7 +116,7 @@ class KotakNeo {
                                     },
                                     data: data5
                                 };
-                                console.log("config", config);
+                          
     
     
                                 axios(config)
@@ -152,7 +149,7 @@ class KotakNeo {
                                     
                                             axios(config1)
                                                 .then(async function (response) {
-                                                     console.log("OTP APIIIII", response);
+                                             
                                                   
                                                     if (response.status == 201) {
     
@@ -226,7 +223,7 @@ class KotakNeo {
     
                                     });
                             } else {
-                                console.log("oauth2/token1", response.data);
+                        
                                 const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
                                 return res.send({ status: false, msg: message })
     
@@ -268,8 +265,6 @@ class KotakNeo {
 
     // Get GetkotakGetSession
     async GetkotakGetSession(req, res) {
-       
-        console.log("req ",req.body)
        
         var user_email = req.body.Email;
         var otp = req.body.otp;
@@ -405,7 +400,7 @@ class KotakNeo {
             
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
+
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }

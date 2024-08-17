@@ -44,7 +44,7 @@ async function run() {
                 if (condition) {
                     await executeTrade(val, data, latestMarketData);
                 } else {
-                    console.log("Condition is false for strategy: ", val._id);
+                
                 }
             } catch (error) {
                 console.log('Error in evaluating the condition:', error);
@@ -70,7 +70,6 @@ async function executeTrade(val, data, latestMarketData) {
     // Add your trade execution logic here...
     // e.g., make HTTP request, update database, etc.
 
-    console.log('Executing trade for strategy:', val.strategy_name);
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
@@ -82,9 +81,7 @@ async function executeTrade(val, data, latestMarketData) {
     };
 
     await axios.request(config)
-        .then((response) => {
-            console.log("Trade executed successfully:", response.data);
-        })
+        .then((response) => {  })
         .catch((error) => {
             console.log('Error in trade execution:', error);
         });

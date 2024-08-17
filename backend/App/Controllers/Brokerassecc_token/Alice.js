@@ -242,7 +242,7 @@ class AliceBlue {
 
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
+        
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }
@@ -275,7 +275,7 @@ class AliceBlue {
                 return res.send({ status: true, data: [new_live_price], msg: "Default Data Added and Returned" });
             }
         } catch (error) {
-            console.log("Error In Get Token Live Price", error);
+       
             return res.send({ status: false, data: error, msg: "Error In get live price data" });
         }
     }
@@ -338,7 +338,7 @@ class AliceBlue {
 
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
+           
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }
@@ -360,7 +360,7 @@ class AliceBlue {
 
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
+    
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }

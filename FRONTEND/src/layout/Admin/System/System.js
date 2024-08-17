@@ -187,7 +187,7 @@ const System = () => {
                 }
             })
             .catch((err) => {
-                console.log("Error nternal server error");
+                return;
             });
     }
 

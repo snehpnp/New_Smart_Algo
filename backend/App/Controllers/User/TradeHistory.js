@@ -136,20 +136,7 @@ class TradeHistory {
             }
 
 
-
-
-
-
-
-
-
-
-
             if (abc1.length > 0) {
-
-
-                console.log("abc1", abc1)
-
 
 
                 const groupedDataStrategy = abc1.flat().reduce((acc, curr) => {
@@ -170,7 +157,7 @@ class TradeHistory {
             return res.send({ status: false, data: [], msg: "Data Empty" });
 
         } catch (error) {
-            console.log("Error get user trading Status error -", error);
+
             return res.status(500).send({ status: false, msg: "Internal Server Error" });
         }
     }

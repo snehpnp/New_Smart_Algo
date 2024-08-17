@@ -168,7 +168,7 @@ class Login {
 
         }
         catch (error) {
-            console.log('Error saving user:', error);
+            
             return res.status(500).json({ status: false, error: 'Internal Server Error' });
         }
     }
@@ -205,8 +205,6 @@ class Login {
         try {
             const { UserName, FullName, Email, PhoneNo, refer_code } = req.body;
 
-            // Log the request body for debugging
-            console.log("Received signup request with refer_code:", refer_code);
 
             // Fetch company information
             const companyInfo = await company_information.findOne();
@@ -261,14 +259,8 @@ class Login {
 
             await newUser.save();
 
-            // Update referral points if refer_code is valid
             const referUser = await User.findOne({ UserName: refer_code });
-            // if (referUser) {
-            //     const newReferPoints = (referUser.refer_points || 0) + referPoints;
-            //     await User.updateOne({ _id: referUser._id }, { $set: { refer_points: newReferPoints } });
-
-            //     console.log("Updated refer points for user:", referUser.UserName, "New points:", newReferPoints);
-            // }
+      
 
             return res.status(201).json({ status: true, msg: 'Sign Up successful!' });
 
@@ -297,7 +289,7 @@ class Login {
             }
 
             try {
-                if (EmailCheck.Role == "USER" || EmailCheck.Role == "SUBADMIN") {
+                if (EmailCheck.Role == "USER" ) {
 
                     // WHERE LOGIN CHECK
                     if (Device.toUpperCase() == "APP") {                  //App Login Check
@@ -942,7 +934,6 @@ class Login {
 
                 var UserRemainPoint = user.refer_points = user.refer_points - reedeem_points;
 
-                console.log("update/reedeem----", UserRemainPoint)
 
                 await User.updateOne(
                     { _id: user._id },

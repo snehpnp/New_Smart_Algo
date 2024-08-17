@@ -63,7 +63,7 @@ const ResetPassword = () => {
                     }
                 })
                 .catch((error) => {
-                    console.log("Error in Forgote Password", error);
+                    return;
                 });
 
         }

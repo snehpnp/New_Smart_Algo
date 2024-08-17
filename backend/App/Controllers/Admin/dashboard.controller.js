@@ -60,7 +60,7 @@ class Dashboard {
             }
 
         } catch (error) {
-            console.log("Get Admin Dashboard data -", error);
+            console.log("Error Get Admin Dashboard data -", error);
         }
     }
 

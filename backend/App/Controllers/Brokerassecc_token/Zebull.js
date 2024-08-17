@@ -40,10 +40,6 @@ class Zebull {
                     var DOB = Get_User[0].api_secret;
                     var uid = Get_User[0].client_code;
 
-                    console.log(password)
-                    console.log(appkey)
-                    console.log(DOB)
-                    console.log(uid)
 
 
                     var pwd_sha256 = sha256(password);
@@ -54,7 +50,6 @@ class Zebull {
                     var raw = "jData=" + JSON.stringify(data);
 
 
-                    console.log("raw", raw)
 
                     var config = {
                         method: 'post',
@@ -68,7 +63,6 @@ class Zebull {
                     await axios.request(config)
                         .then(async (response) => {
 
-                            console.log("req ", response.data)
 
 
                             if (response.data.stat == "Ok") {
@@ -105,7 +99,6 @@ class Zebull {
 
                         })
                         .catch((error) => {
-                            console.log("error -- ", error.response.data);
 
                             if (error) {
                                 if (error.response.data.emsgd) {

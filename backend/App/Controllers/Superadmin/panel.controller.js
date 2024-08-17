@@ -67,7 +67,7 @@ class Panel {
                             const response = await axios.get(backend_rul + 'all/brokerview');
                             return response.data;
                         } catch (error) {
-                           console.log('Error fetching broker view data:', error.message);
+                      
                             throw error;
                         }
                     };
@@ -97,13 +97,13 @@ class Panel {
                             };
                             axios.request(config)
                                 .then((response) => {
-                                    console.log(JSON.stringify(response.data));
+                         
                                 })
                                 .catch((error) => {
-                                    console.log(error);
+                          
                                 });
                         } catch (error) {
-                           console.log('Error fetching broker view data:', error.message);
+              
                             throw error;
                         }
                     };
@@ -127,13 +127,13 @@ class Panel {
                             };
                             axios.request(config)
                                 .then((response) => {
-                                    console.log(JSON.stringify(response.data));
+                      
                                 })
                                 .catch((error) => {
-                                    console.log(error);
+                           
                                 });
                         } catch (error) {
-                           console.log('Error fetching broker view data:', error.message);
+                  
                             throw error;
                         }
                     };
@@ -220,7 +220,7 @@ class Panel {
 
 
         } catch (error) {
-            // console.log("Theme error-", error);
+ 
 
         }
     }
@@ -275,7 +275,7 @@ class Panel {
             return res.send({ status: true, msg: "Get Panel Information", data: Panle_information })
 
         } catch (error) {
-            // console.log("Theme error-", error);
+       
         }
     }
 
@@ -320,7 +320,8 @@ class Panel {
                         Option_chain: 1,
                         Create_Strategy: 1,
                         db_url: 1,
-                        Refer_Earn:1
+                        Refer_Earn:1,
+                        ip_address:1
                     }
                 },
                 {
@@ -345,7 +346,7 @@ class Panel {
                 totalPages: Math.ceil(totalCount / Number(limit)),
             });
         } catch (error) {
-            console.log("Error Get all Panels error-", error);
+ 
             return res.status(500).send({ status: false, msg: "Internal Server Error" });
         }
     }
@@ -464,7 +465,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Error Get all Info error-", error);
+
         }
     }
 
@@ -547,7 +548,7 @@ class Panel {
             return res.send({ status: true, msg: "Get Panel Broker", data: Panel_information })
 
         } catch (error) {
-            // console.log("Theme error-", error);
+     
         }
     }
 
@@ -600,12 +601,12 @@ class Panel {
             const Panel_information = await panel_model.find().select('db_url')
 
             var ErrorArray = []
-            console.log(query)
+        
 
 
             // Your update query
             const updateQuery = { $set: query };
-            console.log(updateQuery)
+
 
             // Function to update documents in a given database
             async function updateDocuments(url) {
@@ -616,7 +617,7 @@ class Panel {
                     const database = client.db();
                     const result = await database.collection(collection_name).updateMany({}, updateQuery);
 
-                    console.log(`Updated ${result.modifiedCount} documents in ${url}`);
+                 
                 } finally {
                     await client.close();
                 }
@@ -638,7 +639,7 @@ class Panel {
             return res.send({ status: true, msg: "Get Panel Broker", data: Panel_information, Error: ErrorArray })
 
         } catch (error) {
-            // console.log("Theme error-", error);
+     
         }
     }
 
@@ -660,8 +661,7 @@ class Panel {
                     },
                 };
 
-                console.log("view", view);
-
+         
                 const client = new MongoClient(url.db_url, { useNewUrlParser: true, useUnifiedTopology: true });
 
                 try {

@@ -306,7 +306,7 @@ const Header = ({ ChatBox }) => {
           }
         })
         .catch((error) => {
-          console.log("Error logout error", error);
+          return;
         });
     }
   };
@@ -348,7 +348,7 @@ const Header = ({ ChatBox }) => {
                 {user_role === "USER" && UserDetails.license_type != 1 ? (
                   <>
                     <div className="headaer-title">
-                      <h3 className="font-w400 mb-0 pe-1">Api Login </h3>
+                      <h3 className="font-w400 mb-0 pe-1" style={{marginLeft:"15px"}}>Api Login </h3>
                     </div>
 
                     <div className="Api Login">

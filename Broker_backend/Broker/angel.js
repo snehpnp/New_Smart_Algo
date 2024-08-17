@@ -57,30 +57,24 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                             item.postdata.transactiontype = 'SELL';
                         }
 
-                        // console.log("price", price)
-                        //console.log("item.client_services.order_type", item.client_services.order_type)
+             
 
                         if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                             item.postdata.price = price
                         }
 
-                        //  console.log("postData after ", item.postdata);
 
 
                         EntryPlaceOrder(item, filePath, signals, signal_req)
 
-                        // console.log("OPTION")
                     } else {
-                        // console.log("CASH")
+                    
 
                         if (type == 'LE' || type == 'SX') {
                             item.postdata.transactiontype = 'BUY';
                         } else if (type == 'SE' || type == 'LX') {
                             item.postdata.transactiontype = 'SELL';
                         }
-
-                        // console.log("price", price)
-
 
                         if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                             item.postdata.price = price
@@ -160,7 +154,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                     var keyStatus = 0;
 
 
-                    console.log("EXITTTTT INSIDEEEEE")
+                   
 
                     try {
                         var config = {
@@ -183,7 +177,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                         axios(config)
                             .then(async (response) => {
                                
-                                 console.log("response",typeof response)
+                                // add code position again run
                                 const filter = { user_id: item._id };
                                 const update = {
                                     $set: {
@@ -205,6 +199,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
 
                                 };
                                 await position_data_store.updateOne(filter, update, { upsert: true });
+                                /////////////
 
                                 fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data) + '\n', function (err) {
                                     if (err) {
@@ -286,79 +281,124 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                                 }
                             })
                             .catch(async (error) => {
+                              
                                 const ExistUserPositionData = await position_data_store.findOne({ user_id: item._id });
+                                
+
+                                fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION AFTER API CATCH ExistUserPositionData - ' + item.UserName + ' ERROR - ' + JSON.stringify(ExistUserPositionData) + '\n', function (err) {
+                                    if (err) {
+                                        return console.log(err);
+                                    }
+                                });
+                                
                                
                                 if (ExistUserPositionData != undefined) {
-                                    console.log("EXITTTTT INSIDEEEEE 4")
-                                    await PositionAgainProcess(ExistUserPositionData.data.response,
-                                        ExistUserPositionData.data.item,
-                                        ExistUserPositionData.data.token,
-                                        ExistUserPositionData.data.signal_req,
-                                        ExistUserPositionData.data.strategy,
-                                        ExistUserPositionData.data.type,
-                                        ExistUserPositionData.data.input_symbol,
-                                        ExistUserPositionData.data.send_rr,
-                                        ExistUserPositionData.data.filePath,
-                                        ExistUserPositionData.data.signals,
-                                        ExistUserPositionData.data.ExistExitSignal,
-                                        ExistUserPositionData.data.segment
-                                     )
+                                    
+                                    // await PositionAgainProcess(ExistUserPositionData.data.response,
+                                    //     ExistUserPositionData.data.item,
+                                    //     ExistUserPositionData.data.token,
+                                    //     ExistUserPositionData.data.signal_req,
+                                    //     ExistUserPositionData.data.strategy,
+                                    //     ExistUserPositionData.data.type,
+                                    //     ExistUserPositionData.data.input_symbol,
+                                    //     ExistUserPositionData.data.send_rr,
+                                    //     ExistUserPositionData.data.filePath,
+                                    //     ExistUserPositionData.data.signals,
+                                    //     ExistUserPositionData.data.ExistExitSignal,
+                                    //     ExistUserPositionData.data.segment
+                                    //  )
+                                    await PositionAgainProcess(ExistUserPositionData.data.response, ExistUserPositionData.data.item,token, signal_req, strategy, type, input_symbol, send_rr, filePath, signals, ExistExitSignal, segment
+                                    )
                                 }
 
-                                fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION DATA ERROR CATCH POSITION API - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
+                                fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION DATA API ERROR CATCH POSITION API - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
                                     if (err) {
                                         return console.log(err);
                                     }
                                 });
         
-                                const message = error.response ? JSON.stringify(error.response.data).replace(/["',]/g, '') : JSON.stringify(error).replace(/["',]/g, '');
+                                // const message = error.response ? JSON.stringify(error.response.data).replace(/["',]/g, '') : JSON.stringify(error).replace(/["',]/g, '');
         
-                                await BrokerResponse.create({
-                                    user_id: item._id,
-                                    receive_signal: signal_req,
-                                    strategy: strategy,
-                                    type: type,
-                                    symbol: input_symbol,
-                                    order_status: "position request error",
-                                    order_id: "",
-                                    trading_symbol: "",
-                                    broker_name: "ANGEL",
-                                    send_request: send_rr,
-                                    reject_reason: message,
-                                });
+                                // await BrokerResponse.create({
+                                //     user_id: item._id,
+                                //     receive_signal: signal_req,
+                                //     strategy: strategy,
+                                //     type: type,
+                                //     symbol: input_symbol,
+                                //     order_status: "position request error",
+                                //     order_id: "",
+                                //     trading_symbol: "",
+                                //     broker_name: "ANGEL",
+                                //     send_request: send_rr,
+                                //     reject_reason: message,
+                                // });
         
-                                await PendingOrderCancel(ExistExitSignal, token, item, filePath, signals, signal_req);
+                                // await PendingOrderCancel(ExistExitSignal, token, item, filePath, signals, signal_req);
 
                             });
 
 
                     } catch (error) {
 
+                        const ExistUserPositionData = await position_data_store.findOne({ user_id: item._id });
+
+                        
+                        fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION AFTER API TRY CATCH ExistUserPositionData - ' + item.UserName + ' ERROR - ' + JSON.stringify(ExistUserPositionData) + '\n', function (err) {
+                            if (err) {
+                                return console.log(err);
+                            }
+                        });
+                               
+                        if (ExistUserPositionData != undefined) {
+                            
+                            // await PositionAgainProcess(ExistUserPositionData.data.response,
+                            //     ExistUserPositionData.data.item,
+                            //     ExistUserPositionData.data.token,
+                            //     ExistUserPositionData.data.signal_req,
+                            //     ExistUserPositionData.data.strategy,
+                            //     ExistUserPositionData.data.type,
+                            //     ExistUserPositionData.data.input_symbol,
+                            //     ExistUserPositionData.data.send_rr,
+                            //     ExistUserPositionData.data.filePath,
+                            //     ExistUserPositionData.data.signals,
+                            //     ExistUserPositionData.data.ExistExitSignal,
+                            //     ExistUserPositionData.data.segment 
+                            //  )
+
+                           
+
+                             await PositionAgainProcess(ExistUserPositionData.data.response, ExistUserPositionData.data.item,token, signal_req, strategy, type, input_symbol, send_rr, filePath, signals, ExistExitSignal, segment
+                             )
 
 
-                        fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
+
+                        }
+
+                        fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION DATA ERROR TRY CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
                             if (err) {
                                 return console.log(err);
                             }
                         });
 
-                        const message = error.response ? JSON.stringify(error.response.data).replace(/["',]/g, '') : JSON.stringify(error).replace(/["',]/g, '');
 
-                        await BrokerResponse.create({
-                            user_id: item._id,
-                            receive_signal: signal_req,
-                            strategy: strategy,
-                            type: type,
-                            symbol: input_symbol,
-                            order_status: "position request error",
-                            order_id: "",
-                            trading_symbol: "",
-                            broker_name: "ANGEL",
-                            send_request: send_rr,
-                            reject_reason: message,
-                        });
 
-                        await PendingOrderCancel(ExistExitSignal, token, item, filePath, signals, signal_req);
+                        // const message = error.response ? JSON.stringify(error.response.data).replace(/["',]/g, '') : JSON.stringify(error).replace(/["',]/g, '');
+
+                        // await BrokerResponse.create({
+                        //     user_id: item._id,
+                        //     receive_signal: signal_req,
+                        //     strategy: strategy,
+                        //     type: type,
+                        //     symbol: input_symbol,
+                        //     order_status: "position request error",
+                        //     order_id: "",
+                        //     trading_symbol: "",
+                        //     broker_name: "ANGEL",
+                        //     send_request: send_rr,
+                        //     reject_reason: message,
+                        // });
+
+                        // await PendingOrderCancel(ExistExitSignal, token, item, filePath, signals, signal_req);
 
 
                     }
@@ -1008,8 +1048,22 @@ const PendingOrderCancel = async (ExistExitSignal, token, item, filePath, signal
 }
 
 const PositionAgainProcess = async (data, item, token, signal_req, strategy, type, input_symbol, send_rr, filePath, signals, ExistExitSignal, segment) => {
+
+    fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION AFTER PositionAgainProcess  INSIDE- ' + item.UserName + ' ERROR - ' + JSON.stringify(data) + '\n', function (err) {
+        if (err) {
+            return console.log(err);
+        }
+    });
+
     const response = JSON.parse(data);
     if (response.data.data != null && response.data.message == "SUCCESS") {
+
+        fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION AFTER PositionAgainProcess  INSIDE- IFF ' + item.UserName + ' ERROR - ' + JSON.stringify(response.data.data) + '\n', function (err) {
+            if (err) {
+                return console.log(err);
+            }
+        });
+
         const Exist_entry_order = response.data.data.find(item1 => item1.symboltoken === token[0].instrument_token);
 
         if (Exist_entry_order !== undefined) {

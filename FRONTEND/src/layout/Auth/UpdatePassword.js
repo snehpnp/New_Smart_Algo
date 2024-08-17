@@ -23,7 +23,7 @@ const UpdatePassword = () => {
         axios.get("https://api.smartalgo.in:3001/smartalgo/get/theme").then((res) => {
      
         }).catch((err) => {
-            console.log("Error in update password", err);
+            return;
         })
     }
 
@@ -77,7 +77,7 @@ const UpdatePassword = () => {
                     }
                 })
                 .catch((error) => {
-                    console.log("Error in update password", error);
+                    return;
                 });
         }
     })

@@ -270,22 +270,7 @@ const TradeHistory = () => {
       ),
     },
 
-    // {
-    //   dataField: "",
-    //   text: "Cancel Order",
-    //   formatter: (cell, row, rowIndex) => (
-    //     <div>
-    //       {row.pendin_order_status == "0" ?
-    //         <>
-    //           <button className="btn btn-primary" onClick={(e) => cancelOrder(e, row)}>
-    //             Cancel
-    //           </button>
-
-    //         </>
-    //         : "-"}
-    //     </div>
-    //   ),
-    // },
+  
   ];
 
   const cancelOrder = async (e, row) => {
@@ -349,6 +334,7 @@ const TradeHistory = () => {
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
 
+    
 
     if (UserDetails && UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
       const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
@@ -377,6 +363,10 @@ const TradeHistory = () => {
             var live_price = response.lp === undefined ? "" : response.lp;
 
             tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
+
+
+
+
               let get_ids = '_id_' + response.tk + '_' + row._id
               let get_id_token = $('.' + get_ids).html();
 
@@ -387,6 +377,7 @@ const TradeHistory = () => {
               const get_entry_type = $(".entry_type_" + response.tk + '_' + row._id).html();
               const get_exit_type = $(".exit_type_" + response.tk + '_' + row._id).html();
               const get_Strategy = $(".strategy_" + response.tk + '_' + row._id).html();
+
 
               if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
                 if (get_entry_qty !== "" && get_exit_qty !== "") {
@@ -781,10 +772,6 @@ const TradeHistory = () => {
     }
   }
 
-
-
-
-
   const handleInputChange = (e) => {
     const value = e.target.value;
     const isValidNumber = /^\d+$/.test(value);
@@ -980,7 +967,7 @@ const TradeHistory = () => {
               <input
                 type="number"
                 className="default-select wide form-control"
-                value={lotMultypaly}
+                defaultValue={lotMultypaly}
                 onChange={(e) => handleInputChange(e)}
               />
             </div>

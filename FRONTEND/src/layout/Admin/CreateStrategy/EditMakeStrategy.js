@@ -33,7 +33,6 @@ const EditMakeStrategy = () => {
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
   const user_role = JSON.parse(localStorage.getItem("user_role"))
 
-  console.log("user_role", user_role)
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
 
@@ -43,15 +42,10 @@ const EditMakeStrategy = () => {
   const [show, setShow] = useState(false);
   const [storeServiceData, setStoreServiceData] = useState([])
   const [filterServices, setFilterServices] = useState("")
-
-  //console.log("filterServices - ",filterServices)
   const [selectedItems, setSelectedItems] = useState([]);
-  //console.log("selectedItems",selectedItems)
-
   const [getIndicators, setGetIndicators] = useState([])
   const [selectAddIndicators, setSelectAddIndicators] = useState([])
   const [indicatorModalRowData, setIndicatorModalRowData] = useState([])
-
   const [showModalindicators, setShowModalindicators] = useState(false);
   const [modalPropsindicators, setModalPropsindicators] = useState({
     e: null,
@@ -201,7 +195,6 @@ const EditMakeStrategy = () => {
       .then((response) => {
         if (response.status) {
 
-          console.log("shakkkkkkkkk --- ", response.data)
           setSingleMakeStrategyData(response.data);
           setTimeFrameVal(response.data.timeframe)
           setExistTimeFrameVal(response.data.timeframe)
@@ -244,7 +237,6 @@ const EditMakeStrategy = () => {
   }
 
 
-  console.log("exitConditionBuyOrSell", exitConditionBuyOrSell)
 
   const handleShow = () => {
     setShow(true);
@@ -259,11 +251,11 @@ const EditMakeStrategy = () => {
 
     axios(config)
       .then(function (response) {
-        // console.log("get service name",response.data);
+       
         setStoreServiceData(response.data.data);
       })
       .catch(function (error) {
-        console.log(error);
+      return ;
       });
   };
 
@@ -305,25 +297,14 @@ const EditMakeStrategy = () => {
     getAllComparatorsApi();
   }, []);
 
-  //const [strategyDataAllAdmin, setStrategyDataAllAdmin] = useState([]);
   const [strategyDataAllAdmin, setStrategyDataAllAdmin] = useState({ loading: true, data: [] });
-
-
-  // get data time frame 
   const [timeFrameData, setTimeFrameData] = useState({ loading: true, data: [] });
-
-  // get data Source 
   const [getSources, setGetSources] = useState({ loading: true, data: [] });
-
-  // get data comparators 
   const [getComparators, setGetComparators] = useState({ loading: true, data: [] });
 
-  console.log("getSources - ", getSources)
 
 
 
-  // console.log("timeFrameData",timeFrameData)
-  // console.log("selectStrategy",selectStrategy)
 
 
   const getAllTimeFrameApi = async () => {
@@ -338,7 +319,7 @@ const EditMakeStrategy = () => {
     )
       .unwrap()
       .then((response) => {
-        //console.log("response get_time_frame - ",response)
+  
         if (response) {
           if (response.status) {
             setTimeFrameData({
@@ -367,7 +348,7 @@ const EditMakeStrategy = () => {
     )
       .unwrap()
       .then((response) => {
-        console.log("response source - ", response)
+        
         if (response) {
           if (response.status) {
             setGetSources({
@@ -396,7 +377,6 @@ const EditMakeStrategy = () => {
     )
       .unwrap()
       .then((response) => {
-        console.log("response get_comparators - ", response)
         if (response) {
           if (response.status) {
             setGetComparators({
@@ -425,7 +405,7 @@ const EditMakeStrategy = () => {
     )
       .unwrap()
       .then((response) => {
-        //console.log("response strategy - ",response)
+    
         if (response.status) {
           if (response.status) {
             setStrategyDataAllAdmin({
@@ -447,7 +427,6 @@ const EditMakeStrategy = () => {
 
 
   const selectTimeFrame = (item) => {
-    console.log("dd -", item.value)
     setTimeFrameVal(item.value);
   }
 
@@ -624,12 +603,7 @@ const EditMakeStrategy = () => {
 
 
   const selectSourceIndicators = (e, propsindicators, field) => {
-    // console.log("fieldfield",field)
-    // console.log("value", e.target.value, "Propsindicators", propsindicators)
-    // console.log(" e ", propsindicators.e.target.value)
-    // console.log(" e.target.value ", e.target.value)
-    // console.log(" buy_sell ", propsindicators.buy_sell)
-    // console.log(" index ", propsindicators.index)
+ 
 
     if (propsindicators.buy_sell == "buy") {
       const foundObject = coditionRequestArr.find((item, i) => i === propsindicators.index);
@@ -727,11 +701,7 @@ const EditMakeStrategy = () => {
 
   const selectSource = (e, condition_item, element_first_second, index, buy_sell) => {
 
-    console.log("e.target.value", e.target.value)
-    console.log("condition_item", condition_item)
-    console.log("element_first_second", element_first_second)
-    console.log("index", index)
-    console.log("buy_sell", buy_sell)
+
     let value = e.target.value;
     if (value == 'ema') {
       openModalindicators(e, condition_item, element_first_second, index, buy_sell)
@@ -781,7 +751,7 @@ const EditMakeStrategy = () => {
     if (e.target.value != "") {
       if (buy_sell == "buy") {
         const foundObject = coditionRequestArr.find((item, i) => i === index);
-        //console.log("foundObject --",foundObject)
+        
         if (foundObject) {
           if (element_first_second == "first") {
             foundObject.first_element.offset = e.target.value;
@@ -793,7 +763,7 @@ const EditMakeStrategy = () => {
         }
       } else if (buy_sell == "sell") {
         const foundObject = coditionRequestArrSell.find((item, i) => i === index);
-        //console.log("foundObject --",foundObject)
+        
         if (foundObject) {
           if (element_first_second == "first") {
             foundObject.first_element.offset = e.target.value;
@@ -1111,8 +1081,6 @@ const EditMakeStrategy = () => {
 
   }
 
-  console.log("coditionRequestArr final --", coditionRequestArr)
-  //console.log("coditionRequestArr Sell final --",coditionRequestArrSell)
 
   let condition_string = "";
   let condition_string_pass = "";
@@ -1120,7 +1088,6 @@ const EditMakeStrategy = () => {
   for (let index = 0; index < coditionRequestArr.length; index++) {
     const val = coditionRequestArr[index];
 
-    //  console.log(`Element at index ${index}: ${val.and_or_operator}`);
 
     if (val.first_element.source !== "" && val.second_element.source !== "") {
 
@@ -1182,8 +1149,6 @@ const EditMakeStrategy = () => {
       break; // Break out of the loop
     }
   }
-  // Continue with the rest of your code
-  console.log("rr - ", condition_string);
 
   let condition_string_sell = "";
   let condition_string_sell_pass = "";
@@ -1191,7 +1156,6 @@ const EditMakeStrategy = () => {
   for (let index = 0; index < coditionRequestArrSell.length; index++) {
     const val = coditionRequestArrSell[index];
 
-    //  console.log(`Element at index ${index}: ${val.and_or_operator}`);
 
     if (val.first_element.source !== "" && val.second_element.source !== "") {
 
@@ -1258,8 +1222,6 @@ const EditMakeStrategy = () => {
     }
   }
 
-  // Continue with the rest of your code
-  console.log("rr sell - ", condition_string_sell);
 
   const AddBracket = (index, start_and, buy_sell) => {
 
@@ -1267,7 +1229,7 @@ const EditMakeStrategy = () => {
       if (start_and == "start") {
 
         const foundObject = coditionRequestArr.find((item, i) => i === index);
-        //console.log("foundObject --",foundObject)
+        
         if (foundObject) {
           // Update the source field of the found object
           foundObject.start_bracket.push("(");
@@ -1277,7 +1239,7 @@ const EditMakeStrategy = () => {
 
       } else if (start_and == "end") {
         const foundObject = coditionRequestArr.find((item, i) => i === index);
-        //console.log("foundObject --",foundObject)
+        
         if (foundObject) {
           // Update the source field of the found object
           foundObject.end_bracket.push(")");
@@ -1290,7 +1252,7 @@ const EditMakeStrategy = () => {
       if (start_and == "start") {
 
         const foundObject = coditionRequestArrSell.find((item, i) => i === index);
-        //console.log("foundObject --",foundObject)
+        
         if (foundObject) {
           // Update the source field of the found object
           foundObject.start_bracket.push("(");
@@ -1300,7 +1262,7 @@ const EditMakeStrategy = () => {
 
       } else if (start_and == "end") {
         const foundObject = coditionRequestArrSell.find((item, i) => i === index);
-        //console.log("foundObject --",foundObject)
+        
         if (foundObject) {
           // Update the source field of the found object
           foundObject.end_bracket.push(")");
@@ -1321,7 +1283,7 @@ const EditMakeStrategy = () => {
         if (start_and == "start") {
 
           const foundObject = coditionRequestArr.find((item, i) => i === index);
-          //console.log("foundObject --",foundObject)
+          
           if (foundObject) {
             // Update the source field of the found object
             foundObject.start_bracket.pop();
@@ -1333,7 +1295,7 @@ const EditMakeStrategy = () => {
         } else if (start_and == "end") {
 
           const foundObject = coditionRequestArr.find((item, i) => i === index);
-          //console.log("foundObject --",foundObject)
+          
           if (foundObject) {
             // Update the source field of the found object
             foundObject.end_bracket.pop();
@@ -1351,7 +1313,7 @@ const EditMakeStrategy = () => {
         if (start_and == "start") {
 
           const foundObject = coditionRequestArrSell.find((item, i) => i === index);
-          //console.log("foundObject --",foundObject)
+         
           if (foundObject) {
             // Update the source field of the found object
             foundObject.start_bracket.pop();
@@ -1363,7 +1325,7 @@ const EditMakeStrategy = () => {
         } else if (start_and == "end") {
 
           const foundObject = coditionRequestArrSell.find((item, i) => i === index);
-          //console.log("foundObject --",foundObject)
+        
           if (foundObject) {
             // Update the source field of the found object
             foundObject.end_bracket.pop();
@@ -1379,15 +1341,10 @@ const EditMakeStrategy = () => {
 
   }
 
-  // console.log("timeFrameVal - ", timeFrameVal)
-
-  // console.log("buyCheck - ", buyCheck)
-
-
-
+  
 
   const StoplossChange = (e, buy_sell) => {
-    console.log("e", e.target.value)
+
     if (parseInt(e.target.value) > 0) {
 
       if (buy_sell == "buy") {
@@ -1422,8 +1379,7 @@ const EditMakeStrategy = () => {
 
     }
   }
-  //console.log("exitConditionBuyOrSell",exitConditionBuyOrSell[0].buy)
-  //console.log("exitConditionBuyOrSell sell",exitConditionBuyOrSell[0].sell)
+  
 
   const TargetChange = (e, buy_sell) => {
 
@@ -1625,7 +1581,7 @@ const EditMakeStrategy = () => {
     let condition_string_source = [];
     for (let index = 0; index < coditionRequestArr.length; index++) {
       const val = coditionRequestArr[index];
-      //  console.log(`Element at index ${index}: ${val.and_or_operator}`)
+     
 
       if (val.first_element.source !== "" && val.second_element.source !== "") {
         if (val.first_element.source != "number") {
@@ -1645,7 +1601,6 @@ const EditMakeStrategy = () => {
         break; // Break out of the loop
       }
     }
-    // console.log("condition_string_source",condition_string_source)
 
 
 
@@ -1672,7 +1627,7 @@ const EditMakeStrategy = () => {
         break; // Break out of the loop
       }
     }
-    // console.log("condition_string_sell_source",condition_string_sell_source)
+
 
 
     // Send Request Buy ------
@@ -1714,7 +1669,6 @@ const EditMakeStrategy = () => {
         "maxLoss": singleMakeStrategyData.maxLoss
       }
 
-      console.log("data request buy", data)
 
       await dispatch(Update_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
         if (response.status === 409) {
@@ -1811,9 +1765,6 @@ const EditMakeStrategy = () => {
 
 
 
-  console.log("timeTradeConddition - ", timeTradeConddition);
-  console.log("update oject - ", singleMakeStrategyData);
-  console.log("update oject selectStrategy- ", selectStrategy);
 
   const SelectStrategyTag = (e) => {
     //alert("okk ssss")

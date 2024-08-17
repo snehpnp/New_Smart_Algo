@@ -738,7 +738,7 @@ class GroupService {
 
 
     } catch (error) {
-      console.log("GET SERVICES NAME -", error);
+    
       return res.send({ status: false, msg: 'Internal Server Error' });
     }
 

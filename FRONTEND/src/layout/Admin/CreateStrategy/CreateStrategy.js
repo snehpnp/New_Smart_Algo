@@ -188,7 +188,7 @@ const CreateStrategy = () => {
         setStoreServiceData(response.data.data);
       })
       .catch(function (error) {
-        console.log(error);
+        return;
       });
   };
 
@@ -390,12 +390,7 @@ const CreateStrategy = () => {
   };
 
   const selectSourceIndicators = (e, propsindicators, field) => {
-      // console.log("fieldfield",field)
-      // console.log("value", e.target.value, "Propsindicators", propsindicators)
-      // console.log(" e ", propsindicators.e.target.value)
-      // console.log(" e.target.value ", e.target.value)
-      // console.log(" buy_sell ", propsindicators.buy_sell)
-      // console.log(" index ", propsindicators.index)
+
 
       if (propsindicators.buy_sell == "buy") {
         const foundObject = coditionRequestArr.find((item, i) => i === propsindicators.index);
@@ -459,11 +454,7 @@ const CreateStrategy = () => {
 
   const selectSource = (e, condition_item, element_first_second, index, buy_sell) => {
 
-    console.log("e.target.value", e.target.value)
-    console.log("condition_item", condition_item)
-    console.log("element_first_second", element_first_second)
-    console.log("index", index)
-    console.log("buy_sell", buy_sell)
+
     let value = e.target.value;
     if (value == 'ema') {
       openModalindicators(e, condition_item, element_first_second, index, buy_sell)
@@ -2598,11 +2589,7 @@ const CreateStrategy = () => {
           </Modal.Header>
           <Modal.Body>
             {
-              //console.log("modalPropsindicators inside -- ", modalPropsindicators)
-              // console.log("modalPropsindicators inside -- ", modalPropsindicators.e != null ? modalPropsindicators.e.target.value +"  "+modalPropsindicators.index 
-              //   : "")
-              //  console.log("modalPropsindicators index -- ", modalPropsindicators.element_first_second)
-              // console.log("modalPropsindicators inside -- ", coditionRequestArr[modalPropsindicators.index])
+          
 
             }
 

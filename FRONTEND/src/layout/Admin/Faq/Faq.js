@@ -23,7 +23,7 @@ const FaqAccordion = () => {
                 else {
                 }
             }).catch((err) => {
-                console.log("Error is found in Backup the signal", err)
+                return;
             })
 
 

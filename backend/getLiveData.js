@@ -159,7 +159,7 @@ module.exports = function (app, io) {
                             }
 
                         } catch (error) {
-                            console.log("Error Shocket", error);
+                            console.log("Error Shocket get live price Date :- " + new Date() +" ---"+ error);
 
                         }
                     }
@@ -172,7 +172,7 @@ module.exports = function (app, io) {
 
 
             } catch (error) {
-                console.log("Error createSocketSess", error);
+                console.log("Error createSocketSess"+ new Date() +" ---"+ error);
             }
 
         }
