@@ -719,6 +719,8 @@ module.exports = function (app) {
             CreateDataBase(req.body)
             // console.log("SNEH")
 
+            DawnloadOptionChainSymbol()
+
 
             return res.send("DONE");
         } catch (error) {
@@ -842,7 +844,6 @@ module.exports = function (app) {
                 licenses: 0,
                 disclaimer_status: "0",
             });
-            console.log("SNEH", companyData)
 
             return companyData.save();
         }

@@ -19,9 +19,8 @@ async function createViewAngel() {
     if (views.length > 0) {
       console.log('View already exists.');
       return; 
-    }
-
-
+    }else{
+      
     const currentDate = new Date(); 
 
     // Define the pipeline to create the view
@@ -346,9 +345,12 @@ async function createViewAngel() {
     // Create the view
     await db.createCollection('angelView', { viewOn: 'users', pipeline });
 
-    console.log('View created successfully.');
+    console.log('Angel View created successfully.');
+    }
+
+
   } catch (error) {
-    console.log('Error:', error);
+return;
   } finally {
     client.close();
   }
