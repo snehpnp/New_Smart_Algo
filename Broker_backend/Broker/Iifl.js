@@ -106,7 +106,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
                     if (segment.toUpperCase() != "C") {
-                        item.postdata.securityId = token[0].instrument_token;
+                        item.postdata.exchangeInstrumentID = token[0].instrument_token;
                     }
 
 
@@ -136,15 +136,21 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     };
                     axios(config)
                         .then(async (response) => {
-
+                           
+                            console.log("response IFFL",response.data);
 
                             if (response.data.result.positionList.length > 0) {
 
                                 fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.result.positionList.length) + '\n', function (err) {
                                     if (err) { }
                                 });
+                                
 
-                                const Exist_entry_order = response.data.result.positionList.find(item1 => item1.ExchangeInstrumentId === token[0].instrument_token);
+                                
+
+                                const Exist_entry_order = response.data.result.positionList.find(item1 => item1.ExchangeInstrumentId == token[0].instrument_token);
+
+                                console.log("Exist_entry_order ",Exist_entry_order)
 
                                 if (Exist_entry_order != undefined) {
 
@@ -608,7 +614,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
 
 
-            if (response.data.orderStatus != undefined) {
+            if (response.data.type == "success") {
 
                 BrokerResponse.create({
                     user_id: item._id,
@@ -616,8 +622,8 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                     strategy: strategy,
                     type: type,
                     symbol: input_symbol,
-                    order_status: response.data.orderStatus,
-                    order_id: response.data.orderId,
+                    order_status: response.data.type,
+                    order_id: response.data.result.AppOrderID,
                     trading_symbol: "",
                     broker_name: "iifl",
                     send_request: send_rr,

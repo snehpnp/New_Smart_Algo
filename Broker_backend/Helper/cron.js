@@ -235,7 +235,20 @@ module.exports = function (app) {
                 //  const url = 'https://justradeuat.swastika.co.in/NFO_symbols.txt.zip';
             
                  // Download the zip file
-                 const response = await axios.get(item.url, { responseType: 'arraybuffer' });
+                 try {
+                   const response = await axios.get(item.url, { responseType: 'arraybuffer' });
+                    // Check the status code
+                    if (response.status !== 200) {
+                        console.log(`Failed to download ${item.filename}. Status code: ${response.status}`);
+                        return;
+                    }
+            
+                    // Verify content type
+                    const contentType = response.headers['content-type'];
+                    if (!contentType.includes('application/zip')) {
+                        console.log(`Unexpected content type for ${item.filename}: ${contentType}`);
+                        return;
+                    }
          
                  // Create a folder to store the extracted files
                  const outputFolder = path.join(__dirname, '../AllInstrumentToken/swastika');
@@ -253,9 +266,9 @@ module.exports = function (app) {
          
                  // Clean up the downloaded zip file
                  fs.unlinkSync(zipFilePath);
-    
-    
-            // console.log('Download and extraction completed successfully '+item.url + " filename ",item.filename);
+                 } catch (error) {
+                    console.log("Err downloadAndSwastika",error)
+                 }
     
             });
 

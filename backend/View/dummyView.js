@@ -3912,7 +3912,6 @@ db.createView("open_position_excute", "open_position",
   ]
 )
 
-
 //ICICI DIRECT VIEW
 db.createView("icicidirectview", "users",
   [
