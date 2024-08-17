@@ -112,7 +112,7 @@ const CreateStrategy = () => {
         setStoreServiceData(response.data.data);
       })
       .catch(function (error) {
-        console.log(error);
+        return;
       });
  
   };

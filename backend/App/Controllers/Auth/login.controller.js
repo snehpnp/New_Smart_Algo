@@ -934,7 +934,6 @@ class Login {
 
                 var UserRemainPoint = user.refer_points = user.refer_points - reedeem_points;
 
-                console.log("update/reedeem----", UserRemainPoint)
 
                 await User.updateOne(
                     { _id: user._id },

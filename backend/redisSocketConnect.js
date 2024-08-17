@@ -122,7 +122,7 @@ module.exports = function (app) {
               }
           }
       } catch (err) {
-          console.log(err);
+   
       }
   }
   
@@ -438,7 +438,7 @@ module.exports = function (app) {
   
   
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+  
     }
   
   
@@ -524,7 +524,7 @@ module.exports = function (app) {
   
   
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+
     }
   
   
@@ -610,7 +610,7 @@ module.exports = function (app) {
   
   
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+
     }
   
   
@@ -695,7 +695,7 @@ module.exports = function (app) {
   
   
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+ 
     }
   
   
@@ -777,7 +777,7 @@ module.exports = function (app) {
   
   
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+
     }
   
   

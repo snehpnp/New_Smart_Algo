@@ -173,7 +173,7 @@ class Swastika {
             
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
+        
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }

@@ -175,7 +175,7 @@ const Login = () => {
         }
       })
       .catch((error) => {
-        console.log("Error in login page", error);
+        return;
       });
   }
 
@@ -246,7 +246,7 @@ const Login = () => {
           }
         })
         .catch((error) => {
-          console.log("Error in login page", error);
+
           setSignInBtn(false);
         });
     },
@@ -456,7 +456,7 @@ const Login = () => {
         }
       })
       .catch((error) => {
-        console.log("Error in Login Page", error);
+        return;
       });
   };
 

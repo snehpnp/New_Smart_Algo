@@ -57,30 +57,24 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                             item.postdata.transactiontype = 'SELL';
                         }
 
-                        // console.log("price", price)
-                        //console.log("item.client_services.order_type", item.client_services.order_type)
+             
 
                         if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                             item.postdata.price = price
                         }
 
-                        //  console.log("postData after ", item.postdata);
 
 
                         EntryPlaceOrder(item, filePath, signals, signal_req)
 
-                        // console.log("OPTION")
                     } else {
-                        // console.log("CASH")
+                    
 
                         if (type == 'LE' || type == 'SX') {
                             item.postdata.transactiontype = 'BUY';
                         } else if (type == 'SE' || type == 'LX') {
                             item.postdata.transactiontype = 'SELL';
                         }
-
-                        // console.log("price", price)
-
 
                         if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                             item.postdata.price = price

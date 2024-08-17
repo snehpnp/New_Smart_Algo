@@ -50,7 +50,6 @@ class Zebull {
                     var raw = "jData=" + JSON.stringify(data);
 
 
-                    console.log("raw", raw)
 
                     var config = {
                         method: 'post',
@@ -64,7 +63,6 @@ class Zebull {
                     await axios.request(config)
                         .then(async (response) => {
 
-                            console.log("req ", response.data)
 
 
                             if (response.data.stat == "Ok") {
@@ -101,7 +99,6 @@ class Zebull {
 
                         })
                         .catch((error) => {
-                            console.log("error -- ", error.response.data);
 
                             if (error) {
                                 if (error.response.data.emsgd) {

@@ -306,7 +306,7 @@ const Header = ({ ChatBox }) => {
           }
         })
         .catch((error) => {
-          console.log("Error logout error", error);
+          return;
         });
     }
   };

@@ -61,7 +61,7 @@ const AdminHelps = () => {
                 }
             })
             .catch((err) => {
-                console.log("error in updation the entry price", err)
+                return;
             })
     }
 
@@ -133,8 +133,8 @@ const AdminHelps = () => {
                     toast.error("some error finds")
                 }
             }).catch((err) => {
-                console.log("Error is found in deleting the signal", err)
-            })
+                return null
+             })
     }
 
 

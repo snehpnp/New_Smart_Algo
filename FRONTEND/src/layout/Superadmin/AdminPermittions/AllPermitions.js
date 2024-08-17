@@ -66,7 +66,7 @@ const AllPermitions = () => {
                 }
             })
             .catch((err) => {
-                console.log("Error to fatching the panle details", err)
+                return;
             })
     }
 

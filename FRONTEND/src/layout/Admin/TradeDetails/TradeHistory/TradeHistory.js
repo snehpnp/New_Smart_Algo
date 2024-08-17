@@ -334,7 +334,7 @@ const TradeHistory = () => {
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
 
-    console.log("row",tradeHistoryData.data[0])
+    
 
     if (UserDetails && UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
       const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
@@ -771,10 +771,6 @@ const TradeHistory = () => {
       }
     }
   }
-
-
-
-
 
   const handleInputChange = (e) => {
     const value = e.target.value;

@@ -53,7 +53,7 @@ class mandotsecurities {
             };
 
             const response = await axios.request(config);
-            console.log("API Response:", response.data);
+         
 
             if (response.data.type == "success") {
                 const result = await User.findByIdAndUpdate(
@@ -73,7 +73,6 @@ class mandotsecurities {
                     system_ip: getIPAddress()
                 });
 
-                console.log("=>>",user_logsData)
                 await user_logsData.save();
 
                 return res.send({ status: true, data: [], msg: "Trading On Successfully" });
@@ -91,7 +90,7 @@ class mandotsecurities {
             }
 
         } catch (error) {
-           console.log("Error Catch -", error.response ? error.response.data : error.message);
+
             return res.send({ status: false, data: error.response ? error.response.data : error.message, msg: "Error occurred while retrieving access token" });
         }
     }
@@ -111,7 +110,7 @@ class mandotsecurities {
 
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
+     
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }

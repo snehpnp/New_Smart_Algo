@@ -592,9 +592,7 @@ class MakeStartegy {
           maxLoss: maxLoss
           })
           .then(async (createUserMakeStrategy) => {
-             console.log("createUserMakeStrategy ",createUserMakeStrategy)
-             
-            //console.log('condition_array:', condition_array);
+    
             
             let arraySource = []
            await condition_array.forEach(async (condition) => {
@@ -604,13 +602,7 @@ class MakeStartegy {
                   if (!arraySource.includes(condition[element].source)) {
                     arraySource.push(condition[element].source)
                   }
-                  
-                  // console.log(`Working on timeframe: ${timeframe}`);
-                  // console.log(`Working on tokensymbol: ${tokensymbol}`);
-                  // console.log(`Working on source: ${condition[element].source}`);
-                  // console.log(`Working on offset: ${condition[element].offset}`);
-                  // console.log(`Working on indicator_field: ${condition[element].indicator_field}`);
-                  // console.log(`Working on period: ${condition[element].period}`);
+            
             
                   let viewName = condition[element].source + '_M' + timeframe + '_' + tokensymbol;
                   let collectionViewName = 'M' + timeframe + '_' + tokensymbol;
@@ -876,13 +868,6 @@ const generateMongoCondition = async (conditions) => {
               break;
       }
 
-      console.log("operator ",operator)
-      console.log("field1 ",field1)
-      console.log("index1 ",index1)
-      console.log("field2 ",field2)
-      console.log("index2 ",index2)
-      console.log("type ",type)
-      console.log("mongoOperator ",mongoOperator)
 
 
       // let condition_one
@@ -1048,7 +1033,6 @@ async function run() {
     // Define the function to be executed
     const executeFunction = async () => {
 
-      // console.log("DONEEE executeFunction")
       let rr = 1
         if (rr) {
      // if (holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
@@ -1064,14 +1048,10 @@ async function run() {
         ];
         const allStrategyResult = await UserMakeStrategy.aggregate(pipeline);
 
-      //  console.log("allStrategyResult ", allStrategyResult.length)
         if (allStrategyResult.length > 0) {
           await Promise.all(
          allStrategyResult.map(async (val, index) => {
-          //for (let index = 0; index < allStrategyResult.length; index++) {
-           // const val = allStrategyResult[index];
-            //console.log("val.condition", val.condition)
-           // console.log("val.condition", val.type)
+      
             const currentDate = new Date();
             const options = {
               hour: '2-digit',
@@ -1118,12 +1098,6 @@ async function run() {
              
               return;
             } else {
-
-              // console.log("currentTime ", currentTime)
-              // console.log("entryTime ", entryTime)
-              // console.log("exitTime ", exitTime)
-              // console.log("notradeTime ", notradeTime)
-              // if (currentTime > entryTime && entryTime < exitTime && entryTime < notradeTime) {
               if (rr) {
                 const currentDate = new Date();
                 const milliseconds = currentDate.getTime();

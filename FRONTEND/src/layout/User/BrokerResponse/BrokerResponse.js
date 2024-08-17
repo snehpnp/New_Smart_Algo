@@ -21,28 +21,19 @@ const BrokerResponse = () => {
   const [refresh, setrefresh] = useState(false)
   const [showModal, setshowModal] = useState(false)
   const [shouldAddNewColumn, setShouldAddNewColumn] = useState(false)
-  
   const [BrokerResponseId, setBrokerResponseId] = useState([])
   const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
-
-
-  console.log("BrokerResponseId",BrokerResponseId)
-  console.log("DashboardData",DashboardData)
+  const [UserDetails, setUserDetails] = useState({ loading: true, data: [] });
+  const [showAddLicenceModal, setshowAddLicenceModal] = useState(false)
 
 
   const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
   const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
   const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
   const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
-  const user_details_goTo = JSON.parse(localStorage.getItem("user_details_goTo"))
 
 
-  const [UserDetails, setUserDetails] = useState({
-    loading: true,
-    data: [],
-  });
 
- console.log("UserDetails",UserDetails)
   const data = async () => {
 
     const userId = isgotodashboard ? gotodashboard.user_id : user_details.user_id;
@@ -59,8 +50,8 @@ const BrokerResponse = () => {
             loading: false,
             data: response.data,
           });
-         if(response.data.broker == "12"){
-           setShouldAddNewColumn(true)
+          if (response.data.broker == "12") {
+            setShouldAddNewColumn(true)
           }
         }
       });
@@ -68,10 +59,6 @@ const BrokerResponse = () => {
   useEffect(() => {
     data();
   }, []);
-
-
-  //  for Add Licence
-  const [showAddLicenceModal, setshowAddLicenceModal] = useState(false)
 
 
 
@@ -129,115 +116,48 @@ const BrokerResponse = () => {
           } size={20} color="#198754" strokeWidth={2} className="mx-1" />
         </>
     },
-    // {
-     
-    //     dataField: '',
-    //     text: 'Refresh',
-    //     formatter: (cell, row, rowIndex) => (
-    //       <>
-          
-    //         {row.order_id != "" && row.order_view_status == "0" ? (
-    //           <button onClick={() => console.log('Button clicked at row:', rowIndex)}>BUTTON</button>
-    //         ) : (
-    //           ""
-    //         )}
-    //       </>
-    //     ),
-    //   }
-      
-    
-    // {
-    //   dataField: 'order_view_status',
-    //   text: 'order ',
-    //   formatter: (cell, row, rowIndex) =>
-    //     cell == "0" || cell == 0 ?
-    //       <>
 
-    //         <GanttChartSquare onClick={(e) => GetBrokerInforMation(row)
-    //         } size={20} color="#198754" strokeWidth={2} className="mx-1" />
-    //       </>
-    //       :
-    //       "-"
-    // },
-    // {
-    //   dataField: 'order_view_status',
-    //   text: 'Action',
-    //   formatter: (cell, row, rowIndex) =>
-    //     <div style={{ width: "120px" }}>
-
-    //       {row.order_view_date !== undefined && row.order_view_date !== "undefined" && row.order_view_date !== "" ? JSON.parse(row.order_view_date).Status == "open" ? <div>
-    //         <span data-toggle="tooltip" data-placement="top" title="Edit">
-    //           <Pencil
-    //             size={20}
-    //             color="#198754"
-    //             strokeWidth={2}
-    //             className="mx-1"
-    //             onClick={() => setshowAddLicenceModal(true)}
-    //           />
-    //         </span>
-
-    //         <span data-toggle="tooltip" data-placement="top" title="Delete">
-    //           <Trash2
-    //             size={20}
-    //             color="#d83131"
-    //             strokeWidth={2}
-    //             className="mx-1"
-    //           // onClick={(e) => Delete_order(row._id)}
-    //           />
-    //         </span>
-
-
-    //       </div> : "" : ""}
-
-    //     </div>
-    // },
 
   ];
 
-// Conditionally add the new column
-if (shouldAddNewColumn) {
-  columns.push({
-    dataField: '',
-    text: 'Refresh',
-    formatter: (cell, row, rowIndex) => (
-      <>
-        {row.order_id !== '' && row.order_view_status === '0' ? (
-          <button 
-          className='btn btn-primary d-flex ms-auto mb-3' 
-          type="reset" 
-          style={{  height: '40px'}}
-          onClick={(e) => Singlerefresh(e,row)
-          
-          }>Refresh</button>
-        ) : (
-          ''
-        )}
-      </>
-    ),
-  });
-}
+  // Conditionally add the new column
+  if (shouldAddNewColumn) {
+    columns.push({
+      dataField: '',
+      text: 'Refresh',
+      formatter: (cell, row, rowIndex) => (
+        <>
+          {row.order_id !== '' && row.order_view_status === '0' ? (
+            <button
+              className='btn btn-primary d-flex ms-auto mb-3'
+              type="reset"
+              style={{ height: '40px' }}
+              onClick={(e) => Singlerefresh(e, row)
 
+              }>Refresh</button>
+          ) : (
+            ''
+          )}
+        </>
+      ),
+    });
+  }
 
- const Singlerefresh =async (e,row) => {
- 
- await dispatch(GET_ALL_BROKER_RESPONSES({ user_id: isgotodashboard ? gotodashboard.user_id : user_Id ,broker_response_id: row._id , order_id : row.order_id})).unwrap()
+  const Singlerefresh = async (e, row) => {
+
+    await dispatch(GET_ALL_BROKER_RESPONSES({ user_id: isgotodashboard ? gotodashboard.user_id : user_Id, broker_response_id: row._id, order_id: row.order_id })).unwrap()
       .then((response) => {
         if (response.status) {
           setrefresh(!refresh)
           window.location.reload();
-        }else{
+        } else {
           setrefresh(!refresh)
         }
-   })
+      })
 
 
- }
-  
- 
+  }
 
-
-
-  // GET BROKER RESPONSE ALL DATA
   const BrokerResponse = async (e) => {
     await dispatch(Get_Broker_Response({ _id: isgotodashboard ? gotodashboard.user_id : user_Id, token: AdminToken })).unwrap()
       .then((response) => {
@@ -251,7 +171,6 @@ if (shouldAddNewColumn) {
       })
   }
 
-
   const updateBrokerResponse = async (e) => {
     await dispatch(GET_ALL_BROKER_RESPONSES({ user_id: isgotodashboard ? gotodashboard.user_id : user_Id })).unwrap()
       .then((response) => {
@@ -261,42 +180,10 @@ if (shouldAddNewColumn) {
       })
   }
 
-
-  // GET ALL GROUP SERVICES NAME
   const GetAllServicesName = async (row) => {
-    // GetBrokerInforMation(row)
     setBrokerResponseId(row)
     setshowModal(true)
-
-
   }
-
-
-  // GET BROKER TRADE DATA
-  const GetBrokerInforMation = async (row) => {
-
-    await dispatch(UpdateBrokerResponse({ OrderId: row.order_id, user_id: row.user_id, token: AdminToken })).unwrap()
-      .then((response) => {
-
-        if (response.status) {
-
-          setDashboardData({
-            loading: false,
-            data: response.data
-          })
-          setrefresh(!refresh)
-        } else {
-
-          setDashboardData({
-            loading: false,
-            data: response.data
-          })
-        }
-      })
-
-  }
-
-
 
   // USE EFFECT
   useEffect(() => {
@@ -310,19 +197,13 @@ if (shouldAddNewColumn) {
 
     <Content Page_title="Broker Response" button_status={false}>
 
-      
       {
-        UserDetails.data && UserDetails.data.broker == "12" ? "":
-        <button className='btn btn-primary d-flex ms-auto mb-3' type="reset" onClick={(e) => setrefresh(!refresh)}>Refresh</button>
+        UserDetails.data && UserDetails.data.broker == "12" ? "" :
+          <button className='btn btn-primary d-flex ms-auto mb-3' type="reset" onClick={(e) => setrefresh(!refresh)}>Refresh</button>
       }
-      
-
 
       <FullDataTable TableColumns={columns} tableData={DashboardData.data} />
-
-
       <OrderPending showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
-
       {
         showModal ?
           <>
@@ -356,7 +237,7 @@ if (shouldAddNewColumn) {
                   <tr>
 
                     <td className="bg-table"> Signal</td>
-                    <td className="order-date-cell">{BrokerResponseId.send_request != undefined ? atob(BrokerResponseId.send_request):""}</td>
+                    <td className="order-date-cell">{BrokerResponseId.send_request != undefined ? atob(BrokerResponseId.send_request) : ""}</td>
                   </tr>
                   <tr>
                     <td className="bg-table"> Order Status</td>
@@ -370,8 +251,8 @@ if (shouldAddNewColumn) {
                     <td className="bg-table"> Order Data</td>
                     <td className="order-date-cell">{BrokerResponseId.order_view_date}</td>
                   </tr>
-                 
-                 
+
+
                 </table>
               </div>
             </Modal >

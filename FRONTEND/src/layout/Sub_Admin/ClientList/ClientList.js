@@ -99,7 +99,7 @@ const AllClients = () => {
                 await Brokerdata();
                 await data();
             } catch (error) {
-                console.log('Error fetching data:', error);
+                return;
             }
         };
 

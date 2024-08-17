@@ -1569,16 +1569,10 @@ class Employee {
       if (key == 1) {
         data = await user_logs.find({ user_Id: id });
       } else {
-        data = await BrokerResponse.find({ user_Id: id });
+        data = await BrokerResponse.find({ user_id: id });
 
       }
 
-
-
-
-      // if (data.length == 0) {
-      //   return res.status(404).json({ status: false, msg: "No data found for the provided ID" });
-      // }
 
       return res.status(200).json({
         status: true,

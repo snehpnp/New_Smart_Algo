@@ -67,7 +67,7 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
                 onClose();
                 resetForm();
             } catch (error) {
-               console.log('Error:', error);
+                return;
             }
         },
     });

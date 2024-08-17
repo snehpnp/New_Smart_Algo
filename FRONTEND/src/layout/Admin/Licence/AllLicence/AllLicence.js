@@ -146,7 +146,7 @@ const AllLicence = () => {
         });
       }
     } catch (error) {
-      console.log('Error fetching data:', error);
+  
       setAllClients({ loading: false, data: null });
     }
   };

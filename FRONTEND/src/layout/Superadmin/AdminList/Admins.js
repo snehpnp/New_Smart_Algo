@@ -33,7 +33,7 @@ const AdminsList = () => {
                 setThemeList(response.data);
             }
         } catch (error) {
-            console.log('Error fetching themes:', error.message);
+            return;
         }
     };
 
@@ -54,7 +54,6 @@ const AdminsList = () => {
                 setFilteredData([]); // Initialize filteredData with empty array
             }
         } catch (error) {
-            console.log('Error fetching panels:', error.message);
             setThemeData({
                 loading: false,
                 data: [],
@@ -74,7 +73,6 @@ const AdminsList = () => {
             const response = await axios.get(row.domain + '/backend/all/brokerview');
             return response.data;
         } catch (error) {
-            console.log('Error fetching broker view data:', error.message);
             return null;
         }
     };
@@ -101,7 +99,6 @@ const AdminsList = () => {
 
             await axios.request(config);
         } catch (error) {
-            console.log('Error fetching broker view data:', error.message);
             throw error;
         }
     };
@@ -286,7 +283,7 @@ const AdminsList = () => {
             }
         } catch (error) {
             toast.error("An error occurred while closing the panel");
-            console.log('Error closing company:', error.message);
+        
         }
     };
 
