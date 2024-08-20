@@ -338,7 +338,7 @@ app.post('/broker-signals', async (req, res) => {
       var option_type = signals.OType;
       var expiry = signals.Expiry;
       var strategy = signals.Strategy;
-      var qty_percent = signals.Quntity;
+      var qty_percent = 100;
       var client_key = signals.Key;
       var TradeType = signals.TradeType;
 
