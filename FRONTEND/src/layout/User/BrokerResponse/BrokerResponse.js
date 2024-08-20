@@ -187,7 +187,7 @@ const BrokerResponse = () => {
 
   // USE EFFECT
   useEffect(() => {
-    updateBrokerResponse()
+ 
     BrokerResponse()
   }, [refresh])
 
