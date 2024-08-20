@@ -114,19 +114,6 @@ class Signals {
                 }
             }
 
-
-
-            if (GetAllClientServices.length > 0 && GetAllClientServices[0].allSignals.flat().length > 0) {
-
-                const sortedAndFilteredArray = GetAllClientServices[0].allSignals.flat()
-                    .sort((a, b) => b.createdAt - a.createdAt);
-
-                return res.send({ status: true, data: sortedAndFilteredArray, msg: "Get Signals" })
-            } else {
-                return res.send({ status: false, data: [], msg: "Data Empty" })
-            }
-
-
         } catch (error) {
             console.log("Error Signals  error -", error);
         }
