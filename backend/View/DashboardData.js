@@ -16,7 +16,7 @@ async function DashboardView() {
         // Establish MongoDB connection using connectToDatabase() function
         const db = await connectToDatabase();
 
-        const views = await db.listCollections({ name: 'angelView' }).toArray();
+        const views = await db.listCollections({ name: 'dashboard_data' }).toArray();
 
         if (views.length > 0) {
             return;
@@ -352,6 +352,7 @@ async function DashboardView() {
 
 
     } catch (error) {
+        
     return
     }
 }
