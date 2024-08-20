@@ -1,44 +1,28 @@
 import React, { useEffect, useState } from "react";
-import Loader from "../../..//Utils/Loader";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import Loader from "../../../Utils/Loader";
+import { useNavigate } from "react-router-dom";
 import Content from "../../../Components/Dashboard/Content/Content";
 import Formikform from "../../../Components/ExtraComponents/Form/Formik_form1";
 import * as valid_err from "../../../Utils/Common_Messages";
-
-
 import { useFormik } from "formik";
-import { Add_Panel_data } from "../../..//ReduxStore/Slice/Superadmin/SuperAdminSlice";
+import { Add_Panel_data } from "../../../ReduxStore/Slice/Superadmin/SuperAdminSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Theme_Name } from '../../../ReduxStore/Slice/ThemeSlice';
-import { All_Brokers } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
-
-import toast, { Toaster } from "react-hot-toast";
-
+import { All_Brokers } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+import toast, { Toaster } from "react-hot-toast";
 
 const Add_Panel = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
     const user_token = JSON.parse(localStorage.getItem("user_details")).token;
     const Role = JSON.parse(localStorage.getItem("user_details")).Role;
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
     const UserName = JSON.parse(localStorage.getItem("user_details")).UserName;
-
-
     const [getAllThemeName, setAllThemeName] = useState([]);
     const [getGetAllBrokerName, setGetAllBrokerName] = useState([]);
-
-
-    const [Addsubadmin, setAddsubadmin] = useState({
-        loading: false,
-        data: [],
-    });
-
-
+    const [Addsubadmin, setAddsubadmin] = useState({ loading: false, data: [] });
     const [state1, setstate1] = useState([]);
-
-
 
     const formik = useFormik({
         initialValues: {
@@ -56,66 +40,47 @@ const Add_Panel = () => {
             Create_Strategy: false,
             Option_chain: false,
             Strategy_plan: false,
-            backend_rul:""
-
+            backend_rul: ""
         },
-
         validate: (values) => {
             const errors = {};
-
-
             if (!values.panel_name && formik.touched.panel_name) {
                 errors.panel_name = valid_err.PANEL_NAME_ERROR;
             }
-
             if (!values.domain) {
                 errors.domain = valid_err.DOMAIN_ERROR;
             }
-
-            // if (!values.port) {
-            //     errors.port = valid_err.PORT_ERROR;
-            // }
-
             if (!values.key) {
                 errors.key = valid_err.KEY_ERROR;
             }
-
             if (!values.db_url) {
                 errors.db_url = valid_err.DBURL_ERROR;
             }
-
-            // if (!values.db_name) {
-            //     errors.db_name = valid_err.DBNAME_ERROR;
-            // }
-
-            // if (!values.backend_rul) {
-            //     errors.backend_rul = valid_err.DBNAME_ERROR;
-            // }
-
-
+            if (!values.theme_id) {
+                errors.theme_id = "Please select theme";
+            }
             return errors;
         },
         onSubmit: async (values) => {
-
-            const req = {
-                panel_name: values.panel_name,
-                domain: values.domain,
-                port: values.port,
-                key: values.key,
-                ip_address: values.ip_address,
-                theme_id: values.theme_id,
-                db_url: values.db_url,
-                db_name: values.db_name,
+            // Trim each field before creating the request object
+            const trimmedValues = {
+                panel_name: values.panel_name.trim(),
+                domain: values.domain.trim(),
+                port: values.port.trim(),
+                key: values.key.trim(),
+                ip_address: values.ip_address.trim(),
+                theme_id: values.theme_id.trim(),
+                db_url: values.db_url.trim(),
+                db_name: values.db_name.trim(),
                 broker_id: state1,
-                Create_Strategy: values.Create_Strategy && values.Create_Strategy ? 1 : 0,
-                Option_chain: values.Option_chain && values.Option_chain ? 1 : 0,
-                Strategy_plan: values.Strategy_plan && values.Strategy_plan ? 1 : 0,
-                backend_rul:values.domain+'/backend/',
-                UserName:UserName
+                Create_Strategy: values.Create_Strategy ? 1 : 0,
+                Option_chain: values.Option_chain ? 1 : 0,
+                Strategy_plan: values.Strategy_plan ? 1 : 0,
+                backend_rul: values.domain.trim() + '/backend/',
+                UserName: UserName.trim()
             };
 
-          
-            await dispatch(Add_Panel_data({ req: req, token: user_token }))
+            await dispatch(Add_Panel_data({ req: trimmedValues, token: user_token }))
                 .unwrap()
                 .then((response) => {
                     if (response.status === 409) {
@@ -133,48 +98,39 @@ const Add_Panel = () => {
         },
     });
 
-
-
-
-
     const fields = [
         {
             name: "panel_name",
             label: "Panel Name",
-            type: "placehoder",
+            type: "placeholder",
             label_size: 12,
             col_size: 6,
-            placeholderdata:"pandpinfotech"
-
+            placeholderdata: "Pandpinfotech"
         },
         {
             name: "domain",
             label: "Domain",
-            type: "placehoder",
+            type: "placeholder",
             label_size: 12,
             col_size: 6,
-            placeholderdata:"https://newpenal.pandpinfotech.com"
+            placeholderdata: "https://newpenal.pandpinfotech.com"
         },
-      
         {
             name: "key",
-            label: "key",
-            type: "placehoder",
+            label: "Key",
+            type: "placeholder",
             label_size: 12,
             col_size: 6,
-            placeholderdata:"SNE132023"
-
+            placeholderdata: "SNE132023"
         },
         {
             name: "ip_address",
             label: "Ip Address",
-            type: "placehoder",
+            type: "placeholder",
             label_size: 12,
             col_size: 6,
-            placeholderdata:"193.239.237.136"
-
+            placeholderdata: "193.239.237.136"
         },
-
         {
             name: 'theme_id',
             label: 'Theme Id',
@@ -185,22 +141,18 @@ const Add_Panel = () => {
         {
             name: "db_url",
             label: "Database Url",
-            type: "placehoder",
+            type: "placeholder",
             label_size: 12,
             col_size: 6,
-            placeholderdata:"mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@193.239.237.136:27017/"
-            
+            placeholderdata: "mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@193.239.237.136:27017/"
         },
-      
-     
         {
             name: "Create_Strategy",
             label: "Create Strategy",
             type: "checkbox",
             label_size: 12,
             col_size: 3,
-            check_box_true:
-                formik.values.Create_Strategy ? true : false,
+            check_box_true: formik.values.Create_Strategy ? true : false,
         },
         {
             name: "Option_chain",
@@ -208,8 +160,7 @@ const Add_Panel = () => {
             type: "checkbox",
             label_size: 12,
             col_size: 3,
-            check_box_true:
-                formik.values.Option_chain ? true : false,
+            check_box_true: formik.values.Option_chain ? true : false,
         },
         {
             name: "Strategy_plan",
@@ -217,44 +168,45 @@ const Add_Panel = () => {
             type: "checkbox",
             label_size: 12,
             col_size: 3,
-            check_box_true:
-                formik.values.Strategy_plan ? true : false,
+            check_box_true: formik.values.Strategy_plan ? true : false,
         },
-
     ];
 
     const data = async () => {
-
         await dispatch(Get_All_Theme_Name()).unwrap()
             .then((response) => {
                 setAllThemeName(response && response.data);
-            })
+            });
 
         await dispatch(All_Brokers()).unwrap()
             .then((response) => {
-                setGetAllBrokerName(
-                    response.data
-                );
-            })
-
-
+                setGetAllBrokerName(response.data);
+            });
     };
 
     useEffect(() => {
         data();
     }, []);
 
-
-
-
-
     const handleSBrokerChange = (event, broker) => {
         const BrokerId = event.target.value;
         if (event.target.checked) {
             setstate1([...state1, { id: broker.broker_id, name: broker.title }]);
         } else {
-            // Remove the strategyId from the state array
             setstate1(state1.filter((data) => data.id !== BrokerId));
+        }
+    };
+
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+
+            const allBrokers = getGetAllBrokerName.map(broker => ({
+                id: broker.broker_id,
+                name: broker.title
+            }));
+            setstate1(allBrokers);
+        } else {
+            setstate1([]);
         }
     };
 
@@ -265,7 +217,6 @@ const Add_Panel = () => {
             formik.setFieldValue("broker_id", "");
         }
     }, [state1]);
-
 
     return (
         <>
@@ -285,6 +236,28 @@ const Add_Panel = () => {
                             additional_field={
                                 <>
                                     <h6>All Brokers</h6>
+
+                                    <div className={`col-lg-2 mt-2`} >
+                                        <div className="row ">
+                                            <div className="col-lg-12 ">
+                                                <div className="form-check custom-checkbox mb-3">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="form-check-input"
+                                                        name={"Select All"}
+                                                        onClick={(e) => handleSelectAll(e)}
+                                                    />
+                                                    <label
+                                                        className="form-check-label"
+                                                        htmlFor="Select All"
+                                                    >
+                                                        Select All
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     {getGetAllBrokerName.map((broker) => (
                                         <div className={`col-lg-2 mt-2`} key={broker.broker_id}>
                                             <div className="row ">
@@ -295,12 +268,12 @@ const Add_Panel = () => {
                                                             className="form-check-input"
                                                             name={broker.title}
                                                             value={broker.broker_id}
+                                                            checked={state1.some(item => item.id === broker.broker_id)}
                                                             onChange={(e) => handleSBrokerChange(e, broker)}
-
                                                         />
                                                         <label
                                                             className="form-check-label"
-                                                            for={broker.title}
+                                                            htmlFor={broker.title}
                                                         >
                                                             {broker.title}
                                                         </label>
@@ -309,17 +282,11 @@ const Add_Panel = () => {
                                             </div>
                                         </div>
                                     ))}
-
-                                    {formik.errors.title && (
-                                        <div style={{ color: "red" }}>
-                                            {formik.errors.title}
-                                        </div>
-                                    )}
                                 </>
                             }
                         />
-
                         <ToastButton />
+
                     </Content>
                 </>
             )}

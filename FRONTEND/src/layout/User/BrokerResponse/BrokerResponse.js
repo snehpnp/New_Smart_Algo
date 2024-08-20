@@ -197,10 +197,10 @@ const BrokerResponse = () => {
 
     <Content Page_title="Broker Response" button_status={false}>
 
-      {
-        UserDetails.data && UserDetails.data.broker == "12" ? "" :
+      {/* {
+        UserDetails.data && UserDetails.data.broker == "12" || UserDetails.data.broker == "2" ? "" :
           <button className='btn btn-primary d-flex ms-auto mb-3' type="reset" onClick={(e) => setrefresh(!refresh)}>Refresh</button>
-      }
+      } */}
 
       <FullDataTable TableColumns={columns} tableData={DashboardData.data} />
       <OrderPending showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />

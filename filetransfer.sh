@@ -76,7 +76,9 @@ remort_path="/var/www/backend/"
   'root@5.178.98.3'
   'root@5.178.98.5'
   'root@5.178.98.6'
-
+  'root@5.178.98.7'
+  'root@5.178.98.8'
+  'root@5.178.98.9'
 
 
 
@@ -157,7 +159,9 @@ remort_path="/var/www/backend/"
   'software.inovateinfotech.com'
   'software.algobliss.com'
   'software.idealalgo.com'
-
+  'software.apextechinnovative.com'
+  'software.eaglesofttech.com'
+  'software.algomoneybooster.com'
 
 
 

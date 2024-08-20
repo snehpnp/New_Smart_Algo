@@ -133,7 +133,7 @@ class Zerodha {
 
 
         } catch (error) {
-         
+
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }
@@ -144,7 +144,7 @@ class Zerodha {
 }
 
 const GetAllBrokerResponse = async (user_info, res) => {
-  
+
     try {
         const objectId = new ObjectId(user_info[0]._id);
         // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
@@ -206,7 +206,7 @@ const GetAllBrokerResponse = async (user_info, res) => {
 
                     })
                     .catch(async (error) => {
-
+                        return res.send({ status: false, msg: 'error in Server side', data: error });
                     });
 
 
@@ -215,11 +215,11 @@ const GetAllBrokerResponse = async (user_info, res) => {
             return res.send({ status: true, msg: "broker response updated successfully" })
 
         } else {
-            return  res.send({ status: false, msg: "no user found" })
+            return res.send({ status: false, msg: "no user found" })
         }
 
     } catch (error) {
-        console.log("Error in broker response in order Id".error);
+       return
     }
 
 
