@@ -33,81 +33,30 @@ const token_chain_collection = db_main.collection('token_chain');
 const { DashboardView, deleteDashboard } = require('../../View/DashboardData')
 const { createView } = require('../../View/Open_position')
 
-const { createViewAlice } = require('../../View/Alice_blue')
-const { createViewAngel } = require('../../View/Angel')
-const { createViewDhan } = require('../../View/dhan')
-const { createViewFivepaisa } = require('../../View/fivepaisa')
-const { createViewFyers } = require('../../View/fyers')
-const { createViewIifl } = require('../../View/Iifl')
-const { createViewKotakNeo } = require('../../View/KotakNeo')
-const { createViewMarketHub } = require('../../View/markethub')
-const { createViewMastertrust } = require('../../View/Mastertrust')
-const { createViewMotilalOswal } = require('../../View/MotilalOswal')
-const { createViewSwastika } = require('../../View/swastika')
-const { createViewUpstox } = require('../../View/Upstox')
-const { createViewZebul } = require('../../View/Zebul')
-const { createViewZerodha } = require('../../View/zerodha')
-const { createViewIcicidirect } = require('../../View/Icicidirectview')
 
 
+// cron.schedule('10 23 * * *', () => {  DeleteTokenAliceToken() });
+cron.schedule('10 23 * * *', () => { TruncateTable() });
 
+cron.schedule('0 1 * * *', () => { deleteDashboard(); dropOpenPosition() });
 
-// shedule delete symbol
-cron.schedule('10 23 * * *', () => {
+cron.schedule('0 6 * * *', () => { DashboardView(); createView(); });
 
-    DeleteTokenAliceToken()
-});
+cron.schedule('5 2 * * *', () => { LogoutAllUsers() });
 
-cron.schedule('0 1 * * *', () => {
+cron.schedule('5 5 * * *', () => { LogoutAllUsers() });
 
-    deleteDashboard()
-    dropOpenPosition()
-});
+cron.schedule('1 1 * * *', () => { numberOfTrade_count_trade(); });
 
-cron.schedule('0 6 * * *', () => {
+cron.schedule('10 2 * * *', () => { TokenSymbolUpdate() });
 
-    DashboardView()
-    createView()
-});
+cron.schedule('*/30 * * * *', () => { GetStrickPriceFromSheet(); });
 
-cron.schedule('5 2 * * *', () => {
+cron.schedule('5 23 * * *', () => { twodaysclient(); });
 
-    LogoutAllUsers()
-});
+cron.schedule('30 6 * * *', () => { TruncateTableTokenChain(); });
 
-cron.schedule('5 5 * * *', () => {
-
-    LogoutAllUsers()
-});
-
-cron.schedule('1 1 * * *', () => {
-
-    numberOfTrade_count_trade();
-});
-
-cron.schedule('10 2 * * *', () => {
-
-    TokenSymbolUpdate()
-});
-
-cron.schedule('*/30 * * * *', () => {
-    GetStrickPriceFromSheet();
-});
-
-
-cron.schedule('5 23 * * *', () => {
-
-    twodaysclient();
-});
-
-cron.schedule('30 6 * * *', () => {
-
-    TruncateTableTokenChain();
-});
-
-cron.schedule('*/5 * * * *', async () => {
-    await TruncateTableTokenChainAdd_fiveMinute()
-});
+cron.schedule('*/5 * * * *', async () => { await TruncateTableTokenChainAdd_fiveMinute() });
 
 
 
@@ -788,7 +737,7 @@ const service_token_update = () => {
 }
 
 const TruncateTable = async () => {
-    // const drop = await Alice_token.deleteMany({});
+    const drop = await Alice_token.deleteMany({});
 }
 
 const DeleteTokenAliceToken = async () => {
@@ -844,7 +793,7 @@ const DeleteTokenAliceToken = async () => {
 
 // TOKEN SYMBOL CREATE
 const TokenSymbolUpdate = () => {
-
+console.log("TokenSymbolUpdate")
     try {
         var d = new Date();
         dformat = [d.getFullYear(),
@@ -1043,8 +992,7 @@ const TokenSymbolUpdate = () => {
                             var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
                         }
 
-                    }
-                    else if (element.instrumenttype == 'OPTIDX' && element.exch_seg == "NFO") {
+                    } else if (element.instrumenttype == 'OPTIDX' && element.exch_seg == "NFO") {
 
 
 
@@ -1081,8 +1029,7 @@ const TokenSymbolUpdate = () => {
                             var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
                         }
 
-                    }
-                    else if (element.instrumenttype == 'OPTSTK' && element.exch_seg == "NFO") {
+                    } else if (element.instrumenttype == 'OPTSTK' && element.exch_seg == "NFO") {
                         let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
                         if (exist_token == null) {
 
