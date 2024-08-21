@@ -130,7 +130,8 @@ const BrokerResponse = () => {
       text: 'Refresh',
       formatter: (cell, row, rowIndex) => (
         <>
-          {row.order_id !== '' && row.order_view_status === '0' ? (
+          {row.order_id !== ''&& row.order_id !== undefined && row.order_view_status == '0' ? (
+           
             <button
               className='btn btn-primary d-flex ms-auto mb-3'
               type="reset"
@@ -165,6 +166,7 @@ const BrokerResponse = () => {
     await dispatch(Get_Broker_Response({ _id: isgotodashboard ? gotodashboard.user_id : user_Id, token: AdminToken })).unwrap()
       .then((response) => {
         if (response.status) {
+          console.log("response.data",response.data)
           setDashboardData({
             loading: false,
             data: response.data
