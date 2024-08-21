@@ -141,6 +141,88 @@ class Zerodha {
 
     }
 
+    // UPDATE SINGLE CLIENT BROKER RESPONSE
+    async SingleOrderFullInformationZerodha(req, res, user_info, broker_response_id, order_id) {
+
+        try {
+
+            const { user_id } = req.body
+            if (!user_id) {
+                return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+            }
+        
+        var config = {
+            method: 'get',
+            url: 'https://api.kite.trade/orders/'+order_id,
+            headers: {
+                'Authorization': 'token ' + user_info[0].api_key + ':' + user_info[0].access_token
+            }
+        };
+        await axios(config)
+            .then(async (response) => {
+
+                   if (response) {
+
+                    let result_order = response.data.data[response.data.data.length - 1];
+
+                    if (result_order != undefined) {
+                       
+                        const message = (JSON.stringify(result_order));
+                        let result = await BrokerResponse.findByIdAndUpdate(
+                            { _id: broker_response_id },
+                            {
+                                order_view_date: message,
+                                order_view_status: '1',
+                                order_view_response: result_order.status,
+                                reject_reason: result_order.status_message
+
+                            },
+                            { new: true }
+                        )
+
+                        return res.send({ status: true, msg: "broker response updated successfully" })
+
+                    } else {
+
+
+                        const message = (JSON.stringify(result_order));
+
+                        let result = await BrokerResponse.findByIdAndUpdate(
+                            { _id: data1._id },
+                            {
+                                order_view_date: message,
+                                order_view_status: '1',
+
+                            },
+                            { new: true }
+                        )
+
+                        return res.send({ status: false, msg: 'No data Available', data: [] });
+
+                    }
+
+
+                }else{
+                    return res.send({ status: false, msg: 'No data Available', data: [] });  
+                }
+
+                })
+                .catch(async (error) => {
+           
+                    return res.send({ status: false, msg: 'Order Api Err .', data: [] });
+                });
+
+
+
+        } catch (error) {
+        
+            return res.send({ status: false, msg: 'error in Server side', data: error });
+
+        }
+
+
+     }
+
 }
 
 const GetAllBrokerResponse = async (user_info, res) => {

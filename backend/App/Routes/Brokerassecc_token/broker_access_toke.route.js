@@ -27,7 +27,7 @@ const { GetAccessTokenFyers, GetOrderFullInformationFyers } = require('../../Con
 
 
 // ZERODHA CONTROLLER FILE
-const { GetAccessTokenZerodha, GetOrderFullInformationZerodha } = require('../../Controllers/Brokerassecc_token/Zerodha')
+const { GetAccessTokenZerodha, GetOrderFullInformationZerodha ,SingleOrderFullInformationZerodha } = require('../../Controllers/Brokerassecc_token/Zerodha')
 
 
 // UPSTOX CONTROLLER FILE
@@ -144,7 +144,14 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
 
     // ZERODHA   -  15
     else if (broker == 15) {
-      GetOrderFullInformationZerodha(req, res, result);
+      let broker_response_id = req.body.broker_response_id;
+      let order_id = req.body.order_id;
+   
+      if(order_id != "" && order_id != undefined){
+        SingleOrderFullInformationZerodha(req, res, result,broker_response_id , order_id);
+      }else{
+        return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+      }
     }
 
     // UPSTOX   -  19
