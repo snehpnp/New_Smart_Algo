@@ -31,7 +31,7 @@ const { GetAccessTokenZerodha, GetOrderFullInformationZerodha } = require('../..
 
 
 // UPSTOX CONTROLLER FILE
-const { GetAccessTokenUpstox, GetOrderFullInformationUpstox } = require('../../Controllers/Brokerassecc_token/Upstox')
+const { GetAccessTokenUpstox, GetOrderFullInformationUpstox ,SingleOrderFullInformationUpstox} = require('../../Controllers/Brokerassecc_token/Upstox')
 
 // Dhan CONTROLLER FILE
 const { GetAccessTokenDhan, GetOrderFullInformationDhan } = require('../../Controllers/Brokerassecc_token/Dhan')
@@ -141,7 +141,15 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
 
     // UPSTOX   -  19
     else if (broker == 19) {
-      GetOrderFullInformationUpstox(req, res, result);
+      // GetOrderFullInformationUpstox(req, res, result);
+      let broker_response_id = req.body.broker_response_id;
+      let order_id = req.body.order_id;
+   
+      if(order_id != "" && order_id != undefined){
+      SingleOrderFullInformationUpstox(req, res, result,broker_response_id , order_id);
+      }else{
+        return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+      }
     }
     // DHAN   -  20
     else if (broker == 20) {
