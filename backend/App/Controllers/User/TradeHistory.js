@@ -107,6 +107,8 @@ class TradeHistory {
                                     signal.qty_percent = findstg.quantity * (Math.ceil(Number(signal.qty_percent) / 100) * 100) * 0.01;
                                 });
 
+                                console.log("findstg.quantity", findstg.quantity * (Math.ceil(Number(item1.entry_qty) / 100) * 100) * 0.01);
+
                                 item1.entry_qty_percent = findstg.quantity * (Math.ceil(Number(item1.entry_qty) / 100) * 100) * 0.01;
                                 item1.exit_qty_percent = findstg.quantity * (Math.ceil(Number(item1.exit_qty_percent) / 100) * 100) * 0.01;
 
