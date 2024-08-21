@@ -34,7 +34,7 @@ const { GetAccessTokenZerodha, GetOrderFullInformationZerodha ,SingleOrderFullIn
 const { GetAccessTokenUpstox, GetOrderFullInformationUpstox ,SingleOrderFullInformationUpstox} = require('../../Controllers/Brokerassecc_token/Upstox')
 
 // Dhan CONTROLLER FILE
-const { GetAccessTokenDhan, GetOrderFullInformationDhan } = require('../../Controllers/Brokerassecc_token/Dhan')
+const { GetAccessTokenDhan, GetOrderFullInformationDhan ,SingleOrderFullInformationDhan} = require('../../Controllers/Brokerassecc_token/Dhan')
 
 // Markethub CONTROLLER FILE
 const { GetAccessTokenMarkethub, GetOrderFullInformationMarkethub } = require('../../Controllers/Brokerassecc_token/Mhub')
@@ -44,7 +44,7 @@ const { GetAccessTokenMarkethub, GetOrderFullInformationMarkethub } = require('.
 const { GetAccessTokenSwastika, GetOrderFullInformationSwastika } = require('../../Controllers/Brokerassecc_token/Swastika')
 
 // Kotak Neo CONTROLLER FILE
-const { GetkotakGetToken, GetkotakGetSession, GetOrderFullInformationKotakNeo } = require('../../Controllers/Brokerassecc_token/KotakNeo')
+const { GetkotakGetToken, GetkotakGetSession, GetOrderFullInformationKotakNeo ,SingleOrderFullInformationKotakNeo} = require('../../Controllers/Brokerassecc_token/KotakNeo')
 
 
 // MASTER TRUST CONTROLLER FILE
@@ -118,7 +118,16 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
 
     // KotakNeo  - 7
     else if (broker == 7) {
-      GetOrderFullInformationKotakNeo(req, res, result);
+
+      let broker_response_id = req.body.broker_response_id;
+      let order_id = req.body.order_id;
+   
+      if(order_id != "" && order_id != undefined){
+      SingleOrderFullInformationKotakNeo(req, res, result,broker_response_id , order_id);
+      }else{
+        return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+      }
+
     }
     // ANGEL   -  12
     else if (broker == 12) {
@@ -168,7 +177,16 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
     }
     // DHAN   -  20
     else if (broker == 20) {
-      GetOrderFullInformationDhan(req, res, result);
+
+      let broker_response_id = req.body.broker_response_id;
+      let order_id = req.body.order_id;
+   
+      if(order_id != "" && order_id != undefined){
+      SingleOrderFullInformationDhan(req, res, result,broker_response_id , order_id);
+      }else{
+        return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+      }
+
     }
     // Swastika   -  21
     else if (broker == 21) {

@@ -53,7 +53,23 @@ const BrokerResponse = () => {
           if (response.data.broker == "12") {
             setShouldAddNewColumn(true)
           }
-        }
+          if (response.data.broker == "2") {
+            setShouldAddNewColumn(true)
+          }
+          if (response.data.broker == "15") {
+            setShouldAddNewColumn(true)
+          }
+
+          else if (response.data.broker == "19") {
+            setShouldAddNewColumn(true)
+          }
+          else if (response.data.broker == "7") {
+            setShouldAddNewColumn(true)
+          }
+          else if (response.data.broker == "20") {
+            setShouldAddNewColumn(true)
+          }
+   }
       });
   };
   useEffect(() => {
@@ -149,8 +165,8 @@ const BrokerResponse = () => {
     await dispatch(GET_ALL_BROKER_RESPONSES({ user_id: isgotodashboard ? gotodashboard.user_id : user_Id, broker_response_id: row._id, order_id: row.order_id })).unwrap()
       .then((response) => {
         if (response.status) {
-          setrefresh(!refresh)
-          window.location.reload();
+          // setrefresh(!refresh)
+          BrokerResponse()
         } else {
           setrefresh(!refresh)
         }
