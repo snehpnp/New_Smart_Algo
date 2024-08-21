@@ -56,6 +56,9 @@ const BrokerResponse = () => {
           else if (response.data.broker == "19") {
             setShouldAddNewColumn(true)
           }
+          else if (response.data.broker == "7") {
+            setShouldAddNewColumn(true)
+          }
         }
       });
   };
