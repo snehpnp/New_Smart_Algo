@@ -53,6 +53,9 @@ const BrokerResponse = () => {
           if (response.data.broker == "12") {
             setShouldAddNewColumn(true)
           }
+          else if (response.data.broker == "19") {
+            setShouldAddNewColumn(true)
+          }
         }
       });
   };
@@ -171,14 +174,7 @@ const BrokerResponse = () => {
       })
   }
 
-  const updateBrokerResponse = async (e) => {
-    await dispatch(GET_ALL_BROKER_RESPONSES({ user_id: isgotodashboard ? gotodashboard.user_id : user_Id })).unwrap()
-      .then((response) => {
-        if (response.status) {
 
-        }
-      })
-  }
 
   const GetAllServicesName = async (row) => {
     setBrokerResponseId(row)
@@ -187,7 +183,7 @@ const BrokerResponse = () => {
 
   // USE EFFECT
   useEffect(() => {
- 
+
     BrokerResponse()
   }, [refresh])
 
@@ -197,12 +193,10 @@ const BrokerResponse = () => {
 
     <Content Page_title="Broker Response" button_status={false}>
 
-      {/* {
-        UserDetails.data && UserDetails.data.broker == "12" || UserDetails.data.broker == "2" ? "" :
-          <button className='btn btn-primary d-flex ms-auto mb-3' type="reset" onClick={(e) => setrefresh(!refresh)}>Refresh</button>
-      } */}
+
 
       <FullDataTable TableColumns={columns} tableData={DashboardData.data} />
+
       <OrderPending showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
       {
         showModal ?
@@ -259,6 +253,13 @@ const BrokerResponse = () => {
           </>
           : ""
       }
+
+      <div style={{ fontFamily: 'Arial, sans-serif', lineHeight: '1.5' }}>
+        <p><strong>English:</strong> If your trade has been received by your broker and an order ID has been generated, it means your trade has been connected to the broker. To check the further progress of your trade, you will see a refresh button next to the order ID. Please press it to receive the complete response from your broker. If the order ID is not showing for your trade, it means that due to a server issue or incorrect information, your trade could not connect to the broker.</p>
+
+        <p><strong>Hindi:</strong> अगर आपके ट्रेड का रिस्पॉन्स आपके ब्रोकऱ से मिला है और उसकी ऑर्डर आईडी जनरेट हुई है, तो इसका मतलब है कि आपका ट्रेड ब्रोकऱ से कनेक्ट हो गया है। आगे उस ट्रेड की प्रक्रिया जानने के लिए आपको ऑर्डर आईडी के आगे एक रिफ्रेश का बटन दिख रहा होगा, उसे दबाएं, तो आपको ब्रोकऱ से पूरा रिस्पॉन्स मिल जाएगा। अगर आपके ट्रेड के आगे ऑर्डर आईडी नहीं दिख रही है, तो किसी सर्वर इश्यू या गलत जानकारी के कारण आपका ट्रेड ब्रोकऱ से कनेक्ट नहीं हो पाया है।</p>
+      </div>
+
 
     </Content>
 
