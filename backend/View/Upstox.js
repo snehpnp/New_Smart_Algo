@@ -133,7 +133,7 @@ async function createViewUpstox() {
                         },
                       ]
                   },
-                  then: 'CARRYFORWARD',
+                  then: 'D',
                   else: {
                     $cond: {
                       if: {
