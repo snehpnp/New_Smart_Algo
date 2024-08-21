@@ -153,6 +153,88 @@ class Dhan {
 
     }
 
+
+
+
+
+    async SingleOrderFullInformationDhan(req, res, user_info, broker_response_id, order_id) {
+
+        try {
+
+            const { user_id } = req.body
+            if (!user_id) {
+                return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+            }
+
+            var config = {
+                method: 'get',
+                url: 'https://api.dhan.co/orders/' + order_id,
+                headers: {
+                    'access-token': user_info[0].access_token,
+                    'Content-Type': 'application/json'
+                },
+            };
+            axios(config)
+                .then(async (response) => {
+
+                    const result_order = response.data;
+
+                    if (result_order != undefined) {
+
+                        const message = (JSON.stringify(result_order));
+
+                        let result = await BrokerResponse.findByIdAndUpdate(
+                            { _id: broker_response_id },
+                            {
+                                order_view_date: message,
+                                order_view_status: '1',
+                                order_view_response: result_order.orderStatus,
+                                reject_reason: result_order.omsErrorDescription
+
+                            },
+                            { new: true }
+                        )
+                        return res.send({ status: true, msg: "broker response updated successfully" })
+
+
+                    } else {
+
+
+                        const message = (JSON.stringify(result_order));
+
+                        let result = await BrokerResponse.findByIdAndUpdate(
+                            { _id: broker_response_id },
+                            {
+                                order_view_date: message,
+                                order_view_status: '1',
+
+                            },
+                            { new: true }
+                        )
+                        return res.send({ status: false, msg: 'result order undefined', data: [] });
+
+                    }
+
+
+                })
+                .catch(async (error) => {
+
+                    return res.send({ status: false, msg: 'Order Api Err .', data: [] });
+                });
+
+
+
+        } catch (error) {
+
+            return res.send({ status: false, msg: 'error in Server side', data: error });
+
+        }
+
+
+    }
+
+
+
 }
 
 const GetAllBrokerResponse = async (user_info, res) => {
