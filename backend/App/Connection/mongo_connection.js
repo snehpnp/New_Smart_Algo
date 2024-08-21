@@ -1,5 +1,3 @@
-
-
 const mongoose = require("mongoose");
 
 const db_connect = process.env.MONGO_URI;
@@ -12,11 +10,10 @@ mongoose.connect(db_connect, {
 
 const connection = mongoose.connection;
 
-connection.on("error Time-" + new Date(), (error) => {
-  console.log("MongoDB Connection Error:", error);
+connection.on("error", (error) => {
+  console.log("MongoDB Connection Error at Time:", new Date(), error);
 });
 
 connection.once("open", () => {
-  console.log("Connected to MongoDB Time-", new Date());
- 
+  console.log("Connected to MongoDB at Time:", new Date());
 });
