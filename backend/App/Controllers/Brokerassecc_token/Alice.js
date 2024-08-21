@@ -375,6 +375,73 @@ class AliceBlue {
         return res.send({ status: true, msg: 'backend run socket' });
     }
 
+    // UPDATE SINGLE CLIENT BROKER RESPONSE
+    async SingleOrderFullInformationAlice(req, res, user_info, broker_response_id, order_id) {
+
+        try {
+
+            const { user_id } = req.body
+            if (!user_id) {
+                return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+            }
+          console.log("req.body",req.body)
+          
+          let data = JSON.stringify({
+            "nestOrderNumber": order_id
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
+            headers: {
+                'Authorization': "Bearer " + user_info[0].demat_userid + " " + user_info[0].access_token,
+                'Content-Type': 'application/json',
+            },
+            data: data
+        };
+        axios(config)
+            .then(async (response) => {
+
+                if (response.data[0]) {
+                    const message = (JSON.stringify(response.data[0]));
+
+                    let result = await BrokerResponse.findByIdAndUpdate(
+                        { _id: broker_response_id },
+                        {
+                            order_view_date: message,
+                            order_view_status: '1',
+                            order_view_response: response.data[0].Status,
+                            reject_reason: response.data[0].rejectionreason
+
+                        },
+                        { new: true }
+                    )
+
+                 return res.send({ status: true, msg: "broker response updated successfully" })
+
+
+                } else {
+                    return res.send({ status: false, msg: 'No data Available', data: [] });
+                }
+
+                })
+                .catch(async (error) => {
+           
+                    return res.send({ status: false, msg: 'Order Api Err .', data: [] });
+                });
+
+
+
+        } catch (error) {
+        
+            return res.send({ status: false, msg: 'error in Server side', data: error });
+
+        }
+
+
+     }
+
 
 }
 
