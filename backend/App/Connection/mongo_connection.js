@@ -12,11 +12,11 @@ mongoose.connect(db_connect, {
 
 const connection = mongoose.connection;
 
-connection.on("error", (error) => {
+connection.on("error Time-" + new Date(), (error) => {
   console.log("MongoDB Connection Error:", error);
 });
 
 connection.once("open", () => {
-  console.log("Connected to MongoDB");
-  // Add your logic here for a successful connection
+  console.log("Connected to MongoDB Time-", new Date());
+ 
 });
