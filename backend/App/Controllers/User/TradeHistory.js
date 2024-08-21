@@ -109,18 +109,16 @@ class TradeHistory {
 
                                 item1.entry_qty_percent = findstg.quantity * (Math.ceil(Number(item1.entry_qty) / 100) * 100) * 0.01;
                                 item1.exit_qty_percent = findstg.quantity * (Math.ceil(Number(item1.exit_qty_percent) / 100) * 100) * 0.01;
-                              
+
                             }
 
-                            if (!item1.Exit_users_id.some(id => id.equals(objectId)) && getType === "Trade") {
 
-
+                            if (Array.isArray(item1.Exit_users_id) && !item1.Exit_users_id.some(id => id.equals(objectId)) && getType === "Trade") {
                                 item1.exit_type = "";
                                 item1.exit_price = "";
                                 item1.exit_qty_percent = "";
                                 item1.exit_qty = "";
                                 item1.exit_dt_date = "";
-
                             }
                         });
                         abc.push(data);
