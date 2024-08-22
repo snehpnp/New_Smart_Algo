@@ -138,7 +138,7 @@ const TradeHistory = () => {
       formatter: (cell, row) => {
         return (
           <div>
-            
+
 
             <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span>
             <span className={`d-none entry_qty_${row.token}_${row._id}`}>
@@ -277,47 +277,50 @@ const TradeHistory = () => {
     <Content Page_title="Trade History" button_status={false} button_status1={true}>
 
       <div className="row d-flex  align-items-center justify-content-start">
-        <div className="col-lg-2 px-1">
-          <div className="form-check custom-checkbox mb-3 ps-0">
-            <label className="col-lg-12" htmlFor="fromdate">
-              From Date
-            </label>
+        {gotodashboard &&
+          <>
+            <div className="col-lg-2 px-1">
+              <div className="form-check custom-checkbox mb-3 ps-0">
+                <label className="col-lg-12" htmlFor="fromdate">
+                  From Date
+                </label>
 
-            <DatePicker
-              selected={fromDate}
-              onChange={(date) => handleFromDateChange(date)}
-              minDate={formattedStartDate}
-              maxDate={new Date()}
+                <DatePicker
+                  selected={fromDate}
+                  onChange={(date) => handleFromDateChange(date)}
+                  minDate={formattedStartDate}
+                  maxDate={new Date()}
 
-              placeholderText="Select a date"
-              dateFormat="yyyy-MM-dd"
-              className="form-control"
-              id="fromdate"
-            />
-          </div>
-        </div>
+                  placeholderText="Select a date"
+                  dateFormat="yyyy-MM-dd"
+                  className="form-control"
+                  id="fromdate"
+                />
+              </div>
+            </div>
 
-        <div className="col-lg-2  px-1">
-          <div className="form-check custom-checkbox mb-3 ps-0">
-            <label className="col-lg-12" htmlFor="endDate">
-              To Date
-            </label>
+            <div className="col-lg-2  px-1">
+              <div className="form-check custom-checkbox mb-3 ps-0">
+                <label className="col-lg-12" htmlFor="endDate">
+                  To Date
+                </label>
 
 
-            <DatePicker
-              selected={toDate}
-              onChange={(date) => handleToDateChange(date)}
-              minDate={fromDate ? fromDate : formattedStartDate}
-              maxDate={new Date()}
-              placeholderText="Select a date"
-              dateFormat="yyyy-MM-dd"
-              className="form-control"
-              id="fromdate"
-            />
+                <DatePicker
+                  selected={toDate}
+                  onChange={(date) => handleToDateChange(date)}
+                  minDate={fromDate ? fromDate : formattedStartDate}
+                  maxDate={new Date()}
+                  placeholderText="Select a date"
+                  dateFormat="yyyy-MM-dd"
+                  className="form-control"
+                  id="fromdate"
+                />
 
-          </div>
-        </div>
-
+              </div>
+            </div>
+          </>
+        }
         <div className="col-lg-2 px-1">
           <div className="mb-3">
             <label for="select" className="form-label">

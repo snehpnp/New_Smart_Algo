@@ -115,6 +115,8 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
 
                             let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
                            
+                          console.log("abc", abc)
+
                             if(get_entry_type === "SE"){
                                 abc = ((parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_entry_qty)).toFixed();
                               }
@@ -213,6 +215,11 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
    
                 let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                 let finalyupl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * upl;
+
+                  console.log("rpl", upl)
+                  console.log("rpl", finalyupl)
+
+
   
                 if ((isNaN(finalyupl) || isNaN(rpl))) {
                   return "-";
