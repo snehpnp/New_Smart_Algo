@@ -78,7 +78,7 @@ class TradeHistory {
             let abc1 = [];
 
             for (const item of GetAllClientServices) {
-                console.log("item",item)
+         
 
                 const client_persnal_key1 = item.users.web_url === '2' ? item.users.client_key : "";
 

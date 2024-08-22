@@ -142,21 +142,19 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                 item.postdata.side = -1;
                             }
 
-                            // console.log("price", price)
-                            //console.log("item.client_services.order_type", item.client_services.order_type)
+                   
 
                             if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                                 item.postdata.limitPrice = price
                             }
 
-                            //  console.log("postData after ", item.postdata);
 
 
                             EntryPlaceOrder(item, filePath, signals, signal_req)
 
 
                         });
-                        // Send all requests concurrently using Promise.all
+                       
                         Promise.all(requestPromises)
                             .then(responses => {
                                 // console.log("Response:", responses.data);
@@ -323,9 +321,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                             } else if (type == 'SE' || type == 'LX') {
                                 item.postdata.side = -1;
                             }
-
-                            // console.log("price", price)
-                            // console.log("item.client_services.order_type", item.client_services.order_type)
 
                             if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                                 item.postdata.limitPrice = price

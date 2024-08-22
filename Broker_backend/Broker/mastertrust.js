@@ -56,8 +56,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                 item.postdata.order_side = 'SELL';
             }
 
-            // console.log("price", price)
-            //console.log("item.client_services.order_type", item.client_services.order_type)
 
             if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                 item.postdata.price = price
@@ -97,8 +95,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         item.postdata.order_side = 'SELL';
                     }
         
-                    // console.log("price", price)
-                    //console.log("item.client_services.order_type", item.client_services.order_type)
         
                     if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                         item.postdata.price = price
