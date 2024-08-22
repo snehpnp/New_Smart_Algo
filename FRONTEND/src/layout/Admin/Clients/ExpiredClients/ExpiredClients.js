@@ -434,7 +434,7 @@ const AllClients = () => {
             </Link>
             {/* {
             row.license_type == "1" ? */}
-              <Link>
+              {/* <Link>
                 <span data-toggle="tooltip" data-placement="top" title="Delete">
                   <Trash2
                     size={20}
@@ -444,7 +444,7 @@ const AllClients = () => {
                     onClick={(e) => Delete_user(row._id)}
                   />
                 </span>
-              </Link>
+              </Link> */}
               {/* : ""} */}
 
           </div>
