@@ -8,7 +8,6 @@ module.exports = function (app, io) {
     const live_price = db.live_price;
     const UserMakeStrategy = db.UserMakeStrategy;
 
-    const { ALice_View_data } = require('./App/Helper/ALice_View_data');
 
 
     const mongoose = require('mongoose');
@@ -107,9 +106,7 @@ module.exports = function (app, io) {
 
                                     const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk }, { _id: 1 });
 
-                                    if (Make_startegy_token) {
-                                        //ALice_View_data(response.tk, response,dbTradeTools);
-                                    }
+                             
 
                                     const currentDate = new Date();
                                     const hours = currentDate.getHours().toString().padStart(2, '0');

@@ -370,7 +370,7 @@ async function deleteDashboard() {
         console.log('dashboard_data view deleted successfully');
 
     } catch (error) {
-        console.log('Error:', error);
+        console.log('Error dashboard_data Delete:', error);
     }
 }
 

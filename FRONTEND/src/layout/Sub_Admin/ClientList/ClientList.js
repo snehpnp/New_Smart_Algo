@@ -241,6 +241,10 @@ const AllClients = () => {
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
+            dataField: 'FullName',
+            text: 'Full Name',
+        },
+        {
             dataField: 'UserName',
             text: 'User Name',
         },

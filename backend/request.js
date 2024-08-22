@@ -671,7 +671,7 @@ module.exports = function (app) {
                 await client.close();
                 console.log(`Database ${databaseName} created successfully`);
             } catch (error) {
-                console.log(error);
+                console.log("Error create data base -",error);
 
             }
         }

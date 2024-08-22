@@ -450,6 +450,16 @@ const AdminsList = () => {
                         value={searchInput} />
                 </div>
 
+                <div className='mb-4'>
+                    <h6>Search here something</h6>
+                    <input type="text"
+
+                        placeholder='search...'
+                        className='p-2 form-contol rounded'
+                        onChange={(e) => { setSearchInput(e.target.value) }}
+                        value={searchInput} />
+                </div>
+
                 {themeData.loading ? <Loader /> :
                     <>
                         <FullDataTable TableColumns={columns} tableData={filteredData} />

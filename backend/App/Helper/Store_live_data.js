@@ -29,11 +29,10 @@ socket.on('connect', () => {
   console.log('Connected to Server 1');
 
   socket.on('LiVE_DATA', async (data) => {
-   console.log("Received data from 'LiVE_DATA':", data.data);
+
    
    var response = data.data 
    
-   //console.log("response token", response.tk);
   
    if (response.tk) {
 
