@@ -1451,11 +1451,6 @@ async function run() {
      // await executeFunction();
       //await exitOpentrade()
     }
-
-    // setInterval(async () => {
-    //   await executeFunction();
-    // }, 1000);
-
     } finally {
     // Close the client when you're done
     }
