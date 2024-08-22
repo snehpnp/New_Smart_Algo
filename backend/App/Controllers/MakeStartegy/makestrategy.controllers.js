@@ -325,7 +325,7 @@ class MakeStartegy {
                 console.log(`View ${viewName} already exists`);
               }
             } catch (error) {
-              console.error(`Error creating view ${viewName}:`, error);
+              console.log(`Error creating view ${viewName}:`, error);
             }
 
 
@@ -413,7 +413,7 @@ class MakeStartegy {
             console.log(`View ${viewName} already exists`);
           }
         } catch (error) {
-          console.error(`Error creating view ${viewName}:`, error);
+          console.log(`Error creating view ${viewName}:`, error);
         }
 
       } else {
@@ -471,7 +471,7 @@ class MakeStartegy {
             console.log(`View ${viewName} already exists`);
           }
         } catch (error) {
-          console.error(`Error creating view ${viewName}:`, error);
+          console.log(`Error creating view ${viewName}:`, error);
         }
       }
 
@@ -645,7 +645,7 @@ class MakeStartegy {
                       console.log(`View ${viewName} already exists`);
                     }
                   } catch (error) {
-                    console.error(`Error creating view ${viewName}:`, error);
+                    console.log(`Error creating view ${viewName}:`, error);
                   }
 
 
@@ -725,7 +725,7 @@ class MakeStartegy {
                   console.log(`View ${viewName} already exists`);
                 }
               } catch (error) {
-                console.error(`Error creating view ${viewName}:`, error);
+                console.log(`Error creating view ${viewName}:`, error);
               }
 
             } else {
@@ -780,7 +780,7 @@ class MakeStartegy {
                   console.log(`View ${viewName} already exists`);
                 }
               } catch (error) {
-                console.error(`Error creating view ${viewName}:`, error);
+                console.log(`Error creating view ${viewName}:`, error);
               }
             }
 
@@ -1279,7 +1279,7 @@ async function run() {
     }
 
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 }
 
@@ -1496,7 +1496,7 @@ async function fetchDataFromViews(viewNames) {
     }
 
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.log('Error fetching data:', error);
   }
 }
 

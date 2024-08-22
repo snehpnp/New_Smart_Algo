@@ -139,7 +139,7 @@ async function createView(collectionName, dbTradeTools) {
 
 
   } catch (err) {
-    //console.error('Error View Create:', err);
+   
   }
 
 
@@ -201,7 +201,7 @@ async function createView1(collectionName, dbTradeTools) {
 
 
   } catch (err) {
-    //console.error('Error View Create:', err);
+
   }
 
 

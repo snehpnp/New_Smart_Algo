@@ -74,7 +74,7 @@ async function run() {
             }
         }
     } catch (error) {
-        console.error('Error running the process:', error);
+        console.log('Error running the process:', error);
     }
 }
 

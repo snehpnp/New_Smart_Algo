@@ -326,7 +326,7 @@ class MakeStartegy {
                 console.log(`View ${viewName} already exists`);
               }
             } catch (error) {
-              console.error(`Error creating view ${viewName}:`, error);
+              console.log(`Error creating view ${viewName}:`, error);
             }
 
 
@@ -411,15 +411,11 @@ class MakeStartegy {
                 console.log(`View ${viewName} already exists`);
               }
             } catch (error) {
-              console.error(`Error creating view ${viewName}:`, error);
+              console.log(`Error creating view ${viewName}:`, error);
             }
 
     } else {
-      console.log("else req.body.status ",req.body.status);
-      console.log("else req.body.timeframe ",req.body.timeframe);
-      console.log("else req.body.tokensymbol ",req.body.tokensymbol);
-      console.log("else req.body.name ",req.body.name);
-      console.log("else req.body.condition ",req.body.condition);
+
         const conditions =await parseConditionString(req.body.condition);
 
         const matchStage =await generateMongoCondition(conditions);
@@ -471,7 +467,7 @@ class MakeStartegy {
              console.log(`View ${viewName} already exists`);
            }
          } catch (error) {
-           console.error(`Error creating view ${viewName}:`, error);
+           console.log(`Error creating view ${viewName}:`, error);
          }
     }
 
@@ -638,7 +634,7 @@ class MakeStartegy {
                       console.log(`View ${viewName} already exists`);
                     }
                   } catch (error) {
-                    console.error(`Error creating view ${viewName}:`, error);
+                    console.log(`Error creating view ${viewName}:`, error);
                   }
 
 
@@ -718,7 +714,7 @@ class MakeStartegy {
                       console.log(`View ${viewName} already exists`);
                     }
                   } catch (error) {
-                    console.error(`Error creating view ${viewName}:`, error);
+                    console.log(`Error creating view ${viewName}:`, error);
                   }
 
           } else {
@@ -773,7 +769,7 @@ class MakeStartegy {
                    console.log(`View ${viewName} already exists`);
                  }
                } catch (error) {
-                 console.error(`Error creating view ${viewName}:`, error);
+                 console.log(`Error creating view ${viewName}:`, error);
                }
           }
 

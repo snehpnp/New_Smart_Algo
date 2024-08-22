@@ -65,4 +65,4 @@ async function run(conditionString) {
 // Example usage:
 const conditionString = '(data.close[1]>data.emaclose3[1])&&(data.close[2]<data.emaclose3[2])';
 run(conditionString)
-  .catch(err => console.error(err));
+  .catch(err => console.log(err));
