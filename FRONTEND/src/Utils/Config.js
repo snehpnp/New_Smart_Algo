@@ -1,4 +1,6 @@
 export const react_domain = `${window.location.origin}`;
+// export const react_domain = `https://software.one-algo.com`;
+
 
 
 export const smartAlogUrl = `https://newpenal.pandpinfotech.com/backend/`;
@@ -24,6 +26,8 @@ export const base_url = "https://software.visionmatictechnology.com/backend/";
 // export const base_url = "https://software.uniquetechnology.in/backend/";
 // export const base_url = "https://software.unitythesmartalgo.com/backend/";
 // export const base_url = "https://software.tradeonn.com/backend/";
+// export const base_url = "https://software.one-algo.com/backend/";
+
 
 
 

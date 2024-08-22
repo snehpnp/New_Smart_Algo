@@ -1,5 +1,5 @@
 
-module.exports = function (app) { 
+module.exports = function (app) {
     var cron = require('node-cron');
     const axios = require('axios');
     const fs = require('fs');
@@ -7,40 +7,40 @@ module.exports = function (app) {
     const AdmZip = require('adm-zip');
     // 1. LOGOUT AND TRADING OFF ALL USER 
     cron.schedule('* 1 * * *', () => {
-  
+
         downloadAlicetoken();
         downloadFyerstoken();
     });
-    
+
     cron.schedule('10 7 * * *', () => {
-  
-        downloadAndSwastika(); 
+
+        downloadAndSwastika();
     });
-    
+
 
     cron.schedule('15 6 * * *', () => {
-  
+
         downloadKotakNeotoken();
     });
 
 
     cron.schedule('15 18 * * *', () => {
-  
+
         downloadKotakNeotoken();
     });
 
     cron.schedule('20 7 * * *', () => {
-  
+
         downloadZerodhatoken();
         downloadAndExtractUpstox();
         downloadAndExtractICICIDirect();
-    
+
     });
 
 
     // ALL Alice Token Genrate
     const downloadAlicetoken = () => {
-    
+
         var TokenUrl = [
             {
                 url: "https://v2api.aliceblueonline.com/restpy/static/contract_master/NFO.csv",
@@ -59,14 +59,14 @@ module.exports = function (app) {
                 key: "ALICE_CDS"
             }
         ]
-    
+
         TokenUrl.forEach((data) => {
-    
+
             const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'Aliceblue', `${data.key}.csv`);
-          
-    
+
+
             const fileUrl = data.url
-    
+
             axios({
                 method: 'get',
                 url: fileUrl,
@@ -75,35 +75,35 @@ module.exports = function (app) {
                 .then(function (response) {
                     // Pipe the HTTP response stream to a local file
                     response.data.pipe(fs.createWriteStream(filePath));
-    
+
                     response.data.on('end', function () {
-                       
+
                     });
                 })
                 .catch(function (error) {
                     console.log('Error downloading file:', error);
                 });
         })
-    
+
     }
-    
-    
+
+
     const downloadZerodhatoken = () => {
-    
+
         var TokenUrl = [
             {
                 url: "https://api.kite.trade/instruments",
                 key: "Zerodha"
             },
-    
+
         ]
         TokenUrl.forEach((data) => {
             const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'Zerodha', `${data.key}.csv`);
             // const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'Aliceblue', `${data.key}.csv`);
-    
-    
+
+
             const fileUrl = data.url
-    
+
             axios({
                 method: 'get',
                 url: fileUrl,
@@ -112,20 +112,20 @@ module.exports = function (app) {
                 .then(function (response) {
                     // Pipe the HTTP response stream to a local file
                     response.data.pipe(fs.createWriteStream(filePath));
-    
+
                     response.data.on('end', function () {
-                       
+
                     });
                 })
                 .catch(function (error) {
                     console.log('Error downloading file:', error);
                 });
         })
-    
+
     }
 
     // Upstox Files
-    const  downloadAndExtractUpstox = async ()=> {
+    const downloadAndExtractUpstox = async () => {
         const fs = require('fs');
         const zlib = require('zlib');
         const path = require('path');
@@ -160,13 +160,13 @@ module.exports = function (app) {
                 console.log('Download and extraction completed successfully');
             });
         } catch (err) {
-           console.log('Error:', err);
+            console.log('Error:', err);
         }
     }
 
 
-     // Fyers Files
-     const downloadFyerstoken = () => {
+    // Fyers Files
+    const downloadFyerstoken = () => {
 
 
         var TokenUrl = [
@@ -190,12 +190,12 @@ module.exports = function (app) {
 
 
         TokenUrl.forEach((data) => {
-    
+
             const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'Fyers', `${data.key}.csv`);
-          
-    
+
+
             const fileUrl = data.url
-    
+
             axios({
                 method: 'get',
                 url: fileUrl,
@@ -204,9 +204,9 @@ module.exports = function (app) {
                 .then(function (response) {
                     // Pipe the HTTP response stream to a local file
                     response.data.pipe(fs.createWriteStream(filePath));
-    
+
                     response.data.on('end', function () {
-                       
+
                     });
                 })
                 .catch(function (error) {
@@ -217,65 +217,65 @@ module.exports = function (app) {
 
     }
 
-       // Swastika Token get
-       async function downloadAndSwastika() {
+    // Swastika Token get
+    async function downloadAndSwastika() {
         try {
-            
+
             var ulrs = [
-                {url:"https://justradeuat.swastika.co.in/NSE_symbols.txt.zip",filename:"NSE_symbols.txt.zip"},
-                {url:"https://justradeuat.swastika.co.in/NFO_symbols.txt.zip",filename:"NFO_symbols.txt.zip"},
-                {url:"https://justradeuat.swastika.co.in/MCX_symbols.txt.zip",filename:"MCX_symbols.txt.zip"},{url:"https://justradeuat.swastika.co.in/CDS_symbols.txt.zip",filename:"CDS_symbols.txt.zip"},
-                {url:"https://justradeuat.swastika.co.in/BSE_symbols.txt.zip",filename:"BSE_symbols.txt.zip"},
-                {url:"https://justradeuat.swastika.co.in/NCX_symbols.txt.zip",filename:"NCX_symbols.txt.zip"}
-    
+                { url: "https://justradeuat.swastika.co.in/NSE_symbols.txt.zip", filename: "NSE_symbols.txt.zip" },
+                { url: "https://justradeuat.swastika.co.in/NFO_symbols.txt.zip", filename: "NFO_symbols.txt.zip" },
+                { url: "https://justradeuat.swastika.co.in/MCX_symbols.txt.zip", filename: "MCX_symbols.txt.zip" }, { url: "https://justradeuat.swastika.co.in/CDS_symbols.txt.zip", filename: "CDS_symbols.txt.zip" },
+                { url: "https://justradeuat.swastika.co.in/BSE_symbols.txt.zip", filename: "BSE_symbols.txt.zip" },
+                { url: "https://justradeuat.swastika.co.in/NCX_symbols.txt.zip", filename: "NCX_symbols.txt.zip" }
+
             ];
-    
-           ulrs.forEach(async function(item) {
-         
+
+            ulrs.forEach(async function (item) {
+
                 //  const url = 'https://justradeuat.swastika.co.in/NFO_symbols.txt.zip';
-            
-                 // Download the zip file
-                 try {
-                   const response = await axios.get(item.url, { responseType: 'arraybuffer' });
+
+                // Download the zip file
+                try {
+                    const response = await axios.get(item.url, { responseType: 'arraybuffer' });
                     // Check the status code
                     if (response.status !== 200) {
                         console.log(`Failed to download ${item.filename}. Status code: ${response.status}`);
                         return;
                     }
-            
+
                     // Verify content type
                     const contentType = response.headers['content-type'];
                     if (!contentType.includes('application/zip')) {
                         console.log(`Unexpected content type for ${item.filename}: ${contentType}`);
                         return;
                     }
-         
-                 // Create a folder to store the extracted files
-                 const outputFolder = path.join(__dirname, '../AllInstrumentToken/swastika');
-                 if (!fs.existsSync(outputFolder)) {
-                     fs.mkdirSync(outputFolder);
-                 }
-         
-                 // Save the zip file
-                 const zipFilePath = path.join(__dirname, item.filename);
-                 fs.writeFileSync(zipFilePath, Buffer.from(response.data, 'binary'));
-         
-                 // Extract the zip file
-                 const zip = new AdmZip(zipFilePath);
-                 zip.extractAllTo(outputFolder, true);
-         
-                 // Clean up the downloaded zip file
-                 fs.unlinkSync(zipFilePath);
-                 } catch (error) {
-                    console.log("Err downloadAndSwastika",error)
-                 }
-    
+
+                    // Create a folder to store the extracted files
+                    const outputFolder = path.join(__dirname, '../AllInstrumentToken/swastika');
+                    if (!fs.existsSync(outputFolder)) {
+                        fs.mkdirSync(outputFolder);
+                    }
+
+                    // Save the zip file
+                    const zipFilePath = path.join(__dirname, item.filename);
+                    fs.writeFileSync(zipFilePath, Buffer.from(response.data, 'binary'));
+
+                    // Extract the zip file
+                    const zip = new AdmZip(zipFilePath);
+                    zip.extractAllTo(outputFolder, true);
+
+                    // Clean up the downloaded zip file
+                    fs.unlinkSync(zipFilePath);
+                } catch (error) {
+                    console.log("Err downloadAndSwastika", error)
+                }
+
             });
 
-    
+
         } catch (err) {
-     
-        }  
+
+        }
 
     }
 
@@ -284,15 +284,15 @@ module.exports = function (app) {
         try {
             // Create a new Date object for the current date
             const currentDate = new Date();
-    
+
             // Get the year, month, and day components
             const year = currentDate.getFullYear();
             const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-indexed, so add 1
             const day = currentDate.getDate().toString().padStart(2, '0');
-    
+
             // Format the date
             const formattedDate = `${year}-${month}-${day}`;
-    
+
             var TokenUrl = [
                 {
                     url: `https://lapi.kotaksecurities.com/wso2-scripmaster/v1/prod/${formattedDate}/transformed/nse_fo.csv`,
@@ -311,11 +311,11 @@ module.exports = function (app) {
                     key: "KOTAK_CDS"
                 },
             ];
-    
+
             TokenUrl.forEach((data) => {
                 const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'KotakNeo', `${data.key}.csv`);
                 const fileUrl = data.url;
-    
+
                 axios({
                     method: 'get',
                     url: fileUrl,
@@ -324,9 +324,9 @@ module.exports = function (app) {
                     .then(function (response) {
                         // Pipe the HTTP response stream to a local file
                         response.data.pipe(fs.createWriteStream(filePath));
-    
+
                         response.data.on('end', function () {
-                           
+
                         });
                     })
                     .catch(function (error) {
@@ -337,9 +337,9 @@ module.exports = function (app) {
             console.log('An unexpected error occurred:', error);
         }
     };
-    
-     // ICICI DIRECT FILES
-    const downloadAndExtractICICIDirect = async ()=> {
+
+    // ICICI DIRECT FILES
+    const downloadAndExtractICICIDirect = async () => {
         try {
             const url = 'https://directlink.icicidirect.com/NewSecurityMaster/SecurityMaster.zip';
 
@@ -366,19 +366,16 @@ module.exports = function (app) {
             // Send a response to indicate success
             console.log('Download and extraction completed successfully');
         } catch (err) {
-         
+
         }
     }
 
 
-    app.get('/sneh', async (req, res) => {
-       downloadKotakNeotoken()
-       return res.send("okkk")
-      })
 
 
-  
-    
+
+
+
 }
 
 

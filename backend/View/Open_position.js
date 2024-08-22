@@ -363,8 +363,7 @@ async function dropOpenPosition() {
         await db.collection('open_position_excute').drop();
 
     } catch (error) {
-        // Handle any errors if the view doesn't exist
-        console.log('Error:', error);
+       return;
     }
 }
 
@@ -376,8 +375,7 @@ async function dropExistingView1() {
         await db.collection('open_position_excute').drop();
 
     } catch (error) {
-        // Handle any errors if the view doesn't exist
-        console.log('Error:', error);
+        return;
     }
 }
 
@@ -406,7 +404,6 @@ async function open_position_excute(req, res) {
             pipeline: pipeline,
         });
 
-        console.log('open_position_excute Destination view created successfully');
     } catch (error) {
     return;
     } finally {

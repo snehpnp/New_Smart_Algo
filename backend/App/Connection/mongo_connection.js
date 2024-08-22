@@ -1,11 +1,14 @@
 const mongoose = require("mongoose");
 
 const db_connect = process.env.MONGO_URI;
-console.log("process.env.DB_NAME",process.env.DB_NAME)
+
 mongoose.connect(db_connect, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   dbName: process.env.DB_NAME,
+  serverSelectionTimeoutMS: 50000, // 50 seconds
+  socketTimeoutMS: 45000, // 45 seconds for I/O operations
+  connectTimeoutMS: 30000, // 30 seconds to establish a connection
 });
 
 const connection = mongoose.connection;

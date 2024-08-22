@@ -148,14 +148,11 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                 item.postdata.Trantype = 'S';
             }
 
-            // console.log("price", price)
-            //console.log("item.client_services.order_type", item.client_services.order_type)
 
             if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                 item.postdata.Prc = price
             }
 
-            //  console.log("postData after ", item.postdata);
 
 
             EntryPlaceOrder(item, filePath, signals, signal_req)

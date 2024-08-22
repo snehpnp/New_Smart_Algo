@@ -8784,7 +8784,7 @@ fieldset:disabled .btn {
 /* rtl:end:remove */
 .text-primary {
   --bs-text-opacity: 1;
-  color: white !important;
+  /* color: white !important; */
 }
 
 .text-secondary {
@@ -12461,9 +12461,7 @@ a.active {
   background-color: var(--yellow) !important;
 }
 
-.text-primary {
-  color: white !important;
-}
+
 
 .fs-12 {
   font-size: 0.75rem !important;

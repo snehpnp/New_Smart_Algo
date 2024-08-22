@@ -48,6 +48,15 @@ class Signals {
                     },
                     {
                         $lookup: {
+                            from: "categories",
+                            localField: "service.categorie_id",
+                            foreignField: "_id",
+                            as: "categories",
+                        },
+                    },
+                    { $unwind: '$categories' },
+                    {
+                        $lookup: {
                             from: "strategies",
                             localField: "strategy_id",
                             foreignField: "_id",
@@ -65,6 +74,7 @@ class Signals {
                                 strategy_name: '$strategys.strategy_name',
                                 currentDate: currentDate,
                                 endOfDay: endOfDay,
+                                segment: '$categories.segment',
                             },
                             pipeline: [
                                 {
@@ -73,6 +83,7 @@ class Signals {
                                             $and: [
                                                 { $eq: ['$symbol', '$$service_name'] },
                                                 { $eq: ['$strategy', '$$strategy_name'] },
+                                                { $eq: ['$segment', '$$segment'] },
                                                 { $gte: ['$createdAt', '$$currentDate'] },
                                                 { $lte: ['$createdAt', '$$endOfDay'] },
                                             ],

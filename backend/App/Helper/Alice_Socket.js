@@ -4,7 +4,6 @@ var CryptoJS = require("crypto-js");
 const db = require('../Models');
 
 
-const { ALice_View_data } = require('./ALice_View_data');
 
 const live_price = db.live_price;
 const UserMakeStrategy = db.UserMakeStrategy;
@@ -66,7 +65,6 @@ const Alice_Socket = async () => {
 
             }).then(res => {
 
-               // console.log("res - ",res)
 
                 if (res.data.stat == "Ok") {
 
@@ -171,8 +169,7 @@ const attemptReconnect = () => {
 
 async function connectToDB(collectionName,response) {
     try {
-      console.log("collectionName ",collectionName)
-      console.log("response ",response)
+   
 
         const collections = await dbTest.listCollections().toArray();
         // let collectionName = message.token
@@ -191,7 +188,7 @@ async function connectToDB(collectionName,response) {
             //     const insertResult = await collection.insertOne(singleDocument);
             // }
             if (response.lp != undefined && response.v != undefined) {
-              console.log("IFFF INSERT ",collectionName)
+            
                 const customTimestamp = new Date();
                 let singleDocument = {
                   _id: customTimestamp,

@@ -1006,10 +1006,6 @@ axios.request(config)
         //console.log("Exist_open_trade  -",Exist_open_trade); 
         if(Exist_open_trade != undefined && Exist_open_trade.Status == "open"){
 
-            
-            // console.log("item.postdata.exch  -",item.postdata.exch);
-            // console.log("Nstordno  -",Exist_open_trade.Nstordno);
-            // console.log("Exist_open_trade.Trsym  -",Exist_open_trade.Trsym);
 
 
             const axios = require('axios');

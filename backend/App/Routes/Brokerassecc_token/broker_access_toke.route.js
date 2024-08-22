@@ -58,7 +58,7 @@ const { GetAccessTokenZebull, GetOrderFullInformationZebull } = require('../../C
 
 const { GetAccessTokenMotilaloswal, GetOrderFullInformationMotilaloswal } = require('../../Controllers/Brokerassecc_token/Motilaloswal')
 
-const { GetAccessTokenIifl, GetOrderFullInformationIifl } = require('../../Controllers/Brokerassecc_token/Iifl')
+const { GetAccessTokenIifl, GetOrderFullInformationIifl ,SingleOrderFullInformationIIfl} = require('../../Controllers/Brokerassecc_token/Iifl')
 
 const { GetAccessTokenIcicidirect, GetOrderFullInformationIcicidirect } = require('../../Controllers/Brokerassecc_token/Icicidirect')
 
@@ -202,7 +202,15 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
       GetOrderFullInformationIcicidirect(req, res, result);
     }
     else if (broker == 26) {
-      GetOrderFullInformationIifl(req, res, result);
+      let broker_response_id = req.body.broker_response_id;
+      let order_id = req.body.order_id;
+   
+      if(order_id != "" && order_id != undefined){
+      SingleOrderFullInformationIIfl(req, res, result,broker_response_id , order_id);
+      }else{
+        return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+      }
+
     }
     // Mandot Securities   -  8
     else if (broker == 8) {

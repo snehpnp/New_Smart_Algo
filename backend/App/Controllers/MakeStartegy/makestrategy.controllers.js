@@ -325,7 +325,7 @@ class MakeStartegy {
                 console.log(`View ${viewName} already exists`);
               }
             } catch (error) {
-              console.error(`Error creating view ${viewName}:`, error);
+              console.log(`Error creating view ${viewName}:`, error);
             }
 
 
@@ -413,7 +413,7 @@ class MakeStartegy {
             console.log(`View ${viewName} already exists`);
           }
         } catch (error) {
-          console.error(`Error creating view ${viewName}:`, error);
+          console.log(`Error creating view ${viewName}:`, error);
         }
 
       } else {
@@ -471,7 +471,7 @@ class MakeStartegy {
             console.log(`View ${viewName} already exists`);
           }
         } catch (error) {
-          console.error(`Error creating view ${viewName}:`, error);
+          console.log(`Error creating view ${viewName}:`, error);
         }
       }
 
@@ -645,7 +645,7 @@ class MakeStartegy {
                       console.log(`View ${viewName} already exists`);
                     }
                   } catch (error) {
-                    console.error(`Error creating view ${viewName}:`, error);
+                    console.log(`Error creating view ${viewName}:`, error);
                   }
 
 
@@ -725,7 +725,7 @@ class MakeStartegy {
                   console.log(`View ${viewName} already exists`);
                 }
               } catch (error) {
-                console.error(`Error creating view ${viewName}:`, error);
+                console.log(`Error creating view ${viewName}:`, error);
               }
 
             } else {
@@ -780,7 +780,7 @@ class MakeStartegy {
                   console.log(`View ${viewName} already exists`);
                 }
               } catch (error) {
-                console.error(`Error creating view ${viewName}:`, error);
+                console.log(`Error creating view ${viewName}:`, error);
               }
             }
 
@@ -1253,37 +1253,45 @@ async function run() {
     // Array to keep track of ongoing operations
     let ongoingOperations = [];
 
+    // while (true) {
+    //   // Delay for 1000 milliseconds (1 second)
+    //   await new Promise(resolve => setTimeout(resolve, 1000));
+
+    //   // Schedule the execution of the function
+    //  // const operation = executeFunction().catch(console.error);
+    //   const operation = exitOpentrade().catch(console.error);
+   
+
+    //   // Store the ongoing operation
+    //   ongoingOperations.push(operation);
+
+    //   // Clean up finished operations to prevent memory leaks
+    //   ongoingOperations = ongoingOperations.filter(p => !p.isSettled);
+
+    //   // Mark completed operations
+    //   Promise.allSettled(ongoingOperations).then(results => {
+    //     results.forEach((result, index) => {
+    //       if (result.status === "fulfilled" || result.status === "rejected") {
+    //         ongoingOperations[index].isSettled = true;
+    //       }
+    //     });
+    //   });
+    // }
+
     while (true) {
       // Delay for 1000 milliseconds (1 second)
       await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Schedule the execution of the function
-     // const operation = executeFunction().catch(console.error);
-      const operation = exitOpentrade().catch(console.error);
-   
-
-      // Store the ongoing operation
-      ongoingOperations.push(operation);
-
-      // Clean up finished operations to prevent memory leaks
-      ongoingOperations = ongoingOperations.filter(p => !p.isSettled);
-
-      // Mark completed operations
-      Promise.allSettled(ongoingOperations).then(results => {
-        results.forEach((result, index) => {
-          if (result.status === "fulfilled" || result.status === "rejected") {
-            ongoingOperations[index].isSettled = true;
-          }
-        });
-      });
+     // await executeFunction();
+      await exitOpentrade()
     }
+    
 
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 }
 
-run().catch(console.error);
+run().catch(console.log);
 
 
 async function fetchDataFromViews(viewNames) {
@@ -1496,7 +1504,7 @@ async function fetchDataFromViews(viewNames) {
     }
 
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.log('Error fetching data:', error);
   }
 }
 
