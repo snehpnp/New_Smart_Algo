@@ -433,6 +433,19 @@ const AdminsList = () => {
         }
     }, [searchInput, themeData.data]);
 
+const changeView = (e) => {
+    const value = e.target.value;
+    if (value === '') {
+        setFilteredData(themeData.data);
+    }
+    else {
+        const filteredData = themeData.data.filter((item) => {
+            return item.is_active === Number(value);
+        });
+        setFilteredData(filteredData);
+    }
+}
+
     return (
         <>
             <Content Page_title="Company Names"
@@ -440,24 +453,28 @@ const AdminsList = () => {
                 route="/super/panel/add"
                 button_status={user_details.UserName === "superadmin"}
             >
-                <div className='mb-4'>
-                    <h6>Search here something</h6>
-                    <input type="text"
+                <div style={{ display: "flex", gap: "10px" }}>
 
-                        placeholder='search...'
-                        className='p-2 form-contol rounded'
-                        onChange={(e) => { setSearchInput(e.target.value) }}
-                        value={searchInput} />
-                </div>
+                    <div className='mb-4'>
+                        <h6>Search here something</h6>
+                        <input type="text"
 
-                <div className='mb-4'>
-                    <h6>Search here something</h6>
-                    <input type="text"
+                            placeholder='search...'
+                            className='p-2 form-contol rounded'
+                            onChange={(e) => { setSearchInput(e.target.value) }}
+                            value={searchInput} />
+                    </div>
 
-                        placeholder='search...'
-                        className='p-2 form-contol rounded'
-                        onChange={(e) => { setSearchInput(e.target.value) }}
-                        value={searchInput} />
+                    <div className='mb-4'>
+                        <h6>Panel Status</h6>
+                        <select className='form-control p-2 rounded' onChange={(e)=>changeView(e)}>
+                            <option value=''>All</option>
+                            <option value='0'>Active</option>
+                            <option value='1'>Inactive</option>
+                        </select>
+
+                    </div>
+
                 </div>
 
                 {themeData.loading ? <Loader /> :
