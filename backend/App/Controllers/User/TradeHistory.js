@@ -30,6 +30,15 @@ class TradeHistory {
                 { $unwind: '$service' },
                 {
                     $lookup: {
+                        from: "categories",
+                        localField: "service.categorie_id",
+                        foreignField: "_id",
+                        as: "categories",
+                    },
+                },
+                { $unwind: '$categories' },
+                {
+                    $lookup: {
                         from: "users",
                         localField: 'user_id',
                         foreignField: "_id",
@@ -52,6 +61,8 @@ class TradeHistory {
                         'strategys.strategy_name': 1,
                         'users.web_url': 1,
                         'users.client_key': 1,
+                        'categories.segment':1,
+
                         quantity: 1
                     },
                 },
@@ -67,6 +78,8 @@ class TradeHistory {
             let abc1 = [];
 
             for (const item of GetAllClientServices) {
+                console.log("item",item)
+
                 const client_persnal_key1 = item.users.web_url === '2' ? item.users.client_key : "";
 
                 const serIndex = serviceIndex === "null" ? item.service.name : serviceIndex;
@@ -76,6 +89,8 @@ class TradeHistory {
                     symbol: serIndex,
                     createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
                     client_persnal_key: client_persnal_key1,
+                    segment: item.categories.segment
+
                 };
 
                 if (getType !== "Trade") {
@@ -107,9 +122,8 @@ class TradeHistory {
                                     signal.qty_percent = findstg.quantity * (Math.ceil(Number(signal.qty_percent) / 100) * 100) * 0.01;
                                 });
 
-                                console.log("findstg.quantity", findstg.quantity * (Math.ceil(Number(item1.entry_qty) / 100) * 100) * 0.01);
 
-                                item1.entry_qty_percent = findstg.quantity * (Math.ceil(Number(item1.entry_qty) / 100) * 100) * 0.01;
+                                item1.entry_qty_percent = findstg.quantity * (Math.ceil(Number(item1.entry_qty_percent) / 100) * 100) * 0.01;
                                 item1.exit_qty_percent = findstg.quantity * (Math.ceil(Number(item1.exit_qty_percent) / 100) * 100) * 0.01;
 
                             }

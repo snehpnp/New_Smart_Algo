@@ -59,9 +59,12 @@ class Iifl {
                     await axios.request(config)
                         .then(async (response) => {
 
+
                             var accesspassword = response.data.result.uniqueKey
                             var connectionString = response.data.result.connectionString
 
+
+                            
 
                             var config = {
                                 method: 'post',
@@ -173,6 +176,87 @@ class Iifl {
 
     }
 
+    async SingleOrderFullInformationIIfl(req, res, user_info, broker_response_id, order_id) {
+
+        try {
+
+            const { user_id } = req.body
+            if (!user_id) {
+                return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+            }
+
+
+            var config = {
+                method: 'get',
+                maxBodyLength: Infinity,
+                url: user_info[0].api_type + '/orders',
+
+                headers: {
+                    'authorization': user_info[0].access_token,
+                    'Content-Type': 'application/json'
+                },
+
+
+            };
+            axios(config)
+                .then(async (response) => {
+                    if (response.data.type == "success") {
+                        const result_order = response.data.result.find(item2 => item2.AppOrderID == order_id);
+
+                        if (result_order != undefined) {
+                            const message = (JSON.stringify(result_order));
+                            let result = await BrokerResponse.findByIdAndUpdate(
+                                { _id: broker_response_id },
+                                {
+                                    order_view_date: message,
+                                    order_view_status: '1',
+                                    order_view_response: result_order.OrderStatus,
+                                    reject_reason: result_order.CancelRejectReason
+
+                                },
+                                { new: true }
+                            )
+                            return res.send({ status: true, msg: "broker response updated successfully" })
+
+
+                        } else {
+                            const message = (JSON.stringify(result_order));
+                            let result = await BrokerResponse.findByIdAndUpdate(
+                                { _id: broker_response_id },
+                                {
+                                    order_view_date: message,
+                                    order_view_status: '1',
+
+                                },
+                                { new: true }
+                            )
+                            return res.send({ status: false, msg: 'result order undefined', data: [] });
+
+                        }
+
+
+                    } else {
+                        return res.send({ status: false, msg: 'Order Api Err .', data: [] });
+                    }
+
+                })
+                .catch(async (error) => {
+           
+                    return res.send({ status: false, msg: 'Order Api Err .', data: [] });
+                });
+
+
+
+        } catch (error) {
+        
+            return res.send({ status: false, msg: 'error in Server side', data: error });
+
+        }
+
+
+     }
+    
+
 }
 
 const GetAllBrokerResponse = async (user_info, res) => {
@@ -244,7 +328,7 @@ const GetAllBrokerResponse = async (user_info, res) => {
 
 
             })
-            return  res.send({ status: true, msg: "broker response updated successfully" })
+            return res.send({ status: true, msg: "broker response updated successfully" })
 
         } else {
             return res.send({ status: false, msg: "no user found" })
