@@ -6,36 +6,19 @@ module.exports = function (app) {
     var path = require('path');
     const AdmZip = require('adm-zip');
     // 1. LOGOUT AND TRADING OFF ALL USER 
-    cron.schedule('* 1 * * *', () => {
-
+    cron.schedule('* 5 * * *', () => {
         downloadAlicetoken();
         downloadFyerstoken();
     });
 
-    cron.schedule('10 7 * * *', () => {
+    cron.schedule('10 6 * * *', () => { downloadAndSwastika();  });
 
-        downloadAndSwastika();
-    });
+    cron.schedule('20 6 * * *', () => { downloadKotakNeotoken(); });
 
+    cron.schedule('30 6 * * *', () => { downloadZerodhatoken(); downloadAndExtractUpstox(); downloadAndExtractICICIDirect(); });
 
-    cron.schedule('15 6 * * *', () => {
+    cron.schedule('15 18 * * *', () => { downloadKotakNeotoken(); });
 
-        downloadKotakNeotoken();
-    });
-
-
-    cron.schedule('15 18 * * *', () => {
-
-        downloadKotakNeotoken();
-    });
-
-    cron.schedule('20 7 * * *', () => {
-
-        downloadZerodhatoken();
-        downloadAndExtractUpstox();
-        downloadAndExtractICICIDirect();
-
-    });
 
 
     // ALL Alice Token Genrate
