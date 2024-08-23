@@ -2,15 +2,16 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_TRADEHISTORY, GET_SEVAN_TRADEHISTORY,GET_ADMIN_TRADING_STATUS } from "../../../Service/admin.service";
+import { GET_TRADEHISTORY, GET_SEVAN_TRADEHISTORY, GET_ADMIN_TRADING_STATUS, AdminTradingStatusGet } from "../../../Service/admin.service";
+import { get } from "jquery";
 
 
 
 export const Get_Tradehisotry = createAsyncThunk("admin/tradhistory", async (apireq) => {
 
-    const { startDate, endDate, service, strategy,type,serviceIndex,lotMultypaly ,token } = apireq
+    const { startDate, endDate, service, strategy, type, serviceIndex, lotMultypaly, token } = apireq
     try {
-        const res = await GET_TRADEHISTORY({ startDate: startDate, endDate: endDate, service: service, strategy: strategy,type ,serviceIndex:serviceIndex,lotMultypaly:lotMultypaly}, token);
+        const res = await GET_TRADEHISTORY({ startDate: startDate, endDate: endDate, service: service, strategy: strategy, type, serviceIndex: serviceIndex, lotMultypaly: lotMultypaly }, token);
         return await res;
     } catch (err) {
         return err;
@@ -44,6 +45,17 @@ export const GET_ADMIN_TRADE_STATUS = createAsyncThunk("admin/trading/status", a
     }
 });
 
+export const ADMINGETTRADINGSTATUS = createAsyncThunk("admin/trading/status/get", async () => {
+
+    try {
+        const res = await AdminTradingStatusGet();
+
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
 
 
 const TradehistorySlice = createSlice({
@@ -55,11 +67,12 @@ const TradehistorySlice = createSlice({
         tradehisotry: [],
         tradehisotry_sevan: [],
         trading_status: [],
+        gettradingstatus: []
 
 
 
     },
-    reducers: {}, // Define any reducers here if needed
+    reducers: {}, 
     extraReducers: {
         [Get_Tradehisotry.fulfilled]: (state, { payload }) => {
             return { ...state, tradehisotry: payload, isLoading: false };
@@ -70,6 +83,10 @@ const TradehistorySlice = createSlice({
         [GET_ADMIN_TRADE_STATUS.fulfilled]: (state, { payload }) => {
             return { ...state, trading_status: payload, isLoading: false };
         },
+        [ADMINGETTRADINGSTATUS.fulfilled]: (state, { payload }) => {
+            return { ...state, gettradingstatus: payload, isLoading: false };
+        },
+
 
     },
 });

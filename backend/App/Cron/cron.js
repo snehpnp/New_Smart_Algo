@@ -862,7 +862,7 @@ const TokenSymbolUpdate = async () => {
                             try {
                                 const Update_service = await services.updateMany(filter_service, updateOperation_service);
                             } catch (error) {
-                                console.log("Error updating documents:", error);
+                              return
                             }
 
 
@@ -872,7 +872,7 @@ const TokenSymbolUpdate = async () => {
                             try {
                                 const Update_alice = await Alice_token.updateMany(filter_alice, updateOperation_alice);
                             } catch (error) {
-                                console.log("Error updating documents:", error);
+                                return
                             }
 
 
@@ -914,7 +914,7 @@ const TokenSymbolUpdate = async () => {
                             try {
                                 const Update_service = await services.updateMany(filter_service, updateOperation_service);
                             } catch (error) {
-                                console.log("Error updating documents:", error);
+                              return
                             }
 
 
@@ -924,7 +924,7 @@ const TokenSymbolUpdate = async () => {
                             try {
                                 const Update_alice = await Alice_token.updateMany(filter_alice, updateOperation_alice);
                             } catch (error) {
-                                console.log("Error updating documents:", error);
+                              return
                             }
 
 
@@ -967,7 +967,7 @@ const TokenSymbolUpdate = async () => {
                             try {
                                 const Update_service = await services.updateMany(filter_service, updateOperation_service);
                             } catch (error) {
-                                console.log("Error updating documents:", error);
+                              return
                             }
 
 
@@ -977,7 +977,7 @@ const TokenSymbolUpdate = async () => {
                             try {
                                 const Update_alice = await Alice_token.updateMany(filter_alice, updateOperation_alice);
                             } catch (error) {
-                                console.log("Error updating documents:", error);
+                              return
                             }
 
 
@@ -1188,7 +1188,7 @@ const TokenSymbolUpdate = async () => {
                             try {
                                 const Update_service = await services.updateMany(filter_service, updateOperation_service);
                             } catch (error) {
-                                console.log("Error updating documents:", error);
+                              return
                             }
 
 
@@ -1198,7 +1198,7 @@ const TokenSymbolUpdate = async () => {
                             try {
                                 const Update_alice = await Alice_token.updateMany(filter_alice, updateOperation_alice);
                             } catch (error) {
-                                console.log("Error updating documents:", error);
+                              return
                             }
 
 
@@ -1268,7 +1268,7 @@ const TokenSymbolUpdate = async () => {
 
                     });
                 }).catch((error) => {
-                    console.log("APi Error", error);
+                    console.log("Error Alice_token", error);
                 });
 
         } else {

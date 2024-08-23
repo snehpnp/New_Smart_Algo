@@ -148,10 +148,7 @@ const AdminsList = () => {
             dataField: 'domain',
             text: 'Domain Name'
         },
-        // {
-        //     dataField: 'key',
-        //     text: 'Key'
-        // },
+
         {
             dataField: 'theme_name',
             text: 'Set theme',
@@ -234,6 +231,25 @@ const AdminsList = () => {
                             strokeWidth={2}
                             className="mx-2 pointer-icon"
                             onClick={() => fetchBrokerView(row)}
+                        />
+                    </div>
+
+                </span>
+            ),
+        },
+        {
+            dataField: 'a',
+            text: 'Live price Update',
+            formatter: (cell, row) => (
+                <span style={{ display: "flex" }}>
+
+                    <div className="tooltip-wrapper" title="All Tables Update">
+                        <RefreshCcw
+                            size={20}
+                            color="#198754"
+                            strokeWidth={2}
+                            className="mx-1 pointer-icon"
+                            onClick={() => UpdateLivePrive(row)}
                         />
                     </div>
 
@@ -334,6 +350,86 @@ const AdminsList = () => {
 
 
 
+    const UpdateLivePrive = async (row) => {
+        try {
+            const { value: password } = await Swal.fire({
+                title: "Enter your Server password",
+                input: "text",
+                inputLabel: "Server Password",
+                inputPlaceholder: "Enter your Server password",
+                inputAttributes: {
+                    autocomplete: 'off'
+                },
+                confirmButtonText: 'Submit',
+                cancelButtonText: 'Cancel',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Password is required!';
+                    }
+                    return null;
+                }
+            });
+
+            if (!password) {
+                return;
+            }
+
+            if (!row.ip_address) {
+                Swal.fire({
+                    icon: 'Error',
+                    title: 'Error',
+                    text: 'Server IP address not found.',
+                });
+                return;
+            }
+
+            let req = {
+                "password": password,
+                "host": row.ip_address
+            };
+
+
+            let config = {
+                method: 'get',
+                maxBodyLength: Infinity,
+                url: row.domain + '/backend/update/tradehistory/token',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: req
+            };
+
+            const response = await axios.request(config);
+
+            if (response.data.status) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Live Price update successful.',
+                });
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Live Price update failed.',
+                });
+            }
+
+
+        } catch (error) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Information',
+                text: 'An issue occurred during the server update. The UI will remain unaffected.',
+            });
+
+            console.log('Error during server update:', error);
+
+        }
+    }
+
 
 
     const formik = useFormik({
@@ -433,18 +529,18 @@ const AdminsList = () => {
         }
     }, [searchInput, themeData.data]);
 
-const changeView = (e) => {
-    const value = e.target.value;
-    if (value === '') {
-        setFilteredData(themeData.data);
+    const changeView = (e) => {
+        const value = e.target.value;
+        if (value === '') {
+            setFilteredData(themeData.data);
+        }
+        else {
+            const filteredData = themeData.data.filter((item) => {
+                return item.is_active === Number(value);
+            });
+            setFilteredData(filteredData);
+        }
     }
-    else {
-        const filteredData = themeData.data.filter((item) => {
-            return item.is_active === Number(value);
-        });
-        setFilteredData(filteredData);
-    }
-}
 
     return (
         <>
@@ -467,7 +563,7 @@ const changeView = (e) => {
 
                     <div className='mb-4'>
                         <h6>Panel Status</h6>
-                        <select className='form-control p-2 rounded' onChange={(e)=>changeView(e)}>
+                        <select className='form-control p-2 rounded' onChange={(e) => changeView(e)}>
                             <option value=''>All</option>
                             <option value='0'>Active</option>
                             <option value='1'>Inactive</option>

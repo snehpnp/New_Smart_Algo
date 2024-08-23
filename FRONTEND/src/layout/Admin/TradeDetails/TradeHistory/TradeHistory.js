@@ -3,32 +3,28 @@ import Content from "../../../../Components/Dashboard/Content/Content";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable2";
 import { Get_Tradehisotry } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
 import { useDispatch, useSelector } from "react-redux";
-import { fa_time, fDateTimeSuffix } from "../../../../Utils/Date_formet";
-import { Eye, CandlestickChart, Pencil } from "lucide-react";
+import { fDateTimeSuffix } from "../../../../Utils/Date_formet";
+import { Eye } from "lucide-react";
 import { loginWithApi } from "../../../../Components/Dashboard/Header/log_with_api";
 import DetailsView from "./DetailsView";
 import { TRADING_OFF_USER } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
 import { Get_All_Service_for_Client, CancelOrderReq } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import { check_Device } from "../../../../Utils/find_device";
 import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../../Service/Alice_Socket";
-import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../../Utils/ShowTradeColor";
+import { ShowColor1 } from "../../../../Utils/ShowTradeColor";
 import { Get_All_Catagory, Service_By_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { Get_All_Service } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
-import { GET_ADMIN_TRADE_STATUS } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
-import Accordion from "react-bootstrap/Accordion";
-import { today } from "../../../../Utils/Date_formet";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { GET_ADMIN_TRADE_STATUS, ADMINGETTRADINGSTATUS } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
+import { useLocation } from "react-router-dom";
 import $ from "jquery";
-
+import { Modal, Button, Table } from 'react-bootstrap';
 
 const TradeHistory = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   var dashboard_filter = location.search.split("=")[1];
-
   const token = JSON.parse(localStorage.getItem("user_details")).token;
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
-
 
   const [UserDetails, setUserDetails] = useState([]);
   const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
@@ -53,8 +49,6 @@ const TradeHistory = () => {
   const [CatagoryData, setCatagoryData] = useState({ loading: true, data: [] });
   const selector = useSelector((state) => state.DashboardSlice);
   const [getColumnDaynamic, setColumnDaynamic] = useState([]);
-
-
 
   useEffect(() => { GetAdminTradingStatus() }, []);
 
@@ -270,26 +264,10 @@ const TradeHistory = () => {
       ),
     },
 
-  
+
   ];
 
-  const cancelOrder = async (e, row) => {
 
-    await dispatch(
-      CancelOrderReq({
-        req: { data: row },
-        token: token,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-
-        } else {
-
-        }
-      });
-  }
 
   const StatusEntry = (row) => {
 
@@ -334,7 +312,7 @@ const TradeHistory = () => {
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
 
-    
+
 
     if (UserDetails && UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
       const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
@@ -652,6 +630,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     GetAllStrategyName();
+    Admin_Trading_data()
   }, []);
 
 
@@ -665,6 +644,21 @@ const TradeHistory = () => {
     }
 
   };
+
+  const Admin_Trading_data = async () => {
+
+    dispatch(ADMINGETTRADINGSTATUS({ token: token }))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          console.log("Admin_Trading_data", response.data)
+          setAdminTradingStatus(response.data)
+        }
+
+      });
+
+  };
+
   useEffect(() => {
     data();
   }, [a]);
@@ -757,7 +751,6 @@ const TradeHistory = () => {
     await dispatch(GET_ADMIN_TRADE_STATUS({ broker_name: "ALICE_BLUE" })).unwrap()
       .then((response) => {
         if (response.status) {
-          //setAdminTradingStatus(response.data)
           checkStatusReff.current = true
         }
       });
@@ -802,7 +795,7 @@ const TradeHistory = () => {
   if (selectedOptions && selectedOptions.length > 0) {
     columns = columns.filter((data) => !selectedOptions.includes(data.text));
   }
-  
+
   const columnTexts = [
     "S.No.",
     "Signals Entry time",
@@ -821,7 +814,13 @@ const TradeHistory = () => {
     "Details View",
     // "Cancel Order", // Uncomment if you want to include this as well
   ];
-  
+
+
+  const [showModal6, setShowModal6] = useState(false);
+
+  const handleShow = () => setShowModal6(true);
+  const handleClose = () => setShowModal6(false);
+
   return (
     <>
 
@@ -831,9 +830,14 @@ const TradeHistory = () => {
         <div className="row d-flex  align-items-center justify-content-start">
 
           {dashboard_filter === "client" ? "" :
-            < div className="col-lg-12 flex-column">
-              <div className="headaer-title">
+            <div className="col-lg-12 flex-column">
+              <div className="header-title d-flex align-items-center">
                 <h5 className="font-w400 mb-0">Live Price</h5>
+
+                <i className="fas fa-info-circle ml-5"
+                  onClick={handleShow}
+                  style={{ cursor: 'pointer', margin: '0px 10px' }}
+                ></i>
               </div>
               <div className="Api Login m-2">
                 <label className="switch">
@@ -853,6 +857,48 @@ const TradeHistory = () => {
                   <span className="slider round"></span>
                 </label>
               </div>
+
+              {/* Modal */}
+              <Modal show={showModal6} onHide={handleClose} size="lg">
+                <Modal.Header closeButton>
+                  <Modal.Title>Trading Status Information</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  {adminTradingStatus.length > 0 ? (
+                    <Table striped bordered hover>
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Login Status</th>
+                          <th>Trading Status</th>
+                        
+                          <th>Device</th>
+                          <th>Created At</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {adminTradingStatus.map((item, index) => (
+                          <tr key={item._id}>
+                            <td>{index + 1}</td>
+                            <td>{item.login_status}</td>
+                            <td>{item.trading_status || "N/A"}</td>
+                          
+                            <td>{item.device}</td>
+                            <td>{new Date(item.createdAt).toLocaleString()}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  ) : (
+                    <p>No trading status information available.</p>
+                  )}
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={handleClose}>
+                    Close
+                  </Button>
+                </Modal.Footer>
+              </Modal>
             </div>
           }
 

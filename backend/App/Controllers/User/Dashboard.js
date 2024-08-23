@@ -416,7 +416,7 @@ class Dashboard {
 
                 const user_login = new user_logs({
                     user_Id: User_information[0]._id,
-                    login_status: "Trading off",
+                    login_status: "Admin Trading off",
                     role: User_information[0].Role,
                     device: device,
                     system_ip: network_ip
@@ -425,7 +425,7 @@ class Dashboard {
                 })
                 await user_login.save();
 
-                return res.send({ status: true, msg: 'Trading Off successfully', data: [] });
+                return res.send({ status: true, msg: 'Admin Trading Off successfully', data: [] });
 
             }
 
