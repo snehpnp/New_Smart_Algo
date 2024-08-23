@@ -5,19 +5,25 @@ module.exports = function (app) {
     const fs = require('fs');
     var path = require('path');
     const AdmZip = require('adm-zip');
-    // 1. LOGOUT AND TRADING OFF ALL USER 
-    cron.schedule('* 5 * * *', () => {
-        downloadAlicetoken();
-        downloadFyerstoken();
-    });
+    
 
-    cron.schedule('10 6 * * *', () => { downloadAndSwastika();  });
+    
+    cron.schedule('* 6 * * *', () => { downloadAlicetoken(); });
+
+    cron.schedule('5 6 * * *', () => { downloadFyerstoken(); });
+
+    cron.schedule('10 6 * * *', () => { downloadAndSwastika(); });
 
     cron.schedule('20 6 * * *', () => { downloadKotakNeotoken(); });
 
-    cron.schedule('30 6 * * *', () => { downloadZerodhatoken(); downloadAndExtractUpstox(); downloadAndExtractICICIDirect(); });
+    cron.schedule('30 6 * * *', () => { downloadZerodhatoken(); });
+
+    cron.schedule('35 6 * * *', () => { downloadAndExtractUpstox(); });
+
+    cron.schedule('40 6 * * *', () => { downloadAndExtractICICIDirect(); });
 
     cron.schedule('15 18 * * *', () => { downloadKotakNeotoken(); });
+
 
 
 

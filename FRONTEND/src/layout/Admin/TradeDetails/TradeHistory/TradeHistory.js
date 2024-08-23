@@ -8,11 +8,9 @@ import { Eye } from "lucide-react";
 import { loginWithApi } from "../../../../Components/Dashboard/Header/log_with_api";
 import DetailsView from "./DetailsView";
 import { TRADING_OFF_USER } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
-import { Get_All_Service_for_Client, CancelOrderReq } from "../../../../ReduxStore/Slice/Common/commoSlice";
-import { check_Device } from "../../../../Utils/find_device";
+import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../../Service/Alice_Socket";
 import { ShowColor1 } from "../../../../Utils/ShowTradeColor";
-import { Get_All_Catagory, Service_By_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { Get_All_Service } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { GET_ADMIN_TRADE_STATUS, ADMINGETTRADINGSTATUS } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
 import { useLocation } from "react-router-dom";
@@ -25,10 +23,8 @@ const TradeHistory = () => {
   var dashboard_filter = location.search.split("=")[1];
   const token = JSON.parse(localStorage.getItem("user_details")).token;
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
-
   const [UserDetails, setUserDetails] = useState([]);
   const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
-  const [SelectSegment, setSelectSegment] = useState("null");
   const [SelectService, setSelectService] = useState("null");
   const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
   const [SocketState, setSocketState] = useState("null");
@@ -38,19 +34,18 @@ const TradeHistory = () => {
   const [showModal, setshowModal] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const [CheckUser, setCheckUser] = useState(check_Device());
   const [refresh, setrefresh] = useState(false);
-  const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
   const [rowData, setRowData] = useState({ loading: true, data: [], });
   const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [], });
   const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
   const [ServiceData, setServiceData] = useState({ loading: true, data: [] });
   const [lotMultypaly, SetlotMultypaly] = useState(1);
-  const [CatagoryData, setCatagoryData] = useState({ loading: true, data: [] });
   const selector = useSelector((state) => state.DashboardSlice);
-  const [getColumnDaynamic, setColumnDaynamic] = useState([]);
+  const [showModal6, setShowModal6] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
-  useEffect(() => { GetAdminTradingStatus() }, []);
+  const handleShow = () => setShowModal6(true);
+  const handleClose = () => setShowModal6(false);
 
   const handleFromDateChange = (e) => { setFromDate(e.target.value); };
   const handleToDateChange = (e) => { setToDate(e.target.value); };
@@ -90,9 +85,6 @@ const TradeHistory = () => {
       });
   };
 
-  useEffect(() => {
-    Get_TradHistory();
-  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter, SelectServiceIndex, lotMultypaly]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");
@@ -606,9 +598,7 @@ const TradeHistory = () => {
     }
   };
 
-  useEffect(() => {
-    ShowLivePrice();
-  }, [tradeHistoryData.data, SocketState, UserDetails]);
+
 
   const GetAllStrategyName = async (e) => {
     await dispatch(
@@ -628,10 +618,7 @@ const TradeHistory = () => {
       });
   };
 
-  useEffect(() => {
-    GetAllStrategyName();
-    Admin_Trading_data()
-  }, []);
+
 
 
   var a = 2
@@ -659,12 +646,6 @@ const TradeHistory = () => {
 
   };
 
-  useEffect(() => {
-    data();
-  }, [a]);
-
-
-  //  LOG IN FOR GET LIVE PRICE 
   const LogIn_WIth_Api = async (check, brokerid, tradingstatus, UserDetails) => {
 
     if (check) {
@@ -672,7 +653,7 @@ const TradeHistory = () => {
     } else {
 
 
-      dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
+      dispatch(TRADING_OFF_USER({ user_id: user_id, device: "web", token: token }))
         .unwrap()
         .then((response) => {
           if (response.status) {
@@ -711,10 +692,6 @@ const TradeHistory = () => {
 
   }
 
-  useEffect(() => {
-    forCSVdata()
-  }, [tradeHistoryData.data])
-
   const getSymbols = async (e) => {
     await dispatch(Get_All_Service({})).unwrap()
       .then((response) => {
@@ -731,20 +708,6 @@ const TradeHistory = () => {
       });
   };
 
-  const getservice = async () => {
-    await dispatch(Get_All_Catagory()).unwrap()
-      .then((response) => {
-        if (response.status) {
-          setCatagoryData({
-            loading: false,
-            data: response.data
-          });
-        }
-      })
-  }
-  useEffect(() => {
-    getservice()
-  }, [])
 
   const GetAdminTradingStatus = async (e) => {
 
@@ -756,7 +719,6 @@ const TradeHistory = () => {
       });
   };
 
-  // CONDITION  MANAGE TO LIVE PRICE SHOW
   if (selector && selector.permission) {
     if (selector.permission && selector.permission.data && selector.permission.data[0]) {
       if (selector.permission.data[0].live_price == 0) {
@@ -776,8 +738,6 @@ const TradeHistory = () => {
     }
   };
 
-
-  const [selectedOptions, setSelectedOptions] = useState([]);
 
   const handleCheckboxChange = (event, option) => {
     let updatedOptions = [...selectedOptions];
@@ -816,10 +776,30 @@ const TradeHistory = () => {
   ];
 
 
-  const [showModal6, setShowModal6] = useState(false);
 
-  const handleShow = () => setShowModal6(true);
-  const handleClose = () => setShowModal6(false);
+
+  useEffect(() => {
+    forCSVdata()
+  }, [tradeHistoryData.data])
+
+  useEffect(() => {
+    data();
+  }, [a]);
+
+  useEffect(() => {
+    ShowLivePrice();
+  }, [tradeHistoryData.data, SocketState, UserDetails]);
+
+  useEffect(() => { GetAdminTradingStatus() }, []);
+
+  useEffect(() => {
+    Get_TradHistory();
+  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter, SelectServiceIndex, lotMultypaly]);
+
+  useEffect(() => {
+    GetAllStrategyName();
+    Admin_Trading_data()
+  }, []);
 
   return (
     <>

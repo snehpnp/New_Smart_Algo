@@ -1,10 +1,7 @@
 
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-// import { DispatchLogin } from "../../../Layout/Auth/Login";
 import { GET_TRADEHISTORY, GET_SEVAN_TRADEHISTORY, GET_ADMIN_TRADING_STATUS, AdminTradingStatusGet } from "../../../Service/admin.service";
-import { get } from "jquery";
-
 
 
 export const Get_Tradehisotry = createAsyncThunk("admin/tradhistory", async (apireq) => {
@@ -32,8 +29,6 @@ export const Get_Sevan_Tradehisotry = createAsyncThunk("get/entry/tradhistory", 
 });
 
 
-
-
 export const GET_ADMIN_TRADE_STATUS = createAsyncThunk("admin/trading/status", async (broker_name) => {
 
     try {
@@ -55,7 +50,6 @@ export const ADMINGETTRADINGSTATUS = createAsyncThunk("admin/trading/status/get"
         return err;
     }
 });
-
 
 
 const TradehistorySlice = createSlice({

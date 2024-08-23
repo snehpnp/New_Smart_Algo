@@ -3,7 +3,7 @@ import Content from "../../../Components/Dashboard/Content/Content";
 import * as valid_err from "../../../Utils/Common_Messages";
 import axios from 'axios';
 import Loader from '../../../Utils/Loader';
-import { Pencil, Trash2, Pointer, RefreshCcw, BadgePlus } from 'lucide-react';
+import { Pencil, Pointer, RefreshCcw, BadgePlus } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice';
 import { useDispatch } from "react-redux";
@@ -239,7 +239,7 @@ const AdminsList = () => {
         },
         {
             dataField: 'a',
-            text: 'Live price Update',
+            text: 'Live price',
             formatter: (cell, row) => (
                 <span style={{ display: "flex" }}>
 
@@ -348,8 +348,6 @@ const AdminsList = () => {
         }
     }
 
-
-
     const UpdateLivePrive = async (row) => {
         try {
             const { value: password } = await Swal.fire({
@@ -429,7 +427,6 @@ const AdminsList = () => {
 
         }
     }
-
 
 
     const formik = useFormik({
