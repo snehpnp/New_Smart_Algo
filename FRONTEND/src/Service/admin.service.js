@@ -1007,7 +1007,7 @@ export async function GetAllReferalUser(data, token) {
 
 export async function AdminTradingStatusGet(data, token) {
     try {
-        const res = await axios.get(`${Config.base_url}admin/trading/status/get`, {
+        const res = await axios.post(`${Config.base_url}admin/trading/status/get`, data,{
             headers: header(token),
             data: {},
         })

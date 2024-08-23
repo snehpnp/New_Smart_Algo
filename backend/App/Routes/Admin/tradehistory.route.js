@@ -12,7 +12,7 @@ router.post('/get/entry/tradhistory', GetAdminsevenTradeHistory)
 router.post('/admin/tradingoff', AdminTradingOff)
 router.post('/admin/trading/status', AdminTradingStatus)
 
-router.get('/admin/trading/status/get', AdminTradingStatusGet)
+router.post('/admin/trading/status/get', AdminTradingStatusGet)
 
 
 

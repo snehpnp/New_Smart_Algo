@@ -338,7 +338,6 @@ class Tradehistory {
   }
 
 
-  // ADMIN TRADING OFF
   async AdminTradingOff(req, res) {
     try {
       const { broker_name, device } = req.body
@@ -358,7 +357,7 @@ class Tradehistory {
 
       const user_login = new user_logs({
         user_Id: Admin_information[0].user_id,
-        login_status: "Admin Trading off",
+        trading_status: "Admin Trading off",
         role: "ADMIN",
         system_ip: getIPAddress(),
         device: device
@@ -366,7 +365,7 @@ class Tradehistory {
       await user_login.save();
 
 
-      
+
 
       return res.send({ status: true, msg: 'Admin Trading Off successfully', data: [] });
 
@@ -383,12 +382,16 @@ class Tradehistory {
       const threeDaysAgo = new Date();
       threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
 
+      const mongoose = require("mongoose");
+      const ObjectId = mongoose.Types.ObjectId;
+
+
       // Find ADMIN records created in the last 3 days
       var Admin_information = await user_logs.find({
+        user_Id: new ObjectId(req.body.id),
         role: "ADMIN",
         createdAt: { $gte: threeDaysAgo },
-        login_status: { $in: ["Admin Trading On", "Admin Trading off"] }
-      });
+      }).sort({ createdAt: -1 });
 
       return res.send({ status: true, msg: "Trading status get", data: Admin_information });
     } catch (error) {

@@ -45,10 +45,10 @@ export const GET_ADMIN_TRADE_STATUS = createAsyncThunk("admin/trading/status", a
     }
 });
 
-export const ADMINGETTRADINGSTATUS = createAsyncThunk("admin/trading/status/get", async () => {
+export const ADMINGETTRADINGSTATUS = createAsyncThunk("admin/trading/status/get", async (data) => {
 
     try {
-        const res = await AdminTradingStatusGet();
+        const res = await AdminTradingStatusGet(data);
 
         return await res;
     } catch (err) {

@@ -647,7 +647,7 @@ const TradeHistory = () => {
 
   const Admin_Trading_data = async () => {
 
-    dispatch(ADMINGETTRADINGSTATUS({ token: token }))
+    dispatch(ADMINGETTRADINGSTATUS({ id: user_id, token: token }))
       .unwrap()
       .then((response) => {
         if (response.status) {
@@ -867,22 +867,21 @@ const TradeHistory = () => {
                   {adminTradingStatus.length > 0 ? (
                     <Table striped bordered hover>
                       <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Login Status</th>
-                          <th>Trading Status</th>
-                        
-                          <th>Device</th>
-                          <th>Created At</th>
+                        <tr >
+                          <th style={{ color: "black" }}>#</th>
+                          <th style={{ color: "black" }}>Login Status</th>
+                          <th style={{ color: "black" }} >Trading Status</th>
+                          <th style={{ color: "black" }} >Device</th>
+                          <th style={{ color: "black" }} >Created At</th>
                         </tr>
                       </thead>
                       <tbody>
                         {adminTradingStatus.map((item, index) => (
                           <tr key={item._id}>
                             <td>{index + 1}</td>
-                            <td>{item.login_status}</td>
-                            <td>{item.trading_status || "N/A"}</td>
-                          
+                            <td>{item.login_status || "-"}</td>
+                            <td>{item.trading_status || "-"}</td>
+
                             <td>{item.device}</td>
                             <td>{new Date(item.createdAt).toLocaleString()}</td>
                           </tr>
