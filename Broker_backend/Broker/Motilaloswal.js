@@ -106,10 +106,12 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
                 const requestPromises = AllClientData.map(async (item) => {
-
+                    item.postdata.symboltoken = Number(token[0].instrument_token);
+                    item.postdata.quantityinlot = Number(item.postdata.quantityinlot);
 
                     if (segment.toUpperCase() != "C") {
                         item.postdata.symboltoken = Number(token[0].instrument_token);
+                        item.postdata.quantityinlot = Number(item.postdata.quantityinlot);
                     }
 
 
