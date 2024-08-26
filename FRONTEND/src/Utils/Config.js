@@ -1,5 +1,5 @@
-// export const react_domain = `${window.location.origin}`;
-export const react_domain = `https://software.one-algo.com`;
+export const react_domain = `${window.location.origin}`;
+// export const react_domain = `https://software.one-algo.com`;
 
 
 
