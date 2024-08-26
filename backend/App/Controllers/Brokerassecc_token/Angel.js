@@ -26,17 +26,17 @@ class Angel {
 
             var keystr = req.query.key;
 
-            if(keystr != undefined){
-    
-    
-                var key = keystr.split('?auth_token=')[0]; 
-           
-                var auth_token = keystr.split('?auth_token=')[1]; 
-                
+            if (keystr != undefined) {
+
+
+                var key = keystr.split('?auth_token=')[0];
+
+                var auth_token = keystr.split('?auth_token=')[1];
+
 
 
                 var hosts = req.headers.host;
-    
+
                 var redirect = hosts.split(':')[0];
                 var redirect_uri = '';
                 if (redirect == "localhost") {
@@ -44,11 +44,11 @@ class Angel {
                 } else {
                     redirect_uri = `https://${redirect}/`
                 }
-    
+
                 const Get_User = await User.find({ client_key: key })
-    
+
                 if (Get_User.length > 0) {
-    
+
                     let result = await User.findByIdAndUpdate(
                         Get_User[0]._id,
                         {
@@ -72,28 +72,28 @@ class Angel {
 
                         }
                     }
-    
-                }else{
-                    return res.send(redirect_uri);   
-                }
-    
 
-            }else{
+                } else {
+                    return res.send(redirect_uri);
+                }
+
+
+            } else {
 
                 return res.send(redirect_uri);
 
             }
 
-          
+
 
         } catch (error) {
             console.log("Error Theme error-", error);
         }
     }
 
-      // UPDATE ALL CLIENT BROKER RESPONSE
-      async GetOrderFullInformationAngel(req, res , user_info) {
-       
+    // UPDATE ALL CLIENT BROKER RESPONSE
+    async GetOrderFullInformationAngel(req, res, user_info) {
+
         try {
             const { user_id } = req.body
 
@@ -101,11 +101,11 @@ class Angel {
                 return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
             }
 
-            GetAllBrokerResponse(user_info,res)
+            GetAllBrokerResponse(user_info, res)
 
 
         } catch (error) {
-    
+
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }
@@ -113,8 +113,8 @@ class Angel {
 
     }
 
-      // UPDATE SINGLE CLIENT BROKER RESPONSE
-      async SingleOrderFullInformationAngel(req, res, user_info, broker_response_id, order_id) {
+    // UPDATE SINGLE CLIENT BROKER RESPONSE
+    async SingleOrderFullInformationAngel(req, res, user_info, broker_response_id, order_id) {
 
         try {
 
@@ -198,31 +198,31 @@ class Angel {
 
                 })
                 .catch(async (error) => {
-           
+
                     return res.send({ status: false, msg: 'Order Api Err .', data: [] });
                 });
 
 
 
         } catch (error) {
-        
+
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }
 
 
-     }
+    }
 
 }
 
-const GetAllBrokerResponse = async (user_info,res) => {
+const GetAllBrokerResponse = async (user_info, res) => {
     try {
         const objectId = new ObjectId(user_info[0]._id);
-        var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId , order_view_status : "0" })
-     
+        var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId, order_view_status: "0" })
+
         if (FindUserBrokerResponse.length > 0) {
-    
-            FindUserBrokerResponse.forEach(async(data1) => {    
+
+            FindUserBrokerResponse.forEach(async (data1) => {
                 var config = {
                     method: 'get',
                     url: 'https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getOrderBook',
@@ -238,23 +238,23 @@ const GetAllBrokerResponse = async (user_info,res) => {
                         'X-PrivateKey': user_info[0].api_key
                     },
                 };
-               await axios(config)
+                await axios(config)
                     .then(async (response) => {
-                       
-                        if(response.data.data.length > 0){
-                            
-                            const result_order = response.data.data.find(item2 => item2.orderid == data1.order_id);
-                            if(result_order != undefined){
 
-                                    var reject_reason;
-                                    if (result_order.text) {
-                                        reject_reason = result_order.text;
-                                    } else {
-                                        reject_reason = '';
-                                    }
+                        if (response.data.data.length > 0) {
+
+                            const result_order = response.data.data.find(item2 => item2.orderid == data1.order_id);
+                            if (result_order != undefined) {
+
+                                var reject_reason;
+                                if (result_order.text) {
+                                    reject_reason = result_order.text;
+                                } else {
+                                    reject_reason = '';
+                                }
 
                                 const message = (JSON.stringify(result_order));
-    
+
                                 let result = await BrokerResponse.findByIdAndUpdate(
                                     { _id: data1._id },
                                     {
@@ -262,50 +262,52 @@ const GetAllBrokerResponse = async (user_info,res) => {
                                         order_view_status: '1',
                                         order_view_response: result_order.status,
                                         reject_reason: reject_reason
-        
+
                                     },
                                     { new: true }
                                 )
+                                return res.send({ status: true, msg: "broker response updated successfully" })
 
-                              }else{
+                            } else {
 
 
-                                 const message = (JSON.stringify(result_order));
-    
+                                const message = (JSON.stringify(result_order));
+
                                 let result = await BrokerResponse.findByIdAndUpdate(
                                     { _id: data1._id },
                                     {
                                         order_view_date: message,
                                         order_view_status: '1',
-                                       
+
                                     },
                                     { new: true }
                                 )
+                                return res.send({ status: false, msg: 'result order undefined', data: [] });
 
-                              }
-                          
-                          
+                            }
+
+
                         }
 
-                       
+
                     })
                     .catch(async (error) => {
                     });
 
-    
-             })
-             return  res.send({status:true,msg:"broker response updated successfully"})
-    
+
+            })
+            return res.send({ status: true, msg: "broker response updated successfully" })
+
         } else {
-            return  res.send({status:false,msg:"no user found"})
-         }
+            return res.send({ status: false, msg: "no user found" })
+        }
 
     } catch (error) {
 
-        return  res.send({status:false,msg:error})
+        return res.send({ status: false, msg: error })
     }
-    
- 
+
+
 }
 
 module.exports = new Angel();

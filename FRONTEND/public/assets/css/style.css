@@ -39026,20 +39026,25 @@ code {
   font-weight: 600;
   letter-spacing: 0.031rem;
   border-color: #c2c2c2;
+  vertical-align: middle;
 }
 
 [data-theme-version="dark"] .table thead th {
   border-color: #3D3D3D;
 }
-
+.table tbody tr th
+{
+  vertical-align: middle;
+}
 .table tbody tr td {
   vertical-align: middle;
   border-color: #d3d3d3;
-  max-width: 600px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
+  max-width: 375px;
+  /* white-space: nowrap; */
+  /* overflow: hidden; */
+  /* text-overflow: ellipsis; */
+  /* height: auto !important; */
+  height: 15px;
 }
 
 [data-theme-version="dark"] .table tbody tr td {

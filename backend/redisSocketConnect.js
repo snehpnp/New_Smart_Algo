@@ -43,7 +43,7 @@ module.exports = function (app) {
             await stock_live_price.updateOne(filter, update, { upsert: true });
             await connectToDB(message)
           } else {
-            console.log('Not token'); // Handle strings without a colon
+        
           }
         } catch (error) {
           console.log('Error parsing JSON:', error);

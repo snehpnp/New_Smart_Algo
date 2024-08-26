@@ -23,12 +23,12 @@ class Tradehistory {
           client_persnal_key1 = { $ne: "" }
         }
       }
-      
+
       var lotMultypaly1 = 1
 
       if (lotMultypaly == undefined || lotMultypaly == 'undefined') {
         lotMultypaly1 = 1
-      }else{
+      } else {
         lotMultypaly1 = Number(lotMultypaly)
       }
 
@@ -338,7 +338,6 @@ class Tradehistory {
   }
 
 
-  // ADMIN TRADING OFF
   async AdminTradingOff(req, res) {
     try {
       const { broker_name, device } = req.body
@@ -358,20 +357,51 @@ class Tradehistory {
 
       const user_login = new user_logs({
         user_Id: Admin_information[0].user_id,
-        login_status: "Trading off",
+        trading_status: "Admin Trading off",
         role: "ADMIN",
         system_ip: getIPAddress(),
         device: device
       })
       await user_login.save();
 
-      return res.send({ status: true, msg: 'Trading Off successfully', data: [] });
+
+
+
+      return res.send({ status: true, msg: 'Admin Trading Off successfully', data: [] });
 
 
     } catch (error) {
       console.log("Error error", error);
     }
   }
+
+
+  async AdminTradingStatusGet(req, res) {
+    try {
+      // Calculate the date 3 days ago from today
+      const threeDaysAgo = new Date();
+      threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+
+      const mongoose = require("mongoose");
+      const ObjectId = mongoose.Types.ObjectId;
+
+
+      // Find ADMIN records created in the last 3 days
+      var Admin_information = await user_logs.find({
+        user_Id: new ObjectId(req.body.id),
+        role: "ADMIN",
+        createdAt: { $gte: threeDaysAgo },
+      }).sort({ createdAt: -1 });
+
+      return res.send({ status: true, msg: "Trading status get", data: Admin_information });
+    } catch (error) {
+      console.log("Error error", error);
+      return res.status(500).send({ status: false, msg: "Error getting trading status", error: error.message });
+    }
+  }
+
+
+
 
 }
 

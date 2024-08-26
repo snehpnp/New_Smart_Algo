@@ -17,6 +17,8 @@ module.exports = function (app) {
     const Roledata = db.role;
     const dbTest = db.dbTest;
     const get_open_position_view = db.open_position;
+    const MainSignals = db.MainSignals;
+
 
 
 
@@ -671,7 +673,7 @@ module.exports = function (app) {
                 await client.close();
                 console.log(`Database ${databaseName} created successfully`);
             } catch (error) {
-                console.log("Error create data base -",error);
+                console.log("Error create data base -", error);
 
             }
         }
@@ -955,7 +957,7 @@ module.exports = function (app) {
             }
 
             CreateDataBase(req.body)
-            // console.log("SNEH")
+     
 
             DawnloadOptionChainSymbol()
 
@@ -1879,6 +1881,40 @@ module.exports = function (app) {
 
 
     })
+
+    app.get('/update/tradehistory/token', async (req, res) => {
+
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0); // Set to the start of the day
+        
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999); // Set to the end of the day
+        
+        let getTradeHistory = await MainSignals.find({
+          createdAt: { $gte: startOfDay, $lte: endOfDay },
+          token:"0"
+        });
+        
+        if (getTradeHistory.length > 0) {
+            getTradeHistory.forEach(async (element) => {
+          
+                let tradeToken = await Alice_token.findOne({ symbol: element.symbol, segment: element.segment, expiry: element.expiry, strike: element.strike });
+             
+
+                if (tradeToken != null) {
+                    let filter = { _id: element._id };
+                    let update = { $set: { token: tradeToken.instrument_token } };
+                    let updateTradeToken = await MainSignals.updateOne(filter, update);
+                }
+
+            });
+        }
+
+
+      return  res.send({ status: true })
+
+    })
+
 
 }
 

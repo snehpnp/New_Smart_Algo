@@ -5,37 +5,26 @@ module.exports = function (app) {
     const fs = require('fs');
     var path = require('path');
     const AdmZip = require('adm-zip');
-    // 1. LOGOUT AND TRADING OFF ALL USER 
-    cron.schedule('* 1 * * *', () => {
+    
 
-        downloadAlicetoken();
-        downloadFyerstoken();
-    });
+    
+    cron.schedule('* 6 * * *', () => { downloadAlicetoken(); });
 
-    cron.schedule('10 7 * * *', () => {
+    cron.schedule('5 6 * * *', () => { downloadFyerstoken(); });
 
-        downloadAndSwastika();
-    });
+    cron.schedule('10 6 * * *', () => { downloadAndSwastika(); });
+
+    cron.schedule('20 6 * * *', () => { downloadKotakNeotoken(); });
+
+    cron.schedule('30 6 * * *', () => { downloadZerodhatoken(); });
+
+    cron.schedule('35 6 * * *', () => { downloadAndExtractUpstox(); });
+
+    cron.schedule('40 6 * * *', () => { downloadAndExtractICICIDirect(); });
+
+    cron.schedule('15 18 * * *', () => { downloadKotakNeotoken(); });
 
 
-    cron.schedule('15 6 * * *', () => {
-
-        downloadKotakNeotoken();
-    });
-
-
-    cron.schedule('15 18 * * *', () => {
-
-        downloadKotakNeotoken();
-    });
-
-    cron.schedule('20 7 * * *', () => {
-
-        downloadZerodhatoken();
-        downloadAndExtractUpstox();
-        downloadAndExtractICICIDirect();
-
-    });
 
 
     // ALL Alice Token Genrate
@@ -220,63 +209,60 @@ module.exports = function (app) {
     // Swastika Token get
     async function downloadAndSwastika() {
         try {
-
-            var ulrs = [
+            const ulrs = [
                 { url: "https://justradeuat.swastika.co.in/NSE_symbols.txt.zip", filename: "NSE_symbols.txt.zip" },
                 { url: "https://justradeuat.swastika.co.in/NFO_symbols.txt.zip", filename: "NFO_symbols.txt.zip" },
-                { url: "https://justradeuat.swastika.co.in/MCX_symbols.txt.zip", filename: "MCX_symbols.txt.zip" }, { url: "https://justradeuat.swastika.co.in/CDS_symbols.txt.zip", filename: "CDS_symbols.txt.zip" },
+                { url: "https://justradeuat.swastika.co.in/MCX_symbols.txt.zip", filename: "MCX_symbols.txt.zip" },
+                { url: "https://justradeuat.swastika.co.in/CDS_symbols.txt.zip", filename: "CDS_symbols.txt.zip" },
                 { url: "https://justradeuat.swastika.co.in/BSE_symbols.txt.zip", filename: "BSE_symbols.txt.zip" },
                 { url: "https://justradeuat.swastika.co.in/NCX_symbols.txt.zip", filename: "NCX_symbols.txt.zip" }
-
             ];
-
-            ulrs.forEach(async function (item) {
-
-                //  const url = 'https://justradeuat.swastika.co.in/NFO_symbols.txt.zip';
-
-                // Download the zip file
-                try {
-                    const response = await axios.get(item.url, { responseType: 'arraybuffer' });
-                    // Check the status code
-                    if (response.status !== 200) {
-                        console.log(`Failed to download ${item.filename}. Status code: ${response.status}`);
-                        return;
+    
+            const outputFolder = path.join(__dirname, '../AllInstrumentToken/swastika');
+            if (!fs.existsSync(outputFolder)) {
+                fs.mkdirSync(outputFolder);
+            }
+    
+            const downloadResults = await Promise.all(
+                ulrs.map(async (item) => {
+                    try {
+                        const response = await axios.get(item.url, { responseType: 'arraybuffer' });
+    
+                        if (response.status !== 200) {
+                            return { filename: item.filename, status: `Failed with status code: ${response.status}` };
+                        }
+    
+                        const contentType = response.headers['content-type'];
+                        if (!contentType.includes('application/zip')) {
+                            return { filename: item.filename, status: `Unexpected content type: ${contentType}` };
+                        }
+    
+                        const zipFilePath = path.join(__dirname, item.filename);
+                        fs.writeFileSync(zipFilePath, Buffer.from(response.data, 'binary'));
+    
+                        const zip = new AdmZip(zipFilePath);
+                        zip.extractAllTo(outputFolder, true);
+    
+                        fs.unlinkSync(zipFilePath);
+    
+                        return { filename: item.filename, status: 'Success' };
+                    } catch (error) {
+                        return { filename: item.filename, status: `Error: ${error.message}` };
                     }
-
-                    // Verify content type
-                    const contentType = response.headers['content-type'];
-                    if (!contentType.includes('application/zip')) {
-                        console.log(`Unexpected content type for ${item.filename}: ${contentType}`);
-                        return;
-                    }
-
-                    // Create a folder to store the extracted files
-                    const outputFolder = path.join(__dirname, '../AllInstrumentToken/swastika');
-                    if (!fs.existsSync(outputFolder)) {
-                        fs.mkdirSync(outputFolder);
-                    }
-
-                    // Save the zip file
-                    const zipFilePath = path.join(__dirname, item.filename);
-                    fs.writeFileSync(zipFilePath, Buffer.from(response.data, 'binary'));
-
-                    // Extract the zip file
-                    const zip = new AdmZip(zipFilePath);
-                    zip.extractAllTo(outputFolder, true);
-
-                    // Clean up the downloaded zip file
-                    fs.unlinkSync(zipFilePath);
-                } catch (error) {
-                    console.log("Err downloadAndSwastika", error)
+                })
+            );
+    
+            downloadResults.forEach(result => {
+                if (result.status !== 'Success') {
+                    console.log(`Download of ${result.filename} encountered an issue: ${result.status}`);
+                } else {
+                    console.log(`Successfully downloaded and extracted ${result.filename}`);
                 }
-
             });
-
-
+    
         } catch (err) {
-
+            console.error("Unexpected error in downloadAndSwastika:", err.message);
         }
-
     }
 
     // Dawnload kotak Token
