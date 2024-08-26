@@ -48,7 +48,7 @@ require("./App/Routes")(app)
 // EMERGANCY
 
 require("./request")(app)
-require("./shakirTeting")(app)
+// require("./shakirTeting")(app)
 // require("./redisSocketConnect")(app)
 
 
