@@ -56,7 +56,7 @@ const { GetAccessTokenMastertrust, GetOrderFullInformationMastertrust } = requir
 const { GetAccessTokenZebull, GetOrderFullInformationZebull } = require('../../Controllers/Brokerassecc_token/Zebull')
 
 
-const { GetAccessTokenMotilaloswal, GetOrderFullInformationMotilaloswal } = require('../../Controllers/Brokerassecc_token/Motilaloswal')
+const { GetAccessTokenMotilaloswal, GetOrderFullInformationMotilaloswal,SingleOrderFullInformationMotilaloswal } = require('../../Controllers/Brokerassecc_token/Motilaloswal')
 
 const { GetAccessTokenIifl, GetOrderFullInformationIifl ,SingleOrderFullInformationIIfl} = require('../../Controllers/Brokerassecc_token/Iifl')
 
@@ -196,7 +196,15 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
       GetOrderFullInformationZebull(req, res, result);
     }
     else if (broker == 4) {
-      GetOrderFullInformationMotilaloswal(req, res, result);
+    
+      let broker_response_id = req.body.broker_response_id;
+      let order_id = req.body.order_id;
+   
+      if(order_id != "" && order_id != undefined){
+      SingleOrderFullInformationMotilaloswal(req, res, result,broker_response_id , order_id);
+      }else{
+        return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+      }
     }
     else if (broker == 25) {
       GetOrderFullInformationIcicidirect(req, res, result);

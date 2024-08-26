@@ -72,6 +72,9 @@ const BrokerResponse = () => {
           else if (response.data.broker == "26") {
             setShouldAddNewColumn(true)
           }
+          else if (response.data.broker == "4") {
+            setShouldAddNewColumn(true)
+          }
    }
       });
   };
@@ -201,7 +204,6 @@ const BrokerResponse = () => {
 
   // USE EFFECT
   useEffect(() => {
- 
     BrokerResponse()
   }, [refresh])
 
