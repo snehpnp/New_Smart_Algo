@@ -36,7 +36,7 @@ const { createView } = require('../../View/Open_position')
 
 
 
-cron.schedule('0 1 * * *', () => { deleteDashboard(); dropOpenPosition() });
+cron.schedule('0 5 * * *', () => { deleteDashboard(); dropOpenPosition() });
 
 cron.schedule('0 6 * * *', () => { DashboardView(); createView(); });
 
@@ -56,19 +56,19 @@ cron.schedule('*/5 * * * *', async () => { await TruncateTableTokenChainAdd_five
 
 
 // cron.schedule('10 23 * * *', () => {  DeleteTokenAliceToken() });
-cron.schedule('55 23 * * *', () => { TruncateTable() });
+// cron.schedule('55 23 * * *', () => { TruncateTable() });
 
 cron.schedule('10 1 * * *', () => { TokenSymbolUpdate() });
 
-cron.schedule('10 2 * * *', () => { TokenSymbolUpdate() });
+// cron.schedule('10 2 * * *', () => { TokenSymbolUpdate() });
 
-cron.schedule('10 5 * * *', () => { TokenSymbolUpdate() });
+// cron.schedule('10 5 * * *', () => { TokenSymbolUpdate() });
 
-cron.schedule('10 7 * * *', () => { TokenSymbolUpdate() });
+// cron.schedule('10 7 * * *', () => { TokenSymbolUpdate() });
 
-cron.schedule('10 8 * * *', () => { TokenSymbolUpdate() });
+// cron.schedule('10 8 * * *', () => { TokenSymbolUpdate() });
 
-cron.schedule('10 9 * * *', () => { TokenSymbolUpdate() });
+// cron.schedule('10 9 * * *', () => { TokenSymbolUpdate() });
 
 
 
@@ -806,14 +806,14 @@ const DeleteTokenAliceToken = async () => {
 
 // TOKEN SYMBOL CREATE
 const TokenSymbolUpdate = async () => {
-
+ 
     try {
-        console.log("TokenSymbolUpdate")
+          console.log("TokenSymbolUpdate "," TIME ",new Date())
+          await TruncateTable();
+          console.log("TruncateTable Delete "," TIME ",new Date())
+          console.log("TokenSymbolUpdate Start ", " TIME ",new Date())
 
-        let AliceToken = await Alice_token.find();
-
-        if (AliceToken.length === 0) {
-            console.log('The Alice_token collection is empty');
+           
             var d = new Date();
             dformat = [d.getFullYear(),
             d.getMonth() + 1,
@@ -829,8 +829,9 @@ const TokenSymbolUpdate = async () => {
             };
 
             axios(config)
-                .then(function (response) {
+                .then(async function(response) {
 
+                    if(response.data.length > 0){
                     let count = 0
                     response.data.forEach(async (element) => {
 
@@ -1234,7 +1235,7 @@ const TokenSymbolUpdate = async () => {
                         }
 
                         // ONLY CASH STOCK
-                        if (element.symbol.slice(-3) == '-EQ') {
+                       else if (element.symbol.slice(-3) == '-EQ') {
                             let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
                             if (exist_token == null) {
                                 tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
@@ -1267,17 +1268,30 @@ const TokenSymbolUpdate = async () => {
 
 
                     });
-                }).catch((error) => {
-                    console.log("APi Error", error);
+                    }
+
+                    const AliceToken = await Alice_token.find();
+                    console.log("AliceToken.length " ,AliceToken.length , " TIME ",new Date());
+                    if(AliceToken.length < 50000){
+                      await TokenSymbolUpdate();
+                    }
+
+
+                }).catch(async(error) => {
+                    console.log("APi Error Token Symbol Cron", " TIME ",new Date() , error);
+                    const AliceToken = await Alice_token.find();
+                     if(AliceToken.length < 50000){
+                     setTimeout(TokenSymbolUpdate, 1800000); // 30 minute
+                     }
                 });
 
-        } else {
-            console.log('The Alice_token collection is not empty');
-        }
+        
 
 
 
     } catch (error) {
+        console.log("Error TokenSymbolUpdate Try Catch" , " TIME ",new Date())
+        setTimeout(TokenSymbolUpdate, 1800000); // 30 minute
         return;
     }
 
