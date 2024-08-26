@@ -831,7 +831,7 @@ const TokenSymbolUpdate = async () => {
             axios(config)
                 .then(async function(response) {
 
-                    if(response.data.length > 0){
+                  if(response.data.length > 0){
                     let count = 0
                     response.data.forEach(async (element) => {
 
