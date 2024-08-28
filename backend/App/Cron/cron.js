@@ -51,7 +51,8 @@ cron.schedule('5 23 * * *', () => { twodaysclient(); });
 
 cron.schedule('30 6 * * *', () => { TruncateTableTokenChain(); });
 
-cron.schedule('*/5 * * * *', async () => { await TruncateTableTokenChainAdd_fiveMinute() });
+ cron.schedule('*/10 * * * *', async () => { await TruncateTableTokenChainAdd_fiveMinute() });
+
 
 
 // cron.schedule('10 23 * * *', () => {  DeleteTokenAliceToken() });
@@ -183,7 +184,9 @@ const MainSignalsRemainToken = async () => {
 }
 
 const TruncateTableTokenChainAdd_fiveMinute = async () => {
-
+    const currentHour = new Date().getHours();
+    if (currentHour >= 8 && currentHour < 20) {
+        console.log("INSIDE FIVE MINUTE")
     const AliceToken = await Alice_token.find();
     if(AliceToken.length > 50000){
        
@@ -199,6 +202,9 @@ const TruncateTableTokenChainAdd_fiveMinute = async () => {
 
         return;
     }
+   }
+
+
     return;  
 
 }
