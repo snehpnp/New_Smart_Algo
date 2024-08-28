@@ -1,20 +1,11 @@
-const MongoClient = require('mongodb').MongoClient;
-
-const mongoose = require('mongoose');
-
-
-const uri = process.env.MONGO_URI
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-client.connect();
-
-const db = client.db(process.env.DB_NAME);
+const db = require('../App/Models');
+const dbTest = db.dbTest;
 
 async function createViewAngel() {
 
   try {
   
-    const views = await db.listCollections({ name: 'angelView' }).toArray();
+    const views = await dbTest.listCollections({ name: 'angelView' }).toArray();
 
     if (views.length > 0) {
       console.log('View already exists.');
@@ -343,17 +334,16 @@ async function createViewAngel() {
     ];
 
     // Create the view
-    await db.createCollection('angelView', { viewOn: 'users', pipeline });
+    await dbTest.createCollection('angelView', { viewOn: 'users', pipeline });
 
     console.log('Angel View created successfully.');
+    return
     }
 
 
   } catch (error) {
-return;
-  } finally {
-    client.close();
-  }
+  return;
+  } 
 }
 
 

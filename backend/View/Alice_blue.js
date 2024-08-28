@@ -1,16 +1,10 @@
-const MongoClient = require('mongodb').MongoClient;
-const mongoose = require('mongoose');
-
-const uri = process.env.MONGO_URI;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = require('../App/Models');
+const dbTest = db.dbTest;
 
 async function createViewAlice() {
   try {
-    await client.connect();
-    const db = client.db(process.env.DB_NAME);
-
-   
-    const views = await db.listCollections({ name: 'aliceblueView' }).toArray();
+    
+    const views = await dbTest.listCollections({ name: 'aliceblueView' }).toArray();
 
     if (views.length > 0) {
       console.log('View already exists.');
@@ -251,16 +245,14 @@ async function createViewAlice() {
       ];
   
       // Create the view
-      await db.createCollection('aliceblueView', { viewOn: 'users', pipeline });
+      await dbTest.createCollection('aliceblueView', { viewOn: 'users', pipeline });
   
       console.log('Alice View created successfully.');
     }
 
   } catch (error) {
    return;
-  } finally {
-    await client.close();
-  }
+  } 
 }
 
 module.exports = { createViewAlice };

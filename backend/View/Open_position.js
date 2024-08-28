@@ -1,20 +1,13 @@
-const { MongoClient } = require('mongodb');
-
-const uri = process.env.MONGO_URI;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-const dbName = process.env.DB_NAME;
+const db = require('../App/Models');
+const dbTest = db.dbTest;
 
 
 // OPEN POSITION
 async function createView() {
     try {
-        await client.connect();
-        console.log('Connected to MongoDB');
 
-        const database = client.db(dbName);
         const collectionName = 'mainsignals';
-
-        const views = await database.listCollections({ name: 'open_position' }).toArray();
+        const views = await dbTest.listCollections({ name: 'open_position' }).toArray();
         if (views.length > 0) {
             return; 
           }else{ 
@@ -339,7 +332,7 @@ async function createView() {
     
             const viewName = 'open_position';
     
-            await database.createCollection(viewName, {
+            await dbTest.createCollection(viewName, {
                 viewOn: collectionName,
                 pipeline: pipeline
             });
@@ -348,19 +341,18 @@ async function createView() {
           }
 
       
-    } finally {
-        await client.close();
-    
+    } 
+    catch (error) {
+        return;
     }
 }
 
 // open_position_excute
 async function dropOpenPosition() {
     try {
-        // await client.connect();
-        const db = client.db(process.env.DB_NAME); // Replace with your actual database name
-        await db.collection('open_position').drop();
-        await db.collection('open_position_excute').drop();
+       
+        await dbTest.collection('open_position').drop();
+        await dbTest.collection('open_position_excute').drop();
 
     } catch (error) {
        return;
@@ -371,8 +363,7 @@ async function dropOpenPosition() {
 async function dropExistingView1() {
     try {
 
-        const db = client.db(process.env.DB_NAME);
-        await db.collection('open_position_excute').drop();
+        await dbTest.collection('open_position_excute').drop();
 
     } catch (error) {
         return;
@@ -399,27 +390,22 @@ async function open_position_excute(req, res) {
         ];
 
         // Create the destination view with the specified pipeline
-        await client.db(dbName).createCollection(destinationViewName, {
+        await dbTest.createCollection(destinationViewName, {
             viewOn: sourceViewName,
             pipeline: pipeline,
         });
 
+        console.log('open open_position_excute View created successfully.');
+       return;
+
     } catch (error) {
     return;
-    } finally {
-        // Ensure the client is closed even if an error occurs
-        await client.close();
-    }
+    } 
 
 
 }
 
-
 module.exports = { dropExistingView1, open_position_excute, createView, dropOpenPosition }
-
-
-
-// db.createView('open_position', 'mainsignals', [
 
 //     {
 //         $addFields: {

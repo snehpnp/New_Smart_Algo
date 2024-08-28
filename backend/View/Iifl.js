@@ -1,27 +1,16 @@
-const MongoClient = require('mongodb').MongoClient;
-
-const mongoose = require('mongoose');
-
-
-const uri = process.env.MONGO_URI
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-client.connect();
-
-const db = client.db(process.env.DB_NAME);
+const db = require('../App/Models');
+const dbTest = db.dbTest;
 
 
 async function createViewIifl() {
 
-
   try {
-    const views = await db.listCollections({ name: 'iiflView' }).toArray();
+    const views = await dbTest.listCollections({ name: 'iiflView' }).toArray();
 
     if (views.length > 0) {
       return;
     } else {
       const currentDate = new Date();
-
 
       const pipeline = [
         {
@@ -333,16 +322,15 @@ async function createViewIifl() {
       ];
 
       // Create the view
-      await db.createCollection('iiflView', { viewOn: 'users', pipeline });
+      await dbTest.createCollection('iiflView', { viewOn: 'users', pipeline });
 
       console.log('iifl View created successfully.');
+      return
     }
 
   } catch (error) {
     return;
-  } finally {
-    client.close();
-  }
+  } 
 }
 
 

@@ -1,19 +1,9 @@
-const MongoClient = require('mongodb').MongoClient;
-
-const mongoose = require('mongoose');
-
-
-const uri = process.env.MONGO_URI
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-client.connect();
-
-const db = client.db(process.env.DB_NAME); // Replace with your actual database name
-
+const db = require('../App/Models');
+const dbTest = db.dbTest;
 
 async function createViewZebul() {
   try {
-    const views = await db.listCollections({ name: 'ZebulView' }).toArray();
+    const views = await dbTest.listCollections({ name: 'ZebulView' }).toArray();
 
     if (views.length > 0) {
       return;
@@ -323,17 +313,16 @@ async function createViewZebul() {
       ];
 
       // Create the view
-      await db.createCollection('ZebulView', { viewOn: 'users', pipeline });
+      await dbTest.createCollection('ZebulView', { viewOn: 'users', pipeline });
 
       console.log('Zebul View created successfully.');
+      return
     }
 
 
   } catch (error) {
     return
-  } finally {
-    client.close();
-  }
+  } 
 }
 
 

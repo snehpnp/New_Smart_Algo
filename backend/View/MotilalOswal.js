@@ -1,21 +1,11 @@
-const MongoClient = require('mongodb').MongoClient;
-
-const mongoose = require('mongoose');
-
-
-const uri = process.env.MONGO_URI
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-client.connect();
-
-const db = client.db(process.env.DB_NAME); // Replace with your actual database name
-
+const db = require('../App/Models');
+const dbTest = db.dbTest;
 
 async function createViewMotilalOswal() {
 
   // All Client Trading on view
   try {
-    const views = await db.listCollections({ name: 'MotilalOswalView' }).toArray();
+    const views = await dbTest.listCollections({ name: 'MotilalOswalView' }).toArray();
 
     if (views.length > 0) {
       return; 
@@ -321,17 +311,16 @@ async function createViewMotilalOswal() {
       ];
   
       // Create the view
-      await db.createCollection('MotilalOswalView', { viewOn: 'users', pipeline });
+      await dbTest.createCollection('MotilalOswalView', { viewOn: 'users', pipeline });
   
       console.log('MotilalOswal View created successfully.');
+      return
     }
 
     
   } catch (error) {
    return;
-  } finally {
-    client.close();
-  }
+  } 
 }
 
 

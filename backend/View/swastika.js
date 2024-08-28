@@ -1,21 +1,10 @@
-const MongoClient = require('mongodb').MongoClient;
-
-const mongoose = require('mongoose');
-
-
-const uri = process.env.MONGO_URI
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-client.connect();
-
-const db = client.db(process.env.DB_NAME); // Replace with your actual database name
-
-
+const db = require('../App/Models');
+const dbTest = db.dbTest;
 
 async function createViewSwastika() {
 
   try {
-    const views = await db.listCollections({ name: 'swastikaView' }).toArray();
+    const views = await dbTest.listCollections({ name: 'swastikaView' }).toArray();
 
     if (views.length > 0) {
       return; 
@@ -301,17 +290,17 @@ async function createViewSwastika() {
       ];
      
   
-      await db.createCollection('swastikaView', { viewOn: 'users', pipeline });
+      await dbTest.createCollection('swastikaView', { viewOn: 'users', pipeline });
   
       console.log('swastika View created successfully.');
+
+      return
     }
 
 
   } catch (error) {
     return;
-  } finally {
-    client.close();
-  }
+  } 
 }
 
 

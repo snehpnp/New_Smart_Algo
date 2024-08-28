@@ -1,20 +1,10 @@
-const MongoClient = require('mongodb').MongoClient;
-
-const mongoose = require('mongoose');
-
-
-const uri = process.env.MONGO_URI
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-client.connect();
-
-const db = client.db(process.env.DB_NAME); // Replace with your actual database name
-
+const db = require('../App/Models');
+const dbTest = db.dbTest;
 
 async function createViewDhan() {
 
   try {
-    const views = await db.listCollections({ name: 'dhanView' }).toArray();
+    const views = await dbTest.listCollections({ name: 'dhanView' }).toArray();
 
     if (views.length > 0) {
       return;
@@ -321,16 +311,15 @@ async function createViewDhan() {
         }
       ];
 
-      await db.createCollection('dhanView', { viewOn: 'users', pipeline });
+      await dbTest.createCollection('dhanView', { viewOn: 'users', pipeline });
 
       console.log('dhanView View  created successfully.');
+      return
     }
 
   } catch (error) {
     return;
-  } finally {
-    client.close();
-  }
+  } 
 }
 
 
