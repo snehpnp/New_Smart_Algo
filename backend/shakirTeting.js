@@ -4191,3 +4191,172 @@ app.get("/remain_get_token",async (req,res)=>{
 //  'eVUch7R8^i^^1!C9'
 
 // )
+
+
+
+
+// const TokenSymbolUpdate = async () => {
+//   console.log("TokenSymbolUpdate");
+
+//   try {
+//     console.log("TokenSymbolUpdate Start", " TIME ", new Date());
+
+//     const config = {
+//       method: 'get',
+//       url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
+//     };
+
+//     const response = await axios(config);
+//     if (response.data.length > 0) {
+//       const pipeline = [
+//         {
+//           $map: {
+//             input: response.data,
+//             as: "element",
+//             in: {
+//               symbol: "$$element.name",
+//               expiry: {
+//                 $dateToString: {
+//                   format: "%d%m%Y",
+//                   date: "$$element.expiry"
+//                 }
+//               },
+//               expiry_month_year: {
+//                 $substr: ["$$element.expiry", 2, 6]
+//               },
+//               expiry_date: {
+//                 $substr: ["$$element.expiry", 0, 2]
+//               },
+//               expiry_str: "$$element.expiry",
+//               strike: {
+//                 $toInt: {
+//                   $substr: ["$$element.strike", 0, -2]
+//                 }
+//               },
+//               option_type: {
+//                 $substr: ["$$element.symbol", -2, 2]
+//               },
+//               segment: {
+//                 $switch: {
+//                   branches: [
+//                     {
+//                       case: { $eq: ["$$element.instrumenttype", "FUTSTK"] },
+//                       then: "F"
+//                     },
+//                     {
+//                       case: { $eq: ["$$element.instrumenttype", "FUTIDX"] },
+//                       then: "F"
+//                     },
+//                     {
+//                       case: { $eq: ["$$element.instrumenttype", "FUTCOM"] },
+//                       then: "MF"
+//                     },
+//                     {
+//                       case: { $eq: ["$$element.instrumenttype", "OPTIDX"] },
+//                       then: "
+
+
+
+
+
+
+
+// const TokenSymbolUpdate = async () => {
+//     console.log("TokenSymbolUpdate");
+  
+//     try {
+//       console.log("TokenSymbolUpdate Start", " TIME ", new Date());
+  
+//       const config = {
+//         method: 'get',
+//         url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
+//       };
+  
+//       const response = await axios(config);
+//       if (response.data.length > 0) {
+//         const pipeline = [
+//           {
+//             $map: {
+//               input: response.data,
+//               as: "element",
+//               in: {
+//                 symbol: "$$element.name",
+//                 expiry: {
+//                   $dateToString: {
+//                     format: "%d%m%Y",
+//                     date: "$$element.expiry"
+//                   }
+//                 },
+//                 expiry_month_year: {
+//                   $substr: ["$$element.expiry", 2, 6]
+//                 },
+//                 expiry_date: {
+//                   $substr: ["$$element.expiry", 0, 2]
+//                 },
+//                 expiry_str: "$$element.expiry",
+//                 strike: {
+//                   $toInt: {
+//                     $substr: ["$$element.strike", 0, -2]
+//                   }
+//                 },
+//                 option_type: {
+//                   $substr: ["$$element.symbol", -2, 2]
+//                 },
+//                 segment: "F",
+//                 instrument_token: "$$element.token",
+//                 lotsize: "$$element.lotsize",
+//                 tradesymbol: "$$element.symbol",
+//                 tradesymbol_m_w: {
+//                   $concat: [
+//                     "$$element.name",
+//                     {
+//                       $substr: ["$$element.expiry", -2, 2]
+//                     },
+//                     {
+//                       $toString: {
+//                         $add: [
+//                           {
+//                             $toInt: {
+//                               $substr: ["$$element.expiry", 2, 2]
+//                             }
+//                           },
+//                           1
+//                         ]
+//                       }
+//                     },
+//                     {
+//                       $substr: ["$$element.expiry", 0, 2]
+//                     },
+//                     {
+//                       $substr: ["$$element.strike", 0, -2]
+//                     },
+//                     {
+//                       $substr: ["$$element.symbol", -2, 2]
+//                     }
+//                   ]
+//                 },
+//                 exch_seg: "$$element.exch_seg"
+//               }
+//             }
+//           },
+//           {
+//             $merge: {
+//               into: "Alice_token",
+//               on: "_id",
+//               whenMatched: "replace",
+//               whenNotMatched: "insert"
+//             }
+//           }
+//         ];
+  
+//         await Alice_token.aggregate(pipeline);
+//         console.log("TokenSymbolUpdate End:", " TIME ", new Date());
+//         return;
+//       } else {
+//         return;
+//       }
+//     } catch (error) {
+//       console.log("Error TokenSymbolUpdate Try catch", " TIME ", new Date(), error);
+//       return;
+//     }
+//   }
