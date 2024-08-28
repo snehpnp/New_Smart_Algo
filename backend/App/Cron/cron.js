@@ -2003,7 +2003,7 @@ const numberOfTrade_count_trade = async () => {
 
 // Accelpix Token Update
 const AccelpixTokenUpdate = async () => {
-
+    return
     let config = {
         method: 'get',
         maxBodyLength: Infinity,
