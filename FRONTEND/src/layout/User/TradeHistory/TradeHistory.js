@@ -79,7 +79,8 @@ const TradeHistory = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-
+          
+          console.log("response.data ",response.data)
           setTradeHistoryData({
             loading: false,
             data: response.data,
@@ -259,6 +260,9 @@ const TradeHistory = () => {
       if (parseInt(item.exit_qty_percent) == parseInt(item.exit_qty_percent) && item.entry_price != '' && item.exit_price) {
 
         if (item.entry_type === "LE") {
+          console.log("parseFloat(item.exit_price) ",parseFloat(item.exit_price))
+          console.log("parseFloat(item.entry_price) ",parseFloat(item.entry_price))
+          console.log("parseFloat(item.exit_qty_percent) ",parseFloat(item.exit_qty_percent))
           let total1 = (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
           if (!isNaN(total1)) {
             total += total1

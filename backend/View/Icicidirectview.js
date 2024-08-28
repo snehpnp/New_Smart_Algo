@@ -1,21 +1,12 @@
-const MongoClient = require('mongodb').MongoClient;
-
-const mongoose = require('mongoose');
-
-
-const uri = process.env.MONGO_URI
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-client.connect();
-
-const db = client.db(process.env.DB_NAME);
+const db = require('../App/Models');
+const dbTest = db.dbTest;
 
 
 async function createViewIcicidirect() {
 
 
     try {
-        const views = await db.listCollections({ name: 'icicidirectview' }).toArray();
+        const views = await dbTest.listCollections({ name: 'icicidirectview' }).toArray();
         if (views.length > 0) {
             return;
         } else {
@@ -305,16 +296,15 @@ async function createViewIcicidirect() {
             ];
 
             // Create the view
-            await db.createCollection('icicidirectview', { viewOn: 'users', pipeline });
+            await dbTest.createCollection('icicidirectview', { viewOn: 'users', pipeline });
 
             console.log('icicidirect View created successfully.');
+            return
         }
 
     } catch (error) {
         return;
-    } finally {
-        client.close();
-    }
+    } 
 }
 
 

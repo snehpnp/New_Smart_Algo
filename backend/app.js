@@ -1,6 +1,9 @@
 "use strict";
 require('dotenv').config();
-const mongoConnection = require('./App/Connection/mongo_connection')
+// const mongoConnection = require('./App/Connection/mongo_connection')
+const {connectToMongoDB} = require('./App/Connection/mongo_connection');
+
+
 const express = require("express");
 const app = express();
 
@@ -48,7 +51,7 @@ require("./App/Routes")(app)
 // EMERGANCY
 
 require("./request")(app)
-require("./shakirTeting")(app)
+// require("./shakirTeting")(app)
 // require("./redisSocketConnect")(app)
 
 
@@ -140,7 +143,7 @@ setIO(io).then(() => {
 
 // Server start
 server.listen(process.env.PORT, () =>{
-  
+   connectToMongoDB();
   const { Alice_Socket } = require('./App/Helper/Alice_Socket')
   console.log(`Server is running on  http://0.0.0.0:${process.env.PORT}`)
    Alice_Socket()

@@ -1,22 +1,12 @@
-const MongoClient = require('mongodb').MongoClient;
-
-const mongoose = require('mongoose');
-
-
-const uri = process.env.MONGO_URI
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-client.connect();
-
-const db = client.db(process.env.DB_NAME); // Replace with your actual database name
-
+const db = require('../App/Models');
+const dbTest = db.dbTest;
 
 async function createViewMandotsecurities() {
 
   // All Client Trading on view
   try {
 
-    const views = await db.listCollections({ name: 'mandotsecuritiesView' }).toArray();
+    const views = await dbTest.listCollections({ name: 'mandotsecuritiesView' }).toArray();
 
     if (views.length > 0) {
       return; 
@@ -305,8 +295,9 @@ async function createViewMandotsecurities() {
       ];
   
       // Create the view
-      await db.createCollection('mandotsecuritiesView', { viewOn: 'users', pipeline });
+      await dbTest.createCollection('mandotsecuritiesView', { viewOn: 'users', pipeline });
       console.log('mandotsecurities View  created successfully.');
+      return
     }
 
 
@@ -314,9 +305,7 @@ async function createViewMandotsecurities() {
 
   } catch (error) {
   return
-  } finally {
-    client.close();
-  }
+  } 
 }
 
 

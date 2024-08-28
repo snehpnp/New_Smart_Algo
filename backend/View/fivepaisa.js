@@ -1,18 +1,10 @@
-const MongoClient = require('mongodb').MongoClient;
-
-const mongoose = require('mongoose');
-
-
-const uri = process.env.MONGO_URI
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-client.connect();
-const db = client.db(process.env.DB_NAME);
+const db = require('../App/Models');
+const dbTest = db.dbTest;
 
 async function createViewFivepaisa() {
 
   try {
-    const views = await db.listCollections({ name: 'fivepaisaView' }).toArray();
+    const views = await dbTest.listCollections({ name: 'fivepaisaView' }).toArray();
 
     if (views.length > 0) {
       return;
@@ -272,18 +264,17 @@ async function createViewFivepaisa() {
         }
       ];
 
-      await db.createCollection('fivepaisaView', { viewOn: 'users', pipeline });
+      await dbTest.createCollection('fivepaisaView', { viewOn: 'users', pipeline });
 
       console.log('fivepaisaView View created successfully.');
+      return
     }
 
 
 
   } catch (error) {
     return;
-  } finally {
-    client.close();
-  }
+  } 
 }
 
 

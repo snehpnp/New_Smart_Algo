@@ -12,6 +12,7 @@ const token_chain = db_GET_VIEW.collection('token_chain');
 const stock_live_price = db_GET_VIEW.collection('stock_live_price');
 const open_position = db_GET_VIEW.collection('open_position');
 const open_position_excute = db_GET_VIEW.collection('open_position_excute');
+const dashboard_data = db_GET_VIEW.collection('dashboard_data');
 
 
 
@@ -65,6 +66,7 @@ module.exports = {
     Faq_Data : require('./Faq.model'),
     userReedeem_modal : require('./User_reedeem'),
     position_data_store : require('./position_data_store.model'),
+    dashboard_data:dashboard_data
 
 
 

@@ -1,4 +1,5 @@
 "use strict";
+const {connectToMongoDB} = require('../../Connection/mongo_connection');
 const db = require('../../Models');
 const HelpCenter_modal = db.HelpCenter
 
@@ -35,9 +36,13 @@ class AdminHelpCenter {
             }
             catch (error) {
                 return res.send({ status: false, msg: 'Error  to Create Generate Help Response.', error: error.message });
+                connectToMongoDB();
+                return
             }
         } catch (error) {
             console.log("Error Help Center error-", error);
+            connectToMongoDB();
+            return
         }
     }
 

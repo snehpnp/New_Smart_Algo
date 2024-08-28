@@ -1,22 +1,12 @@
+const db = require('../App/Models');
+const dbTest = db.dbTest;
+const dashboard_data = db.dashboard_data;
 
-const { MongoClient } = require('mongodb');
-
-const mongoURI = process.env.MONGO_URI;
-const dbName = process.env.DB_NAME;
-
-// MongoDB Connection
-async function connectToDatabase() {
-    const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
-    await client.connect();
-    return client.db(dbName);
-}
 
 async function DashboardView() {
     try {
-        // Establish MongoDB connection using connectToDatabase() function
-        const db = await connectToDatabase();
-
-        const views = await db.listCollections({ name: 'dashboard_data' }).toArray();
+      
+        const views = await dbTest.listCollections({ name: 'dashboard_data' }).toArray();
 
         if (views.length > 0) {
             return;
@@ -345,28 +335,22 @@ async function DashboardView() {
             ];
 
             // Create a MongoDB view named "dashboard_data1"
-            await db.createCollection("dashboard_data", { viewOn: "users", pipeline });
-
+            await dbTest.createCollection("dashboard_data", { viewOn: "users", pipeline });
             console.log('dashboard_data View created successfully.');
+            return;
         }
 
 
     } catch (error) {
         
-    return
+   
     }
 }
 
-
-
-
 async function deleteDashboard() {
     try {
-        const db = await connectToDatabase();
-
         // Drop the view if it exists
-        await db.collection('dashboard_data').drop();
-
+        await dashboard_data.drop();
         console.log('dashboard_data view deleted successfully');
 
     } catch (error) {

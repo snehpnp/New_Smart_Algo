@@ -1,15 +1,5 @@
-const MongoClient = require('mongodb').MongoClient;
-
-const mongoose = require('mongoose');
-
-
-const uri = process.env.MONGO_URI
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-client.connect();
-
-const db = client.db(process.env.DB_NAME); // Replace with your actual database name
-
+const db = require('../App/Models');
+const dbTest = db.dbTest;
 
 
 async function createViewMaxProfitLoss() {
@@ -19,7 +9,7 @@ async function createViewMaxProfitLoss() {
   return
 
   const collectionName  = 'mainsignals';
-  const collection = db.collection(collectionName);
+  const collection = dbTest.collection(collectionName);
 
  
   // All Client Trading on view
@@ -358,21 +348,20 @@ async function createViewMaxProfitLoss() {
   //  const viewPipeline = [...]; // Your aggregation pipeline here
 
     // Create or update the view
-    await db.createCollection(viewName, { viewOn: 'mainsignals', pipeline: Pipeline });
+    await dbTest.createCollection(viewName, { viewOn: 'mainsignals', pipeline: Pipeline });
 
 
 
     //console.log(result);
     console.log("okkk done")
+    return
       
     
 
 
   } catch (error) {
- 
-  } finally {
-    client.close();
-  }
+   return
+  } 
 }
 
 

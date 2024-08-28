@@ -1,4 +1,5 @@
 "use strict";
+const {connectToMongoDB} = require('../../Connection/mongo_connection');
 const db = require('../../Models');
 const mongoose = require('mongoose')
 const company_information = db.company_information
@@ -79,6 +80,8 @@ class Company {
             return res.send({ status: true, msg: 'Done', data: compantInfo });
         } catch (error) {
             console.log("Error Company Information Get -", error);
+            connectToMongoDB()
+            return
         }
     }
 
@@ -96,6 +99,9 @@ class Company {
 
         } catch (error) {
             console.log("Error Company Logo Get -", error);
+            connectToMongoDB()
+            return
+
         }
     }
 

@@ -1,4 +1,5 @@
 "use strict";
+const {connectToMongoDB} = require('../../Connection/mongo_connection');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mongoose = require('mongoose');
@@ -601,7 +602,10 @@ class Login {
             }
         }
         catch (error) {
-            return res.send({ status: false, msg: "Server Side error", data: error })
+             res.send({ status: false, msg: "Server Side error", data: error })
+             connectToMongoDB()
+             return
+           
         }
 
     }
