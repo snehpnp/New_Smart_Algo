@@ -1,4 +1,5 @@
 "use strict";
+const {connectToMongoDB} = require('../../Connection/mongo_connection');
 const db = require('../../Models');
 const panel_model = db.panel_model;
 const User = db.user;
@@ -240,6 +241,8 @@ class Panel {
             return res.send({ status: true, msg: "Get User", data: EmailCheck })
 
         } catch (error) {
+            connectToMongoDB()
+            return
         }
     }
 

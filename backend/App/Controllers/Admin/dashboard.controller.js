@@ -1,4 +1,5 @@
 "use strict";
+const {connectToMongoDB} = require('../../Connection/mongo_connection');
 const db = require('../../Models');
 const mongoose = require('mongoose');
 const MongoClient = require('mongodb').MongoClient;
@@ -53,6 +54,8 @@ class Dashboard {
 
         } catch (error) {
             console.log("Error Get Admin Dashboard data -", error);
+            connectToMongoDB();
+            return
         }
     }
 

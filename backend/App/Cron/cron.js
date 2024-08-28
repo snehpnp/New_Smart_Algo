@@ -58,7 +58,7 @@ cron.schedule('*/5 * * * *', async () => { await TruncateTableTokenChainAdd_five
 // cron.schedule('55 23 * * *', () => { TruncateTable() });
 
 
-cron.schedule('42 14 * * *', () => { TokenSymbolUpdate() });
+cron.schedule('21 15 * * *', () => { TokenSymbolUpdate() });
 
 
 
