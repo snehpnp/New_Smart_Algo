@@ -39,7 +39,7 @@ cron.schedule('10 5 * * *', () => { deleteDashboard() });
 
 cron.schedule('15 5 * * *', () => { DashboardView(); createView(); });
 
-cron.schedule('5 2 * * *', () => { LogoutAllUsers() });
+cron.schedule('5 4 * * *', () => { LogoutAllUsers() });
 
 cron.schedule('5 5 * * *', () => { LogoutAllUsers() });
 
@@ -58,7 +58,7 @@ cron.schedule('*/5 * * * *', async () => { await TruncateTableTokenChainAdd_five
 // cron.schedule('55 23 * * *', () => { TruncateTable() });
 
 
-cron.schedule('21 15 * * *', () => { TokenSymbolUpdate() });
+cron.schedule('15 1 * * *', () => { TokenSymbolUpdate() });
 
 
 
@@ -1307,7 +1307,7 @@ const TokenSymbolUpdate1 = async () => {
 
 }
 
-const TokenSymbolUpdate2 = async () => {
+const TokenSymbolUpdate = async () => {
     console.log("TokenSymbolUpdate")
 
     try {
@@ -1333,7 +1333,7 @@ const TokenSymbolUpdate2 = async () => {
                     let count = 0;
 
                     for (const element of response.data) {
-                    //    await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+                       await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
 
                         var option_type = element.symbol.slice(-2);
                         var expiry_s = element.expiry;
@@ -1355,7 +1355,7 @@ const TokenSymbolUpdate2 = async () => {
                         var tradesymbol_m_w;
 
                         if (element.instrumenttype == 'FUTSTK' && element.exch_seg == "NFO") {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+                            
                             // const filter_service = { name: element.name };
                             // const updateOperation_service = { $set: { lotsize: element.lotsize } };
                             // try {
@@ -1392,7 +1392,7 @@ const TokenSymbolUpdate2 = async () => {
                         } 
                         
                         else if (element.instrumenttype == 'FUTIDX' && element.exch_seg == "NFO") {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+                           
                             // const filter_service = { name: element.name };
                             // const updateOperation_service = { $set: { lotsize: element.lotsize } };
                             // try {
@@ -1429,8 +1429,7 @@ const TokenSymbolUpdate2 = async () => {
 
                         else if (element.instrumenttype == 'FUTCOM') {
 
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-
+                            
                             // const filter_service = { name: element.name };
                             // const updateOperation_service = { $set: { lotsize: element.lotsize } };
                             // try {
@@ -1468,7 +1467,7 @@ const TokenSymbolUpdate2 = async () => {
                         }
                         else if (element.instrumenttype == 'OPTIDX' && element.exch_seg == "NFO") {
                          
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+                         
 
                             let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
                             if (exist_token == null) {
@@ -1503,7 +1502,7 @@ const TokenSymbolUpdate2 = async () => {
 
                         } 
                         else if (element.instrumenttype == 'OPTSTK' && element.exch_seg == "NFO") {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+                            
                             let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
                             if (exist_token == null) {
 
@@ -1538,7 +1537,7 @@ const TokenSymbolUpdate2 = async () => {
 
                         }
                         else if (element.instrumenttype == 'OPTFUT') {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+                           
                             let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
                             if (exist_token == null) {
 
@@ -1574,7 +1573,7 @@ const TokenSymbolUpdate2 = async () => {
 
                         } 
                         else if (element.instrumenttype == 'OPTCOM') {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+                            
                             let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
                             if (exist_token == null) {
 
@@ -1609,7 +1608,7 @@ const TokenSymbolUpdate2 = async () => {
 
                         } 
                         else if (element.instrumenttype == 'OPTCUR') {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+                           
                             let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
                             if (exist_token == null) {
 
@@ -1643,7 +1642,7 @@ const TokenSymbolUpdate2 = async () => {
 
                         } 
                         else if (element.instrumenttype == 'FUTCUR') {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+                           
                             // const filter_service = { name: element.name };
                             // const updateOperation_service = { $set: { lotsize: element.lotsize } };
                             // try {
@@ -1684,7 +1683,7 @@ const TokenSymbolUpdate2 = async () => {
 
                         // ONLY CASH STOCK
                         else if (element.symbol.slice(-3) == '-EQ') {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+                           
                             let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
                             if (exist_token == null) {
                                 tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
@@ -1718,118 +1717,118 @@ const TokenSymbolUpdate2 = async () => {
 
                     }
 
-                    const AliceToken = await Alice_token.find();
-                    console.log("AliceToken.length ", AliceToken.length, " TIME ", new Date());
-                    if (AliceToken.length < 50000) {
-                        await TokenSymbolUpdate();
-                        return;
-                    }
+                    // const AliceToken = await Alice_token.find();
+                    // console.log("AliceToken.length ", AliceToken.length, " TIME ", new Date());
+                    // if (AliceToken.length < 50000) {
+                    //     await TokenSymbolUpdate();
+                    //     return;
+                    // }
                     return;
                 }
             }).catch(async (error) => {
                 console.log("APi Error Token Symbol Cron", " TIME ", new Date(), error);
-                const AliceToken = await Alice_token.find();
-                if (AliceToken.length < 50000) {
-                    setTimeout(TokenSymbolUpdate, 1800000); // 30 minute
-                }
+                // const AliceToken = await Alice_token.find();
+                // if (AliceToken.length < 50000) {
+                //     setTimeout(TokenSymbolUpdate, 1800000); // 30 minute
+                // }
                 return;
             });
     } catch (error) {
         console.log("Error TokenSymbolUpdate Try Catch", " TIME ", new Date());
-        setTimeout(TokenSymbolUpdate, 1800000); // 30 minute
+        // setTimeout(TokenSymbolUpdate, 1800000); // 30 minute
         return;
     }
 }
 
-const TokenSymbolUpdate = async () => {
-    console.log("TokenSymbolUpdate");
+// const TokenSymbolUpdate2 = async () => {
+//     console.log("TokenSymbolUpdate");
 
-    try {
-        console.log("TokenSymbolUpdate Start", " TIME ", new Date());
+//     try {
+//         console.log("TokenSymbolUpdate Start", " TIME ", new Date());
 
-        const config = {
-            method: 'get',
-            url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
-        };
+//         const config = {
+//             method: 'get',
+//             url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
+//         };
 
-        const response = await axios(config);
-        if (response.data.length > 0) {
-            for (const element of response.data) {
-                await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-                const option_type = element.symbol.slice(-2);
-                const expiry_s = dateTime.create(element.expiry);
-                const expiry = expiry_s.format('dmY');
-                const strike_s = parseInt(element.strike);
-                const strike = parseInt(strike_s.toString().slice(0, -2));
-                const day_start = element.expiry.slice(0, 2);
-                const moth_str = element.expiry.slice(2, 5);
-                const year_end = element.expiry.slice(-2);
-                const Dat = new Date(element.expiry);
-                const moth_count = Dat.getMonth() + 1;
+//         const response = await axios(config);
+//         if (response.data.length > 0) {
+//             for (const element of response.data) {
+//                 await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+//                 const option_type = element.symbol.slice(-2);
+//                 const expiry_s = dateTime.create(element.expiry);
+//                 const expiry = expiry_s.format('dmY');
+//                 const strike_s = parseInt(element.strike);
+//                 const strike = parseInt(strike_s.toString().slice(0, -2));
+//                 const day_start = element.expiry.slice(0, 2);
+//                 const moth_str = element.expiry.slice(2, 5);
+//                 const year_end = element.expiry.slice(-2);
+//                 const Dat = new Date(element.expiry);
+//                 const moth_count = Dat.getMonth() + 1;
 
-                let tradesymbol_m_w;
+//                 let tradesymbol_m_w;
 
-                // Check existing token
-                const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
-                if (exist_token == null) {
-                    tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
+//                 // Check existing token
+//                 const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
+//                 if (exist_token == null) {
+//                     tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
 
-                    const user_data = {
-                        symbol: element.name,
-                        expiry: expiry,
-                        expiry_month_year: expiry.slice(2),
-                        expiry_date: expiry.slice(0, -6),
-                        expiry_str: element.expiry,
-                        strike: strike,
-                        option_type: option_type,
-                        segment: "F",  // Default segment, this will be changed based on condition
-                        instrument_token: element.token,
-                        lotsize: element.lotsize,
-                        tradesymbol: element.symbol,
-                        tradesymbol_m_w: tradesymbol_m_w,
-                        exch_seg: element.exch_seg
-                    };
+//                     const user_data = {
+//                         symbol: element.name,
+//                         expiry: expiry,
+//                         expiry_month_year: expiry.slice(2),
+//                         expiry_date: expiry.slice(0, -6),
+//                         expiry_str: element.expiry,
+//                         strike: strike,
+//                         option_type: option_type,
+//                         segment: "F",  // Default segment, this will be changed based on condition
+//                         instrument_token: element.token,
+//                         lotsize: element.lotsize,
+//                         tradesymbol: element.symbol,
+//                         tradesymbol_m_w: tradesymbol_m_w,
+//                         exch_seg: element.exch_seg
+//                     };
 
-                    // Adjust segment based on instrument type
-                    if ((element.instrumenttype == 'FUTSTK' || element.instrumenttype == 'FUTIDX') && element.exch_seg == "NFO") {
-                        user_data.segment = "F";
-                    } else if (element.instrumenttype == 'FUTCOM') {
-                        user_data.segment = "MF";
-                    } else if ((element.instrumenttype == 'OPTIDX' || element.instrumenttype == 'OPTSTK') && element.exch_seg == "NFO") {
-                        user_data.segment = "O";
-                    } else if (element.instrumenttype == 'OPTFUT' || element.instrumenttype == 'OPTCOM') {
-                        user_data.segment = "MO";
-                    } else if (element.instrumenttype == 'OPTCUR') {
-                        user_data.segment = "CO";
-                    } else if (element.instrumenttype == 'FUTCUR') {
-                        user_data.segment = "CF";
-                    } else if (element.symbol.slice(-3) == '-EQ') {
-                        user_data.segment = "C";
-                    }
+//                     // Adjust segment based on instrument type
+//                     if ((element.instrumenttype == 'FUTSTK' || element.instrumenttype == 'FUTIDX') && element.exch_seg == "NFO") {
+//                         user_data.segment = "F";
+//                     } else if (element.instrumenttype == 'FUTCOM') {
+//                         user_data.segment = "MF";
+//                     } else if ((element.instrumenttype == 'OPTIDX' || element.instrumenttype == 'OPTSTK') && element.exch_seg == "NFO") {
+//                         user_data.segment = "O";
+//                     } else if (element.instrumenttype == 'OPTFUT' || element.instrumenttype == 'OPTCOM') {
+//                         user_data.segment = "MO";
+//                     } else if (element.instrumenttype == 'OPTCUR') {
+//                         user_data.segment = "CO";
+//                     } else if (element.instrumenttype == 'FUTCUR') {
+//                         user_data.segment = "CF";
+//                     } else if (element.symbol.slice(-3) == '-EQ') {
+//                         user_data.segment = "C";
+//                     }
 
-                    // Insert or update token data
-                    const filter = { instrument_token: element.token };
-                    await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
-                }
+//                     // Insert or update token data
+//                     const filter = { instrument_token: element.token };
+//                     await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
+//                 }
 
                 
-            }
+//             }
 
-            const AliceToken = await Alice_token.find();
-            console.log("AliceToken.length ", AliceToken.length, " TIME ", new Date());
+//             const AliceToken = await Alice_token.find();
+//             console.log("AliceToken.length ", AliceToken.length, " TIME ", new Date());
 
-            if (AliceToken.length < 50000) {
-                await TokenSymbolUpdate();
-            }
-        }
-    } catch (error) {
-        console.log("Error TokenSymbolUpdate", " TIME ", new Date(), error);
-        const AliceToken = await Alice_token.find();
-        if (AliceToken.length < 50000) {
-            setTimeout(TokenSymbolUpdate, 1800000); // Retry after 30 minutes
-        }
-    }
-}
+//             if (AliceToken.length < 50000) {
+//                 await TokenSymbolUpdate();
+//             }
+//         }
+//     } catch (error) {
+//         console.log("Error TokenSymbolUpdate", " TIME ", new Date(), error);
+//         const AliceToken = await Alice_token.find();
+//         if (AliceToken.length < 50000) {
+//             setTimeout(TokenSymbolUpdate, 1800000); // Retry after 30 minutes
+//         }
+//     }
+// }
 
 const tokenFind = async () => {
     try {
