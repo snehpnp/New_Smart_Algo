@@ -1,4 +1,5 @@
 "use strict";
+const {connectToMongoDB} = require('../../Connection/mongo_connection');
 const bcrypt = require("bcrypt");
 const db = require('../../Models');
 const User_model = db.user;
@@ -197,6 +198,8 @@ class Dashboard {
             })
         } catch (error) {
             console.log("Error get user trading Status error -", error);
+            connectToMongoDB()
+            return
         }
     }
 

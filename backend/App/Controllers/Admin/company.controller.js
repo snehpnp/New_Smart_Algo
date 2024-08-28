@@ -80,6 +80,8 @@ class Company {
             return res.send({ status: true, msg: 'Done', data: compantInfo });
         } catch (error) {
             console.log("Error Company Information Get -", error);
+            connectToMongoDB()
+            return
         }
     }
 
