@@ -199,8 +199,6 @@ const TruncateTableTokenChainAdd_fiveMinute = async () => {
         await MainSignalsRemainToken();
 
         await Alice_Socket();
-    } else {
-        console.log('Function will not run outside of 8 AM to 8 PM.');
     }
 };
 
@@ -1125,10 +1123,13 @@ const AccelpixTokenUpdate = async () => {
 
 const GetStrickPriceFromSheet = async () => {
 
-    try {
-        const csvFilePath = 'https://docs.google.com/spreadsheets/d/1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU/export?format=csv';
 
-        try {
+
+    try {
+        const currentHour = new Date().getHours();
+
+        if (currentHour >= 8 && currentHour < 20) {
+            const csvFilePath = 'https://docs.google.com/spreadsheets/d/1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU/export?format=csv';
             const { data } = await axios.get(csvFilePath);
 
             Papa.parse(data, {
@@ -1172,13 +1173,13 @@ const GetStrickPriceFromSheet = async () => {
                 },
                 header: true,
             });
-        } catch (error) {
-            console.log('Error fetching or parsing CSV:', error.message);
-            return
         }
+
     } catch (error) {
-        console.log("Error Theme error-", error);
+        console.log('Error fetching or parsing CSV:', error.message);
+        return
     }
+
 }
 
 
