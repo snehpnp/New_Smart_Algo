@@ -1,8 +1,7 @@
 var cron = require('node-cron');
 const axios = require('axios');
 const fs = require('fs');
-
-
+const path = require('path');
 var Promise = require('polyfill-promise');
 var Sheets = require('google-sheets-api').Sheets;
 const Papa = require('papaparse')
@@ -51,15 +50,15 @@ cron.schedule('41 10 * * *', () => { twodaysclient(); });
 
 cron.schedule('30 6 * * *', () => { TruncateTableTokenChain(); });
 
- cron.schedule('*/10 * * * *', async () => { await TruncateTableTokenChainAdd_fiveMinute() });
+cron.schedule('*/10 * * * *', async () => { await TruncateTableTokenChainAdd_fiveMinute() });
 
 
 
-// cron.schedule('10 23 * * *', () => {  DeleteTokenAliceToken() });
+ cron.schedule('52 16 * * *', () => {  DeleteTokenAliceToken() });
 // cron.schedule('55 23 * * *', () => { TruncateTable() });
 
 
-cron.schedule('15 1 * * *', () => { TokenSymbolUpdate() });
+cron.schedule('54 16 * * *', () => { TokenSymbolUpdate() });
 
 
 
@@ -186,63 +185,63 @@ const MainSignalsRemainToken = async () => {
 const TruncateTableTokenChainAdd_fiveMinute = async () => {
     const currentHour = new Date().getHours();
     if (currentHour >= 8 && currentHour < 20) {
-    const AliceToken = await Alice_token.find();
-    if(AliceToken.length > 50000){
-       
-        const drop = await token_chain.deleteMany({});
+        const AliceToken = await Alice_token.find();
+        if (AliceToken.length > 50000) {
 
-        await Get_Option_All_Token_Chain()
-    
-        await Get_Option_All_Token_Chain_stock()
-    
-        await MainSignalsRemainToken()
-    
-        await Alice_Socket();
+            const drop = await token_chain.deleteMany({});
 
-        return;
+            await Get_Option_All_Token_Chain()
+
+            await Get_Option_All_Token_Chain_stock()
+
+            await MainSignalsRemainToken()
+
+            await Alice_Socket();
+
+            return;
+        }
     }
-   }
 
 
-    return;  
+    return;
 
 }
 
 const TruncateTableTokenChainAdd = async () => {
     const AliceToken = await Alice_token.find();
-    if(AliceToken.length > 50000){
-    const drop = await token_chain.deleteMany({});
+    if (AliceToken.length > 50000) {
+        const drop = await token_chain.deleteMany({});
 
-    await Get_Option_All_Token_Chain()
+        await Get_Option_All_Token_Chain()
 
-    await Get_Option_All_Token_Chain_stock()
+        await Get_Option_All_Token_Chain_stock()
 
-    await Alice_Socket();
+        await Alice_Socket();
 
+        return;
+    }
     return;
-}
-return;  
 
 
 }
 
 const TruncateTableTokenChain = async () => {
 
-    
+
     const AliceToken = await Alice_token.find();
-    if(AliceToken.length > 50000){
+    if (AliceToken.length > 50000) {
 
-    const drop = await token_chain.deleteMany({});
+        const drop = await token_chain.deleteMany({});
 
-    const drop1 = await stock_live_price.deleteMany({});
+        const drop1 = await stock_live_price.deleteMany({});
 
-    await Get_Option_All_Token_Chain()
+        await Get_Option_All_Token_Chain()
 
-    await Get_Option_All_Token_Chain_stock()
+        await Get_Option_All_Token_Chain_stock()
 
+        return;
+    }
     return;
-}
-return; 
 
 
 }
@@ -403,7 +402,7 @@ const Get_Option_All_Token_Chain = async () => {
                             }
 
 
-                      
+
                             const filter = { _id: element1.instrument_token };
                             const update = {
                                 $set: { _id: element1.instrument_token, exch: element1.exch_seg },
@@ -805,6 +804,7 @@ const DeleteTokenAliceToken = async () => {
 
     ];
     const result = await Alice_token.aggregate(pipeline)
+    console.log("result",result.length)
     if (result.length > 0) {
         const idsToDelete = result.map(item => item._id);
         await Alice_token.deleteMany({ _id: { $in: result[0].idsToDelete } });
@@ -819,32 +819,32 @@ const DeleteTokenAliceToken = async () => {
 // TOKEN SYMBOL CREATE
 const TokenSymbolUpdate1 = async () => {
 
-  
+
     try {
-          console.log("TokenSymbolUpdate Start ", " TIME ",new Date())
+        console.log("TokenSymbolUpdate Start ", " TIME ", new Date())
 
-           
-            var d = new Date();
-            dformat = [d.getFullYear(),
-            d.getMonth() + 1,
-            d.getDate(),
-            ].join('/') + ' ' + [d.getHours(),
-            d.getMinutes(),
-            d.getSeconds()
-            ].join(':');
-            var axios = require('axios');
-            var config = {
-                method: 'get',
-                url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
-            };
 
-            axios(config)
-                .then(async function(response) {
-                 
-                  if(response.data.length > 0){
+        var d = new Date();
+        dformat = [d.getFullYear(),
+        d.getMonth() + 1,
+        d.getDate(),
+        ].join('/') + ' ' + [d.getHours(),
+        d.getMinutes(),
+        d.getSeconds()
+        ].join(':');
+        var axios = require('axios');
+        var config = {
+            method: 'get',
+            url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
+        };
+
+        axios(config)
+            .then(async function (response) {
+
+                if (response.data.length > 0) {
                     let count = 0
                     await response.data.forEach(async (element) => {
-                     
+
                         var option_type = element.symbol.slice(-2);
                         var expiry_s = element.expiry
                         var expiry_s = dateTime.create(expiry_s);
@@ -1280,31 +1280,31 @@ const TokenSymbolUpdate1 = async () => {
                     });
 
                     const AliceToken = await Alice_token.find();
-                    console.log("AliceToken.length " ,AliceToken.length , " TIME ",new Date());
-                    if(AliceToken.length < 50000){
-                      await TokenSymbolUpdate();
-                      return;
+                    console.log("AliceToken.length ", AliceToken.length, " TIME ", new Date());
+                    if (AliceToken.length < 50000) {
+                        await TokenSymbolUpdate();
+                        return;
                     }
                     return;
-                    }
+                }
 
 
 
-                }).catch(async(error) => {
-                    console.log("APi Error Token Symbol Cron", " TIME ",new Date() , error);
-                    const AliceToken = await Alice_token.find();
-                     if(AliceToken.length < 50000){
-                     setTimeout(TokenSymbolUpdate, 1800000); // 30 minute
-                     }
-                     return;
-                });
+            }).catch(async (error) => {
+                console.log("APi Error Token Symbol Cron", " TIME ", new Date(), error);
+                const AliceToken = await Alice_token.find();
+                if (AliceToken.length < 50000) {
+                    setTimeout(TokenSymbolUpdate, 1800000); // 30 minute
+                }
+                return;
+            });
 
-        
+
 
 
 
     } catch (error) {
-        console.log("Error TokenSymbolUpdate Try Catch" , " TIME ",new Date())
+        console.log("Error TokenSymbolUpdate Try Catch", " TIME ", new Date())
         setTimeout(TokenSymbolUpdate, 1800000); // 30 minute
         return;
     }
@@ -1338,7 +1338,7 @@ const TokenSymbolUpdate2 = async () => {
                     let count = 0;
 
                     for (const element of response.data) {
-                       await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+                        await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
 
                         var option_type = element.symbol.slice(-2);
                         var expiry_s = element.expiry;
@@ -1360,7 +1360,7 @@ const TokenSymbolUpdate2 = async () => {
                         var tradesymbol_m_w;
 
                         if (element.instrumenttype == 'FUTSTK' && element.exch_seg == "NFO") {
-                            
+
                             // const filter_service = { name: element.name };
                             // const updateOperation_service = { $set: { lotsize: element.lotsize } };
                             // try {
@@ -1369,7 +1369,7 @@ const TokenSymbolUpdate2 = async () => {
                             //     console.log("Error updating documents:", error);
                             // }
 
-                            
+
 
                             let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
                             if (exist_token == null) {
@@ -1394,10 +1394,10 @@ const TokenSymbolUpdate2 = async () => {
                                 var updateOperation = { $set: user_data };
                                 var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
                             }
-                        } 
-                        
+                        }
+
                         else if (element.instrumenttype == 'FUTIDX' && element.exch_seg == "NFO") {
-                           
+
                             // const filter_service = { name: element.name };
                             // const updateOperation_service = { $set: { lotsize: element.lotsize } };
                             // try {
@@ -1434,7 +1434,7 @@ const TokenSymbolUpdate2 = async () => {
 
                         else if (element.instrumenttype == 'FUTCOM') {
 
-                            
+
                             // const filter_service = { name: element.name };
                             // const updateOperation_service = { $set: { lotsize: element.lotsize } };
                             // try {
@@ -1471,8 +1471,8 @@ const TokenSymbolUpdate2 = async () => {
 
                         }
                         else if (element.instrumenttype == 'OPTIDX' && element.exch_seg == "NFO") {
-                         
-                         
+
+
 
                             let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
                             if (exist_token == null) {
@@ -1505,9 +1505,9 @@ const TokenSymbolUpdate2 = async () => {
                                 var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
                             }
 
-                        } 
+                        }
                         else if (element.instrumenttype == 'OPTSTK' && element.exch_seg == "NFO") {
-                            
+
                             let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
                             if (exist_token == null) {
 
@@ -1542,7 +1542,7 @@ const TokenSymbolUpdate2 = async () => {
 
                         }
                         else if (element.instrumenttype == 'OPTFUT') {
-                           
+
                             let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
                             if (exist_token == null) {
 
@@ -1576,9 +1576,9 @@ const TokenSymbolUpdate2 = async () => {
                                 var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
                             }
 
-                        } 
+                        }
                         else if (element.instrumenttype == 'OPTCOM') {
-                            
+
                             let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
                             if (exist_token == null) {
 
@@ -1611,9 +1611,9 @@ const TokenSymbolUpdate2 = async () => {
                                 var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
                             }
 
-                        } 
+                        }
                         else if (element.instrumenttype == 'OPTCUR') {
-                           
+
                             let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
                             if (exist_token == null) {
 
@@ -1645,9 +1645,9 @@ const TokenSymbolUpdate2 = async () => {
                                 var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
                             }
 
-                        } 
+                        }
                         else if (element.instrumenttype == 'FUTCUR') {
-                           
+
                             // const filter_service = { name: element.name };
                             // const updateOperation_service = { $set: { lotsize: element.lotsize } };
                             // try {
@@ -1688,7 +1688,7 @@ const TokenSymbolUpdate2 = async () => {
 
                         // ONLY CASH STOCK
                         else if (element.symbol.slice(-3) == '-EQ') {
-                           
+
                             let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
                             if (exist_token == null) {
                                 tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
@@ -1747,6 +1747,20 @@ const TokenSymbolUpdate2 = async () => {
 
 const TokenSymbolUpdate = async () => {
     console.log("TokenSymbolUpdate");
+    
+    try {
+        var filePath = path.join(__dirname+'/checkTest.txt'); // Adjust the file path as needed
+        console.log("filePath",filePath)
+        fs.appendFile(filePath, "-----TokenSymbolUpdate  - " + new Date() + "----- ***\\n\n", function (err) {
+            if (err) {
+                console.log("err filePath" ,err);
+            }
+            console.log("The file was saved filePath!");
+        });
+    } catch (error) {
+        console.log("err filePath Try catch" ,error);
+    }
+
 
     try {
         console.log("TokenSymbolUpdate Start", " TIME ", new Date());
@@ -1760,72 +1774,72 @@ const TokenSymbolUpdate = async () => {
         if (response.data.length > 0) {
             for (const element of response.data) {
                 try {
-                await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-                const option_type = element.symbol.slice(-2);
-                const expiry_s = dateTime.create(element.expiry);
-                const expiry = expiry_s.format('dmY');
-                const strike_s = parseInt(element.strike);
-                const strike = parseInt(strike_s.toString().slice(0, -2));
-                const day_start = element.expiry.slice(0, 2);
-                const moth_str = element.expiry.slice(2, 5);
-                const year_end = element.expiry.slice(-2);
-                const Dat = new Date(element.expiry);
-                const moth_count = Dat.getMonth() + 1;
+                    await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+                    const option_type = element.symbol.slice(-2);
+                    const expiry_s = dateTime.create(element.expiry);
+                    const expiry = expiry_s.format('dmY');
+                    const strike_s = parseInt(element.strike);
+                    const strike = parseInt(strike_s.toString().slice(0, -2));
+                    const day_start = element.expiry.slice(0, 2);
+                    const moth_str = element.expiry.slice(2, 5);
+                    const year_end = element.expiry.slice(-2);
+                    const Dat = new Date(element.expiry);
+                    const moth_count = Dat.getMonth() + 1;
 
-                let tradesymbol_m_w;
+                    let tradesymbol_m_w;
 
-                // Check existing token
-                if(element.token != undefined){
-                const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
-                if (exist_token == null) {
-                    tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
+                    // Check existing token
+                    if (element.token != undefined) {
+                        const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
+                        if (exist_token == null) {
+                            tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
 
-                    const user_data = {
-                        symbol: element.name,
-                        expiry: expiry,
-                        expiry_month_year: expiry.slice(2),
-                        expiry_date: expiry.slice(0, -6),
-                        expiry_str: element.expiry,
-                        strike: strike,
-                        option_type: option_type,
-                        segment: "F",  // Default segment, this will be changed based on condition
-                        instrument_token: element.token,
-                        lotsize: element.lotsize,
-                        tradesymbol: element.symbol,
-                        tradesymbol_m_w: tradesymbol_m_w,
-                        exch_seg: element.exch_seg
-                    };
+                            const user_data = {
+                                symbol: element.name,
+                                expiry: expiry,
+                                expiry_month_year: expiry.slice(2),
+                                expiry_date: expiry.slice(0, -6),
+                                expiry_str: element.expiry,
+                                strike: strike,
+                                option_type: option_type,
+                                segment: "F",  // Default segment, this will be changed based on condition
+                                instrument_token: element.token,
+                                lotsize: element.lotsize,
+                                tradesymbol: element.symbol,
+                                tradesymbol_m_w: tradesymbol_m_w,
+                                exch_seg: element.exch_seg
+                            };
 
-                    // Adjust segment based on instrument type
-                    if ((element.instrumenttype == 'FUTSTK' || element.instrumenttype == 'FUTIDX') && element.exch_seg == "NFO") {
-                        user_data.segment = "F";
-                    } else if (element.instrumenttype == 'FUTCOM') {
-                        user_data.segment = "MF";
-                    } else if ((element.instrumenttype == 'OPTIDX' || element.instrumenttype == 'OPTSTK') && element.exch_seg == "NFO") {
-                        user_data.segment = "O";
-                    } else if (element.instrumenttype == 'OPTFUT' || element.instrumenttype == 'OPTCOM') {
-                        user_data.segment = "MO";
-                    } else if (element.instrumenttype == 'OPTCUR') {
-                        user_data.segment = "CO";
-                    } else if (element.instrumenttype == 'FUTCUR') {
-                        user_data.segment = "CF";
-                    } else if (element.symbol.slice(-3) == '-EQ') {
-                        user_data.segment = "C";
+                            // Adjust segment based on instrument type
+                            if ((element.instrumenttype == 'FUTSTK' || element.instrumenttype == 'FUTIDX') && element.exch_seg == "NFO") {
+                                user_data.segment = "F";
+                            } else if (element.instrumenttype == 'FUTCOM') {
+                                user_data.segment = "MF";
+                            } else if ((element.instrumenttype == 'OPTIDX' || element.instrumenttype == 'OPTSTK') && element.exch_seg == "NFO") {
+                                user_data.segment = "O";
+                            } else if (element.instrumenttype == 'OPTFUT' || element.instrumenttype == 'OPTCOM') {
+                                user_data.segment = "MO";
+                            } else if (element.instrumenttype == 'OPTCUR') {
+                                user_data.segment = "CO";
+                            } else if (element.instrumenttype == 'FUTCUR') {
+                                user_data.segment = "CF";
+                            } else if (element.symbol.slice(-3) == '-EQ') {
+                                user_data.segment = "C";
+                            }
+
+                            // Insert or update token data
+                            const filter = { instrument_token: element.token };
+                            await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
+                        }
                     }
 
-                    // Insert or update token data
-                    const filter = { instrument_token: element.token };
-                    await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
-                 }
-                }
-
-               } catch (dbError) {
-                    console.log("Database Error during TokenSymbolUpdate loop:", dbError , " TIME ", new Date(), dbError);
+                } catch (dbError) {
+                    console.log("Database Error during TokenSymbolUpdate loop:", dbError, " TIME ", new Date(), dbError);
                     break; // Break the loop if a database error occurs
                     return
                 }
 
-                
+
             }
 
             // const AliceToken = await Alice_token.find();
@@ -1834,9 +1848,9 @@ const TokenSymbolUpdate = async () => {
             // if (AliceToken.length < 50000) {
             //     await TokenSymbolUpdate();
             // }
-            console.log("TokenSymbolUpdate End:" ," TIME ", new Date());
+            console.log("TokenSymbolUpdate End:", " TIME ", new Date());
             return
-        }else{
+        } else {
             return
         }
     } catch (error) {
@@ -1878,7 +1892,7 @@ const tokenFind = async () => {
 }
 
 // const twodaysclient = async () => {
- 
+
 //     const twoDaysClientGet = await User.aggregate(
 //         [
 //             {
@@ -2054,7 +2068,7 @@ const twodaysclient = async () => {
         return [];
     }
 };
- 
+
 // Update numberOfTrade_count_trade 0
 const numberOfTrade_count_trade = async () => {
     const update_trade_off = {
