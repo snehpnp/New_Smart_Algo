@@ -47,7 +47,7 @@ cron.schedule('10 1 * * *', () => { numberOfTrade_count_trade(); });
 
 cron.schedule('*/30 * * * *', () => { GetStrickPriceFromSheet(); });
 
-cron.schedule('5 23 * * *', () => { twodaysclient(); });
+cron.schedule('41 10 * * *', () => { twodaysclient(); });
 
 cron.schedule('30 6 * * *', () => { TruncateTableTokenChain(); });
 
@@ -1877,10 +1877,127 @@ const tokenFind = async () => {
     }
 }
 
-const twodaysclient = async () => {
+// const twodaysclient = async () => {
+ 
+//     const twoDaysClientGet = await User.aggregate(
+//         [
+//             {
+//                 $match: {
+//                     license_type: "0",
+//                     Is_Active: "1",
+//                     Role: "USER",
+//                     $expr: {
+//                         $gte: [
+//                             {
+//                                 $dateToString: {
+//                                     format: "%Y-%m-%d",
+//                                     date: "$EndDate"
+//                                 }
+//                             },
+//                             {
+//                                 $dateToString: {
+//                                     format: "%Y-%m-%d",
+//                                     date: new Date()
+//                                 }
+//                             }
+//                         ]
+//                     }
+//                 }
+//             },
+//             {
+//                 $lookup: {
+//                     from: "broker_responses",
+//                     localField: "_id",
+//                     foreignField: "user_id",
+//                     as: "responses"
+//                 }
+//             },
+//             {
+//                 $match: {
+//                     "responses.order_id": { $ne: "" } // Filter out responses where order_id is not empty
+//                 }
+//             },
+//             {
+//                 $group: {
+//                     _id: 1, // Use a constant value as the _id
+//                     users: { $push: { _id: "$_id", responses: "$responses" } } // Include _id and responses in the 'users' array
+//                 }
+//             },
+//             {
+//                 $project: {
+//                     _id: 0, // Exclude the _id field
+//                     users: {
+//                         $map: {
+//                             input: "$users",
+//                             as: "user",
+//                             in: {
+//                                 _id: "$$user._id",
+//                                 responses: {
+//                                     $map: {
+//                                         input: "$$user.responses",
+//                                         as: "response",
+//                                         in: {
+//                                             createdAt: {
+//                                                 $dateToString: {
+//                                                     format: "%Y-%m-%d",
+//                                                     date: "$$response.createdAt"
+//                                                 }
+//                                             },
+//                                             // Include other fields from the response if needed
+//                                         }
+//                                     }
+//                                 }
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+//         ])
 
-    const twoDaysClientGet = await User.aggregate(
-        [
+//     var UniqueDataArr = []
+
+//     if (twoDaysClientGet.length > 0) {
+//         var UserData = twoDaysClientGet[0].users.filter((data) => data.responses.length > 0);
+//         console.log("UserData ",UserData)
+//         if (UserData.length > 0) {
+
+//             UserData.forEach((data) => {
+//                 const uniqueCreatedAtValues = [...new Set(data.responses.map(item => item.createdAt))];
+//                 UniqueDataArr.push({ user_id: data._id, createdAt: uniqueCreatedAtValues })
+//             })
+//         }
+//     }
+
+//     if (UniqueDataArr.length > 0) {
+
+//         UniqueDataArr.forEach(async (data) => {
+//             if (data.createdAt.length >= 2) {
+//                 const filter = { _id: new ObjectId(data.user_id) };
+//                 // Get the current date and time
+//                 const currentDate = new Date();
+
+//                 // Format the date to 'YYYY-MM-DD'
+//                 const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+
+//                 const result = await User.updateOne(
+//                     filter,
+//                     { $set: { EndDate: formattedDate } }
+//                 );
+
+//             }
+//         })
+
+//     }
+
+//     return UniqueDataArr
+// }
+
+const twodaysclient = async () => {
+    try {
+        const today = new Date();
+        const formattedToday = today.toISOString().split('T')[0];
+
+        const twoDaysClientGet = await User.aggregate([
             {
                 $match: {
                     license_type: "0",
@@ -1888,18 +2005,8 @@ const twodaysclient = async () => {
                     Role: "USER",
                     $expr: {
                         $gte: [
-                            {
-                                $dateToString: {
-                                    format: "%Y-%m-%d",
-                                    date: "$EndDate"
-                                }
-                            },
-                            {
-                                $dateToString: {
-                                    format: "%Y-%m-%d",
-                                    date: new Date()
-                                }
-                            }
+                            { $dateToString: { format: "%Y-%m-%d", date: "$EndDate" } },
+                            formattedToday
                         ]
                     }
                 }
@@ -1912,95 +2019,42 @@ const twodaysclient = async () => {
                     as: "responses"
                 }
             },
-            {
-                $match: {
-                    "responses.order_id": { $ne: "" } // Filter out responses where order_id is not empty
-                }
-            },
-            {
-                $group: {
-                    _id: 1, // Use a constant value as the _id
-                    users: { $push: { _id: "$_id", responses: "$responses" } } // Include _id and responses in the 'users' array
-                }
-            },
+            { $match: { "responses.order_id": { $ne: "" } } },
             {
                 $project: {
-                    _id: 0, // Exclude the _id field
+                    _id: 0,
                     users: {
-                        $map: {
-                            input: "$users",
-                            as: "user",
-                            in: {
-                                _id: "$$user._id",
-                                responses: {
-                                    $map: {
-                                        input: "$$user.responses",
-                                        as: "response",
-                                        in: {
-                                            createdAt: {
-                                                $dateToString: {
-                                                    format: "%Y-%m-%d",
-                                                    date: "$$response.createdAt"
-                                                }
-                                            },
-                                            // Include other fields from the response if needed
-                                        }
-                                    }
+                        $filter: {
+                            input: {
+                                $map: {
+                                    input: "$responses",
+                                    as: "response",
+                                    in: { createdAt: { $dateToString: { format: "%Y-%m-%d", date: "$$response.createdAt" } } }
                                 }
-                            }
+                            },
+                            as: "response",
+                            cond: { $gte: [{ $size: "$$response" }, 2] }
                         }
                     }
                 }
             }
-        ])
+        ]);
 
-    var UniqueDataArr = []
+        if (twoDaysClientGet.length === 0) return [];
 
-    if (twoDaysClientGet.length > 0) {
+        const updates = twoDaysClientGet[0].users.map(async ({ _id }) => {
+            return User.updateOne({ _id: new ObjectId(_id) }, { $set: { EndDate: formattedToday } });
+        });
 
+        await Promise.all(updates);
 
-        var UserData = twoDaysClientGet[0].users.filter((data) => data.responses.length > 0);
-
-        if (UserData.length > 0) {
-
-            UserData.forEach((data) => {
-                const uniqueCreatedAtValues = [...new Set(data.responses.map(item => item.createdAt))];
-                UniqueDataArr.push({ user_id: data._id, createdAt: uniqueCreatedAtValues })
-            })
-        }
-
-
+        return twoDaysClientGet[0].users;
+    } catch (error) {
+        console.error("Error occurred:", error);
+        return [];
     }
-
-
-
-    if (UniqueDataArr.length > 0) {
-
-        UniqueDataArr.forEach(async (data) => {
-            if (data.createdAt.length >= 2) {
-
-                const filter = { _id: new ObjectId(data.user_id) };
-                // Get the current date and time
-                const currentDate = new Date();
-
-                // Format the date to 'YYYY-MM-DD'
-                const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
-
-                const result = await User.updateOne(
-                    filter,
-                    { $set: { EndDate: formattedDate } }
-                );
-
-            }
-        })
-
-    }
-
-
-
-    return UniqueDataArr
-}
-
+};
+ 
 // Update numberOfTrade_count_trade 0
 const numberOfTrade_count_trade = async () => {
     const update_trade_off = {

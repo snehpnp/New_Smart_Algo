@@ -8,23 +8,22 @@ module.exports = function (app) {
     
 
     
-    cron.schedule('* 6 * * *', () => { downloadAlicetoken(); });
-
+    
     cron.schedule('5 6 * * *', () => { downloadFyerstoken(); });
-
+    
     cron.schedule('10 6 * * *', () => { downloadAndSwastika(); });
-
+    
     cron.schedule('20 6 * * *', () => { downloadKotakNeotoken(); });
-
+    
     cron.schedule('30 6 * * *', () => { downloadZerodhatoken(); });
-
+    
     cron.schedule('35 6 * * *', () => { downloadAndExtractUpstox(); });
-
+    
     cron.schedule('40 6 * * *', () => { downloadAndExtractICICIDirect(); });
+    
+    cron.schedule('45 6 * * *', () => { downloadAlicetoken(); });
 
     cron.schedule('15 18 * * *', () => { downloadKotakNeotoken(); });
-
-
 
 
     // ALL Alice Token Genrate
@@ -48,35 +47,43 @@ module.exports = function (app) {
                 key: "ALICE_CDS"
             }
         ]
+        
+        try {
+            TokenUrl.forEach((data) => {
 
-        TokenUrl.forEach((data) => {
-
-            const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'Aliceblue', `${data.key}.csv`);
-
-
-            const fileUrl = data.url
-
-            axios({
-                method: 'get',
-                url: fileUrl,
-                responseType: 'stream',
-            })
-                .then(function (response) {
-                    // Pipe the HTTP response stream to a local file
-                    response.data.pipe(fs.createWriteStream(filePath));
-
-                    response.data.on('end', function () {
-
-                    });
+                const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'Aliceblue', `${data.key}.csv`);
+    
+    
+                const fileUrl = data.url
+    
+                axios({
+                    method: 'get',
+                    url: fileUrl,
+                    responseType: 'stream',
                 })
-                .catch(function (error) {
-                    console.log('Error downloading file:', error);
-                });
-        })
+                    .then(function (response) {
+                        // Pipe the HTTP response stream to a local file
+                        response.data.pipe(fs.createWriteStream(filePath));
+    
+                        response.data.on('end', function () {
+    
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log('Error downloading file:', error);
+                        return
+                    });
+            })
+        } catch (error) {
+            console.log('An unexpected error occurred:', error);
+            return
+            
+        }
+        
 
     }
 
-
+    // Zerodha Files
     const downloadZerodhatoken = () => {
 
         var TokenUrl = [
@@ -86,30 +93,38 @@ module.exports = function (app) {
             },
 
         ]
-        TokenUrl.forEach((data) => {
-            const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'Zerodha', `${data.key}.csv`);
-            // const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'Aliceblue', `${data.key}.csv`);
 
-
-            const fileUrl = data.url
-
-            axios({
-                method: 'get',
-                url: fileUrl,
-                responseType: 'stream',
-            })
-                .then(function (response) {
-                    // Pipe the HTTP response stream to a local file
-                    response.data.pipe(fs.createWriteStream(filePath));
-
-                    response.data.on('end', function () {
-
-                    });
+        try {
+            TokenUrl.forEach((data) => {
+                const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'Zerodha', `${data.key}.csv`);
+                // const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'Aliceblue', `${data.key}.csv`);
+    
+    
+                const fileUrl = data.url
+    
+                axios({
+                    method: 'get',
+                    url: fileUrl,
+                    responseType: 'stream',
                 })
-                .catch(function (error) {
-                    console.log('Error downloading file:', error);
-                });
-        })
+                    .then(function (response) {
+                        // Pipe the HTTP response stream to a local file
+                        response.data.pipe(fs.createWriteStream(filePath));
+    
+                        response.data.on('end', function () {
+    
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log('Error downloading file:', error);
+                        return
+                    });
+            })
+        } catch (error) {
+            console.log('An unexpected error occurred:', error);
+            return
+        }
+        
 
     }
 
@@ -150,9 +165,9 @@ module.exports = function (app) {
             });
         } catch (err) {
             console.log('Error:', err);
+            return
         }
     }
-
 
     // Fyers Files
     const downloadFyerstoken = () => {
@@ -177,31 +192,38 @@ module.exports = function (app) {
             }
         ]
 
+        try {
+            TokenUrl.forEach((data) => {
 
-        TokenUrl.forEach((data) => {
-
-            const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'Fyers', `${data.key}.csv`);
-
-
-            const fileUrl = data.url
-
-            axios({
-                method: 'get',
-                url: fileUrl,
-                responseType: 'stream',
-            })
-                .then(function (response) {
-                    // Pipe the HTTP response stream to a local file
-                    response.data.pipe(fs.createWriteStream(filePath));
-
-                    response.data.on('end', function () {
-
-                    });
+                const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'Fyers', `${data.key}.csv`);
+    
+    
+                const fileUrl = data.url
+    
+                axios({
+                    method: 'get',
+                    url: fileUrl,
+                    responseType: 'stream',
                 })
-                .catch(function (error) {
-                    console.log('Error downloading file:', error);
-                });
-        })
+                    .then(function (response) {
+                        // Pipe the HTTP response stream to a local file
+                        response.data.pipe(fs.createWriteStream(filePath));
+    
+                        response.data.on('end', function () {
+    
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log('Error downloading file:', error);
+                        return
+                    });
+            })
+        } catch (error) {
+            console.log('An unexpected error occurred:', error);
+            return
+            
+        }
+        
 
 
     }
@@ -255,13 +277,15 @@ module.exports = function (app) {
             downloadResults.forEach(result => {
                 if (result.status !== 'Success') {
                     console.log(`Download of ${result.filename} encountered an issue: ${result.status}`);
+                    return
                 } else {
                     console.log(`Successfully downloaded and extracted ${result.filename}`);
                 }
             });
     
         } catch (err) {
-            console.error("Unexpected error in downloadAndSwastika:", err.message);
+            console.error("Unexpected error in downloadAndSwastika:", err);
+            return
         }
     }
 
@@ -317,10 +341,12 @@ module.exports = function (app) {
                     })
                     .catch(function (error) {
                         console.log(`Error downloading file from ${fileUrl}:`, error);
+                        return
                     });
             });
         } catch (error) {
             console.log('An unexpected error occurred:', error);
+            return
         }
     };
 
@@ -352,7 +378,7 @@ module.exports = function (app) {
             // Send a response to indicate success
             console.log('Download and extraction completed successfully');
         } catch (err) {
-
+         return
         }
     }
 
