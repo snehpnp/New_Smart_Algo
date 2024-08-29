@@ -6,8 +6,6 @@ module.exports = function (app) {
     var path = require('path');
     const AdmZip = require('adm-zip');
     
-
-    
     
     cron.schedule('5 6 * * *', () => { downloadFyerstoken(); });
     
