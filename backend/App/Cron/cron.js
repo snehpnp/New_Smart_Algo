@@ -809,6 +809,7 @@ const DeleteTokenAliceToken = async () => {
         const idsToDelete = result.map(item => item._id);
         await Alice_token.deleteMany({ _id: { $in: result[0].idsToDelete } });
         console.log(`${result.length} expired tokens deleted.`);
+        return
     } else {
         console.log('No expired tokens found.');
     }
