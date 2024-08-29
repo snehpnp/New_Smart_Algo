@@ -54,11 +54,11 @@ cron.schedule('*/10 * * * *', async () => { await TruncateTableTokenChainAdd_fiv
 
 
 
- cron.schedule('52 16 * * *', () => {  DeleteTokenAliceToken() });
+ cron.schedule('05 23 * * *', () => {  DeleteTokenAliceToken() });
 // cron.schedule('55 23 * * *', () => { TruncateTable() });
 
 
-cron.schedule('54 16 * * *', () => { TokenSymbolUpdate() });
+cron.schedule('15 23 * * *', () => { TokenSymbolUpdate() });
 
 
 
