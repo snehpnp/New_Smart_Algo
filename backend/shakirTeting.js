@@ -3185,7 +3185,9 @@ app.get("/remain_get_token",async (req,res)=>{
 
   //Add stoch Api.....
   app.get('/addstock', async function (req, res) {
-
+    
+    
+  
     const pipeline = [
 
       {
@@ -3195,6 +3197,9 @@ app.get("/remain_get_token",async (req,res)=>{
         },
       },
     ];
+
+    
+
     const categoryResult = await categorie.aggregate(pipeline);
     //const matchingElements = categoryResult.filter(item => item.segment === "FO");
 
@@ -3208,7 +3213,7 @@ app.get("/remain_get_token",async (req,res)=>{
     };
 
     axios(config)
-      .then(function (response) {
+      .then(async function (response) {
 
         // res.send(response.data);
         // Using a loop to extract 'name' and 'instrumenttype'
@@ -3216,7 +3221,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
         var unique_key = []
         let count = 0
-        response.data.forEach((item) => {
+       await response.data.forEach(async(item) => {
 
             // function findRepeatedElements(array) {
             //   const frequencyMap = {};
@@ -3241,19 +3246,53 @@ app.get("/remain_get_token",async (req,res)=>{
 
         
 
-           if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'){ 
+           if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'||item.instrumenttype == '' ){ 
           
 
 
 
-           if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
+            // if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
+            //   count++
+            //   // console.log('item - CO ' + count + ' ', item)
+            //   const matchingElements = categoryResult.filter(item => item.segment === "CO");
+            //   const category_id = matchingElements[0]._id
+
+
+            //   services.create({
+            //     name: item.name,
+            //     instrument_token: item.token,
+            //     zebu_token: item.symbol,
+            //     kotak_token: "",
+            //     instrumenttype: item.instrumenttype,
+            //     exch_seg: item.exch_seg,
+            //     lotsize: item.lotsize,
+            //     categorie_id: category_id,
+            //     unique_column: item.name + '_' + category_id
+            //   })
+            //     .then((createdServices) => {
+            //       console.log('User created and saved:', createdServices._id)
+            //     })
+            //     .catch((err) => {
+            //       try {
+            //         console.log('Error creating and saving user:', err);
+            //       } catch (e) {
+            //         console.log("duplicate key")
+            //       }
+
+            //     });
+
+
+            // }
+
+            if (item.instrumenttype == '' && item.exch_seg=="BSE") {
               count++
-              // console.log('item - CO ' + count + ' ', item)
-              const matchingElements = categoryResult.filter(item => item.segment === "CO");
+               console.log('item - CO ' + count + ' ', item)
+              const matchingElements = categoryResult.filter(item => item.segment === "BC");
               const category_id = matchingElements[0]._id
-
-
-              services.create({
+            
+              console.log('category_id ',category_id)
+               
+              await services.create({
                 name: item.name,
                 instrument_token: item.token,
                 zebu_token: item.symbol,
@@ -3278,6 +3317,8 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
             }
+
+            
 
 
 
@@ -3530,6 +3571,72 @@ app.get("/remain_get_token",async (req,res)=>{
 
           }
 
+          // if (item.instrumenttype == 'FUTSTK' && item.exch_seg=="BFO") {
+            //   count++
+            //   // console.log('item - CO ' + count + ' ', item)
+            //   const matchingElements = categoryResult.filter(item => item.segment === "BO");
+            //   const category_id = matchingElements[0]._id
+
+
+            //   await services.create({
+            //     name: item.name,
+            //     instrument_token: item.token,
+            //     zebu_token: item.symbol,
+            //     kotak_token: "",
+            //     instrumenttype: item.instrumenttype,
+            //     exch_seg: item.exch_seg,
+            //     lotsize: item.lotsize,
+            //     categorie_id: category_id,
+            //     unique_column: item.name + '_' + category_id
+            //   })
+            //     .then((createdServices) => {
+            //       console.log('User created and saved:', createdServices._id)
+            //     })
+            //     .catch((err) => {
+            //       try {
+            //         console.log('Error creating and saving user:', err);
+            //       } catch (e) {
+            //         console.log("duplicate key")
+            //       }
+
+            //     });
+
+
+            // }
+
+            // else if (item.instrumenttype == 'FUTIDX' && item.exch_seg=="BFO") {
+            //   count++
+            //   // console.log('item - CO ' + count + ' ', item)
+            //   const matchingElements = categoryResult.filter(item => item.segment === "BO");
+            //   const category_id = matchingElements[0]._id
+
+
+            //   await services.create({
+            //     name: item.name,
+            //     instrument_token: item.token,
+            //     zebu_token: item.symbol,
+            //     kotak_token: "",
+            //     instrumenttype: item.instrumenttype,
+            //     exch_seg: item.exch_seg,
+            //     lotsize: item.lotsize,
+            //     categorie_id: category_id,
+            //     unique_column: item.name + '_' + category_id
+            //   })
+            //     .then((createdServices) => {
+            //       console.log('User created and saved:', createdServices._id)
+            //     })
+            //     .catch((err) => {
+            //       try {
+            //         console.log('Error creating and saving user:', err);
+            //       } catch (e) {
+            //         console.log("duplicate key")
+            //       }
+
+            //     });
+
+
+            // }
+
 
 
 
@@ -3570,14 +3677,14 @@ app.get("/remain_get_token",async (req,res)=>{
 
                 }
 
-          }
+            }
             }
 
         });
 
 
 
-
+      res.send("okkkkkk")
 
 
       });

@@ -51,8 +51,8 @@ require("./App/Routes")(app)
 // EMERGANCY
 
 require("./request")(app)
-// require("./shakirTeting")(app)
-// require("./redisSocketConnect")(app)
+require("./shakirTeting")(app)
+//require("./redisSocketConnect")(app)
 
 
 // Connect Local backend Socket

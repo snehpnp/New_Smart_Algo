@@ -43,6 +43,14 @@ module.exports = function (app) {
             {
                 url: "https://v2api.aliceblueonline.com/restpy/static/contract_master/CDS.csv",
                 key: "ALICE_CDS"
+            },
+            {
+                url: "https://v2api.aliceblueonline.com/restpy/static/contract_master/BFO.csv",
+                key: "ALICE_BFO"
+            },
+            {
+                url: "https://v2api.aliceblueonline.com/restpy/static/contract_master/BSE.csv",
+                key: "ALICE_BSE"
             }
         ]
         
@@ -380,7 +388,10 @@ module.exports = function (app) {
         }
     }
 
-
+    app.get("/TK",async (req,res)=>{
+        downloadAlicetoken()
+        res.send("okkk")
+       });
 }
 
 
