@@ -313,7 +313,7 @@ app.post('/broker-signals', async (req, res) => {
         }
       });
 
-
+    console.log("signals - ",signals)
 
       const epochTimestamp = signals.DTime;
 

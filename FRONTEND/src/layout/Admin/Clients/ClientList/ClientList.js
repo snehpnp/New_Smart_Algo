@@ -341,81 +341,81 @@ const AllClients = () => {
       text: "Month",
       formatter: (cell, row) => showLicenceName(cell, row.license_type),
     },
-    {
-      dataField: "ActiveStatus",
-      text: "Status",
-      formatter: (cell, row) => (
-        <>
-          {row.StartDate == null && row.EndDate == null ?
-            ''
-            :
-            <label className="toggle mt-3">
-              <input
-                className="toggle-checkbox bg-primary"
-                type="checkbox"
-                checked={row.ActiveStatus === "1" ? true : false}
-                onChange={(e) => {
-                  activeUser(e, row);
-                }}
-              />
-              <div className={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
-            </label>
+    // {
+    //   dataField: "ActiveStatus",
+    //   text: "Status",
+    //   formatter: (cell, row) => (
+    //     <>
+    //       {row.StartDate == null && row.EndDate == null ?
+    //         ''
+    //         :
+    //         <label className="toggle mt-3">
+    //           <input
+    //             className="toggle-checkbox bg-primary"
+    //             type="checkbox"
+    //             checked={row.ActiveStatus === "1" ? true : false}
+    //             onChange={(e) => {
+    //               activeUser(e, row);
+    //             }}
+    //           />
+    //           <div className={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
+    //         </label>
 
-          }
-        </>
-      ),
+    //       }
+    //     </>
+    //   ),
 
-    },
-    {
-      dataField: "ActiveStatus",
-      text: "Go To Dashboard",
-      formatter: (cell, row) => (
-        <>
-          <span
-            className=" btn fw-bold "
-            style={
-              row.AppLoginStatus === "0" && row.WebLoginStatus === "0"
-                ? { color: "#FF0000" }
-                : { color: "#56c080" }
-            }
-            onClick={() => goToDashboard(row, row._id, row.Email)}
-            disabled={row.AppLoginStatus == "0" && row.WebLoginStatus == "0"}
-          >
-            Dashboard
-          </span>
-        </>
-      ),
-    },
-    {
-      dataField: "TradingStatus",
-      text: "TradingStatus",
-      formatter: (cell, row) => (
-        <>
-          {row.StartDate == null && row.EndDate == null ?
-            <span
-              style={
-                cell == "off" || cell === null
-                  ? { color: "#FF0000", fontSize: "13px" }
-                  : { color: "#008000", fontSize: "13px" }
-              }
-            >
-              Activate Subadmin Clients
-            </span>
-            :
-            <span
-              style={
-                cell == "off" || cell === null
-                  ? { color: "#FF0000", fontSize: "40px" }
-                  : { color: "#008000", fontSize: "40px" }
-              }
-            >
-              &#9679;
-            </span>
-          }
+    // },
+    // {
+    //   dataField: "ActiveStatus",
+    //   text: "Go To Dashboard",
+    //   formatter: (cell, row) => (
+    //     <>
+    //       <span
+    //         className=" btn fw-bold "
+    //         style={
+    //           row.AppLoginStatus === "0" && row.WebLoginStatus === "0"
+    //             ? { color: "#FF0000" }
+    //             : { color: "#56c080" }
+    //         }
+    //         onClick={() => goToDashboard(row, row._id, row.Email)}
+    //         disabled={row.AppLoginStatus == "0" && row.WebLoginStatus == "0"}
+    //       >
+    //         Dashboard
+    //       </span>
+    //     </>
+    //   ),
+    // },
+    // {
+    //   dataField: "TradingStatus",
+    //   text: "TradingStatus",
+    //   formatter: (cell, row) => (
+    //     <>
+    //       {row.StartDate == null && row.EndDate == null ?
+    //         <span
+    //           style={
+    //             cell == "off" || cell === null
+    //               ? { color: "#FF0000", fontSize: "13px" }
+    //               : { color: "#008000", fontSize: "13px" }
+    //           }
+    //         >
+    //           Activate Subadmin Clients
+    //         </span>
+    //         :
+    //         <span
+    //           style={
+    //             cell == "off" || cell === null
+    //               ? { color: "#FF0000", fontSize: "40px" }
+    //               : { color: "#008000", fontSize: "40px" }
+    //           }
+    //         >
+    //           &#9679;
+    //         </span>
+    //       }
 
-        </>
-      ),
-    },
+    //     </>
+    //   ),
+    // },
     {
       dataField: "CreateDate",
       text: "Create Date",

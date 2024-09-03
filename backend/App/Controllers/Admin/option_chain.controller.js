@@ -190,7 +190,11 @@ class OptionChain {
                     $match: {
                         symbol: symbol,
                         // segment: 'O',
-                        expiry: expiry
+                        expiry: expiry,
+                        $or: [
+                            { segment: 'O' },
+                            { segment: 'BO' }
+                        ]
                     }
                 }
             ]
@@ -200,7 +204,11 @@ class OptionChain {
                     $match: {
                         symbol: symbol,
                         // segment: 'O',
-                        expiry: expiry
+                        expiry: expiry,
+                        $or: [
+                            { segment: 'O' },
+                            { segment: 'BO' }
+                        ]
                     }
                 },
                 {
@@ -235,8 +243,9 @@ class OptionChain {
             ]
 
             const result = await Alice_token.aggregate(pipeline2);
+            // console.log("result ",result)
             const resultStrike = await Alice_token.aggregate(pipeline3);
-
+            console.log("resultStrike ",resultStrike)
             const final_data = [];
             var channelstr = ""
             if (result.length > 0) {
@@ -283,6 +292,7 @@ class OptionChain {
 
         } catch (error) {
             console.log("Error Get_Option_All_Round_Token", error);
+            return res.send({ status: false, data: [], channellist: "" , message: "An error occurred while processing data.", error: error.message })
         }
     }
 

@@ -58,7 +58,7 @@ cron.schedule('05 23 * * *', () => { DeleteTokenAliceToken() });
 // cron.schedule('55 23 * * *', () => { TruncateTable() });
 
 
-cron.schedule('15 23 * * *', () => { TokenSymbolUpdate() });
+cron.schedule('32 10 * * *', () => { TokenSymbolUpdate() });
 
 
 
@@ -1116,7 +1116,7 @@ const TokenSymbolUpdate = async () => {
 
 
             }
-
+            
             // const AliceToken = await Alice_token.find();
             // console.log("AliceToken.length ", AliceToken.length, " TIME ", new Date());
 

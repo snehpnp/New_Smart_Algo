@@ -111,7 +111,7 @@ export const admin_sidebar = [
     },
     {
         id: 6,
-        name: 'Option Chain',
+        name: 'Open position',
         Icon: 'Link2',
         Data: [
             {
