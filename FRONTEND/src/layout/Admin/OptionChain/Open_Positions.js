@@ -423,6 +423,7 @@ const TradeHistory = () => {
                             if (response.status) {
                                 setPanelKey(response.data)
                             }
+                            return
                             toast.success(response.msg);
                             setrefresh(!refresh)
                             setSelected1([])

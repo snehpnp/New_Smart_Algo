@@ -565,14 +565,39 @@ class OptionChain {
         try {
 
             const { data } = req.body;
+            let tokens = []
+           
+            if(data.length > 0){
+             tokens = data.map(tk => ({
+                token : tk.token,
+                exchange : tk.exchange,
+             }));
 
-            data.forEach(async (signal) => {
-
+            await data.forEach(async (signal) => {
                 const filter = { _id: signal._id };
                 const updateOperation = { $set: signal };
                 const result = await MainSignals_modal.updateOne(filter, updateOperation);
 
-            })
+             })
+            }
+            
+            if(tokens.length > 0){
+                
+                const bulkOps = tokens.map(val => ({
+                    updateOne: {
+                        filter: { _id: val.token },
+                        update: { $set: { exch: val.exchange } },  // _id is already in the filter, so no need to set it again
+                        upsert: true
+                    }
+                }));
+                
+                try {
+                    const result = await token_chain_collection.bulkWrite(bulkOps);
+                    console.log(result);  // This will show how many documents were matched, modified, upserted, etc.
+                } catch (error) {
+                    console.error("Error updating tokens:", error);
+                }
+            }
 
             return res.send({ status: true, msg: 'Update SuccessFully', data: [] });
 
