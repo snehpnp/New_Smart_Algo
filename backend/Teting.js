@@ -2355,7 +2355,6 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
   app.get('/socket-api', async (req, res) => {
-    const collection = "shakir2";
     dropAllCollections();
     return res.send("okkkk");
     return
