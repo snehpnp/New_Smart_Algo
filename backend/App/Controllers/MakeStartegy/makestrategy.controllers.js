@@ -653,8 +653,6 @@ class MakeStartegy {
                 }
               });
             });
-
-
             let collectionViewName = "usermakestrategies"
 
             if (arraySource.length > 0) {

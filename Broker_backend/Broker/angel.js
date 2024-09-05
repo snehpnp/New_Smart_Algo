@@ -307,8 +307,14 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                                     //     ExistUserPositionData.data.ExistExitSignal,
                                     //     ExistUserPositionData.data.segment
                                     //  )
-                                    await PositionAgainProcess(ExistUserPositionData.data.response, ExistUserPositionData.data.item,token, signal_req, strategy, type, input_symbol, send_rr, filePath, signals, ExistExitSignal, segment
-                                    )
+                                    
+                                    try {
+                                        await PositionAgainProcess(ExistUserPositionData.data.response, ExistUserPositionData.data.item,token, signal_req, strategy, type, input_symbol, send_rr, filePath, signals, ExistExitSignal, segment
+                                        )
+                                    } catch (error) {
+                                        console.log("PositionAgainProcess Angel",error)  
+                                         
+                                    }
                                 }
 
                                 fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION DATA API ERROR CATCH POSITION API - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {

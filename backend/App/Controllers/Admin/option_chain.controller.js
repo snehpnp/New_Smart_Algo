@@ -45,7 +45,7 @@ class OptionChain {
 
     // GET SYMBOLL EXPIRY
     async Get_Option_Symbol_Expiry(req, res) {
-
+      
         try {
             const symbol = req.body.symbol;
 
@@ -167,7 +167,7 @@ class OptionChain {
 
     // GET All ROUND TOKEN
     async Get_Option_All_Round_Token(req, res) {
-
+        console.log("get_symbol_price",req.body)
         try {
             const symbol = req.body.symbol;
             const expiry = req.body.expiry;
@@ -178,6 +178,8 @@ class OptionChain {
 
             const get_symbol_price = await Get_Option_Chain_modal.findOne({ symbol: symbol })
 
+            console.log("get_symbol_price",get_symbol_price)
+
             if (get_symbol_price != undefined) {
                 price = parseInt(get_symbol_price.price);
             }
@@ -187,8 +189,12 @@ class OptionChain {
                 {
                     $match: {
                         symbol: symbol,
-                        segment: 'O',
-                        expiry: expiry
+                        // segment: 'O',
+                        expiry: expiry,
+                        $or: [
+                            { segment: 'O' },
+                            { segment: 'BO' }
+                        ]
                     }
                 }
             ]
@@ -197,8 +203,12 @@ class OptionChain {
                 {
                     $match: {
                         symbol: symbol,
-                        segment: 'O',
-                        expiry: expiry
+                        // segment: 'O',
+                        expiry: expiry,
+                        $or: [
+                            { segment: 'O' },
+                            { segment: 'BO' }
+                        ]
                     }
                 },
                 {
@@ -233,8 +243,9 @@ class OptionChain {
             ]
 
             const result = await Alice_token.aggregate(pipeline2);
+            // console.log("result ",result)
             const resultStrike = await Alice_token.aggregate(pipeline3);
-
+            console.log("resultStrike ",resultStrike)
             const final_data = [];
             var channelstr = ""
             if (result.length > 0) {
@@ -281,6 +292,7 @@ class OptionChain {
 
         } catch (error) {
             console.log("Error Get_Option_All_Round_Token", error);
+            return res.send({ status: false, data: [], channellist: "" , message: "An error occurred while processing data.", error: error.message })
         }
     }
 
@@ -553,14 +565,39 @@ class OptionChain {
         try {
 
             const { data } = req.body;
+            let tokens = []
+           
+            if(data.length > 0){
+             tokens = data.map(tk => ({
+                token : tk.token,
+                exchange : tk.exchange,
+             }));
 
-            data.forEach(async (signal) => {
-
+            await data.forEach(async (signal) => {
                 const filter = { _id: signal._id };
                 const updateOperation = { $set: signal };
                 const result = await MainSignals_modal.updateOne(filter, updateOperation);
 
-            })
+             })
+            }
+            
+            if(tokens.length > 0){
+                
+                const bulkOps = tokens.map(val => ({
+                    updateOne: {
+                        filter: { _id: val.token },
+                        update: { $set: { exch: val.exchange } },  // _id is already in the filter, so no need to set it again
+                        upsert: true
+                    }
+                }));
+                
+                try {
+                    const result = await token_chain_collection.bulkWrite(bulkOps);
+                    console.log(result);  // This will show how many documents were matched, modified, upserted, etc.
+                } catch (error) {
+                    console.error("Error updating tokens:", error);
+                }
+            }
 
             return res.send({ status: true, msg: 'Update SuccessFully', data: [] });
 

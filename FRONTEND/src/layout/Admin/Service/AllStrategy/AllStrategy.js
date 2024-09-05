@@ -392,22 +392,22 @@ const ServicesList = () => {
                           </>
                         ),
                       },
-                      {
-                        dataField: 'users.TradingStatus',
-                        text: 'Go To Dashboard',
-                        formatter: (cell, row, rowIndex) =>
-                          <>
+                      // {
+                      //   dataField: 'users.TradingStatus',
+                      //   text: 'Go To Dashboard',
+                      //   formatter: (cell, row, rowIndex) =>
+                      //     <>
 
 
-                            <button
-                              className={`btn  ${row.users.AppLoginStatus == '1' || row.users.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
+                      //       <button
+                      //         className={`btn  ${row.users.AppLoginStatus == '1' || row.users.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
 
-                              onClick={() => goToDashboard(row)}
-                              disabled={row.users.AppLoginStatus === '0' && row.users.WebLoginStatus === '0'}
+                      //         onClick={() => goToDashboard(row)}
+                      //         disabled={row.users.AppLoginStatus === '0' && row.users.WebLoginStatus === '0'}
 
-                            > click</button>
-                          </>
-                      },
+                      //       > click</button>
+                      //     </>
+                      // },
                     ]}
                     tableData={getServicesName && getServicesName.data}
                   />

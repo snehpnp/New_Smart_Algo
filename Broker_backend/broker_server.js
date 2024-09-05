@@ -1,7 +1,7 @@
 
 "use strict";
 require('dotenv').config();
-require('../BACKEND/App/Connection/mongo_connection')
+const {connectToMongoDB} = require('../BACKEND/App/Connection/mongo_connection')
 const express = require("express");
 const app = express();
 const path = require('path');
@@ -313,7 +313,7 @@ app.post('/broker-signals', async (req, res) => {
         }
       });
 
-
+    console.log("signals - ",signals)
 
       const epochTimestamp = signals.DTime;
 
@@ -451,13 +451,23 @@ app.post('/broker-signals', async (req, res) => {
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
             findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
 
-          } else if (segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
+          } 
+          else if (segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
             instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "NFO";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
             findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType, strike: strike }
 
-          } else if (segment == 'MO' || segment == 'mo') {
+          } 
+          else if (segment == 'BO' || segment == 'bo' || segment == 'BFO' || segment == 'bfo') {
+            instrument_query = { symbol: input_symbol, segment: "BO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
+            EXCHANGE = "BFO";
+            trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType, strike: strike }
+
+          } 
+          
+          else if (segment == 'MO' || segment == 'mo') {
             instrument_query = { symbol: input_symbol, segment: "MO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "MCX";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
@@ -482,7 +492,8 @@ app.post('/broker-signals', async (req, res) => {
 
             token = await Alice_token.find(instrument_query).maxTimeMS(20000).exec();
           }
-
+           
+          console.log("token ",token)
           var instrument_token = 0
           if (token.length == 0) {
             instrument_token = 0
@@ -490,7 +501,7 @@ app.post('/broker-signals', async (req, res) => {
             instrument_token = token[0].instrument_token
           }
 
-
+   
           const token_chain1 = db1.collection('token_chain');
           const stock_live_price1 = db1.collection('stock_live_price');
 
@@ -1574,7 +1585,7 @@ app.post('/broker-signals', async (req, res) => {
 
 // Server start
 app.listen(process.env.PORT, () => {
-
+  connectToMongoDB();
   // ConnectSocket()
   console.log(`Broker Server is running on http://0.0.0.0:${process.env.PORT}`)
 

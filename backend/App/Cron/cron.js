@@ -1,8 +1,7 @@
 var cron = require('node-cron');
 const axios = require('axios');
 const fs = require('fs');
-
-
+const path = require('path');
 var Promise = require('polyfill-promise');
 var Sheets = require('google-sheets-api').Sheets;
 const Papa = require('papaparse')
@@ -39,7 +38,7 @@ cron.schedule('10 5 * * *', () => { deleteDashboard() });
 
 cron.schedule('15 5 * * *', () => { DashboardView(); createView(); });
 
-cron.schedule('5 2 * * *', () => { LogoutAllUsers() });
+cron.schedule('5 4 * * *', () => { LogoutAllUsers() });
 
 cron.schedule('5 5 * * *', () => { LogoutAllUsers() });
 
@@ -47,18 +46,21 @@ cron.schedule('10 1 * * *', () => { numberOfTrade_count_trade(); });
 
 cron.schedule('*/30 * * * *', () => { GetStrickPriceFromSheet(); });
 
-cron.schedule('5 23 * * *', () => { twodaysclient(); });
+// cron.schedule('50 23 * * *', () => { twodaysclient(); });
 
 cron.schedule('30 6 * * *', () => { TruncateTableTokenChain(); });
 
-cron.schedule('*/5 * * * *', async () => { await TruncateTableTokenChainAdd_fiveMinute() });
+cron.schedule('*/10 * * * *', async () => { await TruncateTableTokenChainAdd_fiveMinute() });
 
 
-// cron.schedule('10 23 * * *', () => {  DeleteTokenAliceToken() });
+
+cron.schedule('05 23 * * *', () => {  DeleteTokenAliceToken() });
+
+cron.schedule('10 7 * * *', () => {  DeleteTokenAliceToken() });
 // cron.schedule('55 23 * * *', () => { TruncateTable() });
 
 
-cron.schedule('21 15 * * *', () => { TokenSymbolUpdate() });
+cron.schedule('50 15 * * *', () => { TokenSymbolUpdate() });
 
 
 
@@ -68,7 +70,10 @@ const MainSignalsRemainToken = async () => {
     const pipeline = [
         {
             $match: {
-                segment: "O",
+                $or: [
+                    { segment: 'O' },
+                    { segment: 'BO' }
+                ],
                 $expr: {
                     $gt: ["$entry_qty", "$exit_qty"]
                 }
@@ -118,7 +123,21 @@ const MainSignalsRemainToken = async () => {
                                                 then: 'CDS',
 
                                                 // all not exist condition 
-                                                else: "NFO"
+                                                else: {
+                                                    $cond: {
+                                                        if: {
+                                                            $or: [
+                                                                { $eq: ['$segment', 'BF'] },
+                                                                { $eq: ['$segment', 'BO'] }
+                                                            ]
+                                                        },
+                                                        then: 'BFO',
+        
+                                                        // all not exist condition 
+                                                        else: "NFO"
+        
+                                                    }
+                                                }
 
                                             }
 
@@ -164,7 +183,7 @@ const MainSignalsRemainToken = async () => {
 
 
     const result = await MainSignals_modal.aggregate(pipeline)
-
+    if(result.length > 0){
     result.forEach(async (element) => {
         const filter = { _id: element.token };
         const update = {
@@ -173,8 +192,9 @@ const MainSignalsRemainToken = async () => {
         const update_token = await token_chain.updateOne(filter, update, { upsert: true });
 
     });
+  }
 
-
+return
 
 
 
@@ -183,61 +203,64 @@ const MainSignalsRemainToken = async () => {
 }
 
 const TruncateTableTokenChainAdd_fiveMinute = async () => {
+    const currentHour = new Date().getHours();
+    if (currentHour >= 8 && currentHour < 20) {
+        const AliceToken = await Alice_token.find();
+        if (AliceToken.length > 60000) {
 
-    const AliceToken = await Alice_token.find();
-    if(AliceToken.length > 50000){
-       
-        const drop = await token_chain.deleteMany({});
+            const drop = await token_chain.deleteMany({});
 
-        await Get_Option_All_Token_Chain()
-    
-        await Get_Option_All_Token_Chain_stock()
-    
-        await MainSignalsRemainToken()
-    
-        await Alice_Socket();
+            await Get_Option_All_Token_Chain()
 
-        return;
+            await Get_Option_All_Token_Chain_stock()
+
+            await MainSignalsRemainToken()
+
+            await Alice_Socket();
+
+            return;
+        }
     }
-    return;  
+
+
+    return;
 
 }
 
 const TruncateTableTokenChainAdd = async () => {
     const AliceToken = await Alice_token.find();
-    if(AliceToken.length > 50000){
-    const drop = await token_chain.deleteMany({});
+    if (AliceToken.length > 60000) {
+        const drop = await token_chain.deleteMany({});
 
-    await Get_Option_All_Token_Chain()
+        await Get_Option_All_Token_Chain()
 
-    await Get_Option_All_Token_Chain_stock()
+        await Get_Option_All_Token_Chain_stock()
 
-    await Alice_Socket();
+        await Alice_Socket();
 
+        return;
+    }
     return;
-}
-return;  
 
 
 }
 
 const TruncateTableTokenChain = async () => {
 
-    
-    const AliceToken = await Alice_token.find();
-    if(AliceToken.length > 50000){
-
     const drop = await token_chain.deleteMany({});
 
     const drop1 = await stock_live_price.deleteMany({});
 
-    await Get_Option_All_Token_Chain()
+    const AliceToken = await Alice_token.find();
+    if (AliceToken.length > 60000) {
 
-    await Get_Option_All_Token_Chain_stock()
+        await Get_Option_All_Token_Chain()
 
+        await Get_Option_All_Token_Chain_stock()
+
+        return;
+    }
     return;
-}
-return; 
 
 
 }
@@ -245,7 +268,7 @@ return;
 const Get_Option_All_Token_Chain = async () => {
 
     try {
-        const symbols = ["NIFTY", "BANKNIFTY", "FINNIFTY"];
+        const symbols = ["NIFTY", "BANKNIFTY", "FINNIFTY","SENSEX","BANKEX","MIDCPNIFTY"];
 
         const expiry = "30112023";
         let limit_set = 20
@@ -398,7 +421,7 @@ const Get_Option_All_Token_Chain = async () => {
                             }
 
 
-                      
+
                             const filter = { _id: element1.instrument_token };
                             const update = {
                                 $set: { _id: element1.instrument_token, exch: element1.exch_seg },
@@ -440,6 +463,7 @@ const Get_Option_All_Token_Chain = async () => {
     } catch (error) {
         console.log("Error Get_Option_All_Token_Chain", error);
     }
+    return
 }
 
 const Get_Option_All_Token_Chain_stock = async () => {
@@ -650,6 +674,7 @@ const Get_Option_All_Token_Chain_stock = async () => {
     } catch (error) {
         console.log("Error Get_Option_All_Token_Chain", error);
     }
+    return
 }
 
 // =========================================================================================================================
@@ -800,10 +825,12 @@ const DeleteTokenAliceToken = async () => {
 
     ];
     const result = await Alice_token.aggregate(pipeline)
+    console.log("result", result.length)
     if (result.length > 0) {
         const idsToDelete = result.map(item => item._id);
         await Alice_token.deleteMany({ _id: { $in: result[0].idsToDelete } });
         console.log(`${result.length} expired tokens deleted.`);
+        return
     } else {
         console.log('No expired tokens found.');
     }
@@ -812,937 +839,342 @@ const DeleteTokenAliceToken = async () => {
 }
 
 // TOKEN SYMBOL CREATE
-const TokenSymbolUpdate1 = async () => {
 
-  
-    try {
-          console.log("TokenSymbolUpdate Start ", " TIME ",new Date())
-
-           
-            var d = new Date();
-            dformat = [d.getFullYear(),
-            d.getMonth() + 1,
-            d.getDate(),
-            ].join('/') + ' ' + [d.getHours(),
-            d.getMinutes(),
-            d.getSeconds()
-            ].join(':');
-            var axios = require('axios');
-            var config = {
-                method: 'get',
-                url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
-            };
-
-            axios(config)
-                .then(async function(response) {
-                 
-                  if(response.data.length > 0){
-                    let count = 0
-                    await response.data.forEach(async (element) => {
-                     
-                        var option_type = element.symbol.slice(-2);
-                        var expiry_s = element.expiry
-                        var expiry_s = dateTime.create(expiry_s);
-                        var expiry = expiry_s.format('dmY');
-                        var strike_s = parseInt(element.strike);
-                        var strike = parseInt(strike_s.toString().slice(0, -2));
-                        var day_month = element.expiry.slice(0, -4);
-                        var year_end = element.expiry.slice(-2);
-                        var day_start = element.expiry.slice(0, 2);
-                        var moth_str = element.expiry.slice(2, 5);
-                        const Dat = new Date(element.expiry);
-                        var moth_count = Dat.getMonth() + 1
-                        var lastWednesd = moment().endOf('month').day('wednesday')
-                        var dt = dateTime.create(lastWednesd);
-                        var lastWednesday_date = dt.format('dmY');
-                        var expiry_month_year = expiry.slice(2);
-                        var expiry_date = expiry.slice(0, -6);
-                        var tradesymbol_m_w;
-
-                        // console.log("element.instrumenttype",element.instrumenttype)
-                        if (element.instrumenttype == 'FUTSTK' && element.exch_seg == "NFO") {
-
-
-                            const filter_service = { name: element.name };
-                            const updateOperation_service = { $set: { lotsize: element.lotsize } };
-                            try {
-                                const Update_service = await services.updateMany(filter_service, updateOperation_service);
-                            } catch (error) {
-                                console.log("Error updating documents:", error);
-                            }
-
-
-
-                            const filter_alice = { symbol: element.name };
-                            const updateOperation_alice = { $set: { lotsize: element.lotsize } };
-                            try {
-                                const Update_alice = await Alice_token.updateMany(filter_alice, updateOperation_alice);
-                            } catch (error) {
-                                console.log("Error updating documents:", error);
-                            }
-
-
-
-
-
-
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "F",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-
-                        } else if (element.instrumenttype == 'FUTIDX' && element.exch_seg == "NFO") {
-
-
-                            const filter_service = { name: element.name };
-                            const updateOperation_service = { $set: { lotsize: element.lotsize } };
-                            try {
-                                const Update_service = await services.updateMany(filter_service, updateOperation_service);
-                            } catch (error) {
-                                console.log("Error updating documents:", error);
-                            }
-
-
-
-                            const filter_alice = { symbol: element.name };
-                            const updateOperation_alice = { $set: { lotsize: element.lotsize } };
-                            try {
-                                const Update_alice = await Alice_token.updateMany(filter_alice, updateOperation_alice);
-                            } catch (error) {
-                                console.log("Error updating documents:", error);
-                            }
-
-
-
-
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "F",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-
-
-                        } else if (element.instrumenttype == 'FUTCOM') {
-
-
-
-                            const filter_service = { name: element.name };
-                            const updateOperation_service = { $set: { lotsize: element.lotsize } };
-                            try {
-                                const Update_service = await services.updateMany(filter_service, updateOperation_service);
-                            } catch (error) {
-                                console.log("Error updating documents:", error);
-                            }
-
-
-
-                            const filter_alice = { symbol: element.name };
-                            const updateOperation_alice = { $set: { lotsize: element.lotsize } };
-                            try {
-                                const Update_alice = await Alice_token.updateMany(filter_alice, updateOperation_alice);
-                            } catch (error) {
-                                console.log("Error updating documents:", error);
-                            }
-
-
-
-
-
-
-
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "MF",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-                        } else if (element.instrumenttype == 'OPTIDX' && element.exch_seg == "NFO") {
-
-
-
-
-
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-                                var moth_str_single = moth_str.slice(0, 1);
-                                var tradesymbol_zerodha;
-                                tradesymbol_zerodha = element.name + year_end + moth_str_single + day_start + strike + option_type;
-
-
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "O",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-                        } else if (element.instrumenttype == 'OPTSTK' && element.exch_seg == "NFO") {
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-
-                                var moth_str_single = moth_str.slice(0, 1);
-                                var tradesymbol_zerodha;
-                                tradesymbol_zerodha = element.name + year_end + moth_str_single + day_start + strike + option_type;
-
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "O",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-                        } else if (element.instrumenttype == 'OPTFUT') {
-
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-
-                                var moth_str_single = moth_str.slice(0, 1);
-                                var tradesymbol_zerodha;
-                                tradesymbol_zerodha = element.name + year_end + moth_str_single + day_start + strike + option_type;
-
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "MO",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-                                // const Alice_tokens = new Alice_token(user_data)
-                                // // const userinfo = Alice_tokens.save()
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-                        } else if (element.instrumenttype == 'OPTCOM') {
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-
-                                var moth_str_single = moth_str.slice(0, 1);
-                                var tradesymbol_zerodha;
-                                tradesymbol_zerodha = element.name + year_end + moth_str_single + day_start + strike + option_type;
-
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "MO",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-
-                                };
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-                        } else if (element.instrumenttype == 'OPTCUR') {
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-                                var moth_str_single = moth_str.slice(0, 1);
-                                var tradesymbol_zerodha;
-                                tradesymbol_zerodha = element.name + year_end + moth_str_single + day_start + strike + option_type;
-
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "CO",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-                        } else if (element.instrumenttype == 'FUTCUR') {
-
-                            const filter_service = { name: element.name };
-                            const updateOperation_service = { $set: { lotsize: element.lotsize } };
-                            try {
-                                const Update_service = await services.updateMany(filter_service, updateOperation_service);
-                            } catch (error) {
-                                console.log("Error updating documents:", error);
-                            }
-
-
-
-                            const filter_alice = { symbol: element.name };
-                            const updateOperation_alice = { $set: { lotsize: element.lotsize } };
-                            try {
-                                const Update_alice = await Alice_token.updateMany(filter_alice, updateOperation_alice);
-                            } catch (error) {
-                                console.log("Error updating documents:", error);
-                            }
-
-
-
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "CF",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-                        }
-
-                        // ONLY CASH STOCK
-                        else if (element.symbol.slice(-3) == '-EQ') {
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "C",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-
-                                };
-
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-                        }
-
-
-
-                    });
-
-                    const AliceToken = await Alice_token.find();
-                    console.log("AliceToken.length " ,AliceToken.length , " TIME ",new Date());
-                    if(AliceToken.length < 50000){
-                      await TokenSymbolUpdate();
-                      return;
-                    }
-                    return;
-                    }
-
-
-
-                }).catch(async(error) => {
-                    console.log("APi Error Token Symbol Cron", " TIME ",new Date() , error);
-                    const AliceToken = await Alice_token.find();
-                     if(AliceToken.length < 50000){
-                     setTimeout(TokenSymbolUpdate, 1800000); // 30 minute
-                     }
-                     return;
-                });
-
-        
-
-
-
-    } catch (error) {
-        console.log("Error TokenSymbolUpdate Try Catch" , " TIME ",new Date())
-        setTimeout(TokenSymbolUpdate, 1800000); // 30 minute
-        return;
-    }
-
-
-}
-
-const TokenSymbolUpdate2 = async () => {
-    console.log("TokenSymbolUpdate")
-
-    try {
-        console.log("TokenSymbolUpdate Start ", " TIME ", new Date())
-
-        var d = new Date();
-        dformat = [d.getFullYear(),
-        d.getMonth() + 1,
-        d.getDate(),
-        ].join('/') + ' ' + [d.getHours(),
-        d.getMinutes(),
-        d.getSeconds()
-        ].join(':');
-        var axios = require('axios');
-        var config = {
-            method: 'get',
-            url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
-        };
-
-        axios(config)
-            .then(async function (response) {
-                if (response.data.length > 0) {
-                    let count = 0;
-
-                    for (const element of response.data) {
-                    //    await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-
-                        var option_type = element.symbol.slice(-2);
-                        var expiry_s = element.expiry;
-                        var expiry_s = dateTime.create(expiry_s);
-                        var expiry = expiry_s.format('dmY');
-                        var strike_s = parseInt(element.strike);
-                        var strike = parseInt(strike_s.toString().slice(0, -2));
-                        var day_month = element.expiry.slice(0, -4);
-                        var year_end = element.expiry.slice(-2);
-                        var day_start = element.expiry.slice(0, 2);
-                        var moth_str = element.expiry.slice(2, 5);
-                        const Dat = new Date(element.expiry);
-                        var moth_count = Dat.getMonth() + 1;
-                        var lastWednesd = moment().endOf('month').day('wednesday');
-                        var dt = dateTime.create(lastWednesd);
-                        var lastWednesday_date = dt.format('dmY');
-                        var expiry_month_year = expiry.slice(2);
-                        var expiry_date = expiry.slice(0, -6);
-                        var tradesymbol_m_w;
-
-                        if (element.instrumenttype == 'FUTSTK' && element.exch_seg == "NFO") {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-                            // const filter_service = { name: element.name };
-                            // const updateOperation_service = { $set: { lotsize: element.lotsize } };
-                            // try {
-                            //     const Update_service = await services.updateMany(filter_service, updateOperation_service);
-                            // } catch (error) {
-                            //     console.log("Error updating documents:", error);
-                            // }
-
-                            
-
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
-                            if (exist_token == null) {
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "F",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-                        } 
+// const TokenSymbolUpdate = async () => {
+//     console.log("TokenSymbolUpdate");
+
+//     try {
+//         var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
+//         console.log("filePath", filePath)
+//         fs.appendFile(filePath, "-----TokenSymbolUpdate  - " + new Date() + "----- ***\\n\n", function (err) {
+//             if (err) {
+//                 console.log("err filePath", err);
+//             }
+//             console.log("The file was saved filePath!");
+//         });
+//     } catch (error) {
+//         console.log("err filePath Try catch", error);
+//     }
+
+
+//     try {
+//         console.log("TokenSymbolUpdate Start", " TIME ", new Date());
+
+//         const config = {
+//             method: 'get',
+//             url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
+//         };
+
+//         const response = await axios(config);
+//         if (response.data.length > 0) {
+//             let count = 0
+//             for (const element of response.data) {
+//                 try {
+//                     // await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+//                     const option_type = element.symbol.slice(-2);
+//                     const expiry_s = dateTime.create(element.expiry);
+//                     const expiry = expiry_s.format('dmY');
+//                     const strike_s = parseInt(element.strike);
+//                     const strike = parseInt(strike_s.toString().slice(0, -2));
+//                     const day_start = element.expiry.slice(0, 2);
+//                     const moth_str = element.expiry.slice(2, 5);
+//                     const year_end = element.expiry.slice(-2);
+//                     const Dat = new Date(element.expiry);
+//                     const moth_count = Dat.getMonth() + 1;
+
+//                     let tradesymbol_m_w;
+
+//                     // Check existing token
+//                     if (element.token != undefined) {
+//                         count++
+                       
+//                         if ((element.instrumenttype == 'FUTSTK' || element.instrumenttype == 'FUTIDX') && element.exch_seg == "NFO") {
+//                             const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
+//                             if (exist_token == null) {
+//                                 tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
+//                                 const user_data = {
+//                                     symbol: element.name,
+//                                     expiry: expiry,
+//                                     expiry_month_year: expiry.slice(2),
+//                                     expiry_date: expiry.slice(0, -6),
+//                                     expiry_str: element.expiry,
+//                                     strike: strike,
+//                                     option_type: option_type,
+//                                     segment: "F",
+//                                     instrument_token: element.token,
+//                                     lotsize: element.lotsize,
+//                                     tradesymbol: element.symbol,
+//                                     tradesymbol_m_w: tradesymbol_m_w,
+//                                     exch_seg: element.exch_seg
+//                                 };
+//                                 const filter = { instrument_token: element.token };
+//                                 await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
+//                             }
+                          
+//                         }
+//                         else if (element.instrumenttype == 'FUTCOM') {
+//                             const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
+//                             if (exist_token == null) {
+//                                 tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
+//                                 const user_data = {
+//                                     symbol: element.name,
+//                                     expiry: expiry,
+//                                     expiry_month_year: expiry.slice(2),
+//                                     expiry_date: expiry.slice(0, -6),
+//                                     expiry_str: element.expiry,
+//                                     strike: strike,
+//                                     option_type: option_type,
+//                                     segment: "MF",
+//                                     instrument_token: element.token,
+//                                     lotsize: element.lotsize,
+//                                     tradesymbol: element.symbol,
+//                                     tradesymbol_m_w: tradesymbol_m_w,
+//                                     exch_seg: element.exch_seg
+//                                 };
+//                                 const filter = { instrument_token: element.token };
+//                                 await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
+//                             }
+//                         }
                         
-                        else if (element.instrumenttype == 'FUTIDX' && element.exch_seg == "NFO") {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-                            // const filter_service = { name: element.name };
-                            // const updateOperation_service = { $set: { lotsize: element.lotsize } };
-                            // try {
-                            //     const Update_service = await services.updateMany(filter_service, updateOperation_service);
-                            // } catch (error) {
-                            //     console.log("Error updating documents:", error);
-                            // }
+//                         else if ((element.instrumenttype == 'OPTIDX' || element.instrumenttype == 'OPTSTK') && element.exch_seg == "NFO") {
+//                             const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
+//                             if (exist_token == null) {
+//                                 tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
+//                                 const user_data = {
+//                                     symbol: element.name,
+//                                     expiry: expiry,
+//                                     expiry_month_year: expiry.slice(2),
+//                                     expiry_date: expiry.slice(0, -6),
+//                                     expiry_str: element.expiry,
+//                                     strike: strike,
+//                                     option_type: option_type,
+//                                     segment: "O",
+//                                     instrument_token: element.token,
+//                                     lotsize: element.lotsize,
+//                                     tradesymbol: element.symbol,
+//                                     tradesymbol_m_w: tradesymbol_m_w,
+//                                     exch_seg: element.exch_seg
+//                                 };
+//                                 const filter = { instrument_token: element.token };
+//                                 await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
+//                             }
+//                         }
+//                         else if (element.instrumenttype == 'OPTFUT' || element.instrumenttype == 'OPTCOM') {
+//                             const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
+//                             if (exist_token == null) {
+//                                 tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
+//                                 const user_data = {
+//                                     symbol: element.name,
+//                                     expiry: expiry,
+//                                     expiry_month_year: expiry.slice(2),
+//                                     expiry_date: expiry.slice(0, -6),
+//                                     expiry_str: element.expiry,
+//                                     strike: strike,
+//                                     option_type: option_type,
+//                                     segment: "MO",
+//                                     instrument_token: element.token,
+//                                     lotsize: element.lotsize,
+//                                     tradesymbol: element.symbol,
+//                                     tradesymbol_m_w: tradesymbol_m_w,
+//                                     exch_seg: element.exch_seg
+//                                 };
+//                                 const filter = { instrument_token: element.token };
+//                                 await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
+//                             }
+//                         }
+//                         else if (element.instrumenttype == 'OPTCUR') {
+//                             const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
+//                             if (exist_token == null) {
+//                                 tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
+//                                 const user_data = {
+//                                     symbol: element.name,
+//                                     expiry: expiry,
+//                                     expiry_month_year: expiry.slice(2),
+//                                     expiry_date: expiry.slice(0, -6),
+//                                     expiry_str: element.expiry,
+//                                     strike: strike,
+//                                     option_type: option_type,
+//                                     segment: "CO",
+//                                     instrument_token: element.token,
+//                                     lotsize: element.lotsize,
+//                                     tradesymbol: element.symbol,
+//                                     tradesymbol_m_w: tradesymbol_m_w,
+//                                     exch_seg: element.exch_seg
+//                                 };
+//                                 const filter = { instrument_token: element.token };
+//                                 await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
+//                             }
+//                         }
+//                         else if (element.instrumenttype == 'FUTCUR') {
+//                             const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
+//                             if (exist_token == null) {
+//                                 tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
+//                                 const user_data = {
+//                                     symbol: element.name,
+//                                     expiry: expiry,
+//                                     expiry_month_year: expiry.slice(2),
+//                                     expiry_date: expiry.slice(0, -6),
+//                                     expiry_str: element.expiry,
+//                                     strike: strike,
+//                                     option_type: option_type,
+//                                     segment: "CF",
+//                                     instrument_token: element.token,
+//                                     lotsize: element.lotsize,
+//                                     tradesymbol: element.symbol,
+//                                     tradesymbol_m_w: tradesymbol_m_w,
+//                                     exch_seg: element.exch_seg
+//                                 };
+//                                 const filter = { instrument_token: element.token };
+//                                 await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
+//                             }
+//                         }
+//                         else if (element.symbol.slice(-3) == '-EQ') {
+//                             const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
+//                             if (exist_token == null) {
+//                                 tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
+//                                 const user_data = {
+//                                     symbol: element.name,
+//                                     expiry: expiry,
+//                                     expiry_month_year: expiry.slice(2),
+//                                     expiry_date: expiry.slice(0, -6),
+//                                     expiry_str: element.expiry,
+//                                     strike: strike,
+//                                     option_type: option_type,
+//                                     segment: "C",
+//                                     instrument_token: element.token,
+//                                     lotsize: element.lotsize,
+//                                     tradesymbol: element.symbol,
+//                                     tradesymbol_m_w: tradesymbol_m_w,
+//                                     exch_seg: element.exch_seg
+//                                 };
+//                                 const filter = { instrument_token: element.token };
+//                                 await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
+//                             }
+//                         }
+//                         else if ((element.instrumenttype == 'OPTIDX' || element.instrumenttype == 'OPTSTK') && element.exch_seg == "BFO") {
+//                             const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
+//                             if (exist_token == null) {
+//                                 tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
+//                                 const user_data = {
+//                                     symbol: element.name,
+//                                     expiry: expiry,
+//                                     expiry_month_year: expiry.slice(2),
+//                                     expiry_date: expiry.slice(0, -6),
+//                                     expiry_str: element.expiry,
+//                                     strike: strike,
+//                                     option_type: option_type,
+//                                     segment: "BO",
+//                                     instrument_token: element.token,
+//                                     lotsize: element.lotsize,
+//                                     tradesymbol: element.symbol,
+//                                     tradesymbol_m_w: tradesymbol_m_w,
+//                                     exch_seg: element.exch_seg
+//                                 };
+//                                 const filter = { instrument_token: element.token };
+//                                 await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
+//                             }
+//                         }
+//                         else if ((element.instrumenttype == 'FUTSTK' || element.instrumenttype == 'FUTIDX') && element.exch_seg == "BFO") {
+//                             const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
+//                             if (exist_token == null) {
+//                                 tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
+//                                 const user_data = {
+//                                     symbol: element.name,
+//                                     expiry: expiry,
+//                                     expiry_month_year: expiry.slice(2),
+//                                     expiry_date: expiry.slice(0, -6),
+//                                     expiry_str: element.expiry,
+//                                     strike: strike,
+//                                     option_type: option_type,
+//                                     segment: "BF",
+//                                     instrument_token: element.token,
+//                                     lotsize: element.lotsize,
+//                                     tradesymbol: element.symbol,
+//                                     tradesymbol_m_w: tradesymbol_m_w,
+//                                     exch_seg: element.exch_seg
+//                                 };
+//                                 const filter = { instrument_token: element.token };
+//                                 await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
+//                             }
+//                         }
+//                         else if (element.instrumenttype == '' && element.exch_seg == "BSE") {
+//                             console.log("element.token", element.token, "count", count);
+//                             const exist_token = await Alice_token.findOne({ instrument_token: element.token }, {
+//                                 instrument_token:
+//                                     1
+//                             });
+//                             if (exist_token == null) {
+//                                 tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
+
+//                                 const user_data = {
+//                                     symbol: element.name,
+//                                     expiry: expiry,
+//                                     expiry_month_year: expiry.slice(2),
+//                                     expiry_date: expiry.slice(0, -6),
+//                                     expiry_str: element.expiry,
+//                                     strike: strike,
+//                                     option_type: option_type,
+//                                     segment: "BC",
+//                                     instrument_token: element.token,
+//                                     lotsize: element.lotsize,
+//                                     tradesymbol: element.symbol,
+//                                     tradesymbol_m_w: tradesymbol_m_w,
+//                                     exch_seg: element.exch_seg
+//                                 };
+//                                 const filter = { instrument_token: element.token };
+//                                 await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
+//                             }
+
+//                         }
+                        
+//                     }
+
+//                 } catch (dbError) {
+//                     console.log("Database Error during TokenSymbolUpdate loop:", dbError, " TIME ", new Date(), dbError);
+//                     break; // Break the loop if a database error occurs
+//                     return
+//                 }
 
 
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
-                            if (exist_token == null) {
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "F",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
+//             }
+            
+//             // const AliceToken = await Alice_token.find();
+//             // console.log("AliceToken.length ", AliceToken.length, " TIME ", new Date());
 
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-                        }
-
-                        else if (element.instrumenttype == 'FUTCOM') {
-
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-
-                            // const filter_service = { name: element.name };
-                            // const updateOperation_service = { $set: { lotsize: element.lotsize } };
-                            // try {
-                            //     const Update_service = await services.updateMany(filter_service, updateOperation_service);
-                            // } catch (error) {
-                            //     console.log("Error updating documents:", error);
-                            // }
-
-
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "MF",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-                        }
-                        else if (element.instrumenttype == 'OPTIDX' && element.exch_seg == "NFO") {
-                         
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-                                var moth_str_single = moth_str.slice(0, 1);
-                                var tradesymbol_zerodha;
-                                tradesymbol_zerodha = element.name + year_end + moth_str_single + day_start + strike + option_type;
-
-
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "O",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-                        } 
-                        else if (element.instrumenttype == 'OPTSTK' && element.exch_seg == "NFO") {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-
-                                var moth_str_single = moth_str.slice(0, 1);
-                                var tradesymbol_zerodha;
-                                tradesymbol_zerodha = element.name + year_end + moth_str_single + day_start + strike + option_type;
-
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "O",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-                        }
-                        else if (element.instrumenttype == 'OPTFUT') {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-
-                                var moth_str_single = moth_str.slice(0, 1);
-                                var tradesymbol_zerodha;
-                                tradesymbol_zerodha = element.name + year_end + moth_str_single + day_start + strike + option_type;
-
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "MO",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-                                // const Alice_tokens = new Alice_token(user_data)
-                                // // const userinfo = Alice_tokens.save()
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-                        } 
-                        else if (element.instrumenttype == 'OPTCOM') {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-
-                                var moth_str_single = moth_str.slice(0, 1);
-                                var tradesymbol_zerodha;
-                                tradesymbol_zerodha = element.name + year_end + moth_str_single + day_start + strike + option_type;
-
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "MO",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-
-                                };
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-                        } 
-                        else if (element.instrumenttype == 'OPTCUR') {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-                                var moth_str_single = moth_str.slice(0, 1);
-                                var tradesymbol_zerodha;
-                                tradesymbol_zerodha = element.name + year_end + moth_str_single + day_start + strike + option_type;
-
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "CO",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-                        } 
-                        else if (element.instrumenttype == 'FUTCUR') {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-                            // const filter_service = { name: element.name };
-                            // const updateOperation_service = { $set: { lotsize: element.lotsize } };
-                            // try {
-                            //     const Update_service = await services.updateMany(filter_service, updateOperation_service);
-                            // } catch (error) {
-                            //     console.log("Error updating documents:", error);
-                            // }
-
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "CF",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-                                };
-
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-
-                        }
-
-                        // ONLY CASH STOCK
-                        else if (element.symbol.slice(-3) == '-EQ') {
-                            await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-                            let exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 })
-                            if (exist_token == null) {
-                                tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
-
-                                var user_data = {
-                                    symbol: element.name,
-                                    expiry: expiry,
-                                    expiry_month_year: expiry_month_year,
-                                    expiry_date: expiry_date,
-                                    expiry_str: element.expiry,
-                                    strike: strike,
-                                    option_type: option_type,
-                                    segment: "C",
-                                    instrument_token: element.token,
-                                    lotsize: element.lotsize,
-                                    tradesymbol: element.symbol,
-                                    tradesymbol_m_w: tradesymbol_m_w,
-                                    exch_seg: element.exch_seg
-
-                                };
-
-
-
-                                const filter = { instrument_token: element.token };
-                                var updateOperation = { $set: user_data };
-                                var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
-                            }
-                        }
-
-                        // Continue similar blocks for other conditions...
-
-                    }
-
-                    const AliceToken = await Alice_token.find();
-                    console.log("AliceToken.length ", AliceToken.length, " TIME ", new Date());
-                    if (AliceToken.length < 50000) {
-                        await TokenSymbolUpdate();
-                        return;
-                    }
-                    return;
-                }
-            }).catch(async (error) => {
-                console.log("APi Error Token Symbol Cron", " TIME ", new Date(), error);
-                const AliceToken = await Alice_token.find();
-                if (AliceToken.length < 50000) {
-                    setTimeout(TokenSymbolUpdate, 1800000); // 30 minute
-                }
-                return;
-            });
-    } catch (error) {
-        console.log("Error TokenSymbolUpdate Try Catch", " TIME ", new Date());
-        setTimeout(TokenSymbolUpdate, 1800000); // 30 minute
-        return;
-    }
-}
+//             // if (AliceToken.length < 50000) {
+//             //     await TokenSymbolUpdate();
+//             // }
+//             console.log("TokenSymbolUpdate End:", " TIME ", new Date());
+//             return
+//         } else {
+//             return
+//         }
+//     } catch (error) {
+//         console.log("Error TokenSymbolUpdate Try catch", " TIME ", new Date(), error);
+//         return
+//         // const AliceToken = await Alice_token.find();
+//         // if (AliceToken.length < 50000) {
+//         //     setTimeout(TokenSymbolUpdate, 1800000); // Retry after 30 minutes
+//         // }
+//     }
+// }
 
 const TokenSymbolUpdate = async () => {
     console.log("TokenSymbolUpdate");
+    
+    try {
+        var filePath = path.join(__dirname+'/checkTest.txt'); // Adjust the file path as needed
+        console.log("filePath",filePath)
+        fs.appendFile(filePath, "-----TokenSymbolUpdate  - " + new Date() + "----- ***\\n\n", function (err) {
+            if (err) {
+                console.log("err filePath" ,err);
+            }
+            console.log("The file was saved filePath!");
+        });
+    } catch (error) {
+        console.log("err filePath Try catch" ,error);
+    }
+
 
     try {
         console.log("TokenSymbolUpdate Start", " TIME ", new Date());
@@ -1755,79 +1187,117 @@ const TokenSymbolUpdate = async () => {
         const response = await axios(config);
         if (response.data.length > 0) {
             for (const element of response.data) {
-                await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
-                const option_type = element.symbol.slice(-2);
-                const expiry_s = dateTime.create(element.expiry);
-                const expiry = expiry_s.format('dmY');
-                const strike_s = parseInt(element.strike);
-                const strike = parseInt(strike_s.toString().slice(0, -2));
-                const day_start = element.expiry.slice(0, 2);
-                const moth_str = element.expiry.slice(2, 5);
-                const year_end = element.expiry.slice(-2);
-                const Dat = new Date(element.expiry);
-                const moth_count = Dat.getMonth() + 1;
+                try {
+                    await new Promise(resolve => setTimeout(resolve, 1)); // 1 millisecond delay
+                    const option_type = element.symbol.slice(-2);
+                    const expiry_s = dateTime.create(element.expiry);
+                    const expiry = expiry_s.format('dmY');
+                    const strike_s = parseInt(element.strike);
+                    const strike = parseInt(strike_s.toString().slice(0, -2));
+                    const day_start = element.expiry.slice(0, 2);
+                    const moth_str = element.expiry.slice(2, 5);
+                    const year_end = element.expiry.slice(-2);
+                    const Dat = new Date(element.expiry);
+                    const moth_count = Dat.getMonth() + 1;
 
-                let tradesymbol_m_w;
+                    let tradesymbol_m_w;
 
-                // Check existing token
-                const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
-                if (exist_token == null) {
-                    tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
+                    // Check existing token
+                    if (element.token != undefined) {
+                        const exist_token = await Alice_token.findOne({ instrument_token: element.token }, { instrument_token: 1 });
+                        if (exist_token == null) {
+                            tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
 
-                    const user_data = {
-                        symbol: element.name,
-                        expiry: expiry,
-                        expiry_month_year: expiry.slice(2),
-                        expiry_date: expiry.slice(0, -6),
-                        expiry_str: element.expiry,
-                        strike: strike,
-                        option_type: option_type,
-                        segment: "F",  // Default segment, this will be changed based on condition
-                        instrument_token: element.token,
-                        lotsize: element.lotsize,
-                        tradesymbol: element.symbol,
-                        tradesymbol_m_w: tradesymbol_m_w,
-                        exch_seg: element.exch_seg
-                    };
+                            const user_data = {
+                                symbol: element.name,
+                                expiry: expiry,
+                                expiry_month_year: expiry.slice(2),
+                                expiry_date: expiry.slice(0, -6),
+                                expiry_str: element.expiry,
+                                strike: strike,
+                                option_type: option_type,
+                                segment: "F",  // Default segment, this will be changed based on condition
+                                instrument_token: element.token,
+                                lotsize: element.lotsize,
+                                tradesymbol: element.symbol,
+                                tradesymbol_m_w: tradesymbol_m_w,
+                                exch_seg: element.exch_seg
+                            };
 
-                    // Adjust segment based on instrument type
-                    if ((element.instrumenttype == 'FUTSTK' || element.instrumenttype == 'FUTIDX') && element.exch_seg == "NFO") {
-                        user_data.segment = "F";
-                    } else if (element.instrumenttype == 'FUTCOM') {
-                        user_data.segment = "MF";
-                    } else if ((element.instrumenttype == 'OPTIDX' || element.instrumenttype == 'OPTSTK') && element.exch_seg == "NFO") {
-                        user_data.segment = "O";
-                    } else if (element.instrumenttype == 'OPTFUT' || element.instrumenttype == 'OPTCOM') {
-                        user_data.segment = "MO";
-                    } else if (element.instrumenttype == 'OPTCUR') {
-                        user_data.segment = "CO";
-                    } else if (element.instrumenttype == 'FUTCUR') {
-                        user_data.segment = "CF";
-                    } else if (element.symbol.slice(-3) == '-EQ') {
-                        user_data.segment = "C";
+                            // Adjust segment based on instrument type
+                            if ((element.instrumenttype == 'FUTSTK' || element.instrumenttype == 'FUTIDX') && element.exch_seg == "NFO") {
+                                user_data.segment = "F";
+                            } else if (element.instrumenttype == 'FUTCOM') {
+                                user_data.segment = "MF";
+                            } else if ((element.instrumenttype == 'OPTIDX' || element.instrumenttype == 'OPTSTK') && element.exch_seg == "NFO") {
+                                user_data.segment = "O";
+                            } else if (element.instrumenttype == 'OPTFUT' || element.instrumenttype == 'OPTCOM') {
+                                user_data.segment = "MO";
+                            } else if (element.instrumenttype == 'OPTCUR') {
+                                user_data.segment = "CO";
+                            } else if (element.instrumenttype == 'FUTCUR') {
+                                user_data.segment = "CF";
+                            } else if (element.symbol.slice(-3) == '-EQ') {
+                                user_data.segment = "C";
+                            }
+                            else if ((element.instrumenttype == 'OPTIDX' || element.instrumenttype == 'OPTSTK') && element.exch_seg == "BFO") {
+                                user_data.segment = "BO";
+                            }
+                            else if ((element.instrumenttype == 'FUTSTK' || element.instrumenttype == 'FUTIDX') && element.exch_seg == "BFO") {
+                                user_data.segment = "BF";
+                            }
+                            else if (element.instrumenttype == '' && element.exch_seg == "BSE") {
+                                user_data.segment = "BC";
+                            }
+                            
+
+                            
+
+                            // Insert or update token data
+                            const filter = { instrument_token: element.token };
+                            await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
+                        }
                     }
 
-                    // Insert or update token data
-                    const filter = { instrument_token: element.token };
-                    await Alice_token.updateOne(filter, { $set: user_data }, { upsert: true });
+                } catch (dbError) {
+                    console.log("Database Error during TokenSymbolUpdate loop:", dbError, " TIME ", new Date(), dbError);
+                    break; // Break the loop if a database error occurs
+                    return
                 }
 
-                
+
             }
 
-            const AliceToken = await Alice_token.find();
-            console.log("AliceToken.length ", AliceToken.length, " TIME ", new Date());
+            // const AliceToken = await Alice_token.find();
+            // console.log("AliceToken.length ", AliceToken.length, " TIME ", new Date());
 
-            if (AliceToken.length < 50000) {
-                await TokenSymbolUpdate();
+            // if (AliceToken.length < 50000) {
+            //     await TokenSymbolUpdate();
+            // }
+            try {
+                var filePath = path.join(__dirname+'/checkTest.txt'); // Adjust the file path as needed
+                console.log("filePath",filePath)
+                fs.appendFile(filePath, "-----TokenSymbolUpdate End - " + new Date() + "----- ***\\n\n", function (err) {
+                    if (err) {
+                        console.log("err filePath" ,err);
+                    }
+                    console.log("The file was saved filePath!");
+                });
+            } catch (error) {
+                console.log("err filePath Try catch" ,error);
             }
+            console.log("TokenSymbolUpdate End:", " TIME ", new Date());
+            return
+        } else {
+            return
         }
     } catch (error) {
-        console.log("Error TokenSymbolUpdate", " TIME ", new Date(), error);
-        const AliceToken = await Alice_token.find();
-        if (AliceToken.length < 50000) {
-            setTimeout(TokenSymbolUpdate, 1800000); // Retry after 30 minutes
-        }
+        console.log("Error TokenSymbolUpdate Try catch", " TIME ", new Date(), error);
+        return
+        // const AliceToken = await Alice_token.find();
+        // if (AliceToken.length < 50000) {
+        //     setTimeout(TokenSymbolUpdate, 1800000); // Retry after 30 minutes
+        // }
     }
 }
 
@@ -1859,10 +1329,127 @@ const tokenFind = async () => {
     }
 }
 
-const twodaysclient = async () => {
+// const twodaysclient = async () => {
 
-    const twoDaysClientGet = await User.aggregate(
-        [
+//     const twoDaysClientGet = await User.aggregate(
+//         [
+//             {
+//                 $match: {
+//                     license_type: "0",
+//                     Is_Active: "1",
+//                     Role: "USER",
+//                     $expr: {
+//                         $gte: [
+//                             {
+//                                 $dateToString: {
+//                                     format: "%Y-%m-%d",
+//                                     date: "$EndDate"
+//                                 }
+//                             },
+//                             {
+//                                 $dateToString: {
+//                                     format: "%Y-%m-%d",
+//                                     date: new Date()
+//                                 }
+//                             }
+//                         ]
+//                     }
+//                 }
+//             },
+//             {
+//                 $lookup: {
+//                     from: "broker_responses",
+//                     localField: "_id",
+//                     foreignField: "user_id",
+//                     as: "responses"
+//                 }
+//             },
+//             {
+//                 $match: {
+//                     "responses.order_id": { $ne: "" } // Filter out responses where order_id is not empty
+//                 }
+//             },
+//             {
+//                 $group: {
+//                     _id: 1, // Use a constant value as the _id
+//                     users: { $push: { _id: "$_id", responses: "$responses" } } // Include _id and responses in the 'users' array
+//                 }
+//             },
+//             {
+//                 $project: {
+//                     _id: 0, // Exclude the _id field
+//                     users: {
+//                         $map: {
+//                             input: "$users",
+//                             as: "user",
+//                             in: {
+//                                 _id: "$$user._id",
+//                                 responses: {
+//                                     $map: {
+//                                         input: "$$user.responses",
+//                                         as: "response",
+//                                         in: {
+//                                             createdAt: {
+//                                                 $dateToString: {
+//                                                     format: "%Y-%m-%d",
+//                                                     date: "$$response.createdAt"
+//                                                 }
+//                                             },
+//                                             // Include other fields from the response if needed
+//                                         }
+//                                     }
+//                                 }
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+//         ])
+
+//     var UniqueDataArr = []
+
+//     if (twoDaysClientGet.length > 0) {
+//         var UserData = twoDaysClientGet[0].users.filter((data) => data.responses.length > 0);
+//         console.log("UserData ",UserData)
+//         if (UserData.length > 0) {
+
+//             UserData.forEach((data) => {
+//                 const uniqueCreatedAtValues = [...new Set(data.responses.map(item => item.createdAt))];
+//                 UniqueDataArr.push({ user_id: data._id, createdAt: uniqueCreatedAtValues })
+//             })
+//         }
+//     }
+
+//     if (UniqueDataArr.length > 0) {
+
+//         UniqueDataArr.forEach(async (data) => {
+//             if (data.createdAt.length >= 2) {
+//                 const filter = { _id: new ObjectId(data.user_id) };
+//                 // Get the current date and time
+//                 const currentDate = new Date();
+
+//                 // Format the date to 'YYYY-MM-DD'
+//                 const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+
+//                 const result = await User.updateOne(
+//                     filter,
+//                     { $set: { EndDate: formattedDate } }
+//                 );
+
+//             }
+//         })
+
+//     }
+
+//     return UniqueDataArr
+// }
+
+const twodaysclient = async () => {
+    try {
+        const today = new Date();
+        const formattedToday = today.toISOString().split('T')[0];
+
+        const twoDaysClientGet = await User.aggregate([
             {
                 $match: {
                     license_type: "0",
@@ -1870,18 +1457,8 @@ const twodaysclient = async () => {
                     Role: "USER",
                     $expr: {
                         $gte: [
-                            {
-                                $dateToString: {
-                                    format: "%Y-%m-%d",
-                                    date: "$EndDate"
-                                }
-                            },
-                            {
-                                $dateToString: {
-                                    format: "%Y-%m-%d",
-                                    date: new Date()
-                                }
-                            }
+                            { $dateToString: { format: "%Y-%m-%d", date: "$EndDate" } },
+                            formattedToday
                         ]
                     }
                 }
@@ -1894,94 +1471,41 @@ const twodaysclient = async () => {
                     as: "responses"
                 }
             },
-            {
-                $match: {
-                    "responses.order_id": { $ne: "" } // Filter out responses where order_id is not empty
-                }
-            },
-            {
-                $group: {
-                    _id: 1, // Use a constant value as the _id
-                    users: { $push: { _id: "$_id", responses: "$responses" } } // Include _id and responses in the 'users' array
-                }
-            },
+            { $match: { "responses.order_id": { $ne: "" } } },
             {
                 $project: {
-                    _id: 0, // Exclude the _id field
+                    _id: 0,
                     users: {
-                        $map: {
-                            input: "$users",
-                            as: "user",
-                            in: {
-                                _id: "$$user._id",
-                                responses: {
-                                    $map: {
-                                        input: "$$user.responses",
-                                        as: "response",
-                                        in: {
-                                            createdAt: {
-                                                $dateToString: {
-                                                    format: "%Y-%m-%d",
-                                                    date: "$$response.createdAt"
-                                                }
-                                            },
-                                            // Include other fields from the response if needed
-                                        }
-                                    }
+                        $filter: {
+                            input: {
+                                $map: {
+                                    input: "$responses",
+                                    as: "response",
+                                    in: { createdAt: { $dateToString: { format: "%Y-%m-%d", date: "$$response.createdAt" } } }
                                 }
-                            }
+                            },
+                            as: "response",
+                            cond: { $gte: [{ $size: "$$response" }, 2] }
                         }
                     }
                 }
             }
-        ])
+        ]);
 
-    var UniqueDataArr = []
+        if (twoDaysClientGet.length === 0) return [];
 
-    if (twoDaysClientGet.length > 0) {
+        const updates = twoDaysClientGet[0].users.map(async ({ _id }) => {
+            return User.updateOne({ _id: new ObjectId(_id) }, { $set: { EndDate: formattedToday } });
+        });
 
+        await Promise.all(updates);
 
-        var UserData = twoDaysClientGet[0].users.filter((data) => data.responses.length > 0);
-
-        if (UserData.length > 0) {
-
-            UserData.forEach((data) => {
-                const uniqueCreatedAtValues = [...new Set(data.responses.map(item => item.createdAt))];
-                UniqueDataArr.push({ user_id: data._id, createdAt: uniqueCreatedAtValues })
-            })
-        }
-
-
+        return twoDaysClientGet[0].users;
+    } catch (error) {
+        console.error("Error occurred:", error);
+        return [];
     }
-
-
-
-    if (UniqueDataArr.length > 0) {
-
-        UniqueDataArr.forEach(async (data) => {
-            if (data.createdAt.length >= 2) {
-
-                const filter = { _id: new ObjectId(data.user_id) };
-                // Get the current date and time
-                const currentDate = new Date();
-
-                // Format the date to 'YYYY-MM-DD'
-                const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
-
-                const result = await User.updateOne(
-                    filter,
-                    { $set: { EndDate: formattedDate } }
-                );
-
-            }
-        })
-
-    }
-
-
-
-    return UniqueDataArr
-}
+};
 
 // Update numberOfTrade_count_trade 0
 const numberOfTrade_count_trade = async () => {
@@ -1998,7 +1522,7 @@ const numberOfTrade_count_trade = async () => {
 
 // Accelpix Token Update
 const AccelpixTokenUpdate = async () => {
-
+    return
     let config = {
         method: 'get',
         maxBodyLength: Infinity,

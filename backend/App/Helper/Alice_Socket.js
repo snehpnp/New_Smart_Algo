@@ -129,7 +129,7 @@ const Alice_Socket = async () => {
                       
                       ws.onclose = function () {
                         //console.log('Disconnected from the server, attempting to  Alice Socket...');
-                         //setTimeout(socketRestart, 30000);
+                         setTimeout(socketRestart, 30000);
                       };
 
                     } catch (error) {
