@@ -1498,9 +1498,7 @@ class Employee {
         data = await BrokerResponse.find({ user_id: id });
       }
 
-      if (data.length == 0) {
-        return res.status(404).json({ status: false, msg: "Data not found" });
-      }
+    
       if (key == 1) {
         data = data.map((item,index) => {
           return {
