@@ -32,7 +32,7 @@ const BrokerResponse = () => {
   const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
   const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
 
-
+console.log("isgotodashboard",isgotodashboard)
 
   const data = async () => {
 
@@ -144,6 +144,7 @@ const BrokerResponse = () => {
 
   // Conditionally add the new column
   if (shouldAddNewColumn) {
+  if(isgotodashboard == null){
     columns.push({
       dataField: '',
       text: 'Refresh',
@@ -156,6 +157,7 @@ const BrokerResponse = () => {
               type="reset"
               style={{ height: '40px' }}
               onClick={(e) => Singlerefresh(e, row)
+                
 
               }>Refresh</button>
           ) : (
@@ -164,6 +166,8 @@ const BrokerResponse = () => {
         </>
       ),
     });
+  }
+  
   }
 
   const Singlerefresh = async (e, row) => {
