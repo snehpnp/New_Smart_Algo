@@ -191,13 +191,13 @@ for i in "${!servers[@]}"; do
 
     
     # Backend Code
-    sshpass -p "$password" rsync -avz --exclude ".env" --exclude ".gitignore" --exclude "shakirTeting.js" --exclude "node_modules" --exclude "Logs" "$source_path" "$server:$remort_path"
+    sshpass -p "$password" rsync -avz --exclude ".env" --exclude ".gitignore" --exclude "node_modules" --exclude "Logs" "$source_path" "$server:$remort_path"
 
     # Execute npm i Backend
     sshpass -p "$password" ssh "$server" "cd /var/www/backend/BACKEND && npm i --force"
 
    # Broker Backend Cod
-    sshpass -p "$password" rsync -avz --exclude ".env" --exclude ".gitignore" --exclude "shakirTeting.js" --exclude "node_modules" --exclude "AllPanelTextFile" --exclude "Logs" "$source_path_bb" "$server:$remort_path"
+    sshpass -p "$password" rsync -avz --exclude ".env" --exclude ".gitignore" --exclude "node_modules" --exclude "AllPanelTextFile" --exclude "Logs" "$source_path_bb" "$server:$remort_path"
     
     # Execute npm i Broker - Backend
     sshpass -p "$password" ssh "$server" "cd /var/www/backend/brokerbackend && npm i"

@@ -174,25 +174,25 @@ const AllSubadmin = () => {
         <span>{maskPassword(cell)}</span>
       )
     },
-    {
-      dataField: "ActiveStatus",
-      text: "Status",
-      formatter: (cell, row) => (
-        <>
-          <label className="toggle mt-3">
-            <input
-              className="toggle-checkbox bg-primary"
-              type="checkbox"
-              checked={row.ActiveStatus == "1" ? true : false}
-              onChange={(e) => {
-                activeUser(e, row);
-              }}
-            />
-            <div className={`toggle-switch ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
-          </label>
-        </>
-      ),
-    },
+    // {
+    //   dataField: "ActiveStatus",
+    //   text: "Status",
+    //   formatter: (cell, row) => (
+    //     <>
+    //       <label className="toggle mt-3">
+    //         <input
+    //           className="toggle-checkbox bg-primary"
+    //           type="checkbox"
+    //           checked={row.ActiveStatus == "1" ? true : false}
+    //           onChange={(e) => {
+    //             activeUser(e, row);
+    //           }}
+    //         />
+    //         <div className={`toggle-switch ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
+    //       </label>
+    //     </>
+    //   ),
+    // },
     {
       dataField: "",
       text: "Clients",

@@ -299,39 +299,39 @@ const AllClients = () => {
         //     ),
         // },
 
-        // {
-        //     dataField: 'ActiveStatus',
-        //     text: 'Got To Dashboard',
-        //     hidden: (getPermissions && getPermissions.go_To_Dashboard == 1 ? false : true),
-        //     formatter: (cell, row) => (
-        //         <>
-        //             <span
-        //                 className=" btn "
-        //                 style={
-        //                     row.AppLoginStatus == '0' && row.WebLoginStatus == '0'
-        //                         ? { color: "#FF0000" }
-        //                         : { color: "#008000" }
-        //                 }
-        //                 onClick={() => goToDashboard(row._id, row.Email, row)}
-        //                 disabled={row.AppLoginStatus == "0" && row.WebLoginStatus == "0"}
-        //             >
-        //                 Dashboard
+        {
+            dataField: 'ActiveStatus',
+            text: 'Got To Dashboard',
+            hidden: (getPermissions && getPermissions.go_To_Dashboard == 1 ? false : true),
+            formatter: (cell, row) => (
+                <>
+                    <span
+                        className=" btn "
+                        style={
+                            row.AppLoginStatus == '0' && row.WebLoginStatus == '0'
+                                ? { color: "#FF0000" }
+                                : { color: "#008000" }
+                        }
+                        onClick={() => goToDashboard(row._id, row.Email, row)}
+                        disabled={row.AppLoginStatus == "0" && row.WebLoginStatus == "0"}
+                    >
+                        Dashboard
 
-        //             </span>
-        //         </>
+                    </span>
+                </>
 
 
-        //     ),
-        // },
-        // {
-        //     dataField: 'TradingStatus',
-        //     text: 'TradingStatus',
-        //     formatter: (cell, row) => (
-        //         <>
-        //             <span style={(cell == "off" || cell === null) ? { color: "#FF0000", fontSize: "40px" } : { color: "#008000", fontSize: "40px" }}>&#9679;</span>
-        //         </>
-        //     ),
-        // },
+            ),
+        },
+        {
+            dataField: 'TradingStatus',
+            text: 'TradingStatus',
+            formatter: (cell, row) => (
+                <>
+                    <span style={(cell == "off" || cell === null) ? { color: "#FF0000", fontSize: "40px" } : { color: "#008000", fontSize: "40px" }}>&#9679;</span>
+                </>
+            ),
+        },
         {
             dataField: 'StartDate',
             text: 'Start Date',

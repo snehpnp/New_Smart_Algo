@@ -309,21 +309,22 @@ const ServicesList = () => {
                                                     dataField: 'user.FullName',
                                                     text: 'Services Name'
                                                 },
-                                                // {
-                                                //     dataField: 'user.TradingStatus',
-                                                //     text: 'Go To Dashboard',
-                                                //     formatter: (cell, row, rowIndex) =>
-                                                //         <>
+                                                {
+                                                    dataField: 'user.TradingStatus',
+                                                    text: 'Go To Dashboard',
+                                                    formatter: (cell, row, rowIndex) =>
+                                                        <>
                                                            
-                                                //             <button
-                                                //                 className={`btn  ${row.user.AppLoginStatus == '1' || row.user.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
+                                                            <button
+                                                                className={`btn  ${row.user.AppLoginStatus == '1' || row.user.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
 
-                                                //                 onClick={() => goToDashboard(row)}
-                                                //                 disabled={row.user.AppLoginStatus === '0' && row.user.WebLoginStatus === '0'}
+                                                                onClick={() => goToDashboard(row)}
+                                                                disabled={row.user.AppLoginStatus === '0' && row.user.WebLoginStatus === '0'}
 
-                                                //             > click</button>
-                                                //         </>
-                                                // },
+                                                            > click</button>
+                                                        </>
+                                                },
+                                                
                                                 {
                                                     dataField: 'user.license_type',
                                                     text: 'License Type',

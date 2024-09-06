@@ -368,43 +368,43 @@ const AllClients = () => {
     //   ),
     // },
 
-    // {
-    //   dataField: "ActiveStatus",
-    //   text: "Go To Dashboard",
-    //   formatter: (cell, row) => (
-    //     <>
-    //       <span
-    //         className=" btn fw-bold "
-    //         style={
-    //           row.AppLoginStatus === "0" && row.WebLoginStatus === "0"
-    //             ? { color: "#FF0000" }
-    //             : { color: "#56c080" }
-    //         }
-    //         onClick={() => goToDashboard(row, row._id, row.Email)}
-    //         disabled={row.AppLoginStatus == "0" && row.WebLoginStatus == "0"}
-    //       >
-    //         Dashboard
-    //       </span>
-    //     </>
-    //   ),
-    // },
-    // {
-    //   dataField: "TradingStatus",
-    //   text: "TradingStatus",
-    //   formatter: (cell, row) => (
-    //     <>
-    //       <span
-    //         style={
-    //           cell == "off" || cell === null
-    //             ? { color: "#FF0000", fontSize: "40px" }
-    //             : { color: "#008000", fontSize: "40px" }
-    //         }
-    //       >
-    //         &#9679;
-    //       </span>
-    //     </>
-    //   ),
-    // },
+    {
+      dataField: "ActiveStatus",
+      text: "Go To Dashboard",
+      formatter: (cell, row) => (
+        <>
+          <span
+            className=" btn fw-bold "
+            style={
+              row.AppLoginStatus === "0" && row.WebLoginStatus === "0"
+                ? { color: "#FF0000" }
+                : { color: "#56c080" }
+            }
+            onClick={() => goToDashboard(row, row._id, row.Email)}
+            disabled={row.AppLoginStatus == "0" && row.WebLoginStatus == "0"}
+          >
+            Dashboard
+          </span>
+        </>
+      ),
+    },
+    {
+      dataField: "TradingStatus",
+      text: "TradingStatus",
+      formatter: (cell, row) => (
+        <>
+          <span
+            style={
+              cell == "off" || cell === null
+                ? { color: "#FF0000", fontSize: "40px" }
+                : { color: "#008000", fontSize: "40px" }
+            }
+          >
+            &#9679;
+          </span>
+        </>
+      ),
+    },
     {
       dataField: "StartDate",
       text: "Start Date",
