@@ -275,6 +275,9 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                                   <div className="col-lg-12 ">
                                     <div className="form-check custom-checkbox mb-3">
                                       <input type={field.type} name={field.name} className="form-check-input" id={field.name}
+
+                                      readOnly={field.disable}
+                                      disabled={field.disable}
                                         {...formik.getFieldProps(field.name)}
                                       />
                                       <label className="form-check-label" for={field.name}>{field.name}</label>
@@ -344,6 +347,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                                             {...formik.getFieldProps(field.name)}
 
                                             readOnly={field.disable}
+                                            disabled={field.disable}
                                           />
                                           <div className="invalid-feedback">
                                             Please enter {field.label}

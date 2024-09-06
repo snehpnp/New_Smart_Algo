@@ -100,6 +100,7 @@ const Modify = ({ UserDetails }) => {
                                     value="1" // Set the actual value here
                                     checked={selectedOptions && selectedOptions.web_url === "1"}
                                     onChange={(e) => handleRadioChange(e)}
+                                    disabled={isgotodashboard}
                                 />
                                 <label className="form-check-label" for="admin">
                                     Admin
@@ -113,6 +114,8 @@ const Modify = ({ UserDetails }) => {
                                     type="radio"
                                     name="web_url"
                                     id="admin"
+                                    disabled={isgotodashboard}
+
                                     value="2" // Set the actual value here
                                     checked={selectedOptions && selectedOptions.web_url === "2"}
                                     onChange={(e) => handleRadioChange(e)}
@@ -177,6 +180,8 @@ const Modify = ({ UserDetails }) => {
                                     name="signals_execution_type"
                                     id="webExecution"
                                     value='1'
+                                    disabled={isgotodashboard}
+
                                     checked={selectedOptions && selectedOptions.signals_execution_type === "1"}
 
                                     onChange={(e) => handleRadioChange(e)}
@@ -195,6 +200,8 @@ const Modify = ({ UserDetails }) => {
                                     name="signals_execution_type"
                                     id="appExecution"
                                     value='2'
+                                    disabled={isgotodashboard}
+
                                     checked={selectedOptions && selectedOptions.signals_execution_type === "2"}
 
                                     onChange={(e) => handleRadioChange(e)}
@@ -210,7 +217,11 @@ const Modify = ({ UserDetails }) => {
             {gotodashboard ? (
                 ""
             ) : (
-                <button className="btn btn-primary mt-3" onClick={handleFinalStep}>
+                <button className="btn btn-primary mt-3" onClick={handleFinalStep}
+                
+                disabled={isgotodashboard}
+                
+                >
                     Continue
                 </button>
             )}

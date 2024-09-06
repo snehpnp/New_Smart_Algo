@@ -478,6 +478,7 @@ const UserProfile = () => {
                                     value="stock"
                                     checked={selectedOption === "stock"}
                                     onChange={handleOptionChange}
+                                    disabled={isgotodashboard}
                                   />
                                   <label
                                     className="form-check-label"
@@ -496,6 +497,8 @@ const UserProfile = () => {
                                     value="fund"
                                     checked={selectedOption === "fund"}
                                     onChange={handleOptionChange}
+                                    disabled={isgotodashboard}
+
                                   />
                                   <label
                                     className="form-check-label"
@@ -514,6 +517,8 @@ const UserProfile = () => {
                                     value="percentage"
                                     checked={selectedOption === "percentage"}
                                     onChange={handleOptionChange}
+                                    disabled={isgotodashboard}
+
                                   />
                                   <label
                                     className="form-check-label"
@@ -535,6 +540,8 @@ const UserProfile = () => {
                                       className="form-control"
                                       placeholder="Enter fund amount"
                                       value={fundValue}
+                                    disabled={isgotodashboard}
+
                                       onChange={(e) =>
                                         setFundValue(e.target.value)
                                       }
@@ -553,6 +560,8 @@ const UserProfile = () => {
                                       className="form-control"
                                       placeholder="Enter percentage (1 to 100)"
                                       value={percentageValue}
+                                    disabled={isgotodashboard}
+
                                       min={1}
                                       max={100}
                                       onChange={(e) =>
@@ -570,14 +579,16 @@ const UserProfile = () => {
                                 )}
 
                                 {/* Submit Button */}
-                                <div className="mt-3">
+                                {isgotodashboard  == null && <div className="mt-3">
+                                 
                                   <button
                                     className="btn btn-primary"
                                     onClick={handleSubmit}
                                   >
                                     Submit
                                   </button>
-                                </div>
+
+                                </div>}
                               </div>
                             </div>
                           </div>
