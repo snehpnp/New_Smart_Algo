@@ -645,6 +645,12 @@ const AllClients = () => {
           })
 
           }
+        }else{
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'No Data Found',
+          })
         }
       });
   };
