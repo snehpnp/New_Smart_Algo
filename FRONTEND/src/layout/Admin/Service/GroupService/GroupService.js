@@ -324,6 +324,7 @@ const ServicesList = () => {
                                                             > click</button>
                                                         </>
                                                 },
+                                                
                                                 {
                                                     dataField: 'user.license_type',
                                                     text: 'License Type',
