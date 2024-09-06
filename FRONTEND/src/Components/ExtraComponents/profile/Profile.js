@@ -287,7 +287,7 @@ const UserProfile = () => {
                         ""
                       )}
 
-                      {UserDetails.broker == "19" && (
+                      {/* {UserDetails.broker == "19" && (
                         <li className="nav-item">
                           <a
                             href="#fund-management"
@@ -297,7 +297,7 @@ const UserProfile = () => {
                             Stock Fund
                           </a>
                         </li>
-                      )}
+                      )} */}
                     </ul>
 
                     <div className="tab-content">
