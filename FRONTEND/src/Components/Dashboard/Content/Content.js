@@ -49,11 +49,11 @@ const Content = ({
               </div>
             )}
 
-            <div className="col-lg-6 ">
+            {/* <div className="col-lg-6 ">
               <button className="btn btn-primary float-lg-end " onClick={()=>OpenModal()}>
                 <i className="fa-solid fa-view"></i> Fund Managment
               </button>
-            </div>
+            </div> */}
           </ol>
         </div>
 

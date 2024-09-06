@@ -280,9 +280,10 @@ const BrokerResponse = () => {
 const OpenModal =(e)=> {
   console.log("OpenModal", e);
 }
+console.log("gotodashboard", gotodashboard);
 
   return (
-    <Content Page_title="Dashboard" button_status={false} OpenModal={OpenModal(true)}>
+    <Content Page_title="Dashboard" button_status={false}>
       <div
         className="table-responsive "
         style={{
@@ -337,6 +338,7 @@ const OpenModal =(e)=> {
                                 id="lot_size"
                                 placeholder="Enter Qty"
                                 min={1}
+                                disabled={gotodashboard}
                                 onChange={(e) => {
                                   setgroup_qty_value_test(
                                     e,
@@ -366,6 +368,8 @@ const OpenModal =(e)=> {
                             <Button
                               variant="primary"
                               onClick={() => handleShowStartegyModal(data)}
+                              disabled={gotodashboard}
+
                             >
                               Selected Strategy
                             </Button>
@@ -375,6 +379,8 @@ const OpenModal =(e)=> {
                               name="strategy_id"
                               className="form-select form-select-lg "
                               aria-label=".form-select-lg example"
+                              disabled={gotodashboard}
+
                               onChange={(e) =>
                                 setgroup_qty_value_test(
                                   e,
@@ -431,6 +437,8 @@ const OpenModal =(e)=> {
                         <td className="color-primary">
                           <select
                             name="order_type"
+                            disabled={gotodashboard}
+
                             className="form-select form-select-lg "
                             aria-label=".form-select-lg example"
                             onChange={(e) =>
@@ -451,6 +459,8 @@ const OpenModal =(e)=> {
                         </td>
                         <td className="color-primary">
                           <select
+                                disabled={gotodashboard}
+
                             name="product_type"
                             className="form-select form-select-lg "
                             aria-label=".form-select-lg example"
@@ -475,6 +485,8 @@ const OpenModal =(e)=> {
                             <input
                               className="toggle-checkbox bg-primary"
                               type="checkbox"
+                              disabled={gotodashboard}
+
                               name="active_status"
                               defaultChecked={data.active_status === "1"}
                               onChange={(e) =>
@@ -569,6 +581,7 @@ const OpenModal =(e)=> {
             className="btn btn-outline-primary btn-lg mt-4"
             onClick={(e) => UpdateDashboard(e)}
             disabled={isUpdating}
+            
           >
             {isUpdating ? "Updating..." : "Update"}
           </button>
