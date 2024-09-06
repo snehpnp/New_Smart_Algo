@@ -10,9 +10,11 @@ import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 const Modify = ({ UserDetails }) => {
 
 
+console.log("UserDetails",UserDetails)
 
-
-
+useEffect(() => {
+    data()
+}, [UserDetails])
 
     const dispatch = useDispatch();
 
@@ -57,28 +59,23 @@ const Modify = ({ UserDetails }) => {
                 }
             });
 
-        // Perform the final step with selected options
-        // You can implement your logic here
+       
     };
 
 
     // GET ALL GROUP SERVICES NAME
     const data = async () => {
-        if (UserDetails.data !== undefined) {
+        if (UserDetails !== undefined) {
             setSelectedOptions({
-                web_url: UserDetails.data && UserDetails.data.web_url,
+                web_url: UserDetails && UserDetails.web_url,
                 // qty_type: UserDetails.data && UserDetails.data.qty_type,
-                signals_execution_type: UserDetails.data && UserDetails.data.signals_execution_type,
+                signals_execution_type: UserDetails && UserDetails.signals_execution_type,
             })
         }
 
 
     }
 
-
-    useEffect(() => {
-        data()
-    }, [UserDetails.data])
 
 
 
