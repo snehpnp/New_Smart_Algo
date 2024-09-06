@@ -4,32 +4,35 @@ import Loader from "../../../../Utils/Loader";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
-import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS, DELETE_USER_SERVICES, UpdateStarClientStatus } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
-import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
+import {
+  GET_ALL_CLIENTS,
+  GO_TO_DASHBOARDS,
+  UPDATE_USER_ACTIVE_STATUS,
+  DELETE_USER_SERVICES,
+  UpdateStarClientStatus,
+} from "../../../../ReduxStore/Slice/Admin/AdminSlice";
+import { All_Api_Info_List } from "../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice";
 import * as Config from "../../../../Utils/Config";
 import { useDispatch } from "react-redux";
 import { fa_time, fDateTime } from "../../../../Utils/Date_formet";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 import { DawnloadDataUser } from "../../../../ReduxStore/Slice/Admin/userSlice";
-import { Download } from 'lucide-react';
+import { Download } from "lucide-react";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { GET_IP } from "../../../../Service/common.service";
+import Swal from 'sweetalert2'
 
 
 const AllClients = () => {
-
-
-  const [ip, setIp] = useState('');
+  const [ip, setIp] = useState("");
 
   useEffect(() => {
     GET_IP().then((response) => {
-  
-      setIp(response.data.ip)
-    })
+      setIp(response.data.ip);
+    });
   }, []);
-
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,18 +47,54 @@ const AllClients = () => {
   const [ClientStatus, setClientStatus] = useState("null");
   const [selectBroker, setSelectBroker] = useState("null");
   const [BrokerDetails, setBrokerDetails] = useState([]);
-  const [ForGetCSV, setForGetCSV] = useState([])
+  const [ForGetCSV, setForGetCSV] = useState([]);
   const [getAllClients, setAllClients] = useState({ loading: true, data: [] });
 
-  const Brokerdata = async () => {
+  useEffect(() => {
+    const filteredData = originalData.filter((item) => {
+      const filter1Match =
+        ClientStatus == "null" || item.license_type.includes(ClientStatus);
+      const filter3Match =
+        selectBroker === "null" || item.broker === selectBroker;
+      const filter2Match =
+        PanelStatus == 2 ||
+        item.TradingStatus.includes(PanelStatus == 1 ? "on" : "off");
+      const searchTermMatch =
+        searchInput === "" ||
+        item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
+        item.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
+        item.PhoneNo.includes(searchInput);
 
-    await dispatch(All_Api_Info_List({ token: user_details && user_details.token, url: Config.react_domain, brokerId: -1, key: 1 })).unwrap()
+      return filter1Match && filter3Match && filter2Match && searchTermMatch;
+    });
+    setAllClients({
+      loading: false,
+      data:
+        searchInput ||
+        PanelStatus !== "2" ||
+        ClientStatus !== "null" ||
+        selectBroker !== "null"
+          ? filteredData
+          : originalData,
+    });
+  }, [searchInput, originalData, PanelStatus, ClientStatus, selectBroker]);
+
+  const Brokerdata = async () => {
+    await dispatch(
+      All_Api_Info_List({
+        token: user_details && user_details.token,
+        url: Config.react_domain,
+        brokerId: -1,
+        key: 1,
+      })
+    )
+      .unwrap()
       .then((response) => {
         if (response.status) {
           setBrokerDetails(response.data);
         }
-      })
-  }
+      });
+  };
 
   const Delete_user = async (id) => {
     var req1 = {
@@ -71,15 +110,14 @@ const AllClients = () => {
             setrefresh(!refresh);
           } else {
             toast.error(response.msg);
-
           }
         });
     } else {
-      return
+      return;
     }
   };
 
-  var headerName = "All Clients"
+  var headerName = "All Clients";
   const data = async () => {
     var req1 = {
       Find_Role: user_details && user_details.Role,
@@ -89,20 +127,22 @@ const AllClients = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-
           if (dashboard_filter !== undefined) {
             let abc =
               response.data &&
               response.data.filter((item) => {
                 if (dashboard_filter === "000") {
-                  headerName = ""
-                  return (item.Role === "USER" && new Date(item.EndDate) <= new Date())
+                  headerName = "";
+                  return (
+                    item.Role === "USER" && new Date(item.EndDate) <= new Date()
+                  );
                 }
                 if (dashboard_filter === "111") {
-                  headerName = "Total Active Clients"
+                  headerName = "Total Active Clients";
 
-                  return (item.Role === "USER" && new Date(item.EndDate) >= new Date())
-
+                  return (
+                    item.Role === "USER" && new Date(item.EndDate) >= new Date()
+                  );
                 }
 
                 if (dashboard_filter === "2" || dashboard_filter === 2) {
@@ -187,7 +227,6 @@ const AllClients = () => {
       });
   };
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -200,6 +239,10 @@ const AllClients = () => {
 
     fetchData();
   }, [refresh]);
+
+  useEffect(() => {
+    forCSVdata();
+  }, [getAllClients.data]);
 
   const goToDashboard = async (row, asyncid, email) => {
     if (row.AppLoginStatus == "1" || row.WebLoginStatus == "1") {
@@ -225,36 +268,31 @@ const AllClients = () => {
           }
         });
     }
-
   };
 
   const activeUser = async (e, data) => {
-
-    if (window.confirm("Do you want To Change Status For This User ?") === true) {
+    if (
+      window.confirm("Do you want To Change Status For This User ?") === true
+    ) {
       let req = {
         id: data._id,
         user_active_status: e.target.checked === true ? "1" : "0",
-        network_ip: ip
+        network_ip: ip,
       };
       await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
         .unwrap()
         .then((response) => {
-
           if (response.status) {
-
             toast.success(response.msg);
-            setrefresh(!refresh)
+            setrefresh(!refresh);
 
-            setTimeout(() => {
-            }, 1000);
+            setTimeout(() => {}, 1000);
           } else {
             toast.error(response.msg);
           }
         });
-    }
-    else {
-      return setrefresh(!refresh)
-
+    } else {
+      return setrefresh(!refresh);
     }
   };
 
@@ -282,10 +320,9 @@ const AllClients = () => {
       await dispatch(UpdateStarClientStatus(req))
         .unwrap()
         .then((response) => {
-
           if (response.status) {
             setIsStarred(newStarStatus ? "1" : "0");
-            setrefresh(!refresh)
+            setrefresh(!refresh);
             // toast.success(response.msg);
           } else {
             // toast.error(response.msg);
@@ -295,15 +332,25 @@ const AllClients = () => {
 
     return (
       <div style={{ width: "100px" }}>
-        <div onClick={(e) => handleToggle(e, row)} style={{ cursor: "pointer" }}>
-          <span data-toggle="tooltip" data-placement="top" title="Trading Status">
-            {isStarred ? <i className="bi bi-star-fill"></i> : <i className="bi bi-star"></i>}
+        <div
+          onClick={(e) => handleToggle(e, row)}
+          style={{ cursor: "pointer" }}
+        >
+          <span
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Trading Status"
+          >
+            {isStarred ? (
+              <i className="bi bi-star-fill"></i>
+            ) : (
+              <i className="bi bi-star"></i>
+            )}
           </span>
         </div>
       </div>
     );
   };
-
 
   const columns = [
     {
@@ -393,7 +440,7 @@ const AllClients = () => {
       text: "TradingStatus",
       formatter: (cell, row) => (
         <>
-          {row.StartDate == null && row.EndDate == null ?
+          {row.StartDate == null && row.EndDate == null ? (
             <span
               style={
                 cell == "off" || cell === null
@@ -403,7 +450,7 @@ const AllClients = () => {
             >
               Activate Subadmin Clients
             </span>
-            :
+          ) : (
             <span
               style={
                 cell == "off" || cell === null
@@ -413,8 +460,7 @@ const AllClients = () => {
             >
               &#9679;
             </span>
-          }
-
+          )}
         </>
       ),
     },
@@ -426,12 +472,12 @@ const AllClients = () => {
     {
       dataField: "StartDate",
       text: "Start Date",
-      formatter: (cell, row) => row.StartDate ? fa_time(row.StartDate) : "-",
+      formatter: (cell, row) => (row.StartDate ? fa_time(row.StartDate) : "-"),
     },
     {
       dataField: "EndDate",
       text: "End Date",
-      formatter: (cell, row) => row.EndDate ? fa_time(row.EndDate) : "-",
+      formatter: (cell, row) => (row.EndDate ? fa_time(row.EndDate) : "-"),
     },
     {
       dataField: "actions",
@@ -449,7 +495,7 @@ const AllClients = () => {
                 />
               </span>
             </Link>
-            {row.license_type == "1" ?
+            {row.license_type == "1" ? (
               <Link>
                 <span data-toggle="tooltip" data-placement="top" title="Delete">
                   <Trash2
@@ -461,8 +507,9 @@ const AllClients = () => {
                   />
                 </span>
               </Link>
-              : ""}
-
+            ) : (
+              ""
+            )}
           </div>
         </div>
       ),
@@ -473,7 +520,11 @@ const AllClients = () => {
       formatter: (cell, row) => (
         <div style={{ width: "120px" }}>
           <div>
-            <span data-toggle="tooltip" data-placement="top" title="Trading Status">
+            <span
+              data-toggle="tooltip"
+              data-placement="top"
+              title="Trading Status"
+            >
               <Download
                 size={20}
                 color="#198754"
@@ -484,7 +535,11 @@ const AllClients = () => {
             </span>
 
             {row.license_type != "1" && (
-              <span data-toggle="tooltip" data-placement="top" title="Broker Response">
+              <span
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Broker Response"
+              >
                 <Download
                   size={20}
                   color="#d83131"
@@ -511,40 +566,16 @@ const AllClients = () => {
     if (licence_type === "1") {
       return "Demo";
     } else {
-
-      const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
+      const foundNumber =
+        BrokerDetails &&
+        BrokerDetails.find((value) => value.broker_id == value1);
       if (foundNumber != undefined) {
-        return foundNumber.title
+        return foundNumber.title;
       } else {
-        return ""
+        return "";
       }
-
-
     }
   };
-
-  useEffect(() => {
-    const filteredData = originalData.filter((item) => {
-
-      const filter1Match = ClientStatus == "null" || item.license_type.includes(ClientStatus);
-      const filter3Match = selectBroker === "null" || item.broker === selectBroker;
-      const filter2Match = PanelStatus == 2 || item.TradingStatus.includes(PanelStatus == 1 ? "on" : "off")
-      const searchTermMatch =
-        searchInput === '' ||
-        item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
-        item.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
-        item.PhoneNo.includes(searchInput)
-      // Return true if all conditions are met
-      return filter1Match && filter3Match && filter2Match && searchTermMatch;
-    });
-    setAllClients({
-      loading: false,
-      data: searchInput || PanelStatus !== "2" || ClientStatus !== "null" || selectBroker !== "null" ? filteredData : originalData,
-
-    });
-
-  }, [searchInput, originalData, PanelStatus, ClientStatus, selectBroker]);
-
 
   const ResetDate = (e) => {
     e.preventDefault();
@@ -558,36 +589,28 @@ const AllClients = () => {
     });
   };
 
-  //  For CSV
   const forCSVdata = () => {
-    let csvArr = []
+    let csvArr = [];
     if (getAllClients.data.length > 0) {
       getAllClients.data.map((item) => {
         return csvArr.push({
-          "FullName": item.FullName,
-          "UserName": item.UserName,
-          "Email": item.Email,
-          "PhoneNo": item.PhoneNo,
-          "StartDate": fa_time(item.StartDate),
-          "EndDate": fa_time(item.EndDate),
+          FullName: item.FullName,
+          UserName: item.UserName,
+          Email: item.Email,
+          PhoneNo: item.PhoneNo,
+          StartDate: fa_time(item.StartDate),
+          EndDate: fa_time(item.EndDate),
           "license type": showLicenceName(item.licence, item.license_type),
-          "broker": showBrokerName(item.broker, item.license_type),
-          "TradingStatus": item.TradingStatus,
-        })
-      })
+          broker: showBrokerName(item.broker, item.license_type),
+          TradingStatus: item.TradingStatus,
+        });
+      });
 
-      setForGetCSV(csvArr)
+      setForGetCSV(csvArr);
     }
-
-  }
-
-  useEffect(() => {
-    forCSVdata()
-  }, [getAllClients.data])
-
+  };
 
   const DownloadsData = async (id, key) => {
-
     await dispatch(
       DawnloadDataUser({
         req: { id: id, key: key },
@@ -597,7 +620,10 @@ const AllClients = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
+        
           if (response.data.length > 0) {
+       
+            let FileName = key === 1 ? "Trading Status" : "Broker Response";
 
             const fileType =
               "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
@@ -605,16 +631,23 @@ const AllClients = () => {
 
             const ws = XLSX.utils.json_to_sheet(response.data);
             const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-            const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+            const excelBuffer = XLSX.write(wb, {
+              bookType: "xlsx",
+              type: "array",
+            });
             const data = new Blob([excelBuffer], { type: fileType });
-            FileSaver.saveAs(data, "Broker Response" + fileExtension);
-
+            FileSaver.saveAs(data, FileName + fileExtension);
+          }else{
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'No Data Found',
+          })
 
           }
         }
       });
-  }
-
+  };
 
   return (
     <>
@@ -623,9 +656,10 @@ const AllClients = () => {
           Page_title={headerName}
           button_title="Add Client"
           route="/admin/client/add"
-          show_csv_button={true} csv_data={ForGetCSV} csv_title="Client-List"
+          show_csv_button={true}
+          csv_data={ForGetCSV}
+          csv_title="Client-List"
         >
-
           <div className="row">
             <div className="col-lg-3">
               <div className="mb-3">
@@ -682,13 +716,9 @@ const AllClients = () => {
               </div>
             </div>
 
-
             <div className="col-lg-2">
-
               <div className="mb-3">
-
                 <label for="select" className="form-label">
-
                   Broker Type
                 </label>
                 <select
@@ -700,18 +730,15 @@ const AllClients = () => {
                 >
                   <option value="null">All</option>
 
-
-                  {BrokerDetails && BrokerDetails.map((element) => (
-                    <option key={element.broker_id} value={element.broker_id}>
-                      {element.title}
-                    </option>
-                  ))}
-
+                  {BrokerDetails &&
+                    BrokerDetails.map((element) => (
+                      <option key={element.broker_id} value={element.broker_id}>
+                        {element.title}
+                      </option>
+                    ))}
                 </select>
               </div>
             </div>
-
-
 
             <div className="col-lg-2 mt-4">
               <button
@@ -728,16 +755,13 @@ const AllClients = () => {
               TableColumns={columns}
               tableData={getAllClients.data}
             />
-
-          ) : (<Loader />)
-
-          }
+          ) : (
+            <Loader />
+          )}
 
           <ToastButton />
-
         </Content>
       </div>
-
     </>
   );
 };

@@ -19,11 +19,12 @@ const Update_Broker_Key = ({ closeModal }) => {
     const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
     const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
     const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
-
     const [Refresh, setRefresh] = useState(false)
     const [UserDetails, setUserDetails] = useState({ loading: true, data: [] });
 
-
+    useEffect(() => {
+        data();
+    }, [Refresh]);
 
 
     const data = async () => {
@@ -43,9 +44,7 @@ const Update_Broker_Key = ({ closeModal }) => {
                 }
             });
     };
-    useEffect(() => {
-        data();
-    }, [Refresh]);
+  
 
 
     const formik = useFormik({
