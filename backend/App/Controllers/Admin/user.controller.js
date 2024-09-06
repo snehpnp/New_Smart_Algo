@@ -29,7 +29,6 @@ var dateTime = require("node-datetime");
 var dt = dateTime.create();
 
 class Employee {
-
   // USER ADD
   async AddEmployee(req, res) {
     try {
@@ -55,40 +54,30 @@ class Employee {
         api_type,
         demat_userid,
         group_service,
-        multiple_strategy_select
+        multiple_strategy_select,
       } = req.body;
 
       var Role = "USER";
       var StartDate1 = "";
       var EndDate1 = "";
 
-
       let Strategies_id_array = [];
 
-
       if (multiple_strategy_select == "0") {
-        Strategies_id_array.push(Strategies[0].id)
+        Strategies_id_array.push(Strategies[0].id);
       } else {
-        let count = 0
+        let count = 0;
         for (const strategy of Strategies) {
-          Strategies_id_array.push(strategy.id)
-
+          Strategies_id_array.push(strategy.id);
         }
       }
 
       const existingUser = await User_model.findOne({
-        $or: [
-          { UserName: UserName },
-          { Email: Email },
-          { PhoneNo: PhoneNo },
-        ],
+        $or: [{ UserName: UserName }, { Email: Email }, { PhoneNo: PhoneNo }],
       });
 
-
       if (existingUser) {
-
         if (existingUser.UserName === UserName) {
-
           return res.send({
             status: false,
             msg: "Username already exists",
@@ -111,9 +100,7 @@ class Employee {
             data: [],
           });
         }
-
       }
-
 
       // IF CHECK STRATEGY NULL
       if (Strategies.length == 0) {
@@ -133,15 +120,12 @@ class Employee {
         });
       }
 
-
-
       // USER 2 DAYS LICENSE USE
       if (license_type == "0") {
         var currentDate = new Date();
         var start_date_2days = dateTime.create(currentDate);
         start_date_2days = start_date_2days.format("Y-m-d H:M:S");
         var start_date = start_date_2days;
-
 
         StartDate1 = start_date;
 
@@ -163,7 +147,6 @@ class Employee {
         var end_date_2days = dateTime.create(UpdateDate);
         var end_date_2days = end_date_2days.format("Y-m-d H:M:S");
 
-
         EndDate1 = end_date_2days;
       } else if (license_type == "1") {
         StartDate1 = fromdate;
@@ -173,7 +156,6 @@ class Employee {
         var start_date_2days = dateTime.create(currentDate);
         start_date_2days = start_date_2days.format("Y-m-d H:M:S");
         var start_date = start_date_2days;
-
 
         StartDate1 = start_date;
 
@@ -187,10 +169,8 @@ class Employee {
         var end_date_2days = dateTime.create(UpdateDate);
         var end_date_2days = end_date_2days.format("Y-m-d H:M:S");
 
-
         EndDate1 = end_date_2days;
       }
-
 
       const min = 1;
       const max = 1000000;
@@ -204,11 +184,12 @@ class Employee {
         salt
       );
 
-
-
       // Panel Prifix key Find
 
-      var Panel_key = await Company_info.find({}, { prefix: 1, licenses: 1, _id: 0 }).limit(1);
+      var Panel_key = await Company_info.find(
+        {},
+        { prefix: 1, licenses: 1, _id: 0 }
+      ).limit(1);
       if (Panel_key.length == 0) {
         return res.send({
           status: false,
@@ -217,13 +198,10 @@ class Employee {
         });
       }
 
-
-
       const mins = 1;
       const maxs = 1000000;
       const rands = mins + Math.random() * (maxs - mins);
       var cli_key = Math.round(rands);
-
 
       var ccd = dt.format("ymd");
       var client_key = Panel_key[0].prefix + cli_key + ccd;
@@ -253,29 +231,17 @@ class Employee {
       }
 
       if (Number(licence) > 0) {
-
-
-        if ((parseInt(TotalLicense) + parseInt(licence)) > Number(Panel_key[0].licenses)) {
-
+        if (
+          parseInt(TotalLicense) + parseInt(licence) >
+          Number(Panel_key[0].licenses)
+        ) {
           return res.send({
             status: false,
             msg: "You Dont Have License",
             data: [],
-          })
+          });
         }
-
       }
-
-
-
-
-
-
-
-
-
-
-
 
       User_model.insertMany([
         {
@@ -309,16 +275,12 @@ class Employee {
         .then(async (data) => {
           var User_id = data[0]._id;
 
-
-
-
           // GROUP SERVICE ADD
           const User_group_service = new groupService_User({
             groupService_id: group_service,
             user_id: User_id,
           });
           User_group_service.save();
-
 
           // STRATEGY ADD
           if (Strategies.length > 0) {
@@ -332,44 +294,38 @@ class Employee {
             });
           }
 
-
-
-
-
           const GroupServiceId = new ObjectId(group_service);
 
           const group_service_find = await serviceGroup_services_id.aggregate([
             {
               $match: {
-                Servicegroup_id: GroupServiceId
-              }
+                Servicegroup_id: GroupServiceId,
+              },
             },
             {
               $lookup: {
                 from: "services",
                 localField: "Service_id",
                 foreignField: "_id",
-                as: "serviceInfo"
-              }
+                as: "serviceInfo",
+              },
             },
             {
-              $unwind: "$serviceInfo"
+              $unwind: "$serviceInfo",
             },
             {
               $project: {
                 _id: 0, // Exclude the _id field if you don't need it
                 Service_id: "$Service_id",
-                lotsize: "$serviceInfo.lotsize"
-              }
-            }
+                lotsize: "$serviceInfo.lotsize",
+              },
+            },
           ]);
-
 
           const clientServicesData = [];
 
           // Build the array with client_services documents
           if (group_service_find.length !== 0) {
-
             // CLIENT SERVICES ADD API
             if (group_service_find.length != 0) {
               group_service_find.forEach((data) => {
@@ -382,7 +338,7 @@ class Employee {
 
                   uniqueUserService: User_id + "_" + data.Service_id,
                   quantity: data.lotsize,
-                  lot_size: 1
+                  lot_size: 1,
                 };
 
                 clientServicesData.push(clientService);
@@ -390,13 +346,7 @@ class Employee {
             }
 
             // Use insertMany to insert the documents in a single database call
-            client_services.insertMany(clientServicesData)
-              .then((result) => {
-              })
-
-
-
-
+            client_services.insertMany(clientServicesData).then((result) => {});
 
             // LICENSE TABLE ADD USE LICENSE OUR CLIENT
             if (license_type == "2") {
@@ -413,9 +363,13 @@ class Employee {
               FullName: FullName,
               Email: Email,
               Password: rand_password,
-              user_type: license_type == 2 ? "Live Account" : license_type == 0 ? "2 Days Free Live Account" : "Free Demo Account"
+              user_type:
+                license_type == 2
+                  ? "Live Account"
+                  : license_type == 0
+                  ? "2 Days Free Live Account"
+                  : "Free Demo Account",
             };
-
 
             const existingUser = await user_SignUp.findOne({
               $or: [
@@ -425,15 +379,10 @@ class Employee {
               ],
             });
 
-
-
-
             if (existingUser) {
-              existingUser.ActiveStatus = '1';
+              existingUser.ActiveStatus = "1";
               await existingUser.save();
-
             }
-
 
             var EmailData = await firstOptPass(email_data);
             CommonEmail(toEmail, subjectEmail, EmailData);
@@ -444,9 +393,6 @@ class Employee {
               user_id: data[0]._id,
             });
             res.send({ status: true, msg: "successfully Add!", data: data[0] });
-
-
-
           }
         })
         .catch((err) => {
@@ -467,9 +413,7 @@ class Employee {
   // UPDATE USER
   async UpdateUser(req, res) {
     try {
-
       var req = req.body.req;
-
 
       var StartDate1 = "";
       var EndDate1 = "";
@@ -517,7 +461,10 @@ class Employee {
 
       var TotalMonth = "0";
 
-      var Panel_key = await Company_info.find({}, { prefix: 1, licenses: 1, _id: 0 }).limit(1);
+      var Panel_key = await Company_info.find(
+        {},
+        { prefix: 1, licenses: 1, _id: 0 }
+      ).limit(1);
 
       const totalLicense = await User_model.aggregate([
         {
@@ -555,24 +502,21 @@ class Employee {
       }
 
       if (Number(new_licence) > 0) {
-
-        if ((parseInt(TotalLicense) + parseInt(new_licence)) > Number(Panel_key[0].licenses)) {
-
+        if (
+          parseInt(TotalLicense) + parseInt(new_licence) >
+          Number(Panel_key[0].licenses)
+        ) {
           return res.send({
             status: false,
             msg: "You Dont Have License",
             data: [],
-          })
+          });
         }
       }
 
-
       // PREVIOS CLIENT IS LIVE
       if (existingUsername.license_type != "2") {
-
-
         if (req.license_type == "0") {
-
           if (existingUsername.license_type != "0") {
             var currentDate = new Date();
             var start_date_2days = dateTime.create(currentDate);
@@ -600,8 +544,6 @@ class Employee {
             var end_date_2days = end_date_2days.format("Y-m-d H:M:S");
             EndDate1 = end_date_2days;
           }
-
-
         } else if (req.license_type == "1") {
           StartDate1 = req.fromdate;
           EndDate1 = req.todate;
@@ -624,14 +566,7 @@ class Employee {
 
           EndDate1 = end_date_2days;
           TotalMonth = new_licence;
-
-
-
-
         }
-
-
-
       } else {
         if (req.license_type == "2") {
           var UserEndDate = new Date(existingUsername.EndDate);
@@ -697,7 +632,6 @@ class Employee {
         }
       }
 
-
       const Strategieclient = await strategy_client.find({
         user_id: existingUsername._id,
       });
@@ -729,8 +663,6 @@ class Employee {
           delete_startegy.push(item);
         }
       });
-
-
 
       // ADD STRATEGY IN STRATEGY CLIENT
       if (add_startegy.length > 0) {
@@ -782,22 +714,18 @@ class Employee {
       // STEP FISECONDRST TO DELTE IN CLIENT SERVICES AND UPDATE NEW STRATEGY
       if (delete_startegy.length > 0) {
         delete_startegy.forEach(async (data) => {
-
           var stgId = new ObjectId(data);
           var deleteStrategy = await strategy_client.find({
             user_id: existingUsername._id,
-            strategy_id: { $ne: stgId }
+            strategy_id: { $ne: stgId },
           });
-
 
           if (req.multiple_strategy_select == 0) {
             if (deleteStrategy.length > 0) {
-
               var update_services = await client_services.updateMany(
                 { user_id: existingUsername._id, strategy_id: stgId },
                 { $set: { strategy_id: deleteStrategy[0].strategy_id } }
               );
-
             } else {
               var update_stg = new ObjectId(add_startegy[0]);
 
@@ -807,12 +735,12 @@ class Employee {
               );
             }
           } else {
-
             if (delete_startegy.length > 0) {
+              const deleteStrategyIds = delete_startegy.map(
+                (data) => new ObjectId(data)
+              );
 
-              const deleteStrategyIds = delete_startegy.map(data => new ObjectId(data));
-
-              const updatePromises = deleteStrategyIds.map(data =>
+              const updatePromises = deleteStrategyIds.map((data) =>
                 client_services.updateMany(
                   { user_id: existingUsername._id },
                   { $pull: { strategy_id: data } }
@@ -821,12 +749,8 @@ class Employee {
 
               // Wait for all update operations to complete
               const results = await Promise.all(updatePromises);
-
             }
-
-
           }
-
         });
       }
 
@@ -841,7 +765,6 @@ class Employee {
         });
 
         if (user_group_service.length == 0) {
-
           const result = await groupService_User.updateOne(
             { user_id: existingUsername._id },
             { $set: { groupService_id: new ObjectId(req.group_service) } }
@@ -865,29 +788,28 @@ class Employee {
           const GroupServices = await serviceGroup_services_id.aggregate([
             {
               $match: {
-                Servicegroup_id: GroupServiceId
-              }
+                Servicegroup_id: GroupServiceId,
+              },
             },
             {
               $lookup: {
                 from: "services",
                 localField: "Service_id",
                 foreignField: "_id",
-                as: "serviceInfo"
-              }
+                as: "serviceInfo",
+              },
             },
             {
-              $unwind: "$serviceInfo"
+              $unwind: "$serviceInfo",
             },
             {
               $project: {
                 _id: 0, // Exclude the _id field if you don't need it
                 Service_id: "$Service_id",
-                lotsize: "$serviceInfo.lotsize"
-              }
-            }
+                lotsize: "$serviceInfo.lotsize",
+              },
+            },
           ]);
-
 
           if (GroupServices.length == "0") {
             return res.send({
@@ -906,7 +828,6 @@ class Employee {
           });
 
           GroupServices.forEach((data) => {
-
             const User_client_services = new client_services({
               user_id: existingUsername._id,
               group_id: GroupServiceId,
@@ -914,25 +835,27 @@ class Employee {
               strategy_id: strategFind[0].strategy_id,
               uniqueUserService: existingUsername._id + "_" + data.Service_id,
               quantity: data.lotsize,
-              lot_size: 1
+              lot_size: 1,
             });
             User_client_services.save();
           });
-
         }
       } catch (error) {
         console.log("Error Group Services Error-", error);
       }
-
-
 
       var User_update = {
         FullName: req.FullName,
         license_type: req.license_type,
         licence: TotalMonth,
         StartDate:
-          StartDate1 == null || StartDate1 == "" ? existingUsername.StartDate : StartDate1,
-        EndDate: EndDate1 == null || EndDate1 == "" ? existingUsername.EndDate : EndDate1,
+          StartDate1 == null || StartDate1 == ""
+            ? existingUsername.StartDate
+            : StartDate1,
+        EndDate:
+          EndDate1 == null || EndDate1 == ""
+            ? existingUsername.EndDate
+            : EndDate1,
         broker: req.broker,
         parent_id: req.parent_id,
         parent_role: existingUsername.Role,
@@ -945,7 +868,7 @@ class Employee {
         demat_userid: req.demat_userid,
         service_given_month: req.service_given_month,
         multiple_strategy_select: req.multiple_strategy_select,
-        Is_Active: "1"
+        Is_Active: "1",
       };
 
       const User_Update = await User_model.updateOne(
@@ -953,9 +876,7 @@ class Employee {
         { $set: User_update }
       );
 
-
       if (req.license_type == "2" || req.license_type == 2) {
-
         if (Number(new_licence) > 0) {
           const count_licenses_add = new count_licenses({
             user_id: existingUsername._id,
@@ -965,83 +886,92 @@ class Employee {
         }
       }
 
-      if (req.multiple_strategy_select == 0 && existingUsername.multiple_strategy_select == 1) {
-        var multy_stgfind = await client_services.find({
-          user_id: existingUsername._id,
-        }).select('strategy_id')
-
+      if (
+        req.multiple_strategy_select == 0 &&
+        existingUsername.multiple_strategy_select == 1
+      ) {
+        var multy_stgfind = await client_services
+          .find({
+            user_id: existingUsername._id,
+          })
+          .select("strategy_id");
 
         if (multy_stgfind.length > 0) {
           multy_stgfind.forEach(async (data) => {
-
             if (data.strategy_id.length > 1) {
               const filter = { _id: data._id };
-              const updateOperation = { $set: { strategy_id: [data.strategy_id[0]] } }
+              const updateOperation = {
+                $set: { strategy_id: [data.strategy_id[0]] },
+              };
 
-
-              const result = await client_services.updateOne(filter, updateOperation);
+              const result = await client_services.updateOne(
+                filter,
+                updateOperation
+              );
             }
-
-          })
+          });
         }
-
       }
 
-
-
-      if (req.multiple_strategy_select == 1 && existingUsername.multiple_strategy_select == 0) {
-
+      if (
+        req.multiple_strategy_select == 1 &&
+        existingUsername.multiple_strategy_select == 0
+      ) {
         var strategFind = await strategy_client.find({
           user_id: existingUsername._id,
         });
 
-        var multy_stgfind = await client_services.find({
-          user_id: existingUsername._id,
-        }).select('strategy_id')
-
+        var multy_stgfind = await client_services
+          .find({
+            user_id: existingUsername._id,
+          })
+          .select("strategy_id");
 
         if (multy_stgfind.length > 0) {
           multy_stgfind.forEach(async (data) => {
-
-
             if (data.strategy_id.length == 0) {
               const filter = { _id: data._id };
-              const updateOperation = { $set: { strategy_id: [strategFind[0].strategy_id] } }
-              const result = await client_services.updateOne(filter, updateOperation);
+              const updateOperation = {
+                $set: { strategy_id: [strategFind[0].strategy_id] },
+              };
+              const result = await client_services.updateOne(
+                filter,
+                updateOperation
+              );
             }
-
-          })
+          });
         }
-
       }
 
-      if (req.multiple_strategy_select == 1 && existingUsername.multiple_strategy_select == 1) {
-
+      if (
+        req.multiple_strategy_select == 1 &&
+        existingUsername.multiple_strategy_select == 1
+      ) {
         var strategFind = await strategy_client.find({
           user_id: existingUsername._id,
         });
 
-        var multy_stgfind = await client_services.find({
-          user_id: existingUsername._id,
-        }).select('strategy_id')
-
+        var multy_stgfind = await client_services
+          .find({
+            user_id: existingUsername._id,
+          })
+          .select("strategy_id");
 
         if (multy_stgfind.length > 0) {
           multy_stgfind.forEach(async (data) => {
-
-
             if (data.strategy_id.length == 0) {
               const filter = { _id: data._id };
-              const updateOperation = { $set: { strategy_id: [strategFind[0].strategy_id] } }
-              const result = await client_services.updateOne(filter, updateOperation);
+              const updateOperation = {
+                $set: { strategy_id: [strategFind[0].strategy_id] },
+              };
+              const result = await client_services.updateOne(
+                filter,
+                updateOperation
+              );
             }
-
-          })
+          });
         }
-
       }
-
-
 
       // USER GET ALL TYPE OF DATA
       return res.send({
@@ -1049,10 +979,6 @@ class Employee {
         msg: "User Update successfully",
         data: [],
       });
-
-
-
-
     } catch (error) {
       console.log("Error In User Update-", error);
     }
@@ -1070,9 +996,12 @@ class Employee {
       const date = new Date();
       const formattedDate = date.toISOString().slice(0, 10); // Sirf date part extract karo
 
-
       if (Find_Role == "ADMIN") {
-        AdminMatch = { Role: "USER", Is_Active: "1", EndDate: { $lt: new Date(formattedDate) } };
+        AdminMatch = {
+          Role: "USER",
+          Is_Active: "1",
+          EndDate: { $lt: new Date(formattedDate) },
+        };
       } else if (Find_Role == "SUBADMIN") {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
@@ -1106,7 +1035,6 @@ class Employee {
     } catch (error) {
       console.log("Error loginClients Error-", error);
     }
-
   }
 
   // GET ALL GetAllClients
@@ -1123,7 +1051,9 @@ class Employee {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
 
-      const getAllClients = await User_model.find(AdminMatch).sort({ CreateDate: -1 });
+      const getAllClients = await User_model.find(AdminMatch).sort({
+        CreateDate: -1,
+      });
       // IF DATA NOT EXIST
       if (getAllClients.length == 0) {
         return res.send({
@@ -1139,7 +1069,6 @@ class Employee {
         status: true,
         msg: "Get All Clients",
         data: getAllClients,
-
       });
     } catch (error) {
       console.log("Error loginClients Error-", error);
@@ -1155,10 +1084,9 @@ class Employee {
   // GET ALL LOGIN CLIENTS
   async loginClients(req, res) {
     try {
-
       const getAllLoginClients = await User_model.find({
         $or: [{ AppLoginStatus: 1 }, { WebLoginStatus: 1 }],
-      })
+      });
 
       if (getAllLoginClients.length == 0) {
         return res.send({
@@ -1173,7 +1101,6 @@ class Employee {
         msg: "Get All Login Clients",
         data: getAllLoginClients,
       });
-
     } catch (error) {
       console.log("Error loginClients Error-", error);
     }
@@ -1207,7 +1134,6 @@ class Employee {
     }
   }
 
-
   // GET ALL TRADING ON  CLIENTS
   async GetTradingStatus(req, res) {
     try {
@@ -1216,15 +1142,11 @@ class Employee {
 
       const currentDate = new Date(); // Get the current date
       const GetAlluser_logs = await User_model.find({
-        Role: 'USER',
-        $or: [
-          { license_type: "2" },
-          { license_type: "0" }
-        ],
+        Role: "USER",
+        $or: [{ license_type: "2" }, { license_type: "0" }],
         TradingStatus: Role,
-        EndDate: { $gt: currentDate }
-
-      }).select('Email FullName EndDate TradingStatus UserName PhoneNo')
+        EndDate: { $gt: currentDate },
+      }).select("Email FullName EndDate TradingStatus UserName PhoneNo");
 
       // const totalCount = GetAlluser_logs.length;
       // IF DATA NOT EXIST
@@ -1272,8 +1194,8 @@ class Employee {
           AppLoginStatus: "0",
           WebLoginStatus: "0",
           web_login_token: null,
-          app_login_token: null
-        }
+          app_login_token: null,
+        },
       };
 
       if (get_user[0].TradingStatus == "on" && user_active_status == 0) {
@@ -1288,22 +1210,26 @@ class Employee {
           user_Id: new ObjectId(id),
           login_status: "Trading Off By System you are Inactive by admin",
           role: "USER",
-          system_ip: network_ip
+          system_ip: network_ip,
         });
         await user_login1.save();
       }
 
       const user_login = new user_logs({
         user_Id: new ObjectId(id),
-        login_status: "Admin " + (user_active_status == 0 ? "InActive" : "Active") + " User",
+        login_status:
+          "Admin " +
+          (user_active_status == 0 ? "InActive" : "Active") +
+          " User",
         role: "USER",
         device: "",
-        system_ip: network_ip
+        system_ip: network_ip,
       });
       await user_login.save();
 
       if (result) {
-        const status_msg = user_active_status == "0" ? "DeActivate" : "Activate";
+        const status_msg =
+          user_active_status == "0" ? "DeActivate" : "Activate";
         return res.send({
           status: true,
           msg: "Update Successfully",
@@ -1314,7 +1240,7 @@ class Employee {
       return res.send({
         status: false,
         msg: "Internal Server Error",
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -1427,14 +1353,12 @@ class Employee {
             api_type: 1,
             demat_userid: 1,
             broker: 1,
-            multiple_strategy_select: 1
+            multiple_strategy_select: 1,
           },
         },
       ];
 
       const GetAllClientServices = await User_model.aggregate(pipeline);
-
-
 
       const userSTG = await strategy_client.find({ user_id: userId });
 
@@ -1480,35 +1404,36 @@ class Employee {
   // GET ONLY CLIENT KEY
   async GetclientKey(req, res) {
     try {
-      const { id } = req.body
+      const { id } = req.body;
       var _id = new ObjectId(id);
-      const Client_key = await User_model.findOne({ _id }, 'client_key');
+      const Client_key = await User_model.findOne({ _id }, "client_key");
       // CHECK IF PANEL EXIST OR NOT
 
-
-
       if (!Client_key) {
-        return res.status(409).json({ status: false, msg: 'Client Not exists', data: [] });
+        return res
+          .status(409)
+          .json({ status: false, msg: "Client Not exists", data: [] });
       }
-      return res.send({ status: true, msg: "Get Client key", data: Client_key })
-    } catch (error) {
-
-    }
+      return res.send({
+        status: true,
+        msg: "Get Client key",
+        data: Client_key,
+      });
+    } catch (error) {}
   }
 
   // Duplicate Data
   async GetDuplicateData(req, res) {
     try {
-
       const Client_key = await User_model.aggregate([
         { $match: { license_type: "2" } },
         {
           $lookup: {
-            from: 'count_licenses',
-            localField: '_id',
-            foreignField: 'user_id',
-            as: 'license_details'
-          }
+            from: "count_licenses",
+            localField: "_id",
+            foreignField: "user_id",
+            as: "license_details",
+          },
         },
         {
           $addFields: {
@@ -1517,45 +1442,44 @@ class Employee {
                 $map: {
                   input: "$license_details.license",
                   as: "license",
-                  in: { $toInt: "$$license" }
-                }
-              }
-            }
-          }
+                  in: { $toInt: "$$license" },
+                },
+              },
+            },
+          },
         },
         {
           $group: {
             _id: "$UserName",
             licence: { $first: "$licence" },
-            total_licenses: { $first: "$total_licenses" }
-          }
+            total_licenses: { $first: "$total_licenses" },
+          },
         },
         {
           $match: {
             $or: [
               { licence: { $exists: false } },
-              { total_licenses: { $exists: false } }
-            ]
-          }
+              { total_licenses: { $exists: false } },
+            ],
+          },
         },
         {
           $project: {
             _id: 0,
             UserName: "$_id",
             licence: 1,
-            total_licenses: 1
-          }
-        }
+            total_licenses: 1,
+          },
+        },
       ]);
 
-
-
-      return res.send({ status: true, msg: "Get Client key", data: Client_key })
-    } catch (error) {
-
-    }
+      return res.send({
+        status: true,
+        msg: "Get Client key",
+        data: Client_key,
+      });
+    } catch (error) {}
   }
-
 
   // Duplicate Data
   async DawnloadStatusandResponse(req, res) {
@@ -1563,29 +1487,69 @@ class Employee {
       const { id, key } = req.body;
 
       if (!id || !key) {
-        return res.status(400).json({ status: false, msg: "ID and key are required" });
+        return res
+          .status(400)
+          .json({ status: false, msg: "ID and key are required" });
       }
-      let data
+      let data;
       if (key == 1) {
         data = await user_logs.find({ user_Id: id });
       } else {
         data = await BrokerResponse.find({ user_id: id });
+      }
 
+      if (data.length == 0) {
+        return res.status(404).json({ status: false, msg: "Data not found" });
+      }
+      if (key == 1) {
+        data = data.map((item,index) => {
+          return {
+            id:index+1,
+            Loginstatus: item.login_status,
+            trading_status: item.trading_status,
+            message: item.message,
+            system_ip: item.system_ip,
+            createdAt: new Date(item.createdAt).toLocaleString("en-IN", {
+              timeZone: "Asia/Kolkata",
+            }),
+          };
+        });
+        
+      } else {
+
+        data = data.map((item,index) => {
+          return {
+            id:index+1,
+            symbol: item.symbol,
+            type: item.type,
+            trading_symbol: item.trading_symbol,
+            strategy: item.strategy,
+            broker_name: item.broker_name,
+            order_status: item.order_status,
+            order_id: item.order_id,
+            order_view_date: item.order_view_date,
+            OrderStatus:item.order_view_response,
+            reject_reason: item.reject_reason,
+            createdAt: new Date(item.createdAt).toLocaleString("en-IN", {
+              timeZone: "Asia/Kolkata",
+            }),
+          };
+        });
       }
 
 
       return res.status(200).json({
         status: true,
         msg: "Data retrieved successfully",
-        data: data
+        data: data,
       });
-
     } catch (error) {
       console.log("Error in DawnloadStatusandResponse:", error);
-      return res.status(500).json({ status: false, msg: "Internal Server Error", error });
+      return res
+        .status(500)
+        .json({ status: false, msg: "Internal Server Error", error });
     }
   }
-
 
   async GetAllStarClients(req, res) {
     try {
@@ -1600,7 +1564,9 @@ class Employee {
         AdminMatch = { Role: "USER", parent_id: user_ID, starClient: "1" };
       }
 
-      const getAllClients = await User_model.find(AdminMatch).sort({ CreateDate: -1 });
+      const getAllClients = await User_model.find(AdminMatch).sort({
+        CreateDate: -1,
+      });
       // IF DATA NOT EXIST
       if (getAllClients.length == 0) {
         return res.send({
@@ -1616,7 +1582,6 @@ class Employee {
         status: true,
         msg: "Get All Clients",
         data: getAllClients,
-
       });
     } catch (error) {
       console.log("Error loginClients Error-", error);
@@ -1628,8 +1593,6 @@ class Employee {
       });
     }
   }
-
-
 
   // CLIENTS ACTIVE INACTIVE STATUS UPDATE
   async UpdateStarStatus(req, res) {
@@ -1661,8 +1624,6 @@ class Employee {
         msg: "Update Successfully",
         data: [],
       });
-
-
     } catch (error) {
       return res.status(500).send({
         status: false,
@@ -1672,43 +1633,51 @@ class Employee {
     }
   }
 
-
   async GetAllReferalClients(req, res) {
     try {
       const { Find_Role, username } = req.body;
 
-      const AdminMatch = Find_Role === "ADMIN"
-        ? { refer_code: { $ne: null, $ne: "" } }
-        : { refer_code: username };
+      const AdminMatch =
+        Find_Role === "ADMIN"
+          ? { refer_code: { $ne: null, $ne: "" } }
+          : { refer_code: username };
 
-      let getAllClients = await user_SignUp.find(AdminMatch).sort({ CreateDate: -1 });
+      let getAllClients = await user_SignUp
+        .find(AdminMatch)
+        .sort({ CreateDate: -1 });
 
       if (getAllClients.length > 0) {
         const updatePromises = getAllClients.map(async (data) => {
-          const GetUser = await User_model.findOne({ UserName: data.UserName }).select('license_type refer_points');
+          const GetUser = await User_model.findOne({
+            UserName: data.UserName,
+          }).select("license_type refer_points");
           if (GetUser) {
             let updatestatus = 0;
 
             if (GetUser.license_type == 1 || GetUser.license_type == 0) {
               updatestatus = 1;
             } else if (GetUser.license_type == 2) {
-              const GetUserSignup = await user_SignUp.findOne({ UserName: data.UserName });
+              const GetUserSignup = await user_SignUp.findOne({
+                UserName: data.UserName,
+              });
               if (GetUserSignup.ActiveStatus == 2) {
                 updatestatus = 2;
               } else {
-
-                const refer_pointsData = await User_model.findOne({ UserName: data.refer_code }).select('refer_points');
-
-
-
+                const refer_pointsData = await User_model.findOne({
+                  UserName: data.refer_code,
+                }).select("refer_points");
 
                 updatestatus = 2;
 
                 await User_model.updateOne(
                   { _id: refer_pointsData._id },
-                  { $set: { refer_points: refer_pointsData.refer_points + data.refer_points } }
+                  {
+                    $set: {
+                      refer_points:
+                        refer_pointsData.refer_points + data.refer_points,
+                    },
+                  }
                 );
-
               }
             }
 
@@ -1723,17 +1692,20 @@ class Employee {
         await Promise.all(updatePromises);
 
         // Fetch all clients again after the update
-        getAllClients = await user_SignUp.find(AdminMatch).sort({ CreateDate: -1 });
+        getAllClients = await user_SignUp
+          .find(AdminMatch)
+          .sort({ CreateDate: -1 });
       }
 
       if (getAllClients.length > 0) {
         getAllClients = getAllClients.filter((data) => {
-          return data.refer_code !== null && data.refer_code !== "null" && data.refer_code !== "";
+          return (
+            data.refer_code !== null &&
+            data.refer_code !== "null" &&
+            data.refer_code !== ""
+          );
         });
-      
-    
       }
-      
 
       if (getAllClients.length === 0) {
         return res.send({
@@ -1744,18 +1716,23 @@ class Employee {
       }
 
       if (Find_Role === "USER") {
-        const GetUser = await User_model.findOne({ UserName: username }).select('license_type refer_points');
-        const UserReedeemPoint = await userReedeem_modal.find({ user_id: GetUser._id, ActiveStatus: "0" }).select('reedeem_points ActiveStatus');
+        const GetUser = await User_model.findOne({ UserName: username }).select(
+          "license_type refer_points"
+        );
+        const UserReedeemPoint = await userReedeem_modal
+          .find({ user_id: GetUser._id, ActiveStatus: "0" })
+          .select("reedeem_points ActiveStatus");
 
-        const sumReedeemPoints = UserReedeemPoint.reduce((total, item) => total + item.reedeem_points, 0);
+        const sumReedeemPoints = UserReedeemPoint.reduce(
+          (total, item) => total + item.reedeem_points,
+          0
+        );
 
         var AllPoints = GetUser.refer_points - sumReedeemPoints;
-
 
         if (AllPoints < 0) {
           AllPoints = 0;
         }
-
 
         return res.send({
           status: true,
@@ -1770,7 +1747,6 @@ class Employee {
           data: getAllClients,
         });
       }
-
     } catch (error) {
       console.log("Error in GetAllReferalClients:", error);
       return res.status(500).send({
@@ -1780,13 +1756,6 @@ class Employee {
       });
     }
   }
-
-
-
-
 }
 
 module.exports = new Employee();
-
-
-

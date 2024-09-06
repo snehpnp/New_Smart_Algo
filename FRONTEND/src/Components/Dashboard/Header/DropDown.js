@@ -20,7 +20,9 @@ const DropDown = () => {
     const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'));
     const [admin_permission, setAdmin_permission] = useState(0);
     const token = JSON.parse(localStorage.getItem("user_details")).token;
-
+    useEffect(() => {
+        Permmision()
+    }, []);
 
     const LogoutUser = async () => {
         const request = {
@@ -82,9 +84,7 @@ const DropDown = () => {
 
     }
 
-    useEffect(() => {
-        Permmision()
-    }, []);
+
 
 
 

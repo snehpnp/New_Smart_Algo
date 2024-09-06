@@ -5,7 +5,7 @@ const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 
 const { getusertradingStatus, getuserUpdateStatus } = require('../../Controllers/User/Trading_status')
-const { getClientServices, updateClientServices, TradingOff, ModifyUpdates, GetUserApiCreate } = require('../../Controllers/User/Dashboard')
+const { getClientServices, updateClientServices, TradingOff, ModifyUpdates, GetUserApiCreate ,USerFundUpdate,UserFundLogs} = require('../../Controllers/User/Dashboard')
 const { GetUserBrokerResponse } = require('../../Controllers/User/BrokerReponse')
 const { GetUserTradeSignals } = require('../../Controllers/User/Signals')
 const { GetUserTradeHistory } = require('../../Controllers/User/TradeHistory')
@@ -21,6 +21,12 @@ const { GetAllSymbols } = require('../../Controllers/User/MakeStrategy')
 router.post('/getall/user/clientServices', verifyToken, getClientServices);
 router.post('/update/clientServices', updateClientServices);
 router.post('/update/modify_details', ModifyUpdates);
+
+router.post('/update/fund', USerFundUpdate);
+
+router.post('/getall/fund', UserFundLogs);
+
+
 
 // TRADING OFF
 router.post('/trading/logout', TradingOff);

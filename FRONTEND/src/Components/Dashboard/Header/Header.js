@@ -42,11 +42,31 @@ const Header = ({ ChatBox }) => {
   const [getLogo, setLogo] = useState("");
   const [ip, setIp] = useState('');
 
+
+  useEffect(() => {
+    CompanyName()
+  }, []);
   useEffect(() => {
     GET_IP().then((response) => {
       setIp(response.data.ip)
     })
   }, []);
+
+  useEffect(() => {
+    if (user_role == "ADMIN") {
+      Notfication();
+    }
+  }, []);
+
+  useEffect(() => {
+    ClearSession();
+  }, []);
+  
+  useEffect(() => {
+    fetchUserProfile();
+    message_brod()
+  }, [refresh]);
+
 
   if (theme_id != null) {
     let themedata = JSON.parse(theme_id);
@@ -213,6 +233,7 @@ const Header = ({ ChatBox }) => {
 
         }
 
+        localStorage.setItem("broker", response.data.broker ? response.data.broker : "0")
 
         setUserDetails(response.data);
       } else {
@@ -244,10 +265,7 @@ const Header = ({ ChatBox }) => {
 
   };
 
-  useEffect(() => {
-    fetchUserProfile();
-    message_brod()
-  }, [refresh]);
+  
 
   //  For Show Notfication
   const Notfication = async () => {
@@ -270,13 +288,7 @@ const Header = ({ ChatBox }) => {
     }
   };
 
-  useEffect(() => {
-    if (user_role == "ADMIN") {
-      Notfication();
-    }
-  }, []);
-
-
+ 
   const ClearSession = async () => {
     var decoded = jwt_decode(user_details.token);
 
@@ -311,9 +323,7 @@ const Header = ({ ChatBox }) => {
     }
   };
 
-  useEffect(() => {
-    ClearSession();
-  }, []);
+
 
 
 
@@ -333,9 +343,7 @@ const Header = ({ ChatBox }) => {
       })
   }
 
-  useEffect(() => {
-    CompanyName()
-  }, []);
+ 
 
   return (
     <div className="header-container">

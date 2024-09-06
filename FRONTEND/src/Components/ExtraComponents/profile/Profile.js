@@ -1,17 +1,20 @@
-
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Content from "../../Dashboard/Content/Content";
 import Formikform from "../Form/Formik_form1";
 import { useFormik } from "formik";
 import * as valid_err from "../../../Utils/Common_Messages";
-import { fDate, fDateTime } from "../../../Utils/Date_formet";
+import { fDate } from "../../../Utils/Date_formet";
 import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import { Reset_Password } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import toast from "react-hot-toast";
 import ToastButton from "../Alert_Toast";
-import { Users } from 'lucide-react';
 import Modify_update from "./Modify_update";
+import { Modal, Button, Table } from "react-bootstrap";
+import {
+  USER_FUND_UPDATE_API,
+  USER_FUND_GETALL_API,
+} from "../../../ReduxStore/Slice/Users/DashboardSlice";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
@@ -19,57 +22,91 @@ const UserProfile = () => {
   const user_role = JSON.parse(localStorage.getItem("user_role"));
   const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
 
-  const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
-  const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+  const gotodashboard = JSON.parse(localStorage.getItem("user_details_goTo"));
+  const isgotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
 
+  const [UserDetails, setUserDetails] = useState([]);
+  const [selectedOption, setSelectedOption] = useState("stock");
+  const [fundValue, setFundValue] = useState("");
+  const [percentageValue, setPercentageValue] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [show, setShow] = useState(false);
 
-  const [UserDetails, setUserDetails] = useState({
-    loading: true,
-    data: [],
-  });
+  const [UserLogs, setUserLogs] = useState([]);
 
-
-  const data = async () => {
-
-    const userId = isgotodashboard ? gotodashboard.user_id : user_details.user_id;
-    const token = isgotodashboard ? gotodashboard.token : user_details.token;
-
-    await dispatch(User_Profile({
-      id: userId,
-      token: token,
-    }))
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setUserDetails({
-            loading: false,
-            data: response.data,
-          });
-        }
-      });
-  };
   useEffect(() => {
     data();
   }, []);
 
+  const data = async () => {
+    const userId = isgotodashboard
+      ? gotodashboard.user_id
+      : user_details.user_id;
+    const token = isgotodashboard ? gotodashboard.token : user_details.token;
+
+    await dispatch(
+      User_Profile({
+        id: userId,
+        token: token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setUserDetails(response.data || []);
+          if (response.data && response.data.fund_type) {
+            setSelectedOption(response.data.fund_type);
+          }
+          if (response.data && response.data.fund_value) {
+            if (response.data.fund_type === "fund") {
+              setFundValue(response.data.fund_value);
+            } else if (response.data.fund_type === "percentage") {
+              setPercentageValue(response.data.fund_value);
+            }
+          }
+        } else {
+          setUserDetails([]);
+        }
+      });
+
+    await dispatch(USER_FUND_GETALL_API({ user_id: userId, token: token }))
+      .unwrap()
+      .then((response) => {
+
+        if (response.status) {
+      
+          setUserLogs(response.data || []);
+        } else {
+          setUserLogs([]);
+         
+        }
+      });
+  };
+
   const fields = [
     {
-      name: "oldpassword", label: "Old Password", type: "password", label_size: 12,
+      name: "oldpassword",
+      label: "Old Password",
+      type: "password",
+      label_size: 12,
       col_size: 8,
     },
     {
-      name: "newpassword", label: "New Password", type: "password", label_size: 12,
+      name: "newpassword",
+      label: "New Password",
+      type: "password",
+      label_size: 12,
       col_size: 8,
     },
     {
-      name: "confirmpassword", label: "Confirm Password", type: "password", label_size: 12,
+      name: "confirmpassword",
+      label: "Confirm Password",
+      type: "password",
+      label_size: 12,
       col_size: 8,
     },
-  ]
+  ];
 
-
-
-  //  FOR RESET PASSWORD
   const formik = useFormik({
     initialValues: {
       oldpassword: "",
@@ -114,7 +151,54 @@ const UserProfile = () => {
     },
   });
 
+  const handleOptionChange = (e) => {
+    setSelectedOption(e.target.value);
+    setErrorMessage("");
+    if (e.target.value === "stock") {
+      setFundValue("");
+      setPercentageValue("");
+    }
+  };
 
+  const handleSubmit = () => {
+    if (selectedOption === "fund" && !fundValue) {
+      setErrorMessage("Please enter a valid fund amount.");
+      return;
+    }
+
+    if (
+      selectedOption === "percentage" &&
+      (!percentageValue || percentageValue < 1 || percentageValue > 100)
+    ) {
+      setErrorMessage("Please enter a percentage between 1 and 100.");
+      return;
+    }
+
+    setErrorMessage("");
+
+    let requestData = {
+      user_id: UserDetails._id,
+      fund_type: selectedOption,
+      fund_value: selectedOption === "fund" ? fundValue : percentageValue,
+    };
+
+    dispatch(USER_FUND_UPDATE_API(requestData))
+      .unwrap()
+      .then((response) => {
+   
+        if (response.status) {
+          toast.success(response.msg);
+        } else {
+          toast.error(response.msg);
+        }
+      })
+      .catch((error) => {
+        toast.error("An error occurred while updating the fund.");
+      });
+  };
+
+  const handleClose = () => setShow(false);
+  const handleShowModal = () => setShow(true);
 
 
   return (
@@ -128,7 +212,7 @@ const UserProfile = () => {
                   <div className="card-body">
                     <div className="profile-blog">
                       <h5 className="text-primary d-block">User Profile</h5>
-                      {/* <Users className="profile-img"/> */}
+
                       <img
                         src="../assets/avatar.jpg"
                         className="profile-img"
@@ -143,18 +227,6 @@ const UserProfile = () => {
                             alt=""
                           />
                         </div>
-                        {/* <div className="profile-details d-block">
-                          <div className="profile-name px-3 pb-3 ">
-                            <p className="m-0"> User Name</p>
-                            <h4>{UserDetails && UserDetails.data.FullName} </h4>
-                          </div>
-                          <div className="profile-email px-2 ">
-                            <p className="m-0">Email</p>
-                            <h4 className="text-muted mb-0">
-                              {UserDetails && UserDetails.data.Email}
-                            </h4>
-                          </div>
-                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -177,7 +249,8 @@ const UserProfile = () => {
                           About Me
                         </a>
                       </li>
-                      {user_role === "SUBADMIN" || gotodashboard && gotodashboard.Role === "SUBADMIN" ? (
+                      {user_role === "SUBADMIN" ||
+                      (gotodashboard && gotodashboard.Role === "SUBADMIN") ? (
                         ""
                       ) : (
                         <li className="nav-item">
@@ -189,11 +262,9 @@ const UserProfile = () => {
                             Change Password
                           </a>
                         </li>
-
                       )}
-                      {user_role === "USER" ?
-
-                        < li className="nav-item">
+                      {user_role === "USER" ? (
+                        <li className="nav-item">
                           <a
                             href="#modify"
                             data-bs-toggle="tab"
@@ -202,19 +273,33 @@ const UserProfile = () => {
                             Modify Updates
                           </a>
                         </li>
-                        : user_role_goTo === "USER" && gotodashboard ?
+                      ) : user_role_goTo === "USER" && gotodashboard ? (
+                        <li className="nav-item">
+                          <a
+                            href="#modify"
+                            data-bs-toggle="tab"
+                            className="nav-link"
+                          >
+                            Modify Updates
+                          </a>
+                        </li>
+                      ) : (
+                        ""
+                      )}
 
-                          < li className="nav-item">
-                            <a
-                              href="#modify"
-                              data-bs-toggle="tab"
-                              className="nav-link"
-                            >
-                              Modify Updates
-                            </a>
-                          </li>
-                          : ""}
+                      {UserDetails.broker == "19" && (
+                        <li className="nav-item">
+                          <a
+                            href="#fund-management"
+                            data-bs-toggle="tab"
+                            className="nav-link"
+                          >
+                            Stock Fund
+                          </a>
+                        </li>
+                      )}
                     </ul>
+
                     <div className="tab-content">
                       <div id="about-me" className="tab-pane fade active show">
                         <div className="profile-personal-info pt-3">
@@ -228,9 +313,7 @@ const UserProfile = () => {
                               </h5>
                             </div>
                             <div className="col-sm-9 col-7">
-                              <span>
-                                {UserDetails && UserDetails.data.FullName}
-                              </span>
+                              <span>{UserDetails && UserDetails.FullName}</span>
                             </div>
                           </div>
                           <div className="row mb-2">
@@ -240,9 +323,7 @@ const UserProfile = () => {
                               </h5>
                             </div>
                             <div className="col-sm-9 col-7">
-                              <span>
-                                {UserDetails && UserDetails.data.Email}
-                              </span>
+                              <span>{UserDetails && UserDetails.Email}</span>
                             </div>
                           </div>
                           <div className="row mb-2">
@@ -253,21 +334,25 @@ const UserProfile = () => {
                             </div>
                             <div className="col-sm-9 col-7">
                               <span>
-                                {UserDetails.data && UserDetails.data?.PhoneNo && `${'*'.repeat(UserDetails.data.PhoneNo.length - 4)}${UserDetails.data.PhoneNo.slice(-4)}`}
+                                {UserDetails &&
+                                  UserDetails.PhoneNo &&
+                                  `${"*".repeat(
+                                    UserDetails.PhoneNo.length - 4
+                                  )}${UserDetails.PhoneNo.slice(-4)}`}
                               </span>
-
                             </div>
                           </div>
 
                           <div className="row mb-2">
                             <div className="col-sm-3 col-5">
                               <h5 className="f-w-500">
-                                PANEL_CLIENT_KEY <span className="pull-end">:</span>
+                                PANEL_CLIENT_KEY{" "}
+                                <span className="pull-end">:</span>
                               </h5>
                             </div>
                             <div className="col-sm-9 col-7">
                               <span>
-                                {UserDetails && UserDetails.data.client_key}
+                                {UserDetails && UserDetails.client_key}
                               </span>
                             </div>
                           </div>
@@ -283,8 +368,8 @@ const UserProfile = () => {
                                 </div>
                                 <div className="col-sm-9 col-7">
                                   <span>
-                                    {UserDetails.data.StartDate &&
-                                      fDate(UserDetails.data.StartDate)}
+                                    {UserDetails.StartDate &&
+                                      fDate(UserDetails.StartDate)}
                                   </span>
                                 </div>
                               </div>
@@ -296,8 +381,8 @@ const UserProfile = () => {
                                 </div>
                                 <div className="col-sm-9 col-7">
                                   <span>
-                                    {UserDetails.data.EndDate &&
-                                      fDate(UserDetails.data.EndDate)}
+                                    {UserDetails.EndDate &&
+                                      fDate(UserDetails.EndDate)}
                                   </span>
                                 </div>
                               </div>
@@ -312,8 +397,12 @@ const UserProfile = () => {
                                 <div className="col-sm-9 col-7">
                                   <span>
                                     {UserDetails &&
-                                      UserDetails.data.license_type == "2" ? "Live" : UserDetails &&
-                                        UserDetails.data.license_type == "1" ? "Demo" : "2 Days"}
+                                    UserDetails.license_type == "2"
+                                      ? "Live"
+                                      : UserDetails &&
+                                        UserDetails.license_type == "1"
+                                      ? "Demo"
+                                      : "2 Days"}
                                   </span>
                                 </div>
                               </div>
@@ -323,26 +412,15 @@ const UserProfile = () => {
                           )}
                         </div>
                       </div>
-                      {/* {user_role === "SUBADMIN" || gotodashboard && gotodashboard.Role === "SUBADMIN" ? (
-                        ""
-                      ) : ( */}
-                      <>
-                        <div
-                          id="modify"
-                          className="tab-pane fade mt-3"
-                        >
-                          <h4 className="text-primary mb-4">
-                            Modify Updates
-                          </h4>
-                          <Modify_update UserDetails={UserDetails && UserDetails} />
-
-                        </div>
-                      </>
-                      {/* )} */}
-
-
-                      {user_role === "USER" || user_role === "ADMIN" || !gotodashboard ?
-
+                      <div id="modify" className="tab-pane fade mt-3">
+                        <h4 className="text-primary mb-4">Modify Updates</h4>
+                        <Modify_update
+                          UserDetails={UserDetails && UserDetails}
+                        />
+                      </div>
+                      {user_role === "USER" ||
+                      user_role === "ADMIN" ||
+                      !gotodashboard ? (
                         <>
                           <div
                             id="profile-settings"
@@ -365,23 +443,199 @@ const UserProfile = () => {
                                 title="forlogin"
                               />
                             )}
-
                           </div>
                         </>
-                        : ""
-                      }
+                      ) : (
+                        ""
+                      )}
+
+                      <div id="fund-management" className="tab-pane fade">
+                        <div className="profile-personal-info pt-3">
+                          <div className="d-flex justify-content-between align-items-center mb-4">
+                            <h4 className="text-primary">Fund Management</h4>
+                            <button
+                              type="button"
+                              className="btn btn-link p-0"
+                              onClick={handleShowModal}
+                            >
+                              <i
+                                className="bi bi-info-circle"
+                                style={{ fontSize: "1.5rem", color: "#0d6efd" }}
+                              ></i>
+                            </button>
+                          </div>
+
+                          <div className="row mb-2">
+                            <div className="row align-items-center">
+                              <div className="col-sm-9 col-7">
+                                {/* Radio Buttons */}
+                                <div className="form-check form-check-inline">
+                                  <input
+                                    type="radio"
+                                    className="form-check-input"
+                                    id="stockWise"
+                                    name="option"
+                                    value="stock"
+                                    checked={selectedOption === "stock"}
+                                    onChange={handleOptionChange}
+                                  />
+                                  <label
+                                    className="form-check-label"
+                                    htmlFor="stockWise"
+                                  >
+                                    Stock Wise
+                                  </label>
+                                </div>
+
+                                <div className="form-check form-check-inline">
+                                  <input
+                                    type="radio"
+                                    className="form-check-input"
+                                    id="fundWise"
+                                    name="option"
+                                    value="fund"
+                                    checked={selectedOption === "fund"}
+                                    onChange={handleOptionChange}
+                                  />
+                                  <label
+                                    className="form-check-label"
+                                    htmlFor="fundWise"
+                                  >
+                                    Fund Wise
+                                  </label>
+                                </div>
+
+                                <div className="form-check form-check-inline">
+                                  <input
+                                    type="radio"
+                                    className="form-check-input"
+                                    id="percentageWise"
+                                    name="option"
+                                    value="percentage"
+                                    checked={selectedOption === "percentage"}
+                                    onChange={handleOptionChange}
+                                  />
+                                  <label
+                                    className="form-check-label"
+                                    htmlFor="percentageWise"
+                                  >
+                                    Percentage Wise
+                                  </label>
+                                </div>
+
+                                {/* Conditional Inputs */}
+                                {selectedOption === "fund" && (
+                                  <div className="mt-3">
+                                    <label htmlFor="fundInput">
+                                      Enter Fund Amount:
+                                    </label>
+                                    <input
+                                      type="number"
+                                      id="fundInput"
+                                      className="form-control"
+                                      placeholder="Enter fund amount"
+                                      value={fundValue}
+                                      onChange={(e) =>
+                                        setFundValue(e.target.value)
+                                      }
+                                    />
+                                  </div>
+                                )}
+
+                                {selectedOption === "percentage" && (
+                                  <div className="mt-3">
+                                    <label htmlFor="percentageInput">
+                                      Enter Percentage:
+                                    </label>
+                                    <input
+                                      type="number"
+                                      id="percentageInput"
+                                      className="form-control"
+                                      placeholder="Enter percentage (1 to 100)"
+                                      value={percentageValue}
+                                      min={1}
+                                      max={100}
+                                      onChange={(e) =>
+                                        setPercentageValue(e.target.value)
+                                      }
+                                    />
+                                  </div>
+                                )}
+
+                                {/* Error Message */}
+                                {errorMessage && (
+                                  <div className="text-danger mt-2">
+                                    {errorMessage}
+                                  </div>
+                                )}
+
+                                {/* Submit Button */}
+                                <div className="mt-3">
+                                  <button
+                                    className="btn btn-primary"
+                                    onClick={handleSubmit}
+                                  >
+                                    Submit
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-
                 </div>
               </div>
             </div>
             <ToastButton />
           </div>
         </div>
-      </Content >
-      )
+
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Fund Management History</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {/* History Table */}
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Fund Status</th>
+                  <th>Fund Amount</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {UserLogs && UserLogs.length > 0 ? (
+                  UserLogs.map((record, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{record.fund_status || "-"}</td>
+                      <td>{record.fund_amount || "-"}</td>
+                      <td>
+                        {record.createdAt ? fDate(record.createdAt) : "-"}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" className="text-center">
+                      No records found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </Content>
     </>
   );
 };

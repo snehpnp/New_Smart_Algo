@@ -229,6 +229,22 @@ const userModel = Schema({
     refer_points: {
         type: Number
     },
+    fund_type: {
+        type: String,
+        default: null
+    },
+    fund_value: {
+        type: String,
+        default: null
+    },
+    Profile_fund: {
+        type: String,
+        default: null
+    },
+
+
+
+
 },
     {
         timestamps: true

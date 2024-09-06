@@ -389,7 +389,7 @@ class Tradehistory {
       // Find ADMIN records created in the last 3 days
       var Admin_information = await user_logs.find({
         user_Id: new ObjectId(req.body.id),
-        role: "ADMIN",
+        // role: "ADMIN",
         createdAt: { $gte: threeDaysAgo },
       }).sort({ createdAt: -1 });
 

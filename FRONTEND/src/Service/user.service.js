@@ -269,8 +269,7 @@ export async function GET_ALL_BROKER_RESPONSE(user_id) {
 }
 
 
-
-// 
+ 
 export async function GET_USER_BROKER_INFO(user_id, token) {
     try {
         const res = await axios.post(`${Config.base_url}get/user_api_create`, user_id, {
@@ -286,8 +285,34 @@ export async function GET_USER_BROKER_INFO(user_id, token) {
 }
 
 
+export async function USER_FUND_UPDATE(user_id, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/fund`, user_id, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
 
 
+export async function USER_FUND_GETALL(user_id, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/fund`, user_id, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
 
 
 
