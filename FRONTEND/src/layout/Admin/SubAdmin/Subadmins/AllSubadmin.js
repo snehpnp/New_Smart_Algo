@@ -212,21 +212,21 @@ const AllSubadmin = () => {
         </>
       ),
     },
-    // {
-    //   dataField: "ActiveStatus",
-    //   text: "Dashboard",
-    //   formatter: (cell, row) => (
-    //     <>
-    //       <span
-    //         className={`btn-success btn btn-new-block`}
-    //         onClick={() => goToDashboard(row._id, row.Email)}
-    //       // disabled={row.AppLoginStatus === "0" && row.WebLoginStatus === "0"}
-    //       >
-    //         Dashboard
-    //       </span>
-    //     </>
-    //   ),
-    // },
+    {
+      dataField: "ActiveStatus",
+      text: "Dashboard",
+      formatter: (cell, row) => (
+        <>
+          <span
+            className={`btn-success btn btn-new-block`}
+            onClick={() => goToDashboard(row._id, row.Email)}
+          // disabled={row.AppLoginStatus === "0" && row.WebLoginStatus === "0"}
+          >
+            Dashboard
+          </span>
+        </>
+      ),
+    },
     {
       dataField: "actions",
       text: "Actions",
