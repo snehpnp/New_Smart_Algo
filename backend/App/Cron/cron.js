@@ -56,11 +56,11 @@ cron.schedule('*/10 * * * *', async () => { await TruncateTableTokenChainAdd_fiv
 
 cron.schedule('05 23 * * *', () => {  DeleteTokenAliceToken() });
 
-cron.schedule('10 7 * * *', () => {  DeleteTokenAliceToken() });
+// cron.schedule('10 7 * * *', () => {  DeleteTokenAliceToken() });
 // cron.schedule('55 23 * * *', () => { TruncateTable() });
 
 
-cron.schedule('50 15 * * *', () => { TokenSymbolUpdate() });
+cron.schedule('50 8 * * *', () => { TokenSymbolUpdate() });
 
 
 
@@ -203,8 +203,14 @@ return
 }
 
 const TruncateTableTokenChainAdd_fiveMinute = async () => {
-    const currentHour = new Date().getHours();
-    if (currentHour >= 8 && currentHour < 20) {
+    
+    const indiaTimezoneOffset = 330; 
+    const currentTimeInMinutes = new Date().getUTCHours() * 60 + new Date().getUTCMinutes() + indiaTimezoneOffset;
+    
+    const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
+    const currentMinute = currentTimeInMinutes % 60;
+  
+    if (currentHour >= 9 && currentMinute >= 15 && currentHour <= 23 && currentMinute <= 30) {
         const AliceToken = await Alice_token.find();
         if (AliceToken.length > 60000) {
 

@@ -289,7 +289,7 @@ class MakeStartegy {
             if (!arraySource.includes(condition[element].source)) {
               arraySource.push(condition[element].source)
             }
-          
+
 
             let viewName = condition[element].source + '_M' + timeframe + '_' + tokensymbol;
             let collectionViewName = 'M' + timeframe + '_' + tokensymbol;
@@ -1164,7 +1164,9 @@ async function run() {
     // };
 
     const exitOpentrade = async () => {
-      //console.log("DONEEE exitOpentrade")
+      console.log("DONEEE exitOpentrade")
+
+
       if (weekday != 'Sunday' && weekday != 'Saturday') {
         try {
 
@@ -1258,7 +1260,7 @@ async function run() {
     //   // Schedule the execution of the function
     //  // const operation = executeFunction().catch(console.error);
     //   const operation = exitOpentrade().catch(console.error);
-   
+
 
     //   // Store the ongoing operation
     //   ongoingOperations.push(operation);
@@ -1279,17 +1281,30 @@ async function run() {
     while (true) {
       // Delay for 1000 milliseconds (1 second)
       await new Promise(resolve => setTimeout(resolve, 1000));
-     // await executeFunction();
-      await exitOpentrade()
+
+      // await executeFunction();
+
+      // Open Position Function Evey Second
+      const indiaTimezoneOffset = 330;
+      const currentTimeInMinutes = new Date().getUTCHours() * 60 + new Date().getUTCMinutes() + indiaTimezoneOffset;
+      const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
+      const currentMinute = currentTimeInMinutes % 60;
+      if (currentHour >= 9 && currentMinute >= 14 && currentHour <= 15 && currentMinute <= 31) {
+        await exitOpentrade()
+      }
+
     }
-    
+
 
   } catch (error) {
     console.log(error);
   }
 }
 
+
+
 run().catch(console.log);
+
 
 
 async function fetchDataFromViews(viewNames) {
@@ -1390,7 +1405,7 @@ async function fetchDataFromViews(viewNames) {
             };
             await axios.request(config)
               .then((response) => {
-                 console.log("response Trade Excuted - ",response)
+                console.log("response Trade Excuted - ", response)
               })
               .catch((error) => {
                 console.log('Error ', error);
@@ -1413,15 +1428,15 @@ async function fetchDataFromViews(viewNames) {
           const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
           if (Check_same_trade_data) {
 
-            console.log("INSIDEEE UPDATE" ,Check_same_trade_data.name)
+            console.log("INSIDEEE UPDATE", Check_same_trade_data.name)
             let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
               $set: {
                 status: "1",
-                tsl:"2"
+                tsl: "2"
               },
             });
 
-            console.log("Res",Res)
+            console.log("Res", Res)
           }
           const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
             {
