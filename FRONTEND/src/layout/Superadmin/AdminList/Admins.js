@@ -334,7 +334,7 @@ const AdminsList = () => {
                 text: 'Server update was successful.',
             });
 
-            console.log(response.data);
+          
 
         } catch (error) {
             Swal.fire({

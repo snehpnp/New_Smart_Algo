@@ -6,6 +6,7 @@ const MongoClient = require("mongodb").MongoClient;
 const ApiCreateInfo = db.api_create_info;
 const count_licenses = db.count_licenses;
 const Superadmin_History = db.Superadmin_History;
+const SuperadminHistoryBackup = db.SuperadminHistoryBackup;
 
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
@@ -572,7 +573,15 @@ class Panel {
   async DeleteHistory(req, res) {
     try {
       const { id } = req.body;
-      const Find_panelInfo = await Superadmin_History.find({ _id: id });
+      const Find_panelInfo = await Superadmin_History.findOne({ _id: id });
+
+      console.log("Find_panelInfo", Find_panelInfo);
+
+      const addBackup = await SuperadminHistoryBackup.create({
+        ...Find_panelInfo,
+        backup_id: Find_panelInfo._id,
+      });
+
 
       if (!Find_panelInfo) {
         return res

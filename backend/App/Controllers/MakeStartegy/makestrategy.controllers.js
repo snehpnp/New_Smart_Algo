@@ -1390,7 +1390,7 @@ async function fetchDataFromViews(viewNames) {
             };
             await axios.request(config)
               .then((response) => {
-                 console.log("response Trade Excuted - ",response)
+             
               })
               .catch((error) => {
                 console.log('Error ', error);
@@ -1413,7 +1413,7 @@ async function fetchDataFromViews(viewNames) {
           const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
           if (Check_same_trade_data) {
 
-            console.log("INSIDEEE UPDATE" ,Check_same_trade_data.name)
+   
             let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
               $set: {
                 status: "1",

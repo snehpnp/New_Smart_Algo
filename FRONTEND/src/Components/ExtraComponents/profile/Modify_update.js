@@ -10,7 +10,6 @@ import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 const Modify = ({ UserDetails }) => {
 
 
-console.log("UserDetails",UserDetails)
 
 useEffect(() => {
     data()

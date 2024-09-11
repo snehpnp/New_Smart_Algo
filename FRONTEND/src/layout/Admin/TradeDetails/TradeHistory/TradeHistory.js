@@ -638,7 +638,7 @@ const TradeHistory = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-          console.log("Admin_Trading_data", response.data)
+   
           setAdminTradingStatus(response.data)
         }
 
