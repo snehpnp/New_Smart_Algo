@@ -277,7 +277,6 @@ const BrokerResponse = () => {
       });
   };
 
-const OpenModal =(e)=> {
 
 
   return (
