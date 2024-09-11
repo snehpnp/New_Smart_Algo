@@ -55,6 +55,7 @@ const Alice_Socket = async () => {
     var type = { "loginType": "API" }
 
     if (broker_infor.user_id !== undefined && broker_infor.access_token !== undefined && broker_infor.trading_status == "on") {
+      console.log("Shocket channelList - ", channelList);
         try {
           
             await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
@@ -127,9 +128,38 @@ const Alice_Socket = async () => {
                         console.log(`WebSocket error: ${error}`);
                       };
                       
-                      ws.onclose = function () {
+                      ws.onclose =async function () {
+                      
+
+                        const indiaTimezoneOffset = 330; 
+                        const currentTimeInMinutes = new Date().getUTCHours() * 60 + new Date().getUTCMinutes() + indiaTimezoneOffset;
+                        
+                        const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
+                        const currentMinute = currentTimeInMinutes % 60;
+                      
+                        if (currentHour >= 9 && currentMinute >= 15 && currentHour <= 15 && currentMinute <= 30) {
+                          const result = checkExchangeSegment(channelList , "NFO");
+                          if(result == true){
+                            console.log("NFO Shocket Restart - ", channelList);
+                            await  socketRestart()
+                            return
+                          }
+                        } 
+
+                        if (currentHour >= 9 && currentMinute >= 15 && currentHour <= 23 && currentMinute <= 30) {
+                          const result = checkExchangeSegment(channelList , "MCX");
+                          if(result == true){
+                            console.log("MCX Shocket Restart - ", channelList);
+                            await  socketRestart()
+                            return
+                          }
+                        } 
+
+                        
+                    
+                        
                         //console.log('Disconnected from the server, attempting to  Alice Socket...');
-                         setTimeout(socketRestart, 30000);
+                         //setTimeout(socketRestart, 30000);
                       };
 
                     } catch (error) {
@@ -149,11 +179,25 @@ const Alice_Socket = async () => {
 
     }
 
-
-
-
 }
 
+const getSocket = () => {
+  return socketObject;
+};
+
+const socketRestart = async () => {
+  //console.log("socketRestart")
+  await Alice_Socket()
+};
+
+
+function checkExchangeSegment(input , exchange) {
+  if (input.includes(exchange)) {
+      return true;
+  } else {
+      return false;
+  }
+}
 
 const attemptReconnect = () => {
   if (reconnectAttempt < maxReconnectAttempts) {
@@ -897,15 +941,9 @@ async function createViewM1DAY(collectionName) {
 
 }
 
-const getSocket = () => {
-    return socketObject;
-};
 
 
-const socketRestart = async () => {
-    //console.log("socketRestart")
-    await Alice_Socket()
-};
+
 
 
 

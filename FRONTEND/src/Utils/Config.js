@@ -26,6 +26,7 @@ export const base_url = "http://localhost:7700/";
 // export const base_url = "https://software.unitythesmartalgo.com/backend/";
 // export const base_url = "https://software.tradeonn.com/backend/";
 // export const base_url = "https://software.one-algo.com/backend/";
+// export const base_url = "https://software.skwinvestmentadviser.com/backend/";
 
 
 
