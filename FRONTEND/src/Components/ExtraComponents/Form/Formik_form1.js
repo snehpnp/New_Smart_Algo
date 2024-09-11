@@ -282,7 +282,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                               </div>
 
                             </> :
-                              field.type === "placehoder" ? <>
+                              field.type === "placeholder" ? <>
                                 <div className={`col-lg-${field.col_size}`}>
                                   <div className="mb-3 row flex-column">
                                     <label

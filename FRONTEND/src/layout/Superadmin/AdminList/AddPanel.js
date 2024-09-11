@@ -24,6 +24,19 @@ const Add_Panel = () => {
     const [Addsubadmin, setAddsubadmin] = useState({ loading: false, data: [] });
     const [state1, setstate1] = useState([]);
 
+    useEffect(() => {
+        data();
+    }, []);
+
+    useEffect(() => {
+        if (state1.length > 1) {
+            formik.setFieldValue("broker_id", "");
+        }
+    }, [state1]);
+
+
+
+
     const formik = useFormik({
         initialValues: {
             panel_name: "",
@@ -44,25 +57,50 @@ const Add_Panel = () => {
         },
         validate: (values) => {
             const errors = {};
-            if (!values.panel_name && formik.touched.panel_name) {
+    
+            // Check if panel_name is empty
+            if (!values.panel_name) {
                 errors.panel_name = valid_err.PANEL_NAME_ERROR;
             }
+    
+            // Check if domain is empty
             if (!values.domain) {
                 errors.domain = valid_err.DOMAIN_ERROR;
             }
+    
+            // Check if port is empty
+            if (!values.port) {
+                errors.port = "Port is required";
+            }
+    
+            // Check if key is empty
             if (!values.key) {
                 errors.key = valid_err.KEY_ERROR;
             }
+    
+            // Check if ip_address is empty
+            if (!values.ip_address) {
+                errors.ip_address = "IP Address is required";
+            }
+    
+            // Check if theme_id is empty
+            if (!values.theme_id) {
+                errors.theme_id = "Please select a theme";
+            }
+    
+            // Check if db_url is empty
             if (!values.db_url) {
                 errors.db_url = valid_err.DBURL_ERROR;
             }
-            if (!values.theme_id) {
-                errors.theme_id = "Please select theme";
+    
+            // Check if db_name is empty
+            if (!values.db_name) {
+                errors.db_name = "Database name is required";
             }
+    
             return errors;
         },
         onSubmit: async (values) => {
-            // Trim each field before creating the request object
             const trimmedValues = {
                 panel_name: values.panel_name.trim(),
                 domain: values.domain.trim(),
@@ -79,7 +117,7 @@ const Add_Panel = () => {
                 backend_rul: values.domain.trim() + '/backend/',
                 UserName: UserName.trim()
             };
-
+    
             await dispatch(Add_Panel_data({ req: trimmedValues, token: user_token }))
                 .unwrap()
                 .then((response) => {
@@ -87,7 +125,6 @@ const Add_Panel = () => {
                         toast.error(response.data.msg);
                     } else if (response.status) {
                         toast.success(response.msg);
-
                         setTimeout(() => {
                             navigate("/super/alladmins");
                         }, 1000);
@@ -97,7 +134,7 @@ const Add_Panel = () => {
                 });
         },
     });
-
+    
     const fields = [
         {
             name: "panel_name",
@@ -184,9 +221,7 @@ const Add_Panel = () => {
             });
     };
 
-    useEffect(() => {
-        data();
-    }, []);
+
 
     const handleSBrokerChange = (event, broker) => {
         const BrokerId = event.target.value;
@@ -212,11 +247,7 @@ const Add_Panel = () => {
 
 
 
-    useEffect(() => {
-        if (state1.length > 1) {
-            formik.setFieldValue("broker_id", "");
-        }
-    }, [state1]);
+  
 
     return (
         <>
