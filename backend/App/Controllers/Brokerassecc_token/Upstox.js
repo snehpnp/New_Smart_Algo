@@ -10,20 +10,19 @@ const panel_model = db.panel_model;
 const User = db.user;
 const user_logs = db.user_logs;
 const BrokerResponse = db.BrokerResponse;
-const Broker_information = db.Broker_information;
-const live_price = db.live_price;
 
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
 const { logger, getIPAddress } = require("../../Helper/logger.helper");
-// const { formattedDateTime } = require('../../Helper/time.helper')
 
 class Upstox {
   // Get GetAccessToken ANGEL
   async GetAccessTokenUpstox(req, res) {
     var tokenCode = req.query.code;
     var user_email = req.query.state;
+
+console.log("tokenCode", tokenCode);
 
     try {
       if (tokenCode != undefined) {

@@ -69,7 +69,7 @@ export const Get_All_Subadmin_Client = createAsyncThunk("get/all/clients", async
 });
 
 
-export const Add_Licence_To_Company = createAsyncThunk("get/all/clients", async (data) => {
+export const Add_Licence_To_Company = createAsyncThunk("add/license", async (data) => {
   const { id, token } = data
 
   try {

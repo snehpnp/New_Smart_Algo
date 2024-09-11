@@ -8,11 +8,16 @@ import Loader from '../../../Utils/Loader';
 import { Form } from "react-bootstrap";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
+import axios from 'axios';
+import * as Config from "../../../Utils/Config";
+import Swal from 'sweetalert2';
+
 
 const History = () => {
     const dispatch = useDispatch();
     const monthRef = useRef("");
     const dayRef = useRef("");
+    const user_details = JSON.parse(localStorage.getItem("user_details"));
 
     const [getFilterValue, setFilterValue] = useState("");
     const [searchInput, setSearchInput] = useState('');
@@ -21,7 +26,7 @@ const History = () => {
     const [filteredData, setFilteredData] = useState([]);
     const [licAdd, setLicAdd] = useState(false);
 
-    const columns = [
+    let columns = [
         {
             dataField: "index",
             text: "SR. No.",
@@ -49,9 +54,64 @@ const History = () => {
             text: "Date & Time",
             formatter: (cell) => <div>{fDateTimeSuffix(cell)}</div>,
             sort: true,
-        }
+        },
+       
     ];
 
+    if (user_details.Email === "superadmin@gmail.com") {
+        columns.push({
+            dataField: "Delete",
+            text: "Delete",
+            formatter: (cell, row, rowIndex) => (
+                <button
+                    className="btn btn-danger"
+                    onClick={() => handleDelete(row, rowIndex)}
+                >
+                    <i className="fa fa-trash" /> Delete
+                </button>
+            ),
+            sort: false, // No need to sort on delete column
+        });
+    }
+    
+    const handleDelete = (row, rowIndex) => {
+    
+        console.log("Row to be deleted:", row);
+   
+        axios.post( `${Config.base_url}delete/history`, {id: row._id})
+        .then((res) => {
+            console.log(res);
+            if (res.data.status) {
+           
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'History deleted successfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                fetchData();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed',
+                    text: 'Failed to delete history',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            alert("Failed to delete history");
+        });
+
+
+
+    };
+    
     const fetchData = async () => {
         const response = await dispatch(Get_Panel_History()).unwrap();
         if (response.status) {
