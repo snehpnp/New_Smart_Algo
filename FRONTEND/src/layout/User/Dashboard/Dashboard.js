@@ -277,10 +277,7 @@ const BrokerResponse = () => {
       });
   };
 
-const OpenModal =(e)=> {
-  console.log("OpenModal", e);
-}
-console.log("gotodashboard", gotodashboard);
+
 
   return (
     <Content Page_title="Dashboard" button_status={false}>

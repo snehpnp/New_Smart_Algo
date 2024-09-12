@@ -573,7 +573,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
               _this4._transitStep(idx);
             })["catch"](function (err) {
-              console.log(err);
+            
 
               _this4._setStepContent(idx, err);
 

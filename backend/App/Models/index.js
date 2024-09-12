@@ -67,6 +67,8 @@ module.exports = {
     userReedeem_modal : require('./User_reedeem'),
     position_data_store : require('./position_data_store.model'),
     user_fund_logs:require('./fund_change_logs.model'),
+    SuperadminHistoryBackup:require('./Superadminhistorybackup.model'),
+
     dashboard_data:dashboard_data
 
 

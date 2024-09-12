@@ -352,6 +352,7 @@ const Header = ({ ChatBox }) => {
         <div className="header-content">
           <nav className="navbar navbar-expand">
             <div className="collapse navbar-collapse justify-content-between">
+        
               <div className="header-left">
                 {user_role === "USER" && UserDetails.license_type != 1 ? (
                   <>

@@ -32,7 +32,6 @@ const BrokerResponse = () => {
   const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
   const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
 
-console.log("isgotodashboard",isgotodashboard)
 
   const data = async () => {
 
@@ -189,7 +188,7 @@ console.log("isgotodashboard",isgotodashboard)
     await dispatch(Get_Broker_Response({ _id: isgotodashboard ? gotodashboard.user_id : user_Id, token: AdminToken })).unwrap()
       .then((response) => {
         if (response.status) {
-          console.log("response.data",response.data)
+      
           setDashboardData({
             loading: false,
             data: response.data

@@ -5,6 +5,8 @@ const panel_model = db.panel_model;
 const User = db.user;
 const ApiCreateInfo = db.api_create_info;
 const Superadmin_History = db.Superadmin_History;
+const SuperadminHistoryBackup = db.SuperadminHistoryBackup;
+
 const Faq_Data = db.Faq_Data;
 
 

@@ -142,8 +142,8 @@ setIO(io).then(() => {
 
 // Server start
 server.listen(process.env.PORT, () =>{
-   connectToMongoDB();
-  const { Alice_Socket } = require('./App/Helper/Alice_Socket')
+  // const { Alice_Socket } = require('./App/Helper/Alice_Socket')
   console.log(`Server is running on  http://0.0.0.0:${process.env.PORT}`)
-   Alice_Socket()
+  connectToMongoDB();
+  //  Alice_Socket()
 });

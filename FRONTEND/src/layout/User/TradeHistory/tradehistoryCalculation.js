@@ -189,8 +189,7 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
   
           if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
 
-            // console.log("get_entry_qty",get_entry_qty)
-            // console.log("get_exit_qty",get_exit_qty)
+  
             if (get_entry_qty !== "" && get_exit_qty !== "") {
   
               if (parseInt(get_entry_qty) == parseInt(get_exit_qty)) {
