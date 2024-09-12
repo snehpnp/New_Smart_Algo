@@ -550,7 +550,6 @@ const UpdateProfile = async (userId, token) => {
     if (response.data && response.data.length > 0) {
       console.log("Net", response.data[0].net);
 
-      // Try to find the user and update the profile fund
       try {
         let data1 = await User.findOne({ demat_userid: userId });
 

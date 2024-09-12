@@ -143,7 +143,7 @@ const BrokerResponse = () => {
 
   // Conditionally add the new column
   if (shouldAddNewColumn) {
-  if(isgotodashboard == null){
+  // if(isgotodashboard == null){
     columns.push({
       dataField: '',
       text: 'Refresh',
@@ -165,7 +165,7 @@ const BrokerResponse = () => {
         </>
       ),
     });
-  }
+  // }
   
   }
 
