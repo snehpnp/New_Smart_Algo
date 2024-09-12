@@ -45,6 +45,9 @@ module.exports = function (app) {
 
 
 
+
+
+
     app.get("/runStrategy", async (req, res) => {
         const data = await dbTest.collection('strategyViewNames').find({}).toArray();
 
