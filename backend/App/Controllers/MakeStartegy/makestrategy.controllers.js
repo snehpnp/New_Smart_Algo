@@ -1164,7 +1164,7 @@ async function run() {
     // };
 
     const exitOpentrade = async () => {
-      console.log("DONEEE exitOpentrade")
+   //   console.log("DONEEE exitOpentrade")
 
 
       if (weekday != 'Sunday' && weekday != 'Saturday') {

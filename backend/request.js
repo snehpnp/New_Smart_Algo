@@ -42,8 +42,11 @@ module.exports = function (app) {
     const { createViewZerodha } = require('./View/zerodha')
     const { createViewIcicidirect } = require('./View/Icicidirectview')
 
-
-
+   
+ app.get("/tk",(req,res)=>{
+    TokenSymbolUpdate();
+    res.send("ok")
+ })
 
 
 
