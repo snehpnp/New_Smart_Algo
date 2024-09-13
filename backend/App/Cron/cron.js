@@ -44,9 +44,9 @@ cron.schedule('5 5 * * *', () => { LogoutAllUsers() });
 
 cron.schedule('10 1 * * *', () => { numberOfTrade_count_trade(); });
 
-cron.schedule('*/30 * * * *', () => { GetStrickPriceFromSheet(); });
+cron.schedule('*/15 * * * *', () => { GetStrickPriceFromSheet(); });
 
-// cron.schedule('50 23 * * *', () => { twodaysclient(); });
+cron.schedule('50 23 * * *', () => { twodaysclient(); });
 
 cron.schedule('30 6 * * *', () => { TruncateTableTokenChain(); });
 
@@ -54,11 +54,13 @@ cron.schedule('*/10 * * * *', async () => { await TruncateTableTokenChainAdd_fiv
 
 
 
-cron.schedule('05 23 * * *', () => {  DeleteTokenAliceToken() });
+cron.schedule('05 23 * * *', () => { DeleteTokenAliceToken() });
 
-// cron.schedule('10 7 * * *', () => {  DeleteTokenAliceToken() });
 // cron.schedule('55 23 * * *', () => { TruncateTable() });
 
+cron.schedule('10 3 * * *', () => { DeleteTokenAliceToken() });
+
+cron.schedule('20 3 * * *', () => { TokenSymbolUpdate() });
 
 cron.schedule('50 8 * * *', () => { TokenSymbolUpdate() });
 
@@ -132,10 +134,10 @@ const MainSignalsRemainToken = async () => {
                                                             ]
                                                         },
                                                         then: 'BFO',
-        
+
                                                         // all not exist condition 
                                                         else: "NFO"
-        
+
                                                     }
                                                 }
 
@@ -183,18 +185,18 @@ const MainSignalsRemainToken = async () => {
 
 
     const result = await MainSignals_modal.aggregate(pipeline)
-    if(result.length > 0){
-    result.forEach(async (element) => {
-        const filter = { _id: element.token };
-        const update = {
-            $set: { _id: element.token, exch: element.exch_seg },
-        };
-        const update_token = await token_chain.updateOne(filter, update, { upsert: true });
+    if (result.length > 0) {
+        result.forEach(async (element) => {
+            const filter = { _id: element.token };
+            const update = {
+                $set: { _id: element.token, exch: element.exch_seg },
+            };
+            const update_token = await token_chain.updateOne(filter, update, { upsert: true });
 
-    });
-  }
+        });
+    }
 
-return
+    return
 
 
 
@@ -203,13 +205,13 @@ return
 }
 
 const TruncateTableTokenChainAdd_fiveMinute = async () => {
-    
-    const indiaTimezoneOffset = 330; 
+
+    const indiaTimezoneOffset = 330;
     const currentTimeInMinutes = new Date().getUTCHours() * 60 + new Date().getUTCMinutes() + indiaTimezoneOffset;
-    
+
     const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
     const currentMinute = currentTimeInMinutes % 60;
-  
+
     if (currentHour >= 9 && currentMinute >= 15 && currentHour <= 23 && currentMinute <= 30) {
         const AliceToken = await Alice_token.find();
         if (AliceToken.length > 60000) {
@@ -274,7 +276,8 @@ const TruncateTableTokenChain = async () => {
 const Get_Option_All_Token_Chain = async () => {
 
     try {
-        const symbols = ["NIFTY", "BANKNIFTY", "FINNIFTY","SENSEX","BANKEX","MIDCPNIFTY"];
+        // const symbols = ["NIFTY", "BANKNIFTY", "FINNIFTY", "SENSEX", "BANKEX", "MIDCPNIFTY"];
+        const symbols = ["NIFTY", "BANKNIFTY", "FINNIFTY"];
 
         const expiry = "30112023";
         let limit_set = 20
@@ -847,60 +850,74 @@ const DeleteTokenAliceToken = async () => {
 // TOKEN SYMBOL CREATE
 
 function createUserDataArray(data, segment) {
+    let count = 0
     return data.map(element => {
-        // console.log("element.symbol",element.symbol)
-      const option_type = element.symbol.slice(-2);
-      const expiry_s = dateTime.create(element.expiry);
-      const expiry = expiry_s.format('dmY');
-      const strike_s = parseInt(element.strike);
-      const strike = parseInt(strike_s.toString().slice(0, -2));
-      const day_start = element.expiry.slice(0, 2);
-      const moth_str = element.expiry.slice(2, 5);
-      const year_end = element.expiry.slice(-2);
-      const Dat = new Date(element.expiry);
-      const moth_count = Dat.getMonth() + 1;
-  
-      const tradesymbol_m_w = `${element.name}${year_end}${moth_count}${day_start}${strike}${option_type}`;
-  
-      return {
-        symbol: element.name,
-        expiry: expiry,
-        expiry_month_year: expiry.slice(2),
-        expiry_date: expiry.slice(0, -6),
-        expiry_str: element.expiry,
-        strike: strike,
-        option_type: option_type,
-        segment: segment,  // Default segment
-        instrument_token: element.token,
-        lotsize: element.lotsize,
-        tradesymbol: element.symbol,
-        tradesymbol_m_w: tradesymbol_m_w,
-        exch_seg: element.exch_seg
-      };
+        //   count++
+        //   console.log("element.symbol",element , "count - ",count)
+        // if (!element.name) {
+        //     console.log(`Skipping element with empty name: ${element}`);
+        //     console.log(`token: ${element.token}`);
+        //     return null;
+        // }
+        const option_type = element.symbol.slice(-2);
+        const expiry_s = dateTime.create(element.expiry);
+        const expiry = expiry_s.format('dmY');
+        const strike_s = parseInt(element.strike);
+        const strike = parseInt(strike_s.toString().slice(0, -2));
+        const day_start = element.expiry.slice(0, 2);
+        const moth_str = element.expiry.slice(2, 5);
+        const year_end = element.expiry.slice(-2);
+        const Dat = new Date(element.expiry);
+        const moth_count = Dat.getMonth() + 1;
+
+        const tradesymbol_m_w = `${element.name}${year_end}${moth_count}${day_start}${strike}${option_type}`;
+
+        return {
+            symbol: element.name,
+            expiry: expiry,
+            expiry_month_year: expiry.slice(2),
+            expiry_date: expiry.slice(0, -6),
+            expiry_str: element.expiry,
+            strike: strike,
+            option_type: option_type,
+            segment: segment,  // Default segment
+            instrument_token: element.token,
+            lotsize: element.lotsize,
+            tradesymbol: element.symbol,
+            tradesymbol_m_w: tradesymbol_m_w,
+            exch_seg: element.exch_seg
+        };
     });
-  }
+}
 
 async function insertData(dataArray) {
-const existingTokens = await Alice_token.distinct("instrument_token", {});
-const filteredDataArray = dataArray.filter(userData => {
-    return !existingTokens.includes(userData.instrument_token);
-});
-await Alice_token.insertMany(filteredDataArray);
+    //console.log("dataArray ",dataArray)
+    try {
+        const existingTokens = await Alice_token.distinct("instrument_token", {});
+        const filteredDataArray = dataArray.filter(userData => {
+            return !existingTokens.includes(userData.instrument_token);
+        });
+
+        await Alice_token.insertMany(filteredDataArray);
+    } catch (error) {
+        console.log("Error in insertData:", error)
+    }
+
 }
 
 const TokenSymbolUpdate = async () => {
 
 
     try {
-        var filePath = path.join(__dirname+'/checkTest.txt'); // Adjust the file path as needed
-        console.log("filePath",filePath)
+        var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
+        console.log("filePath", filePath)
         fs.appendFile(filePath, "-----TokenSymbolUpdate  - " + new Date() + "----- ***\\n\n", function (err) {
             if (err) {
-                console.log("err filePath" ,err);
+                console.log("err filePath", err);
             }
         });
     } catch (error) {
-        console.log("err filePath Try catch" ,error);
+        console.log("err filePath Try catch", error);
     }
 
 
@@ -915,117 +932,114 @@ const TokenSymbolUpdate = async () => {
         const response = await axios(config);
         if (response.data.length > 0) {
 
-              
-               const filteredDataO = response.data.filter(element =>
+
+            const filteredDataO = response.data.filter(element =>
                 (element.instrumenttype === 'OPTIDX' || element.instrumenttype === 'OPTSTK') &&
-                element.exch_seg === "NFO"
-                );
-                const filteredDataF = response.data.filter(element =>
+                element.exch_seg === "NFO" && element.name != ""
+            );
+            const filteredDataF = response.data.filter(element =>
                 (element.instrumenttype === 'FUTSTK' || element.instrumenttype === 'FUTIDX') &&
-                element.exch_seg === "NFO"
-                );
+                element.exch_seg === "NFO" && element.name != ""
+            );
 
-                const filteredDataMF = response.data.filter(element =>
-                element.instrumenttype === 'FUTCOM'
-                );
-                const filteredDataMO = response.data.filter(element =>
-                element.instrumenttype === 'OPTFUT' || element.instrumenttype === 'OPTCOM'
-                );
-                const filteredDataCO = response.data.filter(element =>
-                element.instrumenttype === 'OPTCUR'
-                );
-                const filteredDataCF = response.data.filter(element =>
-                element.instrumenttype === 'FUTCUR'
-                );
-                const filteredDataC = response.data.filter(element =>
-                element.symbol.slice(-3) === '-EQ'
-                );
+            const filteredDataMF = response.data.filter(element =>
+                element.instrumenttype === 'FUTCOM' && element.name != ""
+            );
+            const filteredDataMO = response.data.filter(element =>
+                (element.instrumenttype === 'OPTFUT' || element.instrumenttype === 'OPTCOM') && element.name != ""
+            );
+            const filteredDataCO = response.data.filter(element =>
+                element.instrumenttype === 'OPTCUR' && element.name != ""
+            );
+            const filteredDataCF = response.data.filter(element =>
+                element.instrumenttype === 'FUTCUR' && element.name != ""
+            );
+            const filteredDataC = response.data.filter(element =>
+                element.symbol.slice(-3) === '-EQ' && element.name != ""
+            );
 
-                const filteredDataBO = response.data.filter(element => 
-                (element.instrumenttype === 'OPTIDX' || element.instrumenttype === 'OPTSTK') && 
-                element.exch_seg === "BFO"
-                );
+            const filteredDataBO = response.data.filter(element =>
+                (element.instrumenttype === 'OPTIDX' || element.instrumenttype === 'OPTSTK') &&
+                element.exch_seg === "BFO" && element.name != ""
+            );
 
-                const filteredDataBF = response.data.filter(element => 
-                (element.instrumenttype === 'FUTSTK' || element.instrumenttype === 'FUTIDX') && 
-                element.exch_seg === "BFO"
-                );
-                const filteredDataBC = response.data.filter(element =>
-                element.instrumenttype === '' && element.exch_seg === "BSE"
-                );
-                
-               // console.log("filteredDataBC",filteredDataBC.length)
-                
-               // Segment O -OPTION
-               const userDataSegment_O = await createUserDataArray(filteredDataO, "O");
-               await insertData(userDataSegment_O);
-               console.log("O")
-               // Segment F - FUTURE
-               const userDataSegment_F = await createUserDataArray(filteredDataF, "F");
-               await insertData(userDataSegment_F);
-               console.log("F")
-               // Segment C -CASH
-               const userDataSegment_C = await createUserDataArray(filteredDataC, "C");
-               await insertData(userDataSegment_C);
-                console.log("C")
+            const filteredDataBF = response.data.filter(element =>
+                (element.instrumenttype === 'FUTSTK' || element.instrumenttype === 'FUTIDX') &&
+                element.exch_seg === "BFO" && element.name != ""
+            );
+            const filteredDataBC = response.data.filter(element =>
+                element.instrumenttype === "" && element.exch_seg === "BSE" && element.name != ""
+            );
 
+            //console.log("filteredDataBC", filteredDataBC.length)
 
-                // Segment MF MCX FUTURE
-                const userDataSegment_MF = createUserDataArray(filteredDataMF, "MF");
-                await insertData(userDataSegment_MF);
-                console.log("MF")
-                // Segment MO  MCX OPTION
-                const userDataSegment_MO = createUserDataArray(filteredDataMO, "MO");
-                await insertData(userDataSegment_MO);
-                console.log("MO")
+            // Segment O -OPTION
+            const userDataSegment_O = await createUserDataArray(filteredDataO, "O");
+            await insertData(userDataSegment_O);
+            console.log("O")
+            // Segment F - FUTURE
+            const userDataSegment_F = await createUserDataArray(filteredDataF, "F");
+            await insertData(userDataSegment_F);
+            console.log("F")
+            // Segment C -CASH
+            const userDataSegment_C = await createUserDataArray(filteredDataC, "C");
+            await insertData(userDataSegment_C);
+            console.log("C")
 
 
-
-
-                // Segment CO CURRENCY OPTION
-                const userDataSegment_CO = createUserDataArray(filteredDataCO, "CO");
-                await insertData(userDataSegment_CO);
-                console.log("CO")
-
-                // Segment CF  CURRENCY FUTURE
-                const userDataSegment_CF = createUserDataArray(filteredDataCF, "CF");
-                await insertData(userDataSegment_CF);
-                console.log("CF")
-
-                 // Segment BF
-                 const userDataSegment_BF = createUserDataArray(filteredDataBF, "BF");
-                 await insertData(userDataSegment_BF);
-                 console.log("BF")
-                 // Segment BO
-                const userDataSegment_BO = createUserDataArray(filteredDataBO, "BO");
-                await insertData(userDataSegment_BO);
-                 console.log("BO")
+            // Segment MF MCX FUTURE
+            const userDataSegment_MF = await createUserDataArray(filteredDataMF, "MF");
+            await insertData(userDataSegment_MF);
+            console.log("MF")
+            // Segment MO  MCX OPTION
+            const userDataSegment_MO = createUserDataArray(filteredDataMO, "MO");
+            await insertData(userDataSegment_MO);
+            console.log("MO")
 
 
 
-                // Segment BC
-                // const userDataSegment_BC = createUserDataArray(filteredDataBC, "BC");
-                // await insertData(userDataSegment_BC);
-                // console.log("BC")
-               
 
+            // Segment CO CURRENCY OPTION
+            const userDataSegment_CO = await createUserDataArray(filteredDataCO, "CO");
+            await insertData(userDataSegment_CO);
+            console.log("CO")
+
+            // Segment CF  CURRENCY FUTURE
+            const userDataSegment_CF = await createUserDataArray(filteredDataCF, "CF");
+            await insertData(userDataSegment_CF);
+            console.log("CF")
+
+            // Segment BF
+            const userDataSegment_BF = await createUserDataArray(filteredDataBF, "BF");
+            await insertData(userDataSegment_BF);
+            console.log("BF")
+            // Segment BO
+            const userDataSegment_BO = await createUserDataArray(filteredDataBO, "BO");
+            await insertData(userDataSegment_BO);
+            console.log("BO")
+
+            // Segment BC
+            const userDataSegment_BC = await createUserDataArray(filteredDataBC, "BC");
+            await insertData(userDataSegment_BC);
+            console.log("BC")
             
+
             try {
-                var filePath = path.join(__dirname+'/checkTest.txt'); // Adjust the file path as needed
-                console.log("filePath",filePath)
+                var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
+                console.log("filePath", filePath)
                 fs.appendFile(filePath, "-----TokenSymbolUpdate End - " + new Date() + "----- ***\\n\n", function (err) {
                     if (err) {
-                        console.log("err filePath" ,err);
+                        console.log("err filePath", err);
                     }
-                    
+
                 });
             } catch (error) {
-                console.log("err filePath Try catch" ,error);
+                console.log("err filePath Try catch", error);
             }
             console.log("TokenSymbolUpdate End:", " TIME ", new Date());
             return
         } else {
-         return
+            return
         }
     } catch (error) {
         console.log("Error TokenSymbolUpdate Try catch", " TIME ", new Date(), error);
@@ -1037,15 +1051,15 @@ const TokenSymbolUpdate1 = async () => {
 
 
     try {
-        var filePath = path.join(__dirname+'/checkTest.txt'); // Adjust the file path as needed
-        console.log("filePath",filePath)
+        var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
+        console.log("filePath", filePath)
         fs.appendFile(filePath, "-----TokenSymbolUpdate  - " + new Date() + "----- ***\\n\n", function (err) {
             if (err) {
-                console.log("err filePath" ,err);
+                console.log("err filePath", err);
             }
         });
     } catch (error) {
-        console.log("err filePath Try catch" ,error);
+        console.log("err filePath Try catch", error);
     }
 
 
@@ -1123,7 +1137,7 @@ const TokenSymbolUpdate1 = async () => {
                             else if (element.instrumenttype == '' && element.exch_seg == "BSE") {
                                 user_data.segment = "BC";
                             }
-                            
+
 
                             // Insert or update token data
                             const filter = { instrument_token: element.token };
@@ -1141,15 +1155,15 @@ const TokenSymbolUpdate1 = async () => {
             }
 
             try {
-                var filePath = path.join(__dirname+'/checkTest.txt'); // Adjust the file path as needed
-                console.log("filePath",filePath)
+                var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
+                console.log("filePath", filePath)
                 fs.appendFile(filePath, "-----TokenSymbolUpdate End - " + new Date() + "----- ***\\n\n", function (err) {
                     if (err) {
-                        console.log("err filePath" ,err);
+                        console.log("err filePath", err);
                     }
                 });
             } catch (error) {
-                console.log("err filePath Try catch" ,error);
+                console.log("err filePath Try catch", error);
             }
             console.log("TokenSymbolUpdate End:", " TIME ", new Date());
             return
@@ -1437,9 +1451,13 @@ const GetStrickPriceFromSheet = async () => {
 
 
     try {
-        const currentHour = new Date().getHours();
+     const indiaTimezoneOffset = 330;
+    const currentTimeInMinutes = new Date().getUTCHours() * 60 + new Date().getUTCMinutes() + indiaTimezoneOffset;
 
-        if (currentHour >= 8 && currentHour < 20) {
+    const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
+    const currentMinute = currentTimeInMinutes % 60;
+
+    if (currentHour >= 9 && currentMinute >= 15 && currentHour <= 23 && currentMinute <= 30) {
             const csvFilePath = 'https://docs.google.com/spreadsheets/d/1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU/export?format=csv';
             const { data } = await axios.get(csvFilePath);
 
