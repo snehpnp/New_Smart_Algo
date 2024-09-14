@@ -1,3 +1,4 @@
+const { number } = require('mathjs');
 const mongoose = require('mongoose');
 
 const CompanySchema = new mongoose.Schema({
@@ -109,6 +110,14 @@ const CompanySchema = new mongoose.Schema({
     },
     licenses: {
         type: Number
+    },
+    month_ago_date: {
+        type: Date,
+        default: null
+    },
+    month_ago_number: {
+        type: Number,
+        default: null
     },
     refer_points: {
         type: Number

@@ -346,7 +346,7 @@ class Employee {
             }
 
             // Use insertMany to insert the documents in a single database call
-            client_services.insertMany(clientServicesData).then((result) => {});
+            client_services.insertMany(clientServicesData).then((result) => { });
 
             // LICENSE TABLE ADD USE LICENSE OUR CLIENT
             if (license_type == "2") {
@@ -367,8 +367,8 @@ class Employee {
                 license_type == 2
                   ? "Live Account"
                   : license_type == 0
-                  ? "2 Days Free Live Account"
-                  : "Free Demo Account",
+                    ? "2 Days Free Live Account"
+                    : "Free Demo Account",
             };
 
             const existingUser = await user_SignUp.findOne({
@@ -1039,6 +1039,406 @@ class Employee {
 
   // GET ALL GetAllClients
   async GetAllClients(req, res) {
+
+    // const pip = [
+
+    //   {
+    //     $match: {
+    //       $and: [
+    //         { Role: "USER" }
+    //       ]
+    //     }
+    //   },
+
+    //   {
+    //     $lookup: {
+    //       from: 'companies',
+    //       let: { endDate: "$EndDate" },
+    //       pipeline: [
+    //         {
+    //           $match: {
+    //             $expr: {
+    //               $gt: [
+    //                 { $dateToString: { format: "%Y-%m-%d", date: "$$endDate" } }, // User_model's EndDate
+    //                 { $dateToString: { format: "%Y-%m-%d", date: "$month_ago_date" } } // Ensure $month_ago_date exists in companies
+    //               ]
+    //             }
+    //           }
+    //         }
+    //       ],
+    //       as: 'companyData'
+    //     }
+    //   },
+    //   {
+    //     $unwind: "$companyData"
+    //   },
+
+
+
+    //   {
+    //     $group: {
+    //       _id: null,
+    //       total_client: {
+    //         $sum: {
+    //           $cond: [
+    //             {
+    //               $and: [
+
+    //                 { $eq: ["$Role", "USER"] },
+    //                 { $eq: ["$Is_Active", "1"] },
+
+
+    //               ]
+    //             },
+    //             1,
+    //             0
+    //           ]
+    //         }
+    //       },
+    //       total_active_client: {
+    //         $sum: {
+    //           $cond: [
+    //             {
+    //               $and: [
+    //                 { $eq: ["$Role", "USER"] },
+    //                 // { $eq: ["$license_type", "2"] },
+    //                 { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+    //                 { $eq: ["$Is_Active", "1"] },
+
+
+    //               ]
+    //             },
+    //             1,
+    //             0
+    //           ]
+    //         }
+    //       },
+    //       total_expired_client: {
+    //         $sum: {
+    //           $cond: [
+    //             {
+    //               $and: [
+    //                 { $eq: ["$Role", "USER"] },
+    //                 { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+    //                 { $eq: ["$Is_Active", "1"] },
+
+
+    //               ]
+    //             },
+    //             1,
+    //             0
+    //           ]
+    //         }
+    //       },
+    //       total_live_client: {
+    //         $sum: {
+    //           $cond: [
+    //             {
+    //               $and: [
+    //                 { $eq: ["$Role", "USER"] },
+    //                 { $eq: ["$license_type", "2"] },
+    //                 { $eq: ["$Is_Active", "1"] },
+
+
+
+    //               ]
+    //             },
+    //             1,
+    //             0
+    //           ]
+    //         }
+    //       },
+    //       total_active_live: {
+    //         $sum: {
+    //           $cond: [
+    //             {
+    //               $and: [
+    //                 { $eq: ["$Role", "USER"] },
+    //                 { $eq: ["$license_type", "2"] },
+    //                 {
+    //                   $gte: [
+    //                     {
+    //                       $dateToString: {
+    //                         format: "%Y-%m-%d",
+    //                         date: "$EndDate"
+    //                       }
+    //                     },
+    //                     {
+    //                       $dateToString: {
+    //                         format: "%Y-%m-%d",
+    //                         date: new Date()
+    //                       }
+    //                     }
+    //                   ]
+    //                 },
+    //                 { $eq: ["$Is_Active", "1"] },
+
+    //               ]
+    //             },
+    //             1,
+    //             0
+    //           ]
+    //         }
+    //       },
+    //       total_expired_live: {
+    //         $sum: {
+    //           $cond: [
+    //             {
+    //               $and: [
+    //                 { $eq: ["$Role", "USER"] },
+    //                 { $eq: ["$license_type", "2"] },
+    //                 { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+    //                 { $eq: ["$Is_Active", "1"] },
+
+
+    //               ]
+    //             },
+    //             1,
+    //             0
+    //           ]
+    //         }
+    //       },
+    //       total_demo_client: {
+    //         $sum: {
+    //           $cond: [
+    //             {
+    //               $and: [
+    //                 { $eq: ["$Role", "USER"] },
+    //                 { $eq: ["$license_type", "1"] },
+    //                 { $eq: ["$Is_Active", "1"] },
+
+
+    //               ]
+    //             },
+    //             1,
+    //             0
+    //           ]
+    //         }
+    //       },
+    //       total_active_demo: {
+    //         $sum: {
+    //           $cond: [
+    //             {
+    //               $and: [
+    //                 { $eq: ["$Role", "USER"] },
+    //                 { $eq: ["$license_type", "1"] },
+    //                 {
+    //                   $gte: [
+    //                     {
+    //                       $dateToString: {
+    //                         format: "%Y-%m-%d",
+    //                         date: "$EndDate"
+    //                       }
+    //                     },
+    //                     {
+    //                       $dateToString: {
+    //                         format: "%Y-%m-%d",
+    //                         date: new Date()
+    //                       }
+    //                     }
+    //                   ]
+    //                 },
+    //                 { $eq: ["$Is_Active", "1"] },
+
+    //               ]
+    //             },
+    //             1,
+    //             0
+    //           ]
+    //         }
+    //       },
+    //       total_expired_demo: {
+
+    //         $sum: {
+    //           $cond: [
+    //             {
+    //               $and: [
+    //                 { $eq: ["$Role", "USER"] },
+    //                 { $eq: ["$license_type", "1"] },
+    //                 {
+    //                   $lt: [
+    //                     {
+    //                       $dateToString: {
+    //                         format: "%Y-%m-%d",
+    //                         date: "$EndDate"
+    //                       }
+    //                     },
+    //                     {
+    //                       $dateToString: {
+    //                         format: "%Y-%m-%d",
+    //                         date: new Date()
+    //                       }
+    //                     }
+    //                   ]
+    //                 },
+    //                 { $eq: ["$Is_Active", "1"] },
+
+    //               ]
+    //             },
+    //             1,
+    //             0
+    //           ]
+    //         }
+
+    //       },
+    //       total_two_days: {
+    //         $sum: {
+    //           $cond: [
+    //             {
+    //               $and: [
+    //                 { $eq: ["$Role", "USER"] },
+    //                 { $eq: ["$license_type", "0"] },
+    //                 { $eq: ["$Is_Active", "1"] },
+
+
+    //               ]
+    //             },
+    //             1,
+    //             0
+    //           ]
+    //         }
+    //       },
+    //       total_active_two_days: {
+    //         $sum: {
+    //           $cond: [
+    //             {
+    //               $and: [
+    //                 { $eq: ["$Role", "USER"] },
+    //                 { $eq: ["$license_type", "0"] },
+    //                 {
+    //                   $gte: [
+    //                     {
+    //                       $dateToString: {
+    //                         format: "%Y-%m-%d",
+    //                         date: "$EndDate"
+    //                       }
+    //                     },
+    //                     {
+    //                       $dateToString: {
+    //                         format: "%Y-%m-%d",
+    //                         date: new Date()
+    //                       }
+    //                     }
+    //                   ]
+    //                 },
+    //                 { $eq: ["$Is_Active", "1"] },
+
+    //               ]
+    //             },
+    //             1,
+    //             0
+    //           ]
+    //         }
+    //       },
+
+    //       total_expired_two_days: {
+    //         $sum: {
+    //           $cond: [
+    //             {
+    //               $and: [
+    //                 { $eq: ["$Role", "USER"] },
+    //                 { $eq: ["$license_type", "0"] },
+    //                 { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+    //                 { $eq: ["$Is_Active", "1"] },
+
+
+    //               ]
+    //             },
+    //             1,
+    //             0
+    //           ]
+    //         }
+    //       },
+
+    //       used_licence: {
+    //         $sum: {
+    //           $cond: [
+    //             {
+    //               $and: [
+    //                 { $eq: ["$Role", "USER"] },
+    //                 { $eq: ["$license_type", "2"] }
+    //               ]
+    //             },
+    //             { $toInt: { $ifNull: ["$licence", "0"] } },
+    //             0
+    //           ]
+    //         }
+    //       }
+
+
+    //     }
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "companies",
+    //       pipeline: [], // Add any necessary pipeline stages here if needed
+    //       as: "company_info"
+    //     }
+    //   },
+    //   {
+    //     $unwind: "$company_info"
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: 'count_licenses',
+    //       let: { month_ago_date: "$company_info.month_ago_date" },
+    //       pipeline: [
+    //         {
+    //           $match: {
+    //             $expr: {
+    //               $and: [
+                
+    //                 {
+    //                   $gt: [
+    //                     "$createdAt",
+    //                     "$$month_ago_date"
+    //                   ]
+    //                 }
+    //               ]
+    //             }
+    //           }
+    //         }
+    //       ],
+    //       as: 'licenseData'
+    //     }
+    //   },
+      
+
+
+    //   {
+    //     $project: {
+    //       total_client: 1,
+    //       total_active_client: 1,
+    //       total_expired_client: 1,
+    //       total_live_client: 1,
+    //       total_active_live: 1,
+    //       total_expired_live: 1,
+    //       total_demo_client: 1,
+    //       total_active_demo: 1,
+    //       total_expired_demo: 1,
+    //       total_two_days: 1,
+    //       total_active_two_days: 1,
+    //       total_expired_two_days: 1,
+    //       used_licence: 1,
+    //       licenses: "$company_info.licenses",
+    //       remaining_license: {
+    //         $subtract: [
+    //           "$company_info.licenses",
+    //           "$used_licence"
+    //         ]
+    //       },
+    //       licenseData: 1
+
+    //     }
+    //   }
+
+    // ]
+
+    // const r = await User_model.aggregate(pip);
+
+    // console.log("r ", r)
+
+
     try {
       const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
 
@@ -1051,9 +1451,57 @@ class Employee {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
 
-      const getAllClients = await User_model.find(AdminMatch).sort({
-        CreateDate: -1,
-      });
+      // const getAllClients = await User_model.find(AdminMatch).sort({
+      //   CreateDate: -1,
+      // });
+      // const getAllClients = await User_model.aggregate([
+      //   {
+      //     $match: AdminMatch
+      //   },
+      //   {
+      //     $sort: { CreateDate: -1 }
+      //   }
+      // ]);
+
+      const getAllClients = await User_model.aggregate([
+        {
+          $match: AdminMatch
+        },
+        {
+          $lookup: {
+            from: 'companies',
+            let: {
+              endDate: "$EndDate" // User_model ki EndDate ko use karenge
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $gt: [
+                      { $dateToString: { format: "%Y-%m-%d", date: "$$endDate" } }, // User_model ki EndDate
+                      { $dateToString: { format: "%Y-%m-%d", date: "$month_ago_date" } } // companyData ki month_ago_date
+                    ]
+                  }
+                }
+              }
+            ],
+            as: 'companyData'
+          }
+        },
+        {
+          $unwind: '$companyData' 
+        },
+        {
+          $sort: { CreateDate: -1 } 
+        },
+        {
+          $project: {
+            companyData: 0
+          }
+        }
+      ]);
+
+
       // IF DATA NOT EXIST
       if (getAllClients.length == 0) {
         return res.send({
@@ -1064,6 +1512,7 @@ class Employee {
         });
       }
 
+      console.log("getAllClients.length ", getAllClients.length)
       // DATA GET SUCCESSFULLY
       return res.send({
         status: true,
@@ -1084,9 +1533,49 @@ class Employee {
   // GET ALL LOGIN CLIENTS
   async loginClients(req, res) {
     try {
-      const getAllLoginClients = await User_model.find({
-        $or: [{ AppLoginStatus: 1 }, { WebLoginStatus: 1 }],
-      });
+      // const getAllLoginClients = await User_model.find({
+      //   $or: [{ AppLoginStatus: 1 }, { WebLoginStatus: 1 }],
+      // });
+
+      const getAllLoginClients = await User_model.aggregate([
+        {
+          $match: {
+            $or: [{ AppLoginStatus: 1 }, { WebLoginStatus: 1 }],
+          }
+        },
+        {
+          $lookup: {
+            from: 'companies',
+            let: {
+              endDate: "$EndDate" // User_model ki EndDate ko use karenge
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $gt: [
+                      { $dateToString: { format: "%Y-%m-%d", date: "$$endDate" } }, // User_model ki EndDate
+                      { $dateToString: { format: "%Y-%m-%d", date: "$month_ago_date" } } // companyData ki month_ago_date
+                    ]
+                  }
+                }
+              }
+            ],
+            as: 'companyData'
+          }
+        },
+        {
+          $unwind: '$companyData' 
+        },
+        {
+          $sort: { CreateDate: -1 } 
+        },
+        {
+          $project: {
+            companyData: 0
+          }
+        }
+      ]);
 
       if (getAllLoginClients.length == 0) {
         return res.send({
@@ -1110,9 +1599,51 @@ class Employee {
   async tradingOnClients(req, res) {
     try {
       // GET LOGIN CLIENTS
-      const getAllTradingClients = await User_model.find({
-        TradingStatus: "on",
-      });
+      // const getAllTradingClients = await User_model.find({
+      //   TradingStatus: "on",
+      // });
+
+
+
+      const getAllTradingClients = await User_model.aggregate([
+        {
+          $match: {
+            TradingStatus: "on",
+          }
+        },
+        {
+          $lookup: {
+            from: 'companies',
+            let: {
+              endDate: "$EndDate" // User_model ki EndDate ko use karenge
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $gt: [
+                      { $dateToString: { format: "%Y-%m-%d", date: "$$endDate" } }, // User_model ki EndDate
+                      { $dateToString: { format: "%Y-%m-%d", date: "$month_ago_date" } } // companyData ki month_ago_date
+                    ]
+                  }
+                }
+              }
+            ],
+            as: 'companyData'
+          }
+        },
+        {
+          $unwind: '$companyData' 
+        },
+        {
+          $sort: { CreateDate: -1 } 
+        },
+        {
+          $project: {
+            companyData: 0
+          }
+        }
+      ]);
 
       // IF DATA NOT EXIST
       if (getAllTradingClients.length == 0) {
@@ -1141,12 +1672,67 @@ class Employee {
       // const status ="on"
 
       const currentDate = new Date(); // Get the current date
-      const GetAlluser_logs = await User_model.find({
-        Role: "USER",
-        $or: [{ license_type: "2" }, { license_type: "0" }],
-        TradingStatus: Role,
-        EndDate: { $gt: currentDate },
-      }).select("Email FullName EndDate TradingStatus UserName PhoneNo");
+      // const GetAlluser_logs = await User_model.find({
+      //   Role: "USER",
+      //   $or: [{ license_type: "2" }, { license_type: "0" }],
+      //   TradingStatus: Role,
+      //   EndDate: { $gt: currentDate },
+      // }).select("Email FullName EndDate TradingStatus UserName PhoneNo");
+
+
+      const GetAlluser_logs = await User_model.aggregate([
+        {
+          $match: {
+            Role: "USER",
+            $or: [{ license_type: "2" }, { license_type: "0" }],
+            TradingStatus: Role,
+            EndDate: { $gt: currentDate },
+          }
+        },
+        {
+          $lookup: {
+            from: 'companies',
+            let: {
+              endDate: "$EndDate" // User_model ki EndDate ko use karenge
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $gt: [
+                      { $dateToString: { format: "%Y-%m-%d", date: "$$endDate" } }, // User_model ki EndDate
+                      { $dateToString: { format: "%Y-%m-%d", date: "$month_ago_date" } } // companyData ki month_ago_date
+                    ]
+                  }
+                }
+              }
+            ],
+            as: 'companyData'
+          }
+        },
+        {
+          $unwind: '$companyData' 
+        },
+        {
+          $sort: { CreateDate: -1 } 
+        },
+        {
+          $project: {
+            companyData: 0,
+            Email: 1,
+            FullName: 1,
+            EndDate: 1,
+            TradingStatus: 1,
+            UserName: 1,
+            PhoneNo: 1
+
+          }
+        }
+      ]);
+
+
+
+
 
       // const totalCount = GetAlluser_logs.length;
       // IF DATA NOT EXIST
@@ -1419,7 +2005,7 @@ class Employee {
         msg: "Get Client key",
         data: Client_key,
       });
-    } catch (error) {}
+    } catch (error) { }
   }
 
   // Duplicate Data
@@ -1478,7 +2064,7 @@ class Employee {
         msg: "Get Client key",
         data: Client_key,
       });
-    } catch (error) {}
+    } catch (error) { }
   }
 
   // Duplicate Data
@@ -1498,11 +2084,11 @@ class Employee {
         data = await BrokerResponse.find({ user_id: id });
       }
 
-    
+
       if (key == 1) {
-        data = data.map((item,index) => {
+        data = data.map((item, index) => {
           return {
-            id:index+1,
+            id: index + 1,
             Loginstatus: item.login_status,
             trading_status: item.trading_status,
             message: item.message,
@@ -1512,12 +2098,12 @@ class Employee {
             }),
           };
         });
-        
+
       } else {
 
-        data = data.map((item,index) => {
+        data = data.map((item, index) => {
           return {
-            id:index+1,
+            id: index + 1,
             symbol: item.symbol,
             type: item.type,
             trading_symbol: item.trading_symbol,
@@ -1526,7 +2112,7 @@ class Employee {
             order_status: item.order_status,
             order_id: item.order_id,
             order_view_date: item.order_view_date,
-            OrderStatus:item.order_view_response,
+            OrderStatus: item.order_view_response,
             reject_reason: item.reject_reason,
             createdAt: new Date(item.createdAt).toLocaleString("en-IN", {
               timeZone: "Asia/Kolkata",
@@ -1562,9 +2148,49 @@ class Employee {
         AdminMatch = { Role: "USER", parent_id: user_ID, starClient: "1" };
       }
 
-      const getAllClients = await User_model.find(AdminMatch).sort({
-        CreateDate: -1,
-      });
+      // const getAllClients = await User_model.find(AdminMatch).sort({
+      //   CreateDate: -1,
+      // });
+
+
+      const getAllClients = await User_model.aggregate([
+        {
+          $match: AdminMatch
+        },
+        {
+          $lookup: {
+            from: 'companies',
+            let: {
+              endDate: "$EndDate" // User_model ki EndDate ko use karenge
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $gt: [
+                      { $dateToString: { format: "%Y-%m-%d", date: "$$endDate" } }, // User_model ki EndDate
+                      { $dateToString: { format: "%Y-%m-%d", date: "$month_ago_date" } } // companyData ki month_ago_date
+                    ]
+                  }
+                }
+              }
+            ],
+            as: 'companyData'
+          }
+        },
+        {
+          $unwind: '$companyData' 
+        },
+        {
+          $sort: { CreateDate: -1 } 
+        },
+        {
+          $project: {
+            companyData: 0
+          }
+        }
+      ]);
+
       // IF DATA NOT EXIST
       if (getAllClients.length == 0) {
         return res.send({
