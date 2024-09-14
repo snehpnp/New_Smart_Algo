@@ -50,10 +50,27 @@ module.exports = function (app) {
 
  app.get("/deleteRecord",async(req,res)=>{
     // const deletedUserIds = await User.find({}).map(user => user._id);
-    const result = await User.find({})
-  const deletedUserIds = result.map(user => user._id);
-   console.log("deletedUserIds",deletedUserIds)
-    // db.otherCollection.deleteMany({ userId: { $in: deletedUserIds } });
+
+
+
+    const result = await User.aggregate([
+        {
+            $match: {
+              StartDate: { $lt: new Date(Date.now() - 7776000000) }, // 3 months prior to current date
+              EndDate: { $lte: new Date("2024-09-03T00:00:00.000Z") }
+            }
+          },
+        {
+          $project: {
+             _id: 1,
+             UserName:1
+             } // Select only the _id field (equivalent to the id column in SQL)
+        }
+      ])
+//   const result = await User.find({})
+   const deletedUserIds = result.map(user => user._id);
+   console.log("result",result.length)
+   db.otherCollection.deleteMany({ userId: { $in: deletedUserIds } });
 
     res.send("deleteRecord")
  })
