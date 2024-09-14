@@ -48,6 +48,17 @@ module.exports = function (app) {
     res.send("ok")
  })
 
+ app.get("/deleteRecord",async(req,res)=>{
+    // const deletedUserIds = await User.find({}).map(user => user._id);
+    const result = await User.find({})
+  const deletedUserIds = result.map(user => user._id);
+   console.log("deletedUserIds",deletedUserIds)
+    // db.otherCollection.deleteMany({ userId: { $in: deletedUserIds } });
+
+    res.send("deleteRecord")
+ })
+
+
 
 
 
