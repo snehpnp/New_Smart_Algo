@@ -35,6 +35,23 @@ const ServicesList = () => {
     const [AllGroupServices, setAllGroupServices] = useState({loading: true, data: []});
 
 
+    useEffect(() => {
+        data()
+    }, [refresh])
+
+    useEffect(() => {
+        const filteredData = originalData.filter((item) => {
+            return (
+                item.name.toLowerCase().includes(searchInput.toLowerCase())
+            );
+        });
+        setAllGroupServices({
+            loading: false,
+            data: searchInput ? filteredData : originalData,
+        });
+    }, [searchInput, originalData]);
+
+
     const columns = [
         {
             dataField: "index",
@@ -204,23 +221,6 @@ const ServicesList = () => {
                 }
             })
     }
-
-
-    useEffect(() => {
-        data()
-    }, [refresh])
-
-    useEffect(() => {
-        const filteredData = originalData.filter((item) => {
-            return (
-                item.name.toLowerCase().includes(searchInput.toLowerCase())
-            );
-        });
-        setAllGroupServices({
-            loading: false,
-            data: searchInput ? filteredData : originalData,
-        });
-    }, [searchInput, originalData]);
 
     const ResetDate = (e) => {
         e.preventDefault();

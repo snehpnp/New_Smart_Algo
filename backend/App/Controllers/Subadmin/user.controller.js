@@ -348,7 +348,9 @@ class Employee {
               $project: {
                 _id: 0, // Exclude the _id field if you don't need it
                 Service_id: "$Service_id",
-                lotsize: "$serviceInfo.lotsize"
+                lotsize: "$serviceInfo.lotsize",
+                instrumenttype: "$serviceInfo.instrumenttype",
+                product_type: "$product_type"
               }
             }
           ]);
@@ -360,11 +362,11 @@ class Employee {
                 user_id: User_id,
                 group_id: group_service,
                 service_id: data.Service_id,
-                //strategy_id: Strategies[0].id,
                 strategy_id: Strategies_id_array,
                 uniqueUserService: User_id + "_" + data.Service_id,
                 quantity: data.lotsize,
-                lot_size: 1
+                lot_size: 1,
+                product_type: data.product_type,
               });
               User_client_services.save();
             });
@@ -825,7 +827,9 @@ class Employee {
               $project: {
                 _id: 0,
                 Service_id: "$Service_id",
-                lotsize: "$serviceInfo.lotsize"
+                product_type:"$product_type",
+                lotsize: "$serviceInfo.lotsize",
+                instrumenttype: "$serviceInfo.instrumenttype"
               }
             }
           ]);
@@ -857,7 +861,8 @@ class Employee {
               strategy_id: strategFind[0].strategy_id,
               uniqueUserService: existingUsername._id + "_" + data.Service_id,
               quantity: data.lotsize,
-              lot_size: 1
+              lot_size: 1,
+              product_type: data.product_type
             });
 
             User_client_services.save();

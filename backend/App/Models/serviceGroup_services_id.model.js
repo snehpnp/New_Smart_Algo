@@ -20,6 +20,10 @@ const serviceGroup_services_id = Schema({
         type: String,
         unique: true,
     },
+    product_type: {
+        type: Number,
+        default: 2
+    },
 
 },
     {

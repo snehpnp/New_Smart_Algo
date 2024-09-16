@@ -315,18 +315,20 @@ class Employee {
             },
             {
               $project: {
-                _id: 0, // Exclude the _id field if you don't need it
+                _id: 0,
                 Service_id: "$Service_id",
+                product_type: "$product_type",
+
                 lotsize: "$serviceInfo.lotsize",
+                instrumenttype: "$serviceInfo.instrumenttype",
               },
             },
           ]);
 
           const clientServicesData = [];
+          console.log("group_service_find", group_service_find);
 
-          // Build the array with client_services documents
           if (group_service_find.length !== 0) {
-            // CLIENT SERVICES ADD API
             if (group_service_find.length != 0) {
               group_service_find.forEach((data) => {
                 const clientService = {
@@ -339,6 +341,7 @@ class Employee {
                   uniqueUserService: User_id + "_" + data.Service_id,
                   quantity: data.lotsize,
                   lot_size: 1,
+                  product_type: data.product_type,
                 };
 
                 clientServicesData.push(clientService);
@@ -806,7 +809,10 @@ class Employee {
               $project: {
                 _id: 0, // Exclude the _id field if you don't need it
                 Service_id: "$Service_id",
+                product_type: "$product_type",
+
                 lotsize: "$serviceInfo.lotsize",
+                instrumenttype: "$serviceInfo.instrumenttype",
               },
             },
           ]);
@@ -836,6 +842,7 @@ class Employee {
               uniqueUserService: existingUsername._id + "_" + data.Service_id,
               quantity: data.lotsize,
               lot_size: 1,
+              product_type: data.product_type,
             });
             User_client_services.save();
           });
@@ -1498,11 +1505,10 @@ class Employee {
         data = await BrokerResponse.find({ user_id: id });
       }
 
-    
       if (key == 1) {
-        data = data.map((item,index) => {
+        data = data.map((item, index) => {
           return {
-            id:index+1,
+            id: index + 1,
             Loginstatus: item.login_status,
             trading_status: item.trading_status,
             message: item.message,
@@ -1512,12 +1518,10 @@ class Employee {
             }),
           };
         });
-        
       } else {
-
-        data = data.map((item,index) => {
+        data = data.map((item, index) => {
           return {
-            id:index+1,
+            id: index + 1,
             symbol: item.symbol,
             type: item.type,
             trading_symbol: item.trading_symbol,
@@ -1526,7 +1530,7 @@ class Employee {
             order_status: item.order_status,
             order_id: item.order_id,
             order_view_date: item.order_view_date,
-            OrderStatus:item.order_view_response,
+            OrderStatus: item.order_view_response,
             reject_reason: item.reject_reason,
             createdAt: new Date(item.createdAt).toLocaleString("en-IN", {
               timeZone: "Asia/Kolkata",
@@ -1534,7 +1538,6 @@ class Employee {
           };
         });
       }
-
 
       return res.status(200).json({
         status: true,
