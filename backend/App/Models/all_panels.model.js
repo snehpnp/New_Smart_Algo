@@ -89,6 +89,14 @@ const panelSchema = new mongoose.Schema({
         type: String,
        
     },
+    month_ago_date: {
+        type: Date,
+        default: null
+    },
+    month_ago_number: {
+        type: Number,
+        default: null
+    },
 }, {
     timestamps: true
 });

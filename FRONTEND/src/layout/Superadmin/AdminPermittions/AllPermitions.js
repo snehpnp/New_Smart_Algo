@@ -42,8 +42,9 @@ const AllPermitions = () => {
         await dispatch(All_Panel_List()).unwrap()
             .then((response) => {
                 if (response.status) {
-
-
+                    
+                    console.log("response.data ",response.data)
+                  
                     setPanelData1({
                         loading: false,
                         data: response.data
@@ -205,7 +206,6 @@ const AllPermitions = () => {
                 </span>
             )
         },
-
         {
             dataField: 'signal',
             text: 'Signal ',
@@ -217,7 +217,6 @@ const AllPermitions = () => {
                 </span >
             )
         },
-      
     ];
 
     const columns1 = [

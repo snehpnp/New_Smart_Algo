@@ -303,6 +303,28 @@ class Panel {
             const options = { upsert: true };
 
             await Superadmin_History.updateOne(filter, update, options);
+
+
+              // Panel Data Update Record
+              
+              const currentDate = new Date();
+              const monthsPrior = Number(month); // Change this value to 3, 4, or any other number of months
+              const millisecondsPerMonth = 2629800000; // approximate milliseconds per month
+              const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPerMonth));
+  
+            const filter_panel_model = { _id: id };
+            const update_panel_model = {
+              $set: {
+                  month_ago_number: monthsPrior,
+                  month_ago_date: datePrior
+              },
+           };
+
+            const options_panel_model = { upsert: true };
+
+            await panel_model.updateOne(filter_panel_model, update_panel_model, options_panel_model);
+
+
             return res.send({
               status: true,
               msg: "month Add Successfully",
