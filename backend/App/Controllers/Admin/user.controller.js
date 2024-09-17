@@ -230,6 +230,19 @@ class Employee {
         var TotalLicense = 0;
       }
 
+      console.log("TotalLicense ",TotalLicense);
+      console.log("Number(licence) ",Number(licence));
+      console.log("Panel_key[0].licenses ",Panel_key[0].licenses);
+   
+      return res.send({
+        status: false,
+        msg: "You Dont Have License TEST",
+        data: [],
+      });
+
+
+
+     
       if (Number(licence) > 0) {
         if (
           parseInt(TotalLicense) + parseInt(licence) >
@@ -1006,10 +1019,76 @@ class Employee {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
 
-      const getAllClients = await User_model.find(AdminMatch)
-        .skip(skip)
-        .limit(Number(limit))
-        .sort({ createdAt: -1 });
+      // const getAllClients = await User_model.find(AdminMatch)
+      //   .skip(skip)
+      //   .limit(Number(limit))
+      //   .sort({ createdAt: -1 });
+
+
+        const getAllClients = await User_model.aggregate([
+          {
+            $match: AdminMatch
+          },
+          {
+            $lookup: {
+              from: 'companies',
+              let: {
+                endDate: "$EndDate" // User_model ki EndDate ko use karenge
+              },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $gt: [
+                        { $dateToString: { format: "%Y-%m-%d", date: "$$endDate" } }, // User_model ki EndDate
+                        { $dateToString: { format: "%Y-%m-%d", date: "$month_ago_date" } } // companyData ki month_ago_date
+                      ]
+                    }
+                  }
+                }
+              ],
+              as: 'companyData'
+            }
+          },
+          {
+            $unwind: '$companyData'
+          },
+          {
+            $sort: { CreateDate: -1 }
+          },
+          {
+            $project: {
+              companyData: 0
+            }
+          }
+        ]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       const totalCount = getAllClients.length;
       // IF DATA NOT EXIST
@@ -1368,90 +1447,127 @@ class Employee {
 
     //     }
     //   },
-      
-    //     {
-    //       $lookup: {
-    //         from: "companies",
-    //         pipeline: [], // Add any necessary pipeline stages here if needed
-    //         as: "company_info"
-    //       }
-    //     },
-    //     {
-    //       $unwind: "$company_info"
-    //     },
-    //     {
-    //       $lookup: {
-    //         from: 'count_licenses',
-    //         let: { month_ago_date: "$company_info.month_ago_date" },
-    //         pipeline: [
-    //           {
-    //             $match: {
-    //               $and: [
-    //                 { admin_license: { $exists: true } },
-    //                {
-    //                   $expr: {
-    //                     $gt: ["$createdAt", "$$month_ago_date"] 
-    //                   }
-    //                 }
-    //               ]
-    //             }
-    //           }
-    //         ],
-    //         as: 'licenseData'
-    //       }
-    //     },
-    //     {
-    //       $unwind: "$licenseData"
-    //     },
-    //     {
-    //       $group: {
-    //         _id: "$_id",
-    //         total_admin_license: { 
-    //           $sum: { 
-    //             $toInt: "$licenseData.admin_license" // Convert to integer and sum
-    //           }
-    //         },
-    //         total_client: { $first: "$total_client" },
-    //         total_active_client: { $first: "$total_active_client" },
-    //         total_expired_client: { $first: "$total_expired_client" },
-    //         total_live_client: { $first: "$total_live_client" },
-    //         total_active_live: { $first: "$total_active_live" },
-    //         total_expired_live: { $first: "$total_expired_live" },
-    //         total_demo_client: { $first: "$total_demo_client" },
-    //         total_active_demo: { $first: "$total_active_demo" },
-    //         total_expired_demo: { $first: "$total_expired_demo" },
-    //         total_two_days: { $first: "$total_two_days" },
-    //         total_active_two_days: { $first: "$total_active_two_days" },
-    //         total_expired_two_days: { $first: "$total_expired_two_days" },
-    //         used_licence: { $first: "$used_licence" }
-    //       }
-    //     },
-    //     {
-    //       $project: {
-    //         total_client: 1,
-    //         total_active_client: 1,
-    //         total_expired_client: 1,
-    //         total_live_client: 1,
-    //         total_active_live: 1,
-    //         total_expired_live: 1,
-    //         total_demo_client: 1,
-    //         total_active_demo: 1,
-    //         total_expired_demo: 1,
-    //         total_two_days: 1,
-    //         total_active_two_days: 1,
-    //         total_expired_two_days: 1,
-    //         used_licence: 1,
-    //         total_admin_license: 1,
-    //         remaining_license: {
-    //           $subtract: [
-    //             "$total_admin_license", // Subtract total_admin_license
-    //             "$used_licence"         // from used_licence
-    //           ]
-    //         }
-    //       }
+
+    //   {
+    //     $lookup: {
+    //       from: "companies",
+    //       pipeline: [],
+    //       as: "company_info"
     //     }
+    //   },
+    //   {
+    //     $unwind: "$company_info"
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: 'count_licenses',
+    //       let: { month_ago_date: "$company_info.month_ago_date" },
+    //       pipeline: [],
+         
+    //       as: 'licenseData'
+    //     }
+    //   },
+    //   {
+    //     $unwind: "$licenseData"
+    //   },
+
+    //   {
+    //     $group: {
+    //       _id: "$_id",
+
+    //       total_used_licence: {
+    //         $sum: {
+    //           $toInt: "$licenseData.license"
+    //         }
+    //       },
+
+    //       total_client: { $first: "$total_client" },
+    //       total_active_client: { $first: "$total_active_client" },
+    //       total_expired_client: { $first: "$total_expired_client" },
+    //       total_live_client: { $first: "$total_live_client" },
+    //       total_active_live: { $first: "$total_active_live" },
+    //       total_expired_live: { $first: "$total_expired_live" },
+    //       total_demo_client: { $first: "$total_demo_client" },
+    //       total_active_demo: { $first: "$total_active_demo" },
+    //       total_expired_demo: { $first: "$total_expired_demo" },
+    //       total_two_days: { $first: "$total_two_days" },
+    //       total_active_two_days: { $first: "$total_active_two_days" },
+    //       total_expired_two_days: { $first: "$total_expired_two_days" },
+    //       used_licence: { $first: "$used_licence" },
+    //       total_admin_licence: { $first: "$company_info.licenses" }
+
+    //     }
+    //   },
+    //   {
+    //     $project: {
+    //       total_client: 1,
+    //       total_active_client: 1,
+    //       total_expired_client: 1,
+    //       total_live_client: 1,
+    //       total_active_live: 1,
+    //       total_expired_live: 1,
+    //       total_demo_client: 1,
+    //       total_active_demo: 1,
+    //       total_expired_demo: 1,
+    //       total_two_days: 1,
+    //       total_active_two_days: 1,
+    //       total_expired_two_days: 1,
+    //       total_admin_license: 1,
+    //       total_admin_licence: 1,
+    //       total_used_licence: 1,
+    //       used_licence: 1,
+    //       licenses:
+
+    //       {
+    //         $toInt: {
+    //           $subtract: [
+    //             "$total_admin_licence",
+           
+    //             {
+    //               $subtract: [
+    //                 "$total_used_licence",
+    //                 "$used_licence"
+    //               ]
+    //             },
+
+    //           ]
+              
+    //         }
+    //       },
+
+
+    //       remaining_license: {
+    //         $toInt: {
+    //           $subtract: [
+           
+    //             {
+    //               $toInt: {
+    //                 $subtract: [
+    //                   "$total_admin_licence",
+                 
+    //                   {
+    //                     $subtract: [
+    //                       "$total_used_licence",
+    //                       "$used_licence"
+    //                     ]
+    //                   },
       
-      
+    //                 ]
+                    
+    //               }
+    //             },
+    //             "$used_licence"
+
+    //           ]
+              
+    //         }
+    //       },
+
+    //     }
+    //   }
+
+
+
 
     // ]
 
@@ -1459,7 +1575,7 @@ class Employee {
 
     // console.log("r ", r)
 
-    
+   
 
     try {
       const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
@@ -1473,17 +1589,7 @@ class Employee {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
 
-      // const getAllClients = await User_model.find(AdminMatch).sort({
-      //   CreateDate: -1,
-      // });
-      // const getAllClients = await User_model.aggregate([
-      //   {
-      //     $match: AdminMatch
-      //   },
-      //   {
-      //     $sort: { CreateDate: -1 }
-      //   }
-      // ]);
+    
 
       const getAllClients = await User_model.aggregate([
         {
@@ -1511,10 +1617,10 @@ class Employee {
           }
         },
         {
-          $unwind: '$companyData' 
+          $unwind: '$companyData'
         },
         {
-          $sort: { CreateDate: -1 } 
+          $sort: { CreateDate: -1 }
         },
         {
           $project: {
@@ -1587,10 +1693,10 @@ class Employee {
           }
         },
         {
-          $unwind: '$companyData' 
+          $unwind: '$companyData'
         },
         {
-          $sort: { CreateDate: -1 } 
+          $sort: { CreateDate: -1 }
         },
         {
           $project: {
@@ -1655,10 +1761,10 @@ class Employee {
           }
         },
         {
-          $unwind: '$companyData' 
+          $unwind: '$companyData'
         },
         {
-          $sort: { CreateDate: -1 } 
+          $sort: { CreateDate: -1 }
         },
         {
           $project: {
@@ -1733,10 +1839,10 @@ class Employee {
           }
         },
         {
-          $unwind: '$companyData' 
+          $unwind: '$companyData'
         },
         {
-          $sort: { CreateDate: -1 } 
+          $sort: { CreateDate: -1 }
         },
         {
           $project: {
@@ -2201,10 +2307,10 @@ class Employee {
           }
         },
         {
-          $unwind: '$companyData' 
+          $unwind: '$companyData'
         },
         {
-          $sort: { CreateDate: -1 } 
+          $sort: { CreateDate: -1 }
         },
         {
           $project: {
