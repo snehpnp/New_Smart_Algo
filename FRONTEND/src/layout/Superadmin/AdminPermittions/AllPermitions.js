@@ -42,9 +42,9 @@ const AllPermitions = () => {
         await dispatch(All_Panel_List()).unwrap()
             .then((response) => {
                 if (response.status) {
-                    
-                    console.log("response.data ",response.data)
-                  
+
+                    console.log("response.data ", response.data)
+
                     setPanelData1({
                         loading: false,
                         data: response.data
@@ -199,10 +199,32 @@ const AllPermitions = () => {
             dataField: 'panel_name',
             text: 'Adjust Month',
             formatter: (cell, row) => (
+
+
                 <span data-toggle="tooltip" data-placement="top" title="Adjust Month">
                     <Plus size={20} color="#198754" strokeWidth={2} className="mx-1"
                         onClick={(e) => { setshowPanelName({ panel_name: row.panel_name, id: row._id, db_url: row.db_url, db_name: row.db_name, key: row.key }); setshowAdjustMonthModal(true) }}
                     />
+
+                    
+                </span>
+            )
+        },
+        {
+            dataField: 'panel_name',
+            text: 'Month Date',
+            formatter: (cell, row) => (
+
+
+                <span data-toggle="tooltip" data-placement="top" title="Month">
+                    
+                    {
+                      
+
+                        row.month_ago_number != undefined && row.month_ago_number != null ?
+                            ` ${row.month_ago_number} Month  ${row.month_ago_date.includes("T") ? row.month_ago_date.split("T")[0] : row.month_ago_date} ` :
+                            " - "
+                    }
                 </span>
             )
         },
