@@ -232,6 +232,8 @@ const Header = ({ ChatBox }) => {
           window.location.reload();
 
         }
+        localStorage.setItem("servicegivenmonth", response.data.service_given_month ? response.data.service_given_month : "0")
+
 
         localStorage.setItem("broker", response.data.broker ? response.data.broker : "0")
 
@@ -250,7 +252,6 @@ const Header = ({ ChatBox }) => {
     }
   };
 
-
   //  GET_USER_DETAILS
   const message_brod = async () => {
     if (user_details.Role == "USER") {
@@ -264,8 +265,6 @@ const Header = ({ ChatBox }) => {
     }
 
   };
-
-  
 
   //  For Show Notfication
   const Notfication = async () => {
@@ -287,7 +286,6 @@ const Header = ({ ChatBox }) => {
         });
     }
   };
-
  
   const ClearSession = async () => {
     var decoded = jwt_decode(user_details.token);
@@ -322,10 +320,6 @@ const Header = ({ ChatBox }) => {
         });
     }
   };
-
-
-
-
 
   const CompanyName = async () => {
     await dispatch(Get_Company_Logo()).unwrap()

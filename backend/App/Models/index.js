@@ -68,6 +68,8 @@ module.exports = {
     position_data_store : require('./position_data_store.model'),
     user_fund_logs:require('./fund_change_logs.model'),
     SuperadminHistoryBackup:require('./Superadminhistorybackup.model'),
+    Plansmodel:require('./Plans.model'),
+
 
     dashboard_data:dashboard_data
 

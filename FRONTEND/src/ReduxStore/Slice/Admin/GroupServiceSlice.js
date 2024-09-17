@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ALL_SERVICES, ADD_GROUP_SERVICES, GET_ALL_SERVICES_NAME, UPDATE_SERVICES_BY_GROUP_ID, DELETE_GROUP_SERVICES, GET_ALL_SERVICES_USER_NAME, GET_SERVICES_BY_GROUP_ID, GET_SERVICES_BY_GROUP_ID_For_Edit_update } from "../../../Service/admin.service";
+import { ALL_SERVICES, ADD_GROUP_SERVICES, GET_ALL_SERVICES_NAME, UPDATE_SERVICES_BY_GROUP_ID, DELETE_GROUP_SERVICES, GET_ALL_SERVICES_USER_NAME, GET_SERVICES_BY_GROUP_ID, GET_SERVICES_BY_GROUP_ID_For_Edit_update,Addplans,GetAllPlans,GetPlansById,EditPlans } from "../../../Service/admin.service";
 
 
 
@@ -73,6 +73,42 @@ export const Update_Service_By_Group_Id = createAsyncThunk("service/byid", async
     }
 });
 
+export const Add_Plans = createAsyncThunk("addplans", async (data) => {
+    try {
+        const res = await Addplans(data);
+        return await res;
+    } catch (err) {
+        return
+    }
+});
+
+export const Get_All_Plans = createAsyncThunk("getall/plans", async (data) => {
+    try {
+        const res = await GetAllPlans(data);
+        return await res;
+    } catch (err) {
+        return
+    }
+});
+
+export const Get_Plans_By_Id = createAsyncThunk("getplansbyid", async (data) => {
+    try {
+        const res = await GetPlansById(data);
+        return await res;
+    } catch (err) {
+        return
+    }
+});
+
+export const Edit_Plans = createAsyncThunk("editplans", async (data) => {
+    try {
+        const res = await EditPlans(data);
+        return await res;
+    } catch (err) {
+        return
+    }
+});
+
 
 
 
@@ -89,7 +125,11 @@ const GroupServiceSlice = createSlice({
         AllservicesuserName: [],
         getServiceByGroupId: [],
         updatServiceByGroupId: [],
-        getServiceByGroupId_forEdit: []
+        getServiceByGroupId_forEdit: [],
+        addplans:[],
+        getallplans:[],
+        getplansbyid:[],
+        editplans:[]
     },
     reducers: {}, 
  
@@ -119,6 +159,19 @@ const GroupServiceSlice = createSlice({
         [Get_Service_By_Group_Id_For_Edit_Update.fulfilled]: (state, { payload }) => {
             return { ...state, getServiceByGroupId_forEdit: payload, isLoading: false };
         },
+        [Add_Plans.fulfilled]: (state, { payload }) => {
+            return { ...state, addplans: payload, isLoading: false };
+        },
+        [Get_All_Plans.fulfilled]: (state, { payload }) => {
+            return { ...state, getallplans: payload, isLoading: false };
+        },
+        [Get_Plans_By_Id.fulfilled]: (state, { payload }) => {
+            return { ...state, getplansbyid: payload, isLoading: false };
+        },
+        [Edit_Plans.fulfilled]: (state, { payload }) => {
+            return { ...state, editplans: payload, isLoading: false };
+        },
+        
 
     },
 });

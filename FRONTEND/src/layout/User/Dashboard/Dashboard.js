@@ -13,6 +13,7 @@ import {
 } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 import Loader from "../../../Utils/Loader";
 import { GET_IP } from "../../../Service/common.service";
+import NewsTicker from "./NewsTicker";
 
 const BrokerResponse = () => {
   const dispatch = useDispatch();
@@ -280,6 +281,9 @@ const BrokerResponse = () => {
 
 
   return (
+
+    <>
+    
     <Content Page_title="Dashboard" button_status={false}>
       <div
         className="table-responsive "
@@ -290,6 +294,8 @@ const BrokerResponse = () => {
           flexDirection: "column",
         }}
       >
+ <NewsTicker />
+
        {BrokerId && BrokerId == "4" && <h6 className="fw-bold text-danger mb-3">
           <strong>Note:</strong> Product Type selection is mandatory for CNC in
           Motilal Oswal.
@@ -585,6 +591,7 @@ const BrokerResponse = () => {
         </>
       )}
     </Content>
+    </>
   );
 };
 

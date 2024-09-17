@@ -56,6 +56,8 @@ import Faq from '../layout/Admin/Faq/Faq';
 
 import Starclients from '../layout/Admin/Clients/Starclients/Starclients'
 import ReferralPage  from '../layout/Admin/Profile/ReferralPage'
+import Plans  from '../layout/Admin/Service/Plans/Plans'
+
 
 
 import { useDispatch } from "react-redux";
@@ -151,6 +153,9 @@ const Admin = () => {
                 <Route exact path="/allstarclients" element={<Starclients />} />
                 <Route exact path="/faq" element={<Faq />} />
                 <Route exact path="/refer-earn" element={<ReferralPage />} />
+
+                <Route exact path="/plans" element={<Plans />} />
+
 
 
 

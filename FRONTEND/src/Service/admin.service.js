@@ -1014,3 +1014,59 @@ export async function AdminTradingStatusGet(data, token) {
         return await err
     }
 }
+
+
+
+export async function Addplans(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}addplans`, data,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}
+
+
+export async function GetAllPlans(data, token) {
+    try {
+        const res = await axios.get(`${Config.base_url}getallplans`, data,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}
+
+export async function GetPlansById(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getplansbyid`, data,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}
+
+export async function EditPlans(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}editplans`, data,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}
+

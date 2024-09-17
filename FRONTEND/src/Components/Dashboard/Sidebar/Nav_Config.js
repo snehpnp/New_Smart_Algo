@@ -106,6 +106,11 @@ export const admin_sidebar = [
                 id: 53,
                 name: 'Strategies',
                 route: '/admin/strategies',
+            },
+            {
+                id: 53,
+                name: 'Plans',
+                route: '/admin/plans',
             }
         ]
     },
@@ -385,6 +390,13 @@ export const Client = [
         Icon: 'Info',
         route: '/client/faq',
         Data: []
-    }
+    },
+    {
+        id: 9,
+        name: 'Plans',
+        Icon: 'plan',
+        route: '/client/plan',
+        Data: []
+    },
 ];
 
