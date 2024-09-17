@@ -5,7 +5,7 @@ const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 
 
-const { GetPanelDetails, GetAllClients, GetAllSubadmins, updateBrokerPermission, CloseThePanel, GetAllAdminHelps, GetAll_Broker_details, Admin_Permissions, AddLicensePanle, GetPanlePermistion ,getAllSignals ,DeleteHistory} = require('../../Controllers/Superadmin/Permission.controller')
+const { GetPanelDetails, GetAllClients, GetAllSubadmins, updateBrokerPermission, CloseThePanel, GetAllAdminHelps, GetAll_Broker_details, Admin_Permissions, AddLicensePanle, GetPanlePermistion ,getAllSignals ,DeleteHistory ,AddAdjustMonth} = require('../../Controllers/Superadmin/Permission.controller')
 
 const {getSignal , UpdateSignal , DeleteSignal , backupSignal, deletedSignal , FindUserById ,UpdateUser , UserDelete , findOneUser} = require('../../Controllers/Separate_Superadmin/Superadmin')
 
@@ -17,6 +17,8 @@ router.post('/getall/panel/clients', GetAllClients)
 router.post('/getall/panel/subadmins', GetAllSubadmins)
 
 router.post('/add/license', AddLicensePanle)
+router.post('/add/adjust_month', AddAdjustMonth)
+
 router.post('/getall/panel/helps', GetAllAdminHelps)
 router.post('/getall/brokers', GetAll_Broker_details)
 router.post('/update/permission', Admin_Permissions)

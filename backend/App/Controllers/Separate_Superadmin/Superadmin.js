@@ -77,6 +77,41 @@ class SuperAdmin {
         }
     }
 
+    async AddAdjustMonthPanle(req, res) {
+        try {
+            // const { id, license } = req.body
+            const { month } = req.body
+            const currentDate = new Date();
+            const monthsPrior = Number(month); // Change this value to 3, 4, or any other number of months
+            const millisecondsPerMonth = 2629800000; // approximate milliseconds per month
+            const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPerMonth));
+
+            const updateResult = await company_information.updateMany({}
+                , {
+                    $set: {
+                        month_ago_number: monthsPrior,
+                        month_ago_date: datePrior
+                    },
+                },
+                { upsert: true });
+
+            return res.send({
+                status: true,
+                msg: "Add month",
+                data: updateResult
+            });
+
+
+        } catch (error) {
+            console.log("Error Add month error-", error);
+            return res.send({
+                status: false,
+                msg: "Add month",
+                data: error
+            });
+        }
+    }
+
 
     async GetAllClients(req, res) {
         try {
@@ -667,7 +702,7 @@ class SuperAdmin {
 
             const GetCountLicenceDAta = await count_licenses.find({ user_id: id }).sort({ createdAt: -1 })
 
-            return res.send({ status: true, msg: "Get Data", data: getToMonth ,data1:GetCountLicenceDAta});
+            return res.send({ status: true, msg: "Get Data", data: getToMonth, data1: GetCountLicenceDAta });
 
         } catch (err) {
 

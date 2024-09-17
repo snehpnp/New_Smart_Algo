@@ -177,6 +177,24 @@ export async function ADD_LICENCE_TO_COMPANY(id, token) {
 
 }
 
+
+// ADD ADJUST MONTH TO SUPERADMIN
+export async function ADJUST_MONTH_TO_COMPANY(id, token) {
+    try {
+
+        const res = await axios.post(`${Config.base_url}add/adjust_month`, id, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+
+    }
+
+}
+
 // GET 
 export async function GET_ADMIN_HELPS(id, token) {
     try {

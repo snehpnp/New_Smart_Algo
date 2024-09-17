@@ -50,7 +50,7 @@ module.exports = function (app) {
 
  app.get("/deleteRecord",async(req,res)=>{
 const currentDate = new Date();
-const monthsPrior = 1; // Change this value to 3, 4, or any other number of months
+const monthsPrior = 3; // Change this value to 3, 4, or any other number of months
 const millisecondsPerMonth = 2629800000; // approximate milliseconds per month
 const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPerMonth));
 

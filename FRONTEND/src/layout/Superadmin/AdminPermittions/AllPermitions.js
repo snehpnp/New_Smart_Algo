@@ -10,6 +10,7 @@ import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import SidebarPermission from './Sidebar_permission';
 import PanelDetails from './PanelDetails';
 import AddLicence from './Add_Licence';
+import Adjust_Month from './Adjust_Month';
 import LicenceDetails from './LicenceDetails';
 import BrokerPermittion from './Broker_Permittion';
 import { fDateTimeSuffix, dateFormate } from "../../../Utils/Date_formet";
@@ -24,6 +25,7 @@ const AllPermitions = () => {
     const [showModal, setshowModal] = useState(false)
     const [PanelDetailsModal, setPanelDetailsModal] = useState(false)
     const [showAddLicenceModal, setshowAddLicenceModal] = useState(false)
+    const [showAdjustMonthModal, setshowAdjustMonthModal] = useState(false)
     const [showPanelName, setshowPanelName] = useState(false)
     const [showLicenceModal, setshowLicenceModal] = useState(false)
     const [showLicenceDetails, setshowLicenceDetails] = useState({})
@@ -110,8 +112,6 @@ const AllPermitions = () => {
                 </span>
             )
         },
-
-
         {
             dataField: 'Broker',
             text: 'Broker',
@@ -189,6 +189,18 @@ const AllPermitions = () => {
                 <span data-toggle="tooltip" data-placement="top" title="Add Licence">
                     <Plus size={20} color="#198754" strokeWidth={2} className="mx-1"
                         onClick={(e) => { setshowPanelName({ panel_name: row.panel_name, id: row._id, db_url: row.db_url, db_name: row.db_name, key: row.key }); setshowAddLicenceModal(true) }}
+                    />
+                </span>
+            )
+        },
+
+        {
+            dataField: 'panel_name',
+            text: 'Adjust Month',
+            formatter: (cell, row) => (
+                <span data-toggle="tooltip" data-placement="top" title="Adjust Month">
+                    <Plus size={20} color="#198754" strokeWidth={2} className="mx-1"
+                        onClick={(e) => { setshowPanelName({ panel_name: row.panel_name, id: row._id, db_url: row.db_url, db_name: row.db_name, key: row.key }); setshowAdjustMonthModal(true) }}
                     />
                 </span>
             )
@@ -314,6 +326,8 @@ const AllPermitions = () => {
                                         <BrokerPermittion List={showBrokerDetails} showModal={showBrokerModal} setshowModal={() => setshowBrokerModal(false)} />
                                         <PanelDetails showModal={PanelDetailsModal} data={panelInfo && panelInfo} setshowModal={() => setPanelDetailsModal(false)} />
                                         <AddLicence showPanelName={showPanelName} showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
+
+                                        <Adjust_Month showPanelName={showPanelName} showModal={showAdjustMonthModal} setshowModal={() => setshowAdjustMonthModal(false)} />
 
                                         {showLicenceModal && (<LicenceDetails id={showLicenceDetails} showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />)}
 

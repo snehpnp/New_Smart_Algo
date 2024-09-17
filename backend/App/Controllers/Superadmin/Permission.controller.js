@@ -266,6 +266,78 @@ class Panel {
     }
   }
 
+  async AddAdjustMonth(req, res) {
+    try {
+      // const { id, license } = req.body
+      const { id, db_name, db_url, month, key, Name } = req.body;
+
+      const Find_panelInfo = await panel_model.find({ _id: id });
+
+      if (!Find_panelInfo) {
+        return res
+          .status(409)
+          .send({ status: false, msg: "Panel Not Exist", data: [] });
+      }
+
+      let config = {
+        method: "post",
+        url: Find_panelInfo[0].backend_rul + "/adjust_month/add",
+        data: {
+          month: month,
+        },
+      };
+
+      axios(config)
+        .then(async (response) => {
+          if (response.data.status) {
+            const filter = { panal_name: "111" };
+            const update = {
+              $set: {
+                superadmin_name: Name,
+                panal_name: Find_panelInfo[0].panel_name,
+                client_id: null,
+                msg: "month Add " + month,
+              },
+            };
+
+            const options = { upsert: true };
+
+            await Superadmin_History.updateOne(filter, update, options);
+            return res.send({
+              status: true,
+              msg: "month Add Successfully",
+              data: [],
+            });
+          } else {
+            return res.send({
+              status: false,
+              msg: "month Not Add",
+              data: response.data,
+            });
+          }
+        })
+        .catch((error) => {
+          try {
+            console.log("Error", error);
+            return res.send({
+              status: false,
+              msg: "month Not Add",
+              data: error,
+            });
+          } catch (error) {
+            console.log("Error error", error);
+            return res.send({
+              status: false,
+              msg: "month Not Add",
+              data: error,
+            });
+          }
+        });
+    } catch (error) {
+      console.log("Error Add month error-", error);
+    }
+  }
+
   // GET ALL Help Center
   async GetAllAdminHelps(req, res) {
     try {

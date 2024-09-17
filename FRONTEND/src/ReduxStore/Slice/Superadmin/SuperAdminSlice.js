@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_ALL_PANELS_LIST, ALL_BROKERS, UPDATE_BROKERS, UPDATE_PANEL_THEME, CLOSE_ADMIN_PANEL, GET_PANEL_INFORMATION, UPDATE_ADMIN_PERMISSION, GET_ADMIN_HELPS, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT, GET_PANEL_BROKER, ADD_PANEL, UPDATE_PANEL ,GET_PANEL_HISTORY,UPDATE_QUERY , GET_ALL_SIGNAL , UPDATE_PRICE , DELETE_SIGNAL , GET_ALL_DELETED_SIGNAL  ,BACKUP_SIGNAL , SUPER_UPDATE_USER  ,GET_ONE_USER , USER_DELETE , GET_USER} from "../../../Service/superadmin.service";
+import { GET_ALL_PANELS_LIST, ALL_BROKERS, UPDATE_BROKERS, UPDATE_PANEL_THEME, CLOSE_ADMIN_PANEL, GET_PANEL_INFORMATION, UPDATE_ADMIN_PERMISSION, GET_ADMIN_HELPS, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT, GET_PANEL_BROKER, ADD_PANEL, UPDATE_PANEL ,GET_PANEL_HISTORY,UPDATE_QUERY , GET_ALL_SIGNAL , UPDATE_PRICE , DELETE_SIGNAL , GET_ALL_DELETED_SIGNAL  ,BACKUP_SIGNAL , SUPER_UPDATE_USER  ,GET_ONE_USER , USER_DELETE , GET_USER ,ADJUST_MONTH_TO_COMPANY} from "../../../Service/superadmin.service";
 
 
 export const All_Panel_List = createAsyncThunk("DispatchLogin", async (data) => {
@@ -79,6 +79,18 @@ export const Add_Licence_To_Company = createAsyncThunk("add/license", async (dat
     return err;
   }
 });
+
+export const Adjust_Month_To_Company = createAsyncThunk("add/adjust_month", async (data) => {
+  const { id, token } = data
+
+  try {
+    const res = await ADJUST_MONTH_TO_COMPANY(data, token);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
 export const Get_Admin_Helps = createAsyncThunk("/getall/panel/helps", async (req, token) => {
   // const { req, token } = data
 
