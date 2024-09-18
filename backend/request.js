@@ -49,6 +49,19 @@ module.exports = function (app) {
  })
 
  app.get("/deleteRecord",async(req,res)=>{
+
+    // db.collection.updateMany(
+    //     {
+    //       field_name: { $ne: null }
+    //     },
+    //     {
+    //       $set: { field_name: { $add: ["$field_name", 86400000] } }
+    //     }
+    //   )
+
+
+
+
 const currentDate = new Date();
 const monthsPrior = 3; // Change this value to 3, 4, or any other number of months
 const millisecondsPerMonth = 2629800000; // approximate milliseconds per month
