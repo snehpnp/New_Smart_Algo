@@ -286,8 +286,6 @@ app.post('/broker-signals', async (req, res) => {
   const day = currentDate.getDate();
 
   const formattedDate = `${year}${month.toString().padStart(2, '0')}${day.toString().padStart(2, '0')}`;
-
-
   var filePath = path.join(__dirname + '/AllPanelTextFile', 'PANELKEY' + process.env.PANEL_KEY + process.env.PANEL_NAME + formattedDate + '.txt');
 
   var directoryfilePath = path.join(__dirname + '/AllPanelTextFile');
@@ -313,8 +311,7 @@ app.post('/broker-signals', async (req, res) => {
         }
       });
 
-    console.log("signals - ",signals)
-
+      console.log("signals - ",signals)
       const epochTimestamp = signals.DTime;
 
 

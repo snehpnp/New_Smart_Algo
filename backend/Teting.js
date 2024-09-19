@@ -2335,7 +2335,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
   app.get("/d-s", async (req, res) => {
 
-
+     return
     let array = ['usermakestrategies', 'signals', 'mainsignals'];
 
     let col1 = "usermakestrategies"

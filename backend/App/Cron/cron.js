@@ -9,7 +9,7 @@ const Papa = require('papaparse')
 
 const { logger, getIPAddress } = require('../Helper/logger.helper')
 
-const { Alice_Socket } = require("../Helper/Alice_Socket");
+const { Alice_Socket , updateChannelAndSend } = require("../Helper/Alice_Socket");
 
 var dateTime = require('node-datetime');
 var moment = require('moment');
@@ -50,7 +50,7 @@ cron.schedule('50 23 * * *', () => { twodaysclient(); });
 
 cron.schedule('30 6 * * *', () => { TruncateTableTokenChain(); });
 
-cron.schedule('*/10 * * * *', async () => { await TruncateTableTokenChainAdd_fiveMinute() });
+// cron.schedule('*/10 * * * *', async () => { await TruncateTableTokenChainAdd_fiveMinute() });
 
 
 
@@ -204,18 +204,40 @@ const MainSignalsRemainToken = async () => {
 
 }
 
-const TruncateTableTokenChainAdd_fiveMinute = async () => {
-
+const TruncateTableTokenChainAdd_fiveMinute = async (c,e) => {
+    // const filter = { _id: c };
+    // const update = {
+    //     $set: { _id: c , exch: e },
+    // };
+    // const update_token = await token_chain.updateOne(filter, update, { upsert: true });
+  
+    // updateChannelAndSend(e+"|"+c)
+   
+    
+    console.log("Okkkkk Cronn-")
+   
     const indiaTimezoneOffset = 330;
     const currentTimeInMinutes = new Date().getUTCHours() * 60 + new Date().getUTCMinutes() + indiaTimezoneOffset;
 
     const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
     const currentMinute = currentTimeInMinutes % 60;
+    console.log("currentHour ",currentHour)
+    console.log("currentMinute ",currentMinute)
 
-    if (currentHour >= 9 && currentMinute >= 15 && currentHour <= 23 && currentMinute <= 30) {
+
+    if (currentHour >= 9 || currentMinute >= 15 && currentHour <= 23 || currentMinute <= 30) {
+
+    
+        
         const AliceToken = await Alice_token.find();
         if (AliceToken.length > 60000) {
+             
+            const previousToken = await token_chain.find({}).toArray();
 
+            const previousTokenIds = previousToken.map(item => item._id);
+
+          
+            console.log("Before",updateToken)
             const drop = await token_chain.deleteMany({});
 
             await Get_Option_All_Token_Chain()
@@ -224,10 +246,46 @@ const TruncateTableTokenChainAdd_fiveMinute = async () => {
 
             await MainSignalsRemainToken()
 
-            await Alice_Socket();
+            // const filter = { _id: "97148" };
+            // const update = {
+            //     $set: { _id: "97148" , exch: "NFO" },
+            // };
+            // const update_token = await token_chain.updateOne(filter, update, { upsert: true });
+
+            const updateTokenAfter = await token_chain.find({}).toArray();
+            const unmatchedToken = updateTokenAfter.filter(item => !previousTokenIds.includes(item._id));
+
+            const result = array.map(item => `${item.exch}|${item._id}`).join('#');
+
+           console.log(result);
+
+            var channelstr = ""
+            if (updateTokenAfter.length > 0) {
+                updateTokenAfter.forEach((data) => {
+                    if (data.exch != null && data._id != null) {
+        
+                        channelstr += data.exch + "|" + data._id + "#"
+                    }
+                })
+            }
+            // Display fetched documents
+        
+            var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
+
+            const previousTokenAfter =  updateTokenAfter.map(tk => tk._id)
+
+            // console.log("After",previousTokenAfter.length);
+            // console.log("After",previousTokenAfter)
+            
+            //updateChannelAndSend(alltokenchannellist)
+            // updateChannelAndSend("NFO|97148")
+           
+            //await Alice_Socket();
 
             return;
         }
+    }else{
+        //console.log("- Else")
     }
 
 
@@ -1513,4 +1571,4 @@ const GetStrickPriceFromSheet = async () => {
 
 
 
-module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind, numberOfTrade_count_trade, AccelpixTokenUpdate, GetStrickPriceFromSheet, TruncateTableTokenChain, TruncateTableTokenChainAdd, MainSignalsRemainToken, DeleteTokenAliceToken }
+module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind, numberOfTrade_count_trade, AccelpixTokenUpdate, GetStrickPriceFromSheet, TruncateTableTokenChain, TruncateTableTokenChainAdd, MainSignalsRemainToken, DeleteTokenAliceToken ,TruncateTableTokenChainAdd_fiveMinute}

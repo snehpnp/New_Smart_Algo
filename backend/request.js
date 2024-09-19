@@ -1,3 +1,5 @@
+const { forEach } = require('mathjs');
+
 module.exports = function (app) {
     const axios = require('axios');
     const db = require('./App/Models');
@@ -18,6 +20,7 @@ module.exports = function (app) {
     const dbTest = db.dbTest;
     const get_open_position_view = db.open_position;
     const MainSignals = db.MainSignals;
+    const Signals = db.Signals;
 
 
 
@@ -1970,6 +1973,255 @@ console.log("datePrior",datePrior);
 
 
       return  res.send({ status: true })
+
+    })
+
+    app.get("/main-signals",async(req,res)=>{
+    return res.send({status:"ok"})
+     const result = await Signals.find({})
+     result.forEach(async(item) => {
+        const  {
+        _id,
+        symbol,
+        type,
+        price,
+        qty_percent,
+        exchange,
+        sq_value,
+        sl_value,
+        tsl,
+        tr_price,
+        dt,
+        dt_date,
+        strategy,
+        option_type,
+        strike,
+        expiry,
+        segment,
+        client_persnal_key,
+        TradeType,
+        token,
+        lot_size,
+        MakeStartegyName,
+        exit_status,
+        ft_time,
+        users_id,
+        createdAt,
+        updatedAt,
+     } = item
+  let trade_symbol = item.trade_symbol
+  let input_symbol = symbol
+  let day_expiry = expiry.substr(0, 2);
+  var dateHash = {
+    'Jan': '01',
+    'Feb': '02',
+    'Mar': '03',
+    'Apr': '04',
+    'May': '05',
+    'Jun': '06',
+    'Jul': '07',
+    'Aug': '08',
+    'Sep': '09',
+    'Oct': '10',
+    'Nov': '11',
+    'Dec': '12'
+  }; // 2009-11-10
+  let month_expiry = expiry.substr(2, 2);
+
+
+  var d = new Date(createdAt);
+  var current_date = [d.getFullYear(),
+  d.getMonth() + 1,
+  d.getDate(),
+  ].join('/') + ' ' + [d.getHours(),
+  d.getMinutes(),
+  d.getSeconds()
+  ].join(':');
+
+  function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] == value);
+  }
+  let ex_day_expiry = getKeyByValue(dateHash, month_expiry).toUpperCase();
+  let ex_year_expiry = expiry.substr(-2);
+      if (type == "LE" || type == "le" || type == "SE" || type == "Se") {
+
+      
+        var Entry_MainSignals_req = {
+          symbol: input_symbol,
+          entry_type: type,
+          exit_type: "",
+          entry_price: parseFloat(price),
+          exit_price: "",
+          entry_qty_percent: parseFloat(qty_percent),
+          entry_qty: Number(lot_size) * (Math.ceil(Number(qty_percent) / 100)),
+          exit_qty: 0,
+          exit_qty_percent: "",
+          entry_dt_date: current_date,
+          exit_dt_date: "",
+          dt: Math.round(+new Date() / 1000),
+          dt_date: dt_date,
+          exchange: exchange,
+          strategy: strategy,
+          option_type: option_type,
+          strike: strike,
+          expiry: expiry,
+          segment: segment,
+          trade_symbol: trade_symbol + "[" + segment + "]",
+          client_persnal_key: client_persnal_key,
+          TradeType: TradeType,
+          signals_id: _id,
+          token: token,
+          lot_size: lot_size,
+          target: 0,
+          stop_loss: 0,
+          exit_time: 0,
+          exit_time1: 0,
+          complete_trade: 0,
+          sl_status: 0,
+          MakeStartegyName: "abc",
+          Entry_users_id: [],
+          createdAt:createdAt
+
+        }
+        const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
+        await Entry_MainSignals.save();
+
+      }
+        else if (type == "LX" || type == "lx" || type == "SX" || type == "Sx") {
+    let EXCHANGE = exchange
+    let Trade_Option_Type = option_type;
+
+        // MT_4 , OPTION_CHAIN , MAKE_STG, SQUAR_OFF
+        var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: "", TradeType: "MT_4" }
+
+        if (segment == 'C' || segment == 'c') {
+        instrument_query = { name: input_symbol }
+        EXCHANGE = "NSE";
+        trade_symbol = input_symbol;
+        findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
+        } else if (segment == 'F' || segment == 'f') {
+        instrument_query = { symbol: input_symbol, segment: "F", expiry: expiry }
+        EXCHANGE = "NFO";
+        trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
+        findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
+
+        } 
+        else if (segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
+        instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
+        EXCHANGE = "NFO";
+        trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
+        findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType, strike: strike }
+
+        } 
+        else if (segment == 'BO' || segment == 'bo' || segment == 'BFO' || segment == 'bfo') {
+        instrument_query = { symbol: input_symbol, segment: "BO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
+        EXCHANGE = "BFO";
+        trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
+        findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType, strike: strike }
+
+        } 
+        
+        else if (segment == 'MO' || segment == 'mo') {
+        instrument_query = { symbol: input_symbol, segment: "MO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
+        EXCHANGE = "MCX";
+        trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
+        findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType, strike: strike }
+
+        } else if (segment == 'MF' || segment == 'mf') {
+        instrument_query = { symbol: input_symbol, segment: "MF", expiry: expiry }
+        EXCHANGE = "MCX";
+        trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
+        findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
+
+        } else if (segment == 'CF' || segment == 'Cf') {
+        instrument_query = { symbol: input_symbol, segment: "CF", expiry: expiry, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" }
+        EXCHANGE = "CDS";
+        }
+
+
+
+
+        
+
+            const updatedFindSignal = {
+            ...findSignal,
+            exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
+            };
+
+            //console.log("updatedFindSignal ",updatedFindSignal)
+
+
+            var ExitMainSignals = await MainSignals.find(updatedFindSignal)
+
+            // // ExitMainSignals  FIND IN COLLECTION
+            if (ExitMainSignals.length != 0) {
+
+            const entry_qty = Number(ExitMainSignals[0].exit_qty) || 0; // Use 0 if entry_qty is undefined or null
+            const lot_size = Number(ExitMainSignals[0].lot_size) || 0; // Use 0 if lot_size is undefined or null
+            const qty_percent1 = Number(qty_percent) || 0; // Use 0 if qty_percent is not a valid number
+            const result = entry_qty + (lot_size * Math.ceil(qty_percent1 / 100));
+
+
+            if ((ExitMainSignals[0].exit_price == "" && ExitMainSignals[0].exit_qty_percent == "") || isNaN(ExitMainSignals[0].exit_price)) {
+
+                var exit_qty_percent1 = 0
+                if (parseFloat(ExitMainSignals[0].entry_qty_percent) > parseFloat(qty_percent)) {
+                exit_qty_percent1 = parseFloat(qty_percent)
+                } else {
+                exit_qty_percent1 = parseFloat(ExitMainSignals[0].entry_qty_percent)
+                }
+
+
+                // IF EXIST ENTRY OF THIS EXIT TRADE
+                var updatedData = {
+                exit_type: type,
+                exit_price: parseFloat(price) + (isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price)),
+                exit_qty_percent: exit_qty_percent1,
+                exit_qty: result,
+                exit_dt_date: current_date,
+                exit_status: 0,
+                Exit_users_id:  []
+                }
+                updatedData.$addToSet = { signals_id: _id };
+
+
+                // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
+                const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
+
+            } else {
+
+                console.log("ExitMainSignals", ExitMainSignals)
+                
+                if (parseFloat(ExitMainSignals[0].entry_qty_percent) >= (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
+                var updatedData = {
+                    exit_type: type,
+                    exit_price: (((parseFloat(price) * parseFloat(qty_percent)) + ((isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price)) * (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) / ((isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)) + parseFloat(qty_percent))),
+
+                    exit_qty_percent: (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent))),
+                    exit_qty: result,
+                    exit_dt_date: current_date,
+                    exit_status: 0,
+                    Exit_users_id: []
+                }
+                updatedData.$addToSet = { signals_id: _id };
+                // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
+                const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
+                } else {
+                console.log("---------------------EXTRA SIGNAL GET")
+
+                }
+            }
+
+            } else {
+            console.log("PRIVIOUS SIGNAL UPDATE")
+
+            }
+        }
+
+         })
+
+      
+        return res.send({status:true , data: result})
 
     })
 

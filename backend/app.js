@@ -139,11 +139,30 @@ setIO(io).then(() => {
 });
 
 
+app.get('/UpdateChannel/:c/:e', async (req, res) => {
+  const {  TruncateTableTokenChainAdd_fiveMinute } = require('./App/Cron/cron')
+  const { c ,e} = req.params;
+  console.log("c - ",c)
+  console.log("e - ",e)
+  
+   TruncateTableTokenChainAdd_fiveMinute(c,e)
+  return res.send({ status: true, msg: 'Channel Update' });
+
+
+
+
+  const { updateChannelAndSend } = require('./App/Helper/Alice_Socket')
+  
+  // updateChannelAndSend(c)
+});
+
+
+
 
 // Server start
 server.listen(process.env.PORT, () =>{
-  // const { Alice_Socket } = require('./App/Helper/Alice_Socket')
+   const { Alice_Socket } = require('./App/Helper/Alice_Socket')
   console.log(`Server is running on  http://0.0.0.0:${process.env.PORT}`)
   connectToMongoDB();
-  //  Alice_Socket()
+  // Alice_Socket()
 });
