@@ -204,7 +204,7 @@ const MainSignalsRemainToken = async () => {
 
 }
 
-const TruncateTableTokenChainAdd_fiveMinute = async (c,e) => {
+const TruncateTableTokenChainAdd_fiveMinute = async () => {
     // const filter = { _id: c };
     // const update = {
     //     $set: { _id: c , exch: e },
@@ -213,18 +213,12 @@ const TruncateTableTokenChainAdd_fiveMinute = async (c,e) => {
   
     // updateChannelAndSend(e+"|"+c)
    
-    
-    console.log("Okkkkk Cronn-")
-   
     const indiaTimezoneOffset = 330;
     const currentTimeInMinutes = new Date().getUTCHours() * 60 + new Date().getUTCMinutes() + indiaTimezoneOffset;
 
     const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
     const currentMinute = currentTimeInMinutes % 60;
-    console.log("currentHour ",currentHour)
-    console.log("currentMinute ",currentMinute)
-
-
+   
     if (currentHour >= 9 || currentMinute >= 15 && currentHour <= 23 || currentMinute <= 30) {
 
     
@@ -232,12 +226,6 @@ const TruncateTableTokenChainAdd_fiveMinute = async (c,e) => {
         const AliceToken = await Alice_token.find();
         if (AliceToken.length > 60000) {
              
-            const previousToken = await token_chain.find({}).toArray();
-
-            const previousTokenIds = previousToken.map(item => item._id);
-
-          
-            console.log("Before",updateToken)
             const drop = await token_chain.deleteMany({});
 
             await Get_Option_All_Token_Chain()
@@ -246,40 +234,11 @@ const TruncateTableTokenChainAdd_fiveMinute = async (c,e) => {
 
             await MainSignalsRemainToken()
 
-            // const filter = { _id: "97148" };
-            // const update = {
-            //     $set: { _id: "97148" , exch: "NFO" },
-            // };
-            // const update_token = await token_chain.updateOne(filter, update, { upsert: true });
-
             const updateTokenAfter = await token_chain.find({}).toArray();
-            const unmatchedToken = updateTokenAfter.filter(item => !previousTokenIds.includes(item._id));
-
-            const result = array.map(item => `${item.exch}|${item._id}`).join('#');
-
-           console.log(result);
-
-            var channelstr = ""
-            if (updateTokenAfter.length > 0) {
-                updateTokenAfter.forEach((data) => {
-                    if (data.exch != null && data._id != null) {
-        
-                        channelstr += data.exch + "|" + data._id + "#"
-                    }
-                })
-            }
-            // Display fetched documents
-        
-            var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
-
-            const previousTokenAfter =  updateTokenAfter.map(tk => tk._id)
-
-            // console.log("After",previousTokenAfter.length);
-            // console.log("After",previousTokenAfter)
-            
-            //updateChannelAndSend(alltokenchannellist)
+            const unmatchedTokenChannel = updateTokenAfter.map(item => `${item.exch}|${item._id}`).join('#');
+            console.log("unmatchedTokenChannel ",unmatchedTokenChannel)
+            updateChannelAndSend(unmatchedTokenChannel)
             // updateChannelAndSend("NFO|97148")
-           
             //await Alice_Socket();
 
             return;
