@@ -196,6 +196,18 @@ const History = () => {
     FileSaver.saveAs(data, "History" + fileExtension);
   };
 
+
+let LicenseData =0
+if(licAdd){
+  filteredData && filteredData.map((item) => {
+    if(item.msg.includes("License Add")){
+      LicenseData = Number(item.msg.split(" ")[2]) +LicenseData
+    }
+  }
+  )
+}
+console.log(LicenseData)
+
   return (
     <Theme_Content Page_title="History" button_status={false}>
       <div
@@ -361,7 +373,10 @@ const History = () => {
       {allData.loading ? (
         <Loader />
       ) : (
+        <>
+      {licAdd &&  <h3><b>Total License :-</b> {LicenseData && LicenseData}</h3>}
         <FullDataTable TableColumns={columns} tableData={filteredData} />
+        </>
       )}
     </Theme_Content>
   );

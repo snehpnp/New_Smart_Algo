@@ -79,7 +79,7 @@ const AdminsList = () => {
         loading: false,
         data: [],
       });
-      setFilteredData([]); // Initialize filteredData with empty array
+      setFilteredData([]); 
     }
   };
 
@@ -479,18 +479,6 @@ const AdminsList = () => {
     },
   });
 
-  const fields = [
-    {
-      name: "theme_update",
-      label: "Theme",
-      type: "select",
-      options: themeList.map((item) => ({
-        label: item.theme_name,
-        value: item._id,
-      })),
-    },
-  ];
-
   const CloseCompany = async (domain, status) => {
     try {
       const { value: password } = await Swal.fire({
@@ -520,8 +508,8 @@ const AdminsList = () => {
       const response = await dispatch(Close_Admin_Panel(req)).unwrap();
       if (response.status) {
         toast.success(response.msg);
-        Swal.fire(`Entered password: ${password}`);
-        fetchAllPanels();
+        window.location.reload();
+    
       } else {
         toast.error(response.msg);
         window.location.reload();
@@ -543,6 +531,18 @@ const AdminsList = () => {
     }
   };
 
+  const fields = [
+    {
+      name: "theme_update",
+      label: "Theme",
+      type: "select",
+      options: themeList.map((item) => ({
+        label: item.theme_name,
+        value: item._id,
+      })),
+    },
+  ];
+
   return (
     <>
       <Content
@@ -560,7 +560,7 @@ const AdminsList = () => {
             alignItems: "center",
           }}
         >
-          {/* Search Input */}
+      
           <div
             className="mb-4"
             style={{

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_ALL_PANELS_LIST, ALL_BROKERS, UPDATE_BROKERS, UPDATE_PANEL_THEME, CLOSE_ADMIN_PANEL, GET_PANEL_INFORMATION, UPDATE_ADMIN_PERMISSION, GET_ADMIN_HELPS, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT, GET_PANEL_BROKER, ADD_PANEL, UPDATE_PANEL ,GET_PANEL_HISTORY,UPDATE_QUERY , GET_ALL_SIGNAL , UPDATE_PRICE , DELETE_SIGNAL , GET_ALL_DELETED_SIGNAL  ,BACKUP_SIGNAL , SUPER_UPDATE_USER  ,GET_ONE_USER , USER_DELETE , GET_USER} from "../../../Service/superadmin.service";
+import { GET_ALL_PANELS_LIST, ALL_BROKERS, UPDATE_BROKERS, UPDATE_PANEL_THEME, CLOSE_ADMIN_PANEL, GET_PANEL_INFORMATION, UPDATE_ADMIN_PERMISSION, GET_ADMIN_HELPS, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT, GET_PANEL_BROKER, ADD_PANEL, UPDATE_PANEL ,GET_PANEL_HISTORY,UPDATE_QUERY , GET_ALL_SIGNAL , UPDATE_PRICE , DELETE_SIGNAL , GET_ALL_DELETED_SIGNAL  ,BACKUP_SIGNAL , SUPER_UPDATE_USER  ,GET_ONE_USER , USER_DELETE , GET_USER,DELETE_LICENSE} from "../../../Service/superadmin.service";
 
 
 export const All_Panel_List = createAsyncThunk("DispatchLogin", async (data) => {
@@ -275,6 +275,15 @@ export const Find_User = createAsyncThunk("findOneUser", async (data) => {
 });
 
 
+export const DELETE_LICENSE_API = createAsyncThunk("delete/license1", async (data) => {
+   
+  try {
+    const res = await DELETE_LICENSE(data);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
 
  
 
@@ -307,7 +316,8 @@ const SuperAdminSlice = createSlice({
     find_One_User:[],
     SUPER_UPDATE_USER_DATA:[],
     user_Delete:[],
-    find_User :[] 
+    find_User :[] ,
+    delete_license :[]
   },
 
   recuders: {},
@@ -411,6 +421,10 @@ const SuperAdminSlice = createSlice({
     [Find_User.fulfilled]: (state, { payload }) => {
       // state.isLoading = false;
       return { ...state, find_User: payload, isLoading: false };
+    },
+    [DELETE_LICENSE_API.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, delete_license: payload, isLoading: false };
     },
   },
 

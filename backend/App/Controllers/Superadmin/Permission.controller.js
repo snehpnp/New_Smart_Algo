@@ -463,11 +463,12 @@ class Panel {
           superadmin_name: Name,
           panal_name: Find_panelInfo[0].panel_name,
           client_id: null,
-          msg: "Panel Status " + status == 0 ? "On" : "Off",
+          msg: status == 0 ? "On" : "Off",
         },
       };
 
       const options1 = { upsert: true };
+
 
       await Superadmin_History.updateOne(filter1, update1, options1);
 
@@ -610,6 +611,66 @@ class Panel {
       console.log("Error Get all User error-", error);
     }
   }
+
+
+
+
+
+
+
+  async DeleteLicense(req, res) {
+    try {
+      const { id, backend_rul, db_url } = req.body;
+
+      
+      const Find_panelInfo = await panel_model.find({ backend_rul: backend_rul });
+     
+
+      if (!Find_panelInfo) {
+        return res
+          .status(409)
+          .send({ status: false, msg: "Panel Not Exist", data: [] });
+      }
+
+      let config = {
+        method: "post",
+        // url: Find_panelInfo[0].backend_rul + "delete/license",
+        url:  "http://localhost:7700/delete/license",
+
+      };
+      axios(config)
+        .then(async (response) => {
+          console.log("response", response.data);
+        })
+        .catch((error) => {
+          try {
+            console.log("Error", error);
+            return res.send({
+              status: false,
+              msg: "User Not Get",
+              data: error,
+            });
+          } catch (error) {
+            console.log("Error error", error);
+            return res.send({
+              status: false,
+              msg: "User Not Get",
+              data: error,
+            });
+          }
+        });
+    } catch (error) {
+      console.log("Error Get all User error-", error);
+    }
+  }
+
+
+
+
+
+
+
+
 }
 
 module.exports = new Panel();

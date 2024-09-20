@@ -41,9 +41,7 @@ const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
           toast.error(response.msg);
         } else if (response.status) {
           toast.success(response.msg);
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
+          setshowModal(false)
         } else if (!response.status) {
           toast.error(response.msg);
         }
