@@ -128,10 +128,9 @@ const ServicesList = () => {
       });
   };
   let servicegivenmonth = localStorage.getItem("servicegivenmonth");
-  console.log(servicegivenmonth);
 
   const SetPlan = (index) => {
-    console.log(servicegivenmonth, "-", index);
+
   
     if (servicegivenmonth === 0) {
       return null; 

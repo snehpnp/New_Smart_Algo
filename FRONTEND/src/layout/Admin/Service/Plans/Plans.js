@@ -174,7 +174,7 @@ const ServicesList = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(editPlan);
+
 
     dispatch(Edit_Plans(editPlan))
       .unwrap()

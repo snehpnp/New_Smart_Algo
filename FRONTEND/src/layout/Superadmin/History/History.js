@@ -206,7 +206,6 @@ if(licAdd){
   }
   )
 }
-console.log(LicenseData)
 
   return (
     <Theme_Content Page_title="History" button_status={false}>

@@ -398,7 +398,7 @@ class Employee {
           }
         })
         .catch((err) => {
-          console.log("Error  Add Time Error-", err);
+        
           if (err.keyValue) {
             return res.send({
               status: false,
@@ -845,7 +845,7 @@ class Employee {
           });
         }
       } catch (error) {
-        console.log("Error Group Services Error-", error);
+     
       }
 
       var User_update = {
@@ -1529,7 +1529,6 @@ class Employee {
 
     // const r = await User_model.aggregate(pip);
 
-    // console.log("r ", r)
 
     try {
       const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
@@ -1601,7 +1600,6 @@ class Employee {
         });
       }
 
-      console.log("getAllClients.length ", getAllClients.length);
       // DATA GET SUCCESSFULLY
       return res.send({
         status: true,
@@ -1609,7 +1607,7 @@ class Employee {
         data: getAllClients,
       });
     } catch (error) {
-      console.log("Error loginClients Error-", error);
+  
       return res.send({
         status: false,
         msg: "Empty data",
@@ -1776,16 +1774,8 @@ class Employee {
   async GetTradingStatus(req, res) {
     try {
       const { Role } = req.body;
-      // const status ="on"
-
       const currentDate = new Date(); // Get the current date
-      // const GetAlluser_logs = await User_model.find({
-      //   Role: "USER",
-      //   $or: [{ license_type: "2" }, { license_type: "0" }],
-      //   TradingStatus: Role,
-      //   EndDate: { $gt: currentDate },
-      // }).select("Email FullName EndDate TradingStatus UserName PhoneNo");
-
+  
       const GetAlluser_logs = await User_model.aggregate([
         {
           $match: {
@@ -1799,7 +1789,7 @@ class Employee {
           $lookup: {
             from: "companies",
             let: {
-              endDate: "$EndDate", // User_model ki EndDate ko use karenge
+              endDate: "$EndDate", 
             },
             pipeline: [
               {
@@ -1811,13 +1801,13 @@ class Employee {
                           format: "%Y-%m-%d",
                           date: "$$endDate",
                         },
-                      }, // User_model ki EndDate
+                      }, 
                       {
                         $dateToString: {
                           format: "%Y-%m-%d",
                           date: "$month_ago_date",
                         },
-                      }, // companyData ki month_ago_date
+                      }, 
                     ],
                   },
                 },
@@ -1833,8 +1823,8 @@ class Employee {
           $sort: { CreateDate: -1 },
         },
         {
+          
           $project: {
-            companyData: 0,
             Email: 1,
             FullName: 1,
             EndDate: 1,
@@ -1842,31 +1832,33 @@ class Employee {
             UserName: 1,
             PhoneNo: 1,
           },
+  
+        
         },
       ]);
-
-      // const totalCount = GetAlluser_logs.length;
-      // IF DATA NOT EXIST
-      if (GetAlluser_logs.length == 0) {
-        return res.send({
+  
+      if (GetAlluser_logs.length === 0) {
+        return res.status(200).json({
           status: false,
           msg: "Empty data",
           data: [],
-          // totalCount: totalCount,
         });
       }
-
-      // DATA GET SUCCESSFULLY
-      return res.send({
+  
+      return res.status(200).json({
         status: true,
         msg: "Get All user_logs",
         data: GetAlluser_logs,
-        // totalCount: totalCount,
       });
     } catch (error) {
-      console.log("Error trading status Error-", error);
+      console.error("Error trading status Error-", error);
+      return res.status(500).json({
+        status: false,
+        msg: "Internal server error",
+      });
     }
   }
+  
 
   // CLIENTS ACTIVE INACTIVE STATUS UPDATE
   async UpdateActiveStatus(req, res) {

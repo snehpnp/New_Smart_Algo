@@ -684,11 +684,11 @@ class Panel {
                     if (result.ok === 1) {
                         successResults.push({ db_url: url.db_url, status: 'success' });
                     } else {
-                       console.log('Error creating view:', result);
+              
                         errorArray.push({ db_url: url.db_url, status: 'failed', error: result });
                     }
                 } catch (error) {
-                   console.log('Error creating view:', error);
+           
                     errorArray.push({ db_url: url.db_url, status: 'failed', error: error.message });
                 } finally {
                     await client.close();
@@ -703,7 +703,7 @@ class Panel {
             });
 
         } catch (error) {
-           console.log('View creation error:', error);
+      
             res.status(500).send({ status: false, msg: 'Internal Server Error' });
         }
     }
