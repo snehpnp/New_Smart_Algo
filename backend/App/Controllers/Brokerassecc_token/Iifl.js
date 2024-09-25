@@ -68,6 +68,7 @@ class Iifl {
                     source: "WebAPI",
                   },
                 };
+                console.log("config1", config1);
 
                 axios(config1)
                   .then(async (response1) => {
@@ -140,6 +141,10 @@ class Iifl {
       return res.send({ status: false, msg: "Network error" });
     }
   }
+
+
+
+
 
   // UPDATE ALL CLIENT BROKER RESPONSE
   async GetOrderFullInformationIifl(req, res, user_info) {

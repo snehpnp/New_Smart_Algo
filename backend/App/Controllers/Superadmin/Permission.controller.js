@@ -422,7 +422,7 @@ class Panel {
       const Panle_information = await panel_model
         .find({ domain: domain1 })
         .select(
-          "broker_id Create_Strategy Option_chain Strategy_plan is_active Two_day_client live_price Refer_Earn"
+          "broker_id Create_Strategy Option_chain Strategy_plan is_active Two_day_client live_price Refer_Earn Plans"
         );
 
       // CHECK IF PANEL EXIST OR NOT

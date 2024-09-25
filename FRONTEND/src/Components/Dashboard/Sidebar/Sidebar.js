@@ -51,6 +51,8 @@ const Sidebar = ({ ShowSidebar }) => {
   const [admin_permission, setAdmin_permission] = useState([]);
   const [openmodal, setOpenmodal] = useState(false);
 
+console.log("admin_permission", admin_permission.data && admin_permission.data[0].Plans )
+
   const data2 = async () => {
     if (roles === "SUBADMIN") {
       await dispatch(Get_Sub_Admin_Permissions({ id: user_ID && user_ID }))
@@ -271,7 +273,8 @@ const Sidebar = ({ ShowSidebar }) => {
                 if (
                   (item.id === 9 || item.name === "Make Strategy") &&
                   admin_permission.data &&
-                  admin_permission.data[0].Create_Strategy === 0
+                  admin_permission.data[0].Create_Strategy === 0 && 
+                  admin_permission.data[0].Plans === 0
                 ) {
                 } else {
                   return (
@@ -318,7 +321,11 @@ const Sidebar = ({ ShowSidebar }) => {
                                         "/admin/optionchain" &&
                                         admin_permission.data &&
                                         admin_permission.data[0]
-                                          .Option_chain === 0)
+                                          .Option_chain === 0) ||
+                                          (nested_item.route ==
+                                            "/admin/plans" &&
+                                            admin_permission.data &&
+                                            admin_permission.data[0].Plans === 0)
                                     ) {
                                     } else {
                                       return (
@@ -353,7 +360,13 @@ const Sidebar = ({ ShowSidebar }) => {
                             admin_permission.data[0].Create_Strategy === 0) ||
                           (item.route === "/admin/optionchain" &&
                             admin_permission.data &&
-                            admin_permission.data[0].Option_chain === 0) ? (
+                            admin_permission.data[0].Option_chain === 0) ||
+                            (item.route ==
+                              "/admin/plans" &&
+                              admin_permission.data &&
+                              admin_permission.data[0].Plans === 0)
+                            
+                            ? (
                             ""
                           ) : (
                             <li
@@ -699,7 +712,10 @@ const Sidebar = ({ ShowSidebar }) => {
                           admin_permission.data[0].Create_Strategy === 0) ||
                         (item.route === "/admin/optionchain" &&
                           admin_permission.data &&
-                          admin_permission.data[0].Option_chain === 0) ? (
+                          admin_permission.data[0].Option_chain === 0) ||
+                          (item.route === "/client/plan" &&
+                            admin_permission.data &&
+                            admin_permission.data[0].Plans === 0) ? (
                           ""
                         ) : (
                           <li
