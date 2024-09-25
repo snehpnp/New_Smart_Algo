@@ -5,22 +5,22 @@ const path = require('path');
 var Promise = require('polyfill-promise');
 var Sheets = require('google-sheets-api').Sheets;
 const Papa = require('papaparse')
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
 var dateTime = require('node-datetime');
 var moment = require('moment');
+
 const db = require('../Models')
 const Alice_token = db.Alice_token;
+const services = db.services;
 const User = db.user;
 const user_logs = db.user_logs;
 const live_price = db.live_price;
 const UserMakeStrategy = db.UserMakeStrategy;
 const Get_Option_Chain_modal = db.option_chain_symbols;
 const MainSignals_modal = db.MainSignals
-
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const token_chain = db.token_chain;
 const stock_live_price = db.stock_live_price;
-
 const { DashboardView, deleteDashboard } = require('../../View/DashboardData')
 const { createView } = require('../../View/Open_position')
 const { logger, getIPAddress } = require('../Helper/logger.helper')
@@ -44,21 +44,15 @@ cron.schedule('50 23 * * *', () => { twodaysclient(); });
 
 cron.schedule('30 6 * * *', () => { TruncateTableTokenChain(); });
 
-cron.schedule('*/15 * * * *', async () => { await TruncateTableTokenChainAdd_fiveMinute() });
-
-
+cron.schedule('*/10 * * * *', async () => { await TruncateTableTokenChainAdd_fiveMinute() });
 
 cron.schedule('05 23 * * *', () => { DeleteTokenAliceToken() });
-
-// cron.schedule('55 23 * * *', () => { TruncateTable() });
 
 cron.schedule('10 3 * * *', () => { DeleteTokenAliceToken() });
 
 cron.schedule('20 3 * * *', () => { TokenSymbolUpdate() });
 
 cron.schedule('50 8 * * *', () => { TokenSymbolUpdate() });
-
-
 
 const MainSignalsRemainToken = async () => {
 
@@ -206,7 +200,7 @@ const TruncateTableTokenChainAdd_fiveMinute = async () => {
     const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
     const currentMinute = currentTimeInMinutes % 60;
 
-    if (currentHour >= 9  && currentHour <= 24) {
+    if (currentHour >= 9 && currentMinute >= 15 && currentHour <= 23 && currentMinute <= 30) {
         const AliceToken = await Alice_token.find();
         if (AliceToken.length > 60000) {
 
@@ -755,6 +749,7 @@ const LogoutAllUsers = async () => {
 
 }
 
+// SERVICES TOKEN CREATE
 const service_token_update = () => {
 
 
@@ -1450,7 +1445,7 @@ const GetStrickPriceFromSheet = async () => {
     const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
     const currentMinute = currentTimeInMinutes % 60;
 
-    if (currentHour >= 9  && currentHour <= 24) {
+    if (currentHour >= 9 && currentMinute >= 15 && currentHour <= 23 && currentMinute <= 30) {
             const csvFilePath = 'https://docs.google.com/spreadsheets/d/1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU/export?format=csv';
             const { data } = await axios.get(csvFilePath);
 
@@ -1458,11 +1453,13 @@ const GetStrickPriceFromSheet = async () => {
                 complete: async (result) => {
                     let sheet_Data = result.data;
 
+                    // Remove duplicates based on SYMBOL
                     const uniqueSymbols = [...new Set(sheet_Data.map(item => item.SYMBOL))];
                     sheet_Data = sheet_Data.filter((item, index, self) =>
                         index === self.findIndex(t => t.SYMBOL === item.SYMBOL)
                     );
 
+                    // Map and update specific SYMBOL values
                     sheet_Data.forEach(data => {
                         switch (data.SYMBOL) {
                             case "NIFTY_BANK":
@@ -1474,20 +1471,24 @@ const GetStrickPriceFromSheet = async () => {
                             case "NIFTY_FIN_SERVICE":
                                 data.SYMBOL = "FINNIFTY";
                                 break;
-                           
+                            // Add more cases if needed
                         }
                     });
 
+                    // Sort the array based on SYMBOL
                     sheet_Data.sort((a, b) => a.SYMBOL.localeCompare(b.SYMBOL));
 
+                    // Use Promise.all to wait for all updates to complete
                     await Promise.all(sheet_Data.map(async (data) => {
+                    
                         if(data.CPrice != undefined && data.CPrice != "" && data.CPrice != "#N/A"){
-                        const result = await Get_Option_Chain_modal.updateOne(
-                            { symbol: data.SYMBOL },
-                            { $set: { price: data.CPrice } },
-                            { upsert: true }
-                        );
-                    }
+                            const result = await Get_Option_Chain_modal.updateOne(
+                                { symbol: data.SYMBOL },
+                                { $set: { price: data.CPrice } },
+                                { upsert: true }
+                            );
+                        }
+                      
                     }));
 
                     return

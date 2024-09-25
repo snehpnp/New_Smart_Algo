@@ -242,9 +242,9 @@ class OptionChain {
             ]
 
             const result = await Alice_token.aggregate(pipeline2);
-            // console.log("result ",result)
+      
             const resultStrike = await Alice_token.aggregate(pipeline3);
-            console.log("resultStrike ",resultStrike)
+  
             const final_data = [];
             var channelstr = ""
             if (result.length > 0) {
