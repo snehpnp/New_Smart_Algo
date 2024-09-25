@@ -60,7 +60,6 @@ module.exports = function (app) {
       currentDate.getTime() - monthsPrior * millisecondsPerMonth
     );
 
-    console.log("datePrior", datePrior);
 
     await company.updateOne(
       {},
@@ -91,7 +90,7 @@ module.exports = function (app) {
     ]);
     //   const result = await User.find({})
     const deletedUserIds = result.map((user) => user._id);
-    console.log("result", result.length);
+   
     db.otherCollection.deleteMany({ userId: { $in: deletedUserIds } });
 
     res.send("deleteRecord");

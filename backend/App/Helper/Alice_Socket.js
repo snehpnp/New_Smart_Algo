@@ -3,25 +3,23 @@ const WebSocket = require('ws');
 var CryptoJS = require("crypto-js");
 const db = require('../Models');
 
-
-
 const live_price = db.live_price;
 const UserMakeStrategy = db.UserMakeStrategy;
 const stock_live_price = db.stock_live_price;
 const token_chain = db.token_chain;
 const dbTest = db.dbTest;
 
-
 const currentDate = new Date();
 const hours = currentDate.getHours().toString().padStart(2, '0');
 const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-
-
 
 let socketObject = null;
 let reconnectAttempt = 0;
 const maxReconnectAttempts = 10;
 const reconnectInterval = 5000; // Initial reconnect interval in ms
+
+
+
 
 const Alice_Socket = async () => {
     var rr = 0;
@@ -43,7 +41,6 @@ const Alice_Socket = async () => {
             }
         })
     }
-    // Display fetched documents
 
     var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
 
@@ -55,7 +52,7 @@ const Alice_Socket = async () => {
     var type = { "loginType": "API" }
 
     if (broker_infor.user_id !== undefined && broker_infor.access_token !== undefined && broker_infor.trading_status == "on") {
-      console.log("Shocket channelList - ", channelList);
+   
         try {
           
             await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
@@ -81,12 +78,13 @@ const Alice_Socket = async () => {
                           source: "API"
                         }
                         ws.send(JSON.stringify(initCon))
-                        reconnectAttempt = 0; // Reset reconnect attempts on successful connection
+                        reconnectAttempt = 0; 
                       };
                       
                       ws.onmessage = async function (msg) {
                         const response = JSON.parse(msg.data)
                         if (response.tk) {
+                          // console.log("Alice Socket - ", response.tk)
                           // const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk });
                           // if (Make_startegy_token) {
                           //   console.log("IFFFFF - ", response.tk)
@@ -95,24 +93,30 @@ const Alice_Socket = async () => {
                           //   // console.log("ELSEEEEE - ")
                           // }
                          
-                          if (response.lp != undefined) {
-                          await stock_live_price.updateOne({_id: response.tk}
-                              , {
-                                $set: {
-                                  lp: response.lp,
-                                  exc: response.e,
-                                  // sp1: response.sp1 != undefined ? response.sp1: response.lp,
-                                  // bp1: response.bp1 != undefined ? response.bp1: response.lp,
-                                  curtime: `${new Date().getHours().toString().padStart(2, '0')}${new Date().getMinutes().toString().padStart(2, '0')}`,
-                                  ft: response.ft
+                          try {
+                            if (response.lp !== undefined && response.e !== undefined && response.ft !== undefined) {
+                              const now = new Date();
+                              const curtime = `${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}`;
+                              
+                              await stock_live_price.updateOne(
+                                { _id: response.tk },
+                                {
+                                  $set: {
+                                    lp: response.lp,
+                                    exc: response.e,
+                                    curtime: curtime,
+                                    ft: response.ft
+                                  }
                                 },
-                              }, 
-                              { upsert: true });
-                            
+                                { upsert: true }
+                              );
+                            }
+                          } catch (error) {
+                         
                           }
-                        } else {
-                          // console.log("else", response)
-                        }
+                          
+                          
+                        } else 
                       
                         if (response.s === 'OK') {
                           let json = {
@@ -156,10 +160,7 @@ const Alice_Socket = async () => {
                         } 
 
                         
-                    
-                        
-                        //console.log('Disconnected from the server, attempting to  Alice Socket...');
-                         //setTimeout(socketRestart, 30000);
+                  
                       };
 
                     } catch (error) {
@@ -189,7 +190,6 @@ const socketRestart = async () => {
   //console.log("socketRestart")
   await Alice_Socket()
 };
-
 
 function checkExchangeSegment(input , exchange) {
   if (input.includes(exchange)) {
