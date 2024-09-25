@@ -167,7 +167,7 @@ class OptionChain {
 
     // GET All ROUND TOKEN
     async Get_Option_All_Round_Token(req, res) {
-        console.log("get_symbol_price",req.body)
+
         try {
             const symbol = req.body.symbol;
             const expiry = req.body.expiry;
@@ -178,7 +178,6 @@ class OptionChain {
 
             const get_symbol_price = await Get_Option_Chain_modal.findOne({ symbol: symbol })
 
-            console.log("get_symbol_price",get_symbol_price)
 
             if (get_symbol_price != undefined) {
                 price = parseInt(get_symbol_price.price);

@@ -230,8 +230,6 @@ class Employee {
         var TotalLicense = 0;
       }
 
-   
-
       if (Number(licence) > 0) {
         if (
           parseInt(TotalLicense) + parseInt(licence) >
@@ -320,8 +318,7 @@ class Employee {
                 _id: 0, // Exclude the _id field if you don't need it
                 Service_id: "$Service_id",
                 lotsize: "$serviceInfo.lotsize",
-                product_type:1
-
+                product_type: 1,
               },
             },
           ]);
@@ -329,7 +326,6 @@ class Employee {
           const clientServicesData = [];
 
           if (group_service_find.length !== 0) {
-           
             if (group_service_find.length != 0) {
               group_service_find.forEach((data) => {
                 const clientService = {
@@ -347,10 +343,8 @@ class Employee {
               });
             }
 
-            
             client_services.insertMany(clientServicesData).then((result) => {});
 
-            
             if (license_type == "2") {
               const count_licenses_add = new count_licenses({
                 user_id: User_id,
@@ -398,7 +392,6 @@ class Employee {
           }
         })
         .catch((err) => {
-        
           if (err.keyValue) {
             return res.send({
               status: false,
@@ -422,7 +415,6 @@ class Employee {
 
       var PID = new ObjectId(req.parent_id);
 
-     
       const existingUsername = await User_model.findOne({
         UserName: req.UserName,
       });
@@ -844,9 +836,7 @@ class Employee {
             User_client_services.save();
           });
         }
-      } catch (error) {
-     
-      }
+      } catch (error) {}
 
       var User_update = {
         FullName: req.FullName,
@@ -1091,445 +1081,6 @@ class Employee {
 
   // GET ALL GetAllClients
   async GetAllClients(req, res) {
-    // const pip = [
-
-    //   {
-    //     $match: {
-    //       $and: [
-    //         { Role: "USER" }
-    //       ]
-    //     }
-    //   },
-
-    //   {
-    //     $lookup: {
-    //       from: 'companies',
-    //       let: { endDate: "$EndDate" },
-    //       pipeline: [
-    //         {
-    //           $match: {
-    //             $expr: {
-    //               $gt: [
-    //                 { $dateToString: { format: "%Y-%m-%d", date: "$$endDate" } }, // User_model's EndDate
-    //                 { $dateToString: { format: "%Y-%m-%d", date: "$month_ago_date" } } // Ensure $month_ago_date exists in companies
-    //               ]
-    //             }
-    //           }
-    //         }
-    //       ],
-    //       as: 'companyData'
-    //     }
-    //   },
-    //   {
-    //     $unwind: "$companyData"
-    //   },
-
-    //   {
-    //     $group: {
-    //       _id: null,
-    //       total_client: {
-    //         $sum: {
-    //           $cond: [
-    //             {
-    //               $and: [
-
-    //                 { $eq: ["$Role", "USER"] },
-    //                 { $eq: ["$Is_Active", "1"] },
-
-    //               ]
-    //             },
-    //             1,
-    //             0
-    //           ]
-    //         }
-    //       },
-    //       total_active_client: {
-    //         $sum: {
-    //           $cond: [
-    //             {
-    //               $and: [
-    //                 { $eq: ["$Role", "USER"] },
-    //                 // { $eq: ["$license_type", "2"] },
-    //                 { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
-    //                 { $eq: ["$Is_Active", "1"] },
-
-    //               ]
-    //             },
-    //             1,
-    //             0
-    //           ]
-    //         }
-    //       },
-    //       total_expired_client: {
-    //         $sum: {
-    //           $cond: [
-    //             {
-    //               $and: [
-    //                 { $eq: ["$Role", "USER"] },
-    //                 { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
-    //                 { $eq: ["$Is_Active", "1"] },
-
-    //               ]
-    //             },
-    //             1,
-    //             0
-    //           ]
-    //         }
-    //       },
-    //       total_live_client: {
-    //         $sum: {
-    //           $cond: [
-    //             {
-    //               $and: [
-    //                 { $eq: ["$Role", "USER"] },
-    //                 { $eq: ["$license_type", "2"] },
-    //                 { $eq: ["$Is_Active", "1"] },
-
-    //               ]
-    //             },
-    //             1,
-    //             0
-    //           ]
-    //         }
-    //       },
-    //       total_active_live: {
-    //         $sum: {
-    //           $cond: [
-    //             {
-    //               $and: [
-    //                 { $eq: ["$Role", "USER"] },
-    //                 { $eq: ["$license_type", "2"] },
-    //                 {
-    //                   $gte: [
-    //                     {
-    //                       $dateToString: {
-    //                         format: "%Y-%m-%d",
-    //                         date: "$EndDate"
-    //                       }
-    //                     },
-    //                     {
-    //                       $dateToString: {
-    //                         format: "%Y-%m-%d",
-    //                         date: new Date()
-    //                       }
-    //                     }
-    //                   ]
-    //                 },
-    //                 { $eq: ["$Is_Active", "1"] },
-
-    //               ]
-    //             },
-    //             1,
-    //             0
-    //           ]
-    //         }
-    //       },
-    //       total_expired_live: {
-    //         $sum: {
-    //           $cond: [
-    //             {
-    //               $and: [
-    //                 { $eq: ["$Role", "USER"] },
-    //                 { $eq: ["$license_type", "2"] },
-    //                 { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
-    //                 { $eq: ["$Is_Active", "1"] },
-
-    //               ]
-    //             },
-    //             1,
-    //             0
-    //           ]
-    //         }
-    //       },
-    //       total_demo_client: {
-    //         $sum: {
-    //           $cond: [
-    //             {
-    //               $and: [
-    //                 { $eq: ["$Role", "USER"] },
-    //                 { $eq: ["$license_type", "1"] },
-    //                 { $eq: ["$Is_Active", "1"] },
-
-    //               ]
-    //             },
-    //             1,
-    //             0
-    //           ]
-    //         }
-    //       },
-    //       total_active_demo: {
-    //         $sum: {
-    //           $cond: [
-    //             {
-    //               $and: [
-    //                 { $eq: ["$Role", "USER"] },
-    //                 { $eq: ["$license_type", "1"] },
-    //                 {
-    //                   $gte: [
-    //                     {
-    //                       $dateToString: {
-    //                         format: "%Y-%m-%d",
-    //                         date: "$EndDate"
-    //                       }
-    //                     },
-    //                     {
-    //                       $dateToString: {
-    //                         format: "%Y-%m-%d",
-    //                         date: new Date()
-    //                       }
-    //                     }
-    //                   ]
-    //                 },
-    //                 { $eq: ["$Is_Active", "1"] },
-
-    //               ]
-    //             },
-    //             1,
-    //             0
-    //           ]
-    //         }
-    //       },
-    //       total_expired_demo: {
-
-    //         $sum: {
-    //           $cond: [
-    //             {
-    //               $and: [
-    //                 { $eq: ["$Role", "USER"] },
-    //                 { $eq: ["$license_type", "1"] },
-    //                 {
-    //                   $lt: [
-    //                     {
-    //                       $dateToString: {
-    //                         format: "%Y-%m-%d",
-    //                         date: "$EndDate"
-    //                       }
-    //                     },
-    //                     {
-    //                       $dateToString: {
-    //                         format: "%Y-%m-%d",
-    //                         date: new Date()
-    //                       }
-    //                     }
-    //                   ]
-    //                 },
-    //                 { $eq: ["$Is_Active", "1"] },
-
-    //               ]
-    //             },
-    //             1,
-    //             0
-    //           ]
-    //         }
-
-    //       },
-    //       total_two_days: {
-    //         $sum: {
-    //           $cond: [
-    //             {
-    //               $and: [
-    //                 { $eq: ["$Role", "USER"] },
-    //                 { $eq: ["$license_type", "0"] },
-    //                 { $eq: ["$Is_Active", "1"] },
-
-    //               ]
-    //             },
-    //             1,
-    //             0
-    //           ]
-    //         }
-    //       },
-    //       total_active_two_days: {
-    //         $sum: {
-    //           $cond: [
-    //             {
-    //               $and: [
-    //                 { $eq: ["$Role", "USER"] },
-    //                 { $eq: ["$license_type", "0"] },
-    //                 {
-    //                   $gte: [
-    //                     {
-    //                       $dateToString: {
-    //                         format: "%Y-%m-%d",
-    //                         date: "$EndDate"
-    //                       }
-    //                     },
-    //                     {
-    //                       $dateToString: {
-    //                         format: "%Y-%m-%d",
-    //                         date: new Date()
-    //                       }
-    //                     }
-    //                   ]
-    //                 },
-    //                 { $eq: ["$Is_Active", "1"] },
-
-    //               ]
-    //             },
-    //             1,
-    //             0
-    //           ]
-    //         }
-    //       },
-
-    //       total_expired_two_days: {
-    //         $sum: {
-    //           $cond: [
-    //             {
-    //               $and: [
-    //                 { $eq: ["$Role", "USER"] },
-    //                 { $eq: ["$license_type", "0"] },
-    //                 { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
-    //                 { $eq: ["$Is_Active", "1"] },
-
-    //               ]
-    //             },
-    //             1,
-    //             0
-    //           ]
-    //         }
-    //       },
-
-    //       used_licence: {
-    //         $sum: {
-    //           $cond: [
-    //             {
-    //               $and: [
-    //                 { $eq: ["$Role", "USER"] },
-    //                 { $eq: ["$license_type", "2"] }
-    //               ]
-    //             },
-    //             { $toInt: { $ifNull: ["$licence", "0"] } },
-    //             0
-    //           ]
-    //         }
-    //       }
-
-    //     }
-    //   },
-
-    //   {
-    //     $lookup: {
-    //       from: "companies",
-    //       pipeline: [],
-    //       as: "company_info"
-    //     }
-    //   },
-    //   {
-    //     $unwind: "$company_info"
-    //   },
-    //   {
-    //     $lookup: {
-    //       from: 'count_licenses',
-    //       let: { month_ago_date: "$company_info.month_ago_date" },
-    //       pipeline: [],
-
-    //       as: 'licenseData'
-    //     }
-    //   },
-    //   {
-    //     $unwind: "$licenseData"
-    //   },
-
-    //   {
-    //     $group: {
-    //       _id: "$_id",
-
-    //       total_used_licence: {
-    //         $sum: {
-    //           $toInt: "$licenseData.license"
-    //         }
-    //       },
-
-    //       total_client: { $first: "$total_client" },
-    //       total_active_client: { $first: "$total_active_client" },
-    //       total_expired_client: { $first: "$total_expired_client" },
-    //       total_live_client: { $first: "$total_live_client" },
-    //       total_active_live: { $first: "$total_active_live" },
-    //       total_expired_live: { $first: "$total_expired_live" },
-    //       total_demo_client: { $first: "$total_demo_client" },
-    //       total_active_demo: { $first: "$total_active_demo" },
-    //       total_expired_demo: { $first: "$total_expired_demo" },
-    //       total_two_days: { $first: "$total_two_days" },
-    //       total_active_two_days: { $first: "$total_active_two_days" },
-    //       total_expired_two_days: { $first: "$total_expired_two_days" },
-    //       used_licence: { $first: "$used_licence" },
-    //       total_admin_licence: { $first: "$company_info.licenses" }
-
-    //     }
-    //   },
-    //   {
-    //     $project: {
-    //       total_client: 1,
-    //       total_active_client: 1,
-    //       total_expired_client: 1,
-    //       total_live_client: 1,
-    //       total_active_live: 1,
-    //       total_expired_live: 1,
-    //       total_demo_client: 1,
-    //       total_active_demo: 1,
-    //       total_expired_demo: 1,
-    //       total_two_days: 1,
-    //       total_active_two_days: 1,
-    //       total_expired_two_days: 1,
-    //       total_admin_license: 1,
-    //       total_admin_licence: 1,
-    //       total_used_licence: 1,
-    //       used_licence: 1,
-    //       licenses:
-
-    //       {
-    //         $toInt: {
-    //           $subtract: [
-    //             "$total_admin_licence",
-
-    //             {
-    //               $subtract: [
-    //                 "$total_used_licence",
-    //                 "$used_licence"
-    //               ]
-    //             },
-
-    //           ]
-
-    //         }
-    //       },
-
-    //       remaining_license: {
-    //         $toInt: {
-    //           $subtract: [
-
-    //             {
-    //               $toInt: {
-    //                 $subtract: [
-    //                   "$total_admin_licence",
-
-    //                   {
-    //                     $subtract: [
-    //                       "$total_used_licence",
-    //                       "$used_licence"
-    //                     ]
-    //                   },
-
-    //                 ]
-
-    //               }
-    //             },
-    //             "$used_licence"
-
-    //           ]
-
-    //         }
-    //       },
-
-    //     }
-    //   }
-
-    // ]
-
-    // const r = await User_model.aggregate(pip);
-
-
     try {
       const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
 
@@ -1550,25 +1101,30 @@ class Employee {
           $lookup: {
             from: "companies",
             let: {
-              endDate: "$EndDate", // User_model ki EndDate ko use karenge
+              endDate: "$EndDate", // endDate field
             },
             pipeline: [
               {
                 $match: {
                   $expr: {
-                    $gt: [
+                    $or: [
+                      { $eq: ["$$endDate", null] }, // Handle null endDate
                       {
-                        $dateToString: {
-                          format: "%Y-%m-%d",
-                          date: "$$endDate",
-                        },
-                      }, // User_model ki EndDate
-                      {
-                        $dateToString: {
-                          format: "%Y-%m-%d",
-                          date: "$month_ago_date",
-                        },
-                      }, // companyData ki month_ago_date
+                        $gt: [
+                          {
+                            $dateToString: {
+                              format: "%Y-%m-%d",
+                              date: "$$endDate",
+                            },
+                          },
+                          {
+                            $dateToString: {
+                              format: "%Y-%m-%d",
+                              date: "$month_ago_date",
+                            },
+                          },
+                        ],
+                      },
                     ],
                   },
                 },
@@ -1589,7 +1145,7 @@ class Employee {
           },
         },
       ]);
-
+      
       // IF DATA NOT EXIST
       if (getAllClients.length == 0) {
         return res.send({
@@ -1607,7 +1163,6 @@ class Employee {
         data: getAllClients,
       });
     } catch (error) {
-  
       return res.send({
         status: false,
         msg: "Empty data",
@@ -1775,7 +1330,7 @@ class Employee {
     try {
       const { Role } = req.body;
       const currentDate = new Date(); // Get the current date
-  
+
       const GetAlluser_logs = await User_model.aggregate([
         {
           $match: {
@@ -1789,7 +1344,7 @@ class Employee {
           $lookup: {
             from: "companies",
             let: {
-              endDate: "$EndDate", 
+              endDate: "$EndDate",
             },
             pipeline: [
               {
@@ -1801,13 +1356,13 @@ class Employee {
                           format: "%Y-%m-%d",
                           date: "$$endDate",
                         },
-                      }, 
+                      },
                       {
                         $dateToString: {
                           format: "%Y-%m-%d",
                           date: "$month_ago_date",
                         },
-                      }, 
+                      },
                     ],
                   },
                 },
@@ -1823,7 +1378,6 @@ class Employee {
           $sort: { CreateDate: -1 },
         },
         {
-          
           $project: {
             Email: 1,
             FullName: 1,
@@ -1832,11 +1386,9 @@ class Employee {
             UserName: 1,
             PhoneNo: 1,
           },
-  
-        
         },
       ]);
-  
+
       if (GetAlluser_logs.length === 0) {
         return res.status(200).json({
           status: false,
@@ -1844,7 +1396,7 @@ class Employee {
           data: [],
         });
       }
-  
+
       return res.status(200).json({
         status: true,
         msg: "Get All user_logs",
@@ -1858,7 +1410,6 @@ class Employee {
       });
     }
   }
-  
 
   // CLIENTS ACTIVE INACTIVE STATUS UPDATE
   async UpdateActiveStatus(req, res) {

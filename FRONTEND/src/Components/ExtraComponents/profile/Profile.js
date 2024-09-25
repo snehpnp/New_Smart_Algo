@@ -287,7 +287,7 @@ const UserProfile = () => {
                         ""
                       )}
 
-                      {UserDetails.license_type == "2" && (
+                      {(UserDetails.license_type == "2" && UserDetails.broker == "19")  && (
                         <li className="nav-item">
                           <a
                             href="#fund-management"
