@@ -45,6 +45,13 @@ const Routing = () => {
       navigate("/login");
       return;
     }
+    console.log("location.pathname", location.pathname);
+    if(location.pathname.includes("/admin/" || "/subadmin/") && gotodashboard != null){
+      localStorage.removeItem("gotodashboard");
+      localStorage.removeItem("user_role_goTo");
+      localStorage.removeItem("user_details_goTo")
+      window.location.reload();
+    }
 
     if (roles !== null) {
       if (roles === "ADMIN" && location.pathname === "/login") {
@@ -61,12 +68,12 @@ const Routing = () => {
         window.location.reload();
       }
     } else if (gotodashboard != null) {
+
       if (user_role_goTo === "USER" && location.pathname === "/") {
         navigate("/client/dashboard");
       } else if (roles === "SUBADMIN" && location.pathname === "/") {
         navigate("/subadmin/clients");
       }
-      // console.log("location.pathname", location.pathname);
     }
   }, [location.pathname]);
 
