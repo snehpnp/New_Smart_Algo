@@ -191,8 +191,10 @@ const ServicesList = () => {
     <>
       <Content
         Page_title="Plans"
-        button_status={false}
-        route="/admin/groupservices/add"
+        button_status={true}
+        route="/admin/plan/add"
+        button_title="Add Plan"
+        
       >
         <div style={styles.container}>
           {GetAllPlans.data &&

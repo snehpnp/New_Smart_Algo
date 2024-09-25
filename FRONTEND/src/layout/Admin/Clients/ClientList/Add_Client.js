@@ -9,7 +9,7 @@ import Content from '../../../../Components/Dashboard/Content/Content';
 import { GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
 import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
 import { Get_All_Service_for_Client } from '../../../../ReduxStore/Slice/Common/commoSlice'
-import { Get_Service_By_Group_Id } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
+import { Get_Service_By_Group_Id,Get_All_Plans } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 import * as Config from "../../../../Utils/Config";
 import { Add_User } from '../../../../ReduxStore/Slice/Admin/userSlice';
@@ -30,13 +30,28 @@ const AddClient = () => {
   const [Addsubadmin, setAddsubadmin] = useState({ loading: true, data: [] });
   const [AllStrategy, setAllStrategy] = useState({ loading: true, data: [] });
   const [GetServices, setGetServices] = useState({ loading: true, data: [] });
+  const [selectedPlan, setSelectedPlan] = useState("");
 
   const isValidEmail = (email) => { return Email_regex(email) }
   const isValidContact = (mobile) => { return Mobile_regex(mobile) }
   const isValidName = (mobile) => { return Name_regex(mobile) }
+  const [GetAllPlans, setAllPlans] = useState({ loading: true, data: [] });
 
 
   const selector = useSelector((state) => state.DashboardSlice);
+
+  const GetAllPlansData = async () => {
+    await dispatch(Get_All_Plans())
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setAllPlans({
+            loading: false,
+            data: response.data,
+          });
+        }
+      });
+  };
 
 
   const formik = useFormik({
@@ -166,7 +181,8 @@ const AddClient = () => {
         "api_type": values.api_type,
         "demat_userid": values.demat_userid,
         "group_service": values.groupservice,
-        "multiple_strategy_select": values.multiple_strategy_select === false ? '0' : '1'
+        "multiple_strategy_select": values.multiple_strategy_select === false ? '0' : '1',
+        "plan_id": selectedPlan,
       }
 
 
@@ -213,6 +229,7 @@ const AddClient = () => {
 
 
   useEffect(() => {
+    GetAllPlansData();
     let Service_Month_Arr = []
     for (let index = 1; index < 2; index++) {
       Service_Month_Arr.push({ month: index, endDate: `${index} Month Licence Expired On ${new Date(new Date().getFullYear(), new Date().getMonth() + index, new Date().getDate()).toString().split('00:00:00')[0]}` })
@@ -590,6 +607,31 @@ const AddClient = () => {
           toDate={formik.values.todate}
           additional_field={
             <>
+
+<div>
+                <h6>Select Plans</h6>
+                <div className="row">
+                  {GetAllPlans.data.map((plan, index) => (
+                    <div className="col-lg-2 mt-2" key={index}>
+                      <div className="form-check custom-radio mb-3">
+                        <input
+                          type="radio"
+                          className="form-check-input"
+                          name="plan"
+                          value={plan._id}
+                          id={plan._id}
+                          onChange={(e) => setSelectedPlan(e.target.value)}
+                          checked={selectedPlan === plan._id}
+                        />
+                        <label className="form-check-label" htmlFor={plan._id}>
+                          {plan.name}
+                        </label>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <h6>All Group Service</h6>
               {GetServices && GetServices.data.map((strategy) => (
                 <div className={`col-lg-2 `} key={strategy._id}>

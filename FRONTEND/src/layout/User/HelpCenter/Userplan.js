@@ -7,6 +7,7 @@ import { BadgeCheck } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { Get_All_Plans } from "../../../ReduxStore/Slice/Admin/GroupServiceSlice";
+import { Find_One_User } from "../../../ReduxStore/Slice/Admin/AdminSlice";
 
 const Card = styled.div`
   border: 1px solid #ccc;
@@ -99,10 +100,11 @@ const ServicesList = () => {
   const dispatch = useDispatch();
 
   const [selectedPlan, setSelectedPlan] = useState(null);
-  const [editPlan, setEditPlan] = useState(null);
   const [GetAllPlans, setAllPlans] = useState({ loading: true, data: [] });
+  const [PlanId, setPlanId] = useState(null);
 
   useEffect(() => {
+    data_1();
     GetAllPlansData();
   }, []);
 
@@ -112,7 +114,6 @@ const ServicesList = () => {
 
   const handleModalClose = () => {
     setSelectedPlan(null);
-    setEditPlan(null);
   };
 
   const GetAllPlansData = async () => {
@@ -128,31 +129,42 @@ const ServicesList = () => {
       });
   };
   let servicegivenmonth = localStorage.getItem("servicegivenmonth");
+  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
 
   const SetPlan = (index) => {
-
-  
     if (servicegivenmonth === 0) {
-      return null; 
+      return null;
     }
-  
+
     // Define the ranges
     const ranges = [
       { min: 1, max: 2, index: 0 },
       { min: 3, max: 5, index: 1 },
       { min: 6, max: 11, index: 2 },
-      { min: 12, max: 12, index: 3 }
+      { min: 12, max: 12, index: 3 },
     ];
-  
+
     // Find the matching range for the given month and index
-    const matchedRange = ranges.find(range => 
-      servicegivenmonth >= range.min && servicegivenmonth <= range.max && range.index === index
+    const matchedRange = ranges.find(
+      (range) =>
+        servicegivenmonth >= range.min &&
+        servicegivenmonth <= range.max &&
+        range.index === index
     );
-  
+
     // Return BadgeCheck if the range matches, otherwise return null
     return matchedRange ? <BadgeCheck style={{ color: "green" }} /> : null;
   };
-  
+
+  const data_1 = async () => {
+    await dispatch(Find_One_User({ id: user_id }))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setPlanId(response.data[0].plan_id);
+        }
+      });
+  };
 
   return (
     <>
@@ -163,36 +175,38 @@ const ServicesList = () => {
       >
         <div style={styles.container}>
           {GetAllPlans.data &&
-            GetAllPlans.data.map((plan, index) => (
-              <Card key={index}>
-                <img src={plan.image} alt={plan.name} style={styles.image} />
-                <h2 style={styles.title}>
-  {plan.name} {SetPlan(index)}
-</h2>
-                <h4 style={styles.subtitle}>{plan.title}</h4>
-                <p style={styles.description}>{plan.description}</p>
-                <div style={styles.prices}>
-                  <p style={styles.priceItem}>
-                    Monthly <FaRupeeSign /> {plan.prices.monthly}
-                  </p>
-                  <p style={styles.priceItem}>
-                    Quarterly <FaRupeeSign /> {plan.prices.quarterly}
-                  </p>
-                  <p style={styles.priceItem}>
-                    Half-Yearly <FaRupeeSign /> {plan.prices.halfYearly}
-                  </p>
-                  <p style={styles.priceItem}>
-                    Yearly <FaRupeeSign /> {plan.prices.yearly}
-                  </p>
-                </div>
+            GetAllPlans.data.map((plan, index) =>
+              plan._id.toString() != PlanId ? null : (
+                <Card key={index}>
+                  <img src={plan.image} alt={plan.name} style={styles.image} />
+                  <h2 style={styles.title}>
+                    {plan.name} {SetPlan(index)}
+                  </h2>
+                  <h4 style={styles.subtitle}>{plan.title}</h4>
+                  <p style={styles.description}>{plan.description}</p>
+                  <div style={styles.prices}>
+                    <p style={styles.priceItem}>
+                      Monthly <FaRupeeSign /> {plan.prices.monthly}
+                    </p>
+                    <p style={styles.priceItem}>
+                      Quarterly <FaRupeeSign /> {plan.prices.quarterly}
+                    </p>
+                    <p style={styles.priceItem}>
+                      Half-Yearly <FaRupeeSign /> {plan.prices.halfYearly}
+                    </p>
+                    <p style={styles.priceItem}>
+                      Yearly <FaRupeeSign /> {plan.prices.yearly}
+                    </p>
+                  </div>
 
-                <div style={styles.buttonContainer}>
-                  <Button primary onClick={() => handleViewClick(plan)}>
-                    <FaEye /> View
-                  </Button>
-                </div>
-              </Card>
-            ))}
+                  <div style={styles.buttonContainer}>
+                    <Button primary onClick={() => handleViewClick(plan)}>
+                      <FaEye /> View
+                    </Button>
+                  </div>
+                </Card>
+              )
+            )}
         </div>
       </Content>
       <ToastButton />

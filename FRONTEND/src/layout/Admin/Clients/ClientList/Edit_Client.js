@@ -17,7 +17,7 @@ import {
 } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { Get_All_SUBADMIN } from "../../../../ReduxStore/Slice/Subadmin/Subadminslice";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
-import { Get_Service_By_Group_Id } from "../../../../ReduxStore/Slice/Admin/GroupServiceSlice";
+import { Get_Service_By_Group_Id,Get_All_Plans } from "../../../../ReduxStore/Slice/Admin/GroupServiceSlice";
 import { check_Device } from "../../../../Utils/find_device";
 import toast, { Toaster } from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
@@ -41,6 +41,7 @@ const EditClient = () => {
   }, []);
 
   const selector = useSelector((state) => state.DashboardSlice);
+  const [GetAllPlans, setAllPlans] = useState({ loading: true, data: [] });
 
   const user_token = JSON.parse(localStorage.getItem("user_details")).token;
   const Role = JSON.parse(localStorage.getItem("user_details")).Role;
@@ -58,7 +59,7 @@ const EditClient = () => {
   const [Addsubadmin, setAddsubadmin] = useState({ loading: true, data: [] });
   const [AllStrategy, setAllStrategy] = useState({ loading: true, data: [] });
   const [GetServices, setGetServices] = useState({ loading: true, data: [] });
-  const [selectedPlan, setSelectedPlan] = useState('');
+  const [selectedPlan, setSelectedPlan] = useState("");
   const isValidEmail = (email) => {
     return Email_regex(email);
   };
@@ -80,12 +81,15 @@ const EditClient = () => {
             loading: false,
             data: response,
           });
+          console.log(response.data[0].plan_id);
+          setSelectedPlan(response.data[0].plan_id);
         }
       });
   };
 
   useEffect(() => {
     data_1();
+    GetAllPlansData();
   }, []);
 
   const formik = useFormik({
@@ -194,7 +198,7 @@ const EditClient = () => {
         multiple_strategy_select:
           values.multiple_strategy_select === false ? "0" : "1",
         network_ip: ip,
-        selectedPlan: selectedPlan,
+        plan_id: selectedPlan,
       };
 
       await dispatch(Update_User({ req: req, token: user_token }))
@@ -882,6 +886,7 @@ const EditClient = () => {
         "multiple_strategy_select",
         userData.multiple_strategy_select == "1"
       );
+      formik.setFieldValue("plan_id", userData.plan_id);
     }
   }, [UserData.data]);
 
@@ -920,17 +925,29 @@ const EditClient = () => {
     }
   }
 
-
   const plans = [
-    { id: 'basic', label: 'Basic Plan' },
-    { id: 'standard', label: 'Standard Plan' },
-    { id: 'premium', label: 'Premium Plan' },
-    { id: 'enterprise', label: 'Enterprise Plan' },
+    { id: "basic", label: "Basic Plan" },
+    { id: "standard", label: "Standard Plan" },
+    { id: "premium", label: "Premium Plan" },
+    { id: "enterprise", label: "Enterprise Plan" },
   ];
 
   // Handler to update state when radio button is selected
   const handlePlanChange = (e) => {
-    setSelectedPlan(e.target.value);
+    // console
+  };
+
+  const GetAllPlansData = async () => {
+    await dispatch(Get_All_Plans())
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setAllPlans({
+            loading: false,
+            data: response.data,
+          });
+        }
+      });
   };
 
   return (
@@ -954,31 +971,29 @@ const EditClient = () => {
           toDate={formik.values.todate}
           additional_field={
             <>
-           <div>
-      <h6>Select Plans</h6>
-      <div className="row">
-        {plans.map((plan, index) => (
-          <div className="col-lg-2 mt-2" key={index}>
-            <div className="form-check custom-radio mb-3">
-              <input
-                type="radio"
-                className="form-check-input"
-                name="plan"
-                value={plan.id}
-                id={plan.id}
-                onChange={handlePlanChange}
-                checked={selectedPlan === plan.id}
-              />
-              <label className="form-check-label" htmlFor={plan.id}>
-                {plan.label}
-              </label>
-            </div>
-          </div>
-        ))}
-      </div>
-
-   
-    </div>
+              <div>
+                <h6>Select Plans</h6>
+                <div className="row">
+                  {GetAllPlans.data.map((plan, index) => (
+                    <div className="col-lg-2 mt-2" key={index}>
+                      <div className="form-check custom-radio mb-3">
+                        <input
+                          type="radio"
+                          className="form-check-input"
+                          name="plan"
+                          value={plan._id}
+                          id={plan._id}
+                          onChange={(e) => setSelectedPlan(e.target.value)}
+                          checked={selectedPlan === plan._id}
+                        />
+                        <label className="form-check-label" htmlFor={plan._id}>
+                          {plan.name}
+                        </label>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
               {/*  For Show All Services */}
               <h6>All Group Service</h6>
