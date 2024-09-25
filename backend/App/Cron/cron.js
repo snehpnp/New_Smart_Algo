@@ -7,9 +7,7 @@ var Sheets = require('google-sheets-api').Sheets;
 const Papa = require('papaparse')
 
 
-const { logger, getIPAddress } = require('../Helper/logger.helper')
 
-const { Alice_Socket } = require("../Helper/Alice_Socket");
 
 var dateTime = require('node-datetime');
 var moment = require('moment');
@@ -24,13 +22,13 @@ const Get_Option_Chain_modal = db.option_chain_symbols;
 const MainSignals_modal = db.MainSignals
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
-
 const token_chain = db.token_chain;
 const stock_live_price = db.stock_live_price;
 
 const { DashboardView, deleteDashboard } = require('../../View/DashboardData')
 const { createView } = require('../../View/Open_position')
-
+const { logger, getIPAddress } = require('../Helper/logger.helper')
+const { Alice_Socket } = require("../Helper/Alice_Socket");
 
 
 
@@ -52,11 +50,7 @@ cron.schedule('30 6 * * *', () => { TruncateTableTokenChain(); });
 
 cron.schedule('*/10 * * * *', async () => { await TruncateTableTokenChainAdd_fiveMinute() });
 
-
-
 cron.schedule('05 23 * * *', () => { DeleteTokenAliceToken() });
-
-// cron.schedule('55 23 * * *', () => { TruncateTable() });
 
 cron.schedule('10 3 * * *', () => { DeleteTokenAliceToken() });
 
@@ -1492,10 +1486,15 @@ const GetStrickPriceFromSheet = async () => {
 
                     // Use Promise.all to wait for all updates to complete
                     await Promise.all(sheet_Data.map(async (data) => {
-                        const result = await Get_Option_Chain_modal.updateOne(
-                            { symbol: data.SYMBOL },
-                            { $set: { price: data.CPrice } }
-                        );
+                    
+                        if(data.CPrice != undefined && data.CPrice != "" && data.CPrice != "#N/A"){
+                            const result = await Get_Option_Chain_modal.updateOne(
+                                { symbol: data.SYMBOL },
+                                { $set: { price: data.CPrice } },
+                                { upsert: true }
+                            );
+                        }
+                      
                     }));
 
                     return

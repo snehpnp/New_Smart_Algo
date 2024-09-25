@@ -54,7 +54,7 @@ module.exports = function (app, io) {
                 }
             })
         }
-        // Display fetched documents
+      
 
         var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
 
