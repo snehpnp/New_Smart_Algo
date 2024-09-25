@@ -326,7 +326,8 @@ class Panel {
                         Create_Strategy: 1,
                         db_url: 1,
                         Refer_Earn:1,
-                        ip_address:1
+                        ip_address:1,
+                        Plans:1
                     }
                 },
                 {

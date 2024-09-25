@@ -366,6 +366,7 @@ class Panel {
         live_price,
         Two_day_client,
         Refer_Earn,
+        Plans
       } = req.body;
 
       var domain1 = "http://localhost:3000";
@@ -391,6 +392,7 @@ class Panel {
           live_price: live_price,
           Two_day_client: Two_day_client,
           Refer_Earn: Refer_Earn,
+          Plans: Plans
         },
       };
 
