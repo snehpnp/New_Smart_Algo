@@ -26,6 +26,9 @@ import { f_time } from "../../../../Utils/Date_formet";
 import { All_Api_Info_List } from "../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice";
 import * as Config from "../../../../Utils/Config";
 import { GET_IP } from "../../../../Service/common.service";
+import { Get_Pmermission } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
+const token = JSON.parse(localStorage.getItem("user_details")).token;
+
 
 const EditClient = () => {
   const navigate = useNavigate();
@@ -60,6 +63,10 @@ const EditClient = () => {
   const [AllStrategy, setAllStrategy] = useState({ loading: true, data: [] });
   const [GetServices, setGetServices] = useState({ loading: true, data: [] });
   const [selectedPlan, setSelectedPlan] = useState("");
+  const [admin_permission, setAdmin_permission] = useState([]);
+
+
+
   const isValidEmail = (email) => {
     return Email_regex(email);
   };
@@ -87,10 +94,40 @@ const EditClient = () => {
       });
   };
 
+
+const AdminPermissions = async() => {
+
+    await dispatch(
+      Get_Pmermission({
+        domain: Config.react_domain,
+        token: token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setAdmin_permission({
+            loading: false,
+            data: response.data,
+          });
+        } else {
+          setAdmin_permission({
+            loading: false,
+            data: response.data,
+          });
+        }
+      });
+  }
+
+
+
   useEffect(() => {
+    AdminPermissions()
     data_1();
     GetAllPlansData();
   }, []);
+
+console.log("admin_permission",admin_permission.data && admin_permission.data[0].Plans) ;
 
   const formik = useFormik({
     initialValues: {
@@ -971,7 +1008,7 @@ const EditClient = () => {
           toDate={formik.values.todate}
           additional_field={
             <>
-              <div>
+            {admin_permission.data && admin_permission.data[0].Plans != 0 &&  <div>
                 <h6>Select Plans</h6>
                 <div className="row">
                   {GetAllPlans.data.map((plan, index) => (
@@ -993,7 +1030,7 @@ const EditClient = () => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div>}
 
               {/*  For Show All Services */}
               <h6>All Group Service</h6>

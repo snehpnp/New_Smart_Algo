@@ -51,7 +51,6 @@ const Sidebar = ({ ShowSidebar }) => {
   const [admin_permission, setAdmin_permission] = useState([]);
   const [openmodal, setOpenmodal] = useState(false);
 
-console.log("admin_permission", admin_permission.data && admin_permission.data[0].Plans )
 
   const data2 = async () => {
     if (roles === "SUBADMIN") {
