@@ -27,7 +27,7 @@ import { All_Api_Info_List } from "../../../../ReduxStore/Slice/Superadmin/ApiCr
 import * as Config from "../../../../Utils/Config";
 import { GET_IP } from "../../../../Service/common.service";
 import { Get_Pmermission } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
-const token = JSON.parse(localStorage.getItem("user_details")).token;
+const user_details = JSON.parse(localStorage.getItem("user_details"))
 
 
 const EditClient = () => {
@@ -45,26 +45,20 @@ const EditClient = () => {
 
   const selector = useSelector((state) => state.DashboardSlice);
   const [GetAllPlans, setAllPlans] = useState({ loading: true, data: [] });
-
-  const user_token = JSON.parse(localStorage.getItem("user_details")).token;
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role;
-  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
-
   const [UserData, setUserData] = useState({ loading: true, data: [] });
   const [selectedStrategies, setSelectedStrategies] = useState([]);
   const [ShowAllStratagy, setShowAllStratagy] = useState(true);
   const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
   const [first, setfirst] = useState([]);
-  const [AllGroupServices, setAllGroupServices] = useState({
-    loading: true,
-    data: [],
-  });
   const [Addsubadmin, setAddsubadmin] = useState({ loading: true, data: [] });
   const [AllStrategy, setAllStrategy] = useState({ loading: true, data: [] });
   const [GetServices, setGetServices] = useState({ loading: true, data: [] });
   const [selectedPlan, setSelectedPlan] = useState("");
   const [admin_permission, setAdmin_permission] = useState([]);
-
+  const [AllGroupServices, setAllGroupServices] = useState({
+    loading: true,
+    data: [],
+  });
 
 
   const isValidEmail = (email) => {
@@ -100,7 +94,7 @@ const AdminPermissions = async() => {
     await dispatch(
       Get_Pmermission({
         domain: Config.react_domain,
-        token: token,
+        token: user_details.token,
       })
     )
       .unwrap()
@@ -126,8 +120,6 @@ const AdminPermissions = async() => {
     data_1();
     GetAllPlansData();
   }, []);
-
-console.log("admin_permission",admin_permission.data && admin_permission.data[0].Plans) ;
 
   const formik = useFormik({
     initialValues: {
@@ -215,7 +207,7 @@ console.log("admin_permission",admin_permission.data && admin_permission.data[0]
         broker: values.broker,
         parent_id:
           values.parent_id == null || values.parent_id === ""
-            ? user_id
+            ? user_details.user_id
             : values.parent_id,
         parent_role:
           values.parent_id == null || values.parent_id === ""
@@ -230,7 +222,7 @@ console.log("admin_permission",admin_permission.data && admin_permission.data[0]
         demat_userid: values.demat_userid,
         group_service: values.groupservice,
         licence: values.licence1,
-        Editor_role: Role,
+        Editor_role: user_details.Role,
         device: check_Device(),
         multiple_strategy_select:
           values.multiple_strategy_select === false ? "0" : "1",
@@ -238,7 +230,7 @@ console.log("admin_permission",admin_permission.data && admin_permission.data[0]
         plan_id: selectedPlan,
       };
 
-      await dispatch(Update_User({ req: req, token: user_token }))
+      await dispatch(Update_User({ req: req, token: user_details.token }))
         .unwrap()
         .then((response) => {
           if (response.status === 409) {
@@ -848,7 +840,7 @@ console.log("admin_permission",admin_permission.data && admin_permission.data[0]
     await dispatch(
       Get_All_Service_for_Client({
         req: {},
-        token: user_token,
+        token: user_details.token,
       })
     )
       .unwrap()
@@ -863,7 +855,7 @@ console.log("admin_permission",admin_permission.data && admin_permission.data[0]
 
     await dispatch(
       All_Api_Info_List({
-        token: user_token,
+        token: user_details.token,
         url: Config.react_domain,
         brokerId: -1,
         key: 1,
