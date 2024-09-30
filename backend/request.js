@@ -60,7 +60,6 @@ module.exports = function (app) {
       currentDate.getTime() - monthsPrior * millisecondsPerMonth
     );
 
-
     await company.updateOne(
       {},
       {
@@ -90,7 +89,7 @@ module.exports = function (app) {
     ]);
     //   const result = await User.find({})
     const deletedUserIds = result.map((user) => user._id);
-   
+
     db.otherCollection.deleteMany({ userId: { $in: deletedUserIds } });
 
     res.send("deleteRecord");
@@ -793,13 +792,14 @@ module.exports = function (app) {
         broker_url: `${data.domain}/signal/broker-signals`,
         theme_id: "64d0c04a0e38c94d0e20ee28",
         theme_name: "theme_name",
-        disclaimer: "Disclaimer: The risk of loss in trading in any financial markets or exchange can be substantial. These are leveraged products that carry a substantial risk of loss up to your invested capital and may not be suitable for everyone. You should therefore carefully consider whether such trading is suitable for you considering your financial condition. Please ensure that you fully understand the risks involved and do not invest money you cannot afford to lose. Past performance does not guarantee future performance. Historical returns, expected returns, and probability projections are provided for informational and illustrative purposes, and may not reflect actual future performance. SKW Investment Adviser does not guarantee returns in any of its products or services.",
+        disclaimer:
+          "Disclaimer: The risk of loss in trading in any financial markets or exchange can be substantial. These are leveraged products that carry a substantial risk of loss up to your invested capital and may not be suitable for everyone. You should therefore carefully consider whether such trading is suitable for you considering your financial condition. Please ensure that you fully understand the risks involved and do not invest money you cannot afford to lose. Past performance does not guarantee future performance. Historical returns, expected returns, and probability projections are provided for informational and illustrative purposes, and may not reflect actual future performance. SKW Investment Adviser does not guarantee returns in any of its products or services.",
         version: "1.0",
         panel_short_name: data.client_key.substring(0, 3),
         licenses: 0,
         disclaimer_status: "0",
         month_ago_date: new Date("2020-06-19T04:15:56.910Z"),
-        month_ago_number: "36"
+        month_ago_number: "36",
       });
 
       return companyData.save();
@@ -969,7 +969,8 @@ module.exports = function (app) {
 
       const servicesData = await services.find();
       if (servicesData.length == 0) {
-        service_token_update();
+        // service_token_update1();
+        service_token_update1();
       }
 
       const Alice_tokenData = await Alice_token.find();
@@ -1068,6 +1069,421 @@ module.exports = function (app) {
   app.get("/UpdateServicesToken", async (req, res) => {
     TokenSymbolUpdate();
   });
+
+  const service_token_update1 = async () => {
+    const pipeline = [
+      {
+        $project: {
+          // Include fields from the original collection
+          segment: 1,
+        },
+      },
+    ];
+
+    const categoryResult = await categorie.aggregate(pipeline);
+
+    var axios = require("axios");
+    var config = {
+      method: "get",
+      url: "https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json",
+    };
+
+    axios(config).then(async function (response) {
+      // res.send(response.data);
+      // Using a loop to extract 'name' and 'instrumenttype'
+
+      var unique_key = [];
+      let count = 0;
+      await response.data.forEach(async (item) => {
+        if (
+          item.instrumenttype == "FUTSTK" ||
+          item.instrumenttype == "FUTIDX" ||
+          item.instrumenttype == "FUTCUR" ||
+          item.instrumenttype == "FUTCOM" ||
+          item.instrumenttype == "OPTSTK" ||
+          item.instrumenttype == "OPTIDX" ||
+          item.instrumenttype == "OPTCUR" ||
+          item.instrumenttype == "OPTFUT" ||
+          item.instrumenttype == ""
+        ) {
+          // if (item.instrumenttype == "" && item.exch_seg == "BSE") {
+          //   count++;
+           
+          //   const matchingElements = categoryResult.filter(
+          //     (item) => item.segment === "BC"
+          //   );
+          //   const category_id = matchingElements[0]._id;
+
+
+          //   await services
+          //     .create({
+          //       name: item.name,
+          //       instrument_token: item.token,
+          //       zebu_token: item.symbol,
+          //       kotak_token: "",
+          //       instrumenttype: item.instrumenttype,
+          //       exch_seg: item.exch_seg,
+          //       lotsize: item.lotsize,
+          //       categorie_id: category_id,
+          //       unique_column: item.name + "_" + category_id,
+          //     })
+          //     .then((createdServices) => {
+          //       console.log("User created and saved:", createdServices._id);
+          //     })
+          //     .catch((err) => {
+          //       try {
+          //         console.log("Error creating and saving user:", err);
+          //       } catch (e) {
+          //         console.log("duplicate key");
+          //       }
+          //     });
+          // }
+
+          if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
+            unique_key.push(`${item.name}-${item.instrumenttype}`);
+            
+
+            if (item.symbol.slice(-3) == "-EQ") {
+              count++;
+
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "C"
+              );
+              const category_id = matchingElements[0]._id;
+
+              services
+                .create({
+                  name: item.name + "#",
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + "#_" + category_id,
+                })
+                .then((createdServices) => {
+                  console.log("User created and saved:", createdServices._id);
+                })
+                .catch((err) => {
+                  try {
+                    console.log("Error creating and saving user:", err);
+                  } catch (e) {
+                    console.log("duplicate key");
+                  }
+                });
+            }
+
+            if (
+              item.instrumenttype == "FUTSTK" ||
+              item.instrumenttype == "FUTIDX"
+            ) {
+              count++;
+          
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "F"
+              );
+              const category_id = matchingElements[0]._id;
+
+              services
+                .create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + "_" + category_id,
+                })
+                .then((createdServices) => {
+                  console.log("User created and saved:", createdServices._id);
+                })
+                .catch((err) => {
+                  try {
+                    console.log("Error creating and saving user:", err);
+                  } catch (e) {
+                    console.log("duplicate key");
+                  }
+                });
+            }
+
+            if (
+              item.instrumenttype == "OPTSTK" ||
+              item.instrumenttype == "OPTIDX"
+            ) {
+              count++;
+              
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "O"
+              );
+              const category_id = matchingElements[0]._id;
+
+              services
+                .create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + "_" + category_id,
+                })
+                .then((createdServices) => {
+                  console.log("User created and saved:", createdServices._id);
+                })
+                .catch((err) => {
+                  try {
+                    console.log("Error creating and saving user:", err);
+                  } catch (e) {
+                    console.log("duplicate key");
+                  }
+                });
+            }
+
+            if (item.instrumenttype == "OPTFUT") {
+              count++;
+              console.log("item - MO " + count + " ", item);
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "MO"
+              );
+              const category_id = matchingElements[0]._id;
+
+              services
+                .create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + "_" + category_id,
+                })
+                .then((createdServices) => {
+                  console.log("User created and saved:", createdServices._id);
+                })
+                .catch((err) => {
+                  try {
+                    console.log("Error creating and saving user:", err);
+                  } catch (e) {
+                    console.log("duplicate key");
+                  }
+                });
+            }
+
+            if (item.instrumenttype == "FUTCOM") {
+              count++;
+              console.log("item - MF " + count + " ", item);
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "MF"
+              );
+              const category_id = matchingElements[0]._id;
+
+              services
+                .create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + "_" + category_id,
+                })
+                .then((createdServices) => {
+                  console.log("User created and saved:", createdServices._id);
+                })
+                .catch((err) => {
+                  try {
+                    console.log("Error creating and saving user:", err);
+                  } catch (e) {
+                    console.log("duplicate key");
+                  }
+                });
+            }
+
+            if (item.instrumenttype == "FUTCUR") {
+              count++;
+              console.log("item - CF " + count + " ", item);
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "CF"
+              );
+              const category_id = matchingElements[0]._id;
+
+              services
+                .create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + "_" + category_id,
+                })
+                .then((createdServices) => {
+                  console.log("User created and saved:", createdServices._id);
+                })
+                .catch((err) => {
+                  try {
+                    console.log("Error creating and saving user:", err);
+                  } catch (e) {
+                    console.log("duplicate key");
+                  }
+                });
+            }
+
+            if (item.instrumenttype == "OPTCUR" && item.exch_seg == "CDS") {
+              count++;
+              console.log("item - CO " + count + " ", item);
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "CO"
+              );
+              const category_id = matchingElements[0]._id;
+
+              services
+                .create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + "_" + category_id,
+                })
+                .then((createdServices) => {
+                  console.log("User created and saved:", createdServices._id);
+                })
+                .catch((err) => {
+                  try {
+                    console.log("Error creating and saving user:", err);
+                  } catch (e) {
+                    console.log("duplicate key");
+                  }
+                });
+            }
+
+            // if (item.instrumenttype == 'FUTSTK' && item.exch_seg=="BFO") {
+            //   count++
+            //   // console.log('item - CO ' + count + ' ', item)
+            //   const matchingElements = categoryResult.filter(item => item.segment === "BO");
+            //   const category_id = matchingElements[0]._id
+
+            //   await services.create({
+            //     name: item.name,
+            //     instrument_token: item.token,
+            //     zebu_token: item.symbol,
+            //     kotak_token: "",
+            //     instrumenttype: item.instrumenttype,
+            //     exch_seg: item.exch_seg,
+            //     lotsize: item.lotsize,
+            //     categorie_id: category_id,
+            //     unique_column: item.name + '_' + category_id
+            //   })
+            //     .then((createdServices) => {
+            //       console.log('User created and saved:', createdServices._id)
+            //     })
+            //     .catch((err) => {
+            //       try {
+            //         console.log('Error creating and saving user:', err);
+            //       } catch (e) {
+            //         console.log("duplicate key")
+            //       }
+
+            //     });
+
+            // }
+
+            // else if (item.instrumenttype == 'FUTIDX' && item.exch_seg=="BFO") {
+            //   count++
+            //   // console.log('item - CO ' + count + ' ', item)
+            //   const matchingElements = categoryResult.filter(item => item.segment === "BO");
+            //   const category_id = matchingElements[0]._id
+
+            //   await services.create({
+            //     name: item.name,
+            //     instrument_token: item.token,
+            //     zebu_token: item.symbol,
+            //     kotak_token: "",
+            //     instrumenttype: item.instrumenttype,
+            //     exch_seg: item.exch_seg,
+            //     lotsize: item.lotsize,
+            //     categorie_id: category_id,
+            //     unique_column: item.name + '_' + category_id
+            //   })
+            //     .then((createdServices) => {
+            //       console.log('User created and saved:', createdServices._id)
+            //     })
+            //     .catch((err) => {
+            //       try {
+            //         console.log('Error creating and saving user:', err);
+            //       } catch (e) {
+            //         console.log("duplicate key")
+            //       }
+
+            //     });
+
+            // }
+
+            // if (
+            //   item.instrumenttype == "AMXIDX" ||
+            //   item.instrumenttype == "OPTIRC" ||
+            //   item.instrumenttype == "UNDIRC" ||
+            //   item.instrumenttype == "FUTIRC" ||
+            //   item.instrumenttype == "UNDCUR" ||
+            //   item.instrumenttype == "INDEX" ||
+            //   item.instrumenttype == "COMDTY" ||
+            //   item.instrumenttype == "AUCSO"
+            // ) {
+            //   count++;
+            //   console.log("item - OTHER CONTENT " + count + " ", item);
+            //   // const matchingElements = categoryResult.filter(item => item.segment === "C");
+            //   // const category_id = matchingElements[0]._id
+            //   services
+            //     .create({
+            //       name: item.name,
+            //       instrument_token: item.token,
+            //       zebu_token: item.symbol,
+            //       kotak_token: "",
+            //       instrumenttype: item.instrumenttype,
+            //       exch_seg: item.exch_seg,
+            //       lotsize: item.lotsize,
+            //       categorie_id: "",
+            //       unique_column: item.name + "_" + "c9dbdc14a9fefd971c979",
+            //     })
+            //     .then((createdServices) => {
+            //       console.log("User created and saved:", createdServices._id);
+            //     })
+            //     .catch((err) => {
+            //       try {
+            //         console.log("Error creating and saving user:", err);
+            //       } catch (e) {
+            //         console.log("duplicate key");
+            //       }
+            //     });
+            // }
+          }
+        }
+      });
+
+      // return res.send("okkkkkk");
+    });
+  };
+
+app.get("/ssj", async (req, res) => {
+  service_token_update1();
+});
+
 
   app.get("/UpdateQty", async (req, res) => {
     const pipeline = [
