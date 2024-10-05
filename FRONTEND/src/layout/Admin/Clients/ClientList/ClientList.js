@@ -245,6 +245,8 @@ const AllClients = () => {
   }, [getAllClients.data]);
 
   const goToDashboard = async (row, asyncid, email) => {
+
+
     if (row.AppLoginStatus == "1" || row.WebLoginStatus == "1") {
       let req = {
         Email: email,

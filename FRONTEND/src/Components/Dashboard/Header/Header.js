@@ -11,16 +11,17 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../../../Components/ExtraComponents/Modal";
 import UpdateBrokerKey from "./Update_Broker_Key";
 import { loginWithApi } from "./log_with_api";
-import { User_Profile, GET_MESSAGE_BRODS } from "../../../ReduxStore/Slice/Common/commoSlice.js";
+import {
+  User_Profile,
+  GET_MESSAGE_BRODS,
+} from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import { check_Device } from "../../../Utils/find_device";
 import { GET_HELPS } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import { TRADING_OFF_USER } from "../../../ReduxStore/Slice/Users/DashboardSlice";
-import { Get_Company_Logo } from '../../../ReduxStore/Slice/Admin/AdminSlice';
+import { Get_Company_Logo } from "../../../ReduxStore/Slice/Admin/AdminSlice";
 import jwt_decode from "jwt-decode";
 import { GET_IP } from "../../../Service/common.service";
-
-
 
 const Header = ({ ChatBox }) => {
   const dispatch = useDispatch();
@@ -33,23 +34,24 @@ const Header = ({ ChatBox }) => {
   const [messageData, SetMessageData] = useState({ loading: true, data: [] });
   const user_details = JSON.parse(localStorage.getItem("user_details"));
   let theme_id = localStorage.getItem("theme");
-  const page = localStorage.getItem("page")
+  const page = localStorage.getItem("page");
   const routePath = localStorage.getItem("route");
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
   const user_role = JSON.parse(localStorage.getItem("user_role"));
-  const UserNamego_localstg = JSON.parse(localStorage.getItem("user_details_goTo"))
+  const UserNamego_localstg = JSON.parse(
+    localStorage.getItem("user_details_goTo")
+  );
   const [getLogo, setLogo] = useState("");
-  const [ip, setIp] = useState('');
-
+  const [ip, setIp] = useState("");
 
   useEffect(() => {
-    CompanyName()
+    CompanyName();
   }, []);
   useEffect(() => {
     GET_IP().then((response) => {
-      setIp(response.data.ip)
-    })
+      setIp(response.data.ip);
+    });
   }, []);
 
   useEffect(() => {
@@ -61,12 +63,11 @@ const Header = ({ ChatBox }) => {
   useEffect(() => {
     ClearSession();
   }, []);
-  
+
   useEffect(() => {
     fetchUserProfile();
-    message_brod()
+    message_brod();
   }, [refresh]);
-
 
   if (theme_id != null) {
     let themedata = JSON.parse(theme_id);
@@ -155,15 +156,10 @@ const Header = ({ ChatBox }) => {
     });
   }
 
-
   const redirectToAdmin = () => {
-
     if (page != null) {
-
-
-
-      navigate("/admin/"+page)
-      localStorage.removeItem("page")
+      navigate("/admin/" + page);
+      localStorage.removeItem("page");
       window.location.reload();
       localStorage.removeItem("gotodashboard");
       localStorage.removeItem("user_details_goTo");
@@ -174,8 +170,7 @@ const Header = ({ ChatBox }) => {
         localStorage.removeItem("user_role_goTo");
       }, 1000);
     } else {
-
-      navigate(routePath)
+      navigate(routePath);
 
       window.location.reload();
       localStorage.removeItem("gotodashboard");
@@ -187,7 +182,6 @@ const Header = ({ ChatBox }) => {
         localStorage.removeItem("user_role_goTo");
       }, 1000);
     }
-
   };
 
   //  BROKER LOGIN
@@ -195,28 +189,32 @@ const Header = ({ ChatBox }) => {
     if (check) {
       loginWithApi(brokerid, UserDetails);
     } else {
-      dispatch(TRADING_OFF_USER({
-        user_id: user_details.user_id, device: CheckUser, network_ip: ip
-        , token: user_details.token
-      }))
+      dispatch(
+        TRADING_OFF_USER({
+          user_id: user_details.user_id,
+          device: CheckUser,
+          network_ip: ip,
+          token: user_details.token,
+        })
+      )
         .unwrap()
         .then((response) => {
           if (response.status) {
-            setrefresh(!refresh)
+            setrefresh(!refresh);
           }
         });
-
     }
-
-
-
   };
 
   //  GET_USER_DETAILS
   const fetchUserProfile = async () => {
     try {
-      const userId = gotodashboard ? UserNamego_localstg.user_id : user_details.user_id;
-      const token = gotodashboard ? UserNamego_localstg.token : user_details.token;
+      const userId = gotodashboard
+        ? UserNamego_localstg.user_id
+        : user_details.user_id;
+      const token = gotodashboard
+        ? UserNamego_localstg.token
+        : user_details.token;
 
       const response = await dispatch(
         User_Profile({
@@ -226,30 +224,36 @@ const Header = ({ ChatBox }) => {
       ).unwrap();
 
       if (response.status) {
-
         if (response.data.ActiveStatus == "0") {
           localStorage.clear();
           window.location.reload();
-
         }
-        localStorage.setItem("servicegivenmonth", response.data.service_given_month ? response.data.service_given_month : "0")
+        localStorage.setItem(
+          "servicegivenmonth",
+          response.data.service_given_month
+            ? response.data.service_given_month
+            : "0"
+        );
 
-
-        localStorage.setItem("broker", response.data.broker ? response.data.broker : "0")
+        localStorage.setItem(
+          "broker",
+          response.data.broker ? response.data.broker : "0"
+        );
 
         setUserDetails(response.data);
       } else {
-        if ((response.msg === "Unauthorized!" || response.msg === "No token provided!!") && !gotodashboard) {
-
+        if (
+          (response.msg === "Unauthorized!" ||
+            response.msg === "No token provided!!") &&
+          !gotodashboard
+        ) {
           localStorage.clear();
           window.location.reload();
         } else {
-          console.warn('Unexpected response:', response);
+          console.warn("Unexpected response:", response);
         }
       }
-    } catch (error) {
-
-    }
+    } catch (error) {}
   };
 
   //  GET_USER_DETAILS
@@ -259,17 +263,18 @@ const Header = ({ ChatBox }) => {
         .unwrap()
         .then((response) => {
           if (response.status) {
-            SetMessageData({ loading: false, data: response.data })
+            SetMessageData({ loading: false, data: response.data });
           }
         });
     }
-
   };
 
   //  For Show Notfication
   const Notfication = async () => {
     if (user_role == "ADMIN") {
-      await dispatch(GET_HELPS({ user_id: user_details.user_id, token: user_details.token }))
+      await dispatch(
+        GET_HELPS({ user_id: user_details.user_id, token: user_details.token })
+      )
         .unwrap()
         .then((response) => {
           if (response.status) {
@@ -286,12 +291,11 @@ const Header = ({ ChatBox }) => {
         });
     }
   };
- 
+
   const ClearSession = async () => {
     var decoded = jwt_decode(user_details.token);
 
     if (decoded.exp * 1000 < new Date().getTime()) {
-
       const request = {
         userId: user_details.user_id,
         Device: CheckUser,
@@ -322,22 +326,20 @@ const Header = ({ ChatBox }) => {
   };
 
   const CompanyName = async () => {
-    await dispatch(Get_Company_Logo()).unwrap()
+    await dispatch(Get_Company_Logo())
+      .unwrap()
       .then((response) => {
         if (response.status) {
-
-          setLogo(response.data[0].logo)
+          setLogo(response.data[0].logo);
           $(".Company_logo").html(response.data && response.data[0].panel_name);
           // $(".logo-abbr1").html(response.data && response.data[0].logo);
           // $(".brand-title").html(response.data && response.data[0].logo);
 
-
-          $(".set_Favicon")
+          $(".set_Favicon");
         }
-      })
-  }
+      });
+  };
 
- 
 
   return (
     <div className="header-container">
@@ -346,12 +348,16 @@ const Header = ({ ChatBox }) => {
         <div className="header-content">
           <nav className="navbar navbar-expand">
             <div className="collapse navbar-collapse justify-content-between">
-        
               <div className="header-left">
                 {user_role === "USER" && UserDetails.license_type != 1 ? (
                   <>
                     <div className="headaer-title">
-                      <h3 className="font-w400 mb-0 pe-1" style={{marginLeft:"15px"}}>Api Login </h3>
+                      <h3
+                        className="font-w400 mb-0 pe-1"
+                        style={{ marginLeft: "15px" }}
+                      >
+                        Api Login{" "}
+                      </h3>
                     </div>
 
                     <div className="Api Login">
@@ -375,15 +381,13 @@ const Header = ({ ChatBox }) => {
                       </label>
                     </div>
                   </>
-                ) : ("")}
+                ) : (
+                  ""
+                )}
               </div>
 
-
               <ul className="navbar-nav header-right">
-
                 {gotodashboard != null ? (
-
-
                   <li className="nav-item dropdown header-profile">
                     <>
                       <li className="nav-item dropdown gotodashboard">
@@ -397,12 +401,13 @@ const Header = ({ ChatBox }) => {
                       </li>
                     </>
                   </li>
-                ) : ("")}
-
+                ) : (
+                  ""
+                )}
 
                 <>
-                  {user_role === "ADMIN" || user_role === "USER" || (gotodashboard && user_role_goTo == "USER") ?
-
+                  {user_role === "ADMIN" ||
+                  (gotodashboard && user_role_goTo == "USER") ? (
                     <li className="nav-item dropdown header-profile me-2">
                       <button
                         className=" btn btn-primary px-2"
@@ -411,48 +416,54 @@ const Header = ({ ChatBox }) => {
                         Set API Key
                       </button>
                     </li>
-                    : ""
-                  }
+                  ) : (
+                    ""
+                  )}
 
-
+                  {user_role === "USER" && UserDetails.license_type == "2" ? (
+                    <li className="nav-item dropdown header-profile me-2">
+                      <button
+                        className=" btn btn-primary px-2"
+                        onClick={() => setshowModal(true)}
+                      >
+                        Set API Key
+                      </button>
+                    </li>
+                  ) : (
+                    ""
+                  )}
 
                   <li className="nav-item dropdown header-profile user-name me-2">
-                    {UserNamego_localstg != null ?
+                    {UserNamego_localstg != null ? (
                       // <h4 className="text-dark border-1 mb-0">{UserNamego_localstg.UserName}</h4>
 
-                      <button className=" btn btn-primary px-2">{UserNamego_localstg.UserName}</button>
-                      :
+                      <button className=" btn btn-primary px-2">
+                        {UserNamego_localstg.UserName}
+                      </button>
+                    ) : (
                       // <h4 className="text-dark border-1 mb-0">{user_details.UserName}</h4>
-                      <button className=" btn btn-primary px-2">{user_details.UserName}</button>
-
-                    }
+                      <button className=" btn btn-primary px-2">
+                        {user_details.UserName}
+                      </button>
+                    )}
                   </li>
-
-
                 </>
-
 
                 {user_role === "ADMIN" ? (
                   <>
                     <Notification status="1" NotificationData={getAllClients} />
                   </>
+                ) : user_role === "USER" ? (
+                  <>
+                    <Notification status="2" NotificationData={messageData} />
+                  </>
                 ) : (
-                  user_role === "USER" ? (
-                    <>
-                      <Notification status="2" NotificationData={messageData} />
-
-                    </>
-                  ) : (
-                    ""
-                  )
+                  ""
                 )}
-
 
                 <li className="nav-item dropdown header-profile ">
                   <DropDown />
                 </li>
-
-
               </ul>
             </div>
           </nav>

@@ -665,6 +665,8 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
     axios(config)
         .then(async (response) => {
             fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
+              
+              
                 if (err) {
                     return console.log(err);
                 }

@@ -3200,11 +3200,7 @@ app.get("/remain_get_token",async (req,res)=>{
     
 
     const categoryResult = await categorie.aggregate(pipeline);
-    //const matchingElements = categoryResult.filter(item => item.segment === "FO");
-
-    // console.log('Matching elements:', matchingElements[0]._id);
-    // res.send("done");
-    // return
+    
     var axios = require('axios');
     var config = {
       method: 'get',
@@ -3222,66 +3218,11 @@ app.get("/remain_get_token",async (req,res)=>{
         let count = 0
        await response.data.forEach(async(item) => {
 
-            // function findRepeatedElements(array) {
-            //   const frequencyMap = {};
-            //   const repeatedElements = [];
-
-            //   array.forEach(element => {
-            //     if (frequencyMap[element.instrumenttype]) {
-            //       frequencyMap[element.instrumenttype]++;
-            //       if (frequencyMap[element.instrumenttype] === 2) {
-            //         repeatedElements.push(element.instrumenttype);
-            //       }
-            //     } else {
-            //       frequencyMap[element.instrumenttype] = 1;
-            //     }
-            //   });
-
-            //   return repeatedElements;
-            // }
-
-            // const inputArray = response.data;
-            // const repeatedElements = findRepeatedElements(inputArray);
-
-        
-
+          
            if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'||item.instrumenttype == '' ){ 
           
 
 
-
-            // if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
-            //   count++
-            //   // console.log('item - CO ' + count + ' ', item)
-            //   const matchingElements = categoryResult.filter(item => item.segment === "CO");
-            //   const category_id = matchingElements[0]._id
-
-
-            //   services.create({
-            //     name: item.name,
-            //     instrument_token: item.token,
-            //     zebu_token: item.symbol,
-            //     kotak_token: "",
-            //     instrumenttype: item.instrumenttype,
-            //     exch_seg: item.exch_seg,
-            //     lotsize: item.lotsize,
-            //     categorie_id: category_id,
-            //     unique_column: item.name + '_' + category_id
-            //   })
-            //     .then((createdServices) => {
-            //       console.log('User created and saved:', createdServices._id)
-            //     })
-            //     .catch((err) => {
-            //       try {
-            //         console.log('Error creating and saving user:', err);
-            //       } catch (e) {
-            //         console.log("duplicate key")
-            //       }
-
-            //     });
-
-
-            // }
 
             if (item.instrumenttype == '' && item.exch_seg=="BSE") {
               count++
@@ -3683,7 +3624,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
 
-      res.send("okkkkkk")
+     return res.send("okkkkkk")
 
 
       });

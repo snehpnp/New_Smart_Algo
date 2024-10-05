@@ -18,12 +18,12 @@ let reconnectAttempt = 0;
 const maxReconnectAttempts = 10;
 const reconnectInterval = 5000; // Initial reconnect interval in ms
 
-let ws;
-const url = "wss://ws1.aliceblueonline.com/NorenWS/"
+
+
 
 const Alice_Socket = async () => {
     var rr = 0;
-    
+    const url = "wss://ws1.aliceblueonline.com/NorenWS/"
     var socket = null
     var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
     if (!broker_infor) {
@@ -41,7 +41,6 @@ const Alice_Socket = async () => {
             }
         })
     }
-    // Display fetched documents
 
     var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
 
@@ -53,6 +52,7 @@ const Alice_Socket = async () => {
     var type = { "loginType": "API" }
 
     if (broker_infor.user_id !== undefined && broker_infor.access_token !== undefined && broker_infor.trading_status == "on") {
+   
         try {
           
             await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
@@ -65,7 +65,108 @@ const Alice_Socket = async () => {
 
 
                 if (res.data.stat == "Ok") {
-                  openSocketConnection(channelList , userid , userSession1 )
+
+                    try {
+                      const ws = new WebSocket(url);
+                      ws.onopen = function () {
+                        var encrcptToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession1).toString()).toString();
+                        var initCon = {
+                          susertoken: encrcptToken,
+                          t: "c",
+                          actid: userid + "_" + "API",
+                          uid: userid + "_" + "API",
+                          source: "API"
+                        }
+                        ws.send(JSON.stringify(initCon))
+                        reconnectAttempt = 0; 
+                      };
+                      
+                      ws.onmessage = async function (msg) {
+                        const response = JSON.parse(msg.data)
+                        if (response.tk) {
+                          // console.log("Alice Socket - ", response.tk)
+                          // const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk });
+                          // if (Make_startegy_token) {
+                          //   console.log("IFFFFF - ", response.tk)
+                          //   await connectToDB(response.tk, response)
+                          // } else {
+                          //   // console.log("ELSEEEEE - ")
+                          // }
+                         
+                          try {
+                            if (response.lp !== undefined && response.e !== undefined && response.ft !== undefined) {
+                              const now = new Date();
+                              const curtime = `${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}`;
+                              
+                              await stock_live_price.updateOne(
+                                { _id: response.tk },
+                                {
+                                  $set: {
+                                    lp: response.lp,
+                                    exc: response.e,
+                                    curtime: curtime,
+                                    ft: response.ft
+                                  }
+                                },
+                                { upsert: true }
+                              );
+                            }
+                          } catch (error) {
+                         
+                          }
+                          
+                          
+                        } else 
+                      
+                        if (response.s === 'OK') {
+                          let json = {
+                            k: channelList,
+                            t: 't'
+                          };
+                          await ws.send(JSON.stringify(json))
+                          socketObject = ws
+                        }
+                      };
+                      
+                      ws.onerror = function (error) {
+                        console.log(`WebSocket error: ${error}`);
+                      };
+                      
+                      ws.onclose =async function () {
+                      
+
+                        const indiaTimezoneOffset = 330; 
+                        const currentTimeInMinutes = new Date().getUTCHours() * 60 + new Date().getUTCMinutes() + indiaTimezoneOffset;
+                        
+                        const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
+                        const currentMinute = currentTimeInMinutes % 60;
+                      
+                        if (currentHour >= 9 && currentMinute >= 15 && currentHour <= 15 && currentMinute <= 30) {
+                          const result = checkExchangeSegment(channelList , "NFO");
+                          if(result == true){
+                            console.log("NFO Shocket Restart - ", channelList);
+                            await  socketRestart()
+                            return
+                          }
+                        } 
+
+                        if (currentHour >= 9 && currentMinute >= 15 && currentHour <= 23 && currentMinute <= 30) {
+                          const result = checkExchangeSegment(channelList , "MCX");
+                          if(result == true){
+                            console.log("MCX Shocket Restart - ", channelList);
+                            await  socketRestart()
+                            return
+                          }
+                        } 
+
+                        
+                  
+                      };
+
+                    } catch (error) {
+                        console.log("Error Shocket", error);
+
+                    }
                 }
             })
                 .catch((error) => {
@@ -79,139 +180,7 @@ const Alice_Socket = async () => {
 
     }
 
-
-
-
 }
-
-
-function openSocketConnection(channelList ,userid , userSession1) {
-  ws = new WebSocket(url);
-  ws.onopen = function () {
-    var encrcptToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession1).toString()).toString();
-    var initCon = {
-      susertoken: encrcptToken,
-      t: "c",
-      actid: userid + "_" + "API",
-      uid: userid + "_" + "API",
-      source: "API"
-    }
-    ws.send(JSON.stringify(initCon))
-    sendChannelList(channelList);
-   // reconnectAttempt = 0; // Reset reconnect attempts on successful connection
-  };
-  
-  ws.onmessage = async function (msg) {
-    const response = JSON.parse(msg.data)
-    //console.log("response -",response)
-    if (response.tk) {
-      // console.log("response -",response.tk)
-      // const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk });
-      // if (Make_startegy_token) {
-      //   console.log("IFFFFF - ", response.tk)
-      //   await connectToDB(response.tk, response)
-      // } else {
-      //   // console.log("ELSEEEEE - ")
-      // }
-     
-      if (response.lp != undefined) {
-      await stock_live_price.updateOne({_id: response.tk}
-          , {
-            $set: {
-              lp: response.lp,
-              exc: response.e,
-              // sp1: response.sp1 != undefined ? response.sp1: response.lp,
-              // bp1: response.bp1 != undefined ? response.bp1: response.lp,
-              curtime: `${new Date().getHours().toString().padStart(2, '0')}${new Date().getMinutes().toString().padStart(2, '0')}`,
-              ft: response.ft
-            },
-          }, 
-          { upsert: true });
-        
-      }
-    } else {
-      // console.log("else", response)
-    }
-  
-
-  };
-  
-  ws.onerror = function (error) {
-    console.log(`WebSocket error: ${error}`);
-  };
-  
-  ws.onclose =async function () {
-  
-
-    const indiaTimezoneOffset = 330; 
-    const currentTimeInMinutes = new Date().getUTCHours() * 60 + new Date().getUTCMinutes() + indiaTimezoneOffset;
-    
-    const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
-    const currentMinute = currentTimeInMinutes % 60;
-  
-    if (currentHour >= 9  && currentHour <= 16) {
-      const result = checkExchangeSegment(channelList , "NFO");
-      if(result == true){
-        console.log("NFO Shocket Restart - ", channelList);
-        await  socketRestart()
-        return
-      }
-    } 
-
-    if (currentHour >= 9  && currentHour <= 24) {
-      const result = checkExchangeSegment(channelList , "MCX");
-      if(result == true){
-        console.log("MCX Shocket Restart - ", channelList);
-        await  socketRestart()
-        return
-      }
-    } 
-
-    
-    //console.log('Disconnected from the server, attempting to  Alice Socket...');
-     //setTimeout(socketRestart, 30000);
-  };
-
-}
-
-
-
-// Function to send the current channel list
-function sendChannelList(channelList) {
-  if (ws && ws.readyState === WebSocket.OPEN) {
-      const json = {
-          k: channelList,
-          t: 't'
-      };
-      ws.send(JSON.stringify(json));  // Send channel list to server
-      console.log("Channel list sent:", channelList);
-  } else {
-      console.log("WebSocket is not open. Cannot send channel list.");
-  }
-}
-
-
-// Function to dynamically update the channelList and send it
-function updateChannelAndSend(newChannel) {
- // channelList += newChannel;  // Add the new channel to the existing list
-  console.log("Updated channelList:", newChannel);
-  sendChannelList(newChannel);  // Send updated channel list
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const getSocket = () => {
   return socketObject;
@@ -221,7 +190,6 @@ const socketRestart = async () => {
   //console.log("socketRestart")
   await Alice_Socket()
 };
-
 
 function checkExchangeSegment(input , exchange) {
   if (input.includes(exchange)) {
@@ -300,7 +268,7 @@ async function connectToDB(collectionName,response) {
             //     const insertResult = await collection.insertOne(singleDocument);
             // }
             if (response.lp != undefined && response.v != undefined) {
-            
+              console.log("IFFF ELSE ",collectionName)
                 const customTimestamp = new Date();
                 let singleDocument = {
                   _id: customTimestamp,
@@ -976,4 +944,7 @@ async function createViewM1DAY(collectionName) {
 
 
 
-module.exports = { Alice_Socket, getSocket  , updateChannelAndSend}
+
+
+
+module.exports = { Alice_Socket, getSocket }

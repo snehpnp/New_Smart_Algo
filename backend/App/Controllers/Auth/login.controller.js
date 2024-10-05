@@ -40,7 +40,7 @@ class Login {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });
             }
 
-            if (EmailCheck.Role == "USER") {
+            if (EmailCheck.Role == "USER" && EmailCheck.license_type == "2") {
                 // WHERE LOGIN CHECKgetIPAddress
                 if (device == "APP") {                  //App Login Check
                     if (EmailCheck.AppLoginStatus == 1) {
@@ -290,7 +290,7 @@ class Login {
             }
 
             try {
-                if (EmailCheck.Role == "USER" ) {
+                if (EmailCheck.Role == "USER" && EmailCheck.license_type == "2" ) {
 
                     // WHERE LOGIN CHECK
                     if (Device.toUpperCase() == "APP") {                  //App Login Check

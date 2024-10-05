@@ -18,6 +18,7 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
     const [live_price, setLive_price] = useState(false);
     const [Two_day_client, setTwo_day_client] = useState(false);
     const [getReferAndEarn, setReferAndEarn] = useState(false);
+    const [planPermission, setPlanPermission] = useState(false);
 
 
     const formik = useFormik({
@@ -26,6 +27,10 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
             createstrategy: false,
             tradhistory: false,
             Strategy_plan: false,
+            live_price: false,
+            Two_day_client: false,
+            Refer_Earn: false,
+            Plans: false,
         },
         validate: (values) => {
             const errors = {};
@@ -47,6 +52,7 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
                 "key": showPanelName.key,
                 "domain": showPanelName.rowdata.domain,
                 "Refer_Earn": getReferAndEarn ? 1 : 0,
+                "Plans": planPermission ? 1 : 0
 
             };
 
@@ -79,6 +85,8 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
         setLive_price(!!showPanelName.rowdata?.live_price);
         setTwo_day_client(!!showPanelName.rowdata?.Two_day_client);
         setReferAndEarn(!!showPanelName.rowdata?.Refer_Earn);
+        setPlanPermission(!!showPanelName.rowdata?.Plans);
+
 
     };
 
@@ -89,6 +97,7 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
         setLive_price(false);
         setTwo_day_client(false);
         setReferAndEarn(false);
+        setPlanPermission(false);
 
     };
 
@@ -175,6 +184,19 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
                                         />
                                         <label className="form-check-label" htmlFor='Two_day_client'>
                                             Refer & Earn
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div className={`col-lg-6 my-2`}>
+                                    <div className="col-lg-12 ">
+                                        <input type='checkbox' className="form-check-input"
+                                            name="Plans"
+                                            checked={planPermission}
+                                            onChange={(e) => setPlanPermission(e.target.checked)}
+                                        />
+                                        <label className="form-check-label" htmlFor='Plans'>
+                                           Plans
                                         </label>
                                     </div>
                                 </div>

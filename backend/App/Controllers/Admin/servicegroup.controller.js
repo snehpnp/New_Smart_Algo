@@ -789,8 +789,9 @@ class GroupService {
 
   async Addplans(req, res) {
     try {
-      const { plans } = req.body;
-      const result = await Plansmodel.create(plans);
+
+
+      const result = await Plansmodel.create(req.body.req);
       if (result) {
         return res.send({
           status: true,

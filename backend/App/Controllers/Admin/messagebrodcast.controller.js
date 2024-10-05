@@ -25,7 +25,7 @@ class Message {
 
 
         } catch (error) {
-            console.log("Error in Message brodast Add -", error.model);
+          
             return res.send({ status: false, msg: 'Strategy not exist', data: [] });
 
         }

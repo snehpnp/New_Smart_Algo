@@ -174,7 +174,7 @@ const ServicesList = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(editPlan);
+
 
     dispatch(Edit_Plans(editPlan))
       .unwrap()
@@ -191,13 +191,15 @@ const ServicesList = () => {
     <>
       <Content
         Page_title="Plans"
-        button_status={false}
-        route="/admin/groupservices/add"
+        button_status={true}
+        route="/admin/plan/add"
+        button_title="Add Plan"
+        
       >
-        <div style={styles.container}>
+        <div className="row"  style={styles.container}>
           {GetAllPlans.data &&
             GetAllPlans.data.map((plan, index) => (
-              <Card key={index}>
+              <Card key={index} className="col-3">
                 <img src={plan.image} alt={plan.name} style={styles.image} />
                 <h2 style={styles.title}>{plan.name}</h2>
                 <h4 style={styles.subtitle}>{plan.title}</h4>
@@ -395,7 +397,6 @@ const modalStyles = {
   },
 };
 
-// Updated styles for horizontal scrolling
 const styles = {
   container: {
     display: "flex",
@@ -406,41 +407,48 @@ const styles = {
   },
   image: {
     width: "100%",
-    height: "150px", // Fixed height same as card
+    height: "auto",
+    maxWidth: "250px",
+    maxHeight: "150px",
     objectFit: "cover",
     borderRadius: "8px",
     marginBottom: "15px",
   },
   title: {
-    fontSize: "1.5rem",
-    margin: "10px 0",
+    fontSize: "1.25rem",
     color: "#333",
-    fontWeight: "bold",
+    margin: "10px 0",
   },
   subtitle: {
-    fontSize: "1.2rem",
+    fontSize: "1rem",
+    color: "#555",
     margin: "5px 0",
   },
   description: {
-    fontSize: "1rem",
-    margin: "10px 0",
+    fontSize: "0.9rem",
+    color: "#777",
+    marginBottom: "15px",
   },
   prices: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
-    margin: "10px 0",
-    color: "#555",
-    padding: "0",
-    listStyle: "none",
+    alignItems: "center",
+    gap: "5px",
+    fontSize: "1rem",
+    color: "#333",
   },
   priceItem: {
     margin: "5px 0",
+    display: "flex",
+    alignItems: "center",
+    gap: "5px",
   },
   buttonContainer: {
-    marginTop: "15px",
     display: "flex",
+    justifyContent: "space-around",
+    marginTop: "15px",
   },
+
 };
 
 export default ServicesList;

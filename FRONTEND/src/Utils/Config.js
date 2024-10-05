@@ -1,5 +1,5 @@
 export const react_domain = `${window.location.origin}`;
-// export const react_domain = `https://software.one-algo.com`;
+// export const react_domain = `https://software.algomoneybooster.com`;
 
 
 
@@ -27,6 +27,9 @@ export const base_url = "http://localhost:7700/";
 // export const base_url = "https://software.tradeonn.com/backend/";
 // export const base_url = "https://software.one-algo.com/backend/";
 // export const base_url = "https://software.skwinvestmentadviser.com/backend/";
+
+// export const base_url = "https://software.algomoneybooster.com/backend/";
+
 
 
 

@@ -80,8 +80,8 @@ class AliceBlue {
 
                 const user_login = new user_logs({
                   user_Id: Get_User[0]._id,
-                  login_status: "Admin Trading On",
-                  role: "SUPERADMIN",
+                  trading_status: "Admin Trading On",
+                  role: "ADMIN",
                   device: "WEB",
                   system_ip: getIPAddress(),
                 });

@@ -167,7 +167,7 @@ class OptionChain {
 
     // GET All ROUND TOKEN
     async Get_Option_All_Round_Token(req, res) {
-        console.log("get_symbol_price",req.body)
+
         try {
             const symbol = req.body.symbol;
             const expiry = req.body.expiry;
@@ -178,7 +178,6 @@ class OptionChain {
 
             const get_symbol_price = await Get_Option_Chain_modal.findOne({ symbol: symbol })
 
-            console.log("get_symbol_price",get_symbol_price)
 
             if (get_symbol_price != undefined) {
                 price = parseInt(get_symbol_price.price);
@@ -243,9 +242,9 @@ class OptionChain {
             ]
 
             const result = await Alice_token.aggregate(pipeline2);
-            // console.log("result ",result)
+      
             const resultStrike = await Alice_token.aggregate(pipeline3);
-            console.log("resultStrike ",resultStrike)
+  
             const final_data = [];
             var channelstr = ""
             if (result.length > 0) {

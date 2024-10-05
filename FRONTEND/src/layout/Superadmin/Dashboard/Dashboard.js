@@ -1,345 +1,372 @@
-import React from 'react'
-import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { All_Panel_List } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
-import { useLocation, useParams } from 'react-router-dom'
+import React from "react";
+import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { All_Panel_List } from "../../../ReduxStore/Slice/Superadmin/SuperAdminSlice";
+import { useLocation, useParams } from "react-router-dom";
 
 const Dashboard = () => {
-
-  const location = useLocation()
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const [AllData, setAllData] = useState({ loading: true, data: [] });
-
-
-
-  const activeUsersCount = AllData.data.filter(user => user.is_active).length;
-  const inActiveUserCount = AllData.data.filter(user => user.is_expired).length;
-
+  const [activeUsersCount, setActiveUsersCount] = useState(0);
+  const [inActiveUserCount, setInActiveUserCount] = useState(0);
 
   const data = async () => {
-    await dispatch(All_Panel_List()).unwrap()
+    await dispatch(All_Panel_List())
+      .unwrap()
       .then((response) => {
+        const activeUsers = response.data.filter(
+          (user) => user.is_active === 0
+        ).length;
+        const inActiveUsers = response.data.filter(
+          (user) => user.is_active === 1
+        ).length;
+
+        setActiveUsersCount(activeUsers);
+        setInActiveUserCount(inActiveUsers);
+
         setAllData({
           loading: false,
-          data: response.data
+          data: response.data,
         });
       })
-  }
+      .catch((error) => {
+        console.error("Error fetching panel list:", error);
+      });
+  };
+
   useEffect(() => {
-    data()
+    data();
+  }, []);
 
-  }, [])
+  return (
+    <>
+      <div className="content-body">
+        {!AllData.loading && (
+          <div className="container-fluid">
+            {location.pathname == "/super/dashboard" ? (
+              <>
+                <div className="row">
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total Panel</p>
+                            <h3 className="">{AllData.data.length}</h3>
 
-
-
-
-  return <>
-    <div className="content-body" >
-      {/* row */}
-      <div className="container-fluid">
-
-
-
-     
-        {/* --------theme-6-dashboard start--------- */}
-        {/* <div className='theme-6-dashboard'> */}
-
-          {location.pathname == "/super/dashboard" ? <>
-
-            <div className='row'>
-              <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                <div className="widget-stat card  sixth-dashboard-card">
-                  <div className="card-body  p-4">
-                    <div className="media">
-                      <span className="me-3 bg-primary">
-                        <i className="la la-users  text-white" />
-                      </span>
-                      <div className="media-body ">
-                        <p className="mb-1">Total Panel</p>
-                        <h3 className="">{AllData.data.length}</h3>
-
-                        <div className="progress mb-2 bg-primary"></div>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                <div className="widget-stat card  sixth-dashboard-card">
-                  <div className="card-body  p-4">
-                    <div className="media">
-                      <span className="me-3 bg-primary">
-                        <i className="la la-users  text-white" />
-                      </span>
-                      <div className="media-body ">
-                        <p className="mb-1">Total Active Panel</p>
-                        <h3 className="">{activeUsersCount}</h3>
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total Active Panel</p>
+                            <h3 className="">{activeUsersCount}</h3>
 
-                        <div className="progress mb-2 bg-primary"></div>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                <div className="widget-stat card  sixth-dashboard-card">
-                  <div className="card-body  p-4">
-                    <div className="media">
-                      <span className="me-3 bg-primary">
-                        <i className="la la-users  text-white" />
-                      </span>
-                      <div className="media-body ">
-                        <p className="mb-1">Total InActive Panel </p>
-                        <h3 className="">{inActiveUserCount}</h3>
-                        <div className="progress mb-2 bg-primary"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </> :
-            <>
-              <div className='row'>
-                <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                  <div className="widget-stat card  sixth-dashboard-card">
-                    <div className="card-body  p-4">
-                      <div className="media">
-                        <span className="me-3 bg-primary">
-                          <i className="la la-users  text-white" />
-                        </span>
-                        <div className="media-body ">
-                          <p className="mb-1">Total Students</p>
-                          <h3 className="">3280</h3>
-                          <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
-                          <div className="progress mb-2 bg-primary"></div>
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total InActive Panel </p>
+                            <h3 className="">{inActiveUserCount}</h3>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                  <div className="widget-stat card  sixth-dashboard-card">
-                    <div className="card-body  p-4">
-                      <div className="media">
-                        <span className="me-3 bg-primary">
-                          <i className="la la-users  text-white" />
-                        </span>
-                        <div className="media-body ">
-                          <p className="mb-1">Total Students</p>
-                          <h3 className="">3280</h3>
-                          <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
-                          <div className="progress mb-2 bg-primary"></div>
+              </>
+            ) : (
+              <>
+                <div className="row">
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total Students</p>
+                            <h3 className="">3280</h3>
+                            <h6>
+                              <a href="#" className="mb-2">
+                                <i className="fa-regular fa-eye pe-1"></i>View
+                              </a>
+                            </h6>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                  <div className="widget-stat card  sixth-dashboard-card">
-                    <div className="card-body  p-4">
-                      <div className="media">
-                        <span className="me-3 bg-primary">
-                          <i className="la la-users  text-white" />
-                        </span>
-                        <div className="media-body ">
-                          <p className="mb-1">Total Students</p>
-                          <h3 className="">3280</h3>
-                          <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
-                          <div className="progress mb-2 bg-primary"></div>
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total Students</p>
+                            <h3 className="">3280</h3>
+                            <h6>
+                              <a href="#" className="mb-2">
+                                <i className="fa-regular fa-eye pe-1"></i>View
+                              </a>
+                            </h6>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                  <div className="widget-stat card  sixth-dashboard-card">
-                    <div className="card-body  p-4">
-                      <div className="media">
-                        <span className="me-3 bg-primary">
-                          <i className="la la-users  text-white" />
-                        </span>
-                        <div className="media-body ">
-                          <p className="mb-1">Total Students</p>
-                          <h3 className="">3280</h3>
-                          <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
-                          <div className="progress mb-2 bg-primary"></div>
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total Students</p>
+                            <h3 className="">3280</h3>
+                            <h6>
+                              <a href="#" className="mb-2">
+                                <i className="fa-regular fa-eye pe-1"></i>View
+                              </a>
+                            </h6>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                  <div className="widget-stat card  sixth-dashboard-card">
-                    <div className="card-body  p-4">
-                      <div className="media">
-                        <span className="me-3 bg-primary">
-                          <i className="la la-users  text-white" />
-                        </span>
-                        <div className="media-body ">
-                          <p className="mb-1">Total Students</p>
-                          <h3 className="">3280</h3>
-                          <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
-                          <div className="progress mb-2 bg-primary"></div>
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total Students</p>
+                            <h3 className="">3280</h3>
+                            <h6>
+                              <a href="#" className="mb-2">
+                                <i className="fa-regular fa-eye pe-1"></i>View
+                              </a>
+                            </h6>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                  <div className="widget-stat card  sixth-dashboard-card">
-                    <div className="card-body  p-4">
-                      <div className="media">
-                        <span className="me-3 bg-primary">
-                          <i className="la la-users  text-white" />
-                        </span>
-                        <div className="media-body ">
-                          <p className="mb-1">Total Students</p>
-                          <h3 className="">3280</h3>
-                          <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
-                          <div className="progress mb-2 bg-primary"></div>
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total Students</p>
+                            <h3 className="">3280</h3>
+                            <h6>
+                              <a href="#" className="mb-2">
+                                <i className="fa-regular fa-eye pe-1"></i>View
+                              </a>
+                            </h6>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total Students</p>
+                            <h3 className="">3280</h3>
+                            <h6>
+                              <a href="#" className="mb-2">
+                                <i className="fa-regular fa-eye pe-1"></i>View
+                              </a>
+                            </h6>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-                <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                  <div className="widget-stat card  sixth-dashboard-card">
-                    <div className="card-body  p-4">
-                      <div className="media">
-                        <span className="me-3 bg-primary">
-                          <i className="la la-users  text-white" />
-                        </span>
-                        <div className="media-body ">
-                          <p className="mb-1">Total Students</p>
-                          <h3 className="">3280</h3>
-                          <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
-                          <div className="progress mb-2 bg-primary"></div>
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total Students</p>
+                            <h3 className="">3280</h3>
+                            <h6>
+                              <a href="#" className="mb-2">
+                                <i className="fa-regular fa-eye pe-1"></i>View
+                              </a>
+                            </h6>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total Students</p>
+                            <h3 className="">3280</h3>
+                            <h6>
+                              <a href="#" className="mb-2">
+                                <i className="fa-regular fa-eye pe-1"></i>View
+                              </a>
+                            </h6>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total Students</p>
+                            <h3 className="">3280</h3>
+                            <h6>
+                              <a href="#" className="mb-2">
+                                <i className="fa-regular fa-eye pe-1"></i>View
+                              </a>
+                            </h6>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total Students</p>
+                            <h3 className="">3280</h3>
+                            <h6>
+                              <a href="#" className="mb-2">
+                                <i className="fa-regular fa-eye pe-1"></i>View
+                              </a>
+                            </h6>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total Students</p>
+                            <h3 className="">3280</h3>
+                            <h6>
+                              <a href="#" className="mb-2">
+                                <i className="fa-regular fa-eye pe-1"></i>View
+                              </a>
+                            </h6>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
+                    <div className="widget-stat card  sixth-dashboard-card">
+                      <div className="card-body  p-4">
+                        <div className="media">
+                          <span className="me-3 bg-primary">
+                            <i className="la la-users  text-white" />
+                          </span>
+                          <div className="media-body ">
+                            <p className="mb-1">Total Students</p>
+                            <h3 className="">3280</h3>
+                            <h6>
+                              <a href="#" className="mb-2">
+                                <i className="fa-regular fa-eye pe-1"></i>View
+                              </a>
+                            </h6>
+                            <div className="progress mb-2 bg-primary"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                  <div className="widget-stat card  sixth-dashboard-card">
-                    <div className="card-body  p-4">
-                      <div className="media">
-                        <span className="me-3 bg-primary">
-                          <i className="la la-users  text-white" />
-                        </span>
-                        <div className="media-body ">
-                          <p className="mb-1">Total Students</p>
-                          <h3 className="">3280</h3>
-                          <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
-                          <div className="progress mb-2 bg-primary"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                  <div className="widget-stat card  sixth-dashboard-card">
-                    <div className="card-body  p-4">
-                      <div className="media">
-                        <span className="me-3 bg-primary">
-                          <i className="la la-users  text-white" />
-                        </span>
-                        <div className="media-body ">
-                          <p className="mb-1">Total Students</p>
-                          <h3 className="">3280</h3>
-                          <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
-                          <div className="progress mb-2 bg-primary"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                  <div className="widget-stat card  sixth-dashboard-card">
-                    <div className="card-body  p-4">
-                      <div className="media">
-                        <span className="me-3 bg-primary">
-                          <i className="la la-users  text-white" />
-                        </span>
-                        <div className="media-body ">
-                          <p className="mb-1">Total Students</p>
-                          <h3 className="">3280</h3>
-                          <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
-                          <div className="progress mb-2 bg-primary"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                  <div className="widget-stat card  sixth-dashboard-card">
-                    <div className="card-body  p-4">
-                      <div className="media">
-                        <span className="me-3 bg-primary">
-                          <i className="la la-users  text-white" />
-                        </span>
-                        <div className="media-body ">
-                          <p className="mb-1">Total Students</p>
-                          <h3 className="">3280</h3>
-                          <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
-                          <div className="progress mb-2 bg-primary"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
-                  <div className="widget-stat card  sixth-dashboard-card">
-                    <div className="card-body  p-4">
-                      <div className="media">
-                        <span className="me-3 bg-primary">
-                          <i className="la la-users  text-white" />
-                        </span>
-                        <div className="media-body ">
-                          <p className="mb-1">Total Students</p>
-                          <h3 className="">3280</h3>
-                          <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
-                          <div className="progress mb-2 bg-primary"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>}
-
-        {/* </div> */}
-        {/* --------theme-6-dashboard end--------- */}
-
-
+              </>
+            )}
+          </div>
+        )}
       </div>
-    </div>
-  </>
-}
+    </>
+  );
+};
 
-
-export default Dashboard
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default Dashboard;
 
 //    {/* --------theme-1-dashboard start---------- */}
 //    <div className='theme-1-dashboard' >
@@ -1932,7 +1959,6 @@ export default Dashboard
 //         <div className='theme-7-dashboard'>
 //           <div className='row'>
 
-
 //             <div className="col-xl-2 col-lg-2 col-xxl-2 col-md-4">
 //               <div className="card">
 //                 <div className="card-header border-0 pb-0 align-items-start">
@@ -2452,7 +2478,6 @@ export default Dashboard
 //                 </div>
 //               </div>
 //             </div>
-
 
 //             <div className="col-xl-3 col-xxl-3 col-lg-3 col-sm-6">
 //               <div className="widget-stat card">
