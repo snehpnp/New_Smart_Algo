@@ -33,8 +33,8 @@ class Tradehistory {
       }
 
 
-      let startDateObj = new Date(startDate)
-      let endDateObj = new Date(endDate)
+      let startDateObj = new Date(startDate ? startDate : new Date())
+      let endDateObj = new Date(endDate ? endDate : new Date())
       let stg1
       let ser1
       let serIndex
@@ -65,12 +65,20 @@ class Tradehistory {
       }
 
 
+     
+      // IF startDate and endDate same then add 1 day in endDate
+      if (startDate == startDate) {
+      
+        endDateObj.setDate(endDateObj.getDate() + 1);
+      }
+
+
       const filteredSignals = await MainSignals_modal.aggregate([
         {
           $match: {
-            dt_date: {
-              $gte: startDate,
-              $lte: endDate,
+            createdAt: {
+              $gte:  new Date(startDateObj),
+              $lte:  new Date(endDateObj),
             },
             strategy: stg1,
             trade_symbol: ser1,
@@ -124,9 +132,9 @@ class Tradehistory {
       const filteredSignals_tradesymbols = await MainSignals_modal.aggregate([
         {
           $match: {
-            dt_date: {
-              $gte: startDate,
-              $lte: endDate,
+            createdAt: {
+              $gte:  new Date(startDate),
+              $lte:  new Date(endDate),
             },
             client_persnal_key: client_persnal_key1,
           },
