@@ -1289,9 +1289,9 @@ async function run() {
       const currentTimeInMinutes = new Date().getUTCHours() * 60 + new Date().getUTCMinutes() + indiaTimezoneOffset;
       const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
       const currentMinute = currentTimeInMinutes % 60;
-      if (currentHour >= 9 && currentMinute >= 14 && currentHour <= 15 && currentMinute <= 31) {
+      // if (currentHour >= 9 && currentMinute >= 14 && currentHour <= 15 && currentMinute <= 31) {
         await exitOpentrade()
-      }
+      // }
 
     }
 
