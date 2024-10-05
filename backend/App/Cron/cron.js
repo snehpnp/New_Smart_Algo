@@ -11,8 +11,13 @@ const { logger, getIPAddress } = require('../Helper/logger.helper')
 
 const { Alice_Socket , updateChannelAndSend } = require("../Helper/Alice_Socket");
 
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
+
+
+const { DashboardView, deleteDashboard } = require('../../View/DashboardData')
+const { createView } = require('../../View/Open_position')
+// const { logger, getIPAddress } = require('../Helper/logger.helper')
+// const { Alice_Socket } = require("../Helper/Alice_Socket11");
+
 var dateTime = require('node-datetime');
 var moment = require('moment');
 const db = require('../Models')
@@ -27,10 +32,7 @@ const MainSignals_modal = db.MainSignals
 const token_chain = db.token_chain;
 const stock_live_price = db.stock_live_price;
 
-const { DashboardView, deleteDashboard } = require('../../View/DashboardData')
-const { createView } = require('../../View/Open_position')
-const { logger, getIPAddress } = require('../Helper/logger.helper')
-const { Alice_Socket } = require("../Helper/Alice_Socket11");
+
 
 
 

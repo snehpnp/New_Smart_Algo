@@ -67,23 +67,55 @@ class SuperAdmin {
         }
       );
 
-            return res.send({
-                status: true,
-                msg: "Add License",
-                data: updateResult
-            });
-
-
-        } catch (error) {
-            console.log("Error Add License error-", error);
-            return res.send({
-                status: false,
-                msg: "Add License",
-                data: error
-            });
-        }
+      return res.send({
+        status: true,
+        msg: "Add License",
+        data: updateResult,
+      });
+    } catch (error) {
+      console.log("Error Add License error-", error);
+      return res.send({
+        status: false,
+        msg: "Add License",
+        data: error,
+      });
     }
+  }
 
+  async AddAdjustMonthPanle(req, res) {
+    try {
+      // const { id, license } = req.body
+      const { month } = req.body
+      const currentDate = new Date();
+      const monthsPrior = Number(month); // Change this value to 3, 4, or any other number of months
+      const millisecondsPerMonth = 2629800000; // approximate milliseconds per month
+      const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPerMonth));
+
+      const updateResult = await company_information.updateMany({}
+        , {
+          $set: {
+            month_ago_number: monthsPrior,
+            month_ago_date: datePrior
+          },
+        },
+        { upsert: true });
+
+      return res.send({
+        status: true,
+        msg: "Add month",
+        data: updateResult
+      });
+
+
+    } catch (error) {
+      console.log("Error Add month error-", error);
+      return res.send({
+        status: false,
+        msg: "Add month",
+        data: error
+      });
+    }
+  }
 
   async GetAllClients(req, res) {
     try {
@@ -545,166 +577,276 @@ class SuperAdmin {
         });
       }
 
-      return res.send({
-        status: true,
-        msg: "User fatched succeddfully ",
-        data: findUser,
-      });
+      
+
+
+      const getToMonth = await user.aggregate([
+        { $match: { _id: new ObjectId(id) } },
+        {
+          $lookup: {
+            from: "count_licenses",
+            localField: "_id",
+            foreignField: "user_id",
+            as: "licenses"
+          }
+        },
+        { $unwind: "$licenses" },
+        {
+          $group: {
+            _id: "$_id",
+            totalLicence: { $sum: { $toDouble: "$licenses.license" } },
+            UserName: { $first: "$UserName" },
+            CreateDate: { $first: "$CreateDate" },
+            StartDate: { $first: "$StartDate" },
+            EndDate: { $first: "$EndDate" },
+            licence: { $first: "$licence" },
+
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            UserName: 1,
+            totalLicence: 1,
+            CreateDate: 1,
+            licence: 1,
+            EndDate: 1,
+            StartDate: 1
+          }
+        }
+      ]).exec();
+
+
+
+      const GetCountLicenceDAta = await count_licenses.find({ user_id: id }).sort({ createdAt: -1 })
+
+      return res.send({ status: true, msg: "Get Data", data: getToMonth, data1: GetCountLicenceDAta });
+
     } catch (err) {
-      return res.send({
-        status: false,
-        msg: "Internal server error",
-        data: [],
-      });
+
+      return res.send({ status: false, msg: 'Internal server error', data: [] });
     }
-  }
+}
 
   async UpdateUser(req, res) {
-    try {
-      const {
-        id,
-        FullName,
-        UserName,
-        Email,
-        PhoneNo,
-        superadmin_name,
-        panel_name,
-      } = req.body;
+  try {
+    const {
+      id,
+      FullName,
+      UserName,
+      Email,
+      PhoneNo,
+      superadmin_name,
+      panel_name,
+    } = req.body;
 
-      const data = {
-        FullName: FullName,
-        UserName: UserName,
-        Email: Email,
-        PhoneNo: PhoneNo,
-      };
-      const updateUser = await user.updateOne({ _id: id }, data);
+    const data = {
+      FullName: FullName,
+      UserName: UserName,
+      Email: Email,
+      PhoneNo: PhoneNo,
+    };
+    const updateUser = await user.updateOne({ _id: id }, data);
 
-      if (!updateUser.acknowledged) {
-        return res.send({
-          status: false,
-          msg: "User Not Update some error occer",
-          data: [],
-        });
-      }
-      const superadmin_History = new Superadmin_History({
-        superadmin_name: superadmin_name,
-        panal_name: panel_name,
-        msg: "Super admin Update User",
-      });
-
-      await superadmin_History.save();
-
-      return res.send({
-        status: true,
-        msg: "User Updated Successfully",
-        data: [],
-      });
-    } catch (err) {
+    if (!updateUser.acknowledged) {
       return res.send({
         status: false,
-        msg: "Internal server error",
+        msg: "User Not Update some error occer",
         data: [],
       });
     }
+    const superadmin_History = new Superadmin_History({
+      superadmin_name: superadmin_name,
+      panal_name: panel_name,
+      msg: "Super admin Update User",
+    });
+
+    await superadmin_History.save();
+
+    return res.send({
+      status: true,
+      msg: "User Updated Successfully",
+      data: [],
+    });
+  } catch (err) {
+    return res.send({
+      status: false,
+      msg: "Internal server error",
+      data: [],
+    });
   }
+}
 
   async UserDelete(req, res) {
-    try {
-      const { id, panel_name, superadmin_name } = req.body;
-      if (!id) {
-        return res.send({ status: false, msg: "Id is Not Found", data: [] });
-      }
-
-      const deleteUser = await user.deleteMany({ _id: id });
-      await count_licenses.deleteMany({ user_id: id });
-      await strategy_client.deleteMany({ user_id: id });
-      await user_activity_logs.deleteMany({ user_id: id });
-      await client_services.deleteMany({ user_id: id });
-      await groupService_User.deleteMany({ user_id: id });
-
-      if (!deleteUser.acknowledged) {
-        return res.send({ status: false, msg: "Invalid User Id", data: [] });
-      }
-
-      const superadmin_History = new Superadmin_History({
-        superadmin_name: superadmin_name,
-        panal_name: panel_name,
-        msg: "Super admin delete User",
-      });
-
-      await superadmin_History.save();
-
-      return res.send({
-        status: true,
-        msg: "User Deleted Successfully ",
-        data: [],
-      });
-    } catch (err) {
-      res.sends({
-        status: false,
-        msg: "internal server error",
-        data: [],
-      });
+  try {
+    const { id, panel_name, superadmin_name } = req.body;
+    if (!id) {
+      return res.send({ status: false, msg: "Id is Not Found", data: [] });
     }
+
+    const deleteUser = await user.deleteMany({ _id: id });
+    await count_licenses.deleteMany({ user_id: id });
+    await strategy_client.deleteMany({ user_id: id });
+    await user_activity_logs.deleteMany({ user_id: id });
+    await client_services.deleteMany({ user_id: id });
+    await groupService_User.deleteMany({ user_id: id });
+
+    if (!deleteUser.acknowledged) {
+      return res.send({ status: false, msg: "Invalid User Id", data: [] });
+    }
+
+    const superadmin_History = new Superadmin_History({
+      superadmin_name: superadmin_name,
+      panal_name: panel_name,
+      msg: "Super admin delete User",
+    });
+
+    await superadmin_History.save();
+
+    return res.send({
+      status: true,
+      msg: "User Deleted Successfully ",
+      data: [],
+    });
+  } catch (err) {
+    res.sends({
+      status: false,
+      msg: "internal server error",
+      data: [],
+    });
   }
+}
 
   async findOneUser(req, res) {
-    try {
-      const { id } = req.body;
+  try {
+    const { id } = req.body;
 
-      if (!id) {
-        return res.send({ status: false, msg: "Id Not Found", data: [] });
-      }
-
-
-
-            const getToMonth = await user.aggregate([
-                { $match: { _id: new ObjectId(id) } },
-                {
-                    $lookup: {
-                        from: "count_licenses",
-                        localField: "_id",
-                        foreignField: "user_id",
-                        as: "licenses"
-                    }
-                },
-                { $unwind: "$licenses" },
-                {
-                    $group: {
-                        _id: "$_id",
-                        totalLicence: { $sum: { $toDouble: "$licenses.license" } },
-                        UserName: { $first: "$UserName" },
-                        CreateDate: { $first: "$CreateDate" },
-                        StartDate: { $first: "$StartDate" },
-                        EndDate: { $first: "$EndDate" },
-                        licence: { $first: "$licence" },
-
-                    }
-                },
-                {
-                    $project: {
-                        _id: 0,
-                        UserName: 1,
-                        totalLicence: 1,
-                        CreateDate: 1,
-                        licence: 1,
-                        EndDate: 1,
-                        StartDate: 1
-                    }
-                }
-            ]).exec();
-
-
-
-            const GetCountLicenceDAta = await count_licenses.find({ user_id: id }).sort({ createdAt: -1 })
-
-            return res.send({ status: true, msg: "Get Data", data: getToMonth ,data1:GetCountLicenceDAta});
-
-        } catch (err) {
-
-            return res.send({ status: false, msg: 'Internal server error', data: [] });
-        }
+    if (!id) {
+      return res.send({ status: false, msg: "Id Not Found", data: [] });
     }
+
+    const getToMonth = await user
+      .aggregate([
+        { $match: { _id: new ObjectId(id) } },
+        {
+          $lookup: {
+            from: "count_licenses",
+            localField: "_id",
+            foreignField: "user_id",
+            as: "licenses",
+          },
+        },
+        { $unwind: "$licenses" },
+        {
+          $group: {
+            _id: "$_id",
+            totalLicence: { $sum: { $toDouble: "$licenses.license" } },
+            UserName: { $first: "$UserName" },
+            CreateDate: { $first: "$CreateDate" },
+            StartDate: { $first: "$StartDate" },
+            EndDate: { $first: "$EndDate" },
+            licence: { $first: "$licence" },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            UserName: 1,
+            totalLicence: 1,
+            CreateDate: 1,
+            licence: 1,
+            EndDate: 1,
+            StartDate: 1,
+          },
+        },
+      ])
+      .exec();
+
+    const GetCountLicenceDAta = await count_licenses
+      .find({ user_id: id })
+      .sort({ createdAt: -1 });
+
+    return res.send({
+      status: true,
+      msg: "Get Data",
+      data: getToMonth,
+      data1: GetCountLicenceDAta,
+    });
+  } catch (err) {
+    return res.send({
+      status: false,
+      msg: "Internal server error",
+      data: [],
+    });
+  }
+}
+
+  async LicenseCut(req, res) {
+  try {
+    const { UserName, licence } = req.body;
+
+    // Find user with the specified username and license type
+    const UserGet = await user
+      .find({ UserName: UserName, license_type: "2" })
+      .select("licence StartDate EndDate");
+
+    if (UserGet.length === 0) {
+      return res.send({
+        status: false,
+        msg: "User Not Found",
+        data: [],
+      });
+    }
+
+    // Find and sort licenses by creation date (descending)
+    const CountLicenseData = await count_licenses
+      .find({ user_id: UserGet[0]._id })
+      .sort({ createdAt: -1 });
+
+    // Calculate the updated license count and new end date
+    let UpdateLicense = UserGet[0].licence - licence;
+    let UpdateEndDate = new Date(UserGet[0].EndDate);
+    UpdateEndDate.setMonth(UpdateEndDate.getMonth() - licence); // Subtract months based on 'licence'
+
+    // Update the user's license and end date
+    await user.updateOne(
+      { _id: UserGet[0]._id },
+      {
+        $set: {
+          licence: UpdateLicense,
+          EndDate: UpdateEndDate,
+        },
+      }
+    );
+
+    // Remove the specified number of licenses from CountLicenseData
+    const licensesToRemove = CountLicenseData.slice(0, licence);
+
+    // Loop over the licenses to remove and delete them from the database
+    for (const license of licensesToRemove) {
+      await count_licenses.deleteOne({ _id: license._id });
+    }
+
+    return res.send({
+      status: true,
+      msg: "License updated and records removed successfully",
+      data: {
+        UpdateLicense,
+        UpdateEndDate,
+        removedLicenses: licensesToRemove,
+      },
+    });
+
+  } catch (err) {
+    return res.send({
+      status: false,
+      msg: "Internal server error",
+      data: [],
+    });
+  }
+}
+  
+  
 }
 
 module.exports = new SuperAdmin();
