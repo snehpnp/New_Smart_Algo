@@ -133,8 +133,8 @@ class Tradehistory {
         {
           $match: {
             createdAt: {
-              $gte:  new Date(startDate),
-              $lte:  new Date(endDate),
+              $gte:  new Date(startDateObj),
+              $lte:  new Date(endDateObj),
             },
             client_persnal_key: client_persnal_key1,
           },
@@ -191,6 +191,7 @@ class Tradehistory {
         return acc;
       }, {});
 
+   
       const trade_symbols_filter = Object.keys(groupedData);
 
       if (filteredSignals.length > 0) {
