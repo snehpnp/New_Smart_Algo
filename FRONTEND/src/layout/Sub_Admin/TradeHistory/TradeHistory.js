@@ -164,6 +164,11 @@ const TradeHistory = () => {
       text: "Signals time",
       formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
+    {
+      dataField: "exit_dt_date",
+      text: "Signals Exit time",
+      formatter: (cell) => <>{cell ? fDateTimeSuffix(cell) : "-"}</>,
+    },
 
     {
       dataField: "trade_symbol",
