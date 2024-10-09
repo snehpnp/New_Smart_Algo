@@ -188,7 +188,7 @@ class License {
   
       const resultLicence = await user_model.aggregate(pip);
   
-       //console.log("resultLicence ", resultLicence[0].total_admin_licence)
+       console.log("resultLicence ", resultLicence)
        // console.log("total_licence ", resultLicence[0].licenses)
       // console.log("remaining_license ", resultLicence[0].remaining_license)
       // console.log("used_licence ", resultLicence[0].used_licence)

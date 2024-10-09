@@ -936,6 +936,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
   };
 
   app.get("/all/brokerview", (req, res) => {
+    DashboardView();
     createViewAlice();
     createViewAngel();
     createViewDhan();
@@ -951,7 +952,6 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
     createViewZebul();
     createViewZerodha();
     createViewIcicidirect();
-    DashboardView();
     createView();
     open_position_excute();
 
