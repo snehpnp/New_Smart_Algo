@@ -2043,6 +2043,28 @@ class Employee {
       });
     }
   }
+
+  async GetLastUserName(req, res) {
+    try{
+
+      let lastUser = await User_model.findOne({}).sort({ _id: -1 }).select("UserName");
+      
+      return res.send({
+        status: true,
+        msg: "Get Last User Name",
+        data: lastUser,
+      });
+
+    }catch(error){
+      console.log("Error in GetLastUserName:", error);
+      return res.status(500).send({
+        status: false,
+        msg: "Internal Server Error",
+        data: [],
+      });
+    }
+  }
+
 }
 
 module.exports = new Employee();

@@ -17,7 +17,9 @@ class Dashboard {
       // Query the view to get the data
       const result = await dashboard_data.find().toArray();
 
-      if ((result, length > 0)) {
+        console.log("Dashboard Data:", result);
+
+      if ((result.length > 0)) {
         return res.send({
           status: true,
           msg: "Get Dashboard Data",

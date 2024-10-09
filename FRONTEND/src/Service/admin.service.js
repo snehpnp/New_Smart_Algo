@@ -1070,3 +1070,15 @@ export async function EditPlans(data, token) {
     }
 }
 
+export async function GetLastUserName() {
+    try {
+        const res = await axios.get(`${Config.base_url}get/last/username`,{
+            
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}

@@ -3,6 +3,7 @@ import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form1
 import { useFormik } from "formik";
 import * as valid_err from "../../../../Utils/Common_Messages";
 import { useNavigate, useLocation } from "react-router-dom";
+
 import {
   Email_regex,
   Mobile_regex,
@@ -19,7 +20,7 @@ import {
 } from "../../../../ReduxStore/Slice/Admin/GroupServiceSlice";
 import { All_Api_Info_List } from "../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice";
 import * as Config from "../../../../Utils/Config";
-import { Add_User } from "../../../../ReduxStore/Slice/Admin/userSlice";
+import { Add_User,GetLastCretedUserName } from "../../../../ReduxStore/Slice/Admin/userSlice";
 import toast, { Toaster } from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 import "../../../../App.css";
@@ -33,17 +34,18 @@ const AddClient = () => {
   const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
   const [ShowAllStratagy, setShowAllStratagy] = useState(false);
   const [first, setfirst] = useState([]);
-  const [AllGroupServices, setAllGroupServices] = useState({
-    loading: true,
-    data: [],
-  });
   const [Addsubadmin, setAddsubadmin] = useState({ loading: true, data: [] });
   const [AllStrategy, setAllStrategy] = useState({ loading: true, data: [] });
   const [GetServices, setGetServices] = useState({ loading: true, data: [] });
   const [selectedPlan, setSelectedPlan] = useState("");
   const [admin_permission, setAdmin_permission] = useState([]);
+  const [GetAllPlans, setAllPlans] = useState({ loading: true, data: [] });
+  const [LastUSerName, setLastUSerName] = useState("");
+  const [AllGroupServices, setAllGroupServices] = useState({
+    loading: true,
+    data: [],
+  });
 
-  
   const isValidEmail = (email) => {
     return Email_regex(email);
   };
@@ -53,9 +55,32 @@ const AddClient = () => {
   const isValidName = (mobile) => {
     return Name_regex(mobile);
   };
-  const [GetAllPlans, setAllPlans] = useState({ loading: true, data: [] });
-
   const selector = useSelector((state) => state.DashboardSlice);
+
+  useEffect(() => {
+    GetAllPlansData();
+    let Service_Month_Arr = [];
+    for (let index = 1; index < 2; index++) {
+      Service_Month_Arr.push({
+        month: index,
+        endDate: `${index} Month Licence Expired On ${
+          new Date(
+            new Date().getFullYear(),
+            new Date().getMonth() + index,
+            new Date().getDate()
+          )
+            .toString()
+            .split("00:00:00")[0]
+        }`,
+      });
+    }
+    setfirst(Service_Month_Arr);
+  }, []);
+
+  useEffect(() => {
+    data();
+    Get_Last_User_Name()
+  }, []);
 
   const GetAllPlansData = async () => {
     await dispatch(Get_All_Plans())
@@ -72,6 +97,7 @@ const AddClient = () => {
 
   const formik = useFormik({
     initialValues: {
+      LastUsername:"",
       username: null,
       fullName: null,
       email: null,
@@ -210,6 +236,145 @@ const AddClient = () => {
   });
 
   useEffect(() => {
+    if (formik.values.broker === "1" || formik.values.broker === 1) {
+      formik.setFieldValue("api_key", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "2" || formik.values.broker === 2) {
+      formik.setFieldValue("api_key", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("client_code", "null");
+      formik.setFieldValue("api_type", "null");
+    }
+    if (formik.values.broker === "3" || formik.values.broker === 3) {
+      formik.setFieldValue("api_key", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("client_code", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "4" || formik.values.broker === 4) {
+      formik.setFieldValue("api_secret", "null");
+      formik.setFieldValue("app_id", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "5" || formik.values.broker === 5) {
+      formik.setFieldValue("api_secret", "null");
+      formik.setFieldValue("api_key", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "6" || formik.values.broker === 6) {
+      formik.setFieldValue("app_id", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "7" || formik.values.broker === 7) {
+      formik.setFieldValue("app_key", "null");
+    }
+    if (formik.values.broker === "8" || formik.values.broker === 8) {
+      formik.setFieldValue("app_id", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("client_code", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "9" || formik.values.broker === 9) {
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("api_type", "null");
+    }
+    if (formik.values.broker === "10" || formik.values.broker === 10) {
+      formik.setFieldValue("app_id", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("client_code", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "11" || formik.values.broker === 11) {
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "12" || formik.values.broker === 12) {
+      formik.setFieldValue("api_secret", "null");
+      formik.setFieldValue("app_id", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("client_code", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "13" || formik.values.broker === 13) {
+      formik.setFieldValue("api_key", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("client_code", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "14" || formik.values.broker === 14) {
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("client_code", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "15" || formik.values.broker === 15) {
+      formik.setFieldValue("app_id", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("client_code", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "19" || formik.values.broker === 19) {
+      formik.setFieldValue("app_id", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("client_code", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "20" || formik.values.broker === 20) {
+      formik.setFieldValue("app_id", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "21" || formik.values.broker === 21) {
+      formik.setFieldValue("app_id", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("client_code", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.broker === "26" || formik.values.broker === 26) {
+      formik.setFieldValue("app_id", "null");
+      formik.setFieldValue("app_key", "null");
+      formik.setFieldValue("client_code", "null");
+      formik.setFieldValue("api_type", "null");
+      formik.setFieldValue("demat_userid", "null");
+    }
+    if (formik.values.licence === "2" || formik.values.licence === 2) {
+      formik.setFieldValue("fromDate", null);
+      formik.setFieldValue("todate", null);
+    }
+    if (formik.values.licence === "1" || formik.values.licence === 1) {
+      formik.setFieldValue("tomonth", null);
+      formik.setFieldValue("broker", null);
+    }
+    if (formik.values.licence === "0" || formik.values.licence === 0) {
+      formik.setFieldValue("fromDate", null);
+      formik.setFieldValue("todate", null);
+    }
+  }, [formik.values.broker, formik.values.licence]);
+
+  useEffect(() => {
+    getGroupeServics();
+  }, [formik.values.groupservice]);
+
+  useEffect(() => {
     formik.setFieldValue(
       "username",
       (location.state !== null && location.state.UserName) || ""
@@ -244,27 +409,30 @@ const AddClient = () => {
     }
   };
 
-  useEffect(() => {
-    GetAllPlansData();
-    let Service_Month_Arr = [];
-    for (let index = 1; index < 2; index++) {
-      Service_Month_Arr.push({
-        month: index,
-        endDate: `${index} Month Licence Expired On ${
-          new Date(
-            new Date().getFullYear(),
-            new Date().getMonth() + index,
-            new Date().getDate()
-          )
-            .toString()
-            .split("00:00:00")[0]
-        }`,
+  const Get_Last_User_Name = async () => {
+    await dispatch(GetLastCretedUserName())
+      .unwrap()
+      .then((response) => {
+        if(response.status){
+        setLastUSerName(response.data.UserName);
+        formik.setFieldValue("LastUsername", response.data.UserName);
+        }
+      })
+      .catch((error) => {
+          console.log('Error fetching last created user:', error); 
       });
-    }
-    setfirst(Service_Month_Arr);
-  }, []);
+};
+
 
   let fields = [
+    {
+      name: "LastUsername",
+      label: "Last Username",
+      type: "lastusername",
+      label_size: 12,
+      col_size: 6,
+      disable: true,
+    },
     {
       name: "username",
       label: "Username",
@@ -611,141 +779,6 @@ const AddClient = () => {
     },
   ];
 
-  useEffect(() => {
-    if (formik.values.broker === "1" || formik.values.broker === 1) {
-      formik.setFieldValue("api_key", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "2" || formik.values.broker === 2) {
-      formik.setFieldValue("api_key", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("client_code", "null");
-      formik.setFieldValue("api_type", "null");
-    }
-    if (formik.values.broker === "3" || formik.values.broker === 3) {
-      formik.setFieldValue("api_key", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("client_code", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "4" || formik.values.broker === 4) {
-      formik.setFieldValue("api_secret", "null");
-      formik.setFieldValue("app_id", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "5" || formik.values.broker === 5) {
-      formik.setFieldValue("api_secret", "null");
-      formik.setFieldValue("api_key", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "6" || formik.values.broker === 6) {
-      formik.setFieldValue("app_id", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "7" || formik.values.broker === 7) {
-      formik.setFieldValue("app_key", "null");
-    }
-    if (formik.values.broker === "8" || formik.values.broker === 8) {
-      formik.setFieldValue("app_id", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("client_code", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "9" || formik.values.broker === 9) {
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("api_type", "null");
-    }
-    if (formik.values.broker === "10" || formik.values.broker === 10) {
-      formik.setFieldValue("app_id", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("client_code", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "11" || formik.values.broker === 11) {
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "12" || formik.values.broker === 12) {
-      formik.setFieldValue("api_secret", "null");
-      formik.setFieldValue("app_id", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("client_code", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "13" || formik.values.broker === 13) {
-      formik.setFieldValue("api_key", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("client_code", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "14" || formik.values.broker === 14) {
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("client_code", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "15" || formik.values.broker === 15) {
-      formik.setFieldValue("app_id", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("client_code", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "19" || formik.values.broker === 19) {
-      formik.setFieldValue("app_id", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("client_code", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "20" || formik.values.broker === 20) {
-      formik.setFieldValue("app_id", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "21" || formik.values.broker === 21) {
-      formik.setFieldValue("app_id", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("client_code", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.broker === "26" || formik.values.broker === 26) {
-      formik.setFieldValue("app_id", "null");
-      formik.setFieldValue("app_key", "null");
-      formik.setFieldValue("client_code", "null");
-      formik.setFieldValue("api_type", "null");
-      formik.setFieldValue("demat_userid", "null");
-    }
-    if (formik.values.licence === "2" || formik.values.licence === 2) {
-      formik.setFieldValue("fromDate", null);
-      formik.setFieldValue("todate", null);
-    }
-    if (formik.values.licence === "1" || formik.values.licence === 1) {
-      formik.setFieldValue("tomonth", null);
-      formik.setFieldValue("broker", null);
-    }
-    if (formik.values.licence === "0" || formik.values.licence === 0) {
-      formik.setFieldValue("fromDate", null);
-      formik.setFieldValue("todate", null);
-    }
-  }, [formik.values.broker, formik.values.licence]);
-
   const getGroupeServics = async () => {
     if (formik.values.groupservice) {
       await dispatch(
@@ -762,9 +795,6 @@ const AddClient = () => {
         });
     }
   };
-  useEffect(() => {
-    getGroupeServics();
-  }, [formik.values.groupservice]);
 
   const data = async () => {
     await dispatch(GET_ALL_GROUP_SERVICES())
@@ -820,9 +850,6 @@ const AddClient = () => {
         }
       });
   };
-  useEffect(() => {
-    data();
-  }, []);
 
   if (selector && selector.permission) {
     if (
@@ -861,6 +888,7 @@ const AddClient = () => {
           btn_name="Add Client"
           fromDate={formik.values.fromDate}
           toDate={formik.values.todate}
+          LastUSerName={LastUSerName}
           additional_field={
             <>
               <div>

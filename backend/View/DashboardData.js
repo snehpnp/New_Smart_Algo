@@ -27,9 +27,8 @@ async function DashboardView() {
 
     const pipeline = [
       {
-        $match: {
-          $and: [{ Role: "USER" }],
-        },
+        $match: { Role: "USER" }
+        
       },
 
       {
@@ -304,7 +303,6 @@ async function DashboardView() {
               ],
             },
           },
-
           total_expired_two_days: {
             $sum: {
               $cond: [
@@ -321,7 +319,6 @@ async function DashboardView() {
               ],
             },
           },
-
           used_licence: {
             $sum: {
               $cond: [
