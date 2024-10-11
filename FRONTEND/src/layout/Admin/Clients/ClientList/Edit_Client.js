@@ -976,10 +976,7 @@ const EditClient = () => {
       });
   };
 
-  console.log(
-    "selectedStrategies",
-    admin_permission.data && admin_permission.data[0].Plans
-  );
+ 
 
   return (
     <>
