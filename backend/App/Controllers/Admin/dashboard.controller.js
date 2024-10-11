@@ -14,10 +14,9 @@ class Dashboard {
   // ADMIN DASHBOARD
   async AdminDashboard(req, res) {
     try {
-      // Query the view to get the data
+  
       const result = await dashboard_data.find().toArray();
 
-        console.log("Dashboard Data:", result);
 
       if ((result.length > 0)) {
         return res.send({
@@ -64,6 +63,7 @@ class Dashboard {
           },
         });
       }
+
     } catch (error) {
       console.log("Error Get Admin Dashboard data -", error);
       connectToMongoDB();

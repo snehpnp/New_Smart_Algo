@@ -45,7 +45,7 @@ const Routing = () => {
       navigate("/login");
       return;
     }
-    console.log("location.pathname", location.pathname);
+    
     if(location.pathname.includes("/admin/" || "/subadmin/") && gotodashboard != null){
       localStorage.removeItem("gotodashboard");
       localStorage.removeItem("user_role_goTo");

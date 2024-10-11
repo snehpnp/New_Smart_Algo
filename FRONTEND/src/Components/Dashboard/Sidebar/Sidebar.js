@@ -648,7 +648,7 @@ const Sidebar = ({ ShowSidebar }) => {
               Client.map((item) => {
              
                 if (
-                  admin_permission.data[0].Plans === 0 &&
+                  admin_permission.data &&  admin_permission.data[0].Plans == 0 &&
                   item.name === "Plans"
                 ) {
                   return null;

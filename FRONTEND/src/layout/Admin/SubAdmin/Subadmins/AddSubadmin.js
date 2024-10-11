@@ -571,31 +571,8 @@ const AllSubadmin = () => {
                     ""
                   )}
 
-                  {/* {formik.values.Strategy ? (
-                    <>
-                      <h6>All Strategy</h6>
-                      <label className="toggle mt-3">
-                        <input
-                          className="toggle-checkbox bg-primary"
-                          type="checkbox"
-                          onChange={(e) => {
-                            setShowAllStratagy(e.target.checked);
-                          }}
-                          defaultChecked={formik.values.all}
-                        />
-                        <div
-                          className={`toggle-switch ${ShowAllStratagy ? "bg-primary" : "bg-secondary"
-                            }`}
-                        ></div>
-                        <span className="toggle-label">Show Strategy</span>
-                      </label>
+           
 
-                    </>
-                  ) : (
-                    ""
-                  )} */}
-
-                  {/*  For Show All Strategy */}
                   {formik.values.Strategy || formik.values.all || formik.values.addclient || formik.values.editclient ? (
                     <>
                       <h6>All Strategy</h6>

@@ -85,12 +85,14 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
 
     ];
 
+   
+
     return (
         <div>   <Modal isOpen={showModal} size="lg" title="Update Images" hideBtn={true}
             handleClose={() => setshowModal(false)}>
 
             <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
-                showImagePreview={true}
+                showImagePreview={true} removebtn={true}
             />
             <ToastButton />
 

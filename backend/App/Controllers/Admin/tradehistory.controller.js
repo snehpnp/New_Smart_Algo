@@ -397,9 +397,10 @@ class Tradehistory {
 
       var Admin_information = await user_logs.find({
         user_Id: new ObjectId(req.body.id),
-        // role: "ADMIN",
-        createdAt: { $gte: threeDaysAgo },
+        trading_status: { $in: ["Admin Trading On", "Admin Trading off"] },
+        createdAt: { $gte: threeDaysAgo }
       }).sort({ createdAt: -1 });
+      
 
       return res.send({ status: true, msg: "Trading status get", data: Admin_information });
     } catch (error) {

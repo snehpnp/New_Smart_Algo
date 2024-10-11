@@ -20,7 +20,10 @@ import {
 } from "../../../../ReduxStore/Slice/Admin/GroupServiceSlice";
 import { All_Api_Info_List } from "../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice";
 import * as Config from "../../../../Utils/Config";
-import { Add_User,GetLastCretedUserName } from "../../../../ReduxStore/Slice/Admin/userSlice";
+import {
+  Add_User,
+  GetLastCretedUserName,
+} from "../../../../ReduxStore/Slice/Admin/userSlice";
 import toast, { Toaster } from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 import "../../../../App.css";
@@ -79,7 +82,7 @@ const AddClient = () => {
 
   useEffect(() => {
     data();
-    Get_Last_User_Name()
+    Get_Last_User_Name();
   }, []);
 
   const GetAllPlansData = async () => {
@@ -97,7 +100,7 @@ const AddClient = () => {
 
   const formik = useFormik({
     initialValues: {
-      LastUsername:"",
+      LastUsername: "",
       username: null,
       fullName: null,
       email: null,
@@ -413,16 +416,15 @@ const AddClient = () => {
     await dispatch(GetLastCretedUserName())
       .unwrap()
       .then((response) => {
-        if(response.status){
-        setLastUSerName(response.data.UserName);
-        formik.setFieldValue("LastUsername", response.data.UserName);
+        if (response.status) {
+          setLastUSerName(response.data.UserName);
+          formik.setFieldValue("LastUsername", response.data.UserName);
         }
       })
       .catch((error) => {
-          console.log('Error fetching last created user:', error); 
+        console.log("Error fetching last created user:", error);
       });
-};
-
+  };
 
   let fields = [
     {
@@ -891,6 +893,20 @@ const AddClient = () => {
           LastUSerName={LastUSerName}
           additional_field={
             <>
+              {GetServices.data && <h6>All Group Service</h6>}
+
+              {GetServices &&
+                GetServices.data.map((strategy) => (
+                  <div className={`col-lg-2 `} key={strategy._id}>
+                    <div className="col-lg-12 ">
+                      <label
+                        className="form-check-label bg-primary text-white py-2 px-4"
+                        for={strategy.ServiceResult.name}
+                      >{`${strategy.ServiceResult.name}[${strategy.categories.segment}]`}</label>
+                    </div>
+                  </div>
+                ))}
+
               <div>
                 <h6>Select Plans</h6>
                 <div className="row">
@@ -915,34 +931,6 @@ const AddClient = () => {
                 </div>
               </div>
 
-              <h6>All Group Service</h6>
-              {GetServices &&
-                GetServices.data.map((strategy) => (
-                  <div className={`col-lg-2 `} key={strategy._id}>
-                    <div className="col-lg-12 ">
-                      <label
-                        className="form-check-label bg-primary text-white py-2 px-4"
-                        for={strategy.ServiceResult.name}
-                      >{`${strategy.ServiceResult.name}[${strategy.categories.segment}]`}</label>
-                    </div>
-                  </div>
-                ))}
-              <label className="toggle mt-3">
-                <input
-                  className="toggle-checkbox bg-primary"
-                  type="checkbox"
-                  onChange={(e) => {
-                    setShowAllStratagy(e.target.checked);
-                  }}
-                />
-                <div
-                  className={`toggle-switch ${
-                    ShowAllStratagy ? "bg-primary" : "bg-secondary"
-                  }`}
-                ></div>
-                <span className="toggle-label">Show Strategy</span>
-              </label>
-
               {formik.errors.Strategy && (
                 <div style={{ color: "red" }} className="my-3">
                   {formik.errors.Strategy}{" "}
@@ -950,35 +938,31 @@ const AddClient = () => {
               )}
 
               <h6>All Strategy</h6>
-              {ShowAllStratagy ? (
-                <>
-                  {AllStrategy.data.map((strategy) => (
-                    <div className={`col-lg-2 mt-2`} key={strategy._id}>
-                      <div className="row ">
-                        <div className="col-lg-12 ">
-                          <div className="form-check custom-checkbox mb-3">
-                            <input
-                              type="checkbox"
-                              className="form-check-input"
-                              name={strategy.strategy_name}
-                              value={strategy._id}
-                              onChange={(e) => handleStrategyChange(e)}
-                            />
-                            <label
-                              className="form-check-label"
-                              for={strategy.strategy_name}
-                            >
-                              {strategy.strategy_name}
-                            </label>
-                          </div>
+              <>
+                {AllStrategy.data.map((strategy) => (
+                  <div className={`col-lg-2 mt-2`} key={strategy._id}>
+                    <div className="row ">
+                      <div className="col-lg-12 ">
+                        <div className="form-check custom-checkbox mb-3">
+                          <input
+                            type="checkbox"
+                            className="form-check-input"
+                            name={strategy.strategy_name}
+                            value={strategy._id}
+                            onChange={(e) => handleStrategyChange(e)}
+                          />
+                          <label
+                            className="form-check-label"
+                            for={strategy.strategy_name}
+                          >
+                            {strategy.strategy_name}
+                          </label>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </>
-              ) : (
-                ""
-              )}
+                  </div>
+                ))}
+              </>
             </>
           }
         />

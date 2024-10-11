@@ -1042,7 +1042,7 @@ const TradeHistory = () => {
                       <thead>
                         <tr>
                           <th style={{ color: "black" }}>#</th>
-                          <th style={{ color: "black" }}>Login Status</th>
+                          {/* <th style={{ color: "black" }}>Login Status</th> */}
                           <th style={{ color: "black" }}>Trading Status</th>
                           <th style={{ color: "black" }}>Device</th>
                           <th style={{ color: "black" }}>Created At</th>
@@ -1052,7 +1052,7 @@ const TradeHistory = () => {
                         {adminTradingStatus.map((item, index) => (
                           <tr key={item._id}>
                             <td>{index + 1}</td>
-                            <td>{item.login_status || "-"}</td>
+                            {/* <td>{item.login_status || "-"}</td> */}
                             <td>{item.trading_status || "-"}</td>
 
                             <td>{item.device}</td>

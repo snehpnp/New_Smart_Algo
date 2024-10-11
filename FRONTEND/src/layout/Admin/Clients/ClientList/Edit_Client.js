@@ -17,7 +17,10 @@ import {
 } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { Get_All_SUBADMIN } from "../../../../ReduxStore/Slice/Subadmin/Subadminslice";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
-import { Get_Service_By_Group_Id,Get_All_Plans } from "../../../../ReduxStore/Slice/Admin/GroupServiceSlice";
+import {
+  Get_Service_By_Group_Id,
+  Get_All_Plans,
+} from "../../../../ReduxStore/Slice/Admin/GroupServiceSlice";
 import { check_Device } from "../../../../Utils/find_device";
 import toast, { Toaster } from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
@@ -27,8 +30,7 @@ import { All_Api_Info_List } from "../../../../ReduxStore/Slice/Superadmin/ApiCr
 import * as Config from "../../../../Utils/Config";
 import { GET_IP } from "../../../../Service/common.service";
 import { Get_Pmermission } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
-const user_details = JSON.parse(localStorage.getItem("user_details"))
-
+const user_details = JSON.parse(localStorage.getItem("user_details"));
 
 const EditClient = () => {
   const navigate = useNavigate();
@@ -60,7 +62,6 @@ const EditClient = () => {
     data: [],
   });
 
-
   const isValidEmail = (email) => {
     return Email_regex(email);
   };
@@ -88,9 +89,7 @@ const EditClient = () => {
       });
   };
 
-
-const AdminPermissions = async() => {
-
+  const AdminPermissions = async () => {
     await dispatch(
       Get_Pmermission({
         domain: Config.react_domain,
@@ -111,12 +110,10 @@ const AdminPermissions = async() => {
           });
         }
       });
-  }
-
-
+  };
 
   useEffect(() => {
-    AdminPermissions()
+    AdminPermissions();
     data_1();
     GetAllPlansData();
   }, []);
@@ -979,6 +976,11 @@ const AdminPermissions = async() => {
       });
   };
 
+  console.log(
+    "selectedStrategies",
+    admin_permission.data && admin_permission.data[0].Plans
+  );
+
   return (
     <>
       <Content
@@ -1000,29 +1002,36 @@ const AdminPermissions = async() => {
           toDate={formik.values.todate}
           additional_field={
             <>
-            {admin_permission.data && admin_permission.data[0].Plans != 0 &&  <div>
-                <h6>Select Plans</h6>
-                <div className="row">
-                  {GetAllPlans.data.map((plan, index) => (
-                    <div className="col-lg-2 mt-2" key={index}>
-                      <div className="form-check custom-radio mb-3">
-                        <input
-                          type="radio"
-                          className="form-check-input"
-                          name="plan"
-                          value={plan._id}
-                          id={plan._id}
-                          onChange={(e) => setSelectedPlan(e.target.value)}
-                          checked={selectedPlan === plan._id}
-                        />
-                        <label className="form-check-label" htmlFor={plan._id}>
-                          {plan.name}
-                        </label>
+              {admin_permission.data && admin_permission.data[0].Plans == 0 ? (
+                ""
+              ) : (
+                <div>
+                  <h6>Select Plans</h6>
+                  <div className="row">
+                    {GetAllPlans.data.map((plan, index) => (
+                      <div className="col-lg-2 mt-2" key={index}>
+                        <div className="form-check custom-radio mb-3">
+                          <input
+                            type="radio"
+                            className="form-check-input"
+                            name="plan"
+                            value={plan._id}
+                            id={plan._id}
+                            onChange={(e) => setSelectedPlan(e.target.value)}
+                            checked={selectedPlan === plan._id}
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor={plan._id}
+                          >
+                            {plan.name}
+                          </label>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>}
+              )}
 
               {/*  For Show All Services */}
               <h6>All Group Service</h6>
