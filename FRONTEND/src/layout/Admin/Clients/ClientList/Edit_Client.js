@@ -976,8 +976,6 @@ const EditClient = () => {
       });
   };
 
- 
-
   return (
     <>
       <Content
@@ -999,6 +997,28 @@ const EditClient = () => {
           toDate={formik.values.todate}
           additional_field={
             <>
+              <div>
+                <h6>Select Trade permission</h6>
+                <div className="row">
+                  <div className="col-lg-2 mt-2" key={0}>
+                    <div className="form-check custom-radio mb-3">
+                      <input
+                        type="radio"
+                        className="form-check-input"
+                        name="plan"
+                        value={0}
+                        id={0}
+                        // onChange={(e) => setSelectedPlan(e.target.value)}
+                        // checked={selectedPlan === plan._id}
+                      />
+                      <label className="form-check-label" htmlFor={0}>
+                        Full Auto
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {admin_permission.data && admin_permission.data[0].Plans == 0 ? (
                 ""
               ) : (

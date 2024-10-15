@@ -17,7 +17,7 @@ async function DashboardView() {
     const views = await dbTest
       .listCollections({ name: "dashboard_data" })
       .toArray();
-
+    console.log("Views:", views);
 
     // If the view exists, exit the function
     if (views.length > 0) {
@@ -27,8 +27,9 @@ async function DashboardView() {
 
     const pipeline = [
       {
-        $match: { Role: "USER" }
-        
+        $match: {
+          $and: [{ Role: "USER" }],
+        },
       },
 
       {
@@ -40,8 +41,8 @@ async function DashboardView() {
               $match: {
                 $expr: {
                   $cond: {
-                    if: { $eq: ["$$endDate", null] }, 
-                    then: true, 
+                    if: { $eq: ["$$endDate", null] }, // Check if endDate is null
+                    then: true, // If null, return true (valid verify condition)
                     else: {
                       $gt: [
                         {
@@ -303,6 +304,7 @@ async function DashboardView() {
               ],
             },
           },
+
           total_expired_two_days: {
             $sum: {
               $cond: [
@@ -319,6 +321,7 @@ async function DashboardView() {
               ],
             },
           },
+
           used_licence: {
             $sum: {
               $cond: [
@@ -365,24 +368,24 @@ async function DashboardView() {
 
           total_used_licence: {
             $sum: {
-              $ifNull: [{ $toInt: "$licenseData.license" }, 0],
+              $toInt: "$licenseData.license",
             },
           },
 
-          total_client: { $first: ["$total_client", 0] },
-          total_active_client: { $first: ["$total_active_client",0] },
-          total_expired_client: { $first: ["$total_expired_client",0] },
-          total_live_client: { $first: ["$total_live_client",0] },
-          total_active_live: { $first: ["$total_active_live",0] },
-          total_expired_live: { $first: ["$total_expired_live",0] },
-          total_demo_client: { $first: ["$total_demo_client",0] },
-          total_active_demo: { $first: ["$total_active_demo",0] },
-          total_expired_demo: { $first: ["$total_expired_demo",0] },
-          total_two_days: { $first: ["$total_two_days",0] },
-          total_active_two_days: { $first: ["$total_active_two_days",0] },
-          total_expired_two_days: { $first: ["$total_expired_two_days",0] },
-          used_licence: { $first: ["$used_licence",0] },
-          total_admin_licence: { $first: ["$company_info.licenses",0] },
+          total_client: { $first: "$total_client" },
+          total_active_client: { $first: "$total_active_client" },
+          total_expired_client: { $first: "$total_expired_client" },
+          total_live_client: { $first: "$total_live_client" },
+          total_active_live: { $first: "$total_active_live" },
+          total_expired_live: { $first: "$total_expired_live" },
+          total_demo_client: { $first: "$total_demo_client" },
+          total_active_demo: { $first: "$total_active_demo" },
+          total_expired_demo: { $first: "$total_expired_demo" },
+          total_two_days: { $first: "$total_two_days" },
+          total_active_two_days: { $first: "$total_active_two_days" },
+          total_expired_two_days: { $first: "$total_expired_two_days" },
+          used_licence: { $first: "$used_licence" },
+          total_admin_licence: { $first: "$company_info.licenses" },
         },
       },
       {
@@ -404,21 +407,35 @@ async function DashboardView() {
           total_used_licence: 1,
           used_licence: 1,
           licenses: {
-            $subtract: [
-              { $ifNull: ["$total_admin_licence", 0] },
-              {
-                $subtract: [{ $ifNull: ["$total_used_licence", 0] }, { $ifNull: ["$used_licence", 0] }],
-              },
-            ],
+            $toInt: {
+              $subtract: [
+                "$total_admin_licence",
+
+                {
+                  $subtract: ["$total_used_licence", "$used_licence"],
+                },
+              ],
+            },
           },
+
           remaining_license: {
-            $subtract: [
-              { $subtract: [{ $ifNull: ["$total_admin_licence", 0] }, { $ifNull: ["$total_used_licence", 0] }] },
-              { $ifNull: ["$used_licence", 0] },
-            ],
+            $toInt: {
+              $subtract: [
+                {
+                  $toInt: {
+                    $subtract: [
+                      "$total_admin_licence",
+
+                      {
+                        $subtract: ["$total_used_licence", "$used_licence"],
+                      },
+                    ],
+                  },
+                },
+                "$used_licence",
+              ],
+            },
           },
-
-
         },
       },
     ];
