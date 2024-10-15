@@ -51,7 +51,7 @@ const AllPermitions = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-          console.log("response.data ", response.data);
+         
 
           setPanelData1({
             loading: false,

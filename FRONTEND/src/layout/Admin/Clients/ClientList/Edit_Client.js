@@ -960,7 +960,7 @@ const EditClient = () => {
 
   // Handler to update state when radio button is selected
   const handlePlanChange = (e) => {
-    // console
+ 
   };
 
   const GetAllPlansData = async () => {

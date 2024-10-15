@@ -140,7 +140,6 @@ const TradeHistory = () => {
           });
           
 
-          console.log("filterData", filterData);
 
           setTradeHistoryData({
             loading: false,

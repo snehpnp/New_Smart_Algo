@@ -3,6 +3,7 @@ import {
   ADD_CLIENT,
   DawnloadData,
   GetLastUserName,
+  DeletePlans
 } from "../../../Service/admin.service";
 
 export const Add_User = createAsyncThunk("admin/user/add", async (apireq) => {
@@ -40,6 +41,19 @@ export const GetLastCretedUserName = createAsyncThunk(
   }
 );
 
+export const DeletePlan = createAsyncThunk(
+  "delete/plans",
+  async (apireq) => {
+    const { req, token } = apireq;
+    try {
+      const res = await DeletePlans(req, token);
+      return await res;
+    } catch (err) {
+      return err;
+    }
+  }
+);
+
 const AdminUserSlice = createSlice({
   name: "AdminUserSlice",
   initialState: {
@@ -48,6 +62,7 @@ const AdminUserSlice = createSlice({
     status: false,
     add_user: [],
     data: [],
+    delete_plan: [],
   },
   reducers: {}, // Define any reducers here if needed
   extraReducers: {
@@ -59,6 +74,9 @@ const AdminUserSlice = createSlice({
     },
     [GetLastCretedUserName.fulfilled]: (state, { payload }) => {
       return { ...state, data: payload, isLoading: false };
+    },
+    [DeletePlan.fulfilled]: (state, { payload }) => {
+      return { ...state, delete_plan: payload, isLoading: false };
     }
   },
 });

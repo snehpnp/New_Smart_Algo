@@ -32,7 +32,7 @@ const Dashboard = () => {
         });
       })
       .catch((error) => {
-        console.error("Error fetching panel list:", error);
+        console.log("Error fetching panel list:", error);
       });
   };
 

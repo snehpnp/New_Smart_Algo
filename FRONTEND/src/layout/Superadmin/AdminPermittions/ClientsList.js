@@ -284,7 +284,6 @@ const SubAdminList = () => {
     }
   };
 
-  console.log("userData", searchInput);
 
   return (
     <>

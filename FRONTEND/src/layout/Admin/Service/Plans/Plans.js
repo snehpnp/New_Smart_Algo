@@ -11,6 +11,10 @@ import {
   Edit_Plans,
 } from "../../../../ReduxStore/Slice/Admin/GroupServiceSlice";
 
+import { DeletePlan } from "../../../../ReduxStore/Slice/Admin/userSlice";
+
+import Swal from "sweetalert2";
+
 // Styled Components
 const Card = styled.div`
   border: 1px solid #ccc;
@@ -175,7 +179,6 @@ const ServicesList = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-
     dispatch(Edit_Plans(editPlan))
       .unwrap()
       .then((response) => {
@@ -187,6 +190,32 @@ const ServicesList = () => {
       });
   };
 
+  const DeletePlanApi = (plan) => {
+
+    dispatch(DeletePlan({ req: { id: plan._id } }))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          Swal.fire({
+            icon: "success",
+            title: "Plan Deleted Successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          GetAllPlansData();
+
+          handleModalClose();
+        }else{
+          Swal.fire({
+            icon: "error",
+            title:response.msg,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
+  };
+
   return (
     <>
       <Content
@@ -194,9 +223,8 @@ const ServicesList = () => {
         button_status={true}
         route="/admin/plan/add"
         button_title="Add Plan"
-        
       >
-        <div className="row"  style={styles.container}>
+        <div className="row" style={styles.container}>
           {GetAllPlans.data &&
             GetAllPlans.data.map((plan, index) => (
               <Card key={index} className="col-3">
@@ -220,11 +248,15 @@ const ServicesList = () => {
                 </div>
 
                 <div style={styles.buttonContainer}>
-                  <Button primary onClick={() => handleViewClick(plan)}>
+                  {/* <Button primary onClick={() => handleViewClick(plan)}>
                     <FaEye /> View
-                  </Button>
+                  </Button> */}
                   <Button onClick={() => handleEditClick(plan)}>
                     <FaEdit /> Edit
+                  </Button>
+                  <Button primary onClick={() => DeletePlanApi(plan)}>
+                    {/*  Add Delete */}
+                    Delete
                   </Button>
                 </div>
               </Card>
@@ -448,7 +480,6 @@ const styles = {
     justifyContent: "space-around",
     marginTop: "15px",
   },
-
 };
 
 export default ServicesList;

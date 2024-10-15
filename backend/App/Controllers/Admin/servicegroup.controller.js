@@ -12,6 +12,7 @@ const groupServices_client1 = db.groupService_User;
 const client_services = db.client_services;
 const strategy_client = db.strategy_client;
 const Plansmodel = db.Plansmodel;
+const user_modal = db.user;
 
 class GroupService {
   // ADD GROUP SERVICES
@@ -789,8 +790,6 @@ class GroupService {
 
   async Addplans(req, res) {
     try {
-
-
       const result = await Plansmodel.create(req.body.req);
       if (result) {
         return res.send({
@@ -859,6 +858,39 @@ class GroupService {
           status: true,
           msg: "successfully Edit",
           data: result,
+        });
+      } else {
+        return res.send({ status: false, msg: "An error occurred", data: [] });
+      }
+    } catch (error) {
+      return res.send({ status: false, msg: "An error occurred", data: error });
+    }
+  }
+
+  async DeletePlans(req, res) {
+    try {
+      const { id } = req.body;
+      const objectId = new ObjectId(id);
+
+      console.log(objectId);
+
+      const User_plan = await user_modal.find({ plan_id: objectId });
+
+      console.log(User_plan?.length);
+      if (User_plan?.length > 0) {
+        return res.send({
+          status: false,
+          msg: "This plan already assign",
+          data: User_plan,
+        });
+      }
+
+      const result = await Plansmodel.deleteOne({ _id: objectId });
+      if (result.acknowledged == true) {
+        return res.send({
+          status: true,
+          msg: "Delete successfully",
+          data: result.acknowledged,
         });
       } else {
         return res.send({ status: false, msg: "An error occurred", data: [] });
