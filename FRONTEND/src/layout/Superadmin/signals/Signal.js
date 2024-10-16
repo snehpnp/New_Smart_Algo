@@ -8,8 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
-import { fa_time, fDateTime } from "../../../Utils/Date_formet";
-
+import { fDateTime } from "../../../Utils/Date_formet";
 
 const AdminHelps = () => {
 
@@ -20,7 +19,6 @@ const AdminHelps = () => {
     const token = JSON.parse(localStorage.getItem("user_details")).token
     const backend_rul = localStorage.getItem("backend_rul");
     const panel_name = localStorage.getItem("panel_name");
-
     const [showModal, setShowmodal] = useState(false)
     const [showModal1, setShowmodal1] = useState(false)
     const [entryPrice, setEntryPrice] = useState('')
@@ -31,22 +29,24 @@ const AdminHelps = () => {
     const [signalId, setSignalId] = useState('')
     const [refresh, setRefresh] = useState(false)
     const [getAllSignals, setAllSignals] = useState({loading: true, data: [] });
-
+    useEffect(() => {
+        data()
+    }, [refresh, inputSearch])
 
     const updatePrice = async () => {
         const data = { id: entryPriceId, price: entryPrice, signalId: signalId, entryPriceID: 1, backend_rul: backend_rul, superadmin_name: UserName, panel_name: panel_name }
-        await dispatch(Update_Price(data)).unwrap()
-            .then((response) => {
-                if (response.status) {
-                    setRefresh(!refresh)
-                    setShowmodal(false)
-                    setEntryPriceId('')
-                    setSignalId('')
-                }
-            })
-            .catch((err) => {
-                return err
-            })
+        try {
+            const response = await dispatch(Update_Price(data)).unwrap();
+            if (response.status) {
+                setRefresh(!refresh);
+                setShowmodal(false);
+                setEntryPriceId('');
+                setSignalId('');
+            }
+        } catch (err) {
+            console.error(err);
+        }
+        
     }
 
     const updateExitPrice = async () => {
@@ -96,47 +96,10 @@ const AdminHelps = () => {
                 }
             })
     }
-    useEffect(() => {
-        data()
-    }, [refresh, inputSearch])
+ 
 
 
-    const handleDelete = async (id) => {
-
-        const { value: password } = await Swal.fire({
-            title: "Enter your password",
-            input: "password",
-            inputLabel: "Password",
-            inputPlaceholder: "Enter your password",
-            inputAttributes: {
-                maxlength: "10",
-                autocapitalize: "off",
-                autocorrect: "off"
-            }
-        });
-
-        if (password !== "7700") {
-            Swal.fire("Incorrect password");
-            window.location.reload();
-            return;
-        }
-
-        const data = { id: id, backend_rul: backend_rul, superadmin_name: UserName, panel_name: panel_name }
-        await dispatch(DeleteSignal(data)).unwrap()
-            .then((response) => {
-                if (response.status) {
-                    toast.success("User deleted successfully")
-                    setRefresh(!refresh)
-
-                }
-                else {
-                    toast.error("some error finds")
-                }
-            }).catch((err) => {
-                return null
-             })
-    }
-
+   
 
     const columns = [
 
@@ -202,8 +165,71 @@ const AdminHelps = () => {
 
     const handleBackupBtn = () => {
         navigate('/super/backupsignal')
-
     }
+
+
+    const handleDelete = async (id) => {
+        // Show confirmation dialog
+        const confirmResult = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        });
+    
+        // If the user clicks cancel, exit the function
+        if (!confirmResult.isConfirmed) {
+            return;
+        }
+    
+        // Prompt for password
+        // const { value: password } = await Swal.fire({
+        //     title: "Enter your password",
+        //     input: "password",
+        //     inputLabel: "Password",
+        //     inputPlaceholder: "Enter your password",
+        //     inputAttributes: {
+        //         maxlength: "10",
+        //         autocapitalize: "off",
+        //         autocorrect: "off"
+        //     },
+        //     showCancelButton: true,  // Allow cancel
+        //     confirmButtonText: "Submit"
+        // });
+    
+        // Check if the user clicked cancel or entered no password
+        // if (!password) {
+        //     Swal.fire("Password is required or action was cancelled.");
+        //     return;
+        // }
+    
+        // // Check for incorrect password
+        // if (password !== "7700") {
+        //     Swal.fire("Incorrect password");
+        //     return;  // No need to reload the page, just exit the function
+        // }
+    
+        const data = { id, backend_rul, superadmin_name: UserName, panel_name };
+    
+        try {
+            const response = await dispatch(DeleteSignal(data)).unwrap();
+            
+            if (response.status) {
+                toast.success("User deleted successfully");
+                setRefresh(!refresh);  // Refresh data
+            } else {
+                toast.error("An error occurred during deletion");
+            }
+        } catch (err) {
+            toast.error("Error deleting user, please try again.");
+            console.error("Deletion error:", err);  // Log error for debugging
+        }
+    };
+    
+    
 
     return (
         <>

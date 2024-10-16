@@ -997,7 +997,7 @@ const EditClient = () => {
           toDate={formik.values.todate}
           additional_field={
             <>
-              <div>
+              {/* <div>
                 <h6>Select Trade permission</h6>
                 <div className="row">
                   <div className="col-lg-2 mt-2" key={0}>
@@ -1017,7 +1017,7 @@ const EditClient = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {admin_permission.data && admin_permission.data[0].Plans == 0 ? (
                 ""
