@@ -154,7 +154,7 @@ const Dashboard1 = ({ data }) => {
                       <div className="clearfix col-6 mt-2">
                         {item.visible ? <>
 
-                          <h6> <Link href="#" className=" d-flex align-items-center  justify-content-end" to={item.route}>
+                          <h6> <Link className=" d-flex align-items-center  justify-content-end" to={item.route}>
                             <i className="fa-regular fa-eye pe-1" ></i>View</Link></h6>
                         </> : ""}
 

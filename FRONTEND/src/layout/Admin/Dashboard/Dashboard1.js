@@ -162,7 +162,7 @@ const Dashboard1 = ({ data }) => {
                   {item.visible ? <>
                     <h6>
 
-                      <Link href="#" className="mb-2" to={item.route}>
+                      <Link className="mb-2" to={item.route}>
                         <i className="fa-regular fa-eye pe-1" ></i>View</Link>
                     </h6>
                   </> : ""}

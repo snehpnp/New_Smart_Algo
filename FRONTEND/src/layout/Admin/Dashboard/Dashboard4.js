@@ -148,7 +148,7 @@ const Dashboard1 = ({ data }) => {
                         <h4 className='mb-0 my-2'>{item.name}</h4>
                         {item.visible ? <>
 
-                          <Link href="#" className="mb-2" to={item.route}>
+                          <Link className="mb-2" to={item.route}>
                             <i className="fa-regular fa-eye pe-1 my-1" ></i>View</Link>
                         </> : ""}
 
