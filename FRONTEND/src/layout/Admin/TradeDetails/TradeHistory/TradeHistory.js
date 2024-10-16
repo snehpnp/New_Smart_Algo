@@ -135,7 +135,9 @@ const TradeHistory = () => {
             return (
               item.trade_symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
               item.strategy.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              item.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+              item.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              item.entry_price.toLowerCase().includes(searchTerm.toLowerCase()) 
+
             );
           });
           

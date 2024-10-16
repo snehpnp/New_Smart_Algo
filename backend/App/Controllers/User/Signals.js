@@ -23,12 +23,22 @@ class Signals {
             var endOfDay = new Date(currentDate);
             endOfDay.setHours(23, 59, 59, 999);
 
+
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
             var GetAllClientServices
             if (type == "Trade") {
-                GetAllClientServices = await Signals_modal.find({ users_id: user_id }).sort({ createdAt: -1 });
+                GetAllClientServices = await Signals_modal.find({ users_id: user_id, createdAt: {
+                    $gte: today,
+                    $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+                }, }).sort({ createdAt: -1 });
+
                 return res.send({ status: true, data: GetAllClientServices, msg: "Get Signals" })
 
             } else {
+                
                 let pipeline = [
                     {
                         $match: {

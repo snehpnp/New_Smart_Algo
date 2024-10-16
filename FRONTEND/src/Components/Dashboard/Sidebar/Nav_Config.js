@@ -315,7 +315,7 @@ export const Client = [
     },
     {
         id: 2,
-        name: 'Signals',
+        name: 'Trade Details',
         Icon: 'Signal',
         Data: [
             {

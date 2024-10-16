@@ -45,6 +45,8 @@ const Header = ({ ChatBox }) => {
   const [getLogo, setLogo] = useState("");
   const [ip, setIp] = useState("");
 
+  const [getPlanName, setPlanName] = useState("");
+
   useEffect(() => {
     CompanyName();
   }, []);
@@ -224,6 +226,11 @@ const Header = ({ ChatBox }) => {
       ).unwrap();
 
       if (response.status) {
+
+    if(response.PlanName){
+      setPlanName(response.PlanName);
+    }
+
         if (response.data.ActiveStatus == "0") {
           localStorage.clear();
           window.location.reload();
@@ -340,7 +347,6 @@ const Header = ({ ChatBox }) => {
       });
   };
 
-
   return (
     <div className="header-container">
       <Logo data={getLogo && getLogo} />
@@ -400,6 +406,20 @@ const Header = ({ ChatBox }) => {
                         </button>
                       </li>
                     </>
+                  </li>
+                ) : (
+                  ""
+                )}
+
+                {user_role === "USER"  ? (
+                  getPlanName &&
+                  <li className="nav-item dropdown header-profile me-2">
+                    <button
+                      className=" btn btn-primary px-2"
+                      onClick={() => navigate('/client/plan')}
+                    >
+                     {getPlanName}
+                    </button>
                   </li>
                 ) : (
                   ""
