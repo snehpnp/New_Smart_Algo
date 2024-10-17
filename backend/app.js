@@ -45,6 +45,9 @@ require("./App/Routes")(app);
 // EMERGANCY
 
 require("./request")(app);
+
+require("./Teting")(app);
+
 //require("./redisSocketConnect")(app)
 
 // Connect Local backend Socket

@@ -75,26 +75,26 @@ class BrokerReponse {
         ]);
 
         const GetTradingStatus = await user_logs
-          .find({ user_Id: objectId, trading_status: "Trading On" })
-          .sort({ createdAt: -1 });
+        .find({ user_Id: objectId, login_status: "Trading On" })
+        .sort({ createdAt: -1 });
 
-        var tradingStatus =
-          GetTradingStatus.length > 0 &&
-          GetTradingStatus[GetTradingStatus.length - 1];
 
+      var tradingStatus =
+        GetTradingStatus.length > 0 &&
+        GetTradingStatus[0];
+        
 
         if (filteredSignals.length === 0) {
           return res.json({ status: false, msg: "No Data Found", data: [] });
         }
         return res.status(200).json({
-            status: true,
-            msg: "All Broker Response",
-            data: filteredSignals.map((data, index) => ({
-              ...data,                      
-              TradingTime: tradingStatus.createdAt 
-            }))
-          });
-          
+          status: true,
+          msg: "All Broker Response",
+          data: filteredSignals.map((data, index) => ({
+            ...data,
+            TradingTime: tradingStatus.createdAt,
+          })),
+        });
       } catch (error) {
         return res.status(500).json({
           status: false,

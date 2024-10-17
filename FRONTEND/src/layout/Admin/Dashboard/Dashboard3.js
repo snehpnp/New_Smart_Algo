@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
+import { Link } from 'react-router-dom'
 
 
 const Dashboard1 = ({ data }) => {
