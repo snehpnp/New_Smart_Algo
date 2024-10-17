@@ -251,25 +251,39 @@ class Panel {
   async UserProfile(req, res) {
     try {
       const { id } = req.body;
-
-      // FIND PANEL NAME DUPLICATE
+  
+      // FIND USER BY ID
       let EmailCheck = await User.findOne({ _id: id });
-
-      const PlanName = await Plansmodel.findOne({ _id: EmailCheck.plan_id });
-    
-
   
       if (!EmailCheck) {
         return res
           .status(409)
           .send({ status: false, msg: "User Not exists", data: [] });
       }
-      return res.send({ status: true, msg: "Get User", data: EmailCheck,PlanName: PlanName && PlanName?.name });
+  
+      // Try to get the PlanName
+      let PlanName;
+      try {
+        const plan = await Plansmodel.findOne({ _id: EmailCheck.plan_id });
+        PlanName = plan ? plan.name : "No Plan Found";
+      } catch (planError) {
+        PlanName = ""; 
+      }
+  
+      return res.send({
+        status: true,
+        msg: "Get User",
+        data: EmailCheck,
+        PlanName: PlanName,
+      });
     } catch (error) {
       connectToMongoDB();
-      return;
+      return res
+        .status(500)
+        .send({ status: false, msg: "Server Error", data: [] });
     }
   }
+  
 
   // GET ONE PANEL AND HIS THEME INFORMATION
   async GetPanleinformation(req, res) {
