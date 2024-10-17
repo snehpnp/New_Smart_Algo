@@ -806,7 +806,45 @@ class GroupService {
   }
   async GetAllPlans(req, res) {
     try {
-      const result = await Plansmodel.find().lean();
+
+      const result = await Plansmodel.aggregate([
+        {
+          $lookup: {
+            from: 'users',
+            let: { planId: { $toString: '$_id' } }, 
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $eq: ['$plan_id', '$$planId'] },
+                },
+              },
+            ],
+            as: 'users',
+          },
+        },
+        {
+          $project: {
+            plan_id: 1,
+            name: 1,
+            title: 1,
+            description: 1,
+            image: 1,
+            prices: 1,
+            users: {
+              $map: {
+                input: '$users',
+                as: 'user',
+                in: '$$user.UserName',
+              },
+            },
+          },
+        },
+      ]).exec();
+      
+
+
+
+
 
       if (result.length > 0) {
         return res.send({
