@@ -174,12 +174,12 @@ const AllClients = () => {
                 if (dashboard_filter === "2" || dashboard_filter === 2) {
                   return (
                     item.license_type == dashboard_filter && 
-                    item.Is_Active == "1" && item.ActiveStatus == "1"
+                    item.Is_Active == "1" 
                   );
                 }
                 if (dashboard_filter === "21" || dashboard_filter === 21) {
                   return (
-                    new Date(item.EndDate) > new Date() &&
+                    new Date(item.EndDate) >= new Date() &&
                     (item.license_type === "2" || item.license_type === 2)
                   );
                 }
