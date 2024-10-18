@@ -187,9 +187,28 @@ const EditClient = () => {
         errors.email = valid_err.INVALID_EMAIL_ERROR;
       }
 
+      // if (values.licence == 2) {
+      //   if(values.tomonth == null || values.tomonth == "" || values.tomonth == undefined || values.tomonth == "0"){
+      //     errors.tomonth = "Please Select Licence";
+      //   }
+
+      // }
+
       return errors;
     },
     onSubmit: async (values) => {
+
+
+      if (values.licence == 2) {
+       if(values.licence1 == null){
+        if(values.tomonth == null || values.tomonth == "" || values.tomonth == undefined || values.tomonth == "0"){
+          toast.error("Please Select Licence");
+          return;
+        }
+       }
+      }
+
+
       const req = {
         FullName: values.fullName,
         UserName: values.username,
@@ -226,6 +245,7 @@ const EditClient = () => {
         network_ip: ip,
         plan_id: selectedPlan,
       };
+
 
       await dispatch(Update_User({ req: req, token: user_details.token }))
         .unwrap()

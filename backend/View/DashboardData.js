@@ -17,7 +17,6 @@ async function DashboardView() {
     const views = await dbTest
       .listCollections({ name: "dashboard_data" })
       .toArray();
-    console.log("Views:", views);
 
     // If the view exists, exit the function
     if (views.length > 0) {

@@ -190,6 +190,18 @@ const AddClient = () => {
         return;
       }
 
+      if (values.license_type == 2) {
+        if (
+          !values.licence ||
+          values.licence == null ||
+          values.licence == "" ||
+          values.licence == "0"
+        ) {
+          toast.error("Live Client Licence is Mandatory");
+          return;
+        }
+      }
+
       const req = {
         FullName: values.fullName,
         UserName: values.username,
