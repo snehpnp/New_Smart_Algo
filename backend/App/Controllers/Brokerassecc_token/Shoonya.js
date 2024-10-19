@@ -76,6 +76,8 @@ class Shoonya {
   
       const responseData = response.data;
   
+      console.log("responseData", responseData);
+
       if (responseData.stat === "Ok") {
         const updatedUser = await User.findByIdAndUpdate(
           { _id: user._id },
@@ -104,7 +106,7 @@ class Shoonya {
       } else {
         const user_logs1 = new user_logs({
           user_Id: user._id,
-          trading_status: responseData.message,
+          trading_status: responseData.emsg,
           role: "USER",
           device: "WEB",
           system_ip: getIPAddress(),
@@ -115,7 +117,7 @@ class Shoonya {
         return res.send({
           status: false,
           data: [],
-          msg: responseData.message,
+          msg: responseData.emsg,
         });
       }
     } catch (error) {
