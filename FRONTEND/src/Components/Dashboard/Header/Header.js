@@ -8,7 +8,7 @@ import Notification from "../../ExtraComponents/Notification";
 import { useDispatch } from "react-redux";
 import $ from "jquery";
 import { useNavigate } from "react-router-dom";
-import Modal from "../../../Components/ExtraComponents/Modal";
+import Modal1 from "../../../Components/ExtraComponents/Modal";
 import UpdateBrokerKey from "./Update_Broker_Key";
 import { loginWithApi } from "./log_with_api";
 import {
@@ -22,7 +22,9 @@ import { TRADING_OFF_USER } from "../../../ReduxStore/Slice/Users/DashboardSlice
 import { Get_Company_Logo } from "../../../ReduxStore/Slice/Admin/AdminSlice";
 import jwt_decode from "jwt-decode";
 import { GET_IP } from "../../../Service/common.service";
+import { Update_Broker_Keys } from "../../../ReduxStore/Slice/Users/BrokerUpdateSlice";
 
+import { Modal, Button } from "react-bootstrap";
 const Header = ({ ChatBox }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,10 +44,13 @@ const Header = ({ ChatBox }) => {
   const UserNamego_localstg = JSON.parse(
     localStorage.getItem("user_details_goTo")
   );
+
+  const AdminToken = JSON.parse(localStorage.getItem("user_details"))?.token;
+
   const [getLogo, setLogo] = useState("");
   const [ip, setIp] = useState("");
-
   const [getPlanName, setPlanName] = useState("");
+  const [shoonyaStatus, setShoonyaStatus] = useState(false);
 
   useEffect(() => {
     CompanyName();
@@ -189,7 +194,11 @@ const Header = ({ ChatBox }) => {
   //  BROKER LOGIN
   const LogIn_WIth_Api = (check, brokerid, tradingstatus, UserDetails) => {
     if (check) {
-      loginWithApi(brokerid, UserDetails);
+      if (brokerid == 27) {
+        setShoonyaStatus(!shoonyaStatus);
+      } else {
+        loginWithApi(brokerid, UserDetails, check);
+      }
     } else {
       dispatch(
         TRADING_OFF_USER({
@@ -226,10 +235,9 @@ const Header = ({ ChatBox }) => {
       ).unwrap();
 
       if (response.status) {
-
-    if(response.PlanName){
-      setPlanName(response.PlanName);
-    }
+        if (response.PlanName) {
+          setPlanName(response.PlanName);
+        }
 
         if (response.data.ActiveStatus == "0") {
           localStorage.clear();
@@ -347,6 +355,103 @@ const Header = ({ ChatBox }) => {
       });
   };
 
+  const [formValues, setFormValues] = useState({
+    userId: "",
+    password: "",
+    otp: "",
+  });
+
+  const [formValuesErr, setFormValuesErr] = useState({
+    userId: "",
+    password: "",
+    otp: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+  
+    setFormValues((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
+  
+    // Clear the error message when the user types something valid
+    setFormValuesErr((prevState) => ({
+      ...prevState,
+      [id]: "", 
+    }));
+  };
+  
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+  
+    let hasError = false;
+  
+    // Check if User ID is empty
+    if (formValues.userId === "") {
+      setFormValuesErr((prevState) => ({
+        ...prevState,
+        userId: "Please enter User ID",
+      }));
+      hasError = true;
+    }
+  
+    // Check if Password is empty
+    if (formValues.password === "") {
+      setFormValuesErr((prevState) => ({
+        ...prevState,
+        password: "Please enter Password",
+      }));
+      hasError = true;
+    }
+  
+    // Check if OTP is empty
+    if (formValues.otp === "") {
+      setFormValuesErr((prevState) => ({
+        ...prevState,
+        otp: "Please enter OTP",
+      }));
+      hasError = true;
+    }
+  
+    // If any errors exist, prevent submission
+    if (hasError) return;
+  
+    // Prepare the request payload
+    const req = {
+      id: user_details.user_id,
+      data: {
+        demat_userid: formValues.userId,
+        app_id: formValues.password,
+        app_key: formValues.otp,
+      },
+    };
+  
+    // Dispatch the Update_Broker_Keys action
+    await dispatch(Update_Broker_Keys({ req: req, token: AdminToken }))
+      .unwrap()
+      .then((response) => {
+        console.log("Response: ", response);
+        if (response.status) {
+          console.log("Success");
+          setShoonyaStatus(false);
+          setFormValues({
+            userId: "",
+            password: "",
+            otp: "",
+          });
+  
+          // Trigger additional login logic
+          loginWithApi(27, UserDetails, true);
+        }
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+  };
+  
+
   return (
     <div className="header-container">
       <Logo data={getLogo && getLogo} />
@@ -411,19 +516,18 @@ const Header = ({ ChatBox }) => {
                   ""
                 )}
 
-                {user_role === "USER"  ? (
-                  getPlanName &&
-                  <li className="nav-item dropdown header-profile me-2">
-                    <button
-                      className=" btn btn-primary px-2"
-                      onClick={() => navigate('/client/plan')}
-                    >
-                     {getPlanName}
-                    </button>
-                  </li>
-                ) : (
-                  ""
-                )}
+                {user_role === "USER"
+                  ? getPlanName && (
+                      <li className="nav-item dropdown header-profile me-2">
+                        <button
+                          className=" btn btn-primary px-2"
+                          onClick={() => navigate("/client/plan")}
+                        >
+                          {getPlanName}
+                        </button>
+                      </li>
+                    )
+                  : ""}
 
                 <>
                   {user_role === "ADMIN" ||
@@ -489,7 +593,7 @@ const Header = ({ ChatBox }) => {
           </nav>
         </div>
 
-        <Modal
+        <Modal1
           isOpen={showModal}
           backdrop="static"
           size="ms-5"
@@ -498,8 +602,228 @@ const Header = ({ ChatBox }) => {
           handleClose={() => setshowModal(false)}
         >
           <UpdateBrokerKey closeModal={() => setshowModal(false)} />
-        </Modal>
+        </Modal1>
       </div>
+
+      {shoonyaStatus && (
+        <div>
+          <Modal
+            show={shoonyaStatus}
+            centered
+            size={"xl"}
+            backdrop={"static"}
+            onHide={() => setShoonyaStatus(false)}
+            fullscreen={true} // Fullscreen modal
+          >
+            <Modal.Body>
+              <div
+                style={{
+                  backgroundColor: "#fff",
+                  padding: 20,
+                  borderRadius: 10,
+                  boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+                  maxWidth: "80%", // Increase width
+                  maxHeight: "80%", // Increase height
+                  textAlign: "center",
+                  margin: "0 auto",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <div>
+                  {/* Logo */}
+                  <div className="logo">
+                    <img
+                      src="https://trade.shoonya.com/NorenLogoLS.png"
+                      alt="Shoonya Logo"
+                      style={{ width: 50, marginBottom: 20 }}
+                    />
+                  </div>
+
+                  {/* Title */}
+                  <h2 style={{ marginBottom: 20, color: "#333" }}>
+                    Login to SHOONYA
+                  </h2>
+
+                  {/* Form */}
+                  <form onSubmit={handleLogin}>
+                    {/* User ID */}
+                    <div style={{ marginBottom: 15, textAlign: "left" }}>
+                      <label
+                        htmlFor="user-id"
+                        style={{
+                          display: "block",
+                          fontSize: 14,
+                          color: "#666",
+                        }}
+                      >
+                        User ID
+                      </label>
+                      <input
+                        type="text"
+                        id="userId"
+                        placeholder="Enter User ID"
+                        value={formValues.userId}
+                        onChange={handleInputChange}
+                        style={{
+                          width: "100%",
+                          padding: 10,
+                          marginTop: 5,
+                          border: "1px solid #ccc",
+                          borderRadius: 5,
+                          fontSize: 16,
+                        }}
+                      />
+
+                      {formValuesErr.userId && (
+                        <span style={{ color: "red", fontSize: 12 }}>
+                          {formValuesErr.userId}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Password */}
+                    <div
+                      style={{
+                        marginBottom: 15,
+                        textAlign: "left",
+                        position: "relative",
+                      }}
+                    >
+                      <label
+                        htmlFor="password"
+                        style={{
+                          display: "block",
+                          fontSize: 14,
+                          color: "#666",
+                        }}
+                      >
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter Password"
+                        value={formValues.password}
+                        onChange={handleInputChange}
+                        style={{
+                          width: "100%",
+                          padding: 10,
+                          marginTop: 5,
+                          border: "1px solid #ccc",
+                          borderRadius: 5,
+                          fontSize: 16,
+                        }}
+                      />
+                      <span
+                        style={{
+                          position: "absolute",
+                          right: 20,
+                          top: 49,
+                          cursor: "pointer",
+                        }}
+                      >
+                        👁️
+                      </span>
+                      {formValuesErr.password && (
+                        <span style={{ color: "red", fontSize: 12 }}>
+                          {formValuesErr.password}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* OTP */}
+                    <div style={{ marginBottom: 15, textAlign: "left" }}>
+                      <label
+                        htmlFor="otp"
+                        style={{
+                          display: "block",
+                          fontSize: 14,
+                          color: "#666",
+                        }}
+                      >
+                        OTP/TOTP
+                      </label>
+                      <input
+                        type="text"
+                        id="otp"
+                        placeholder="Enter OTP"
+                        value={formValues.otp}
+                        onChange={handleInputChange}
+                        style={{
+                          width: "100%",
+                          padding: 10,
+                          marginTop: 5,
+                          border: "1px solid #ccc",
+                          borderRadius: 5,
+                          fontSize: 16,
+                        }}
+                      />
+
+                      {formValuesErr.otp && (
+                        <span style={{ color: "red", fontSize: 12 }}>
+                          {formValuesErr.otp}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Login Button */}
+                    <button
+                      type="submit"
+                      style={{
+                        width: "100%",
+                        padding: 10,
+                        backgroundColor: "#d4a023",
+                        border: "none",
+                        borderRadius: 5,
+                        color: "white",
+                        fontSize: 16,
+                        cursor: "pointer",
+                      }}
+                    >
+                      Login
+                    </button>
+                  </form>
+
+                  {/* Back Button */}
+                  <button
+                    onClick={() => setShoonyaStatus(false)} // Close modal on click
+                    style={{
+                      marginTop: 20,
+                      padding: 10,
+                      backgroundColor: "#ccc",
+                      border: "none",
+                      borderRadius: 5,
+                      color: "#333",
+                      fontSize: 16,
+                      cursor: "pointer",
+                      width: "100%",
+                    }}
+                  >
+                    Back
+                  </button>
+
+                  {/* Footer */}
+                  <div style={{ marginTop: 20, fontSize: 12, color: "#999" }}>
+                    <img
+                      src="https://algosworld.com/assets/images/partners/broker-finvasia.png"
+                      alt="Finvasia Logo"
+                      style={{ width: 141, marginBottom: 10 }}
+                    />
+                    <p>NSE | BSE | MCX | NCDEX</p>
+                    <p>SEBI | SEBI Registration</p>
+                    <p>
+                      Version: 1.2.0 | Privacy Policy | All rights reserved.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Modal.Body>
+          </Modal>
+        </div>
+      )}
     </div>
   );
 };

@@ -425,6 +425,8 @@ const EditClient = () => {
           ? "App Key"
           : formik.values.broker == 25
           ? "Api Key"
+           : formik.values.broker == 27
+          ? "Api Key"
           : "'Api Key",
       type: "text",
       showWhen: (values) =>
@@ -441,6 +443,7 @@ const EditClient = () => {
         values.broker === "19" ||
         values.broker === "20" ||
         values.broker === "26" ||
+        values.broker === "27" ||
         values.broker === "25",
       label_size: 12,
       col_size: 6,
@@ -465,6 +468,8 @@ const EditClient = () => {
           ? "Client Code"
           : formik.values.broker == 11
           ? "client_code"
+           : formik.values.broker == 27
+          ? "Vendor Code"
           : "User Id",
       type: "text",
       showWhen: (values) =>
@@ -476,6 +481,7 @@ const EditClient = () => {
         values.broker === "11" ||
         values.broker === "6" ||
         values.broker === "20" ||
+        values.broker === "27" ||
         values.broker === "21",
       label_size: 12,
       col_size: 6,
@@ -556,6 +562,8 @@ const EditClient = () => {
           ? "Api Secret"
           : formik.values.broker == 25
           ? "Api Secret"
+          : formik.values.broker == 27
+          ? "imei"
           : "Api Secret",
       type: "text",
       showWhen: (values) =>
@@ -573,6 +581,7 @@ const EditClient = () => {
         values.broker === "15" ||
         values.broker === "19" ||
         values.broker === "26" ||
+        values.broker === "27" ||
         values.broker === "25",
       label_size: 12,
       col_size: 6,
@@ -587,9 +596,11 @@ const EditClient = () => {
           ? "Trade Api Password"
           : formik.values.broker == 9
           ? "Encryption IV"
+           : formik.values.broker == 27
+          ? "twoFA"
           : "Api Secret",
       type: "text",
-      showWhen: (values) => values.broker === "7" || values.broker === "9",
+      showWhen: (values) => values.broker === "7" || values.broker === "9" || values.broker === "27",
       label_size: 12,
       col_size: 6,
       disable: false,
@@ -792,6 +803,13 @@ const EditClient = () => {
       formik.setFieldValue("app_key", "null");
       formik.setFieldValue("api_type", "null");
       formik.setFieldValue("demat_userid", "null");
+    }
+
+    if (formik.values.broker === "27" || formik.values.broker === 27) {
+      // formik.setFieldValue("api_key", "null");
+      // formik.setFieldValue("client_code", "null");
+      // formik.setFieldValue("api_secret", "null");
+      // formik.setFieldValue("api_type", "null");
     }
 
     ////////////////--------------END BROKER SET KEY----------------///////////

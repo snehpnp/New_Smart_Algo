@@ -371,6 +371,13 @@ const AddClient = () => {
       formik.setFieldValue("api_type", "null");
       formik.setFieldValue("demat_userid", "null");
     }
+    if (formik.values.broker === "27" || formik.values.broker === 27) {
+      formik.setFieldValue("api_key", "null");
+      formik.setFieldValue("client_code", "null");
+      formik.setFieldValue("api_secret", "null");
+      formik.setFieldValue("api_type", "null");
+    }
+
     if (formik.values.licence === "2" || formik.values.licence === 2) {
       formik.setFieldValue("fromDate", null);
       formik.setFieldValue("todate", null);
@@ -557,6 +564,8 @@ const AddClient = () => {
           ? "App Key"
           : formik.values.broker == 26
           ? "App Key"
+            : formik.values.broker == 27
+          ? "ApI Key"
           : formik.values.broker == 25
           ? "Api Key"
           : "Api Key",
@@ -575,6 +584,7 @@ const AddClient = () => {
         values.broker === "19" ||
         values.broker === "20" ||
         values.broker === "26" ||
+        values.broker === "27" ||
         values.broker === "25",
       label_size: 12,
       col_size: 6,
@@ -599,6 +609,8 @@ const AddClient = () => {
           ? "Client Code"
           : formik.values.broker == 11
           ? "client_code"
+             : formik.values.broker == 27
+          ? "Vendor Code"
           : "User Id",
       type: "text",
       showWhen: (values) =>
@@ -610,6 +622,7 @@ const AddClient = () => {
         values.broker === "11" ||
         values.broker === "6" ||
         values.broker === "20" ||
+        values.broker === "27" ||
         values.broker === "21",
       label_size: 12,
       col_size: 6,
@@ -692,6 +705,8 @@ const AddClient = () => {
           ? "Api Secret"
           : formik.values.broker == 25
           ? "Api Secret"
+          : formik.values.broker == 27
+          ? "imei"
           : "Api Secret",
       type: "text",
       showWhen: (values) =>
@@ -709,6 +724,7 @@ const AddClient = () => {
         values.broker === "15" ||
         values.broker === "19" ||
         values.broker === "26" ||
+        values.broker === "27" ||
         values.broker === "25",
       label_size: 12,
       col_size: 6,
@@ -723,9 +739,11 @@ const AddClient = () => {
           ? "Trade Api Password"
           : formik.values.broker == 9
           ? "Encryption IV"
+          : formik.values.broker == 27
+          ? "twoFA"
           : "Api Secret",
       type: "text",
-      showWhen: (values) => values.broker === "7" || values.broker === "9",
+      showWhen: (values) => values.broker === "7" || values.broker === "9" || values.broker === "27",
       label_size: 12,
       col_size: 6,
       disable: false,

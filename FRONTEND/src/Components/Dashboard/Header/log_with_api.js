@@ -8,10 +8,10 @@ import { GET_BROKER_INFORMATION } from "../../../Service/admin.service";
 import toast, { Toaster } from 'react-hot-toast';
 
 import ToastButton from "../../ExtraComponents/Alert_Toast";
+import Shoonya from "./Brokerpage/Shoonya";
 
 
-
-export const loginWithApi = async (broker_id, UserDetails) => {
+export const loginWithApi = async (broker_id, UserDetails,check) => {
 
     if (broker_id === "1" || broker_id === 1) {
 
@@ -143,21 +143,17 @@ export const loginWithApi = async (broker_id, UserDetails) => {
     else if (broker_id === "11" || broker_id === 11) {
         alert("broker-11")
     }
-
     else if (broker_id === "12" || broker_id === 12) {
        
   
         window.location.href = "https://smartapi.angelbroking.com/publisher-login?api_key=" + UserDetails.api_key;
        
     }
-
     else if (broker_id === "13" || broker_id === 13) {
 
         window.location.href = `https://api.fyers.in/api/v2/generate-authcode?client_id=${UserDetails.app_id}&redirect_uri=${Config.base_url}fyers&response_type=code&state=${UserDetails.client_key}`
        
     }
-
-    // FIVE PAISA
     else if (broker_id === "14" || broker_id === 14) {
 
         window.location.href = `https://dev-openapi.5paisa.com/WebVendorLogin/VLogin/Index?VendorKey=${UserDetails.api_key}&ResponseURL=${Config.base_url}fivepaisa&State=${UserDetails.client_key}`;
@@ -263,6 +259,35 @@ export const loginWithApi = async (broker_id, UserDetails) => {
             }
 
         });;
+
+    }
+    else if (broker_id === "27" || broker_id === 27) {
+        // THIS PAGE OPEN A MODAL THIS MODAL FULL PAGEMODAL AND A FORM INSIDE IT CODE 
+   
+        axios({
+            url: `${Config.base_url}shoonya`,
+            method: "post",
+            data: {
+                Email: UserDetails.Email,
+                _id: UserDetails._id,
+                system_ip:""
+
+            },
+        }).then((res) => {
+
+            console.log(res.data)
+            if (res.data.status == true) {
+                toast.success(res.data.msg)
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+
+            } else {
+                toast.error(res.data.msg)
+
+            }
+
+        });
 
     }
 

@@ -1,0 +1,638 @@
+
+NEW TRADE TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:32 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:12:33 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"Uid":"FA84664_U","Actid":"FA84664_U","Exch":"NSE","Tsym":"IDEA-EQ","Qty":"1","Prc":"0","Trgprc":"0","Dscqty":"0","Prd":"C","Trantype":"B","Prctyp":"MKT","Ret":"DAY","Remarks":"QRSTP"}
+TIME Sat Oct 19 2024 10:12:33 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"261","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData={\"Uid\":\"FA84664_U\",\"Actid\":\"FA84664_U\",\"Exch\":\"NSE\",\"Tsym\":\"IDEA-EQ\",\"Qty\":\"1\",\"Prc\":\"0\",\"Trgprc\":\"0\",\"Dscqty\":\"0\",\"Prd\":\"C\",\"Trantype\":\"B\",\"Prctyp\":\"MKT\",\"Ret\":\"DAY\",\"Remarks\":\"QRSTP\"}&jKey=54ed6e6d555876bc2bf9e38273f85ffed88486f0bd24063109c04f77814bb9f6"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:16:38 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"Uid":"FA84664","Actid":"FA84664","Exch":"NSE","Tsym":"IDEA-EQ","Qty":"1","Prc":"0","Trgprc":"0","Dscqty":"0","Prd":"C","Trantype":"B","Prctyp":"MKT","Ret":"DAY","Remarks":"QRSTP"}
+TIME Sat Oct 19 2024 10:16:39 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"257","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData={\"Uid\":\"FA84664\",\"Actid\":\"FA84664\",\"Exch\":\"NSE\",\"Tsym\":\"IDEA-EQ\",\"Qty\":\"1\",\"Prc\":\"0\",\"Trgprc\":\"0\",\"Dscqty\":\"0\",\"Prd\":\"C\",\"Trantype\":\"B\",\"Prctyp\":\"MKT\",\"Ret\":\"DAY\",\"Remarks\":\"QRSTP\"}&jKey=54ed6e6d555876bc2bf9e38273f85ffed88486f0bd24063109c04f77814bb9f6"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:20:37 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"Uid":"FA84664","Actid":"FA84664","Exch":"NSE","Tsym":"IDEA-EQ","Qty":"1","Prc":"0","Trgprc":"0","Dscqty":"0","Prd":"C","Trantype":"B","Prctyp":"MKT","Ret":"DAY","Remarks":"QRSTP"}
+TIME Sat Oct 19 2024 10:20:38 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"257","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData={\"Uid\":\"FA84664\",\"Actid\":\"FA84664\",\"Exch\":\"NSE\",\"Tsym\":\"IDEA-EQ\",\"Qty\":\"1\",\"Prc\":\"0\",\"Trgprc\":\"0\",\"Dscqty\":\"0\",\"Prd\":\"C\",\"Trantype\":\"B\",\"Prctyp\":\"MKT\",\"Ret\":\"DAY\",\"Remarks\":\"QRSTP\"}&jKey=54ed6e6d555876bc2bf9e38273f85ffed88486f0bd24063109c04f77814bb9f6"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"Uid":"FA84664","Actid":"FA84664","Exch":"NSE","Tsym":"IDEA-EQ","Qty":"1","Prc":"0","Trgprc":"0","Dscqty":"0","Prd":"C","Trantype":"B","Prctyp":"MKT","Ret":"DAY","Remarks":"QRSTP"}
+TIME Sat Oct 19 2024 10:22:57 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"215","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"VIDYA\",\"actid\":\"CLIENT1\",\"exch\":\"NSE\",\"tsym\":\"ACC-EQ\",\"qty\":\"1\",\"price\":\"1400\",\"prd\":\"H\",\"trantype\":\"B\",\"prctyp\":\"LMT\",\"ret\":\"DAY\"}&jKey=54ed6e6d555876bc2bf9e38273f85ffed88486f0bd24063109c04f77814bb9f6"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"Uid":"FA84664","Actid":"FA84664","Exch":"NSE","Tsym":"IDEA-EQ","Qty":"1","Prc":"0","Trgprc":"0","Dscqty":"0","Prd":"C","Trantype":"B","Prctyp":"MKT","Ret":"DAY","Remarks":"QRSTP"}
+TIME Sat Oct 19 2024 10:24:03 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"217","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"FA84664\",\"actid\":\"CLIENT1\",\"exch\":\"NSE\",\"tsym\":\"ACC-EQ\",\"qty\":\"1\",\"price\":\"1400\",\"prd\":\"H\",\"trantype\":\"B\",\"prctyp\":\"LMT\",\"ret\":\"DAY\"}&jKey=54ed6e6d555876bc2bf9e38273f85ffed88486f0bd24063109c04f77814bb9f6"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:25:35 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"Uid":"FA84664","Actid":"FA84664","Exch":"NSE","Tsym":"IDEA-EQ","Qty":"1","Prc":"0","Trgprc":"0","Dscqty":"0","Prd":"C","Trantype":"B","Prctyp":"MKT","Ret":"DAY","Remarks":"QRSTP"}
+TIME Sat Oct 19 2024 10:25:36 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"218","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"FA84664\",\"actid\":\"CLIENT1\",\"exch\":\"NSE\",\"tsym\":\"IDEA-EQ\",\"qty\":\"1\",\"price\":\"1400\",\"prd\":\"H\",\"trantype\":\"B\",\"prctyp\":\"LMT\",\"ret\":\"DAY\"}&jKey=54ed6e6d555876bc2bf9e38273f85ffed88486f0bd24063109c04f77814bb9f6"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:26:38 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"Uid":"FA84664","Actid":"FA84664","Exch":"NSE","Tsym":"IDEA-EQ","Qty":"1","Prc":"0","Trgprc":"0","Dscqty":"0","Prd":"C","Trantype":"B","Prctyp":"MKT","Ret":"DAY","Remarks":"QRSTP"}
+TIME Sat Oct 19 2024 10:26:39 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"218","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"FA84664\",\"actid\":\"CLIENT1\",\"exch\":\"NSE\",\"tsym\":\"IDEA-EQ\",\"qty\":\"1\",\"price\":\"1400\",\"prd\":\"H\",\"trantype\":\"B\",\"prctyp\":\"LMT\",\"ret\":\"DAY\"}&jKey=54ed6e6d555876bc2bf9e38273f85ffed88486f0bd24063109c04f77814bb9f6"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"Uid":"FA84664","Actid":"FA84664","Exch":"NSE","Tsym":"IDEA-EQ","Qty":"1","Prc":"0","Trgprc":"0","Dscqty":"0","Prd":"C","Trantype":"B","Prctyp":"MKT","Ret":"DAY","Remarks":"QRSTP"}
+TIME Sat Oct 19 2024 10:32:59 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"340","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData=%7B%22uid%22%3A%22FA84664%22%2C%22actid%22%3A%22CLIENT1%22%2C%22exch%22%3A%22NSE%22%2C%22tsym%22%3A%22IDEA-EQ%22%2C%22qty%22%3A%221%22%2C%22price%22%3A%221400%22%2C%22prd%22%3A%22H%22%2C%22trantype%22%3A%22B%22%2C%22prctyp%22%3A%22LMT%22%2C%22ret%22%3A%22DAY%22%7D&jKey=54ed6e6d555876bc2bf9e38273f85ffed88486f0bd24063109c04f77814bb9f6"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"Uid":"FA84664","Actid":"FA84664","Exch":"NSE","Tsym":"IDEA-EQ","Qty":"1","Prc":"0","Trgprc":"0","Dscqty":"0","Prd":"C","Trantype":"B","Prctyp":"MKT","Ret":"DAY","Remarks":"QRSTP"}
+TIME Sat Oct 19 2024 10:33:22 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"415","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData=%7B%22Uid%22%3A%22FA84664%22%2C%22Actid%22%3A%22FA84664%22%2C%22Exch%22%3A%22NSE%22%2C%22Tsym%22%3A%22IDEA-EQ%22%2C%22Qty%22%3A%221%22%2C%22Prc%22%3A%220%22%2C%22Trgprc%22%3A%220%22%2C%22Dscqty%22%3A%220%22%2C%22Prd%22%3A%22C%22%2C%22Trantype%22%3A%22B%22%2C%22Prctyp%22%3A%22MKT%22%2C%22Ret%22%3A%22DAY%22%2C%22Remarks%22%3A%22QRSTP%22%7D&jKey=54ed6e6d555876bc2bf9e38273f85ffed88486f0bd24063109c04f77814bb9f6"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"Uid":"FA84664","Actid":"FA84664","Exch":"NSE","Tsym":"IDEA-EQ","Qty":"1","Prc":"0","Trgprc":"0","Dscqty":"0","Prd":"C","Trantype":"B","Prctyp":"MKT","Ret":"DAY","Remarks":"QRSTP"}
+TIME Sat Oct 19 2024 10:35:46 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"415","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData=%7B%22Uid%22%3A%22FA84664%22%2C%22Actid%22%3A%22FA84664%22%2C%22Exch%22%3A%22NSE%22%2C%22Tsym%22%3A%22IDEA-EQ%22%2C%22Qty%22%3A%221%22%2C%22Prc%22%3A%220%22%2C%22Trgprc%22%3A%220%22%2C%22Dscqty%22%3A%220%22%2C%22Prd%22%3A%22C%22%2C%22Trantype%22%3A%22B%22%2C%22Prctyp%22%3A%22MKT%22%2C%22Ret%22%3A%22DAY%22%2C%22Remarks%22%3A%22QRSTP%22%7D&jKey=54ed6e6d555876bc2bf9e38273f85ffed88486f0bd24063109c04f77814bb9f6"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"Uid":"FA84664","Actid":"FA84664","Exch":"NSE","Tsym":"IDEA-EQ","Qty":"1","Prc":"0","Trgprc":"0","Dscqty":"0","Prd":"C","Trantype":"B","Prctyp":"MKT","Ret":"DAY"}
+TIME Sat Oct 19 2024 10:36:37 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"385","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData=%7B%22Uid%22%3A%22FA84664%22%2C%22Actid%22%3A%22FA84664%22%2C%22Exch%22%3A%22NSE%22%2C%22Tsym%22%3A%22IDEA-EQ%22%2C%22Qty%22%3A%221%22%2C%22Prc%22%3A%220%22%2C%22Trgprc%22%3A%220%22%2C%22Dscqty%22%3A%220%22%2C%22Prd%22%3A%22C%22%2C%22Trantype%22%3A%22B%22%2C%22Prctyp%22%3A%22MKT%22%2C%22Ret%22%3A%22DAY%22%7D&jKey=54ed6e6d555876bc2bf9e38273f85ffed88486f0bd24063109c04f77814bb9f6"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:36:45 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:36:46 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"Uid":"FA84664","Actid":"FA84664","Exch":"NSE","Tsym":"IDEA-EQ","Qty":"1","Prc":"0","Trgprc":"0","Dscqty":"0","Prd":"C","Trantype":"B","Prctyp":"MKT","Ret":"DAY"}
+TIME Sat Oct 19 2024 10:36:46 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"385","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData=%7B%22Uid%22%3A%22FA84664%22%2C%22Actid%22%3A%22FA84664%22%2C%22Exch%22%3A%22NSE%22%2C%22Tsym%22%3A%22IDEA-EQ%22%2C%22Qty%22%3A%221%22%2C%22Prc%22%3A%220%22%2C%22Trgprc%22%3A%220%22%2C%22Dscqty%22%3A%220%22%2C%22Prd%22%3A%22C%22%2C%22Trantype%22%3A%22B%22%2C%22Prctyp%22%3A%22MKT%22%2C%22Ret%22%3A%22DAY%22%7D&jKey=54ed6e6d555876bc2bf9e38273f85ffed88486f0bd24063109c04f77814bb9f6"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"Uid":"FA84664","Actid":"FA84664","Exch":"NSE","Tsym":"IDEA-EQ","Qty":"1","Prc":"0","Trgprc":"0","Dscqty":"0","Prd":"C","Trantype":"B","Prctyp":"MKT","Ret":"DAY"}
+TIME Sat Oct 19 2024 10:43:25 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"239","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData={\"Uid\":\"FA84664\",\"Actid\":\"FA84664\",\"Exch\":\"NSE\",\"Tsym\":\"IDEA-EQ\",\"Qty\":\"1\",\"Prc\":\"0\",\"Trgprc\":\"0\",\"Dscqty\":\"0\",\"Prd\":\"C\",\"Trantype\":\"B\",\"Prctyp\":\"MKT\",\"Ret\":\"DAY\"}&jKey=54ed6e6d555876bc2bf9e38273f85ffed88486f0bd24063109c04f77814bb9f6"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:44:02 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+
+NEW TRADE TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:47:36 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+
+NEW TRADE TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"uid":"FA84664","actid":"FA84664","exch":"NSE","tsym":"","qty":"1","prc":"0","Trgprc":"0","Dscqty":"0","prd":"C","trantype":"B","prctyp":"MKT","ret":"DAY","Tsym":"IDEA-EQ","Trantype":"B"}
+TIME Sat Oct 19 2024 10:48:03 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 401","name":"AxiosError","stack":"AxiosError: Request failed with status code 401\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"264","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"FA84664\",\"actid\":\"FA84664\",\"exch\":\"NSE\",\"tsym\":\"\",\"qty\":\"1\",\"prc\":\"0\",\"Trgprc\":\"0\",\"Dscqty\":\"0\",\"prd\":\"C\",\"trantype\":\"B\",\"prctyp\":\"MKT\",\"ret\":\"DAY\",\"Tsym\":\"IDEA-EQ\",\"Trantype\":\"B\"}&jKey=54ed6e6d555876bc2bf9e38273f85ffed88486f0bd24063109c04f77814bb9f6"},"code":"ERR_BAD_REQUEST","status":401}
+
+NEW TRADE TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"uid":"FA84664","actid":"FA84664","exch":"NSE","tsym":"","qty":"1","prc":"0","Trgprc":"0","Dscqty":"0","prd":"C","trantype":"B","prctyp":"MKT","ret":"DAY","Tsym":"IDEA-EQ","Trantype":"B"}
+TIME Sat Oct 19 2024 10:48:57 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"264","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"FA84664\",\"actid\":\"FA84664\",\"exch\":\"NSE\",\"tsym\":\"\",\"qty\":\"1\",\"prc\":\"0\",\"Trgprc\":\"0\",\"Dscqty\":\"0\",\"prd\":\"C\",\"trantype\":\"B\",\"prctyp\":\"MKT\",\"ret\":\"DAY\",\"Tsym\":\"IDEA-EQ\",\"Trantype\":\"B\"}&jKey=c37ae9313179b9e0f52e49b48fb8a2d7aeaebd47e5dda089f61cc85649bb478b"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Sat Oct 19 2024 10:50:12 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:50:12 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:50:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:12 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:12 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:12 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:12 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:12 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:12 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:12 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:13 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:13 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:13 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:13 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:50:13 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:50:13 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"uid":"FA84664","actid":"FA84664","exch":"NSE","tsym":"IDEA-EQ","qty":"1","prc":"0","Trgprc":"0","Dscqty":"0","prd":"C","trantype":"B","prctyp":"MKT","ret":"DAY","Trantype":"B"}
+TIME Sat Oct 19 2024 10:50:13 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER USER ENTRY - Shoonya RESPONSE -{"request_time":"10:50:13 19-10-2024","stat":"Ok","norenordno":"24101900001682"}
+TIME Sat Oct 19 2024 10:50:13 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{}
+
+NEW TRADE TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"uid":"FA84664","actid":"FA84664","exch":"NSE","tsym":"IDEA-EQ","qty":"1","prc":"0","Trgprc":"0","Dscqty":"0","prd":"C","trantype":"B","prctyp":"MKT","ret":"DAY","Trantype":"B"}
+TIME Sat Oct 19 2024 10:52:24 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER USER ENTRY - Shoonya RESPONSE -{"request_time":"10:52:24 19-10-2024","stat":"Ok","norenordno":"24101900001709"}
+
+NEW TRADE TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"uid":"FA84664","actid":"FA84664","exch":"NSE","tsym":"IDEA-EQ","qty":"1","prc":"0","Trgprc":"0","Dscqty":"0","prd":"C","trantype":"B","prctyp":"MKT","ret":"DAY","Trantype":"B"}
+TIME Sat Oct 19 2024 10:58:33 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER USER ENTRY - Shoonya RESPONSE -{"request_time":"10:58:33 19-10-2024","stat":"Ok","norenordno":"24101900001771"}
+
+NEW TRADE TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 10:58:50 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+
+NEW TRADE TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 11:03:10 GMT+0530 (India Standard Time) SHOONYA POSITION DATA - Shoonya LENGTH = 1
+
+NEW TRADE TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) SHOONYA POSITION DATA - Shoonya LENGTH = 1
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER EXIT- Shoonya REQUEST -{"uid":"FA84664","actid":"FA84664","exch":"NSE","tsym":"IDEA-EQ","qty":"1","prc":"0","Trgprc":"0","Dscqty":"0","prd":"C","trantype":"B","prctyp":"MKT","ret":"DAY","Trantype":"S"}
+TIME Sat Oct 19 2024 11:05:52 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER USER EXIT- Shoonya RESPONSE -{"request_time":"11:05:52 19-10-2024","stat":"Ok","norenordno":"24101900001837"}
+
+NEW TRADE TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) SHOONYA POSITION DATA - Shoonya LENGTH = 1
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER EXIT- Shoonya REQUEST -{"uid":"FA84664","actid":"FA84664","exch":"NSE","tsym":"IDEA-EQ","qty":"1","prc":"0","Trgprc":"0","Dscqty":"0","prd":"C","trantype":"B","prctyp":"MKT","ret":"DAY","Trantype":"S"}
+TIME Sat Oct 19 2024 11:06:56 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER USER EXIT- Shoonya RESPONSE -{"request_time":"11:06:56 19-10-2024","stat":"Ok","norenordno":"24101900001845"}
+
+NEW TRADE TIME Sat Oct 19 2024 11:08:01 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 11:08:09 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 11:08:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) SHOONYA POSITION DATA - Shoonya LENGTH = 1
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER EXIT- Shoonya REQUEST -{"uid":"FA84664","actid":"FA84664","exch":"NSE","tsym":"IDEA-EQ","qty":"1","prc":"0","Trgprc":"0","Dscqty":"0","prd":"C","trantype":"B","prctyp":"MKT","ret":"DAY","Trantype":"S"}
+TIME Sat Oct 19 2024 11:08:11 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER USER EXIT- Shoonya RESPONSE -{"request_time":"11:08:11 19-10-2024","stat":"Ok","norenordno":"24101900001851"}
+
+NEW TRADE TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) SHOONYA POSITION DATA - Shoonya LENGTH = 1
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER EXIT- Shoonya REQUEST -{"uid":"FA84664","actid":"FA84664","exch":"NSE","tsym":"IDEA-EQ","qty":"1","prc":"0","Trgprc":"0","Dscqty":"0","prd":"C","trantype":"B","prctyp":"MKT","ret":"DAY","Trantype":"S"}
+TIME Sat Oct 19 2024 11:08:14 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER USER EXIT- Shoonya RESPONSE -{"request_time":"11:08:14 19-10-2024","stat":"Ok","norenordno":"24101900001852"}
+
+NEW TRADE TIME Sat Oct 19 2024 11:08:15 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 11:08:15 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) SHOONYA POSITION DATA - Shoonya LENGTH = 1
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER EXIT- Shoonya REQUEST -{"uid":"FA84664","actid":"FA84664","exch":"NSE","tsym":"IDEA-EQ","qty":"1","prc":"0","Trgprc":"0","Dscqty":"0","prd":"C","trantype":"B","prctyp":"MKT","ret":"DAY","Trantype":"S"}
+TIME Sat Oct 19 2024 11:08:16 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER USER EXIT- Shoonya RESPONSE -{"request_time":"11:08:16 19-10-2024","stat":"Ok","norenordno":"24101900001853"}
+
+NEW TRADE TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:18800,OType:PUT,Expiry:21102021,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:26 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:27 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:17:27 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 11:17:27 GMT+0530 (India Standard Time) SHOONYA POSITION DATA - Shoonya LENGTH = 1
+TIME Sat Oct 19 2024 11:17:27 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER EXIT- Shoonya REQUEST -{"uid":"FA84664","actid":"FA84664","exch":"NSE","tsym":"IDEA-EQ","qty":"1","prc":"0","Trgprc":"0","Dscqty":"0","prd":"C","trantype":"B","prctyp":"MKT","ret":"DAY","Trantype":"S"}
+TIME Sat Oct 19 2024 11:17:27 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER USER EXIT- Shoonya RESPONSE -{"request_time":"11:17:27 19-10-2024","stat":"Ok","norenordno":"24101900001943"}
+
+NEW TRADE TIME Sat Oct 19 2024 11:34:23 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:BANKNIFTY,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:51000,OType:PUT,Expiry:23102024,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 11:34:23 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 53053
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"uid":"FA84664","actid":"FA84664","exch":"NFO","tsym":"BAJFINANCE27JUN24C4000","qty":"15","prc":"0","Trgprc":"0","Dscqty":"0","prd":"M","trantype":"B","prctyp":"MKT","ret":"DAY","Trantype":"B"}
+TIME Sat Oct 19 2024 11:34:24 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER CATCH ENTRY - Shoonya ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:531:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"270","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.shoonya.com/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"FA84664\",\"actid\":\"FA84664\",\"exch\":\"NFO\",\"tsym\":\"BAJFINANCE27JUN24C4000\",\"qty\":\"15\",\"prc\":\"0\",\"Trgprc\":\"0\",\"Dscqty\":\"0\",\"prd\":\"M\",\"trantype\":\"B\",\"prctyp\":\"MKT\",\"ret\":\"DAY\",\"Trantype\":\"B\"}&jKey=abded2f364f91ada9f14a1655e51e3669b4ae18060d0d197e8ec52acec2734a2"},"code":"ERR_BAD_REQUEST","status":400}

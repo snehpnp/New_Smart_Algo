@@ -64,6 +64,8 @@ const { GetAccessTokenIcicidirect, GetOrderFullInformationIcicidirect } = requir
 
 const { GetAccessTokenmandotsecurities, GetOrderFullInformationmandotsecurities } = require('../../Controllers/Brokerassecc_token/Mandotsecurities')
 
+const {GetAccessTokenShoonya,GetOrderFullInformationShoonya,SingleOrderFullInformationShoonya} = require('../../Controllers/Brokerassecc_token/Shoonya')
+
 
 // BROKER REDIRECT
 const GetOrderFullInformationAll_broker = async (req, res) => {
@@ -224,6 +226,21 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
     else if (broker == 8) {
       GetOrderFullInformationmandotsecurities(req, res, result);
     }
+
+
+    else if (broker == 27) {
+      let broker_response_id = req.body.broker_response_id;
+      let order_id = req.body.order_id;
+   
+      if(order_id != "" && order_id != undefined){
+        SingleOrderFullInformationShoonya(req, res, result,broker_response_id , order_id);
+      }else{
+        return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+      }
+
+    }
+
+
     
     else {
       return res.send({ status: false, msg: "broker not found" });
@@ -314,6 +331,7 @@ router.post('/iiflsecurities', GetAccessTokenIifl);
 
 router.post('/mandotsecurities', GetAccessTokenmandotsecurities);
 
+router.post('/shoonya', GetAccessTokenShoonya);
 
 
 

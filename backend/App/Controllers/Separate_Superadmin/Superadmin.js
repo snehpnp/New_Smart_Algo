@@ -579,50 +579,6 @@ class SuperAdmin {
 
       
 
-
-      // const getToMonth = await user.aggregate([
-      //   { $match: { _id: new ObjectId(id) } },
-      //   {
-      //     $lookup: {
-      //       from: "count_licenses",
-      //       localField: "_id",
-      //       foreignField: "user_id",
-      //       as: "licenses"
-      //     }
-      //   },
-      //   { $unwind: "$licenses" },
-      //   {
-      //     $group: {
-      //       _id: "$_id",
-      //       totalLicence: { $sum: { $toDouble: "$licenses.license" } },
-      //       UserName: { $first: "$UserName" },
-      //       CreateDate: { $first: "$CreateDate" },
-      //       StartDate: { $first: "$StartDate" },
-      //       EndDate: { $first: "$EndDate" },
-      //       licence: { $first: "$licence" },
-      //       Email : { $first: "$Email" },
-      //       PhoneNo : { $first: "$PhoneNo"},
-      //       FullName : { $first: "$FullName" }
-
-
-      //     }
-      //   },
-      //   {
-      //     $project: {
-      //       _id: 0,
-      //       UserName: 1,
-      //       totalLicence: 1,
-      //       CreateDate: 1,
-      //       licence: 1,
-      //       EndDate: 1,
-      //       StartDate: 1,
-      //       Email: 1,
-      //       FullName: 1,
-      //       PhoneNo: 1,
-      //     }
-      //   }
-      // ]).exec();
-
       const getToMonth = await user.aggregate([
         { $match: { _id: new ObjectId(id) } },
         {
@@ -638,7 +594,14 @@ class SuperAdmin {
         {
           $group: {
             _id: "$_id",
-            totalLicence: { $sum: { $toDouble: "$licenses.license" } },
+            // Use $ifNull to handle cases where `licenses.license` is null or doesn't exist
+            totalLicence: { 
+              $sum: { 
+                $toDouble: { 
+                  $ifNull: ["$licenses.license", 0]  // If `licenses.license` is null, default to 0
+                }
+              }
+            },
             UserName: { $first: "$UserName" },
             CreateDate: { $first: "$CreateDate" },
             StartDate: { $first: "$StartDate" },
@@ -664,7 +627,6 @@ class SuperAdmin {
           }
         }
       ]).exec();
-      
 
       const GetCountLicenceDAta = await count_licenses.find({ user_id: id }).sort({ createdAt: -1 })
 

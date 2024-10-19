@@ -137,6 +137,41 @@ const OrderPosition = async () => {
 
 // postOrder();
 
-OrderPosition()
+// OrderPosition()
 
 // Order()
+
+
+
+
+
+
+const UpstoOrderBook = async () => {
+
+  let config = {
+    method: 'get',
+    // url: 'https://api.upstox.com/v2/order/retrieve-all',
+    url: 'https://api.upstox.com/v2/portfolio/short-term-positions',
+
+    headers: {
+        'accept': ' application/json',
+        'Api-Version': ' 2.0',
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI4NUFQRkUiLCJqdGkiOiI2NzExZDllZWQ2MTk0NTE2MWRjZjAzN2EiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzI5MjIzMTUwLCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MjkyODg4MDB9.Flm29zvbd2eHCN9_A_deQ1OWO4NvD-EXkjOtB_6QV2w',
+        'Content-Type': 'application/json'
+    },
+    
+
+};
+
+axios(config)
+    .then(async (response) => {
+      console.log(response.data)
+    }
+    )
+    .catch((error) => {
+      console.log(error);
+    });
+
+  }
+
+   UpstoOrderBook()
