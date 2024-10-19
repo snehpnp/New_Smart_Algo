@@ -185,7 +185,7 @@ class Shoonya {
           uid: user_info[0].demat_userid,
           actid: user_info[0].demat_userid,
           norenordno:req.body.order_id,
-          exch:"NSE" 
+          exch:"NFO" 
         };
         
         let data = JSON.stringify(postData);
@@ -197,7 +197,9 @@ class Shoonya {
           method: "post",
           maxBodyLength: Infinity,
       
-          url: "https://api.shoonya.com/NorenWClientTP/SingleOrdStatus",
+          // url: "https://api.shoonya.com/NorenWClientTP/SingleOrdStatus",
+          url: "https://api.shoonya.com/NorenWClientTP/OrderBook",
+
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
@@ -209,17 +211,22 @@ class Shoonya {
 
           console.log("response",response.data)
 
-          if (response.data[0]) {
-            const message = JSON.stringify(response.data[0]);
-            console.log("message",message)
+          if (response.data.length > 0) {
+
+            const FindTrade = response.data.find(item => item.norenordno == order_id);
+
+            console.log("message",FindTrade)
+
+            const message = JSON.stringify(FindTrade);
+          
 
             let result = await BrokerResponse.findByIdAndUpdate(
               { _id: broker_response_id },
               {
                 order_view_date: message,
                 order_view_status: "1",
-                order_view_response: response.data[0].status,
-                reject_reason: response.data[0].rejreason,
+                order_view_response: FindTrade.status,
+                reject_reason: FindTrade.rejreason,
               },
               { new: true }
             );

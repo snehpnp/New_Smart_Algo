@@ -46,39 +46,39 @@ const place_order = async (
         var tsym;
 
         if (segment && segment.toUpperCase() === "C") {
-          filePath_token = "/swastika/NSE_symbols.txt";
+          filePath_token = "/shoonya/NSE_symbols.txt";
         } else if (
           segment &&
           (segment.toUpperCase() === "F" ||
             segment.toUpperCase() === "O" ||
             segment.toUpperCase() === "FO")
         ) {
-          filePath_token = "/swastika/NFO_symbols.txt";
+          filePath_token = "/shoonya/NFO_symbols.txt";
         } else if (
           segment &&
           (segment.toUpperCase() === "CF" || segment.toUpperCase() === "CO")
         ) {
-          filePath_token = "/swastika/CDS_symbols.txt";
+          filePath_token = "/shoonya/CDS_symbols.txt";
         } else if (
           segment &&
           (segment.toUpperCase() === "MF" || segment.toUpperCase() === "MO")
         ) {
-          filePath_token = "/swastika/MCX_symbols.txt";
+          filePath_token = "/shoonya/MCX_symbols.txt";
         } else {
           console.log("Invalid segment value");
           return;
         }
 
-        const filePath_swastika = path.join(
+        const filePath_shoonya = path.join(
           __dirname,
           "..",
           "AllInstrumentToken",
           filePath_token
         );
 
-        //    const command = `grep ,${pattern}, ${filePath_swastika}`;
-        //    const command = `grep -E ".*,(${pattern}),.*.*(${input_symbol}).*" ${filePath_swastika}`;
-        const command = `findstr ${pattern} ${filePath_swastika}`;
+        //    const command = `grep ,${pattern}, ${filePath_shoonya}`;
+        //    const command = `grep -E ".*,(${pattern}),.*.*(${input_symbol}).*" ${filePath_shoonya}`;
+        const command = `findstr ${pattern} ${filePath_shoonya}`;
 
         console.log("command ", command);
 

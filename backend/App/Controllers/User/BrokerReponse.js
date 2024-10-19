@@ -68,7 +68,8 @@ class BrokerReponse {
               receive_signal: 1,
               order_id: 1,
               order_view_status: 1,
-
+              order_view_response: 1,
+              order_view_date: 1,
               "userDetails.UserName": 1,
             },
           },

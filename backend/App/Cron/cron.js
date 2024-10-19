@@ -951,7 +951,7 @@ const TokenSymbolUpdate = async () => {
 
     try {
         var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
-        console.log("filePath", filePath)
+   
         fs.appendFile(filePath, "-----TokenSymbolUpdate  - " + new Date() + "----- ***\\n\n", function (err) {
             if (err) {
                 console.log("err filePath", err);
@@ -1067,7 +1067,7 @@ const TokenSymbolUpdate = async () => {
 
             try {
                 var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
-                console.log("filePath", filePath)
+              
                 fs.appendFile(filePath, "-----TokenSymbolUpdate End - " + new Date() + "----- ***\\n\n", function (err) {
                     if (err) {
                         console.log("err filePath", err);
@@ -1093,7 +1093,7 @@ const TokenSymbolUpdate1 = async () => {
 
     try {
         var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
-        console.log("filePath", filePath)
+    
         fs.appendFile(filePath, "-----TokenSymbolUpdate  - " + new Date() + "----- ***\\n\n", function (err) {
             if (err) {
                 console.log("err filePath", err);
@@ -1197,7 +1197,7 @@ const TokenSymbolUpdate1 = async () => {
 
             try {
                 var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
-                console.log("filePath", filePath)
+              
                 fs.appendFile(filePath, "-----TokenSymbolUpdate End - " + new Date() + "----- ***\\n\n", function (err) {
                     if (err) {
                         console.log("err filePath", err);
