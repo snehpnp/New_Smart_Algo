@@ -36,8 +36,18 @@ class Strategy {
             var pipeline = ""
 
             if (searchQuery == "") {
+               
 
                 pipeline = [
+                    {
+                        $match: {
+                            $or: [
+                                { segment: 'C' },
+                                { segment: 'F' },
+                                { segment: 'MF' }
+                            ],
+                        }
+                    },
                     {
                         $skip: (page - 1) * pageSize
                     },
@@ -47,11 +57,17 @@ class Strategy {
                 ];
 
             } else {
-
+                
+              
                 pipeline = [
                     {
                         $match: {
-                            tradesymbol: { $regex: "^" + searchQuery, $options: "i" }
+                            tradesymbol: { $regex: "^" + searchQuery, $options: "i" },
+                            $or: [
+                                { segment: 'C' },
+                                { segment: 'F' },
+                                { segment: 'MF' }
+                            ],
                         }
                     },
                     {
