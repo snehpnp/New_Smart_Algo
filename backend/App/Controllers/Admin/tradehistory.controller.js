@@ -396,7 +396,7 @@ class Tradehistory {
 
 
       var Admin_information = await user_logs.find({
-        user_Id: new ObjectId(req.body.id),
+        // user_Id: new ObjectId(req.body.id),
         trading_status: { $in: ["Admin Trading On", "Admin Trading off"] },
         createdAt: { $gte: threeDaysAgo }
       }).sort({ createdAt: -1 });

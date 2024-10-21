@@ -1262,7 +1262,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
 
             if (item.instrumenttype == "OPTFUT") {
               count++;
-              console.log("item - MO " + count + " ", item);
+      
               const matchingElements = categoryResult.filter(
                 (item) => item.segment === "MO"
               );
@@ -1358,7 +1358,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
 
             if (item.instrumenttype == "OPTCUR" && item.exch_seg == "CDS") {
               count++;
-              console.log("item - CO " + count + " ", item);
+             
               const matchingElements = categoryResult.filter(
                 (item) => item.segment === "CO"
               );

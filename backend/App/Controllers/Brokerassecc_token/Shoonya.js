@@ -75,8 +75,6 @@ class Shoonya {
       );
   
       const responseData = response.data;
-  
-      console.log("responseData", responseData);
 
       if (responseData.stat === "Ok") {
         const updatedUser = await User.findByIdAndUpdate(
@@ -211,13 +209,11 @@ class Shoonya {
       axios(config)
         .then(async (response) => {
 
-          console.log("response",response.data)
 
           if (response.data.length > 0) {
 
             const FindTrade = response.data.find(item => item.norenordno == order_id);
 
-            console.log("message",FindTrade)
 
             const message = JSON.stringify(FindTrade);
           
@@ -270,8 +266,6 @@ const GetAllBrokerResponse = async (user_info, res) => {
       user_id: objectId,
       order_view_status: "0",
     });
-
-    console.log("FindUserBrokerResponse", FindUserBrokerResponse);
 
     if (FindUserBrokerResponse.length > 0) {
       FindUserBrokerResponse.forEach((data1) => {

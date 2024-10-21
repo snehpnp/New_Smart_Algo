@@ -107,10 +107,10 @@ app.post("/pm2/update", async (req, res) => {
             conn.end();
           })
           .on("data", (data) => {
-            console.log(`STDOUT: ${data}`);
+            // console.log(`STDOUT: ${data}`);
           })
           .stderr.on("data", (data) => {
-            console.log(`STDERR: ${data}`);
+            // console.log(`STDERR: ${data}`);
           });
       });
     })
@@ -131,8 +131,7 @@ app.post("/pm2/update", async (req, res) => {
 app.get('/UpdateChannel/:c/:e', async (req, res) => {
   const {  TruncateTableTokenChainAdd_fiveMinute } = require('./App/Cron/cron')
   const { c ,e} = req.params;
-  console.log("c - ",c)
-  console.log("e - ",e)
+
   
    TruncateTableTokenChainAdd_fiveMinute()
   return res.send({ status: true, msg: 'Channel Update' });

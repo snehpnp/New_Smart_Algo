@@ -188,7 +188,6 @@ class License {
   
       const resultLicence = await user_model.aggregate(pip);
   
-       console.log("resultLicence ", resultLicence)
 
 
       const Transection_license = await count_licenses.aggregate([

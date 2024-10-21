@@ -592,7 +592,7 @@ class OptionChain {
                 
                 try {
                     const result = await token_chain_collection.bulkWrite(bulkOps);
-                    console.log(result);  // This will show how many documents were matched, modified, upserted, etc.
+                 
                 } catch (error) {
                     console.error("Error updating tokens:", error);
                 }

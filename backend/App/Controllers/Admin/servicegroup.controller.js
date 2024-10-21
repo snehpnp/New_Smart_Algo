@@ -881,7 +881,7 @@ class GroupService {
   async EditPlans(req, res) {
     try {
       const { _id, name, title, description, image, prices } = req.body;
-      console.log(req.body);
+ 
 
       const objectId = new ObjectId(_id);
       const result = await Plansmodel.findByIdAndUpdate(objectId, {
@@ -910,11 +910,9 @@ class GroupService {
       const { id } = req.body;
       const objectId = new ObjectId(id);
 
-      console.log(objectId);
 
       const User_plan = await user_modal.find({ plan_id: objectId });
 
-      console.log(User_plan?.length);
       if (User_plan?.length > 0) {
         return res.send({
           status: false,
