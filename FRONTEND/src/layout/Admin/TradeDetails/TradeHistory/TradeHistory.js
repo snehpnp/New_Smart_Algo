@@ -1257,15 +1257,15 @@ const TradeHistory = () => {
         <div className="table-responsive">
           {tradeHistoryData.data.length > 0 ? (
             total >= 0 ? (
-              <h4>
-                Total Realised P/L :{" "}
-                <span style={{ color: "green" }}> {total.toFixed(2)}</span>{" "}
-              </h4>
+              <h3>
+               <b>Total Realised P/L</b>  :{" "}
+               <b><span style={{ color: "green" }}> {total.toFixed(2)}</span>{" "}</b> 
+              </h3>
             ) : (
-              <h4>
-                Total Realised P/L :{" "}
-                <span style={{ color: "red" }}> {total.toFixed(2)}</span>{" "}
-              </h4>
+              <h3>
+                <b>Total Realised P/L</b> :{" "}
+                <b><span style={{ color: "red" }}> {total.toFixed(2)}</span>{" "}</b> 
+              </h3>
             )
           ) : (
             ""

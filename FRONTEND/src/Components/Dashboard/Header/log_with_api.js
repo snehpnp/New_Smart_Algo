@@ -276,11 +276,11 @@ export const loginWithApi = async (broker_id, UserDetails,check) => {
         }).then((res) => {
 
             console.log(res.data)
-            if (res.data.status == true) {
+            if (res.data.status) {
                 toast.success(res.data.msg)
                 setTimeout(() => {
                     window.location.reload();
-                }, 1500);
+                }, 1100);
 
             } else {
                 toast.error(res.data.msg)

@@ -513,11 +513,11 @@ const Header = ({ ChatBox }) => {
                     </>
                   </li>
                 ) : (
-                  ""
+                  null
                 )}
 
-                {user_role === "USER"
-                  ? getPlanName && (
+                {user_role === "USER" && getPlanName
+                   ? (
                       <li className="nav-item dropdown header-profile me-2">
                         <button
                           className=" btn btn-primary px-2"
@@ -527,7 +527,7 @@ const Header = ({ ChatBox }) => {
                         </button>
                       </li>
                     )
-                  : ""}
+                  : null}
 
                 <>
                   {user_role === "ADMIN" ||
@@ -541,10 +541,10 @@ const Header = ({ ChatBox }) => {
                       </button>
                     </li>
                   ) : (
-                    ""
+                    null
                   )}
 
-                  {user_role === "USER" && UserDetails.license_type == "2" ? (
+                  {user_role === "USER" && UserDetails.license_type == "2"  || UserDetails.license_type == "0"? (
                     <li className="nav-item dropdown header-profile me-2">
                       <button
                         className=" btn btn-primary px-2"
@@ -554,7 +554,7 @@ const Header = ({ ChatBox }) => {
                       </button>
                     </li>
                   ) : (
-                    ""
+                    null
                   )}
 
                   <li className="nav-item dropdown header-profile user-name me-2">

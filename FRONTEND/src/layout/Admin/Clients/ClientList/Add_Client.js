@@ -739,11 +739,10 @@ const AddClient = () => {
           ? "Trade Api Password"
           : formik.values.broker == 9
           ? "Encryption IV"
-          : formik.values.broker == 27
-          ? "twoFA"
+        
           : "Api Secret",
       type: "text",
-      showWhen: (values) => values.broker === "7" || values.broker === "9" || values.broker === "27",
+      showWhen: (values) => values.broker === "7" || values.broker === "9",
       label_size: 12,
       col_size: 6,
       disable: false,

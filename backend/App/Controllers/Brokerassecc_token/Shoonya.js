@@ -117,7 +117,7 @@ class Shoonya {
         return res.send({
           status: false,
           data: [],
-          msg: responseData.emsg,
+          msg: "Trading On Try Feild " +responseData.emsg,
         });
       }
     } catch (error) {
