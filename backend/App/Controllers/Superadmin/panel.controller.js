@@ -262,9 +262,7 @@ class Panel {
       }
   
 
-      if(EmailCheck.plan_id == null || EmailCheck.plan_id == undefined || EmailCheck.plan_id == ""){
-        return res.send({ status: false, msg: "User Not exists", data: [] , PlanName: '',});
-      }
+     
       // Try to get the PlanName
       let PlanName;
       try {

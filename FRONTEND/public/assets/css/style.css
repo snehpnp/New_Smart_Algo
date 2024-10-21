@@ -13615,15 +13615,15 @@ label {
   fill: #FFFFFF !important;
 }
 
-@media only screen and (max-width: 1600px) {
+/* @media only screen and (max-width: 1600px) {
   .nav-header .brand-title {
     max-width: 6.75rem;
   }
-}
+} */
 
 @media only screen and (max-width: 87.5rem) {
   .nav-header .brand-title {
-    max-width: 7rem;
+    /* max-width: 7rem; */
     height: 50px;
   }
 }
