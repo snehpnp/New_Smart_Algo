@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Content from "../../../Components/Dashboard/Content/Content";
 import * as valid_err from "../../../Utils/Common_Messages";
 import axios from "axios";
+import ExportToExcel from "../../../Utils/ExportCsv";
+
 import Loader from "../../../Utils/Loader";
 import { Pencil, Pointer, RefreshCcw, BadgePlus } from "lucide-react";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
@@ -29,6 +31,8 @@ const AdminsList = () => {
   const [searchInput, setSearchInput] = useState("");
   const [themeData, setThemeData] = useState({ loading: true, data: [] });
   const [filteredData, setFilteredData] = useState([]);
+  const [excelData, setExcelData] = useState([]);
+  const [ statusData , setStatusData ] = useState("");
 
   useEffect(() => {
     fetchAllPanels();
@@ -36,16 +40,36 @@ const AdminsList = () => {
 
   useEffect(() => {
     if (themeData.data.length > 0) {
+
+
+      console.log("statusData",statusData)
+    
       const filteredData = themeData.data.filter((item) => {
         const matchSearch =
           searchInput === "" ||
           item.panel_name.toLowerCase().includes(searchInput.toLowerCase()) ||
           item.domain.toLowerCase().includes(searchInput.toLowerCase());
-        return matchSearch;
+      
+        const matchStatus =
+          statusData === undefined || item.is_active === Number(statusData);
+      
+        return matchSearch && matchStatus;
       });
+      
+      let ExportData = filteredData && filteredData.map((item) => {
+        return {
+          "Panel Name": item.panel_name,
+          "Theme Name": item.theme_name,
+          "Is Active": item.is_active === 0 ? "Active" : "Inactive",
+        };
+      });
+
+
+
+      setExcelData(ExportData);
       setFilteredData(filteredData);
     }
-  }, [searchInput, themeData.data]);
+  }, [searchInput, themeData.data,statusData]);
 
   const GetAllThemes = async () => {
     try {
@@ -62,6 +86,16 @@ const AdminsList = () => {
     try {
       const response = await dispatch(All_Panel_List()).unwrap();
       if (response.status) {
+        let ExportData = response.data && response.data.map((item) => {
+          return {
+            "Panel Name": item.panel_name,
+            "Theme Name": item.theme_name,
+            "Is Active": item.is_active === 0 ? "Active" : "Inactive",
+          };
+        });
+
+        setExcelData(ExportData);
+
         setThemeData({
           loading: false,
           data: response.data,
@@ -79,7 +113,7 @@ const AdminsList = () => {
         loading: false,
         data: [],
       });
-      setFilteredData([]); 
+      setFilteredData([]);
     }
   };
 
@@ -164,17 +198,17 @@ const AdminsList = () => {
       text: "SR. No.",
       formatter: (cell, row, rowIndex) => rowIndex + 1,
     },
- 
+
     {
-        dataField: 'panel_name',
-        text: 'Panel Name',
-        formatter: (cell, row) => (
-            <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-                <Link to={`${row.domain}`} target="_blank" rel="noopener noreferrer">
-                    {row.domain}
-                </Link>
-            </span>
-        )
+      dataField: "panel_name",
+      text: "Panel Name",
+      formatter: (cell, row) => (
+        <span data-toggle="tooltip" data-placement="top" title="Panel Views">
+          <Link to={`${row.domain}`} target="_blank" rel="noopener noreferrer">
+            {row.domain}
+          </Link>
+        </span>
+      ),
     },
 
     {
@@ -509,7 +543,6 @@ const AdminsList = () => {
       if (response.status) {
         toast.success(response.msg);
         window.location.reload();
-    
       } else {
         toast.error(response.msg);
         window.location.reload();
@@ -527,6 +560,18 @@ const AdminsList = () => {
       const filteredData = themeData.data.filter((item) => {
         return item.is_active === Number(value);
       });
+
+
+      let ExportData = filteredData && filteredData.map((item) => {
+        return {
+          "Panel Name": item.panel_name,
+          "Theme Name": item.theme_name,
+          "Is Active": item.is_active === 0 ? "Active" : "Inactive",
+        };
+      });
+
+      setExcelData(ExportData);
+
       setFilteredData(filteredData);
     }
   };
@@ -560,7 +605,6 @@ const AdminsList = () => {
             alignItems: "center",
           }}
         >
-      
           <div
             className="mb-4"
             style={{
@@ -586,7 +630,6 @@ const AdminsList = () => {
             />
           </div>
 
-          {/* Panel Status Dropdown */}
           <div
             className="mb-4"
             style={{
@@ -605,12 +648,31 @@ const AdminsList = () => {
                 border: "1px solid #ccc",
                 fontSize: "16px",
               }}
-              onChange={(e) => changeView(e)}
+              onChange={(e) => setStatusData(e.target.value)}
             >
               <option value="">All</option>
               <option value="0">Active</option>
               <option value="1">Inactive</option>
             </select>
+          </div>
+
+          <div
+            className="mb-4"
+            style={{
+              flex: "1 1 200px",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <h6 style={{ marginBottom: "10px", fontWeight: "bold" }}>
+              Export Data
+            </h6>
+
+            <ExportToExcel
+              className="btn btn-primary export-btn "
+              apiData={excelData}
+              fileName={"Export"}
+            />
           </div>
         </div>
 

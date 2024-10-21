@@ -279,27 +279,30 @@ const BrokerResponse = () => {
   };
 
 
-
+  const newsData = [
+    "Algorithmic trading carries inherent risks, including market volatility and fluctuations.Trading in financial markets can result in the loss of capital   Ensure that you fully understand the risks associated with trading before engaging   You are solely responsible for all decisions and outcomes resulting from the use of this software.",
+  ];
   return (
 
     <>
-    
+
+
     <Content Page_title="Dashboard" button_status={false}>
       <div
         className="table-responsive "
         style={{
           height: "55vh",
           overflowY: "auto",
-          display: "flex",
-          flexDirection: "column",
         }}
       >
- <NewsTicker />
-
+    
        {BrokerId && BrokerId == "4" && <h6 className="fw-bold text-danger mb-3">
           <strong>Note:</strong> Product Type selection is mandatory for CNC in
           Motilal Oswal.
         </h6>}
+
+
+        <NewsTicker/>
 
         <table className="table dashboard-table ">
           <thead className="bg-primary">

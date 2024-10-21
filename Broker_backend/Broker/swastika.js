@@ -14,7 +14,6 @@ var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
      
-  console.log("okkk swastika...")
     try {
 
         var dt = signals.DTime;

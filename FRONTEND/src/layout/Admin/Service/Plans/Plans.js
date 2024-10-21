@@ -11,6 +11,10 @@ import {
   Edit_Plans,
 } from "../../../../ReduxStore/Slice/Admin/GroupServiceSlice";
 
+import { DeletePlan } from "../../../../ReduxStore/Slice/Admin/userSlice";
+
+import Swal from "sweetalert2";
+
 // Styled Components
 const Card = styled.div`
   border: 1px solid #ccc;
@@ -175,7 +179,6 @@ const ServicesList = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-
     dispatch(Edit_Plans(editPlan))
       .unwrap()
       .then((response) => {
@@ -187,6 +190,52 @@ const ServicesList = () => {
       });
   };
 
+  const DeletePlanApi = (plan) => {
+    dispatch(DeletePlan({ req: { id: plan._id } }))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          Swal.fire({
+            icon: "success",
+            title: "Plan Deleted Successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          GetAllPlansData();
+
+          handleModalClose();
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: response.msg,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
+  };
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 10;
+
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = selectedPlan
+    ? selectedPlan.users.slice(indexOfFirstUser, indexOfLastUser)
+    : [];
+
+  const totalPages = Math.ceil(
+    (selectedPlan?.users.length || 0) / usersPerPage
+  );
+
+  const handleNext = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrev = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
   return (
     <>
       <Content
@@ -194,16 +243,18 @@ const ServicesList = () => {
         button_status={true}
         route="/admin/plan/add"
         button_title="Add Plan"
-        
       >
-        <div className="row"  style={styles.container}>
+        <div className="row" style={styles.container}>
           {GetAllPlans.data &&
             GetAllPlans.data.map((plan, index) => (
               <Card key={index} className="col-3">
                 <img src={plan.image} alt={plan.name} style={styles.image} />
                 <h2 style={styles.title}>{plan.name}</h2>
                 <h4 style={styles.subtitle}>{plan.title}</h4>
-                <p style={styles.description}>{plan.description}</p>
+                <p style={styles.description} title={plan.description}>
+                  {plan.description}
+                </p>
+
                 <div style={styles.prices}>
                   <p style={styles.priceItem}>
                     Monthly <FaRupeeSign /> {plan.prices.monthly}
@@ -226,6 +277,10 @@ const ServicesList = () => {
                   <Button onClick={() => handleEditClick(plan)}>
                     <FaEdit /> Edit
                   </Button>
+                  <Button primary onClick={() => DeletePlanApi(plan)}>
+                    {/*  Add Delete */}
+                    Delete
+                  </Button>
                 </div>
               </Card>
             ))}
@@ -238,27 +293,77 @@ const ServicesList = () => {
         <Modal open={!!selectedPlan} onClick={handleModalClose}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
             <CloseButton onClick={handleModalClose}>×</CloseButton>
-            <img
-              src={selectedPlan.image}
-              alt={selectedPlan.name}
-              style={modalStyles.image}
-            />
-            <h2>{selectedPlan.name}</h2>
-            <h4>{selectedPlan.title}</h4>
-            <p>{selectedPlan.description}</p>
-            <div style={modalStyles.prices}>
-              <p>
-                Monthly <FaRupeeSign /> {selectedPlan.prices.monthly}
-              </p>
-              <p>
-                Quarterly <FaRupeeSign /> {selectedPlan.prices.quarterly}
-              </p>
-              <p>
-                Half-Yearly <FaRupeeSign /> {selectedPlan.prices.halfYearly}
-              </p>
-              <p>
-                Yearly <FaRupeeSign /> {selectedPlan.prices.yearly}
-              </p>
+            <div>
+              <div style={{ maxHeight: "450px", overflowY: "auto" }}>
+                <table
+                  className="table table-bordered"
+                  style={{ width: "100%", borderCollapse: "collapse" }}
+                >
+                  <thead>
+                    <tr>
+                      <th
+                        style={{
+                          border: "1px solid #ddd",
+                          padding: "8px",
+                          color: "black",
+                        }}
+                      >
+                        Id
+                      </th>
+                      <th
+                        style={{
+                          border: "1px solid #ddd",
+                          padding: "8px",
+                          color: "black",
+                        }}
+                      >
+                        Plan Title
+                      </th>
+                    </tr>
+                  </thead>
+                 {currentUsers ? <tbody>
+                    {currentUsers.map((user, index) => (
+                      <tr key={index}>
+                        <td
+                          style={{ border: "1px solid #ddd", padding: "8px" }}
+                        >
+                          {indexOfFirstUser + index + 1}
+                        </td>
+                        <td
+                          style={{ border: "1px solid #ddd", padding: "8px" }}
+                        >
+                          {user}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody> 
+                :
+                 
+                  <tbody>
+                    <tr>
+                      <td 
+                        colSpan="2"
+                        style={{ border: "1px solid #ddd", padding: "8px" }}
+                      >
+                        No data available
+                      </td>
+                    </tr>
+                  </tbody>
+
+                }
+                </table>
+              </div>
+              <div>
+                <button onClick={handlePrev} disabled={currentPage === 1}>
+                  Previous
+                </button>
+                <button
+                  onClick={handleNext}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </ModalContent>
         </Modal>
@@ -428,6 +533,10 @@ const styles = {
     fontSize: "0.9rem",
     color: "#777",
     marginBottom: "15px",
+    overflow: "hidden", // Hide overflowing text
+    textOverflow: "ellipsis", // Show "..." when the text overflows
+    whiteSpace: "nowrap", // Prevent text wrapping
+    cursor: "pointer", // Change cursor to indicate it's interactive
   },
   prices: {
     display: "flex",
@@ -448,7 +557,6 @@ const styles = {
     justifyContent: "space-around",
     marginTop: "15px",
   },
-
 };
 
 export default ServicesList;

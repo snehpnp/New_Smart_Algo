@@ -68,7 +68,6 @@ class Iifl {
                     source: "WebAPI",
                   },
                 };
-                console.log("config1", config1);
 
                 axios(config1)
                   .then(async (response1) => {

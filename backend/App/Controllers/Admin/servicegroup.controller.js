@@ -12,6 +12,7 @@ const groupServices_client1 = db.groupService_User;
 const client_services = db.client_services;
 const strategy_client = db.strategy_client;
 const Plansmodel = db.Plansmodel;
+const user_modal = db.user;
 
 class GroupService {
   // ADD GROUP SERVICES
@@ -789,8 +790,6 @@ class GroupService {
 
   async Addplans(req, res) {
     try {
-
-
       const result = await Plansmodel.create(req.body.req);
       if (result) {
         return res.send({
@@ -807,7 +806,45 @@ class GroupService {
   }
   async GetAllPlans(req, res) {
     try {
-      const result = await Plansmodel.find().lean();
+
+      const result = await Plansmodel.aggregate([
+        {
+          $lookup: {
+            from: 'users',
+            let: { planId: { $toString: '$_id' } }, 
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $eq: ['$plan_id', '$$planId'] },
+                },
+              },
+            ],
+            as: 'users',
+          },
+        },
+        {
+          $project: {
+            plan_id: 1,
+            name: 1,
+            title: 1,
+            description: 1,
+            image: 1,
+            prices: 1,
+            users: {
+              $map: {
+                input: '$users',
+                as: 'user',
+                in: '$$user.UserName',
+              },
+            },
+          },
+        },
+      ]).exec();
+      
+
+
+
+
 
       if (result.length > 0) {
         return res.send({
@@ -844,7 +881,7 @@ class GroupService {
   async EditPlans(req, res) {
     try {
       const { _id, name, title, description, image, prices } = req.body;
-      console.log(req.body);
+ 
 
       const objectId = new ObjectId(_id);
       const result = await Plansmodel.findByIdAndUpdate(objectId, {
@@ -859,6 +896,37 @@ class GroupService {
           status: true,
           msg: "successfully Edit",
           data: result,
+        });
+      } else {
+        return res.send({ status: false, msg: "An error occurred", data: [] });
+      }
+    } catch (error) {
+      return res.send({ status: false, msg: "An error occurred", data: error });
+    }
+  }
+
+  async DeletePlans(req, res) {
+    try {
+      const { id } = req.body;
+      const objectId = new ObjectId(id);
+
+
+      const User_plan = await user_modal.find({ plan_id: objectId });
+
+      if (User_plan?.length > 0) {
+        return res.send({
+          status: false,
+          msg: "This plan already assign",
+          data: User_plan,
+        });
+      }
+
+      const result = await Plansmodel.deleteOne({ _id: objectId });
+      if (result.acknowledged == true) {
+        return res.send({
+          status: true,
+          msg: "Delete successfully",
+          data: result.acknowledged,
         });
       } else {
         return res.send({ status: false, msg: "An error occurred", data: [] });

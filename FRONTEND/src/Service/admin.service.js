@@ -1070,3 +1070,29 @@ export async function EditPlans(data, token) {
     }
 }
 
+export async function GetLastUserName() {
+    try {
+        const res = await axios.get(`${Config.base_url}get/last/username`,{
+            
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}
+
+// DELETE PLANS
+export async function DeletePlans(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}deleteplans`, data,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}

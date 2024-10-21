@@ -147,7 +147,7 @@ const Dashboard1 = ({ data }) => {
                     <div>
                       <span className="fs-4 font-w500">{item.name}</span>
                       <h3 className="font-w600 fs-2 mb-0">{item.value}</h3>
-                      <Link href="#" className="mb-2" to={item.route}>
+                      <Link  className="mb-2" to={item.route}>
                         <i className="fa-regular fa-eye pe-1" ></i>View</Link>
                     </div>
                     <span className="income-icon style-3">

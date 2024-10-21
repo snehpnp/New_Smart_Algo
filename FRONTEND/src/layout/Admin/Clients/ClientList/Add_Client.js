@@ -3,6 +3,7 @@ import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form1
 import { useFormik } from "formik";
 import * as valid_err from "../../../../Utils/Common_Messages";
 import { useNavigate, useLocation } from "react-router-dom";
+
 import {
   Email_regex,
   Mobile_regex,
@@ -19,7 +20,10 @@ import {
 } from "../../../../ReduxStore/Slice/Admin/GroupServiceSlice";
 import { All_Api_Info_List } from "../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice";
 import * as Config from "../../../../Utils/Config";
-import { Add_User } from "../../../../ReduxStore/Slice/Admin/userSlice";
+import {
+  Add_User,
+  GetLastCretedUserName,
+} from "../../../../ReduxStore/Slice/Admin/userSlice";
 import toast, { Toaster } from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 import "../../../../App.css";
@@ -33,17 +37,18 @@ const AddClient = () => {
   const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
   const [ShowAllStratagy, setShowAllStratagy] = useState(false);
   const [first, setfirst] = useState([]);
-  const [AllGroupServices, setAllGroupServices] = useState({
-    loading: true,
-    data: [],
-  });
   const [Addsubadmin, setAddsubadmin] = useState({ loading: true, data: [] });
   const [AllStrategy, setAllStrategy] = useState({ loading: true, data: [] });
   const [GetServices, setGetServices] = useState({ loading: true, data: [] });
   const [selectedPlan, setSelectedPlan] = useState("");
   const [admin_permission, setAdmin_permission] = useState([]);
+  const [GetAllPlans, setAllPlans] = useState({ loading: true, data: [] });
+  const [LastUSerName, setLastUSerName] = useState("");
+  const [AllGroupServices, setAllGroupServices] = useState({
+    loading: true,
+    data: [],
+  });
 
-  
   const isValidEmail = (email) => {
     return Email_regex(email);
   };
@@ -53,9 +58,32 @@ const AddClient = () => {
   const isValidName = (mobile) => {
     return Name_regex(mobile);
   };
-  const [GetAllPlans, setAllPlans] = useState({ loading: true, data: [] });
-
   const selector = useSelector((state) => state.DashboardSlice);
+
+  useEffect(() => {
+    GetAllPlansData();
+    let Service_Month_Arr = [];
+    for (let index = 1; index < 2; index++) {
+      Service_Month_Arr.push({
+        month: index,
+        endDate: `${index} Month Licence Expired On ${
+          new Date(
+            new Date().getFullYear(),
+            new Date().getMonth() + index,
+            new Date().getDate()
+          )
+            .toString()
+            .split("00:00:00")[0]
+        }`,
+      });
+    }
+    setfirst(Service_Month_Arr);
+  }, []);
+
+  useEffect(() => {
+    data();
+    Get_Last_User_Name();
+  }, []);
 
   const GetAllPlansData = async () => {
     await dispatch(Get_All_Plans())
@@ -72,6 +100,7 @@ const AddClient = () => {
 
   const formik = useFormik({
     initialValues: {
+      LastUsername: "",
       username: null,
       fullName: null,
       email: null,
@@ -161,6 +190,18 @@ const AddClient = () => {
         return;
       }
 
+      if (values.license_type == 2) {
+        if (
+          !values.licence ||
+          values.licence == null ||
+          values.licence == "" ||
+          values.licence == "0"
+        ) {
+          toast.error("Live Client Licence is Mandatory");
+          return;
+        }
+      }
+
       const req = {
         FullName: values.fullName,
         UserName: values.username,
@@ -208,408 +249,6 @@ const AddClient = () => {
         });
     },
   });
-
-  useEffect(() => {
-    formik.setFieldValue(
-      "username",
-      (location.state !== null && location.state.UserName) || ""
-    );
-    formik.setFieldValue(
-      "fullName",
-      (location.state !== null && location.state.FullName) || ""
-    );
-    formik.setFieldValue(
-      "email",
-      (location.state !== null && location.state.Email) || ""
-    );
-    formik.setFieldValue(
-      "mobile",
-      (location.state !== null && location.state.PhoneNo) || ""
-    );
-  }, [location.state]);
-
-  const handleStrategyChange = (event) => {
-    const strategyId = event.target.value;
-    const strategyName = event.target.name;
-    if (event.target.checked) {
-      setSelectedStrategies([
-        ...selectedStrategies,
-        { id: strategyId, name: strategyName },
-      ]);
-      formik.setFieldValue("Strategy", selectedStrategies);
-    } else {
-      setSelectedStrategies(
-        selectedStrategies.filter((strategy) => strategy.id !== strategyId)
-      );
-    }
-  };
-
-  useEffect(() => {
-    GetAllPlansData();
-    let Service_Month_Arr = [];
-    for (let index = 1; index < 2; index++) {
-      Service_Month_Arr.push({
-        month: index,
-        endDate: `${index} Month Licence Expired On ${
-          new Date(
-            new Date().getFullYear(),
-            new Date().getMonth() + index,
-            new Date().getDate()
-          )
-            .toString()
-            .split("00:00:00")[0]
-        }`,
-      });
-    }
-    setfirst(Service_Month_Arr);
-  }, []);
-
-  let fields = [
-    {
-      name: "username",
-      label: "Username",
-      type: "text",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "fullName",
-      label: "FullName",
-      type: "text",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "email",
-      label: "Email",
-      type: "text",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "mobile",
-      label: "Mobile",
-      type: "text",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "licence",
-      label: "Licence",
-      type: "select",
-      options: [
-        { label: "2 Days", value: "0" },
-        { label: "Demo", value: "1" },
-        { label: "Live", value: "2" },
-      ],
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "tomonth",
-      label: "To Month",
-      type: "select",
-      options:
-        first &&
-        first.map((item) => ({ label: item.endDate, value: item.month })),
-      showWhen: (values) => values.licence === "2",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-      isSelected: true,
-    },
-    {
-      name: "broker",
-      label: "Broker",
-      type: "select",
-      options:
-        GetBrokerInfo &&
-        GetBrokerInfo.map((item) => ({
-          label: item.title,
-          value: item.broker_id,
-        })),
-      showWhen: (values) => values.licence === "2" || values.licence === "0",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "fromDate",
-      label: "From Date",
-      type: "date1",
-      showWhen: (values) => values.licence === "1",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "todate",
-      label: "To Date",
-      type: "date1",
-      showWhen: (values) => values.licence === "1",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "api_key",
-      label:
-        formik.values.broker == 20
-          ? "ACCESS TOKEN "
-          : formik.values.broker == 19
-          ? "Api Key"
-          : formik.values.broker == 4
-          ? "App Key"
-          : formik.values.broker == 7
-          ? "Consumer Key"
-          : formik.values.broker == 9
-          ? "Vendor Key"
-          : formik.values.broker == 8
-          ? "App Key"
-          : formik.values.broker == 10
-          ? "App Key"
-          : formik.values.broker == 26
-          ? "App Key"
-          : formik.values.broker == 25
-          ? "Api Key"
-          : "Api Key",
-      type: "text",
-      showWhen: (values) =>
-        values.broker === "4" ||
-        values.broker === "7" ||
-        values.broker === "8" ||
-        values.broker === "9" ||
-        values.broker === "10" ||
-        values.broker === "11" ||
-        values.broker === "12" ||
-        values.broker === "14" ||
-        values.broker === "15" ||
-        values.broker === "6" ||
-        values.broker === "19" ||
-        values.broker === "20" ||
-        values.broker === "26" ||
-        values.broker === "25",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "client_code",
-      label:
-        formik.values.broker == 21
-          ? "CLIENT CODE"
-          : formik.values.broker == 20
-          ? "CLIENT ID"
-          : formik.values.broker == 1
-          ? "User"
-          : formik.values.broker == 4
-          ? "Client Code"
-          : formik.values.broker == 7
-          ? "User Name"
-          : formik.values.broker == 9
-          ? "Vander Id"
-          : formik.values.broker == 11
-          ? "Client Code"
-          : formik.values.broker == 11
-          ? "client_code"
-          : "User Id",
-      type: "text",
-      showWhen: (values) =>
-        values.broker === "1" ||
-        values.broker === "5" ||
-        values.broker === "4" ||
-        values.broker === "7" ||
-        values.broker === "9" ||
-        values.broker === "11" ||
-        values.broker === "6" ||
-        values.broker === "20" ||
-        values.broker === "21",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "demat_userid",
-      label: formik.values.broker == 9 ? "User Id" : "",
-      type: "text",
-      showWhen: (values) => values.broker === "9",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "app_id",
-      label:
-        formik.values.broker == 21
-          ? "MPIN"
-          : formik.values.broker == 1
-          ? "Verification Code"
-          : formik.values.broker == 5
-          ? "Password"
-          : formik.values.broker == 7
-          ? "Demat Password"
-          : formik.values.broker == 11
-          ? "Password"
-          : formik.values.broker == 2
-          ? "Demat UserId"
-          : formik.values.broker == 13
-          ? "App Id"
-          : formik.values.broker == 9
-          ? "Password"
-          : formik.values.broker == 14
-          ? "User Id "
-          : "App Id",
-      type: "text",
-      showWhen: (values) =>
-        values.broker === "1" ||
-        values.broker === "2" ||
-        values.broker === "3" ||
-        values.broker === "5" ||
-        values.broker === "7" ||
-        values.broker === "9" ||
-        values.broker === "11" ||
-        values.broker === "13" ||
-        values.broker === "14" ||
-        values.broker === "21",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "app_key",
-      label: formik.values.broker == 5 || 6 ? "App Key" : "",
-      type: "text",
-      showWhen: (values) => values.broker === "5",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "api_secret",
-      label:
-        formik.values.broker == 1
-          ? "Password Code"
-          : formik.values.broker == 5
-          ? "DOB"
-          : formik.values.broker == 7
-          ? "Consumer Secret"
-          : formik.values.broker == 9
-          ? "Encryption Secret Key"
-          : formik.values.broker == 10
-          ? "Api Secret Key"
-          : formik.values.broker == 11
-          ? "2FA"
-          : formik.values.broker == 14
-          ? "Encryption Key"
-          : formik.values.broker == 26
-          ? "Api Secret"
-          : formik.values.broker == 25
-          ? "Api Secret"
-          : "Api Secret",
-      type: "text",
-      showWhen: (values) =>
-        values.broker === "1" ||
-        values.broker === "3" ||
-        values.broker === "5" ||
-        values.broker === "6" ||
-        values.broker === "7" ||
-        values.broker === "8" ||
-        values.broker === "9" ||
-        values.broker === "10" ||
-        values.broker === "11" ||
-        values.broker === "13" ||
-        values.broker === "14" ||
-        values.broker === "15" ||
-        values.broker === "19" ||
-        values.broker === "26" ||
-        values.broker === "25",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "api_type",
-      label:
-        formik.values.broker == 5
-          ? "DOB"
-          : formik.values.broker == 7
-          ? "Trade Api Password"
-          : formik.values.broker == 9
-          ? "Encryption IV"
-          : "Api Secret",
-      type: "text",
-      showWhen: (values) => values.broker === "7" || values.broker === "9",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-
-    {
-      name: "parent_id",
-      label: "Sub-Admin",
-      type: "select",
-      options:
-        Addsubadmin.data &&
-        Addsubadmin.data.map((item) => ({
-          label: item.FullName,
-          value: item._id,
-        })),
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "service_given_month",
-      label: "Service Given To Month",
-      type: "select",
-      options: [
-        { label: "0", value: "0" },
-        { label: "1", value: "1" },
-        { label: "2", value: "2" },
-        { label: "3", value: "3" },
-        { label: "4", value: "4" },
-        { label: "5", value: "5" },
-        { label: "6", value: "6" },
-        { label: "7", value: "7" },
-        { label: "8", value: "8" },
-        { label: "9", value: "9" },
-        { label: "10", value: "10" },
-        { label: "11", value: "11" },
-        { label: "12", value: "12" },
-      ],
-      showWhen: (values) => values.licence === "2" || values.licence === 2,
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "groupservice",
-      label: "Group Service",
-      type: "select",
-      options:
-        AllGroupServices.data &&
-        AllGroupServices.data.map((item) => ({
-          label: item.name,
-          value: item._id,
-        })),
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-    {
-      name: "multiple_strategy_select",
-      label: "Mutiple Selection Strategy",
-      type: "checkbox",
-      label_size: 12,
-      col_size: 6,
-      disable: false,
-    },
-  ];
 
   useEffect(() => {
     if (formik.values.broker === "1" || formik.values.broker === 1) {
@@ -732,6 +371,13 @@ const AddClient = () => {
       formik.setFieldValue("api_type", "null");
       formik.setFieldValue("demat_userid", "null");
     }
+    if (formik.values.broker === "27" || formik.values.broker === 27) {
+      formik.setFieldValue("api_key", "null");
+      formik.setFieldValue("client_code", "null");
+      formik.setFieldValue("api_secret", "null");
+      formik.setFieldValue("api_type", "null");
+    }
+
     if (formik.values.licence === "2" || formik.values.licence === 2) {
       formik.setFieldValue("fromDate", null);
       formik.setFieldValue("todate", null);
@@ -745,6 +391,424 @@ const AddClient = () => {
       formik.setFieldValue("todate", null);
     }
   }, [formik.values.broker, formik.values.licence]);
+
+  useEffect(() => {
+    getGroupeServics();
+  }, [formik.values.groupservice]);
+
+  useEffect(() => {
+    formik.setFieldValue(
+      "username",
+      (location.state !== null && location.state.UserName) || ""
+    );
+    formik.setFieldValue(
+      "fullName",
+      (location.state !== null && location.state.FullName) || ""
+    );
+    formik.setFieldValue(
+      "email",
+      (location.state !== null && location.state.Email) || ""
+    );
+    formik.setFieldValue(
+      "mobile",
+      (location.state !== null && location.state.PhoneNo) || ""
+    );
+  }, [location.state]);
+
+  const handleStrategyChange = (event) => {
+    const strategyId = event.target.value;
+    const strategyName = event.target.name;
+    if (event.target.checked) {
+      setSelectedStrategies([
+        ...selectedStrategies,
+        { id: strategyId, name: strategyName },
+      ]);
+      formik.setFieldValue("Strategy", selectedStrategies);
+    } else {
+      setSelectedStrategies(
+        selectedStrategies.filter((strategy) => strategy.id !== strategyId)
+      );
+    }
+  };
+
+  const Get_Last_User_Name = async () => {
+    await dispatch(GetLastCretedUserName())
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setLastUSerName(response.data.UserName);
+          formik.setFieldValue("LastUsername", response.data.UserName);
+        }
+      })
+      .catch((error) => {
+        console.log("Error fetching last created user:", error);
+      });
+  };
+
+  let fields = [
+    {
+      name: "LastUsername",
+      label: "Last Username",
+      type: "lastusername",
+      label_size: 12,
+      col_size: 6,
+      disable: true,
+    },
+    {
+      name: "username",
+      label: "Username",
+      type: "text",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "fullName",
+      label: "FullName",
+      type: "text",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "email",
+      label: "Email",
+      type: "text",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "mobile",
+      label: "Mobile",
+      type: "text",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "licence",
+      label: "Licence",
+      type: "select",
+      options: [
+        { label: "2 Days", value: "0" },
+        { label: "Demo", value: "1" },
+        { label: "Live", value: "2" },
+      ],
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "tomonth",
+      label: "To Month",
+      type: "select",
+      options:
+        first &&
+        first.map((item) => ({ label: item.endDate, value: item.month })),
+      showWhen: (values) => values.licence === "2",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+      isSelected: true,
+    },
+    {
+      name: "broker",
+      label: "Broker",
+      type: "select",
+      options:
+        GetBrokerInfo &&
+        GetBrokerInfo.map((item) => ({
+          label: item.title,
+          value: item.broker_id,
+        })),
+      showWhen: (values) => values.licence === "2" || values.licence === "0",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "fromDate",
+      label: "From Date",
+      type: "date1",
+      showWhen: (values) => values.licence === "1",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "todate",
+      label: "To Date",
+      type: "date1",
+      showWhen: (values) => values.licence === "1",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "api_key",
+      label:
+        formik.values.broker == 20
+          ? "ACCESS TOKEN "
+          : formik.values.broker == 19
+          ? "Api Key"
+          : formik.values.broker == 4
+          ? "App Key"
+          : formik.values.broker == 7
+          ? "Consumer Key"
+          : formik.values.broker == 9
+          ? "Vendor Key"
+          : formik.values.broker == 8
+          ? "App Key"
+          : formik.values.broker == 10
+          ? "App Key"
+          : formik.values.broker == 26
+          ? "App Key"
+            : formik.values.broker == 27
+          ? "ApI Key"
+          : formik.values.broker == 25
+          ? "Api Key"
+          : "Api Key",
+      type: "text",
+      showWhen: (values) =>
+        values.broker === "4" ||
+        values.broker === "7" ||
+        values.broker === "8" ||
+        values.broker === "9" ||
+        values.broker === "10" ||
+        values.broker === "11" ||
+        values.broker === "12" ||
+        values.broker === "14" ||
+        values.broker === "15" ||
+        values.broker === "6" ||
+        values.broker === "19" ||
+        values.broker === "20" ||
+        values.broker === "26" ||
+        values.broker === "27" ||
+        values.broker === "25",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "client_code",
+      label:
+        formik.values.broker == 21
+          ? "CLIENT CODE"
+          : formik.values.broker == 20
+          ? "CLIENT ID"
+          : formik.values.broker == 1
+          ? "User"
+          : formik.values.broker == 4
+          ? "Client Code"
+          : formik.values.broker == 7
+          ? "User Name"
+          : formik.values.broker == 9
+          ? "Vander Id"
+          : formik.values.broker == 11
+          ? "Client Code"
+          : formik.values.broker == 11
+          ? "client_code"
+             : formik.values.broker == 27
+          ? "Vendor Code"
+          : "User Id",
+      type: "text",
+      showWhen: (values) =>
+        values.broker === "1" ||
+        values.broker === "5" ||
+        values.broker === "4" ||
+        values.broker === "7" ||
+        values.broker === "9" ||
+        values.broker === "11" ||
+        values.broker === "6" ||
+        values.broker === "20" ||
+        values.broker === "27" ||
+        values.broker === "21",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "demat_userid",
+      label: formik.values.broker == 9 ? "User Id" : "",
+      type: "text",
+      showWhen: (values) => values.broker === "9",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "app_id",
+      label:
+        formik.values.broker == 21
+          ? "MPIN"
+          : formik.values.broker == 1
+          ? "Verification Code"
+          : formik.values.broker == 5
+          ? "Password"
+          : formik.values.broker == 7
+          ? "Demat Password"
+          : formik.values.broker == 11
+          ? "Password"
+          : formik.values.broker == 2
+          ? "Demat UserId"
+          : formik.values.broker == 13
+          ? "App Id"
+          : formik.values.broker == 9
+          ? "Password"
+          : formik.values.broker == 14
+          ? "User Id "
+          : "App Id",
+      type: "text",
+      showWhen: (values) =>
+        values.broker === "1" ||
+        values.broker === "2" ||
+        values.broker === "3" ||
+        values.broker === "5" ||
+        values.broker === "7" ||
+        values.broker === "9" ||
+        values.broker === "11" ||
+        values.broker === "13" ||
+        values.broker === "14" ||
+        values.broker === "21",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "app_key",
+      label: formik.values.broker == 5 || 6 ? "App Key" : "",
+      type: "text",
+      showWhen: (values) => values.broker === "5",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "api_secret",
+      label:
+        formik.values.broker == 1
+          ? "Password Code"
+          : formik.values.broker == 5
+          ? "DOB"
+          : formik.values.broker == 7
+          ? "Consumer Secret"
+          : formik.values.broker == 9
+          ? "Encryption Secret Key"
+          : formik.values.broker == 10
+          ? "Api Secret Key"
+          : formik.values.broker == 11
+          ? "2FA"
+          : formik.values.broker == 14
+          ? "Encryption Key"
+          : formik.values.broker == 26
+          ? "Api Secret"
+          : formik.values.broker == 25
+          ? "Api Secret"
+          : formik.values.broker == 27
+          ? "imei"
+          : "Api Secret",
+      type: "text",
+      showWhen: (values) =>
+        values.broker === "1" ||
+        values.broker === "3" ||
+        values.broker === "5" ||
+        values.broker === "6" ||
+        values.broker === "7" ||
+        values.broker === "8" ||
+        values.broker === "9" ||
+        values.broker === "10" ||
+        values.broker === "11" ||
+        values.broker === "13" ||
+        values.broker === "14" ||
+        values.broker === "15" ||
+        values.broker === "19" ||
+        values.broker === "26" ||
+        values.broker === "27" ||
+        values.broker === "25",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "api_type",
+      label:
+        formik.values.broker == 5
+          ? "DOB"
+          : formik.values.broker == 7
+          ? "Trade Api Password"
+          : formik.values.broker == 9
+          ? "Encryption IV"
+        
+          : "Api Secret",
+      type: "text",
+      showWhen: (values) => values.broker === "7" || values.broker === "9",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+
+    {
+      name: "parent_id",
+      label: "Sub-Admin",
+      type: "select",
+      options:
+        Addsubadmin.data &&
+        Addsubadmin.data.map((item) => ({
+          label: item.FullName,
+          value: item._id,
+        })),
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "service_given_month",
+      label: "Service Given To Month",
+      type: "select",
+      options: [
+        { label: "0", value: "0" },
+        { label: "1", value: "1" },
+        { label: "2", value: "2" },
+        { label: "3", value: "3" },
+        { label: "4", value: "4" },
+        { label: "5", value: "5" },
+        { label: "6", value: "6" },
+        { label: "7", value: "7" },
+        { label: "8", value: "8" },
+        { label: "9", value: "9" },
+        { label: "10", value: "10" },
+        { label: "11", value: "11" },
+        { label: "12", value: "12" },
+      ],
+      showWhen: (values) => values.licence === "2" || values.licence === 2,
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "groupservice",
+      label: "Group Service",
+      type: "select",
+      options:
+        AllGroupServices.data &&
+        AllGroupServices.data.map((item) => ({
+          label: item.name,
+          value: item._id,
+        })),
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "multiple_strategy_select",
+      label: "Mutiple Selection Strategy",
+      type: "checkbox",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+  ];
 
   const getGroupeServics = async () => {
     if (formik.values.groupservice) {
@@ -762,9 +826,6 @@ const AddClient = () => {
         });
     }
   };
-  useEffect(() => {
-    getGroupeServics();
-  }, [formik.values.groupservice]);
 
   const data = async () => {
     await dispatch(GET_ALL_GROUP_SERVICES())
@@ -820,9 +881,6 @@ const AddClient = () => {
         }
       });
   };
-  useEffect(() => {
-    data();
-  }, []);
 
   if (selector && selector.permission) {
     if (
@@ -861,8 +919,23 @@ const AddClient = () => {
           btn_name="Add Client"
           fromDate={formik.values.fromDate}
           toDate={formik.values.todate}
+          LastUSerName={LastUSerName}
           additional_field={
             <>
+              {GetServices.data && <h6>All Group Service</h6>}
+
+              {GetServices &&
+                GetServices.data.map((strategy) => (
+                  <div className={`col-lg-2 `} key={strategy._id}>
+                    <div className="col-lg-12 ">
+                      <label
+                        className="form-check-label bg-primary text-white py-2 px-4"
+                        for={strategy.ServiceResult.name}
+                      >{`${strategy.ServiceResult.name}[${strategy.categories.segment}]`}</label>
+                    </div>
+                  </div>
+                ))}
+
               <div>
                 <h6>Select Plans</h6>
                 <div className="row">
@@ -887,34 +960,6 @@ const AddClient = () => {
                 </div>
               </div>
 
-              <h6>All Group Service</h6>
-              {GetServices &&
-                GetServices.data.map((strategy) => (
-                  <div className={`col-lg-2 `} key={strategy._id}>
-                    <div className="col-lg-12 ">
-                      <label
-                        className="form-check-label bg-primary text-white py-2 px-4"
-                        for={strategy.ServiceResult.name}
-                      >{`${strategy.ServiceResult.name}[${strategy.categories.segment}]`}</label>
-                    </div>
-                  </div>
-                ))}
-              <label className="toggle mt-3">
-                <input
-                  className="toggle-checkbox bg-primary"
-                  type="checkbox"
-                  onChange={(e) => {
-                    setShowAllStratagy(e.target.checked);
-                  }}
-                />
-                <div
-                  className={`toggle-switch ${
-                    ShowAllStratagy ? "bg-primary" : "bg-secondary"
-                  }`}
-                ></div>
-                <span className="toggle-label">Show Strategy</span>
-              </label>
-
               {formik.errors.Strategy && (
                 <div style={{ color: "red" }} className="my-3">
                   {formik.errors.Strategy}{" "}
@@ -922,35 +967,31 @@ const AddClient = () => {
               )}
 
               <h6>All Strategy</h6>
-              {ShowAllStratagy ? (
-                <>
-                  {AllStrategy.data.map((strategy) => (
-                    <div className={`col-lg-2 mt-2`} key={strategy._id}>
-                      <div className="row ">
-                        <div className="col-lg-12 ">
-                          <div className="form-check custom-checkbox mb-3">
-                            <input
-                              type="checkbox"
-                              className="form-check-input"
-                              name={strategy.strategy_name}
-                              value={strategy._id}
-                              onChange={(e) => handleStrategyChange(e)}
-                            />
-                            <label
-                              className="form-check-label"
-                              for={strategy.strategy_name}
-                            >
-                              {strategy.strategy_name}
-                            </label>
-                          </div>
+              <>
+                {AllStrategy.data.map((strategy) => (
+                  <div className={`col-lg-2 mt-2`} key={strategy._id}>
+                    <div className="row ">
+                      <div className="col-lg-12 ">
+                        <div className="form-check custom-checkbox mb-3">
+                          <input
+                            type="checkbox"
+                            className="form-check-input"
+                            name={strategy.strategy_name}
+                            value={strategy._id}
+                            onChange={(e) => handleStrategyChange(e)}
+                          />
+                          <label
+                            className="form-check-label"
+                            for={strategy.strategy_name}
+                          >
+                            {strategy.strategy_name}
+                          </label>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </>
-              ) : (
-                ""
-              )}
+                  </div>
+                ))}
+              </>
             </>
           }
         />

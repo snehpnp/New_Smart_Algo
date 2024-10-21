@@ -48,6 +48,7 @@ module.exports = function (app) {
   const { createViewZebul } = require("./View/Zebul");
   const { createViewZerodha } = require("./View/zerodha");
   const { createViewIcicidirect } = require("./View/Icicidirectview");
+  const {createViewShoonya} = require('./View/Shoonya');
 
   app.get("/tk", (req, res) => {
     TokenSymbolUpdate();
@@ -936,6 +937,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
   };
 
   app.get("/all/brokerview", (req, res) => {
+    DashboardView();
     createViewAlice();
     createViewAngel();
     createViewDhan();
@@ -951,9 +953,9 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
     createViewZebul();
     createViewZerodha();
     createViewIcicidirect();
-    DashboardView();
     createView();
     open_position_excute();
+    createViewShoonya()
 
     return res.send("DONEE");
   });
@@ -1260,7 +1262,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
 
             if (item.instrumenttype == "OPTFUT") {
               count++;
-              console.log("item - MO " + count + " ", item);
+      
               const matchingElements = categoryResult.filter(
                 (item) => item.segment === "MO"
               );
@@ -1356,7 +1358,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
 
             if (item.instrumenttype == "OPTCUR" && item.exch_seg == "CDS") {
               count++;
-              console.log("item - CO " + count + " ", item);
+             
               const matchingElements = categoryResult.filter(
                 (item) => item.segment === "CO"
               );
@@ -2116,7 +2118,7 @@ app.get("/ssj", async (req, res) => {
   });
 
   app.get("/test", (req, res) => {
-    MainSignalsRemainToken();
+    createViewShoonya();
     return res.send("DONEE");
   });
 

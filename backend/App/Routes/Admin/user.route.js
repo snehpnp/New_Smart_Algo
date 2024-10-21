@@ -5,7 +5,7 @@ const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 const { upload } = require('../../Helper/imgUpload');
 
-const { AddEmployee, UpdateUser, GetAllClients, GetAllExpiredClients ,loginClients, tradingOnClients, GetclientKey , GetTradingStatus, UpdateActiveStatus, DeleteUser, GetUserInfo, Update_Broker_Keys,GetDuplicateData ,DawnloadStatusandResponse,GetAllStarClients,UpdateStarStatus,GetAllReferalClients} = require('../../Controllers/Admin/user.controller')
+const { AddEmployee, UpdateUser, GetAllClients, GetAllExpiredClients ,loginClients, tradingOnClients, GetclientKey , GetTradingStatus, UpdateActiveStatus, DeleteUser, GetUserInfo, Update_Broker_Keys,GetDuplicateData ,DawnloadStatusandResponse,GetAllStarClients,UpdateStarStatus,GetAllReferalClients,GetLastUserName} = require('../../Controllers/Admin/user.controller')
 const { EditCompany, GetCompanyInfo, GetCompany_logo, EditEmailInfo , UpdateDisclaimer } = require('../../Controllers/Admin/company.controller')
 const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy, DeleteStragegy, GetAllStrategyForClient, ClientsAccordingToStrategy ,GetAddRemoveStrategy ,UpdateAddRemoveStrategy } = require('../../Controllers/Admin/strategy.controller')
 
@@ -31,6 +31,8 @@ router.post('/get/panel_key', GetclientKey);
 router.post('/getall/star/clients', GetAllStarClients);
 router.post('/update/star/status', UpdateStarStatus);
 
+
+router.get('/get/last/username', GetLastUserName);
 
  
 

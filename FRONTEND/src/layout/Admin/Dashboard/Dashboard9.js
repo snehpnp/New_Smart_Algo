@@ -149,7 +149,7 @@ const Dashboard1 = ({ data }) => {
                       <h2 className="text-uppercase mb-0">{item.value}</h2>
                       {item.visible ? <>
 
-                      <Link href="#" className="" to={item.route}>
+                      <Link  className="" to={item.route}>
                           <i className="fa-regular fa-eye pe-1" ></i>View</Link>
                       </> : ""}
 

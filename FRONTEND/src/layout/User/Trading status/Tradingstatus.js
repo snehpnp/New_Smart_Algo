@@ -47,7 +47,17 @@ const TradingStatus = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-          const data = first1 === "all" ? response.data : response.data.filter(item => item.createdAt.split("T")[0] === first1);
+          const data = first1 === "all" 
+            ? response.data 
+            : response.data.filter(item => {
+                if (item.createdAt) {
+                  // Format the createdAt date and first1 to the same string format for comparison
+                  const createdAtDate = new Date(item.createdAt).toISOString().split('T')[0]; // YYYY-MM-DD format
+                  return createdAtDate === first1;
+                }
+                return false; // If createdAt is not available, exclude the item
+              });
+          
           setUserLogs({
             loading: false,
             data: data,
@@ -58,27 +68,40 @@ const TradingStatus = () => {
             data: [],
           });
         }
+        
       });
   };
 
   useEffect(() => {
     const generateDateArray = () => {
       let dates = [];
-      for (let i = 0; i < 3; i++) {
+      let count = 0;
+      let i = 0;
+      
+      while (count < 5) {
         const currentDate = new Date();
         currentDate.setDate(currentDate.getDate() - i);
-        const day = currentDate.getDate() < 10 ? `0${currentDate.getDate()}` : currentDate.getDate();
-        const month = currentDate.getMonth() + 1 < 10 ? `0${currentDate.getMonth() + 1}` : currentDate.getMonth() + 1;
-        const year = currentDate.getFullYear();
-        const formattedDate = `${year}-${month}-${day}`;
-        dates.push(formattedDate);
+        const dayOfWeek = currentDate.getDay(); 
+    
+        if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+          const day = currentDate.getDate() < 10 ? `0${currentDate.getDate()}` : currentDate.getDate();
+          const month = currentDate.getMonth() + 1 < 10 ? `0${currentDate.getMonth() + 1}` : currentDate.getMonth() + 1;
+          const year = currentDate.getFullYear();
+          const formattedDate = `${year}-${month}-${day}`;
+          dates.push(formattedDate);
+          count++;
+        }
+        
+        i++; 
       }
+    
       setDateArray(dates);
       setFirst(dates[0]);
       setFirst1(dates[0]);
     };
-
+    
     generateDateArray();
+    
   }, []);
 
   useEffect(() => {

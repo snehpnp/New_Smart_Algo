@@ -188,10 +188,7 @@ class License {
   
       const resultLicence = await user_model.aggregate(pip);
   
-       //console.log("resultLicence ", resultLicence[0].total_admin_licence)
-       // console.log("total_licence ", resultLicence[0].licenses)
-      // console.log("remaining_license ", resultLicence[0].remaining_license)
-      // console.log("used_licence ", resultLicence[0].used_licence)
+
 
       const Transection_license = await count_licenses.aggregate([
        
@@ -250,42 +247,7 @@ class License {
         },
       ]);
 
-      //console.log("Transection_license ",Transection_license)
-
-      // const total_licence = await company_information.find({});
-
-      // const sumUsedLicenses = await count_licenses.aggregate([
-      //   {
-      //     $addFields: {
-      //       convertedLicense: { $toInt: "$license" }
-      //     }
-      //   },
-      //   {
-      //     $lookup: {
-      //       from: "users",
-      //       localField: "user_id",
-      //       foreignField: "_id",
-      //       as: "user",
-      //     },
-      //   },
-      //   {
-      //     $unwind: "$user",
-      //   },
-      //   {
-      //     $match: {
-      //       "user.Role": "USER",
-      //       "user.license_type": "2",
-      //       "user.Is_Active": "1",
-
-      //     },
-      //   },
-      //   {
-      //     $group: {
-      //       _id: null,
-      //       totalUsedLicenses: { $sum: "$convertedLicense" }
-      //     }
-      //   }
-      // ]);
+    
 
  
       if (Transection_license.length == 0) {
@@ -295,13 +257,7 @@ class License {
           data: Transection_license,
         });
       }
-      // return res.send({
-      //   status: true,
-      //   msg: "Get all Transection license",
-      //   data: Transection_license,
-      //   total_licence: total_licence[0].licenses,
-      //   used_licence:sumUsedLicenses.length != 0 ?   sumUsedLicenses[0].totalUsedLicenses : 0
-      // });
+   
 
      let ExistMonthRemoveLicence = resultLicence.length > 0 ? parseInt(resultLicence[0].total_admin_licence ) -  parseInt(resultLicence[0].licenses ):0;
    
@@ -324,13 +280,27 @@ class License {
 
       updatedArr.reverse();
 
-      return res.send({
-        status: true,
-        msg: "Get all Transection license",
-        data: updatedArr,
-        total_licence: resultLicence[0].licenses,
-        used_licence:resultLicence[0].used_licence  != 0  || resultLicence[0].used_licence != undefined ?   resultLicence[0].used_licence : 0
-      });
+      if(resultLicence.length > 0){
+        return res.send({
+          status: true,
+          msg: "Get all Transection license",
+          data: updatedArr,
+          total_licence: resultLicence[0].licenses,
+          used_licence:resultLicence[0].used_licence  != 0  || resultLicence[0].used_licence != undefined ?   resultLicence[0].used_licence : 0
+        });
+
+      }else{
+        return res.send({
+          status: true,
+          msg: "Get all Transection license",
+          data: updatedArr,
+          total_licence: 0,
+          used_licence:0
+        });
+      }
+
+
+     
     } catch (error) {
       console.log("Error Get All Transction License -", error);
     }

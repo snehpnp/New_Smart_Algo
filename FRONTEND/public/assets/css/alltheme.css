@@ -90,7 +90,9 @@ body.theme-10 .theme-8-dashboard,
 body.theme-10 .theme-9-dashboard {
     display: none;
 }
-
+.body{
+font-weight: 600 !important;
+}
 .content-body {
     min-height: 788px;
 }
@@ -504,7 +506,7 @@ body.theme-9 .card.form-card .form-control {
 }
 
 body.theme-10 .deznav {
-    background-color: #CD2C66;
+    background-color: #ff4c8d;
 }
 
 body.theme-10 .card.form-card .form-control {

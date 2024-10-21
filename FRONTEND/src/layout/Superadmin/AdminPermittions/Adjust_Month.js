@@ -37,7 +37,6 @@ const Adjust_Month = ({ showModal, setshowModal, showPanelName }) => {
       };
 
       try {
-        console.log("req" ,req)
         
         const response = await dispatch(Adjust_Month_To_Company(req)).unwrap();
         if (response.status === false) {

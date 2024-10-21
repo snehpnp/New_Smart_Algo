@@ -77,6 +77,9 @@ const BrokerResponse = () => {
           else if (response.data.broker == "25") {
             setShouldAddNewColumn(true)
           }
+          else if (response.data.broker == "27") {
+            setShouldAddNewColumn(true)
+          }
    
    }
       });
@@ -97,7 +100,7 @@ const BrokerResponse = () => {
     {
       dataField: 'createdAt',
       text: 'Created At',
-      formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>
+      formatter: (cell, row, rowIndex) => <div>{cell ? fDateTimeSuffix(cell) :"-"}</div>
 
     },
     {
@@ -234,6 +237,15 @@ const BrokerResponse = () => {
             >
               <div className='table-responsive'>
                 <table className='table table-striped table-bordered border border-response-view' style={{ width: '100%', tableLayout: 'fixed' }}>
+                <tr>
+                    <td className="bg-table"> User Name</td>
+                    <td>{BrokerResponseId.userDetails.UserName}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td className="bg-table">Trading On Time</td>
+                    <td>{BrokerResponseId.TradingTime ? fDateTimeSuffix(BrokerResponseId.TradingTime):"-"}</td>
+                  </tr>
                   <tr>
                     <td className="bg-table"> Created At</td>
                     <td>{fDateTimeSuffix(BrokerResponseId.createdAt)}</td>

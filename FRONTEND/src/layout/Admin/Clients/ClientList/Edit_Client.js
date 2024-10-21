@@ -17,7 +17,10 @@ import {
 } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { Get_All_SUBADMIN } from "../../../../ReduxStore/Slice/Subadmin/Subadminslice";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
-import { Get_Service_By_Group_Id,Get_All_Plans } from "../../../../ReduxStore/Slice/Admin/GroupServiceSlice";
+import {
+  Get_Service_By_Group_Id,
+  Get_All_Plans,
+} from "../../../../ReduxStore/Slice/Admin/GroupServiceSlice";
 import { check_Device } from "../../../../Utils/find_device";
 import toast, { Toaster } from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
@@ -27,8 +30,7 @@ import { All_Api_Info_List } from "../../../../ReduxStore/Slice/Superadmin/ApiCr
 import * as Config from "../../../../Utils/Config";
 import { GET_IP } from "../../../../Service/common.service";
 import { Get_Pmermission } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
-const user_details = JSON.parse(localStorage.getItem("user_details"))
-
+const user_details = JSON.parse(localStorage.getItem("user_details"));
 
 const EditClient = () => {
   const navigate = useNavigate();
@@ -60,7 +62,6 @@ const EditClient = () => {
     data: [],
   });
 
-
   const isValidEmail = (email) => {
     return Email_regex(email);
   };
@@ -88,9 +89,7 @@ const EditClient = () => {
       });
   };
 
-
-const AdminPermissions = async() => {
-
+  const AdminPermissions = async () => {
     await dispatch(
       Get_Pmermission({
         domain: Config.react_domain,
@@ -111,12 +110,10 @@ const AdminPermissions = async() => {
           });
         }
       });
-  }
-
-
+  };
 
   useEffect(() => {
-    AdminPermissions()
+    AdminPermissions();
     data_1();
     GetAllPlansData();
   }, []);
@@ -190,9 +187,28 @@ const AdminPermissions = async() => {
         errors.email = valid_err.INVALID_EMAIL_ERROR;
       }
 
+      // if (values.licence == 2) {
+      //   if(values.tomonth == null || values.tomonth == "" || values.tomonth == undefined || values.tomonth == "0"){
+      //     errors.tomonth = "Please Select Licence";
+      //   }
+
+      // }
+
       return errors;
     },
     onSubmit: async (values) => {
+
+
+      if (values.licence == 2) {
+       if(values.licence1 == null){
+        if(values.tomonth == null || values.tomonth == "" || values.tomonth == undefined || values.tomonth == "0"){
+          toast.error("Please Select Licence");
+          return;
+        }
+       }
+      }
+
+
       const req = {
         FullName: values.fullName,
         UserName: values.username,
@@ -229,6 +245,7 @@ const AdminPermissions = async() => {
         network_ip: ip,
         plan_id: selectedPlan,
       };
+
 
       await dispatch(Update_User({ req: req, token: user_details.token }))
         .unwrap()
@@ -408,6 +425,8 @@ const AdminPermissions = async() => {
           ? "App Key"
           : formik.values.broker == 25
           ? "Api Key"
+           : formik.values.broker == 27
+          ? "Api Key"
           : "'Api Key",
       type: "text",
       showWhen: (values) =>
@@ -424,6 +443,7 @@ const AdminPermissions = async() => {
         values.broker === "19" ||
         values.broker === "20" ||
         values.broker === "26" ||
+        values.broker === "27" ||
         values.broker === "25",
       label_size: 12,
       col_size: 6,
@@ -448,6 +468,8 @@ const AdminPermissions = async() => {
           ? "Client Code"
           : formik.values.broker == 11
           ? "client_code"
+           : formik.values.broker == 27
+          ? "Vendor Code"
           : "User Id",
       type: "text",
       showWhen: (values) =>
@@ -459,6 +481,7 @@ const AdminPermissions = async() => {
         values.broker === "11" ||
         values.broker === "6" ||
         values.broker === "20" ||
+        values.broker === "27" ||
         values.broker === "21",
       label_size: 12,
       col_size: 6,
@@ -539,6 +562,8 @@ const AdminPermissions = async() => {
           ? "Api Secret"
           : formik.values.broker == 25
           ? "Api Secret"
+          : formik.values.broker == 27
+          ? "imei"
           : "Api Secret",
       type: "text",
       showWhen: (values) =>
@@ -556,6 +581,7 @@ const AdminPermissions = async() => {
         values.broker === "15" ||
         values.broker === "19" ||
         values.broker === "26" ||
+        values.broker === "27" ||
         values.broker === "25",
       label_size: 12,
       col_size: 6,
@@ -570,9 +596,10 @@ const AdminPermissions = async() => {
           ? "Trade Api Password"
           : formik.values.broker == 9
           ? "Encryption IV"
+          
           : "Api Secret",
       type: "text",
-      showWhen: (values) => values.broker === "7" || values.broker === "9",
+      showWhen: (values) => values.broker === "7" || values.broker === "9" ,
       label_size: 12,
       col_size: 6,
       disable: false,
@@ -777,6 +804,13 @@ const AdminPermissions = async() => {
       formik.setFieldValue("demat_userid", "null");
     }
 
+    if (formik.values.broker === "27" || formik.values.broker === 27) {
+      // formik.setFieldValue("api_key", "null");
+      // formik.setFieldValue("client_code", "null");
+      // formik.setFieldValue("api_secret", "null");
+      // formik.setFieldValue("api_type", "null");
+    }
+
     ////////////////--------------END BROKER SET KEY----------------///////////
 
     if (formik.values.licence === "2" || formik.values.licence === 2) {
@@ -963,7 +997,7 @@ const AdminPermissions = async() => {
 
   // Handler to update state when radio button is selected
   const handlePlanChange = (e) => {
-    // console
+ 
   };
 
   const GetAllPlansData = async () => {
@@ -1000,29 +1034,58 @@ const AdminPermissions = async() => {
           toDate={formik.values.todate}
           additional_field={
             <>
-            {admin_permission.data && admin_permission.data[0].Plans != 0 &&  <div>
-                <h6>Select Plans</h6>
+              {/* <div>
+                <h6>Select Trade permission</h6>
                 <div className="row">
-                  {GetAllPlans.data.map((plan, index) => (
-                    <div className="col-lg-2 mt-2" key={index}>
-                      <div className="form-check custom-radio mb-3">
-                        <input
-                          type="radio"
-                          className="form-check-input"
-                          name="plan"
-                          value={plan._id}
-                          id={plan._id}
-                          onChange={(e) => setSelectedPlan(e.target.value)}
-                          checked={selectedPlan === plan._id}
-                        />
-                        <label className="form-check-label" htmlFor={plan._id}>
-                          {plan.name}
-                        </label>
-                      </div>
+                  <div className="col-lg-2 mt-2" key={0}>
+                    <div className="form-check custom-radio mb-3">
+                      <input
+                        type="radio"
+                        className="form-check-input"
+                        name="plan"
+                        value={0}
+                        id={0}
+                        // onChange={(e) => setSelectedPlan(e.target.value)}
+                        // checked={selectedPlan === plan._id}
+                      />
+                      <label className="form-check-label" htmlFor={0}>
+                        Full Auto
+                      </label>
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>}
+              </div> */}
+
+              {admin_permission.data && admin_permission.data[0].Plans == 0 ? (
+                ""
+              ) : (
+                <div>
+                  <h6>Select Plans</h6>
+                  <div className="row">
+                    {GetAllPlans.data.map((plan, index) => (
+                      <div className="col-lg-2 mt-2" key={index}>
+                        <div className="form-check custom-radio mb-3">
+                          <input
+                            type="radio"
+                            className="form-check-input"
+                            name="plan"
+                            value={plan._id}
+                            id={plan._id}
+                            onChange={(e) => setSelectedPlan(e.target.value)}
+                            checked={selectedPlan === plan._id}
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor={plan._id}
+                          >
+                            {plan.name}
+                          </label>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/*  For Show All Services */}
               <h6>All Group Service</h6>

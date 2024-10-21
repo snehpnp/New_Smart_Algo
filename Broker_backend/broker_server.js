@@ -257,6 +257,8 @@ const Motilaloswal = require('./Broker/Motilaloswal')
 const Zebull = require('./Broker/Zebull')
 const icicidirect = require('./Broker/icicidirect')
 
+const shoonya = require('./Broker/shoonya')
+
 
 
 
@@ -951,7 +953,28 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+  //Process shoonya admin client
+  try {
+    const shoonyaViewCollection = db1.collection('shoonyaView');
+    const shoonyaViewdocuments = await shoonyaViewCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
+
+    fs.appendFile(filePath, 'TIME ' + new Date() + ' ICICI DIRECT View ALL CLIENT LENGTH ' + shoonyaViewdocuments.length + '\n', function (err) {
+      if (err) {
+        return console.log(err);
+      }
+    });
+
+
+
+    if (shoonyaViewdocuments.length > 0) {
+      shoonya.place_order(shoonyaViewdocuments, signals, token, filePath, signal_req);
+    }
+
+  } catch (error) {
+    console.log("Error Get shoonya Client In view", error);
+  }
+  //End Process shoonya admin client
 
 
 
@@ -1304,6 +1327,31 @@ app.post('/broker-signals', async (req, res) => {
               console.log("Error Get icicidirect Client In view", error);
             }
             //End Process Tading View Client icicidirect 
+
+
+
+
+            //Process Tading View Client Shoonya
+            try {
+              const ShoonyaCollection = db1.collection('shoonyaView');
+              const shoonyadocuments = await ShoonyaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' icicidirect TRADING VIEW CLIENT LENGTH ' + Icicidirectdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+              if (shoonyadocuments.length > 0) {
+                shoonya.place_order(shoonyadocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get Shoonya Client In view", error);
+            }
+            //End Process Tading View Client Shoonya 
+
 
 
           }

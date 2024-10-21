@@ -544,11 +544,10 @@ const UpdateProfile = async (userId, token) => {
     // Make the API request
     const response = await axios(config);
 
-    // Log the API response data
-    console.log(response.data);
+
 
     if (response.data && response.data.length > 0) {
-      console.log("Net", response.data[0].net);
+    
 
       try {
         let data1 = await User.findOne({ demat_userid: userId });
@@ -560,7 +559,6 @@ const UpdateProfile = async (userId, token) => {
             { new: true }
           );
 
-          console.log("Profile updated successfully:", result);
         } else {
           console.error(
             "User not found with the provided demat_userid:",

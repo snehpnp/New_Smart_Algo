@@ -42,7 +42,6 @@ console.log("tokenCode", tokenCode);
           var apiKey = Get_User[0].api_key;
           var apiSecret = Get_User[0].api_secret;
 
-          console.log("hosts", hosts);
 
           // Define the request data
           const requestData = {

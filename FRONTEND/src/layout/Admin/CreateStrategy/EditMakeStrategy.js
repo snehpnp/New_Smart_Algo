@@ -663,7 +663,7 @@ const EditMakeStrategy = () => {
 }
 
   // const selectSource = (e, condition_item, element_first_second, index, buy_sell) => {
-  //   // console.log("e -",e.target.value)
+
     
 
   //   if (e.target.value != "") {

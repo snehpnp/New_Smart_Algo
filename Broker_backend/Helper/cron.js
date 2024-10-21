@@ -21,6 +21,9 @@ module.exports = function (app) {
     
     cron.schedule('45 6 * * *', () => { downloadAlicetoken(); });
 
+    cron.schedule('55 6 * * *', () => { downloadAndShoonya(); });
+
+
     cron.schedule('15 18 * * *', () => { downloadKotakNeotoken(); });
 
 
@@ -388,8 +391,88 @@ module.exports = function (app) {
         }
     }
 
+
+    // SHOONYA FILES
+    async function downloadAndShoonya() {
+        try {
+            const ulrs = [
+                { url: "https://api.shoonya.com/NSE_symbols.txt.zip", filename: "NSE_symbols.txt.zip" },
+                { url: "https://api.shoonya.com/NFO_symbols.txt.zip", filename: "NFO_symbols.txt.zip" },
+                { url: "https://api.shoonya.com/MCX_symbols.txt.zip", filename: "MCX_symbols.txt.zip" },
+                { url: "https://api.shoonya.com/CDS_symbols.txt.zip", filename: "CDS_symbols.txt.zip" },
+                { url: "https://api.shoonya.com/BSE_symbols.txt.zip", filename: "BSE_symbols.txt.zip" },
+                { url: "https://api.shoonya.com/BFO_symbols.txt.zip", filename: "BFO_symbols.txt.zip" },
+
+                { url: "https://api.shoonya.com/NCX_symbols.txt.zip", filename: "NCX_symbols.txt.zip" }
+            ];
+    
+            const outputFolder = path.join(__dirname, '../AllInstrumentToken/shoonya');
+            if (!fs.existsSync(outputFolder)) {
+                fs.mkdirSync(outputFolder);
+            }
+    
+            const downloadResults = await Promise.all(
+                ulrs.map(async (item) => {
+                    try {
+                        const response = await axios.get(item.url, { responseType: 'arraybuffer' });
+    
+                        console.log("response",response)
+
+                        if (response.status !== 200) {
+                            return { filename: item.filename, status: `Failed with status code: ${response.status}` };
+                        }
+    
+                        const contentType = response.headers['content-type'];
+                        if (!contentType.includes('application/zip')) {
+                            return { filename: item.filename, status: `Unexpected content type: ${contentType}` };
+                        }
+    
+                        const zipFilePath = path.join(__dirname, item.filename);
+                        fs.writeFileSync(zipFilePath, Buffer.from(response.data, 'binary'));
+    
+                        const zip = new AdmZip(zipFilePath);
+                        zip.extractAllTo(outputFolder, true);
+    
+                        fs.unlinkSync(zipFilePath);
+    
+                        return { filename: item.filename, status: 'Success' };
+                    } catch (error) {
+                        return { filename: item.filename, status: `Error: ${error.message}` };
+                    }
+                })
+            );
+    
+            downloadResults.forEach(result => {
+                if (result.status !== 'Success') {
+                    console.log(`Download of ${result.filename} encountered an issue: ${result.status}`);
+                    return
+                } else {
+                    console.log(`Successfully downloaded and extracted ${result.filename}`);
+                }
+            });
+    
+        } catch (err) {
+            console.error("Unexpected error in downloadAndSwastika:", err);
+            return
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     app.get("/TK",async (req,res)=>{
-        downloadAlicetoken()
+        downloadAndShoonya()
         res.send("okkk")
        });
 }

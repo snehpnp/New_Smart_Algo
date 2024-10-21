@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
+import { Link } from 'react-router-dom'
 
 
 const Dashboard1 = ({ data }) => {
@@ -151,7 +152,11 @@ const Dashboard1 = ({ data }) => {
                       {item.visible ? <>
 
                         <div className=" col-6 d-flex align-items-center  justify-content-end">
-                          <a href="#" ><i className="fa-regular fa-eye pe-1"></i>View</a>
+                         
+                         
+                          <Link  className="mb-2" to={item.route}>
+                          <i className="fa-regular fa-eye pe-1" ></i>View</Link>
+
                         </div>
                       </> : ""}
 

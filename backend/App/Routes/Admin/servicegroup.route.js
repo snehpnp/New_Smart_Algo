@@ -4,7 +4,7 @@
 const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 
-const { Addgroupservice, GetAllServices, GetAllCatagory, allServicesSymboll, GetServicesByGroupId1, getServiceByCatagory, getAllgroupServices, GetAllServicesName, DELETEGROUPSERVICES, GetAllServicesUserNAme, GetServicesByGroupId, Editgroupservice ,Addplans,GetAllPlans,GetPlansById,EditPlans} = require('../../Controllers/Admin/servicegroup.controller')
+const { Addgroupservice, GetAllServices, GetAllCatagory, allServicesSymboll, GetServicesByGroupId1, getServiceByCatagory, getAllgroupServices, GetAllServicesName, DELETEGROUPSERVICES, GetAllServicesUserNAme, GetServicesByGroupId, Editgroupservice ,Addplans,GetAllPlans,GetPlansById,EditPlans,DeletePlans} = require('../../Controllers/Admin/servicegroup.controller')
 
 
 router.get('/getAllService', GetAllServices)
@@ -28,6 +28,7 @@ router.get('/getallplans', GetAllPlans)
 router.post('/getplansbyid', GetPlansById)
 router.post('/editplans', EditPlans)
 
+router.post('/deleteplans', DeletePlans)
 
 
 

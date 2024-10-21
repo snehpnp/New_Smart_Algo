@@ -106,7 +106,6 @@ module.exports = function (app, io) {
 
                                     // const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk }, { _id: 1 });
 
-                             console.log("Make_startegy_token",response)
 
                                     const currentDate = new Date();
                                     const hours = currentDate.getHours().toString().padStart(2, '0');

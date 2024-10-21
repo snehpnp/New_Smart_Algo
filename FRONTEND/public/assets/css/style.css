@@ -19,7 +19,9 @@
 @import url(../vendor/aos/css/aos.min.css);
 @import url(../vendor/perfect-scrollbar/css/perfect-scrollbar.css);
 @import url(../vendor/metismenu/css/metisMenu.min.css);
-
+body {
+  font-weight: bold !important;
+}
 :root {
   --primary: #ff5f07;
   --secondary: #ffd482;
@@ -13599,8 +13601,8 @@ label {
 }
 
 .nav-header .brand-title {
-  margin-left: 0.9375rem;
-  max-width: 11.75rem;
+  margin-left: -0.0605rem;
+  max-width: 15.75rem;
   font-size: 2.375rem;
   color: #000;
 }
@@ -13613,15 +13615,15 @@ label {
   fill: #FFFFFF !important;
 }
 
-@media only screen and (max-width: 1600px) {
+/* @media only screen and (max-width: 1600px) {
   .nav-header .brand-title {
     max-width: 6.75rem;
   }
-}
+} */
 
 @media only screen and (max-width: 87.5rem) {
   .nav-header .brand-title {
-    max-width: 7rem;
+    /* max-width: 7rem; */
     height: 50px;
   }
 }
@@ -19203,6 +19205,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   -webkit-transition: all 0.5s;
   -ms-transition: all 0.5s;
   transition: all 0.5s;
+  font-weight: bold;
 }
 
 [data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu>li>a:before {
@@ -21627,7 +21630,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 .sidebar-right #header_color_11+label,
 .sidebar-right #sidebar_color_11+label,
 .sidebar-right #primary_color_11+label {
-  background-color: #cd2c66;
+  background-color: #ff4c8d;
 }
 
 .sidebar-right #nav_header_color_12+label,
@@ -22742,7 +22745,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-nav-headerbg="color_11"][data-theme-version="dark"],
 [data-nav-headerbg="color_11"] {
-  --nav-headbg: #cd2c66;
+  --nav-headbg: #ff4c8d;
 }
 
 [data-nav-headerbg="color_11"][data-theme-version="dark"] .nav-header,
@@ -25215,7 +25218,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-sibebarbg="color_11"][data-theme-version="dark"],
 [data-sibebarbg="color_11"] {
-  --sidebar-bg: #cd2c66;
+  --sidebar-bg: #ff4c8d;
   /* .hamburger .line{
 				background:$white;
 			} */
@@ -25223,7 +25226,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-sibebarbg="color_11"][data-theme-version="dark"] .menu-toggle .deznav .metismenu li>ul,
 [data-sibebarbg="color_11"] .menu-toggle .deznav .metismenu li>ul {
-  background: #cd2c66 !important;
+  background: #ff4c8d !important;
 }
 
 [data-sibebarbg="color_11"][data-theme-version="dark"] .deznav .metismenu ul a:before,
@@ -27357,7 +27360,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-headerbg="color_11"][data-theme-version="dark"],
 [data-headerbg="color_11"] {
-  --headerbg: #cd2c66;
+  --headerbg: #ff4c8d;
 }
 
 [data-headerbg="color_11"][data-theme-version="dark"] .search-area2 .input-group-text,
@@ -28146,7 +28149,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 }
 
 [data-primary="color_11"] {
-  --primary: #cd2c66;
+  --primary: #ff4c8d;
   --secondary: #ffd482;
   --primary-hover: #b51f55;
   --primary-dark: #382435;
@@ -34824,14 +34827,13 @@ table {
   align-items: center;
 }
 
-.page-titles h4,
-.page-titles .h4 {
+.page-titles h4, .page-titles .h4 {
   margin-bottom: 0;
   margin-top: 0;
   color: var(--primary);
   font-size: 1.25rem;
+  font-weight: bold;
 }
-
 .page-titles h4 span,
 .page-titles .h4 span {
   font-size: 0.875rem;

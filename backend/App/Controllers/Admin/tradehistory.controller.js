@@ -33,8 +33,8 @@ class Tradehistory {
       }
 
 
-      let startDateObj = new Date(startDate)
-      let endDateObj = new Date(endDate)
+      let startDateObj = new Date(startDate ? startDate : new Date())
+      let endDateObj = new Date(endDate ? endDate : new Date())
       let stg1
       let ser1
       let serIndex
@@ -65,12 +65,20 @@ class Tradehistory {
       }
 
 
+     
+      // IF startDate and endDate same then add 1 day in endDate
+      if (startDate == startDate) {
+      
+        endDateObj.setDate(endDateObj.getDate() + 1);
+      }
+
+
       const filteredSignals = await MainSignals_modal.aggregate([
         {
           $match: {
-            dt_date: {
-              $gte: startDate,
-              $lte: endDate,
+            createdAt: {
+              $gte:  new Date(startDateObj),
+              $lte:  new Date(endDateObj),
             },
             strategy: stg1,
             trade_symbol: ser1,
@@ -124,9 +132,9 @@ class Tradehistory {
       const filteredSignals_tradesymbols = await MainSignals_modal.aggregate([
         {
           $match: {
-            dt_date: {
-              $gte: startDate,
-              $lte: endDate,
+            createdAt: {
+              $gte:  new Date(startDateObj),
+              $lte:  new Date(endDateObj),
             },
             client_persnal_key: client_persnal_key1,
           },
@@ -183,6 +191,7 @@ class Tradehistory {
         return acc;
       }, {});
 
+   
       const trade_symbols_filter = Object.keys(groupedData);
 
       if (filteredSignals.length > 0) {
@@ -387,10 +396,11 @@ class Tradehistory {
 
 
       var Admin_information = await user_logs.find({
-        user_Id: new ObjectId(req.body.id),
-        // role: "ADMIN",
-        createdAt: { $gte: threeDaysAgo },
+        // user_Id: new ObjectId(req.body.id),
+        trading_status: { $in: ["Admin Trading On", "Admin Trading off"] },
+        createdAt: { $gte: threeDaysAgo }
       }).sort({ createdAt: -1 });
+      
 
       return res.send({ status: true, msg: "Trading status get", data: Admin_information });
     } catch (error) {

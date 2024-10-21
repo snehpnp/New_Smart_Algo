@@ -22,8 +22,7 @@ import { Download } from "lucide-react";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { GET_IP } from "../../../../Service/common.service";
-import Swal from 'sweetalert2'
-
+import Swal from "sweetalert2";
 
 const AllClients = () => {
   const [ip, setIp] = useState("");
@@ -118,6 +117,33 @@ const AllClients = () => {
   };
 
   var headerName = "All Clients";
+
+  if (dashboard_filter !== undefined) {
+    if (dashboard_filter === "000") {
+      headerName = "";
+    } else if (dashboard_filter === "111") {
+      headerName = "Total Active Clients";
+    } else if (dashboard_filter == "21") {
+      headerName = "Active Live Client";
+    } else if (dashboard_filter == "2") {
+      headerName = "Total Live Client";
+    } else if (dashboard_filter == "20") {
+      headerName = "Expired Live Client";
+    } else if (dashboard_filter == "1") {
+      headerName = "Total Demo Client";
+    } else if (dashboard_filter == "11") {
+      headerName = "Active Demo Client";
+    } else if (dashboard_filter == "10") {
+      headerName = "Expired Demo Client";
+    } else if (dashboard_filter == "0") {
+      headerName = "Total 2 Days Client";
+    } else if (dashboard_filter == "01") {
+      headerName = "Active 2 Days Client";
+    } else if (dashboard_filter == "00") {
+      headerName = "Expired 2 Days Client";
+    }
+  }
+
   const data = async () => {
     var req1 = {
       Find_Role: user_details && user_details.Role,
@@ -147,13 +173,13 @@ const AllClients = () => {
 
                 if (dashboard_filter === "2" || dashboard_filter === 2) {
                   return (
-                    item.license_type === dashboard_filter ||
-                    item.license_type === dashboard_filter
+                    item.license_type == dashboard_filter && 
+                    item.Is_Active == "1" 
                   );
                 }
                 if (dashboard_filter === "21" || dashboard_filter === 21) {
                   return (
-                    new Date(item.EndDate) > new Date() &&
+                    new Date(item.EndDate) >= new Date() &&
                     (item.license_type === "2" || item.license_type === 2)
                   );
                 }
@@ -195,7 +221,7 @@ const AllClients = () => {
                 }
                 if (dashboard_filter === "00") {
                   return (
-                    new Date(item.EndDate) < new Date() &&
+                    new Date(item.EndDate) <= new Date() &&
                     (item.license_type === "0" || item.license_type === 0)
                   );
                 }
@@ -245,8 +271,6 @@ const AllClients = () => {
   }, [getAllClients.data]);
 
   const goToDashboard = async (row, asyncid, email) => {
-
-
     if (row.AppLoginStatus == "1" || row.WebLoginStatus == "1") {
       let req = {
         Email: email,
@@ -395,17 +419,21 @@ const AllClients = () => {
       text: "Status",
       formatter: (cell, row) => (
         <>
-        <label className="toggle mt-3">
-              <input
-                className="toggle-checkbox bg-primary"
-                type="checkbox"
-                checked={row.ActiveStatus === "1" ? true : false}
-                onChange={(e) => {
-                  activeUser(e, row);
-                }}
-              />
-              <div className={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
-            </label>
+          <label className="toggle mt-3">
+            <input
+              className="toggle-checkbox bg-primary"
+              type="checkbox"
+              checked={row.ActiveStatus === "1" ? true : false}
+              onChange={(e) => {
+                activeUser(e, row);
+              }}
+            />
+            <div
+              className={`toggle-switch  ${
+                row.ActiveStatus === "1" ? "bg-success" : "bg-danger"
+              }`}
+            ></div>
+          </label>
 
           {/* {row.StartDate == null && row.EndDate == null ?
             ''
@@ -425,7 +453,6 @@ const AllClients = () => {
           } */}
         </>
       ),
-
     },
     {
       dataField: "ActiveStatus",
@@ -632,9 +659,7 @@ const AllClients = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-        
           if (response.data.length > 0) {
-       
             let FileName = key === 1 ? "Trading Status" : "Broker Response";
 
             const fileType =
@@ -649,20 +674,19 @@ const AllClients = () => {
             });
             const data = new Blob([excelBuffer], { type: fileType });
             FileSaver.saveAs(data, FileName + fileExtension);
-          }else{
+          } else {
             Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'No Data Found',
-          })
-
+              icon: "error",
+              title: "Oops...",
+              text: "No Data Found",
+            });
           }
-        }else{
+        } else {
           Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'No Data Found',
-          })
+            icon: "error",
+            title: "Oops...",
+            text: "No Data Found",
+          });
         }
       });
   };

@@ -130,7 +130,10 @@ const ServicesList = () => {
   };
   let servicegivenmonth = localStorage.getItem("servicegivenmonth");
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
+  const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
+  const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
 
+  
   const SetPlan = (index) => {
     if (servicegivenmonth === 0) {
       return null;
@@ -157,7 +160,7 @@ const ServicesList = () => {
   };
 
   const data_1 = async () => {
-    await dispatch(Find_One_User({ id: user_id }))
+    await dispatch(Find_One_User({ id: gotodashboard ? GoToDahboard_id.user_id :user_id }))
       .unwrap()
       .then((response) => {
         if (response.status) {

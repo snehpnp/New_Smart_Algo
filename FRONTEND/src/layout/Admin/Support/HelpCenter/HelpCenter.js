@@ -7,7 +7,7 @@ import FullDataTable from "../../../../Components/ExtraComponents/Datatable/Full
 import { GET_HELPS } from '../../../../ReduxStore/Slice/Admin/AdminHelpSlice'
 import { useDispatch } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
-
+import {fDateTime} from '../../../../Utils/Date_formet'
 
 const HelpCenter = () => {
 
@@ -75,8 +75,8 @@ const HelpCenter = () => {
             dataField: 'createdAt',
             text: 'Date',
             formatter: (cell, row) => (
-                        <><div>{cell.split('T')[0] +"   "+cell.split('T')[1].split('.')[0]}</div> </>
-                        // <><div>{cell.split('.')[0]}</div> </>
+                        <><div>{cell ? fDateTime(cell) :"-"}</div> </>
+                       
 
         
         

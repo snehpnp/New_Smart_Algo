@@ -60,8 +60,17 @@ const SubAdminList = () => {
   const filterClients = () => {
     const filterData = allClients.filter(
       (item) =>
+
         searchInput === "" ||
-        item.UserName.toLowerCase().includes(searchInput.toLowerCase())
+        item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
+        item.Email.toLowerCase().includes(searchInput.toLowerCase()) || 
+        item.PhoneNo.includes(searchInput) 
+        // item.broker.toLowerCase().includes(searchInput.toLowerCase()) || 
+        // item.license_type.toLowerCase().includes(searchInput.toLowerCase()) 
+
+        
+
+
     );
     setFilteredClients(filterData);
   };
@@ -274,6 +283,7 @@ const SubAdminList = () => {
       setLicence(value);
     }
   };
+
 
   return (
     <>

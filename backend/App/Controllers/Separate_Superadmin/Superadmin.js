@@ -579,7 +579,6 @@ class SuperAdmin {
 
       
 
-
       const getToMonth = await user.aggregate([
         { $match: { _id: new ObjectId(id) } },
         {
@@ -590,17 +589,27 @@ class SuperAdmin {
             as: "licenses"
           }
         },
-        { $unwind: "$licenses" },
+        // Use unwind with `preserveNullAndEmptyArrays: true` to retain user data even if no licenses are found
+        { $unwind: { path: "$licenses", preserveNullAndEmptyArrays: true } },
         {
           $group: {
             _id: "$_id",
-            totalLicence: { $sum: { $toDouble: "$licenses.license" } },
+            // Use $ifNull to handle cases where `licenses.license` is null or doesn't exist
+            totalLicence: { 
+              $sum: { 
+                $toDouble: { 
+                  $ifNull: ["$licenses.license", 0]  // If `licenses.license` is null, default to 0
+                }
+              }
+            },
             UserName: { $first: "$UserName" },
             CreateDate: { $first: "$CreateDate" },
             StartDate: { $first: "$StartDate" },
             EndDate: { $first: "$EndDate" },
             licence: { $first: "$licence" },
-
+            Email: { $first: "$Email" },
+            PhoneNo: { $first: "$PhoneNo" },
+            FullName: { $first: "$FullName" }
           }
         },
         {
@@ -611,12 +620,13 @@ class SuperAdmin {
             CreateDate: 1,
             licence: 1,
             EndDate: 1,
-            StartDate: 1
+            StartDate: 1,
+            Email: 1,
+            FullName: 1,
+            PhoneNo: 1,
           }
         }
       ]).exec();
-
-
 
       const GetCountLicenceDAta = await count_licenses.find({ user_id: id }).sort({ createdAt: -1 })
 

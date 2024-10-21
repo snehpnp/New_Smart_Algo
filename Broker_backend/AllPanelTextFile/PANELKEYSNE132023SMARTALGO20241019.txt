@@ -1,0 +1,22 @@
+
+NEW TRADE TIME Sat Oct 19 2024 11:55:29 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1729261712,Symbol:BANKNIFTY,TType:LE,Tr_Price:0.00000000,Price:818.90,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:51000,OType:PUT,Expiry:23102024,Strategy:jhgsa,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Sat Oct 19 2024 11:55:29 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 53053
+TIME Sat Oct 19 2024 11:55:29 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:29 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:29 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:29 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:29 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:30 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:30 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:30 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:30 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:30 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:30 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:30 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:30 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:30 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:30 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Sat Oct 19 2024 11:55:30 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Sat Oct 19 2024 11:55:30 GMT+0530 (India Standard Time) SHOONYA BEFORE PLACE ORDER USER ENTRY- Shoonya REQUEST -{"uid":"FA84664","actid":"FA84664","exch":"NFO","tsym":"BANKNIFTY23OCT24P51000","qty":"15","prc":"0","Trgprc":"0","Dscqty":"0","prd":"M","trantype":"B","prctyp":"MKT","ret":"DAY","Trantype":"B"}
+TIME Sat Oct 19 2024 11:55:30 GMT+0530 (India Standard Time) SHOONYA AFTER PLACE ORDER USER ENTRY - Shoonya RESPONSE -{"request_time":"11:55:30 19-10-2024","stat":"Ok","norenordno":"24101900002365"}
