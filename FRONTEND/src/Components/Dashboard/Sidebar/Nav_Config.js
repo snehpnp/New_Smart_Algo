@@ -148,23 +148,23 @@ export const admin_sidebar = [
             }
         ]
     },
-    // {
-    //     id: 73,
-    //     name: 'Make Strategy',
-    //     Icon: 'Boxes',
-    //     Data: [
-    //         {
-    //             id: 731,
-    //             name: 'Create Strategy',
-    //             route: '/admin/createstrategy',
-    //         },
-    //         {
-    //             id: 732,
-    //             name: 'All Strategies',
-    //             route: '/admin/AllMakeStrategy',
-    //         }
-    //     ]
-    // },
+    {
+        id: 73,
+        name: 'Make Strategy',
+        Icon: 'Boxes',
+        Data: [
+            {
+                id: 731,
+                name: 'Create Strategy',
+                route: '/admin/createstrategy',
+            },
+            {
+                id: 732,
+                name: 'All Strategies',
+                route: '/admin/AllMakeStrategy',
+            }
+        ]
+    },
     {
         id: 7,
         name: 'More',

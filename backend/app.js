@@ -38,12 +38,9 @@ app.use(express.json());
 
 // REQUIRE File
 require("./App/Cron/cron");
-
 // Routes all
 require("./App/Routes")(app);
-
 // EMERGANCY
-
 require("./request")(app);
 
 require("./Teting")(app);

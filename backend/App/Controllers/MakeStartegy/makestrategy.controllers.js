@@ -1,6 +1,7 @@
 "use strict";
 const db = require('../../Models');
 const mongoose = require('mongoose');
+const { format } = require('date-fns');
 // const MongoClient = require('mongodb').MongoClient;
 const axios = require('axios');
 const ObjectId = mongoose.Types.ObjectId;
@@ -660,7 +661,6 @@ class MakeStartegy {
               let pipeline = [];
 
               const conditions = await parseConditionString(createUserMakeStrategy.condition);
-
               const matchStage = await generateMongoCondition(conditions);
 
               pipeline.push({
@@ -699,9 +699,26 @@ class MakeStartegy {
               });
 
 
+              // pipeline.push({
+              //   $addFields: {
+              //     isCondition: matchStage
+              //   }
+              // });
+
               pipeline.push({
                 $addFields: {
-                  isCondition: matchStage
+                  isCondition: {
+                    $cond: {
+                      if: { 
+                        $eq: [
+                          { $size: { $ifNull: ["$" + arraySource[0] + "Data", []] } },  // Check size of dynamic source + 'Data'
+                          0
+                        ]
+                      },  
+                      then: false,  // If it's empty, set isCondition to false
+                      else: matchStage  // Otherwise, use matchStage as isCondition
+                    }
+                  }
                 }
               });
 
@@ -755,11 +772,24 @@ class MakeStartegy {
                 }
               });
 
+              // pipeline.push({
+              //   $addFields: {
+              //     isCondition: matchStage
+              //   }
+              // });
+
               pipeline.push({
                 $addFields: {
-                  isCondition: matchStage
+                  isCondition: {
+                    $cond: {
+                      if: { $eq: [{ $size: "$timeFrameViewData" }, 0] },  // Check if timeFrameViewData is empty
+                      then: false,  // If it's empty, set isCondition to false
+                      else: matchStage  // Otherwise, use matchStage (the original condition)
+                    }
+                  }
                 }
               });
+              
 
               let viewName = 'M' + createUserMakeStrategy.timeframe + '_' + createUserMakeStrategy.tokensymbol + '_make_' + createUserMakeStrategy.name;
 
@@ -780,10 +810,6 @@ class MakeStartegy {
                 console.log(`Error creating view ${viewName}:`, error);
               }
             }
-
-
-
-
             //res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
 
           }).catch((err) => {
@@ -1150,11 +1176,11 @@ let rr = 1
 async function run() {
   try {
     // Define the function to be executed
-    // const executeFunction = async () => {
-    //   // console.log("DONEEE executeFunction");
-    //   const data = await dbTest.collection('strategyViewNames').find({}).toArray();
-    //   fetchDataFromViews(data);
-    // };
+    const executeFunction = async () => {
+      // console.log("DONEEE executeFunction");
+      const data = await dbTest.collection('strategyViewNames').find({}).toArray();
+      await fetchDataFromViews(data);
+    };
 
     const exitOpentrade = async () => {
    //   console.log("DONEEE exitOpentrade")
@@ -1275,7 +1301,7 @@ async function run() {
       // Delay for 1000 milliseconds (1 second)
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // await executeFunction();
+       await executeFunction();
 
       // Open Position Function Evey Second
       const indiaTimezoneOffset = 330;
@@ -1311,10 +1337,13 @@ async function fetchDataFromViews(viewNames) {
           timeFrameViewData: { $ne: null, $ne: [] }
         }).toArray();
 
-        // console.log(`Data from view ${valView.viewName}:`, data);
+         console.log(`Data from view ${valView.viewName}:`, data);
         if (data.length > 0) {
           //console.log(`Data from view ${valView.viewName}:`, data);
           let val = data[0];
+
+          const date = new Date(val.expiry);
+          val.expiry = format(date, 'ddMMyyyy');
 
           let entry_type = 'LE';
           if (val.type === 'BUY') {

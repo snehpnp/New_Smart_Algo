@@ -26,6 +26,7 @@ const Alice_Socket = async () => {
     
     var socket = null
     var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
+   
     if (!broker_infor) {
         return null
     }
@@ -45,6 +46,8 @@ const Alice_Socket = async () => {
 
     var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
 
+    
+   console.log("alltokenchannellist ",alltokenchannellist)
     var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
     var userid = broker_infor.user_id
     var userSession1 = broker_infor.access_token
@@ -52,7 +55,9 @@ const Alice_Socket = async () => {
     var channelList = alltokenchannellist
     var type = { "loginType": "API" }
 
+    
     if (broker_infor.user_id !== undefined && broker_infor.access_token !== undefined && broker_infor.trading_status == "on") {
+      
         try {
           
             await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
@@ -61,26 +66,22 @@ const Alice_Socket = async () => {
                     'Content-Type': 'application/json'
                 },
 
-            }).then(res => {
-
-
+            }).then(res => {  
                 if (res.data.stat == "Ok") {
                   openSocketConnection(channelList , userid , userSession1 )
                 }
-            })
-                .catch((error) => {
-                    return "error"
-                })
+             }).catch((error) => {
+                  return "error"
+              })
 
 
         } catch (error) {
             console.log("Error createSocketSess", error);
         }
 
+    }else{
+      console.log("Alice Socket Not Connected")
     }
-
-
-
 
 }
 
@@ -105,14 +106,12 @@ function openSocketConnection(channelList ,userid , userSession1) {
     const response = JSON.parse(msg.data)
     //console.log("response -",response)
     if (response.tk) {
-      // console.log("response -",response.tk)
-      // const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk });
-      // if (Make_startegy_token) {
-      //   console.log("IFFFFF - ", response.tk)
-      //   await connectToDB(response.tk, response)
-      // } else {
-      //   // console.log("ELSEEEEE - ")
-      // }
+    //  console.log("response -",response.tk)
+      const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk });
+      if (Make_startegy_token) {
+       // console.log("IFFFFF - ", response.tk)
+        await connectToDB(response.tk, response)
+      } 
      
       if (response.lp != undefined) {
       await stock_live_price.updateOne({_id: response.tk}
@@ -197,21 +196,6 @@ function updateChannelAndSend(newChannel) {
   console.log("Updated channelList:", newChannel);
   sendChannelList(newChannel);  // Send updated channel list
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const getSocket = () => {
   return socketObject;
