@@ -37,11 +37,10 @@ const { getIO } = require('../../Helper/BackendSocketIo');
 class MakeStartegy {
 
   async getcandledata(req, res) {
-
+  //  console.log("req,",req.body)
     let timeFrame = req.body.timeframe;
     let tokensymbol = req.body.tokensymbol;
     let collectionName = 'M' + timeFrame + '_' + tokensymbol;
-
 
     try {
 
@@ -67,11 +66,11 @@ class MakeStartegy {
 
 
       } else {
-        return ({ status: false, msg: "Empty data", data: [] })
+         return res.send({ status: false, msg: "Empty data", data: [] })
       }
 
     } catch (e) {
-
+     return res.send({ status: false, msg: "Empty data", data: [] })
     }
 
 
@@ -804,13 +803,7 @@ class MakeStartegy {
     }
   }
 
-
-
-
 }
-
-
-
 
 
 
