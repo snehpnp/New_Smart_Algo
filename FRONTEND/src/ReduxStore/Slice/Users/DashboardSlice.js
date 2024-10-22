@@ -6,7 +6,8 @@ import {
   UPDATE_DAHBOARD_DATA,
   TRADING_OFF,
   USER_FUND_UPDATE,
-  USER_FUND_GETALL
+  USER_FUND_GETALL,
+  GET_HELP
 } from "../../../Service/user.service";
 
 
@@ -96,6 +97,23 @@ export const USER_FUND_GETALL_API = createAsyncThunk(
     }
   );
 
+  export const Get_USER_HELP = createAsyncThunk(
+    "getall/user/help",
+    async (data1) => {
+      const { domain, token } = data1;
+      try {
+        const res = await GET_HELP(data1, token);
+        return await res;
+      } catch (err) {
+        return
+      }
+    }
+  );
+
+
+
+
+
 const DashboardSlice = createSlice({
   name: "DashboardSlice",
   initialState: {
@@ -108,7 +126,8 @@ const DashboardSlice = createSlice({
     permission: [],
     UserFundUpdate: [],
     status: false,
-    UserLogs:[]
+    UserLogs:[],
+    UserHelp:[]
   },
 
   recuders: {},
@@ -140,6 +159,10 @@ const DashboardSlice = createSlice({
       },
       [USER_FUND_GETALL_API.fulfilled]: (state, { payload }) => {
         return { ...state, UserLogs: payload, status: false };
+      },
+
+      [Get_USER_HELP.fulfilled]: (state, { payload }) => {
+        return { ...state, UserHelp: payload, status: false };
       },
   },
 });

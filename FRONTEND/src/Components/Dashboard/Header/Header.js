@@ -369,25 +369,24 @@ const Header = ({ ChatBox }) => {
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
-  
+
     setFormValues((prevState) => ({
       ...prevState,
       [id]: value,
     }));
-  
+
     // Clear the error message when the user types something valid
     setFormValuesErr((prevState) => ({
       ...prevState,
-      [id]: "", 
+      [id]: "",
     }));
   };
-  
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
     let hasError = false;
-  
+
     // Check if User ID is empty
     if (formValues.userId === "") {
       setFormValuesErr((prevState) => ({
@@ -396,7 +395,7 @@ const Header = ({ ChatBox }) => {
       }));
       hasError = true;
     }
-  
+
     // Check if Password is empty
     if (formValues.password === "") {
       setFormValuesErr((prevState) => ({
@@ -405,7 +404,7 @@ const Header = ({ ChatBox }) => {
       }));
       hasError = true;
     }
-  
+
     // Check if OTP is empty
     if (formValues.otp === "") {
       setFormValuesErr((prevState) => ({
@@ -414,10 +413,10 @@ const Header = ({ ChatBox }) => {
       }));
       hasError = true;
     }
-  
+
     // If any errors exist, prevent submission
     if (hasError) return;
-  
+
     // Prepare the request payload
     const req = {
       id: user_details.user_id,
@@ -427,7 +426,7 @@ const Header = ({ ChatBox }) => {
         app_key: formValues.otp,
       },
     };
-  
+
     // Dispatch the Update_Broker_Keys action
     await dispatch(Update_Broker_Keys({ req: req, token: AdminToken }))
       .unwrap()
@@ -441,7 +440,7 @@ const Header = ({ ChatBox }) => {
             password: "",
             otp: "",
           });
-  
+
           // Trigger additional login logic
           loginWithApi(27, UserDetails, true);
         }
@@ -450,7 +449,6 @@ const Header = ({ ChatBox }) => {
         console.error("Error: ", error);
       });
   };
-  
 
   return (
     <div className="header-container">
@@ -512,50 +510,44 @@ const Header = ({ ChatBox }) => {
                       </li>
                     </>
                   </li>
-                ) : (
-                  null
-                )}
+                ) : null}
 
-                {user_role === "USER" && getPlanName
-                   ? (
-                      <li className="nav-item dropdown header-profile me-2">
-                        <button
-                          className=" btn btn-primary px-2"
-                          onClick={() => navigate("/client/plan")}
-                        >
-                          {getPlanName}
-                        </button>
-                      </li>
-                    )
-                  : null}
+                {user_role === "USER" && getPlanName ? (
+                  <li className="nav-item dropdown header-profile me-2">
+                    <button
+                      className=" btn btn-primary px-2"
+                      onClick={() => navigate("/client/plan")}
+                    >
+                      {getPlanName}
+                    </button>
+                  </li>
+                ) : null}
 
                 <>
                   {user_role === "ADMIN" ||
                   (gotodashboard && user_role_goTo == "USER") ? (
                     <li className="nav-item dropdown header-profile me-2">
                       <button
-                        className=" btn btn-primary px-2"
+                        className="btn btn-primary px-2"
                         onClick={() => setshowModal(true)}
                       >
                         Set API Key
                       </button>
                     </li>
-                  ) : (
-                    null
-                  )}
+                  ) : null}
 
-                  {user_role === "USER" && UserDetails.license_type == "2"  || UserDetails.license_type == "0"? (
+                  {user_role === "USER" &&
+                  (UserDetails.license_type == "2" ||
+                    UserDetails.license_type == "0") ? (
                     <li className="nav-item dropdown header-profile me-2">
                       <button
-                        className=" btn btn-primary px-2"
+                        className="btn btn-primary px-2"
                         onClick={() => setshowModal(true)}
                       >
                         Set API Key
                       </button>
                     </li>
-                  ) : (
-                    null
-                  )}
+                  ) : null}
 
                   <li className="nav-item dropdown header-profile user-name me-2">
                     {UserNamego_localstg != null ? (

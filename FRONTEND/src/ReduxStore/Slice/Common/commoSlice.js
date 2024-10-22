@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { USER_PROFILE, GET_ALL_SERVICE_FOR_CLIENTS,GET_ALL_SIGNUP_CLIENTS, GET_MESSAGE_BROD,CANCEL_ORDER_BY_ADMIN } from "../../../Service/common.service";
 
 
-export const User_Profile = createAsyncThunk("user/profile", async (data) => {
+export const User_Profile = createAsyncThunk("get/profile", async (data) => {
     try {
         const res = await USER_PROFILE(data);
         return await res;
@@ -10,6 +10,10 @@ export const User_Profile = createAsyncThunk("user/profile", async (data) => {
         return err;
     }
 });
+
+
+
+
 
 export const Get_All_Service_for_Client = createAsyncThunk("user/service1", async (apireq) => {
     const { req, token } = apireq
@@ -61,6 +65,15 @@ const CommonSlice = createSlice({
 
     recuders: {},
     extraReducers: {
+        [User_Profile.pending]: (state) => {
+            state.isLoading = true;
+        },
+        [Get_All_Service_for_Client.pending]: (state) => {
+            state.isLoading = true;
+        },
+        [GET_MESSAGE_BRODS.pending]: (state) => {
+            state.isLoading = true;
+        },
         [User_Profile.fulfilled]: (state, { payload }) => {
             return { ...state, profiledata: payload, isLoading: false };
         },
@@ -70,6 +83,19 @@ const CommonSlice = createSlice({
         [GET_MESSAGE_BRODS.fulfilled]: (state, { payload }) => {
             return { ...state, message_brod: payload, isLoading: false };
         },
+        [User_Profile.rejected]: (state) => {
+            state.isLoading = false;
+            state.isError = true;
+        },
+        [Get_All_Service_for_Client.rejected]: (state) => {
+            state.isLoading = false;
+            state.isError = true;
+        },
+        [GET_MESSAGE_BRODS.rejected]: (state) => {
+            state.isLoading = false;
+            state.isError = true;
+        }
+
     }
 })
 

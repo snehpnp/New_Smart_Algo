@@ -19,8 +19,6 @@ class HelpCenter {
                 var adminid = new ObjectId(Req.admin_id)
                 var userid = new ObjectId(Req.user_id)
 
-
-
                 const Help = new HelpCenter_modal({
                     user_id: Req.user_id,
                     admin_id: Req.admin_id,
@@ -29,22 +27,53 @@ class HelpCenter {
                     fullname: Req.fullname,
                     username: Req.username,
                     email: Req.email
-
                 })
                 
                 Help.save()
                     .then(async (data) => {
-                        return res.status(200).json({ status: true, msg: 'Message Send SuccessFully', data: [] });
+                        return res.json({ status: true, msg: 'Message Send SuccessFully', data: [] });
                     })
             }
             catch (error) {
-                return res.status(500).json({ status: false, msg: 'Error  to Create Generate Help Response.', error: error.message });
+                return res.son({ status: false, msg: 'Error  to Create Generate Help Response.', error: error.message });
             }
 
         } catch (error) {
             console.log("Error Help- Center error-", error);
         }
     }
+
+    async GetAllHelp(req, res) {
+        try {
+            console.log("Get All Help Center Data");
+            const { user_id } = req.body;
+            
+            const startOfDay = new Date();
+            startOfDay.setHours(0, 0, 0, 0); 
+
+            const endOfDay = new Date();
+            endOfDay.setHours(23, 59, 59, 999);
+
+            try {
+    
+                const Help = await HelpCenter_modal.find({
+                    user_id: user_id,
+                    createdAt: {
+                        $gte: startOfDay,  
+                        $lte: endOfDay   
+                    }
+                }).sort({ createdAt: -1 });
+
+                return res.json({ status: true, msg: 'Help Center Data', data: Help });
+            } catch (error) {
+                return res.son({ status: false, msg: 'Error retrieving Help Center data.', error: error.message });
+            }
+
+        } catch (error) {
+            console.log("Error Help- Center error-", error);
+        }
+    }
+
 
 }
 
