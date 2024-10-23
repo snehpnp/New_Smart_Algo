@@ -535,6 +535,23 @@ export async function GET_TRADEHISTORY(data, token) {
 
 }
 
+// GET TRADEHISTORY
+export async function GET_TRADEHISTORY1(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/tradhistory1`, data, {
+            headers: header(token),
+            data: { data },
+        })
+        return await res?.data;
+    }
+    catch (err) {
+
+        return err
+        // custom error
+    }
+
+}
+
 
 // GET 7 Day TRADEHISTORY
 export async function GET_SEVAN_TRADEHISTORY(data, token) {

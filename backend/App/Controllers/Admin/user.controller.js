@@ -1091,7 +1091,8 @@ class Employee {
       var AdminMatch;
 
       if (Find_Role == "ADMIN") {
-        AdminMatch = { Role: "USER" };
+        AdminMatch = { Role: "USER",
+          Is_Active: "1" };
       } else if (Find_Role == "SUBADMIN") {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }

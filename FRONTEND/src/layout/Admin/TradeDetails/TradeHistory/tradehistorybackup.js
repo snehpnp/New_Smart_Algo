@@ -171,7 +171,6 @@ const TradeHistory = () => {
             loading: false,
             data: filterData,
             pagination: response.pagination,
-            TotalCalculate:response.TotalCalculate
 
           });
           setTotal(response.pagination.totalItems);
@@ -223,7 +222,6 @@ const TradeHistory = () => {
       dataField: "createdAt",
       text: "Signals Entry time",
       formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
-      width: "5rem"
     },
 
     {
@@ -283,7 +281,7 @@ const TradeHistory = () => {
       dataField: "exit_qty",
       text: "Exit Qty",
       formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== ""  || cell != 0 ? parseInt(cell) : "-"}</span>
+        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
       ),
     },
     {
@@ -320,13 +318,11 @@ const TradeHistory = () => {
     },
 
     {
-      dataField: "TradeType",
+      dataField: "",
       text: "Entry Status",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span>{cell}</span>
-
-          {/* <span>{StatusEntry(row)}</span> */}
+          <span>{StatusEntry(row)}</span>
           {/* <span>{row.result[0].exit_status ==="above"?"ABOVE":row.result[0].exit_status ==="below"?"BELOW":row.result[0].exit_status == "range"?"RANGE":" - "}</span> */}
         </div>
       ),
@@ -336,7 +332,7 @@ const TradeHistory = () => {
       text: "Exit Status",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span>{row.exit_status == "-" ? "MT_4" :row.exit_status}</span>
+          <span>{row.exit_status}</span>
         </div>
       ),
     },
@@ -1016,14 +1012,6 @@ const TradeHistory = () => {
     setPage(1); // Reset to first page
   };
 
-  const NoDataIndication = () => (
-    <>
-        <img src='../../../../assets/images/norecordfound.png' alt="sss"
-            className='mx-auto d-flex'
-        />
-    </>
-);
-
   return (
     <>
       <Content
@@ -1292,81 +1280,26 @@ const TradeHistory = () => {
 
         <div className="table-responsive">
           {tradeHistoryData.data.length > 0 ? (
-            tradeHistoryData.TotalCalculate >= 0 ? (
+            total >= 0 ? (
               <h3>
                <b>Total Realised P/L</b>  :{" "}
-               <b><span style={{ color: "green" }}> {tradeHistoryData.TotalCalculate.toFixed(2)}</span>{" "}</b> 
+               <b><span style={{ color: "green" }}> {total.toFixed(2)}</span>{" "}</b> 
               </h3>
             ) : (
               <h3>
                 <b>Total Realised P/L</b> :{" "}
-                <b><span style={{ color: "red" }}> {tradeHistoryData.TotalCalculate.toFixed(2)}</span>{" "}</b> 
+                <b><span style={{ color: "red" }}> {total.toFixed(2)}</span>{" "}</b> 
               </h3>
             )
           ) : (
             ""
           )}
 
-<PaginationProvider
-        pagination={paginationFactory({
-          ...paginationOptions,
-          totalSize: total1,
-          page: getPage,
-          sizePerPage: getSizePerPage,
-        })}
-      >
-        {({ paginationProps, paginationTableProps }) => (
-          <div>
-            <BootstrapTable
-              keyField="_id" // Assuming "_id" is the unique key in your data
-              data={tradeHistoryData.data} // Data from API
-              columns={columns} // Table columns
-              remote // Indicate that pagination and data are remotely controlled
-              onTableChange={handleTableChange} // Handle pagination changes
-              {...paginationTableProps} // Attach pagination props
-              headerClasses="bg-primary text-primary text-center header-class"
-              rowClasses={`text-center`}
-              noDataIndication={() => <NoDataIndication />}
-
-            />
-
-<div className="mb-2 d-flex justify-content-between align-items-start mt-2">
-<div className="d-flex align-items-center">
-  <label htmlFor="sizePerPageSelect" className="mx-2" >
-    Items per page:
-  </label>
-  <select
-    id="sizePerPageSelect"
-    value={getSizePerPage}
-    onChange={handleSizePerPageChange}
-  
-  >
-    <option value={10}>10</option>
-    <option value={25}>25</option>
-    <option value={50}>50</option>
-    <option value={100}>100</option>
-    <option value={200}>200</option>
-
-    <option value={500}>500</option>
-    <option value={1000}>1000</option>
-    <option value={1500}>1500</option>
-
-
-  </select>
-</div>
-  <div className="d-flex align-items-center">
-    <PaginationTotalStandalone {...paginationProps} className="mr-3" /> {/* Add margin to the right for spacing */}
-  </div>
-  <div className="d-flex align-items-end">
-  <PaginationListStandalone {...paginationProps} />
-  </div>
-  
-</div>
-
-            
-          </div>
-        )}
-      </PaginationProvider>
+          <FullDataTable
+            TableColumns={columns}
+            tableData={tradeHistoryData.data}
+            pagination1={true}
+          />
         </div>
 
         <DetailsView

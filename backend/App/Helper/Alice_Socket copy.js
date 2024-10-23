@@ -191,7 +191,7 @@ function sendChannelList() {
           t: 't'
       };
       ws.send(JSON.stringify(json));  // Send channel list to server
-      console.log("Channel list sent:", channelList);
+      // console.log("Channel list sent:", channelList);
   } else {
       console.log("WebSocket is not open. Cannot send channel list.");
   }

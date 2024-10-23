@@ -39020,6 +39020,7 @@ code {
 }
 
 .table thead th {
+  width: 161px !important;
   border-bottom: 0.0625rem solid #EEEEEE;
   text-transform: capitalize;
   color: #fff;

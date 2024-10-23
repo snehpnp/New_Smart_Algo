@@ -1,19 +1,31 @@
 
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { GET_TRADEHISTORY, GET_SEVAN_TRADEHISTORY, GET_ADMIN_TRADING_STATUS, AdminTradingStatusGet } from "../../../Service/admin.service";
+import { GET_TRADEHISTORY,GET_TRADEHISTORY1, GET_SEVAN_TRADEHISTORY, GET_ADMIN_TRADING_STATUS, AdminTradingStatusGet } from "../../../Service/admin.service";
 
 
 export const Get_Tradehisotry = createAsyncThunk("admin/tradhistory", async (apireq) => {
 
-    const { startDate, endDate, service, strategy, type, serviceIndex, lotMultypaly, token } = apireq
+    const { startDate, endDate, service, strategy, type, serviceIndex, lotMultypaly, token ,page,limit} = apireq
     try {
-        const res = await GET_TRADEHISTORY({ startDate: startDate, endDate: endDate, service: service, strategy: strategy, type, serviceIndex: serviceIndex, lotMultypaly: lotMultypaly }, token);
+        const res = await GET_TRADEHISTORY({ startDate: startDate, endDate: endDate, service: service, strategy: strategy, type, serviceIndex: serviceIndex, lotMultypaly: lotMultypaly,page:page,limit:limit }, token);
         return await res;
     } catch (err) {
         return err;
     }
 });
+
+export const Get_Tradehisotry1 = createAsyncThunk("admin/tradhistory1", async (apireq) => {
+
+    const { startDate, endDate, service, strategy, type, serviceIndex, lotMultypaly, token ,page,limit} = apireq
+    try {
+        const res = await GET_TRADEHISTORY1({ startDate: startDate, endDate: endDate, service: service, strategy: strategy, type, serviceIndex: serviceIndex, lotMultypaly: lotMultypaly,page:page,limit:limit }, token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
 
 
 export const Get_Sevan_Tradehisotry = createAsyncThunk("get/entry/tradhistory", async (apireq) => {
@@ -61,7 +73,8 @@ const TradehistorySlice = createSlice({
         tradehisotry: [],
         tradehisotry_sevan: [],
         trading_status: [],
-        gettradingstatus: []
+        gettradingstatus: [],
+        tradehisotry1: [],
 
 
 
@@ -70,6 +83,9 @@ const TradehistorySlice = createSlice({
     extraReducers: {
         [Get_Tradehisotry.fulfilled]: (state, { payload }) => {
             return { ...state, tradehisotry: payload, isLoading: false };
+        },
+        [Get_Tradehisotry1.fulfilled]: (state, { payload }) => {
+            return { ...state, tradehisotry1: payload, isLoading: false };
         },
         [Get_Sevan_Tradehisotry.fulfilled]: (state, { payload }) => {
             return { ...state, tradehisotry_sevan: payload, isLoading: false };

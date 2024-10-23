@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable2";
-import { Get_Tradehisotry } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
+import { Get_Tradehisotry1 } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { fDateTimeSuffix } from "../../../../Utils/Date_formet";
 import { Eye } from "lucide-react";
@@ -137,7 +137,7 @@ const TradeHistory = () => {
     let endDate = getActualDateFormate(toDate);
 
     await dispatch(
-      Get_Tradehisotry({
+      Get_Tradehisotry1({
         startDate: !fromDate ? full : startDate,
         endDate: !toDate ? (fromDate ? "" : full) : endDate,
         service: SelectService,
@@ -153,25 +153,26 @@ const TradeHistory = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-          let filterData = response.data.filter((item) => {
-            if (searchTerm === "") return item;
+          // let filterData = response.data.filter((item) => {
+          //   if (searchTerm === "") return item;
           
-            return (
-              item.trade_symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              item.strategy.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              item.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              item.entry_price.toLowerCase().includes(searchTerm.toLowerCase()) 
+          //   return (
+          //     item.trade_symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          //     item.strategy.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          //     item.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          //     item.entry_price.toLowerCase().includes(searchTerm.toLowerCase()) 
 
-            );
-          });
+          //   );
+          // });
           
 
 
           setTradeHistoryData({
             loading: false,
-            data: filterData,
+            data: response.data,
             pagination: response.pagination,
             TotalCalculate:response.TotalCalculate
+
 
           });
           setTotal(response.pagination.totalItems);
@@ -222,14 +223,17 @@ const TradeHistory = () => {
     {
       dataField: "createdAt",
       text: "Signals Entry time",
-      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
+      formatter: (cell,row) => 
+        <span className="text">{row.type == "LE" || row.type == "SE" ?  fDateTimeSuffix(cell) : "-"}</span>,
+      
+      
       width: "5rem"
     },
 
     {
-      dataField: "exit_dt_date",
+      dataField: "createdAt",
       text: "Signals Exit time",
-      formatter: (cell) => <>{cell ? fDateTimeSuffix(cell) : "-"}</>,
+      formatter: (cell,row) =>  <span className="text">{row.type == "LX" || row.type == "SX" ?  fDateTimeSuffix(cell) : "-"}</span>,
     },
     {
       dataField: "trade_symbol",
@@ -240,11 +244,11 @@ const TradeHistory = () => {
       text: "Strategy",
     },
     {
-      dataField: "2",
+      dataField: "type",
       text: "Entry Type",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span>{row.entry_type === "LE" ? "BUY ENTRY" : "SELL ENTRY"}</span>
+          <span>{row.type}</span>
           <span className={`d-none entry_qty_${row.token}_${row._id}`}>
             {row.entry_qty}
           </span>
@@ -273,89 +277,62 @@ const TradeHistory = () => {
       ),
     },
     {
-      dataField: "entry_qty",
+      dataField: "lot_size",
       text: "Entry Qty",
       formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+        <span className="text">{row.type == "LE" || row.type == "SE" ? parseInt(cell) : "-"}</span>
       ),
     },
     {
-      dataField: "exit_qty",
+      dataField: "lot_size",
       text: "Exit Qty",
       formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== ""  || cell != 0 ? parseInt(cell) : "-"}</span>
+        <span className="text">{row.type == "LX" || row.type == "SX" ? parseInt(cell) : "-"}</span>
+
       ),
     },
+    // {
+    //   dataField: "live",
+    //   text: "Live Price",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <div>
+    //       <span className={`LivePrice_${row.token}`}></span>
+    //     </div>
+    //   ),
+    // },
     {
-      dataField: "live",
-      text: "Live Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`LivePrice_${row.token}`}></span>
-        </div>
-      ),
-    },
-    {
-      dataField: "entry_price",
+      dataField: "price",
       text: "Entry Price",
       formatter: (cell, row, rowIndex) => (
-        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
+        <span className="text">{row.type == "LE" || row.type == "SE" ? cell : "-"}</span>
+
       ),
     },
     {
-      dataField: "exit_price",
+      dataField: "price",
       text: "Exit Price",
       formatter: (cell, row, rowIndex) => (
-        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
+        <span className="text">{row.type == "LX" || row.type == "SX" ? cell: "-"}</span>
+
       ),
     },
     {
-      dataField: "TPL",
+      dataField: "cal",
       text: "Total",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span className={`fw-bold  TPL_${row.token}_${row._id}`}></span>
+          <span className="text">
+            {row.type === "LX" || row.type === "SX"
+              ? parseFloat(cell).toFixed(3) 
+              : "-"}
+          </span>
         </div>
       ),
-    },
+    }
+    
 
-    {
-      dataField: "TradeType",
-      text: "Entry Status",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span>{cell}</span>
+   
 
-          {/* <span>{StatusEntry(row)}</span> */}
-          {/* <span>{row.result[0].exit_status ==="above"?"ABOVE":row.result[0].exit_status ==="below"?"BELOW":row.result[0].exit_status == "range"?"RANGE":" - "}</span> */}
-        </div>
-      ),
-    },
-    {
-      dataField: "exit_status",
-      text: "Exit Status",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span>{row.exit_status == "-" ? "MT_4" :row.exit_status}</span>
-        </div>
-      ),
-    },
-
-    {
-      dataField: "",
-      text: "Details View",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <Eye
-            className="mx-2"
-            onClick={() => {
-              setRowData(row);
-              setshowModal(true);
-            }}
-          />
-        </div>
-      ),
-    },
   ];
 
   const StatusEntry = (row) => {
@@ -984,24 +961,6 @@ const TradeHistory = () => {
     columns = columns.filter((data) => !selectedOptions.includes(data.text));
   }
 
-  const columnTexts = [
-    "S.No.",
-    "Signals Entry time",
-    "Signals Exit time",
-    "Symbol",
-    "Strategy",
-    "Entry Type",
-    "Entry Qty",
-    "Exit Qty",
-    "Live Price",
-    "Entry Price",
-    "Exit Price",
-    "Total",
-    "Entry Status",
-    "Exit Status",
-    "Details View",
-    // "Cancel Order", // Uncomment if you want to include this as well
-  ];
 
    // Handle pagination changes
    const handleTableChange = (type, { page, sizePerPage }) => {
@@ -1023,6 +982,8 @@ const TradeHistory = () => {
         />
     </>
 );
+console.log("tradeHistoryData",tradeHistoryData.data)
+
 
   return (
     <>
@@ -1036,81 +997,8 @@ const TradeHistory = () => {
         csv_title="TradeHistory"
       >
         <div className="row d-flex  align-items-center justify-content-start">
-          {dashboard_filter === "client" ? (
-            ""
-          ) : (
-            <div className="col-lg-12 flex-column">
-              <div className="header-title d-flex align-items-center">
-                <h5 className="font-w400 mb-0">Live Price</h5>
-
-                <i
-                  className="fas fa-info-circle ml-5"
-                  onClick={handleShow}
-                  style={{ cursor: "pointer", margin: "0px 10px" }}
-                ></i>
-              </div>
-              <div className="Api Login m-2">
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    className="bg-primary"
-                    checked={checkStatusReff.current}
-                    onChange={(e) =>
-                      LogIn_WIth_Api(
-                        e.target.checked,
-                        UserDetails.broker_id,
-                        UserDetails.trading_status,
-                        UserDetails
-                      )
-                    }
-                  />
-                  <span className="slider round"></span>
-                </label>
-              </div>
-
-              {/* Modal */}
-              <Modal show={showModal6} onHide={handleClose} size="lg">
-                <Modal.Header closeButton>
-                  <Modal.Title>Trading Status Information</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  {adminTradingStatus.length > 0 ? (
-                    <Table striped bordered hover>
-                      <thead>
-                        <tr>
-                          <th style={{ color: "black" }}>#</th>
-                          {/* <th style={{ color: "black" }}>Login Status</th> */}
-                          <th style={{ color: "black" }}>Trading Status</th>
-                          <th style={{ color: "black" }}>Device</th>
-                          <th style={{ color: "black" }}>Created At</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {adminTradingStatus.map((item, index) => (
-                          <tr key={item._id}>
-                            <td>{index + 1}</td>
-                            {/* <td>{item.login_status || "-"}</td> */}
-                            <td>{item.trading_status || "-"}</td>
-
-                            <td>{item.device}</td>
-                            <td>{new Date(item.createdAt).toLocaleString()}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  ) : (
-                    <p>No trading status information available.</p>
-                  )}
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={handleClose}>
-                    Close
-                  </Button>
-                </Modal.Footer>
-              </Modal>
-            </div>
-          )}
-
+       
+  
           <div className="col-lg-2 px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
               <label className="col-lg-12" htmlFor="fromdate">
@@ -1233,65 +1121,12 @@ const TradeHistory = () => {
             </div>
           </div>
 
-          <div className="col-lg-2 px-1">
-            <div className="form-check custom-checkbox mb-3 ps-0">
-              <div className="custom-dropdown">
-                <button
-                  className="btn btn-primary dropdown-toggle"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Select options
-                </button>
-                <div className="dropdown-menu">
-                  <div className="row">
-                    {columnTexts.length > 0 &&
-                      columnTexts.map((data, index) => (
-                        <div key={index} className="col-3">
-                          <li className="dropdown-item d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="form-check-input me-2"
-                              value={data}
-                              onChange={(e) => handleCheckboxChange(e, data)}
-                            />
-                            <label className="form-check-label">{data}</label>
-                          </li>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        
 
-          <div className="col-lg-2  px-1">
-            <div className="mb-3">
-              <button
-                className="btn btn-primary"
-                onClick={(e) => ResetAllData(e)}
-              >
-                Reset
-              </button>
-            </div>
-          </div>
-
-          <div className="col-lg-2  px-1">
-            <div className="mb-3">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search anything..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
         </div>
 
         <div className="table-responsive">
-          {tradeHistoryData.data.length > 0 ? (
+        {tradeHistoryData.data.length > 0 ? (
             tradeHistoryData.TotalCalculate >= 0 ? (
               <h3>
                <b>Total Realised P/L</b>  :{" "}
@@ -1345,13 +1180,6 @@ const TradeHistory = () => {
     <option value={25}>25</option>
     <option value={50}>50</option>
     <option value={100}>100</option>
-    <option value={200}>200</option>
-
-    <option value={500}>500</option>
-    <option value={1000}>1000</option>
-    <option value={1500}>1500</option>
-
-
   </select>
 </div>
   <div className="d-flex align-items-center">

@@ -372,10 +372,10 @@ const AddClient = () => {
       formik.setFieldValue("demat_userid", "null");
     }
     if (formik.values.broker === "27" || formik.values.broker === 27) {
-      formik.setFieldValue("api_key", "null");
-      formik.setFieldValue("client_code", "null");
-      formik.setFieldValue("api_secret", "null");
-      formik.setFieldValue("api_type", "null");
+      // formik.setFieldValue("api_key", "null");
+      // formik.setFieldValue("client_code", "null");
+      // formik.setFieldValue("api_secret", "null");
+      // formik.setFieldValue("api_type", "null");
     }
 
     if (formik.values.licence === "2" || formik.values.licence === 2) {
@@ -646,8 +646,8 @@ const AddClient = () => {
           ? "Verification Code"
           : formik.values.broker == 5
           ? "Password"
-          : formik.values.broker == 7
-          ? "Demat Password"
+          // : formik.values.broker == 7
+          // ? "Demat Password"
           : formik.values.broker == 11
           ? "Password"
           : formik.values.broker == 2
@@ -665,7 +665,7 @@ const AddClient = () => {
         values.broker === "2" ||
         values.broker === "3" ||
         values.broker === "5" ||
-        values.broker === "7" ||
+        // values.broker === "7" ||
         values.broker === "9" ||
         values.broker === "11" ||
         values.broker === "13" ||

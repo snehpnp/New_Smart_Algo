@@ -4,7 +4,7 @@
 const router = require("express").Router()
 const {verifyToken}= require('../../Middleware/authjwt')
 
-const { GetAdminTradeHistory,GetAdminsevenTradeHistory ,AdminTradingStatus,AdminTradingOff,AdminTradingStatusGet} = require('../../Controllers/Admin/tradehistory.controller')
+const { GetAdminTradeHistory,GetAdminsevenTradeHistory ,AdminTradingStatus,AdminTradingOff,AdminTradingStatusGet,GetAdminTradeHistory1} = require('../../Controllers/Admin/tradehistory.controller')
 
 
 router.post('/get/tradhistory', GetAdminTradeHistory)
@@ -17,6 +17,7 @@ router.post('/admin/trading/status/get', AdminTradingStatusGet)
 
 
 
+router.post('/get/tradhistory1', GetAdminTradeHistory1)
 
 
 
