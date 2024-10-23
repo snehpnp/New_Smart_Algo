@@ -5,8 +5,19 @@ const path = require('path');
 var Promise = require('polyfill-promise');
 var Sheets = require('google-sheets-api').Sheets;
 const Papa = require('papaparse')
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
+
+
+const { logger, getIPAddress } = require('../Helper/logger.helper')
+
+const { Alice_Socket , updateChannelAndSend } = require("../Helper/Alice_Socket");
+
+
+
+const { DashboardView, deleteDashboard } = require('../../View/DashboardData')
+const { createView } = require('../../View/Open_position')
+// const { logger, getIPAddress } = require('../Helper/logger.helper')
+// const { Alice_Socket } = require("../Helper/Alice_Socket11");
+
 var dateTime = require('node-datetime');
 var moment = require('moment');
 const db = require('../Models')
@@ -20,12 +31,8 @@ const MainSignals_modal = db.MainSignals
 
 const token_chain = db.token_chain;
 const stock_live_price = db.stock_live_price;
-const company_information = db.company_information;
 
-const { DashboardView, deleteDashboard } = require('../../View/DashboardData')
-const { createView } = require('../../View/Open_position')
-const { logger, getIPAddress } = require('../Helper/logger.helper')
-const { Alice_Socket } = require("../Helper/Alice_Socket11");
+
 
 
 
@@ -45,7 +52,7 @@ cron.schedule('50 23 * * *', () => { twodaysclient(); });
 
 cron.schedule('30 6 * * *', () => { TruncateTableTokenChain(); });
 
-cron.schedule('*/15 * * * *', async () => { await TruncateTableTokenChainAdd_fiveMinute() });
+// cron.schedule('*/10 * * * *', async () => { await TruncateTableTokenChainAdd_fiveMinute() });
 
 
 
@@ -59,9 +66,7 @@ cron.schedule('20 3 * * *', () => { TokenSymbolUpdate() });
 
 cron.schedule('50 8 * * *', () => { TokenSymbolUpdate() });
 
-cron.schedule("1 1 * * *", () => {
-    UpdateGetMonthlyData();
-  });
+
 
 const MainSignalsRemainToken = async () => {
 
@@ -178,9 +183,10 @@ const MainSignalsRemainToken = async () => {
 
 
     ]
-    const result = await MainSignals_modal.aggregate(pipeline)
-   
 
+
+
+    const result = await MainSignals_modal.aggregate(pipeline)
     if (result.length > 0) {
         result.forEach(async (element) => {
             const filter = { _id: element.token };
@@ -201,32 +207,46 @@ const MainSignalsRemainToken = async () => {
 }
 
 const TruncateTableTokenChainAdd_fiveMinute = async () => {
-
-    // console.log("Call five minute token")
-    // return
-
+    // const filter = { _id: c };
+    // const update = {
+    //     $set: { _id: c , exch: e },
+    // };
+    // const update_token = await token_chain.updateOne(filter, update, { upsert: true });
+  
+    // updateChannelAndSend(e+"|"+c)
+   
     const indiaTimezoneOffset = 330;
     const currentTimeInMinutes = new Date().getUTCHours() * 60 + new Date().getUTCMinutes() + indiaTimezoneOffset;
 
     const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
     const currentMinute = currentTimeInMinutes % 60;
+   
+    if (currentHour >= 9 || currentMinute >= 15 && currentHour <= 23 || currentMinute <= 30) {
 
-    if (currentHour >= 9  && currentHour <= 24) {
+    
+        
         const AliceToken = await Alice_token.find();
         if (AliceToken.length > 60000) {
-
+             
             const drop = await token_chain.deleteMany({});
 
             await Get_Option_All_Token_Chain()
-        
+
             await Get_Option_All_Token_Chain_stock()
 
             await MainSignalsRemainToken()
 
-            await Alice_Socket();
+            const updateTokenAfter = await token_chain.find({}).toArray();
+            const unmatchedTokenChannel = updateTokenAfter.map(item => `${item.exch}|${item._id}`).join('#');
+           // console.log("unmatchedTokenChannel ",unmatchedTokenChannel)
+           // updateChannelAndSend(unmatchedTokenChannel)
+             updateChannelAndSend("NSE|2885")
+            //await Alice_Socket();
 
             return;
         }
+    }else{
+        //console.log("- Else")
     }
 
 
@@ -240,7 +260,7 @@ const TruncateTableTokenChainAdd = async () => {
         const drop = await token_chain.deleteMany({});
 
         await Get_Option_All_Token_Chain()
-       
+
         await Get_Option_All_Token_Chain_stock()
 
         await Alice_Socket();
@@ -448,22 +468,23 @@ const Get_Option_All_Token_Chain = async () => {
                 });
 
 
-                // alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
-                // final_data.push(alltokenchannellist)
+                alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
+                final_data.push(alltokenchannellist)
 
             }
 
         }
-        // var concatenatedArray = ""
+        var concatenatedArray = ""
 
-        // final_data.forEach((data) => {
-        //     concatenatedArray += data + "#"
-        // });
+        final_data.forEach((data) => {
+            concatenatedArray += data + "#"
+        });
 
-        // var concatenatedArray1 = concatenatedArray.substring(0, concatenatedArray.length - 1)
-        // const filter = { broker_name: "ALICE_BLUE" };
-        // const updateOperation = { $set: { Stock_chain: concatenatedArray1 } };
-        // const Update_Stock_chain = await live_price.updateOne(filter, updateOperation);
+
+        var concatenatedArray1 = concatenatedArray.substring(0, concatenatedArray.length - 1)
+        const filter = { broker_name: "ALICE_BLUE" };
+        const updateOperation = { $set: { Stock_chain: concatenatedArray1 } };
+        const Update_Stock_chain = await live_price.updateOne(filter, updateOperation);
         return
 
 
@@ -686,51 +707,6 @@ const Get_Option_All_Token_Chain_stock = async () => {
 
 // =========================================================================================================================
 
-
-const UpdateGetMonthlyData = async () => {
-    try {
-      const ExistCompanyData = await company_information
-        .find({})
-        .select("month_ago_date month_ago_number");
-  
-      if (ExistCompanyData.length > 0) {
-  
-        if (ExistCompanyData[0].month_ago_date == null) {
-          ExistCompanyData[0].month_ago_date = new Date(
-            "2020-01-01T04:15:56.910Z"
-          );
-          ExistCompanyData[0].month_ago_number = 50;
-        } else {
-          const date = new Date(ExistCompanyData[0].month_ago_date);
-          date.setDate(date.getDate() + 1);
-          ExistCompanyData[0].month_ago_date = date;
-        }
-  
-        const filter = { _id: ExistCompanyData[0]._id };
-        const update = {
-          $set: {
-            month_ago_date: ExistCompanyData[0].month_ago_date,
-            month_ago_number: ExistCompanyData[0].month_ago_number,
-          },
-        };
-  
-        const update_token = await company_information.updateOne(filter, update);
-     
-      }
-    } catch (error) {
-      console.log("Error ", error);
-    }
-  };
-  
-
-
-
-
-
-
-
-
-
 // 1. LOGOUT AND TRADING OFF ALL USER 
 const LogoutAllUsers = async () => {
 
@@ -952,7 +928,7 @@ const TokenSymbolUpdate = async () => {
 
     try {
         var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
-   
+        console.log("filePath", filePath)
         fs.appendFile(filePath, "-----TokenSymbolUpdate  - " + new Date() + "----- ***\\n\n", function (err) {
             if (err) {
                 console.log("err filePath", err);
@@ -1068,7 +1044,7 @@ const TokenSymbolUpdate = async () => {
 
             try {
                 var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
-              
+                console.log("filePath", filePath)
                 fs.appendFile(filePath, "-----TokenSymbolUpdate End - " + new Date() + "----- ***\\n\n", function (err) {
                     if (err) {
                         console.log("err filePath", err);
@@ -1094,7 +1070,7 @@ const TokenSymbolUpdate1 = async () => {
 
     try {
         var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
-    
+        console.log("filePath", filePath)
         fs.appendFile(filePath, "-----TokenSymbolUpdate  - " + new Date() + "----- ***\\n\n", function (err) {
             if (err) {
                 console.log("err filePath", err);
@@ -1198,7 +1174,7 @@ const TokenSymbolUpdate1 = async () => {
 
             try {
                 var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
-              
+                console.log("filePath", filePath)
                 fs.appendFile(filePath, "-----TokenSymbolUpdate End - " + new Date() + "----- ***\\n\n", function (err) {
                     if (err) {
                         console.log("err filePath", err);

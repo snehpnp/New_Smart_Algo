@@ -22,7 +22,8 @@ const dbTest = db.dbTest;
 
 
 
-const { Alice_Socket, getSocket } = require('../../Helper/Alice_Socket');
+const { Alice_Socket, getSocket ,updateChannelAndSend} = require('../../Helper/Alice_Socket');
+
 const { Socket_data } = require('../../Helper/Socket_data');
 
 const { getIO } = require('../../Helper/BackendSocketIo');
@@ -160,7 +161,7 @@ class MakeStartegy {
   async DeleteMakeStartegy(req, res) {
     try {
       const objectId = new ObjectId(req.body.id);
-      const result = await UserMakeStrategy.deleteOne({ _id: objectId });
+      //const result = await UserMakeStrategy.deleteOne({ _id: objectId });
       if (result.acknowledged == true) {
         return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
       }
@@ -552,6 +553,9 @@ class MakeStartegy {
 
         }
 
+       var alltokenchannellist = channelList.substring(0, channelList.length - 1);
+       updateChannelAndSend(alltokenchannellist)
+  
 
         await UserMakeStrategy.create({
           name: req.body.name + req.body.user_id + req.body.type + tokensymbol,
@@ -820,10 +824,7 @@ class MakeStartegy {
           });
       }
 
-      var alltokenchannellist = channelList.substring(0, channelList.length - 1);
-
-
-      const suscribe_token = await Socket_data(alltokenchannellist);
+      
       res.send({ status: true, msg: "successfully Add!", data: [] });
     } catch (e) {
     }
@@ -1337,7 +1338,7 @@ async function fetchDataFromViews(viewNames) {
           timeFrameViewData: { $ne: null, $ne: [] }
         }).toArray();
 
-         console.log(`Data from view ${valView.viewName}:`, data);
+         //console.log(`Data from view ${valView.viewName}:`, data);
         if (data.length > 0) {
           //console.log(`Data from view ${valView.viewName}:`, data);
           let val = data[0];

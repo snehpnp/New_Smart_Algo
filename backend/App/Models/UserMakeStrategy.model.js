@@ -135,9 +135,12 @@ const userMakeStrategySchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-
-
     status: {
+        type: String,
+        enum: ['1', '2'],
+        default: '1'
+    },
+    statusOnOff: {
         type: String,
         enum: ['1', '2'],
         default: '1'
