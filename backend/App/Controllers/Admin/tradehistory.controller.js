@@ -276,7 +276,6 @@ class Tradehistory {
         ...openClose1,
       };
 
-      console.log("matchStage", matchStage);
 
       const filteredSignals = await MainSignals_modal.aggregate([
         { $match: matchStage },

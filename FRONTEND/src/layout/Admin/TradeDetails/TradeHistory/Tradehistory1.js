@@ -1029,7 +1029,7 @@ console.log("tradeHistoryData",tradeHistoryData.data)
               />
             </div>
           </div>
-          <div className="col-lg-2 px-1">
+          {/* <div className="col-lg-2 px-1">
             <div className="mb-3">
               <label for="select" className="form-label">
                 Symbol
@@ -1054,7 +1054,7 @@ console.log("tradeHistoryData",tradeHistoryData.data)
                   })}
               </select>
             </div>
-          </div>
+          </div> */}
           <div className="col-lg-2 px-1">
             <div className="mb-3">
               <label for="select" className="form-label">
