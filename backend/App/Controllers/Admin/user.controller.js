@@ -465,6 +465,7 @@ class Employee {
       const totalLicense = await User_model.aggregate([
         {
           $match: {
+            Role: "USER",
             license_type: "2",
             licence: { $exists: true, $ne: null, $not: { $type: 10 } }, // Exclude undefined or NaN values
           },
@@ -478,6 +479,8 @@ class Employee {
           },
         },
       ]);
+
+      console.log("totalLicense", totalLicense);
 
       if (totalLicense.length > 0) {
         var TotalLicense = totalLicense[0].totalLicense;
@@ -496,6 +499,11 @@ class Employee {
       } else {
         new_licence = req.licence1;
       }
+
+      console.log("new_licence", new_licence);
+      console.log("TotalLicense", TotalLicense);
+      console.log("Panel_key[0].licenses", Panel_key[0].licenses);
+
 
       if (Number(new_licence) > 0) {
         if (
@@ -1553,7 +1561,7 @@ class Employee {
           status: false,
           msg: "Empty data",
           data: [],
-          totalCount: totalCount,
+          // totalCount: totalCount,
         });
       }
 

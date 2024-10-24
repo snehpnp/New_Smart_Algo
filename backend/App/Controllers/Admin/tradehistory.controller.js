@@ -218,6 +218,7 @@ class Tradehistory {
         lotMultypaly,
         page,
         limit,
+        openClose,
       } = req.body;
 
       var page1 = page || 1;
@@ -253,6 +254,16 @@ class Tradehistory {
         endDateObj.setDate(endDateObj.getDate() + 1);
       }
 
+
+      let openClose1 = { exit_qty_percent: "" };
+      if (openClose === "Open") {
+        openClose1 = { exit_qty_percent: "" };
+      } else if (openClose === "Close") {
+        openClose1 = { exit_qty_percent: { $ne: "" } };
+      } else {
+        openClose1 = {};
+      }
+
       const matchStage = {
         createdAt: {
           $gte: new Date(startDateObj),
@@ -262,7 +273,10 @@ class Tradehistory {
         trade_symbol: ser1,
         symbol: serIndex,
         client_persnal_key: client_persnal_key1,
+        ...openClose1,
       };
+
+      console.log("matchStage", matchStage);
 
       const filteredSignals = await MainSignals_modal.aggregate([
         { $match: matchStage },
@@ -807,15 +821,13 @@ class Tradehistory {
       if (filteredSignals.length > 0) {
         filteredSignals.forEach((item) => {
           if (item.result.length > 0) {
-            item.result.forEach((item1) => { 
+            item.result.forEach((item1) => {
               if (item1.type === "LX" || item1.type === "SX") {
-               
                 var cal = (item.exit_price - item.entry_price) * item.entry_qty;
-                console.log("cal", cal);
 
                 TotalTrade.push({
                   ...item1,
-                  cal: cal
+                  cal: cal,
                 });
               } else {
                 TotalTrade.push({ ...item1, cal: "-" });
@@ -824,7 +836,6 @@ class Tradehistory {
           }
         });
       }
-      
 
       // console.log("TotalTrade", TotalTrade);
 

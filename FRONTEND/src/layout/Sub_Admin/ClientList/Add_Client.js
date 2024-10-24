@@ -873,6 +873,7 @@ const AddClient = () => {
               )}
 
               <>
+              <h5> All Strategy </h5>
                 {AllStrategy.data.map((strategy) => (
                   <div className={`col-lg-2 mt-2`} key={strategy._id}>
                     <div className="row ">

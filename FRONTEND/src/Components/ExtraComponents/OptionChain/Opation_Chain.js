@@ -1045,41 +1045,44 @@ const HelpCenter = () => {
                                                 {
                                                     dataField: "Symbol",
                                                     text: "Symbol",
+                                                    headerClasses: 'table-column-name',
+                                                    classes: 'table-column-name',
+                                                    
                                                 },
-                                                {
-                                                    dataField: "",
-                                                    text: "Enter Qty (%)",
-                                                    formatter: (cell, row, rowIndex) => (
-                                                        <div>
-                                                            <input
-                                                                // key={index}
-                                                                type="text"
-                                                                name="quantity"
-                                                                className=""
-                                                                id="quantity"
-                                                                placeholder="Enter Qty (%)"
+                                                // {
+                                                //     dataField: "",
+                                                //     text: "Enter Qty (%)",
+                                                //     formatter: (cell, row, rowIndex) => (
+                                                //         <div>
+                                                //             <input
+                                                //                 // key={index}
+                                                //                 type="text"
+                                                //                 name="quantity"
+                                                //                 className=""
+                                                //                 id="quantity"
+                                                //                 placeholder="Enter Qty (%)"
 
-                                                                onChange={
-                                                                    (e) =>
-                                                                        Set_Entry_Exit_Qty(
-                                                                            row,
-                                                                            e.target.value,
-                                                                            row.Symbol
-                                                                        )
+                                                //                 onChange={
+                                                //                     (e) =>
+                                                //                         Set_Entry_Exit_Qty(
+                                                //                             row,
+                                                //                             e.target.value,
+                                                //                             row.Symbol
+                                                //                         )
 
-                                                                    //  setEnterQty(e.target.value)
-                                                                }
-                                                            // value={inputValue ? inputValue : row.old_qty_persent}
-                                                            // max={row.old_qty_persent}
-                                                            // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
+                                                //                     //  setEnterQty(e.target.value)
+                                                //                 }
+                                                //             // value={inputValue ? inputValue : row.old_qty_persent}
+                                                //             // max={row.old_qty_persent}
+                                                //             // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
 
-                                                            />
-                                                        </div>
-                                                    ),
+                                                //             />
+                                                //         </div>
+                                                //     ),
 
 
 
-                                                },
+                                                // },
                                                 {
                                                     dataField: "price",
                                                     text: "Price",

@@ -222,19 +222,18 @@ const TradeHistory = () => {
 
     {
       dataField: "createdAt",
-      text: "Signals Entry time",
+      text: "Signal time",
       formatter: (cell,row) => 
-        <span className="text">{row.type == "LE" || row.type == "SE" ?  fDateTimeSuffix(cell) : "-"}</span>,
-      
-      
+        <span className="text">{ cell ?fDateTimeSuffix(cell) :"-"}</span>,
+    
       width: "5rem"
     },
 
-    {
-      dataField: "createdAt",
-      text: "Signals Exit time",
-      formatter: (cell,row) =>  <span className="text">{row.type == "LX" || row.type == "SX" ?  fDateTimeSuffix(cell) : "-"}</span>,
-    },
+    // {
+    //   dataField: "createdAt",
+    //   text: "Signals Exit time",
+    //   formatter: (cell,row) =>  <span className="text">{row.type == "LX" || row.type == "SX" ?  fDateTimeSuffix(cell) : "-"}</span>,
+    // },
     {
       dataField: "trade_symbol",
       text: "Symbol",

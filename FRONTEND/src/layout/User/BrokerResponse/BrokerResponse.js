@@ -12,7 +12,7 @@ import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDat
 import { fa_time, fDateTimeSuffix } from '../../../Utils/Date_formet'
 import { GanttChartSquare, Eye, Pencil, Trash2 } from 'lucide-react';
 import OrderPending from "./OrderPending"
-
+import Swal from 'sweetalert2'
 
 const BrokerResponse = () => {
   const dispatch = useDispatch()
@@ -184,6 +184,12 @@ const BrokerResponse = () => {
           // setrefresh(!refresh)
           BrokerResponse()
         } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: response.msg,
+          })
+
           setrefresh(!refresh)
         }
       })

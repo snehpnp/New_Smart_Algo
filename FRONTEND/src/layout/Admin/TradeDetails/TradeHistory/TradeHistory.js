@@ -51,6 +51,8 @@ const TradeHistory = () => {
   const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
   const [SelectService, setSelectService] = useState("null");
   const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
+  const [SelectOpenClose, setSelectopenclose] = useState("null");
+
   const [SocketState, setSocketState] = useState("null");
   const [ForGetCSV, setForGetCSV] = useState([]);
   const [adminTradingStatus, setAdminTradingStatus] = useState(false);
@@ -118,7 +120,8 @@ const TradeHistory = () => {
     SelectServiceIndex,
     lotMultypaly,
     searchTerm,
-    getPage, getSizePerPage
+    getPage, getSizePerPage,
+    SelectOpenClose
   ]);
 
   useEffect(() => {
@@ -136,6 +139,8 @@ const TradeHistory = () => {
     let startDate = getActualDateFormate(fromDate);
     let endDate = getActualDateFormate(toDate);
 
+    console.log("SelectOpenClose", SelectOpenClose);
+
     await dispatch(
       Get_Tradehisotry({
         startDate: !fromDate ? full : startDate,
@@ -148,6 +153,7 @@ const TradeHistory = () => {
         token: token,
         page: getPage,
         limit: getSizePerPage,
+        openClose:SelectOpenClose
       })
     )
       .unwrap()
@@ -223,7 +229,8 @@ const TradeHistory = () => {
       dataField: "createdAt",
       text: "Signals Entry time",
       formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
-      width: "5rem"
+      width: "5rem",
+      hidden: false,
     },
 
     {
@@ -358,23 +365,6 @@ const TradeHistory = () => {
     },
   ];
 
-  const StatusEntry = (row) => {
-    const filteredData = row.result.find(
-      (obj) => obj.type === "LE" || obj.type === "SE"
-    );
-
-    if (filteredData != undefined) {
-      return filteredData.exit_status == "above"
-        ? "ABOVE"
-        : filteredData.exit_status == "below"
-        ? "BELOW"
-        : filteredData.exit_status == "range"
-        ? "RANGE"
-        : filteredData.exit_status;
-    } else {
-      return "-";
-    }
-  };
 
   var CreatechannelList = "";
   let total = 0;
@@ -980,10 +970,7 @@ const TradeHistory = () => {
     // Get_TradHistory(updatedOptions);
   };
 
-  if (selectedOptions && selectedOptions.length > 0) {
-    columns = columns.filter((data) => !selectedOptions.includes(data.text));
-  }
-
+ 
   const columnTexts = [
     "S.No.",
     "Signals Entry time",
@@ -1000,20 +987,20 @@ const TradeHistory = () => {
     "Entry Status",
     "Exit Status",
     "Details View",
-    // "Cancel Order", // Uncomment if you want to include this as well
+
   ];
 
-   // Handle pagination changes
+ 
    const handleTableChange = (type, { page, sizePerPage }) => {
     setPage(page);
     setSizePerPage(sizePerPage);
   };
 
-  // Handle size per page change
+
   const handleSizePerPageChange = (e) => {
     const value = parseInt(e.target.value);
     setSizePerPage(value);
-    setPage(1); // Reset to first page
+    setPage(1);
   };
 
   const NoDataIndication = () => (
@@ -1023,6 +1010,12 @@ const TradeHistory = () => {
         />
     </>
 );
+
+
+if (selectedOptions && selectedOptions.length > 0) {
+  columns = columns.filter((data) => !selectedOptions.includes(data.text));
+}
+
 
   return (
     <>
@@ -1036,6 +1029,7 @@ const TradeHistory = () => {
         csv_title="TradeHistory"
       >
         <div className="row d-flex  align-items-center justify-content-start">
+       
           {dashboard_filter === "client" ? (
             ""
           ) : (
@@ -1223,6 +1217,29 @@ const TradeHistory = () => {
           </div>
           <div className="col-lg-2  px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
+              <label className="col-lg-12">Open/close</label>
+              <select
+                className="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectopenclose(e.target.value)}
+                value={SelectOpenClose}
+              >
+                <option value="null" selected>
+                  All
+                </option>
+                <option value="Open" selected>
+                Open
+                </option>
+                <option value="Close" selected>
+                Close
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div className="col-lg-2  px-1">
+            <div className="form-check custom-checkbox mb-3 ps-0">
               <label className="col-lg-12">Lots</label>
               <input
                 type="number"
@@ -1233,9 +1250,25 @@ const TradeHistory = () => {
             </div>
           </div>
 
+          <div className="col-lg-2  px-1">
+            <div className="mb-3">
+            <label className="col-lg-12">Search Here</label>
+
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search anything..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
+
           <div className="col-lg-2 px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
               <div className="custom-dropdown">
+            <label className="col-lg-12">Select Option</label>
+
                 <button
                   className="btn btn-primary dropdown-toggle"
                   type="button"
@@ -1268,6 +1301,8 @@ const TradeHistory = () => {
 
           <div className="col-lg-2  px-1">
             <div className="mb-3">
+            <label className="col-lg-12">Reset</label>
+
               <button
                 className="btn btn-primary"
                 onClick={(e) => ResetAllData(e)}
@@ -1277,17 +1312,7 @@ const TradeHistory = () => {
             </div>
           </div>
 
-          <div className="col-lg-2  px-1">
-            <div className="mb-3">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search anything..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
+        
         </div>
 
         <div className="table-responsive">

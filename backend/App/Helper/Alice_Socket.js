@@ -152,7 +152,7 @@ function openSocketConnection(channelList ,userid , userSession1) {
     if (currentHour >= 9  && currentHour <= 16) {
       const result = checkExchangeSegment(channelList , "NFO");
       if(result == true){
-        console.log("NFO Shocket Restart - ", channelList);
+       
         await  socketRestart()
         return
       }
@@ -161,7 +161,7 @@ function openSocketConnection(channelList ,userid , userSession1) {
     if (currentHour >= 9  && currentHour <= 24) {
       const result = checkExchangeSegment(channelList , "MCX");
       if(result == true){
-        console.log("MCX Shocket Restart - ", channelList);
+       
         await  socketRestart()
         return
       }

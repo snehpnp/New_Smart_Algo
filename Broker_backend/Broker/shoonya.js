@@ -158,9 +158,9 @@ const place_order = async (
                 // item.postdata.tsym = "BANKNIFTY24APR24P47500";
 
                 if (type == "LE" || type == "SX") {
-                  item.postdata.Trantype = "B";
+                  item.postdata.trantype = "B";
                 } else if (type == "SE" || type == "LX") {
-                  item.postdata.Trantype = "S";
+                  item.postdata.trantype = "S";
                 }
 
                 if (
@@ -248,13 +248,13 @@ const place_order = async (
           }
         });
       } else if (type == "SX" || type == "LX") {
-        console.log("trade exit");
+       
 
         const requestPromises = AllClientData.map(async (item) => {
           if (type == "LE" || type == "SX") {
-            item.postdata.Trantype = "B";
+            item.postdata.trantype = "B";
           } else if (type == "SE" || type == "LX") {
-            item.postdata.Trantype = "S";
+            item.postdata.trantype = "S";
           }
 
           if (

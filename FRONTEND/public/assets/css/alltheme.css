@@ -1794,7 +1794,7 @@ button.button_sell.active {
     color: white;
 }
 
-/* .table-container {
+.table-container {
     max-height: 300px;
     overflow-y: auto;
   }
@@ -1802,7 +1802,7 @@ button.button_sell.active {
   .table-responsive {
     overflow-y: auto;
   }
-  
+  /* 
   .fiXed-header th {
     position: sticky;
     top: 0;

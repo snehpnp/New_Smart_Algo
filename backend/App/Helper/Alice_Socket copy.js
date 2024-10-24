@@ -141,7 +141,7 @@ const Alice_Socket = async () => {
                         if (currentHour >= 9 && currentMinute >= 15 && currentHour <= 15 && currentMinute <= 30) {
                           const result = checkExchangeSegment(channelList , "NFO");
                           if(result == true){
-                            console.log("NFO Shocket Restart - ", channelList);
+                            
                             await  socketRestart()
                             return
                           }
@@ -150,7 +150,7 @@ const Alice_Socket = async () => {
                         if (currentHour >= 9 && currentMinute >= 15 && currentHour <= 23 && currentMinute <= 30) {
                           const result = checkExchangeSegment(channelList , "MCX");
                           if(result == true){
-                            console.log("MCX Shocket Restart - ", channelList);
+                          
                             await  socketRestart()
                             return
                           }

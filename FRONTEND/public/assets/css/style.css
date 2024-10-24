@@ -2392,6 +2392,11 @@ progress {
   border-color: #7d7d7d;
 }
 
+.table-column-name {
+  width: 25%;
+}
+
+
 .table-responsive,
 .react-bootstrap-table {
   overflow-x: auto;
