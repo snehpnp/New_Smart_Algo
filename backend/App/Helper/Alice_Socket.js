@@ -27,7 +27,7 @@ const url = "wss://ws1.aliceblueonline.com/NorenWS/"
 
 const Alice_Socket = async () => {
   var rr = 0;
-  console.log("INSIDEE")
+  // console.log("INSIDEE")
   let channelstradd = "";
   const uniqueTokens = new Set();
   //Main SignalS code
@@ -318,7 +318,7 @@ const Alice_Socket = async () => {
   var alltokenchannellist = channelstradd.substring(0, channelstradd.length - 1);
 
 
-  console.log("alltokenchannellist ", alltokenchannellist)
+  // console.log("alltokenchannellist ", alltokenchannellist)
   var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
   var userid = broker_infor.user_id
   var userSession1 = broker_infor.access_token

@@ -160,13 +160,44 @@ class MakeStartegy {
   //Delete make strateg
   async DeleteMakeStartegy(req, res) {
     try {
-      const objectId = new ObjectId(req.body.id);
-      //const result = await UserMakeStrategy.deleteOne({ _id: objectId });
+      
+      const {_id ,timeframe , tokensymbol , name , show_strategy ,type} = req.body.data;
+      const objectId = new ObjectId(_id);
+      const exist_view =  `M${timeframe}_${tokensymbol}_make_${name}`;
+
+      let checkType = "BUY"
+      if(type == "BUY"){
+        checkType = "SELL"
+      }
+      
+      const matchNameStartegy = await UserMakeStrategy.findOne({ type:checkType,show_strategy:show_strategy});
+  
+      try {
+        const collectionExists = await dbTest.listCollections({ name: exist_view }).hasNext();
+        if (collectionExists) {
+            await dbTest.collection(exist_view).drop();
+        } 
+      } catch (error) {
+      }
+      
+      if(matchNameStartegy != null){
+         const matchNameStartegy_exist_view =  `M${matchNameStartegy.timeframe}_${matchNameStartegy.tokensymbol}_make_${matchNameStartegy.name}`;
+          try {
+            const collectionExists = await dbTest.listCollections({ name: matchNameStartegy_exist_view }).hasNext();
+            if (collectionExists) {
+                await dbTest.collection(matchNameStartegy_exist_view).drop();
+            } 
+          } catch (error) {
+          }
+         await UserMakeStrategy.deleteOne({ name: matchNameStartegy.name });
+       }
+   
+       const result = await UserMakeStrategy.deleteOne({ _id: objectId });
       if (result.acknowledged == true) {
         return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
       }
     } catch (error) {
-
+     
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }

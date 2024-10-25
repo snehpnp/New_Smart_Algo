@@ -139,7 +139,7 @@ const AllMakeStrategy = () => {
                     req: {
                         page: "1",
                         limit: "100",
-                        id: row._id
+                        data: row
                     },
                     token: AdminToken,
                 }
