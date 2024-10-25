@@ -72,6 +72,40 @@ const ReusableForm = ({
     setPreviews([]);
   };
 
+
+  var GetThemeId = JSON.parse(localStorage.getItem("theme"));
+
+  useEffect(() => {
+    if (GetThemeId.themeId == 19) {
+      console.log(GetThemeId.themeId);
+      // FULL PAGE FONT COLOR CHANGE for BLACK
+      const elements = document.getElementsByTagName("label");
+      for (let i = 0; i < elements.length; i++) {
+        // Add ! important
+        elements[i].style.color = "White";
+      }
+
+      const elements1 = document.getElementsByTagName("select");
+      for (let i = 0; i < elements1.length; i++) {
+        // Add ! important
+        elements1[i].style.background = "black";
+        elements1[i].style.color = "white";
+
+      }
+
+      const elements2 = document.getElementsByTagName("input");
+      for (let i = 0; i < elements2.length; i++) {
+        // Add ! important
+        elements2[i].style.background = "black";
+        elements2[i].style.color = "white";
+
+      }
+
+
+    }
+  }, [GetThemeId.themeId]);
+
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <div
@@ -117,7 +151,7 @@ const ReusableForm = ({
                         <select
                           className="default-select wide form-control"
                           id={field.name}
-                          style={{ background: field.disable ? "#eeeeee" : "" }}
+                          // style={{ background: field.disable ? "#eeeeee" : "" }}
                           {...formik.getFieldProps(field.name)}
                           disabled={field.disable}
                         >

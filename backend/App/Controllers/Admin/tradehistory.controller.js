@@ -422,7 +422,7 @@ class Tradehistory {
           totalItems,
           totalPages: Math.ceil(totalItems / limit1),
         },
-        TotalCalculate: TotalCalculate,
+        TotalCalculate: TotalCalculate ? TotalCalculate : 0,
       });
     } catch (error) {
       console.log("Error Trade History Error-", error);
@@ -849,7 +849,7 @@ class Tradehistory {
           totalItems,
           totalPages: Math.ceil(totalItems / limit1),
         },
-        TotalCalculate: TotalCalculate,
+        TotalCalculate: TotalCalculate ? TotalCalculate : 0,
       });
     } catch (error) {
       console.log("Error Trade History Error-", error);

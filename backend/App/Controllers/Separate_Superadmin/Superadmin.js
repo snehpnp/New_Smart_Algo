@@ -209,6 +209,9 @@ class SuperAdmin {
 
   async getSignal(req, res) {
     try {
+
+      console.log("getSignal",req.body)
+
       const today = new Date();
       const yesterday = new Date();
       yesterday.setDate(today.getDate() - 1);

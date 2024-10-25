@@ -1125,16 +1125,16 @@ console.log("tradeHistoryData",tradeHistoryData.data)
         </div>
 
         <div className="table-responsive">
-        {tradeHistoryData.data.length > 0 ? (
+        {tradeHistoryData.data.length > 0 ? ( tradeHistoryData.TotalCalculate &&
             tradeHistoryData.TotalCalculate >= 0 ? (
               <h3>
                <b>Total Realised P/L</b>  :{" "}
-               <b><span style={{ color: "green" }}> {tradeHistoryData.TotalCalculate.toFixed(2)}</span>{" "}</b> 
+               <b><span style={{ color: "green" }}> {tradeHistoryData.TotalCalculate ? tradeHistoryData.TotalCalculate.toFixed(2):"-" }</span>{" "}</b> 
               </h3>
             ) : (
               <h3>
                 <b>Total Realised P/L</b> :{" "}
-                <b><span style={{ color: "red" }}> {tradeHistoryData.TotalCalculate.toFixed(2)}</span>{" "}</b> 
+                <b><span style={{ color: "red" }}> {tradeHistoryData.TotalCalculate ? tradeHistoryData.TotalCalculate.toFixed(2) : "-"}</span>{" "}</b> 
               </h3>
             )
           ) : (
