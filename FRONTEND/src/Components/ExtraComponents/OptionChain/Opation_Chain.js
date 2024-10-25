@@ -331,9 +331,9 @@ const HelpCenter = () => {
         const isAfterCutoffTime = new Date(currentDateIST).getTime() > cutoffTimeIST.getTime();
 
 
-        if (!holidays.isHoliday(currentDate) && weekday !== 'Sunday' && weekday !== 'Saturday' && isAfterCutoffTime) {
-            alert("Market Time Is Off")
-        } else {
+        // if (!holidays.isHoliday(currentDate) && weekday !== 'Sunday' && weekday !== 'Saturday' && isAfterCutoffTime) {
+        //     alert("Market Time Is Off")
+        // } else {
             if (UserDetails !== undefined && UserDetails.trading_status === "on") {
                 let Arr = []
 
@@ -371,7 +371,7 @@ const HelpCenter = () => {
             }
 
 
-        }
+        // }
     }
 
     // ------------------------------------ CREATE-CHAIN-FOR-EXECUTE-TRADE ------------------------------------

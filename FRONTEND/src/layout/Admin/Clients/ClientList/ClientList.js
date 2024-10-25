@@ -387,6 +387,7 @@ const AllClients = () => {
     {
       dataField: "UserName",
       text: "User Name",
+   
     },
     {
       dataField: "Email",
