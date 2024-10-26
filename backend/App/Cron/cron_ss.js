@@ -240,7 +240,7 @@ const TruncateTableTokenChainAdd_fiveMinute = async () => {
             const unmatchedTokenChannel = updateTokenAfter.map(item => `${item.exch}|${item._id}`).join('#');
            // console.log("unmatchedTokenChannel ",unmatchedTokenChannel)
            // updateChannelAndSend(unmatchedTokenChannel)
-             updateChannelAndSend("NSE|2885")
+             //updateChannelAndSend("NSE|2885")
             //await Alice_Socket();
 
             return;

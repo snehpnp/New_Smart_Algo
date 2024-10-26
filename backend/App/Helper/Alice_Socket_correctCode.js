@@ -27,7 +27,7 @@ const url = "wss://ws1.aliceblueonline.com/NorenWS/"
 
 const Alice_Socket = async () => {
   var rr = 0;
-  console.log("INSIDEE")
+  // console.log("INSIDEE")
   let channelstradd = "";
   const uniqueTokens = new Set();
   //Main SignalS code
@@ -295,15 +295,7 @@ const Alice_Socket = async () => {
     }
   }
 
-
-
-
-
-
-
-
-console.log("channelstradd  ", channelstradd)
-
+// console.log("channelstradd  ", channelstradd)
 
   var socket = null
   var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
@@ -313,8 +305,6 @@ console.log("channelstradd  ", channelstradd)
   }
 
 
-
- 
   // var channelstr = ""
   // if (updateToken.length > 0) {
   //   updateToken.forEach((data) => {
@@ -328,7 +318,7 @@ console.log("channelstradd  ", channelstradd)
   var alltokenchannellist = channelstradd.substring(0, channelstradd.length - 1);
 
 
-  console.log("alltokenchannellist ", alltokenchannellist)
+  // console.log("alltokenchannellist ", alltokenchannellist)
   var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
   var userid = broker_infor.user_id
   var userSession1 = broker_infor.access_token
@@ -421,35 +411,7 @@ function openSocketConnection(channelList, userid, userSession1) {
   };
 
   ws.onclose = async function () {
-
-
-    const indiaTimezoneOffset = 330;
-    const currentTimeInMinutes = new Date().getUTCHours() * 60 + new Date().getUTCMinutes() + indiaTimezoneOffset;
-
-    const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
-    const currentMinute = currentTimeInMinutes % 60;
-
-    if (currentHour >= 9 && currentHour <= 16) {
-      const result = checkExchangeSegment(channelList, "NFO");
-      if (result == true) {
-        console.log("NFO Shocket Restart - ", channelList);
-        await socketRestart()
-        return
-      }
-    }
-
-    if (currentHour >= 9 && currentHour <= 24) {
-      const result = checkExchangeSegment(channelList, "MCX");
-      if (result == true) {
-        console.log("MCX Shocket Restart - ", channelList);
-        await socketRestart()
-        return
-      }
-    }
-
-
-    //console.log('Disconnected from the server, attempting to  Alice Socket...');
-    //setTimeout(socketRestart, 30000);
+    await socketRestart()
   };
 
 }
@@ -511,7 +473,6 @@ const attemptReconnect = () => {
 async function connectToDB(collectionName, response) {
   try {
 
-
     const collections = await dbTest.listCollections().toArray();
     // let collectionName = message.token
     // Check if the desired collection exists
@@ -519,15 +480,6 @@ async function connectToDB(collectionName, response) {
 
     if (collectionExists) {
       const collection = dbTest.collection(collectionName);
-      // if (message.price != undefined && message.volume != undefined) {
-      //     const customTimestamp = new Date();
-      //     let singleDocument = {
-      //         _id: customTimestamp,
-      //         lp: parseFloat(message.price),
-      //         v: parseFloat(message.volume)
-      //     };
-      //     const insertResult = await collection.insertOne(singleDocument);
-      // }
       if (response.lp != undefined && response.v != undefined) {
 
         const customTimestamp = new Date();
@@ -582,8 +534,6 @@ async function connectToDB(collectionName, response) {
 
 async function createView(collectionName) {
   try {
-
-
     const pipeline = [
       {
         $project: {
@@ -643,9 +593,6 @@ async function createView(collectionName) {
 
 async function createViewM3(collectionName) {
   try {
-
-
-
     const pipeline = [
       {
         $project: {
@@ -1158,9 +1105,6 @@ async function createViewM60(collectionName) {
 
 async function createViewM1DAY(collectionName) {
   try {
-
-
-
     const pipeline = [
       {
         $project: {
@@ -1237,8 +1181,6 @@ async function createViewM1DAY(collectionName) {
 
 
 }
-
-
 
 
 module.exports = { Alice_Socket, getSocket, updateChannelAndSend }
