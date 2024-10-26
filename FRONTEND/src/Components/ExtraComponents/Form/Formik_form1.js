@@ -72,39 +72,28 @@ const ReusableForm = ({
     setPreviews([]);
   };
 
-
   var GetThemeId = JSON.parse(localStorage.getItem("theme"));
 
   useEffect(() => {
     if (GetThemeId.themeId == 19) {
-      console.log(GetThemeId.themeId);
-      // FULL PAGE FONT COLOR CHANGE for BLACK
       const elements = document.getElementsByTagName("label");
       for (let i = 0; i < elements.length; i++) {
-        // Add ! important
         elements[i].style.color = "White";
       }
 
       const elements1 = document.getElementsByTagName("select");
       for (let i = 0; i < elements1.length; i++) {
-        // Add ! important
         elements1[i].style.background = "black";
         elements1[i].style.color = "white";
-
       }
 
       const elements2 = document.getElementsByTagName("input");
       for (let i = 0; i < elements2.length; i++) {
-        // Add ! important
         elements2[i].style.background = "black";
         elements2[i].style.color = "white";
-
       }
-
-
     }
   }, [GetThemeId.themeId]);
-
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -151,7 +140,6 @@ const ReusableForm = ({
                         <select
                           className="default-select wide form-control"
                           id={field.name}
-                          // style={{ background: field.disable ? "#eeeeee" : "" }}
                           {...formik.getFieldProps(field.name)}
                           disabled={field.disable}
                         >
@@ -164,6 +152,16 @@ const ReusableForm = ({
                             </option>
                           ))}
                         </select>
+
+                        {field.name == "broker" &&
+                          formik.values.broker == 7 && (
+                            <div style={{ color: "red" }}>
+                              You should save the mobile number which is
+                              registered in the account of Kotak Neo in the
+                              mobile number field.
+                            </div>
+                          )}
+
                         {formik.errors[field.name] && (
                           <div style={{ color: "red" }}>
                             {formik.errors[field.name]}
@@ -571,7 +569,7 @@ const ReusableForm = ({
         </div>
         {additional_field}
         <div className="form-group row">
-        {removebtn && (
+          {removebtn && (
             <a
               className="btn btn-primary col-md-6"
               type="button"
@@ -582,15 +580,13 @@ const ReusableForm = ({
           )}
 
           <button
-            className={`btn btn-primary ${removebtn ? "col-md-6" :"col-md-2"} ${
-              location.pathname === "resetpassword" ? "col-md-11" : ""
-            }`}
+            className={`btn btn-primary ${
+              removebtn ? "col-md-6" : "col-md-2"
+            } ${location.pathname === "resetpassword" ? "col-md-11" : ""}`}
             type="submit"
           >
             {btn_name}
           </button>
-
-        
         </div>
       </div>
     </form>

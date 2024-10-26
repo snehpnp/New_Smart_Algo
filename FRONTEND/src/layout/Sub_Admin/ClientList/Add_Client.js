@@ -411,8 +411,6 @@ const AddClient = () => {
           ? "User"
           : formik.values.broker == 4
           ? "Client Code"
-          : formik.values.broker == 7
-          ? "User Name"
           : formik.values.broker == 9
           ? "Vander Id"
           : formik.values.broker == 11
@@ -427,7 +425,6 @@ const AddClient = () => {
         values.broker == "1" ||
         values.broker == "5" ||
         values.broker == "4" ||
-        values.broker == "7" ||
         values.broker == "9" ||
         values.broker == "11" ||
         values.broker == "6" ||
@@ -456,8 +453,6 @@ const AddClient = () => {
           ? "Verification Code"
           : formik.values.broker == 5
           ? "Password"
-          // : formik.values.broker == 7
-          // ? "Demat Password"
           : formik.values.broker == 11
           ? "Password"
           : formik.values.broker == 2
@@ -475,7 +470,6 @@ const AddClient = () => {
         values.broker == "2" ||
         values.broker == "3" ||
         values.broker == "5" ||
-        // values.broker == "7" ||
         values.broker == "9" ||
         values.broker == "11" ||
         values.broker == "13" ||
@@ -545,14 +539,13 @@ const AddClient = () => {
       label:
         formik.values.broker == 5
           ? "DOB"
-          : formik.values.broker == 7
-          ? "Trade Api Password"
+        
           : formik.values.broker == 9
           ? "Encryption IV"
         
           : "Api Secret",
       type: "text",
-      showWhen: (values) => values.broker == "7" || values.broker == "9",
+      showWhen: (values) =>  values.broker == "9",
       label_size: 12,
       col_size: 6,
       disable: false,

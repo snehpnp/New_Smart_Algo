@@ -113,8 +113,8 @@ const Update_Broker_Key = ({ closeModal }) => {
         },
         {
             name: 'client_code',
-            label: formik.values.broker == 21 ? "CLIENT CODE" : formik.values.broker == 20 ? "CLIENT ID" : formik.values.broker === 1 ? 'User' : formik.values.broker === 4 ? "Client Code" : formik.values.broker == 7 ? "User Name" : formik.values.broker === 9 ? "Vander Id" : formik.values.broker === 11 ? "Client Code" : formik.values.broker === 11 ? "client_code" : formik.values.broker == 27 ? "Vendor code" :'User Id', type: 'text',
-            showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6' || values.broker === '20' || values.broker === '21' || values.broker === '27',
+            label: formik.values.broker == 21 ? "CLIENT CODE" : formik.values.broker == 20 ? "CLIENT ID" : formik.values.broker === 1 ? 'User' : formik.values.broker === 4 ? "Client Code" : formik.values.broker === 9 ? "Vander Id" : formik.values.broker === 11 ? "Client Code" : formik.values.broker === 11 ? "client_code" : formik.values.broker == 27 ? "Vendor code" :'User Id', type: 'text',
+            showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' ||  values.broker === '9' || values.broker === '11' || values.broker === '6' || values.broker === '20' || values.broker === '21' || values.broker === '27',
             label_size: 12, col_size: 6, disable: isgotodashboard ? true : false
         },
         {
@@ -144,9 +144,9 @@ const Update_Broker_Key = ({ closeModal }) => {
         },
         {
             name: 'api_type',
-            label: formik.values.broker === 5 ? 'DOB' : formik.values.broker == 7 ? 'Trade Api Password' : formik.values.broker === 9 ? 'Encryption IV' :  'Api Secret', type: 'text',
+            label: formik.values.broker === 5 ? 'DOB' :  formik.values.broker === 9 ? 'Encryption IV' :  'Api Secret', type: 'text',
             showWhen: values =>
-                values.broker === '7' || values.broker === '9' ,
+                 values.broker === '9' ,
             label_size: 12, col_size: 6, disable: isgotodashboard ? true : false
         },
 
