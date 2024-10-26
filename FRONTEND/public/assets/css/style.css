@@ -39023,9 +39023,11 @@ code {
 .table.short-one tr th:first-child {
   width: 3.75rem;
 }
+.react-bootstrap-table table {
+  table-layout: unset !important;
 
+}
 .table thead th {
-  width: 165px !important;
   border-bottom: 0.0625rem solid #EEEEEE;
   text-transform: capitalize;
   color: #fff;
