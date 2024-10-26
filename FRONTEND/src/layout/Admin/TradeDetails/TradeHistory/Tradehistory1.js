@@ -981,8 +981,6 @@ const TradeHistory = () => {
         />
     </>
 );
-console.log("tradeHistoryData",tradeHistoryData.data)
-
 
   return (
     <>

@@ -23,6 +23,7 @@ const ReusableForm = ({
   disabled,
   LastUSerName,
   removebtn,
+  hidebtn
 }) => {
   const location = useLocation();
   const [passwordVisible, setPasswordVisible] = useState({});
@@ -579,14 +580,14 @@ const ReusableForm = ({
             </a>
           )}
 
-          <button
+         {hidebtn ? null: <button
             className={`btn btn-primary ${
               removebtn ? "col-md-6" : "col-md-2"
             } ${location.pathname === "resetpassword" ? "col-md-11" : ""}`}
             type="submit"
           >
             {btn_name}
-          </button>
+          </button>}
         </div>
       </div>
     </form>

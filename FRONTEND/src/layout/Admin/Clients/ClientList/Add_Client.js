@@ -3,6 +3,7 @@ import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form1
 import { useFormik } from "formik";
 import * as valid_err from "../../../../Utils/Common_Messages";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Get_Pmermission } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
 
 import {
   Email_regex,
@@ -81,6 +82,7 @@ const AddClient = () => {
   }, []);
 
   useEffect(() => {
+    AdminPermissions()
     data();
     Get_Last_User_Name();
   }, []);
@@ -97,6 +99,30 @@ const AddClient = () => {
         }
       });
   };
+
+  const AdminPermissions = async () => {
+    await dispatch(
+      Get_Pmermission({
+        domain: Config.react_domain,
+        token: user_details.token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setAdmin_permission({
+            loading: false,
+            data: response.data,
+          });
+        } else {
+          setAdmin_permission({
+            loading: false,
+            data: response.data,
+          });
+        }
+      });
+  };
+
 
   const formik = useFormik({
     initialValues: {
@@ -938,8 +964,12 @@ const AddClient = () => {
                     </div>
                   </div>
                 ))}
-
+  {admin_permission.data && admin_permission.data[0].Plans == 0 ? (
+                ""
+              ) : (
               <div>
+
+
                 <h6>Select Plans</h6>
                 <div className="row">
                   {GetAllPlans.data.map((plan, index) => (
@@ -962,6 +992,7 @@ const AddClient = () => {
                   ))}
                 </div>
               </div>
+              )}
 
               {formik.errors.Strategy && (
                 <div style={{ color: "red" }} className="my-3">

@@ -132,7 +132,7 @@ const EditClient = () => {
   
   useEffect(() => {
     if( UserData.data.length > 0){
-      console.log("UserData.data", UserData.data);
+  
 
     formik.setFieldValue(
       "username",

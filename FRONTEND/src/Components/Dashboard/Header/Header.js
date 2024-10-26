@@ -15,6 +15,8 @@ import {
   User_Profile,
   GET_MESSAGE_BRODS,
 } from "../../../ReduxStore/Slice/Common/commoSlice.js";
+import { Get_Pmermission } from "../../../ReduxStore/Slice/Users/DashboardSlice";
+
 import { check_Device } from "../../../Utils/find_device";
 import { GET_HELPS } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
@@ -57,7 +59,7 @@ const Header = ({ ChatBox }) => {
   const [shoonyaStatus, setShoonyaStatus] = useState(false);
   const [kotakStatus, setKotakStatus] = useState(false);
   const [kotakStatus1, setKotakStatus1] = useState(false);
-
+  const [admin_permission, setAdmin_permission] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ username: "", password: "" });
@@ -94,6 +96,7 @@ const Header = ({ ChatBox }) => {
   }, []);
 
   useEffect(() => {
+    AdminPermissions();
     ClearSession();
   }, []);
 
@@ -101,6 +104,32 @@ const Header = ({ ChatBox }) => {
     fetchUserProfile();
     message_brod();
   }, [refresh]);
+
+
+  const AdminPermissions = async () => {
+
+    await dispatch(
+      Get_Pmermission({
+        domain: Config.react_domain,
+        token: user_details.token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setAdmin_permission({
+            loading: false,
+            data: response.data,
+          });
+        } else {
+          setAdmin_permission({
+            loading: false,
+            data: response.data,
+          });
+        }
+      });
+  };
+
 
   if (theme_id != null) {
     let themedata = JSON.parse(theme_id);
@@ -225,8 +254,6 @@ const Header = ({ ChatBox }) => {
     if (errors.password) setErrors((prev) => ({ ...prev, password: "" }));
   };
 
-  
-
   const handleChange = (e, index) => {
     const value = e.target.value;
 
@@ -257,7 +284,7 @@ const Header = ({ ChatBox }) => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      console.log("Form submitted with", { username, password });
+  
 
       axios({
         url: `${Config.base_url}kotakGetToken`,
@@ -296,9 +323,6 @@ const Header = ({ ChatBox }) => {
     }
 
 
-    console.log("OTP entered:", otp.join(''));
-
-
     axios({
       url: `${Config.base_url}kotakGetSession`,
       method: "post",
@@ -331,7 +355,6 @@ const Header = ({ ChatBox }) => {
     setKotakStatus1(false);
     setOtp(['', '', '', '']);
   };
-
 
   // Redirect to Admin Page
   const redirectToAdmin = () => {
@@ -592,7 +615,6 @@ const Header = ({ ChatBox }) => {
     await dispatch(Update_Broker_Keys({ req: req, token: AdminToken }))
       .unwrap()
       .then((response) => {
-        console.log("Response: ", response);
         if (response.status) {
           setShoonyaStatus(false);
           setFormValues({
@@ -674,7 +696,7 @@ const Header = ({ ChatBox }) => {
                   </li>
                 ) : null}
 
-                {user_role === "USER" && getPlanName ? (
+                {admin_permission.data?.length > 0 && admin_permission.data[0]?.Plans && user_role === "USER" && getPlanName ? (
                   <li className="nav-item dropdown header-profile me-2">
                     <button
                       className=" btn btn-primary px-2"

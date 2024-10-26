@@ -139,7 +139,6 @@ const TradeHistory = () => {
     let startDate = getActualDateFormate(fromDate);
     let endDate = getActualDateFormate(toDate);
 
-    console.log("SelectOpenClose", SelectOpenClose);
 
     await dispatch(
       Get_Tradehisotry({

@@ -124,6 +124,7 @@ const Sidebar = ({ ShowSidebar }) => {
     CompanyName();
   }, []);
 
+
   return (
     <div className="deznav ">
       <div className="deznav-scroll">
@@ -133,7 +134,9 @@ const Sidebar = ({ ShowSidebar }) => {
               ? Client &&
               Client.map((item,index) => {
                 const isActive = location.pathname.includes(item.route);
-            
+            if(admin_permission.data?.length > 0 && admin_permission.data[0]?.Plans == 0 && item.name === "Plans"){
+              return null;
+            }
                 return (
                     <React.Fragment key={"USER"+index}>
                         {item.Data.length > 0 ? (
