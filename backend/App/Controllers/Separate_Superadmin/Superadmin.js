@@ -209,6 +209,11 @@ class SuperAdmin {
 
   async getSignal(req, res) {
     try {
+
+      const toDate = req.body.fromDate;
+      const fromDate = req.body.toDate;
+
+
       const today = new Date();
       const yesterday = new Date();
       yesterday.setDate(today.getDate() - 1);
@@ -217,10 +222,16 @@ class SuperAdmin {
       const endOfToday = new Date(today);
       endOfToday.setHours(23, 59, 59, 999);
 
+
+
+      let startDateObj = new Date(toDate ? toDate : yesterday);
+      let endDateObj = new Date(fromDate ? fromDate :endOfToday);
+
+
       const filteredSignals = await MainSignals.find({
         createdAt: {
-          $gte: yesterday,
-          $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+          $gte: new Date(startDateObj),
+          $lte: new Date(endDateObj),
         },
       }).sort({ createdAt: -1 });
 

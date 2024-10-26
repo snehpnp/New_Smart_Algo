@@ -18,39 +18,37 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const { logger, getIPAddress } = require("../../Helper/logger.helper");
 
-
 class Shoonya {
- 
   async GetAccessTokenShoonya(req, res) {
     const user_email = req.body.Email;
     const totp = req.body.totp;
-  
+
     try {
       if (!user_email) {
         return res.send({ status: false, msg: "Email is required" });
       }
-  
+
       const Get_User = await User.find({ Email: user_email });
-  
+
       if (Get_User.length === 0) {
         return res.send({ status: false, msg: "User not found" });
       }
-  
+
       const user = Get_User[0];
-  
+
       const params = {
         userid: user.demat_userid,
         password: user.app_id,
         twoFA: user.app_key,
         vendor_code: user.client_code,
         api_secret: user.api_secret,
-        imei: user.api_secret, 
+        imei: user.api_secret,
       };
-  
+
       const pwd = sha256(params.password).toString();
       const u_app_key = `${params.userid}|${user.api_key}`;
       const app_key = sha256(u_app_key).toString();
-  
+
       const authparams = {
         source: "API",
         apkversion: "js:1.0.0",
@@ -61,9 +59,9 @@ class Shoonya {
         appkey: app_key,
         imei: params.imei,
       };
-  
+
       const payload = "jData=" + JSON.stringify(authparams);
-  
+
       const response = await axios.post(
         "https://api.shoonya.com/NorenWClientTP/QuickAuth",
         payload,
@@ -73,7 +71,7 @@ class Shoonya {
           },
         }
       );
-  
+
       const responseData = response.data;
 
       if (responseData.stat === "Ok") {
@@ -85,7 +83,7 @@ class Shoonya {
           },
           { new: true }
         );
-  
+
         const user_logsData = new user_logs({
           user_Id: user._id,
           trading_status: "Trading On",
@@ -93,9 +91,9 @@ class Shoonya {
           device: "WEB",
           system_ip: getIPAddress(),
         });
-  
+
         await user_logsData.save();
-  
+
         return res.send({
           status: true,
           data: updatedUser,
@@ -109,18 +107,18 @@ class Shoonya {
           device: "WEB",
           system_ip: getIPAddress(),
         });
-  
+
         await user_logs1.save();
-  
+
         return res.send({
           status: false,
           data: [],
-          msg: "Trading On Try Feild " +responseData.emsg,
+          msg: "Trading On Try Feild " + responseData.emsg,
         });
       }
     } catch (error) {
       console.error("Error occurred:", error);
-  
+
       if (error.response) {
         return res.send({
           status: false,
@@ -128,7 +126,7 @@ class Shoonya {
           msg: "API Error occurred",
         });
       }
-  
+
       return res.send({
         status: false,
         data: error,
@@ -136,7 +134,6 @@ class Shoonya {
       });
     }
   }
-  
 
   // UPDATE ALL CLIENT BROKER RESPONSE
   async GetOrderFullInformationShoonya(req, res, user_info) {
@@ -161,7 +158,6 @@ class Shoonya {
     }
   }
 
-
   async SingleOrderFullInformationShoonya(
     req,
     res,
@@ -179,44 +175,41 @@ class Shoonya {
         });
       }
 
-      const jKey = user_info[0].access_token
+      const jKey = user_info[0].access_token;
 
-        const postData = {
-          uid: user_info[0].demat_userid,
-          actid: user_info[0].demat_userid,
-          norenordno:req.body.order_id,
-          exch:"NFO" 
-        };
-        
-        let data = JSON.stringify(postData);
+      const postData = {
+        uid: user_info[0].demat_userid,
+        actid: user_info[0].demat_userid,
+        norenordno: req.body.order_id,
+        exch: "NFO",
+      };
 
-        let payload = "jData=" + data;
-        payload = payload + `&jKey=${jKey}`;
-      
-        var config = {
-          method: "post",
-          maxBodyLength: Infinity,
-      
-          // url: "https://api.shoonya.com/NorenWClientTP/SingleOrdStatus",
-          url: "https://api.shoonya.com/NorenWClientTP/OrderBook",
+      let data = JSON.stringify(postData);
 
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          data: payload,
-        };
+      let payload = "jData=" + data;
+      payload = payload + `&jKey=${jKey}`;
+
+      var config = {
+        method: "post",
+        maxBodyLength: Infinity,
+
+        // url: "https://api.shoonya.com/NorenWClientTP/SingleOrdStatus",
+        url: "https://api.shoonya.com/NorenWClientTP/OrderBook",
+
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        data: payload,
+      };
 
       axios(config)
         .then(async (response) => {
-
-
           if (response.data.length > 0) {
-
-            const FindTrade = response.data.find(item => item.norenordno == order_id);
-
+            const FindTrade = response.data.find(
+              (item) => item.norenordno == order_id
+            );
 
             const message = JSON.stringify(FindTrade);
-          
 
             let result = await BrokerResponse.findByIdAndUpdate(
               { _id: broker_response_id },
@@ -242,8 +235,20 @@ class Shoonya {
           }
         })
         .catch(async (error) => {
-          console.log("error",error.response.data)
-          return res.send({ status: false, msg: "Order Api Err .", data: [] });
+
+          if (error.response.data.stat == "NotOk") {
+            return res.send({
+              status: false,
+              msg: error.response.data.emsg,
+              data: [],
+            });
+          } else {
+            return res.send({
+              status: false,
+              msg: "Order Api Err .",
+              data: [],
+            });
+          }
         });
     } catch (error) {
       return res.send({
@@ -253,13 +258,10 @@ class Shoonya {
       });
     }
   }
-
-
 }
 
 const GetAllBrokerResponse = async (user_info, res) => {
   try {
-
     const objectId = new ObjectId(user_info[0]._id);
     // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
     var FindUserBrokerResponse = await BrokerResponse.find({
@@ -273,32 +275,29 @@ const GetAllBrokerResponse = async (user_info, res) => {
           Uid: user_info[0].client_code,
         });
 
-        const jKey = user_info[0].access_token
+        const jKey = user_info[0].access_token;
 
         const postData = {
-          uid: user_info[0].demat_userid 
+          uid: user_info[0].demat_userid,
         };
-        
+
         const params = new URLSearchParams();
-        params.append("jData", JSON.stringify(postData)); 
-        params.append("jKey", jKey); 
-
-
+        params.append("jData", JSON.stringify(postData));
+        params.append("jKey", jKey);
 
         let config = {
           method: "post",
           maxBodyLength: Infinity,
-          url: "https://api.shoonya.com/NorenWClientTP/SingleOrdStatus",  
+          url: "https://api.shoonya.com/NorenWClientTP/SingleOrdStatus",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
-          data: params.toString()  
+          data: params.toString(),
         };
 
         axios(config)
           .then(async (response) => {
-console.log("response",response.data)
-
+            console.log("response", response.data);
 
             // if (response.data.IsError != true) {
             //   const result_order = response.data.Result.Data.find(

@@ -12,10 +12,7 @@ export async function USER_PROFILE(data, token) {
         });
 
         const responseData = await res?.data;
-        // if (responseData?.status === false && responseData?.msg === "Unauthorized!") {
-        //     localStorage.clear();
-        //     window.location.reload()
-        // }
+   
 
         return responseData;
     } catch (err) {

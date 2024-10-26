@@ -409,8 +409,33 @@ function openSocketConnection(channelList, userid, userSession1) {
     console.log(`WebSocket error: ${error}`);
   };
 
-  ws.onclose = async function () {
-    await socketRestart()
+    const indiaTimezoneOffset = 330; 
+    const currentTimeInMinutes = new Date().getUTCHours() * 60 + new Date().getUTCMinutes() + indiaTimezoneOffset;
+    
+    const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
+    const currentMinute = currentTimeInMinutes % 60;
+  
+    if (currentHour >= 9  && currentHour <= 16) {
+      const result = checkExchangeSegment(channelList , "NFO");
+      if(result == true){
+       
+        await  socketRestart()
+        return
+      }
+    } 
+
+    if (currentHour >= 9  && currentHour <= 24) {
+      const result = checkExchangeSegment(channelList , "MCX");
+      if(result == true){
+       
+        await  socketRestart()
+        return
+      }
+    } 
+
+    
+    //console.log('Disconnected from the server, attempting to  Alice Socket...');
+     //setTimeout(socketRestart, 30000);
   };
 
 }
@@ -420,12 +445,12 @@ function openSocketConnection(channelList, userid, userSession1) {
 // Function to send the current channel list
 function sendChannelList(channelList) {
   if (ws && ws.readyState === WebSocket.OPEN) {
-    const json = {
-      k: channelList,
-      t: 't'
-    };
-    ws.send(JSON.stringify(json));  // Send channel list to server
-    console.log("Channel list sent:", channelList);
+      const json = {
+          k: channelList,
+          t: 't'
+      };
+      ws.send(JSON.stringify(json));  // Send channel list to server
+      // console.log("Channel list sent:", channelList);
   } else {
     console.log("WebSocket is not open. Cannot send channel list.");
   }

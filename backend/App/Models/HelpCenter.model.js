@@ -33,6 +33,10 @@ const HelpCenterSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    viewed: {
+        type: Boolean,
+        default: false
+    },
     createdAt: {
         type: Date,
         default: Date.now

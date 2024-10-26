@@ -1794,7 +1794,7 @@ button.button_sell.active {
     color: white;
 }
 
-/* .table-container {
+.table-container {
     max-height: 300px;
     overflow-y: auto;
   }
@@ -1810,7 +1810,7 @@ button.button_sell.active {
     color: #fff;
     z-index: 1;
   }
-   */
+   
 
 /* .react-bootstrap-table {
     height: 700px !important;

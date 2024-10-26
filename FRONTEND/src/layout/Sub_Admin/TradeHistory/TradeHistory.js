@@ -182,25 +182,54 @@ const TradeHistory = () => {
       dataField: "entry_qty",
       text: "Entry Qty",
       formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+        <>
+           <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+     
+           <span className={`d-none entry_qty_${row.token}_${row._id}`}>
+              {row.entry_qty}
+            </span>
+            <span className={`d-none exit_qty_${row.token}_${row._id}`}>
+              {row.exit_qty}
+            </span>
+            <span className={`d-none exit_price_${row.token}_${row._id}`}>
+              {row.exit_price}
+            </span>
+            <span className={`d-none entry_price_${row.token}_${row._id}`}>
+              {row.entry_price}
+            </span>
+            <span className={`d-none entry_type_${row.token}_${row._id}`}>
+              {row.entry_type}
+            </span>
+            <span className={`d-none exit_type_${row.token}_${row._id}`}>
+              {row.exit_type}
+            </span>
+            <span className={`d-none strategy_${row.token}_${row._id}`}>
+              {row.strategy}
+            </span>
+            <span className={`d-none _id_${row.token}_${row._id}`}>
+              {row._id}
+            </span>
+
+
+         </>
       ),
     },
     {
       dataField: "exit_qty",
       text: "Exit Qty",
       formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+        <>  <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span> </>
       ),
     },
-    {
-      dataField: "live",
-      text: "Live Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`LivePrice_${row.token}`}></span>
-        </div>
-      ),
-    },
+    // {
+    //   dataField: "live",
+    //   text: "Live Price",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <div>
+    //       <span className={`LivePrice_${row.token}`}></span>
+    //     </div>
+    //   ),
+    // },
     {
       dataField: "entry_price",
       text: "Entry Price",
@@ -444,6 +473,9 @@ const TradeHistory = () => {
 
 
         if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
+
+
+
           if (get_entry_qty !== "" && get_exit_qty !== "") {
 
             if (parseInt(get_entry_qty) == parseInt(get_exit_qty)) {
@@ -454,6 +486,8 @@ const TradeHistory = () => {
 
               let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
               let finalyupl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * upl;
+
+
 
               if ((isNaN(finalyupl) || isNaN(rpl))) {
                 return "-";

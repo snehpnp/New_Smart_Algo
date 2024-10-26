@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable2";
-import { Get_Tradehisotry } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
+import { Get_Tradehisotry1 } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { fDateTimeSuffix } from "../../../../Utils/Date_formet";
 import { Eye } from "lucide-react";
@@ -51,8 +51,6 @@ const TradeHistory = () => {
   const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
   const [SelectService, setSelectService] = useState("null");
   const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
-  const [SelectOpenClose, setSelectopenclose] = useState("null");
-
   const [SocketState, setSocketState] = useState("null");
   const [ForGetCSV, setForGetCSV] = useState([]);
   const [adminTradingStatus, setAdminTradingStatus] = useState(false);
@@ -120,8 +118,7 @@ const TradeHistory = () => {
     SelectServiceIndex,
     lotMultypaly,
     searchTerm,
-    getPage, getSizePerPage,
-    SelectOpenClose
+    getPage, getSizePerPage
   ]);
 
   useEffect(() => {
@@ -139,9 +136,8 @@ const TradeHistory = () => {
     let startDate = getActualDateFormate(fromDate);
     let endDate = getActualDateFormate(toDate);
 
-
     await dispatch(
-      Get_Tradehisotry({
+      Get_Tradehisotry1({
         startDate: !fromDate ? full : startDate,
         endDate: !toDate ? (fromDate ? "" : full) : endDate,
         service: SelectService,
@@ -152,7 +148,6 @@ const TradeHistory = () => {
         token: token,
         page: getPage,
         limit: getSizePerPage,
-        openClose:SelectOpenClose
       })
     )
       .unwrap()
@@ -176,7 +171,6 @@ const TradeHistory = () => {
             loading: false,
             data: filterData,
             pagination: response.pagination,
-            TotalCalculate:response.TotalCalculate
 
           });
           setTotal(response.pagination.totalItems);
@@ -228,8 +222,7 @@ const TradeHistory = () => {
       dataField: "createdAt",
       text: "Signals Entry time",
       formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
-      width: "5rem",
-      hidden: false,
+      width: "5rem"
     },
 
     {
@@ -289,7 +282,7 @@ const TradeHistory = () => {
       dataField: "exit_qty",
       text: "Exit Qty",
       formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== ""  || cell != 0 ? parseInt(cell) : "-"}</span>
+        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
       ),
     },
     {
@@ -326,13 +319,11 @@ const TradeHistory = () => {
     },
 
     {
-      dataField: "TradeType",
+      dataField: "",
       text: "Entry Status",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span>{cell}</span>
-
-          {/* <span>{StatusEntry(row)}</span> */}
+          <span>{StatusEntry(row)}</span>
           {/* <span>{row.result[0].exit_status ==="above"?"ABOVE":row.result[0].exit_status ==="below"?"BELOW":row.result[0].exit_status == "range"?"RANGE":" - "}</span> */}
         </div>
       ),
@@ -342,7 +333,7 @@ const TradeHistory = () => {
       text: "Exit Status",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span>{row.exit_status == "-" ? "MT_4" :row.exit_status}</span>
+          <span>{row.exit_status}</span>
         </div>
       ),
     },
@@ -364,6 +355,23 @@ const TradeHistory = () => {
     },
   ];
 
+  const StatusEntry = (row) => {
+    const filteredData = row.result.find(
+      (obj) => obj.type === "LE" || obj.type === "SE"
+    );
+
+    if (filteredData != undefined) {
+      return filteredData.exit_status == "above"
+        ? "ABOVE"
+        : filteredData.exit_status == "below"
+        ? "BELOW"
+        : filteredData.exit_status == "range"
+        ? "RANGE"
+        : filteredData.exit_status;
+    } else {
+      return "-";
+    }
+  };
 
   var CreatechannelList = "";
   let total = 0;
@@ -969,7 +977,10 @@ const TradeHistory = () => {
     // Get_TradHistory(updatedOptions);
   };
 
- 
+  if (selectedOptions && selectedOptions.length > 0) {
+    columns = columns.filter((data) => !selectedOptions.includes(data.text));
+  }
+
   const columnTexts = [
     "S.No.",
     "Signals Entry time",
@@ -986,20 +997,20 @@ const TradeHistory = () => {
     "Entry Status",
     "Exit Status",
     "Details View",
-
+    // "Cancel Order", // Uncomment if you want to include this as well
   ];
 
- 
+   // Handle pagination changes
    const handleTableChange = (type, { page, sizePerPage }) => {
     setPage(page);
     setSizePerPage(sizePerPage);
   };
 
-
+  // Handle size per page change
   const handleSizePerPageChange = (e) => {
     const value = parseInt(e.target.value);
     setSizePerPage(value);
-    setPage(1);
+    setPage(1); // Reset to first page
   };
 
   const NoDataIndication = () => (
@@ -1009,12 +1020,6 @@ const TradeHistory = () => {
         />
     </>
 );
-
-
-if (selectedOptions && selectedOptions.length > 0) {
-  columns = columns.filter((data) => !selectedOptions.includes(data.text));
-}
-
 
   return (
     <>
@@ -1028,7 +1033,6 @@ if (selectedOptions && selectedOptions.length > 0) {
         csv_title="TradeHistory"
       >
         <div className="row d-flex  align-items-center justify-content-start">
-       
           {dashboard_filter === "client" ? (
             ""
           ) : (
@@ -1216,29 +1220,6 @@ if (selectedOptions && selectedOptions.length > 0) {
           </div>
           <div className="col-lg-2  px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
-              <label className="col-lg-12">Open/close</label>
-              <select
-                className="default-select wide form-control"
-                aria-label="Default select example"
-                id="select"
-                onChange={(e) => setSelectopenclose(e.target.value)}
-                value={SelectOpenClose}
-              >
-                <option value="null" selected>
-                  All
-                </option>
-                <option value="Open" selected>
-                Open
-                </option>
-                <option value="Close" selected>
-                Close
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <div className="col-lg-2  px-1">
-            <div className="form-check custom-checkbox mb-3 ps-0">
               <label className="col-lg-12">Lots</label>
               <input
                 type="number"
@@ -1249,25 +1230,9 @@ if (selectedOptions && selectedOptions.length > 0) {
             </div>
           </div>
 
-          <div className="col-lg-2  px-1">
-            <div className="mb-3">
-            <label className="col-lg-12">Search Here</label>
-
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search anything..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
-
           <div className="col-lg-2 px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
               <div className="custom-dropdown">
-            <label className="col-lg-12">Select Option</label>
-
                 <button
                   className="btn btn-primary dropdown-toggle"
                   type="button"
@@ -1300,8 +1265,6 @@ if (selectedOptions && selectedOptions.length > 0) {
 
           <div className="col-lg-2  px-1">
             <div className="mb-3">
-            <label className="col-lg-12">Reset</label>
-
               <button
                 className="btn btn-primary"
                 onClick={(e) => ResetAllData(e)}
@@ -1311,20 +1274,30 @@ if (selectedOptions && selectedOptions.length > 0) {
             </div>
           </div>
 
-        
+          <div className="col-lg-2  px-1">
+            <div className="mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search anything..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
         </div>
 
         <div className="table-responsive">
-        {tradeHistoryData.data.length > 0 ? ( tradeHistoryData.TotalCalculate &&
-            tradeHistoryData.TotalCalculate >= 0 ? (
+          {tradeHistoryData.data.length > 0 ? (
+            total >= 0 ? (
               <h3>
                <b>Total Realised P/L</b>  :{" "}
-               <b><span style={{ color: "green" }}> {tradeHistoryData.TotalCalculate ? tradeHistoryData.TotalCalculate.toFixed(2):"-" }</span>{" "}</b> 
+               <b><span style={{ color: "green" }}> {total.toFixed(2)}</span>{" "}</b> 
               </h3>
             ) : (
               <h3>
                 <b>Total Realised P/L</b> :{" "}
-                <b><span style={{ color: "red" }}> {tradeHistoryData.TotalCalculate ? tradeHistoryData.TotalCalculate.toFixed(2) : "-"}</span>{" "}</b> 
+                <b><span style={{ color: "red" }}> {total.toFixed(2)}</span>{" "}</b> 
               </h3>
             )
           ) : (
@@ -1369,13 +1342,6 @@ if (selectedOptions && selectedOptions.length > 0) {
     <option value={25}>25</option>
     <option value={50}>50</option>
     <option value={100}>100</option>
-    <option value={200}>200</option>
-
-    <option value={500}>500</option>
-    <option value={1000}>1000</option>
-    <option value={1500}>1500</option>
-
-
   </select>
 </div>
   <div className="d-flex align-items-center">

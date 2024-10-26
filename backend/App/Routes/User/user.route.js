@@ -10,7 +10,7 @@ const { GetUserBrokerResponse } = require('../../Controllers/User/BrokerReponse'
 const { GetUserTradeSignals } = require('../../Controllers/User/Signals')
 const { GetUserTradeHistory } = require('../../Controllers/User/TradeHistory')
 const { GetUserStrategy } = require('../../Controllers/User/Strategy_Desc')
-const { AddHelp } = require('../../Controllers/User/HelpCenter')
+const { AddHelp,GetAllHelp } = require('../../Controllers/User/HelpCenter')
 const { GetAllSymbols } = require('../../Controllers/User/MakeStrategy')
 
 
@@ -52,6 +52,7 @@ router.post('/getall/user/strategy', GetUserStrategy);
 
 // Help Center
 router.post('/create/user/help', AddHelp);
+router.post('/getall/user/help', GetAllHelp);
 
 
 // Make Strategy...

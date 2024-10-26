@@ -357,7 +357,7 @@ const UserProfile = () => {
                             </div>
                           </div>
 
-                          {user_role === "USER" ? (
+                          { user_role === "USER" ||( isgotodashboard == true && gotodashboard.Role=="USER" )? (
                             <>
                               <div className="row mb-2">
                                 <div className="col-sm-3 col-5">
@@ -401,8 +401,8 @@ const UserProfile = () => {
                                       ? "Live"
                                       : UserDetails &&
                                         UserDetails.license_type == "1"
-                                      ? "Demo"
-                                      : "2 Days"}
+                                      ? "Free Demo"
+                                      : "Free 2 Days"}
                                   </span>
                                 </div>
                               </div>

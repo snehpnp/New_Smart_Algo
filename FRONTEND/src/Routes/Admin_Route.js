@@ -59,6 +59,7 @@ import ReferralPage  from '../layout/Admin/Profile/ReferralPage'
 import Plans  from '../layout/Admin/Service/Plans/Plans'
 import Addplans  from '../layout/Admin/Service/Plans/Addplan'
 
+import TradeHistory1 from "../layout/Admin/TradeDetails/TradeHistory/Tradehistory1"
 
 import { useDispatch } from "react-redux";
 
@@ -159,7 +160,7 @@ const Admin = () => {
 
 
 
-
+                <Route exact path="/tradehistory1" element={<TradeHistory1 />} />
 
 
             </Routes>

@@ -138,7 +138,7 @@ const Dashboard1 = ({ data }) => {
     <div className='theme-6-dashboard'>
       <div className='row'>
         {arr.map((item, index) => {
-          return <>
+          return <React.Fragment key={index}>
             <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6" key={index}>
               <div className="widget-stat card  sixth-dashboard-card">
                 <div className="card-body  p-4">
@@ -162,7 +162,7 @@ const Dashboard1 = ({ data }) => {
                 </div>
               </div>
             </div>
-          </>
+          </React.Fragment>
         })}
       </div>
     </div>

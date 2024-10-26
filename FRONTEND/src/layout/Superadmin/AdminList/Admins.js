@@ -37,40 +37,31 @@ const AdminsList = () => {
   useEffect(() => {
     fetchAllPanels();
   }, []);
-
   useEffect(() => {
     if (themeData.data.length > 0) {
-
-
-      console.log("statusData",statusData)
-    
       const filteredData = themeData.data.filter((item) => {
         const matchSearch =
-          searchInput === "" ||
+          !searchInput ||
           item.panel_name.toLowerCase().includes(searchInput.toLowerCase()) ||
           item.domain.toLowerCase().includes(searchInput.toLowerCase());
-      
+  
         const matchStatus =
-          statusData === undefined || item.is_active === Number(statusData);
-      
+          !statusData || item.is_active === Number(statusData);
+  
         return matchSearch && matchStatus;
       });
-      
-      let ExportData = filteredData && filteredData.map((item) => {
-        return {
-          "Panel Name": item.panel_name,
-          "Theme Name": item.theme_name,
-          "Is Active": item.is_active === 0 ? "Active" : "Inactive",
-        };
-      });
-
-
-
+  
+      const ExportData = filteredData.map((item) => ({
+        "Panel Name": item.panel_name,
+        "Theme Name": item.theme_name,
+        "Is Active": item.is_active === 0 ? "Active" : "Inactive",
+      }));
+  
       setExcelData(ExportData);
       setFilteredData(filteredData);
     }
-  }, [searchInput, themeData.data,statusData]);
-
+  }, [searchInput, themeData.data, statusData]);
+  
   const GetAllThemes = async () => {
     try {
       const response = await dispatch(Get_All_Theme()).unwrap();

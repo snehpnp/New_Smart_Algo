@@ -133,7 +133,7 @@ const Wraper = () => {
         <Header ChatBox={ShowChatBox} ShowSidebar={ShowSidebar} />
         <Sidebar ShowSidebar={ShowSidebar} />
         {roles === "SUPERADMIN" ? <> <ThemeSelection /> <CreateTheme SelectTheme1={SelectTheme} /> </> : ""}
-        <ChatBox toggleChat={toggleChatBox} />
+        {/* <ChatBox toggleChat={toggleChatBox} /> */}
         <Footer />
 
       </div>

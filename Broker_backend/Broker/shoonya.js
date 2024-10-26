@@ -138,7 +138,7 @@ const place_order = async (
                       try {
                         console.log("Error creating and saving user:", err);
                       } catch (e) {
-                        console.log("duplicate key");
+                        ;
                       }
                     });
                 });
@@ -158,9 +158,9 @@ const place_order = async (
                 // item.postdata.tsym = "BANKNIFTY24APR24P47500";
 
                 if (type == "LE" || type == "SX") {
-                  item.postdata.Trantype = "B";
+                  item.postdata.trantype = "B";
                 } else if (type == "SE" || type == "LX") {
-                  item.postdata.Trantype = "S";
+                  item.postdata.trantype = "S";
                 }
 
                 if (
@@ -200,7 +200,7 @@ const place_order = async (
                     try {
                       console.log("Error creating and saving user:", err);
                     } catch (e) {
-                      console.log("duplicate key");
+                      ;
                     }
                   });
               });
@@ -233,7 +233,7 @@ const place_order = async (
                   try {
                     console.log("Error creating and saving user:", err);
                   } catch (e) {
-                    console.log("duplicate key");
+                    ;
                   }
                 });
             });
@@ -248,13 +248,13 @@ const place_order = async (
           }
         });
       } else if (type == "SX" || type == "LX") {
-        console.log("trade exit");
+       
 
         const requestPromises = AllClientData.map(async (item) => {
           if (type == "LE" || type == "SX") {
-            item.postdata.Trantype = "B";
+            item.postdata.trantype = "B";
           } else if (type == "SE" || type == "LX") {
-            item.postdata.Trantype = "S";
+            item.postdata.trantype = "S";
           }
 
           if (
@@ -331,7 +331,7 @@ const place_order = async (
                         try {
                           console.log("Error creating and saving user:", err);
                         } catch (e) {
-                          console.log("duplicate key");
+                          ;
                         }
                       });
                   } else {
@@ -372,7 +372,7 @@ const place_order = async (
                       try {
                         console.log("Error creating and saving user:", err);
                       } catch (e) {
-                        console.log("duplicate key");
+                        ;
                       }
                     });
                 }
@@ -400,7 +400,7 @@ const place_order = async (
                     try {
                       console.log("Error creating and saving user:", err);
                     } catch (e) {
-                      console.log("duplicate key");
+                      ;
                     }
                   });
               }
@@ -445,7 +445,7 @@ const place_order = async (
                     try {
                       console.log("Error creating and saving user:", err);
                     } catch (e) {
-                      console.log("duplicate key");
+                      ;
                     }
                   });
               } else {
@@ -469,7 +469,7 @@ const place_order = async (
                     try {
                       console.log("Error creating and saving user:", err);
                     } catch (e) {
-                      console.log("duplicate key");
+                      ;
                     }
                   });
               }
@@ -504,7 +504,7 @@ const place_order = async (
             try {
               console.log("Error creating and saving user:", err);
             } catch (e) {
-              console.log("duplicate key");
+              ;
             }
           });
       });
@@ -609,7 +609,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
             try {
               console.log("Error creating and saving user:", err);
             } catch (e) {
-              console.log("duplicate key");
+              ;
             }
           });
       } else {
@@ -632,7 +632,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
             try {
               console.log("Error creating and saving user:", err);
             } catch (e) {
-              console.log("duplicate key");
+              ;
             }
           });
       }
@@ -679,7 +679,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                 try {
                   console.log("Error creating and saving user:", err);
                 } catch (e) {
-                  console.log("duplicate key");
+                  ;
                 }
               });
           } else {
@@ -702,7 +702,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                 try {
                   console.log("Error creating and saving user:", err);
                 } catch (e) {
-                  console.log("duplicate key");
+                  ;
                 }
               });
           }
@@ -812,7 +812,7 @@ const ExitPlaceOrder = async (
             try {
               console.log("Error creating and saving user:", err);
             } catch (e) {
-              console.log("duplicate key");
+              ;
             }
           });
       } else {
@@ -835,7 +835,7 @@ const ExitPlaceOrder = async (
             try {
               console.log("Error creating and saving user:", err);
             } catch (e) {
-              console.log("duplicate key");
+              ;
             }
           });
       }
@@ -882,7 +882,7 @@ const ExitPlaceOrder = async (
                 try {
                   console.log("Error creating and saving user:", err);
                 } catch (e) {
-                  console.log("duplicate key");
+                  ;
                 }
               });
           } else {
@@ -905,7 +905,7 @@ const ExitPlaceOrder = async (
                 try {
                   console.log("Error creating and saving user:", err);
                 } catch (e) {
-                  console.log("duplicate key");
+                  ;
                 }
               });
           }

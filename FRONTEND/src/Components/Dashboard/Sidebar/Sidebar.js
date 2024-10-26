@@ -124,6 +124,7 @@ const Sidebar = ({ ShowSidebar }) => {
     CompanyName();
   }, []);
 
+
   return (
     <div className="deznav ">
       <div className="deznav-scroll">
@@ -131,85 +132,39 @@ const Sidebar = ({ ShowSidebar }) => {
           {gotodashboard != null
             ? user_role_goTo === "USER"
               ? Client &&
-                Client.map((item) => {
-                  return (
-                    <>
-                      <li
-                        key={item.id}
-                        className={`${
-                          location.pathname.includes(item.route && item.route)
-                            ? "mm-active"
-                            : ""
-                        }`}
-                      >
+              Client.map((item,index) => {
+                const isActive = location.pathname.includes(item.route);
+            if(admin_permission.data?.length > 0 && admin_permission.data[0]?.Plans == 0 && item.name === "Plans"){
+              return null;
+            }
+                return (
+                    <React.Fragment key={"USER"+index}>
                         {item.Data.length > 0 ? (
-                          <>
-                            <a className="has-arrow">
-                              <IconComponent
-                                key={item.id}
-                                icon={item.Icon}
-                                className="mx-2"
-                              />
-                              <span className="nav-text">{item.name}</span>
-                            </a>
-                          </>
-                        ) : (
-                          ""
-                        )}
-                        {item.Data.length !== 0 ? (
-                          <>
-                            <ul aria-expanded="false">
-                              {item.Data.length > 0
-                                ? item.Data.map((nested_item) => {
-                                    return (
-                                      <>
-                                        <li
-                                          className={`${
-                                            location.pathname.includes(
-                                              item.route && item.route
-                                            )
-                                              ? "mm-active"
-                                              : ""
-                                          }`}
-                                        >
-                                          <Link to={nested_item.route}>
-                                            {nested_item.name}
-                                          </Link>
+                            <li className={isActive ? "mm-active" : ""}>
+                                <a className="has-arrow">
+                                    <IconComponent icon={item.Icon} className="mx-2" />
+                                    <span className="nav-text">{item.name}</span>
+                                </a>
+                                <ul aria-expanded="false">
+                                    {item.Data.map((nested_item) => (
+                                        <li key={nested_item.id} className={location.pathname.includes(nested_item.route) ? "mm-active" : ""}>
+                                            <Link to={nested_item.route}>{nested_item.name}</Link>
                                         </li>
-                                      </>
-                                    );
-                                  })
-                                : ""}
-                            </ul>
-                          </>
-                        ) : null}
-                      </li>
-                      {item.Data.length === 0 ? (
-                        <>
-                          <li
-                            className={`${
-                              location.pathname === item.route && item.route
-                                ? "mm-active"
-                                : ""
-                            }`}
-                          >
-                            <Link
-                              to={item.route}
-                              className=""
-                              aria-expanded="false"
-                            >
-                              <IconComponent key={item.id} icon={item.Icon} />
-
-                              <span className="nav-text mx-2">{item.name}</span>
-                            </Link>
-                          </li>
-                        </>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  );
-                })
+                                    ))}
+                                </ul>
+                            </li>
+                        ) : (
+                            <li className={isActive ? "mm-active" : ""}>
+                                <Link to={item.route}>
+                                    <IconComponent icon={item.Icon} />
+                                    <span className="nav-text mx-2">{item.name}</span>
+                                </Link>
+                            </li>
+                        )}
+                    </React.Fragment>
+                );
+            })
+            
               : user_role_goTo === "SUBADMIN"
               ? sub_admin_sidebar &&
                 sub_admin_sidebar.map((item) => {
@@ -303,7 +258,7 @@ const Sidebar = ({ ShowSidebar }) => {
                           <>
                             <ul aria-expanded="false" className="mm-collapse">
                               {item.Data.length > 0
-                                ? item.Data.map((nested_item) => {
+                                ? item.Data.map((nested_item,index) => {
                                     if (
                                       (nested_item.route ==
                                         "/admin/createstrategy" &&
@@ -326,7 +281,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                     ) {
                                     } else {
                                       return (
-                                        <>
+                                        <React.Fragment key={index}>
                                           <li
                                             className={`${
                                               location.pathname.includes(
@@ -340,7 +295,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                               {nested_item.name}
                                             </Link>
                                           </li>
-                                        </>
+                                        </React.Fragment>
                                       );
                                     }
                                   })
@@ -750,7 +705,6 @@ const Sidebar = ({ ShowSidebar }) => {
   );
 };
 
-export default Sidebar;
 
 const IconComponent = ({ icon }) => {
   const renderIcon = () => {
@@ -809,3 +763,5 @@ const IconComponent = ({ icon }) => {
 
   return <>{renderIcon()}</>;
 };
+
+export default Sidebar;

@@ -2392,6 +2392,11 @@ progress {
   border-color: #7d7d7d;
 }
 
+.table-column-name {
+  width: 25%;
+}
+
+
 .table-responsive,
 .react-bootstrap-table {
   overflow-x: auto;
@@ -39020,6 +39025,7 @@ code {
 }
 
 .table thead th {
+  width: 165px !important;
   border-bottom: 0.0625rem solid #EEEEEE;
   text-transform: capitalize;
   color: #fff;

@@ -128,11 +128,23 @@ export async function CREATE_HELP(data, token) {
 
 }
 
+export async function GET_HELP(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/user/help`, data, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
 
 
 
 // USER CREATE HELP
-
 export async function UPDATE_DAHBOARD_DATA(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}update/clientServices`, data, {

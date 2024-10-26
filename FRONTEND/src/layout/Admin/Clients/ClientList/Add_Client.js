@@ -3,6 +3,7 @@ import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form1
 import { useFormik } from "formik";
 import * as valid_err from "../../../../Utils/Common_Messages";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Get_Pmermission } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
 
 import {
   Email_regex,
@@ -81,6 +82,7 @@ const AddClient = () => {
   }, []);
 
   useEffect(() => {
+    AdminPermissions()
     data();
     Get_Last_User_Name();
   }, []);
@@ -97,6 +99,30 @@ const AddClient = () => {
         }
       });
   };
+
+  const AdminPermissions = async () => {
+    await dispatch(
+      Get_Pmermission({
+        domain: Config.react_domain,
+        token: user_details.token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setAdmin_permission({
+            loading: false,
+            data: response.data,
+          });
+        } else {
+          setAdmin_permission({
+            loading: false,
+            data: response.data,
+          });
+        }
+      });
+  };
+
 
   const formik = useFormik({
     initialValues: {
@@ -372,10 +398,10 @@ const AddClient = () => {
       formik.setFieldValue("demat_userid", "null");
     }
     if (formik.values.broker === "27" || formik.values.broker === 27) {
-      formik.setFieldValue("api_key", "null");
-      formik.setFieldValue("client_code", "null");
-      formik.setFieldValue("api_secret", "null");
-      formik.setFieldValue("api_type", "null");
+      // formik.setFieldValue("api_key", "null");
+      // formik.setFieldValue("client_code", "null");
+      // formik.setFieldValue("api_secret", "null");
+      // formik.setFieldValue("api_type", "null");
     }
 
     if (formik.values.licence === "2" || formik.values.licence === 2) {
@@ -601,8 +627,7 @@ const AddClient = () => {
           ? "User"
           : formik.values.broker == 4
           ? "Client Code"
-          : formik.values.broker == 7
-          ? "User Name"
+        
           : formik.values.broker == 9
           ? "Vander Id"
           : formik.values.broker == 11
@@ -617,7 +642,7 @@ const AddClient = () => {
         values.broker === "1" ||
         values.broker === "5" ||
         values.broker === "4" ||
-        values.broker === "7" ||
+        // values.broker === "7" ||
         values.broker === "9" ||
         values.broker === "11" ||
         values.broker === "6" ||
@@ -646,8 +671,8 @@ const AddClient = () => {
           ? "Verification Code"
           : formik.values.broker == 5
           ? "Password"
-          : formik.values.broker == 7
-          ? "Demat Password"
+          // : formik.values.broker == 7
+          // ? "Demat Password"
           : formik.values.broker == 11
           ? "Password"
           : formik.values.broker == 2
@@ -665,7 +690,7 @@ const AddClient = () => {
         values.broker === "2" ||
         values.broker === "3" ||
         values.broker === "5" ||
-        values.broker === "7" ||
+        // values.broker === "7" ||
         values.broker === "9" ||
         values.broker === "11" ||
         values.broker === "13" ||
@@ -735,14 +760,16 @@ const AddClient = () => {
       label:
         formik.values.broker == 5
           ? "DOB"
-          : formik.values.broker == 7
-          ? "Trade Api Password"
+          // : formik.values.broker == 7
+          // ? "Trade Api Password"
           : formik.values.broker == 9
           ? "Encryption IV"
         
           : "Api Secret",
       type: "text",
-      showWhen: (values) => values.broker === "7" || values.broker === "9",
+      showWhen: (values) =>
+        //  values.broker === "7" || 
+      values.broker === "9",
       label_size: 12,
       col_size: 6,
       disable: false,
@@ -904,6 +931,8 @@ const AddClient = () => {
     }
   }
 
+ 
+
   return (
     <>
       <Content
@@ -935,8 +964,12 @@ const AddClient = () => {
                     </div>
                   </div>
                 ))}
-
+  {admin_permission.data && admin_permission.data[0].Plans == 0 ? (
+                ""
+              ) : (
               <div>
+
+
                 <h6>Select Plans</h6>
                 <div className="row">
                   {GetAllPlans.data.map((plan, index) => (
@@ -959,6 +992,7 @@ const AddClient = () => {
                   ))}
                 </div>
               </div>
+              )}
 
               {formik.errors.Strategy && (
                 <div style={{ color: "red" }} className="my-3">

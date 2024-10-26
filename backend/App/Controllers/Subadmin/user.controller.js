@@ -943,6 +943,45 @@ class Employee {
 
       const get_user = await User_model.find({ _id: id });
 
+      const totalLicense = await User_model.aggregate([
+        {
+          $match: {
+            license_type: "2",
+            licence: { $exists: true, $ne: null, $not: { $type: 10 } }, 
+          },
+        },
+        {
+          $group: {
+            _id: null, 
+            totalLicense: {
+              $sum: { $toInt: "$licence" },
+            },
+          },
+        },
+      ]);
+      var Panel_key = await Company_info.find(
+        {},
+        { prefix: 1, licenses: 1, _id: 0 }
+      ).limit(1);
+
+
+      if (totalLicense.length > 0) {
+        var TotalLicense = totalLicense[0].totalLicense;
+      } else {
+        var TotalLicense = 0;
+      }
+      if (
+        parseInt(TotalLicense) + parseInt(1) >
+        Number(Panel_key[0].licenses)
+      ) {
+        return res.send({
+          status: false,
+          msg: "You Dont Have License",
+          data: [],
+        });
+      }
+
+
       if (get_user.length == 0) {
         return res.send({
           status: false,

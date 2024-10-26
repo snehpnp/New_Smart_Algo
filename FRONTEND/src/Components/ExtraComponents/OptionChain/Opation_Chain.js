@@ -331,9 +331,9 @@ const HelpCenter = () => {
         const isAfterCutoffTime = new Date(currentDateIST).getTime() > cutoffTimeIST.getTime();
 
 
-        if (!holidays.isHoliday(currentDate) && weekday !== 'Sunday' && weekday !== 'Saturday' && isAfterCutoffTime) {
-            alert("Market Time Is Off")
-        } else {
+        // if (!holidays.isHoliday(currentDate) && weekday !== 'Sunday' && weekday !== 'Saturday' && isAfterCutoffTime) {
+        //     alert("Market Time Is Off")
+        // } else {
             if (UserDetails !== undefined && UserDetails.trading_status === "on") {
                 let Arr = []
 
@@ -371,7 +371,7 @@ const HelpCenter = () => {
             }
 
 
-        }
+        // }
     }
 
     // ------------------------------------ CREATE-CHAIN-FOR-EXECUTE-TRADE ------------------------------------
@@ -1033,41 +1033,44 @@ const HelpCenter = () => {
                                                 {
                                                     dataField: "Symbol",
                                                     text: "Symbol",
+                                                    headerClasses: 'table-column-name',
+                                                    classes: 'table-column-name',
+                                                    
                                                 },
-                                                {
-                                                    dataField: "",
-                                                    text: "Enter Qty (%)",
-                                                    formatter: (cell, row, rowIndex) => (
-                                                        <div>
-                                                            <input
-                                                                // key={index}
-                                                                type="text"
-                                                                name="quantity"
-                                                                className=""
-                                                                id="quantity"
-                                                                placeholder="Enter Qty (%)"
+                                                // {
+                                                //     dataField: "",
+                                                //     text: "Enter Qty (%)",
+                                                //     formatter: (cell, row, rowIndex) => (
+                                                //         <div>
+                                                //             <input
+                                                //                 // key={index}
+                                                //                 type="text"
+                                                //                 name="quantity"
+                                                //                 className=""
+                                                //                 id="quantity"
+                                                //                 placeholder="Enter Qty (%)"
 
-                                                                onChange={
-                                                                    (e) =>
-                                                                        Set_Entry_Exit_Qty(
-                                                                            row,
-                                                                            e.target.value,
-                                                                            row.Symbol
-                                                                        )
+                                                //                 onChange={
+                                                //                     (e) =>
+                                                //                         Set_Entry_Exit_Qty(
+                                                //                             row,
+                                                //                             e.target.value,
+                                                //                             row.Symbol
+                                                //                         )
 
-                                                                    //  setEnterQty(e.target.value)
-                                                                }
-                                                            // value={inputValue ? inputValue : row.old_qty_persent}
-                                                            // max={row.old_qty_persent}
-                                                            // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
+                                                //                     //  setEnterQty(e.target.value)
+                                                //                 }
+                                                //             // value={inputValue ? inputValue : row.old_qty_persent}
+                                                //             // max={row.old_qty_persent}
+                                                //             // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
 
-                                                            />
-                                                        </div>
-                                                    ),
+                                                //             />
+                                                //         </div>
+                                                //     ),
 
 
 
-                                                },
+                                                // },
                                                 {
                                                     dataField: "price",
                                                     text: "Price",
