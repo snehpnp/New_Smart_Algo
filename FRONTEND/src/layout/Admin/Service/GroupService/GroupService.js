@@ -137,7 +137,6 @@ const ServicesList = () => {
             })
     }
 
-    // GET ALL GROUP SERVICES USER NAME
     const GetAllServicesUserName = async (row) => {
         await dispatch(GET_ALL_SERVICES_USER_NAMES({
             _id: row._id

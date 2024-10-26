@@ -139,7 +139,6 @@ const TradeHistory = () => {
     let startDate = getActualDateFormate(fromDate);
     let endDate = getActualDateFormate(toDate);
 
-    console.log("SelectOpenClose", SelectOpenClose);
 
     await dispatch(
       Get_Tradehisotry({
@@ -1316,16 +1315,16 @@ if (selectedOptions && selectedOptions.length > 0) {
         </div>
 
         <div className="table-responsive">
-          {tradeHistoryData.data.length > 0 ? (
+        {tradeHistoryData.data.length > 0 ? ( tradeHistoryData.TotalCalculate &&
             tradeHistoryData.TotalCalculate >= 0 ? (
               <h3>
                <b>Total Realised P/L</b>  :{" "}
-               <b><span style={{ color: "green" }}> {tradeHistoryData.TotalCalculate.toFixed(2)}</span>{" "}</b> 
+               <b><span style={{ color: "green" }}> {tradeHistoryData.TotalCalculate ? tradeHistoryData.TotalCalculate.toFixed(2):"-" }</span>{" "}</b> 
               </h3>
             ) : (
               <h3>
                 <b>Total Realised P/L</b> :{" "}
-                <b><span style={{ color: "red" }}> {tradeHistoryData.TotalCalculate.toFixed(2)}</span>{" "}</b> 
+                <b><span style={{ color: "red" }}> {tradeHistoryData.TotalCalculate ? tradeHistoryData.TotalCalculate.toFixed(2) : "-"}</span>{" "}</b> 
               </h3>
             )
           ) : (

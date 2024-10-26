@@ -487,7 +487,6 @@ const TradeHistory = () => {
               let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
               let finalyupl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * upl;
 
-              console.log("finalyupl", finalyupl)
 
 
               if ((isNaN(finalyupl) || isNaN(rpl))) {

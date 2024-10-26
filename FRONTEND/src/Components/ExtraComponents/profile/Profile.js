@@ -25,9 +25,6 @@ const UserProfile = () => {
   const gotodashboard = JSON.parse(localStorage.getItem("user_details_goTo"));
   const isgotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
 
-console.log("isgotodashboard",isgotodashboard)
-console.log("gotodashboard",gotodashboard)
-
   const [UserDetails, setUserDetails] = useState([]);
   const [selectedOption, setSelectedOption] = useState("stock");
   const [fundValue, setFundValue] = useState("");

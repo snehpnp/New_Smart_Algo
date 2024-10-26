@@ -361,8 +361,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
             // await dbTest.collection(viewName).drop();
             // console.log(`View ${viewName} dropped successfully`);
 
-            // console.log("ele - id 2", ele._id, "condition[element].source ", condition[element].source)
-
+         
             // console.log(`Working on timeframe: ${timeframe}`);
             // console.log(`Working on tokensymbol: ${tokensymbol}`);
             // console.log(`Working on source: ${condition[element].source}`);
@@ -1143,13 +1142,13 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
           //       unique_column: item.name + "_" + category_id,
           //     })
           //     .then((createdServices) => {
-          //       console.log("User created and saved:", createdServices._id);
+       
           //     })
           //     .catch((err) => {
           //       try {
-          //         console.log("Error creating and saving user:", err);
+  
           //       } catch (e) {
-          //         console.log("duplicate key");
+       
           //       }
           //     });
           // }
@@ -1185,7 +1184,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
                   try {
                     console.log("Error creating and saving user:", err);
                   } catch (e) {
-                    console.log("duplicate key");
+                    ;
                   }
                 });
             }
@@ -1220,7 +1219,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
                   try {
                     console.log("Error creating and saving user:", err);
                   } catch (e) {
-                    console.log("duplicate key");
+                    ;
                   }
                 });
             }
@@ -1255,7 +1254,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
                   try {
                     console.log("Error creating and saving user:", err);
                   } catch (e) {
-                    console.log("duplicate key");
+                    ;
                   }
                 });
             }
@@ -1287,7 +1286,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
                   try {
                     console.log("Error creating and saving user:", err);
                   } catch (e) {
-                    console.log("duplicate key");
+                    ;
                   }
                 });
             }
@@ -1319,7 +1318,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
                   try {
                     console.log("Error creating and saving user:", err);
                   } catch (e) {
-                    console.log("duplicate key");
+                    ;
                   }
                 });
             }
@@ -1351,7 +1350,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
                   try {
                     console.log("Error creating and saving user:", err);
                   } catch (e) {
-                    console.log("duplicate key");
+                    ;
                   }
                 });
             }
@@ -1383,7 +1382,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
                   try {
                     console.log("Error creating and saving user:", err);
                   } catch (e) {
-                    console.log("duplicate key");
+                    ;
                   }
                 });
             }
@@ -1412,7 +1411,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
             //       try {
             //         console.log('Error creating and saving user:', err);
             //       } catch (e) {
-            //         console.log("duplicate key")
+           
             //       }
 
             //     });
@@ -1443,7 +1442,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
             //       try {
             //         console.log('Error creating and saving user:', err);
             //       } catch (e) {
-            //         console.log("duplicate key")
+            
             //       }
 
             //     });
@@ -1461,7 +1460,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
             //   item.instrumenttype == "AUCSO"
             // ) {
             //   count++;
-            //   console.log("item - OTHER CONTENT " + count + " ", item);
+       
             //   // const matchingElements = categoryResult.filter(item => item.segment === "C");
             //   // const category_id = matchingElements[0]._id
             //   services
@@ -1477,13 +1476,13 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
             //       unique_column: item.name + "_" + "c9dbdc14a9fefd971c979",
             //     })
             //     .then((createdServices) => {
-            //       console.log("User created and saved:", createdServices._id);
+        
             //     })
             //     .catch((err) => {
             //       try {
-            //         console.log("Error creating and saving user:", err);
+           
             //       } catch (e) {
-            //         console.log("duplicate key");
+           
             //       }
             //     });
             // }
@@ -2593,7 +2592,7 @@ app.get("/ssj", async (req, res) => {
             exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
             };
 
-            //console.log("updatedFindSignal ",updatedFindSignal)
+        
 
 
             var ExitMainSignals = await MainSignals.find(updatedFindSignal)

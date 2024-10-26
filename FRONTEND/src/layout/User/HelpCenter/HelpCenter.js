@@ -70,7 +70,7 @@ const ApiCreateInfo = () => {
                         setRefresh(!refresh);
                         toast.success(response.msg);
                         setTimeout(() => {
-                            navigate("/client/dashboard");
+                            navigate("/client/helpcenter");
                         }, 1000);
                     } else if (!response.status) {
                         toast.error(response.msg);
@@ -143,6 +143,8 @@ if(activeTab == "form") {
         // toast.success(`Tab changed to: ${key}`);
     };
 
+    console.log('isgotodashboard', isgotodashboard);
+
     return (
         <>
             <Content Page_title="Help Center" button_status={false}>
@@ -152,6 +154,7 @@ if(activeTab == "form") {
                             fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))}
                             formik={formik}
                             btn_name="Send"
+                            hidebtn={isgotodashboard}
                         />
                     </Tab>
                     <Tab eventKey="history" title="Help Request History">
