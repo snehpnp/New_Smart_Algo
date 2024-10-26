@@ -439,128 +439,12 @@ const Get_Option_All_Token_Chain = async () => {
                 upsert: true,
               });
             }
-<<<<<<< HEAD
-
-            const pipeline2 = [
-                {
-                    $match: {
-                        symbol: symbol,
-                        segment: 'O',
-                        expiry: { $in: expiryDatesArray }
-                    }
-                }
-            ]
-
-            const pipeline3 = [
-                {
-                    $match: {
-                        symbol: symbol,
-                        segment: 'O',
-                        expiry: { $in: expiryDatesArray }
-                    }
-                },
-                {
-                    $addFields: {
-                        absoluteDifference: {
-                            $abs: {
-                                $subtract: [{ $toInt: "$strike" }, price]
-                            }
-                        }
-                    }
-                },
-                {
-                    $group: {
-                        _id: "$strike", // Group by unique values of A
-                        minDifference: { $min: "$absoluteDifference" }, // Find the minimum absolute difference for each group
-                        document: { $first: "$$ROOT" } // Keep the first document in each group
-                    }
-                },
-                {
-                    $sort: {
-                        minDifference: 1 // Sort by the minimum absolute difference in ascending order
-                    }
-                },
-                {
-                    $limit: limit_set
-                },
-                {
-                    $sort: {
-                        _id: 1 // Sort by the minimum absolute difference in ascending order
-                    }
-                }
-            ]
-
-            const result = await Alice_token.aggregate(pipeline2);
-            const resultStrike = await Alice_token.aggregate(pipeline3);
-
-            var channelstr = ""
-            if (result.length > 0) {
-                resultStrike.forEach(element => {
-                    let call_token = "";
-                    let put_token = "";
-                    let symbol = ""
-                    let segment = ""
-                    result.forEach(async (element1) => {
-                        if (element.document.strike == element1.strike) {
-                            if (element1.option_type == "CE") {
-                                symbol = element1.symbol
-                                segment = element1.segment
-                                call_token = element1.instrument_token;
-                            } else if (element1.option_type == "PE") {
-                                symbol = element1.symbol
-                                segment = element1.segment
-                                put_token = element1.instrument_token;
-                            }
-
-
-
-                            const filter = { _id: element1.instrument_token };
-                            const update = {
-                                $set: { _id: element1.instrument_token, exch: element1.exch_seg },
-                            };
-
-                            channelstr += element1.exch_seg + "|" + element1.instrument_token + "#"
-
-                            const update_token = await token_chain.updateOne(filter, update, { upsert: true });
-
-
-
-                        }
-                    });
-
-
-                });
-
-
-                // alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
-                // final_data.push(alltokenchannellist)
-
-            }
-
-        }
-        // var concatenatedArray = ""
-
-        // final_data.forEach((data) => {
-        //     concatenatedArray += data + "#"
-        // });
-
-        // var concatenatedArray1 = concatenatedArray.substring(0, concatenatedArray.length - 1)
-        // const filter = { broker_name: "ALICE_BLUE" };
-        // const updateOperation = { $set: { Stock_chain: concatenatedArray1 } };
-        // const Update_Stock_chain = await live_price.updateOne(filter, updateOperation);
-        return
-
-
-    } catch (error) {
-        console.log("Error Get_Option_All_Token_Chain", error);
-=======
           });
         });
 
         alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
         final_data.push(alltokenchannellist);
       }
->>>>>>> 7d6b1bc4c1b9d0abcb59c34f1566ccc15338b808
     }
     var concatenatedArray = "";
 
@@ -1760,13 +1644,6 @@ const GetStrickPriceFromSheet = async () => {
   }
 };
 
-<<<<<<< HEAD
-}
-
-
-
-module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind, numberOfTrade_count_trade, AccelpixTokenUpdate, GetStrickPriceFromSheet, TruncateTableTokenChain, TruncateTableTokenChainAdd, MainSignalsRemainToken, DeleteTokenAliceToken ,TruncateTableTokenChainAdd_fiveMinute}
-=======
 module.exports = {
   service_token_update,
   TokenSymbolUpdate,
@@ -1780,4 +1657,3 @@ module.exports = {
   MainSignalsRemainToken,
   DeleteTokenAliceToken,
 };
->>>>>>> 7d6b1bc4c1b9d0abcb59c34f1566ccc15338b808
