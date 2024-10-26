@@ -177,9 +177,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                    
 
                                         var possition_qty = parseInt(Exist_entry_order.BuyQty) - parseInt(Exist_entry_order.SellQty);
-                                        // console.log("possition_qty Cash", possition_qty);
+                                       
                                         if (possition_qty == 0) {
-                                            // console.log("possition_qty Not Available", possition_qty);
+                                      
                                             BrokerResponse.create({
                                                 user_id: item._id,
                                                 receive_signal: signal_req,

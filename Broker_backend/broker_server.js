@@ -1441,7 +1441,6 @@ app.post('/broker-signals', async (req, res) => {
 
           }
 
-          //console.log("findSignal -- strike",findSignal)
 
           // ENTRY OR EXIST CHECK
           if (type == "LE" || type == "le" || type == "SE" || type == "Se") {

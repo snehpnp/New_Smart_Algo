@@ -120,7 +120,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
             // Send all requests concurrently using Promise.all
             Promise.all(requestPromises)
                 .then(responses => {
-                    // console.log("Response:", responses.data);
+                   
 
                 })
                 .catch(errors => {
@@ -312,7 +312,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                                         await PositionAgainProcess(ExistUserPositionData.data.response, ExistUserPositionData.data.item,token, signal_req, strategy, type, input_symbol, send_rr, filePath, signals, ExistExitSignal, segment
                                         )
                                     } catch (error) {
-                                        console.log("PositionAgainProcess Angel",error)  
+                                       
                                          
                                     }
                                 }
@@ -595,7 +595,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
             // Send all requests concurrently using Promise.all
             Promise.all(requestPromises)
                 .then(responses => {
-                    // console.log("Response:", responses.data);
+                    
 
                 })
                 .catch(errors => {

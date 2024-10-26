@@ -29,7 +29,7 @@
 // function getCookie(cname)
 // 	{
 
-// 		// console.log("document" ,document);
+
 // 		var name = cname + "=";
 // 		var decodedCookie = decodeURIComponent(document.cookie);
 // 		var ca = decodedCookie.split(';');
@@ -235,8 +235,7 @@
 // 		{
 // 			jQuery.each(themeOptionArr, function(optionKey, optionValue) {
 
-// 				// console.log("themeOptionArr[optionKey]" ,optionKey);
-// 				// console.log("dezSettingsOptions" ,dezSettingsOptions[optionKey]);
+
 // 				var optionData = getCookie(optionKey);
 // 				themeOptionArr[optionKey] = (optionData != '')?optionData:dezSettingsOptions[optionKey];
 // 			});

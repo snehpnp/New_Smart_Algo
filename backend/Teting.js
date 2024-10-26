@@ -1783,11 +1783,10 @@ module.exports = function (app) {
         lastElementTimeFrameViewData
       );
 
-      // console.log("averageData call strategy",averageData);
+      
       const lastElementAverageData = averageData[averageData.length - 1];
-      // console.log("Last lastElementAverageData:", lastElementAverageData);
+    
 
-      // Split the string based on "&&" or "||" using a regular expression
       if (condition != undefined) {
         const conditionArray = condition.split(/\s*(?:&&|\|\|)\s*/);
         console.log(conditionArray);
@@ -2589,7 +2588,7 @@ module.exports = function (app) {
       // Check if the condition is true or false based on the data
       if (condition) {
         // Your code for when the condition is true
-        // console.log("Condition is true");
+      
       } else {
         // Your code for when the condition is false
         console.log("Condition is false");

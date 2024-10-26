@@ -63,7 +63,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
      //    const command = `grep ,${pattern}, ${filePath_swastika}`;
        const command = `grep -E ".*,(${pattern}),.*.*(${input_symbol}).*" ${filePath_swastika}`;
      
-        console.log("command ", command)
 
         exec(command, (error, stdout, stderr) => {
 
@@ -77,7 +76,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             const parts = stdout.split(','); // Extract the content inside double quotes
 
             if(parts){
-            // console.log("Extracted Part:", parts[9]);
+        
             if (segment && segment.toUpperCase() === 'C') {
                 Tsym = parts[4];
             }
@@ -125,9 +124,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                 });
                 // Send all requests concurrently using Promise.all
                 Promise.all(requestPromises)
-                .then(responses => {
-                    // console.log("Response:", responses.data);
-                })
+                .then(responses => { })
                 .catch(errors => {
                     console.log("errors:", errors);
                   });
@@ -161,7 +158,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         // Send all requests concurrently using Promise.all
           Promise.all(requestPromises)
           .then(responses => {
-              // console.log("Response:", responses.data);
+
           })
           .catch(errors => {
               console.log("errors:", errors);
@@ -201,7 +198,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                 // Send all requests concurrently using Promise.all
                     Promise.all(requestPromises)
                     .then(responses => {
-                        // console.log("Response:", responses.data);
+                
         
                     })
                     .catch(errors => {
@@ -246,7 +243,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     // Send all requests concurrently using Promise.all
                         Promise.all(requestPromises)
                         .then(responses => {
-                            // console.log("Response:", responses.data);
+                        
             
                         })
                         .catch(errors => {
@@ -265,7 +262,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
       }
 
       else if (type == 'SX' || type == 'LX') {
-        console.log("trade exit")
+      
       
         const requestPromises = AllClientData.map(async (item) => {
     
@@ -276,8 +273,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     item.postdata.Trantype = 'S';
                 }
     
-                // console.log("price", price)
-                // console.log("item.client_services.order_type", item.client_services.order_type)
+               
     
                 if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                     item.postdata.Prc = price
@@ -314,16 +310,16 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
     
                            
                             const Exist_entry_order = response.data.Result.Data.find(item1 => item1.Token === token[0].instrument_token);
-                          //  console.log("Exist_entry_order",Exist_entry_order)
+                         
     
                             if(Exist_entry_order != undefined){
                             
                                     item.postdata.Tsym = Exist_entry_order.Tsym;
                                     const possition_qty = parseInt(Exist_entry_order.Daybuyqty) - parseInt(Exist_entry_order.Daysellqty);
-                                    // console.log("possition_qty", possition_qty);
+                                    
     
                                     if (possition_qty == 0) {
-                                        // console.log("possition_qty Not Available", possition_qty);
+                                    
                                         BrokerResponse.create({
                                             user_id: item._id,
                                             receive_signal: signal_req,
@@ -510,7 +506,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         // Send all requests concurrently using Promise.all
         Promise.all(requestPromises)
             .then(responses => {
-                // console.log("Response:", responses.data);
+           
     
             })
             .catch(errors => {
@@ -555,7 +551,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         // Send all requests concurrently using Promise.all
             Promise.all(requestPromises)
             .then(responses => {
-                // console.log("Response:", responses.data);
+               
 
             })
             .catch(errors => {

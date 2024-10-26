@@ -137,7 +137,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     axios(config)
                         .then(async (response) => {
                            
-                            console.log("response IFFL",response.data);
 
                             if (response.data.result.positionList.length > 0) {
 
@@ -150,7 +149,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                                 const Exist_entry_order = response.data.result.positionList.find(item1 => item1.ExchangeInstrumentId == token[0].instrument_token);
 
-                                console.log("Exist_entry_order ",Exist_entry_order)
 
                                 if (Exist_entry_order != undefined) {
 
