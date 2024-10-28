@@ -899,9 +899,6 @@ const HelpCenter = () => {
     return (
         <>
             {
-
-
-
                 All_Symbols.loading ? <Loader /> :
                     <>
                         <Theme_Content Page_title="Option Chain" button_status={false}>
@@ -994,11 +991,7 @@ const HelpCenter = () => {
                                         Select Option Stock
                                     </button>
                                 </div>
-
-
-
-
-                                <div className="col-md-2 d-flex justify-content-end align-items-center text-secondary mt-4">
+                            <div className="col-md-2 d-flex justify-content-end align-items-center text-secondary mt-4">
                                     <button
                                         className="btn btn-primary me-2"
                                         onClick={(e) => ExcuteTradeButton()}
@@ -1010,13 +1003,8 @@ const HelpCenter = () => {
                                 </div>
                             </div>
 
-
-
-
-
-                            <div className='option-chain mt-2'>
-
-                                <FullDataTable TableColumns={columns} tableData={OptionChainData.data} pagination1={true}></FullDataTable>
+                     <div className='option-chain mt-2'>
+                       <FullDataTable TableColumns={columns} tableData={OptionChainData.data} pagination1={true}></FullDataTable>
                             </div>
 
 

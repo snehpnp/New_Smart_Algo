@@ -34,10 +34,48 @@ class Strategy {
             const page = 1;
             const pageSize = 10;
             var pipeline = ""
+            const currentDate = new Date();
+            const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const startOfNextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
 
             if (searchQuery == "") {
 
+
                 pipeline = [
+                    {
+                        $addFields: {
+                            expiry: {
+                                $dateFromString: {
+                                    dateString: {
+                                        $concat: [
+                                            { $substr: ["$expiry", 4, 4] }, // Year (YYYY)
+                                            "-",
+                                            { $substr: ["$expiry", 2, 2] }, // Month (MM)
+                                            "-",
+                                            { $substr: ["$expiry", 0, 2] }  // Day (DD)
+                                        ]
+                                    },
+                                    format: "%Y-%m-%d"
+                                }
+                            }
+                        }
+                    },
+
+                    {
+                        $match: {
+                            $or: [
+                                { segment: 'C' },
+                                { segment: 'F' },
+                                { segment: 'MF' },
+                                { exch_seg: { $ne: 'NCO' } },
+                            ],
+                        },
+                        expiry: {
+                            $gte: startOfMonth,
+                            $lt: startOfNextMonth
+                        },
+                        exch_seg: { $ne: 'NCO' }
+                    },
                     {
                         $skip: (page - 1) * pageSize
                     },
@@ -48,10 +86,41 @@ class Strategy {
 
             } else {
 
+
                 pipeline = [
+
                     {
+                        $addFields: {
+                            expiry: {
+                                $dateFromString: {
+                                    dateString: {
+                                        $concat: [
+                                            { $substr: ["$expiry", 4, 4] }, // Year (YYYY)
+                                            "-",
+                                            { $substr: ["$expiry", 2, 2] }, // Month (MM)
+                                            "-",
+                                            { $substr: ["$expiry", 0, 2] }  // Day (DD)
+                                        ]
+                                    },
+                                    format: "%Y-%m-%d"
+                                }
+                            }
+                        }
+                    },
+                    {  
+                        
                         $match: {
-                            tradesymbol: { $regex: "^" + searchQuery, $options: "i" }
+                            tradesymbol: { $regex: "^" + searchQuery, $options: "i" },
+                            $or: [
+                                { segment: 'C' },
+                                { segment: 'F' },
+                                { segment: 'MF' }
+                            ],
+                            expiry: {
+                                $gte: startOfMonth,
+                                $lt: startOfNextMonth
+                            },
+                           exch_seg: { $ne: 'NCO' } 
                         }
                     },
                     {
@@ -64,12 +133,12 @@ class Strategy {
 
             }
 
-      
+
 
             const get_user = await Alice_token.aggregate(pipeline);
 
             if (get_user.length > 0) {
-                return  res.send({ status: true, msg: "Get Permission Successfully", data: get_user });
+                return res.send({ status: true, msg: "Get Permission Successfully", data: get_user });
             } else {
                 return res.send({ status: false, msg: "Empty data", data: [] });
             }
@@ -86,7 +155,7 @@ class Strategy {
             const get_indicator = await collection.aggregate([]).toArray();
 
             if (get_indicator.length > 0) {
-                return  res.send({ status: true, msg: "Get Permission Successfully", data: get_indicator });
+                return res.send({ status: true, msg: "Get Permission Successfully", data: get_indicator });
             } else {
                 return res.send({ status: false, msg: "Empty data", data: [] });
             }

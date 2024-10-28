@@ -1,6 +1,7 @@
 "use strict";
 const db = require('../../Models');
 const mongoose = require('mongoose');
+const { format } = require('date-fns');
 // const MongoClient = require('mongodb').MongoClient;
 const axios = require('axios');
 const ObjectId = mongoose.Types.ObjectId;
@@ -21,7 +22,8 @@ const dbTest = db.dbTest;
 
 
 
-const { Alice_Socket, getSocket } = require('../../Helper/Alice_Socket');
+const { Alice_Socket, getSocket, updateChannelAndSend } = require('../../Helper/Alice_Socket');
+
 const { Socket_data } = require('../../Helper/Socket_data');
 
 const { getIO } = require('../../Helper/BackendSocketIo');
@@ -37,11 +39,10 @@ const { getIO } = require('../../Helper/BackendSocketIo');
 class MakeStartegy {
 
   async getcandledata(req, res) {
-
+    //  console.log("req,",req.body)
     let timeFrame = req.body.timeframe;
     let tokensymbol = req.body.tokensymbol;
     let collectionName = 'M' + timeFrame + '_' + tokensymbol;
-
 
     try {
 
@@ -67,11 +68,11 @@ class MakeStartegy {
 
 
       } else {
-        return ({ status: false, msg: "Empty data", data: [] })
+        return res.send({ status: false, msg: "Empty data", data: [] })
       }
 
     } catch (e) {
-
+      return res.send({ status: false, msg: "Empty data", data: [] })
     }
 
 
@@ -140,12 +141,50 @@ class MakeStartegy {
     try {
 
       const pipeline = [
+        
+        {
+            $group: {
+                _id: "$show_strategy", // Group by show_strategy
+                firstDocument: { $first: "$$ROOT" }, // Get the first document in each group
+                secondDocument: { $push: "$$ROOT" } // Collect all documents in this group
+            }
+        },
+        {
+            $project: {
+                _id: "$firstDocument._id",
+                user_id: "$firstDocument.user_id",
+                name: "$firstDocument.name",
+                tokensymbol: "$firstDocument.tokensymbol",
+                show_strategy: "$firstDocument.show_strategy",
+                symbol_name: "$firstDocument.symbol_name",
+                strategy_name: "$firstDocument.strategy_name",
+                segment: "$firstDocument.segment",
+                strike_price: "$firstDocument.strike_price",
+                option_type: "$firstDocument.option_type",
+                expiry: "$firstDocument.expiry",
+                indicator: "$firstDocument.indicator",
+                timeframe: "$firstDocument.timeframe",
+                price_source: "$firstDocument.price_source",
+                period: "$firstDocument.period",
+                inside_indicator: "$firstDocument.inside_indicator",
+                condition: "$firstDocument.condition",
+                exch_seg: "$firstDocument.exch_seg",
+                condition_source: "$firstDocument.condition_source",
+                buffer_value: "$firstDocument.buffer_value",
+                type: { $arrayElemAt: ["$secondDocument.type", 0] }, // Get the type of the first document
+                _id_secondObject: { $arrayElemAt: ["$secondDocument._id", 1] }, // Get the _id of the second document if it exists
+                type_secondObject: { $arrayElemAt: ["$secondDocument.type", 1] }, // Get the type of the second document if it exists
+                createdAt: "$firstDocument.createdAt",
+                updatedAt: "$firstDocument.updatedAt",
+            }
+        },
+
         { $sort: { _id: -1 } }
-      ]
+      ];
+
       const result = await UserMakeStrategy.aggregate(pipeline)
-
-
       if (result.length > 0) {
+        console.log("result ", result)
         res.send({ status: true, msg: "Get All make strategy", data: result });
       } else {
         res.send({ status: false, msg: "Empty data", data: [] });
@@ -159,7 +198,38 @@ class MakeStartegy {
   //Delete make strateg
   async DeleteMakeStartegy(req, res) {
     try {
-      const objectId = new ObjectId(req.body.id);
+
+      const { _id, timeframe, tokensymbol, name, show_strategy, type } = req.body.data;
+      const objectId = new ObjectId(_id);
+      const exist_view = `M${timeframe}_${tokensymbol}_make_${name}`;
+
+      let checkType = "BUY"
+      if (type == "BUY") {
+        checkType = "SELL"
+      }
+
+      const matchNameStartegy = await UserMakeStrategy.findOne({ type: checkType, show_strategy: show_strategy });
+
+      try {
+        const collectionExists = await dbTest.listCollections({ name: exist_view }).hasNext();
+        if (collectionExists) {
+          await dbTest.collection(exist_view).drop();
+        }
+      } catch (error) {
+      }
+
+      if (matchNameStartegy != null) {
+        const matchNameStartegy_exist_view = `M${matchNameStartegy.timeframe}_${matchNameStartegy.tokensymbol}_make_${matchNameStartegy.name}`;
+        try {
+          const collectionExists = await dbTest.listCollections({ name: matchNameStartegy_exist_view }).hasNext();
+          if (collectionExists) {
+            await dbTest.collection(matchNameStartegy_exist_view).drop();
+          }
+        } catch (error) {
+        }
+        await UserMakeStrategy.deleteOne({ name: matchNameStartegy.name });
+      }
+
       const result = await UserMakeStrategy.deleteOne({ _id: objectId });
       if (result.acknowledged == true) {
         return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
@@ -552,6 +622,9 @@ class MakeStartegy {
 
         }
 
+        var alltokenchannellist = channelList.substring(0, channelList.length - 1);
+        updateChannelAndSend(alltokenchannellist)
+
 
         await UserMakeStrategy.create({
           name: req.body.name + req.body.user_id + req.body.type + tokensymbol,
@@ -661,7 +734,6 @@ class MakeStartegy {
               let pipeline = [];
 
               const conditions = await parseConditionString(createUserMakeStrategy.condition);
-
               const matchStage = await generateMongoCondition(conditions);
 
               pipeline.push({
@@ -700,9 +772,26 @@ class MakeStartegy {
               });
 
 
+              // pipeline.push({
+              //   $addFields: {
+              //     isCondition: matchStage
+              //   }
+              // });
+
               pipeline.push({
                 $addFields: {
-                  isCondition: matchStage
+                  isCondition: {
+                    $cond: {
+                      if: {
+                        $eq: [
+                          { $size: { $ifNull: ["$" + arraySource[0] + "Data", []] } },  // Check size of dynamic source + 'Data'
+                          0
+                        ]
+                      },
+                      then: false,  // If it's empty, set isCondition to false
+                      else: matchStage  // Otherwise, use matchStage as isCondition
+                    }
+                  }
                 }
               });
 
@@ -756,11 +845,24 @@ class MakeStartegy {
                 }
               });
 
+              // pipeline.push({
+              //   $addFields: {
+              //     isCondition: matchStage
+              //   }
+              // });
+
               pipeline.push({
                 $addFields: {
-                  isCondition: matchStage
+                  isCondition: {
+                    $cond: {
+                      if: { $eq: [{ $size: "$timeFrameViewData" }, 0] },  // Check if timeFrameViewData is empty
+                      then: false,  // If it's empty, set isCondition to false
+                      else: matchStage  // Otherwise, use matchStage (the original condition)
+                    }
+                  }
                 }
               });
+
 
               let viewName = 'M' + createUserMakeStrategy.timeframe + '_' + createUserMakeStrategy.tokensymbol + '_make_' + createUserMakeStrategy.name;
 
@@ -781,10 +883,6 @@ class MakeStartegy {
                 console.log(`Error creating view ${viewName}:`, error);
               }
             }
-
-
-
-
             //res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
 
           }).catch((err) => {
@@ -795,22 +893,13 @@ class MakeStartegy {
           });
       }
 
-      var alltokenchannellist = channelList.substring(0, channelList.length - 1);
 
-
-      const suscribe_token = await Socket_data(alltokenchannellist);
       res.send({ status: true, msg: "successfully Add!", data: [] });
     } catch (e) {
     }
   }
 
-
-
-
 }
-
-
-
 
 
 
@@ -1157,14 +1246,14 @@ let rr = 1
 async function run() {
   try {
     // Define the function to be executed
-    // const executeFunction = async () => {
-    //   // console.log("DONEEE executeFunction");
-    //   const data = await dbTest.collection('strategyViewNames').find({}).toArray();
-    //   fetchDataFromViews(data);
-    // };
+    const executeFunction = async () => {
+      // console.log("DONEEE executeFunction");
+      const data = await dbTest.collection('strategyViewNames').find({}).toArray();
+      await fetchDataFromViews(data);
+    };
 
     const exitOpentrade = async () => {
-   //   console.log("DONEEE exitOpentrade")
+      //   console.log("DONEEE exitOpentrade")
 
 
       if (weekday != 'Sunday' && weekday != 'Saturday') {
@@ -1282,7 +1371,7 @@ async function run() {
       // Delay for 1000 milliseconds (1 second)
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // await executeFunction();
+      await executeFunction();
 
       // Open Position Function Evey Second
       const indiaTimezoneOffset = 330;
@@ -1290,7 +1379,7 @@ async function run() {
       const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
       const currentMinute = currentTimeInMinutes % 60;
       // if (currentHour >= 9 && currentMinute >= 14 && currentHour <= 15 && currentMinute <= 31) {
-        await exitOpentrade()
+      await exitOpentrade()
       // }
 
     }
@@ -1318,10 +1407,13 @@ async function fetchDataFromViews(viewNames) {
           timeFrameViewData: { $ne: null, $ne: [] }
         }).toArray();
 
-        // console.log(`Data from view ${valView.viewName}:`, data);
+        //console.log(`Data from view ${valView.viewName}:`, data);
         if (data.length > 0) {
           //console.log(`Data from view ${valView.viewName}:`, data);
           let val = data[0];
+
+          const date = new Date(val.expiry);
+          val.expiry = format(date, 'ddMMyyyy');
 
           let entry_type = 'LE';
           if (val.type === 'BUY') {
@@ -1405,7 +1497,7 @@ async function fetchDataFromViews(viewNames) {
             };
             await axios.request(config)
               .then((response) => {
-             
+
               })
               .catch((error) => {
                 console.log('Error ', error);
@@ -1428,7 +1520,7 @@ async function fetchDataFromViews(viewNames) {
           const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
           if (Check_same_trade_data) {
 
-   
+
             let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
               $set: {
                 status: "1",

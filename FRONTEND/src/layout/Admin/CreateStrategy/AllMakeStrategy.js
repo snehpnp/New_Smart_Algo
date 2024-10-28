@@ -89,7 +89,31 @@ const AllMakeStrategy = () => {
             dataField: 'type',
             text: 'Transaction Type',
             sort: true,
+            formatter: (cell, row) => (
+                <div>
+                    {row.type}
+                    <Link to={user_role === 'ADMIN' ? `/admin/MakeStrategy/edit/${row._id}` : user_role === 'SUBADMIN' ? `/subadmin/MakeStrategy/edit/${row._id}` : ""} data-toggle="tooltip"
+                        data-placement="top" title="Edit">
+                        < Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                    </Link>
+                    
+                    
+                    {row.type_secondObject != undefined ? row.type_secondObject
+                        : ""
+                    }
 
+                    {row._id_secondObject != undefined ? 
+                    
+                    <Link to={user_role === 'ADMIN' ? `/admin/MakeStrategy/edit/${row._id_secondObject}` : user_role === 'SUBADMIN' ? `/subadmin/MakeStrategy/edit/${row._id_secondObject}` : ""} data-toggle="tooltip"
+                        data-placement="top" title="Edit">
+                        < Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                    </Link>
+                        : ""
+                    }
+
+                </div>
+
+            ),
 
         },
         {
@@ -114,10 +138,10 @@ const AllMakeStrategy = () => {
             formatter: (cell, row) => (
                 <div>
 
-                    <Link to={ user_role=== 'ADMIN' ? `/admin/MakeStrategy/edit/${row._id}` : user_role==='SUBADMIN' ? `/subadmin/MakeStrategy/edit/${row._id}` : ""} data-toggle="tooltip" 
-                    data-placement="top" title="Edit">
+                    {/* <Link to={user_role === 'ADMIN' ? `/admin/MakeStrategy/edit/${row._id}` : user_role === 'SUBADMIN' ? `/subadmin/MakeStrategy/edit/${row._id}` : ""} data-toggle="tooltip"
+                        data-placement="top" title="Edit">
                         < Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </Link>
+                    </Link> */}
                     <span data-toggle="tooltip" data-placement="top" title=" Delete">
                         <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={(e) => DeleteGroup(row)} />
                     </span>
@@ -131,7 +155,7 @@ const AllMakeStrategy = () => {
 
     // DELETE GROUP
     const DeleteGroup = async (row) => {
- 
+
         if (window.confirm("Do You Really Want To Delete ?")) {
 
             await dispatch(delete_make_strategy(
@@ -139,13 +163,13 @@ const AllMakeStrategy = () => {
                     req: {
                         page: "1",
                         limit: "100",
-                        id: row._id
+                        data: row
                     },
                     token: AdminToken,
                 }
             )).unwrap()
                 .then((response) => {
-                  
+
                     if (response.status) {
                         toast.success(response.msg)
                         setrefresh(!refresh)
@@ -186,7 +210,7 @@ const AllMakeStrategy = () => {
                 }
                 setOriginalData(response.data);
             })
-            
+
     }
 
     useEffect(() => {
@@ -196,7 +220,7 @@ const AllMakeStrategy = () => {
 
 
 
- 
+
     //  MANAGE MULTIFILTER
     useEffect(() => {
         const filteredData = originalData.filter((item) => {
@@ -224,7 +248,7 @@ const AllMakeStrategy = () => {
     const [selected1, setSelected1] = useState([]);
 
     const handleOnSelect = (row, isSelect) => {
-        
+
         if (isSelect) {
             setSelected([...selected, row._id]);
             setSelected1([...selected1, row]);
@@ -259,7 +283,7 @@ const AllMakeStrategy = () => {
 
 
     const SelectedAllDelete = async (e) => {
-        
+
         if (selected.length > 0) {
             // alert("okk");
             if (window.confirm("Do You Really Want To Delete Selected Row ?")) {
@@ -272,7 +296,7 @@ const AllMakeStrategy = () => {
                     }
                 )).unwrap()
                     .then((response) => {
-                    
+
                         if (response.status) {
                             toast.success(response.msg)
                             setrefresh(!refresh)
@@ -293,7 +317,7 @@ const AllMakeStrategy = () => {
             {
                 AllMakeStrategy.loading ? <Loader /> :
                     <>
-                         <Content Page_title="All Make strategies" button_title="Create Strategy" route={user_role == "ADMIN" ? "/admin/createstrategy" : user_role == "SUBADMIN" ? "/subadmin/createstrategy" : ""}>
+                        <Content Page_title="All Make strategies" button_title="Create Strategy" route={user_role == "ADMIN" ? "/admin/createstrategy" : user_role == "SUBADMIN" ? "/subadmin/createstrategy" : ""}>
 
                             <div className="row">
                                 <div className="col-lg-4">
@@ -393,7 +417,7 @@ const AllMakeStrategy = () => {
                                                     text: 'Go To Dashboard',
                                                     formatter: (cell, row, rowIndex) =>
                                                         <>
-                                                             
+
                                                             <button
                                                                 className={`btn  ${row.user.AppLoginStatus == '1' || row.user.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
 
