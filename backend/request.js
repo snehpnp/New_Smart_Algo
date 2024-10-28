@@ -359,15 +359,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
             }
 
             // await dbTest.collection(viewName).drop();
-            // console.log(`View ${viewName} dropped successfully`);
-
          
-            // console.log(`Working on timeframe: ${timeframe}`);
-            // console.log(`Working on tokensymbol: ${tokensymbol}`);
-            // console.log(`Working on source: ${condition[element].source}`);
-            // console.log(`Working on offset: ${condition[element].offset}`);
-            // console.log(`Working on indicator_field: ${condition[element].indicator_field}`);
-            // console.log(`Working on period: ${condition[element].period}`);
 
             // let viewName = condition[element].source + '_M' + timeframe + '_' + tokensymbol;
             // let collectionViewName = 'M' + timeframe + '_' + tokensymbol;
@@ -1389,7 +1381,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
 
             // if (item.instrumenttype == 'FUTSTK' && item.exch_seg=="BFO") {
             //   count++
-            //   // console.log('item - CO ' + count + ' ', item)
+          
             //   const matchingElements = categoryResult.filter(item => item.segment === "BO");
             //   const category_id = matchingElements[0]._id
 
@@ -1405,11 +1397,11 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
             //     unique_column: item.name + '_' + category_id
             //   })
             //     .then((createdServices) => {
-            //       console.log('User created and saved:', createdServices._id)
+          
             //     })
             //     .catch((err) => {
             //       try {
-            //         console.log('Error creating and saving user:', err);
+          
             //       } catch (e) {
            
             //       }
@@ -1420,7 +1412,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
 
             // else if (item.instrumenttype == 'FUTIDX' && item.exch_seg=="BFO") {
             //   count++
-            //   // console.log('item - CO ' + count + ' ', item)
+           
             //   const matchingElements = categoryResult.filter(item => item.segment === "BO");
             //   const category_id = matchingElements[0]._id
 
@@ -1436,11 +1428,11 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
             //     unique_column: item.name + '_' + category_id
             //   })
             //     .then((createdServices) => {
-            //       console.log('User created and saved:', createdServices._id)
+            
             //     })
             //     .catch((err) => {
             //       try {
-            //         console.log('Error creating and saving user:', err);
+      
             //       } catch (e) {
             
             //       }

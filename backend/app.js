@@ -39,7 +39,7 @@ const server = http.createServer(app);
 app.use(express.json());
 
 // REQUIRE File
-// require("./App/Cron/cron");
+require("./App/Cron/cron");
 // require("./App/Cron/cron_ss");
 // Routes all
 require("./App/Routes")(app);
@@ -52,9 +52,8 @@ require("./Teting")(app);
 
 // Connect Local backend Socket
 const { setIO, getIO } = require("./App/Helper/BackendSocketIo");
-const { forEach } = require("mathjs");
 
-//  ----------------------------   for help center ------------------
+
 const io = socketIo(server, {
   cors: {
     origin: "*",

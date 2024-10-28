@@ -20,7 +20,7 @@ async function DashboardView() {
 
     // If the view exists, exit the function
     if (views.length > 0) {
-      console.log("dashboard_data view already exists");
+
       return;
     }
 
@@ -443,7 +443,7 @@ async function DashboardView() {
       viewOn: "users",
       pipeline,
     });
-    console.log("dashboard_data View created successfully.");
+    
     return;
   } catch (error) {
     console.log("Error dashboard_data Create:", error);
@@ -454,7 +454,7 @@ async function deleteDashboard() {
   try {
     // Drop the view if it exists
     await dashboard_data.drop();
-    console.log("dashboard_data view deleted successfully");
+ 
   } catch (error) {
     console.log("Error dashboard_data Delete:", error);
   }

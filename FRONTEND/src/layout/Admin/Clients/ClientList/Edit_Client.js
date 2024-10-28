@@ -83,7 +83,7 @@ const EditClient = () => {
             loading: false,
             data: response,
           });
-          console.log(response.data[0].plan_id);
+         
           setSelectedPlan(response.data[0].plan_id);
         }
       });

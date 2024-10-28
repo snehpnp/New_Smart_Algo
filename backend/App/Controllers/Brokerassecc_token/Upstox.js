@@ -22,7 +22,6 @@ class Upstox {
     var tokenCode = req.query.code;
     var user_email = req.query.state;
 
-console.log("tokenCode", tokenCode);
 
     try {
       if (tokenCode != undefined) {
@@ -66,7 +65,6 @@ console.log("tokenCode", tokenCode);
             .then(async (response) => {
               const accessToken = response.data.access_token;
 
-              console.log("response.data", response.data);
 
               if (accessToken !== undefined) {
                 let result = await User.findByIdAndUpdate(Get_User[0]._id, {
@@ -92,7 +90,7 @@ console.log("tokenCode", tokenCode);
               }
             })
             .catch((error) => {
-                console.log("Error Theme error-", error.response.data);
+             
               return res.redirect(redirect_uri);
             });
         } else {

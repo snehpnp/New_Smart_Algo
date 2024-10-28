@@ -469,7 +469,6 @@ const AdminsList = () => {
         text: "An issue occurred during the server update. The UI will remain unaffected.",
       });
 
-      console.log("Error during server update:", error);
     }
   };
 

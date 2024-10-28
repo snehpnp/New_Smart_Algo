@@ -297,7 +297,7 @@ const GetAllBrokerResponse = async (user_info, res) => {
 
         axios(config)
           .then(async (response) => {
-            console.log("response", response.data);
+        
 
             // if (response.data.IsError != true) {
             //   const result_order = response.data.Result.Data.find(

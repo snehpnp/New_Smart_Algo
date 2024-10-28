@@ -1741,15 +1741,11 @@ module.exports = function (app) {
         get_final_data = get_view_data.map((item) => item.low);
       }
 
-      //  console.log("timeFrameViewData",timeFrameViewData);
+   
 
       const lastElementTimeFrameViewData =
         timeFrameViewData[timeFrameViewData.length - 1];
 
-      console.log(
-        "Last lastElementTimeFrameViewData: 1 ",
-        lastElementTimeFrameViewData
-      );
 
       let averageData = "";
 
@@ -1778,10 +1774,7 @@ module.exports = function (app) {
         }
       }
 
-      console.log(
-        "Last lastElementTimeFrameViewData: 2 ",
-        lastElementTimeFrameViewData
-      );
+  
 
       
       const lastElementAverageData = averageData[averageData.length - 1];
@@ -1789,7 +1782,7 @@ module.exports = function (app) {
 
       if (condition != undefined) {
         const conditionArray = condition.split(/\s*(?:&&|\|\|)\s*/);
-        console.log(conditionArray);
+      
         if (conditionArray.length > 0) {
         }
       }
@@ -1845,19 +1838,19 @@ module.exports = function (app) {
           .aggregate(pipelineGetPrice)
           .toArray();
 
-        console.log("getPriceData - ", getPriceData[0].lp);
+     
 
         sendSignanl(lastElementTimeFrameViewData, element, getPriceData[0].lp);
       }
     } else {
-      // console.log(`Collection ${collectionName} does not exist.`);
+   
     }
   }
 
   function evaluateSingleCondition(condition, data) {
-    console.log("condition", condition);
+
     const [variable, operator, value] = condition.split(/\s*(>|<|>=|<=|=)\s*/);
-    // console.log("value", data[value]);
+
     //const numericValue = parseFloat(value);
     const numericValue = parseFloat(data[value]);
     switch (operator) {
@@ -1877,8 +1870,7 @@ module.exports = function (app) {
   }
 
   function sendSignanl(lastElementTimeFrameViewData, element, price) {
-    console.log("signal sendd element", element);
-    console.log("signal sendd");
+   
     const dt_date = new Date().getTime();
 
     let type = "LE";
@@ -1940,7 +1932,6 @@ module.exports = function (app) {
       "|" +
       client_key +
       "|demo";
-    console.log("request", request);
 
     var axios = require("axios").default;
 
@@ -1958,7 +1949,7 @@ module.exports = function (app) {
     axios
       .request(options)
       .then(function (response) {
-        console.log(response.data);
+  
       })
       .catch(function (error) {
         console.log(error);
@@ -2026,7 +2017,6 @@ module.exports = function (app) {
 
     const result = await UserMakeStrategy.aggregate(pipeline);
 
-    // console.log("result",result)
 
     if (result.length > 0) {
       result.forEach((element) => {
@@ -2048,11 +2038,10 @@ module.exports = function (app) {
 
         if (collectionName != "system.views") {
           await dbTradeTools.collection(collectionName).drop();
-          console.log(`Dropped collection: ${collectionName}`);
+         
         }
       }
 
-      console.log("All collections dropped.");
     } catch (error) {
       console.log("Error:", error);
     } finally {

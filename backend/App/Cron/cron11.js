@@ -841,10 +841,9 @@ function createUserDataArray(data, segment) {
     let count = 0
     return data.map(element => {
         //   count++
-        //   console.log("element.symbol",element , "count - ",count)
+
         // if (!element.name) {
-        //     console.log(`Skipping element with empty name: ${element}`);
-        //     console.log(`token: ${element.token}`);
+
         //     return null;
         // }
         const option_type = element.symbol.slice(-2);
@@ -879,7 +878,7 @@ function createUserDataArray(data, segment) {
 }
 
 async function insertData(dataArray) {
-    //console.log("dataArray ",dataArray)
+  
     try {
         const existingTokens = await Alice_token.distinct("instrument_token", {});
         const filteredDataArray = dataArray.filter(userData => {
@@ -959,7 +958,6 @@ const TokenSymbolUpdate = async () => {
                 element.instrumenttype === "" && element.exch_seg === "BSE" && element.name != ""
             );
 
-            //console.log("filteredDataBC", filteredDataBC.length)
 
             // Segment O -OPTION
             const userDataSegment_O = await createUserDataArray(filteredDataO, "O");

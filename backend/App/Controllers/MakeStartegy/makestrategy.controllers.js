@@ -39,7 +39,7 @@ const { getIO } = require('../../Helper/BackendSocketIo');
 class MakeStartegy {
 
   async getcandledata(req, res) {
-    //  console.log("req,",req.body)
+
     let timeFrame = req.body.timeframe;
     let tokensymbol = req.body.tokensymbol;
     let collectionName = 'M' + timeFrame + '_' + tokensymbol;
@@ -1371,7 +1371,7 @@ async function run() {
       // Delay for 1000 milliseconds (1 second)
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      await executeFunction();
+      // await executeFunction();
 
       // Open Position Function Evey Second
       const indiaTimezoneOffset = 330;

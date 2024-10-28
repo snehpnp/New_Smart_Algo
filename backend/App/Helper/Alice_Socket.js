@@ -27,7 +27,7 @@ const url = "wss://ws1.aliceblueonline.com/NorenWS/"
 
 const Alice_Socket = async () => {
   var rr = 0;
-  // console.log("INSIDEE")
+ 
   let channelstradd = "";
   const uniqueTokens = new Set();
   //Main SignalS code
@@ -152,7 +152,7 @@ const Alice_Socket = async () => {
 
   ]
   const result = await MainSignals_modal.aggregate(pipeline)
-  // console.log("result MainSignals_modal ", result)
+  
   if (result.length > 0) {
    
     const resultString = result.reduce((acc, { token, exch_seg }) => {
@@ -295,7 +295,6 @@ const Alice_Socket = async () => {
     }
   }
 
-// console.log("channelstradd  ", channelstradd)
 
   var socket = null
   var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
@@ -318,7 +317,6 @@ const Alice_Socket = async () => {
   var alltokenchannellist = channelstradd.substring(0, channelstradd.length - 1);
 
 
-  // console.log("alltokenchannellist ", alltokenchannellist)
   var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
   var userid = broker_infor.user_id
   var userSession1 = broker_infor.access_token
@@ -375,9 +373,9 @@ function openSocketConnection(channelList, userid, userSession1) {
 
   ws.onmessage = async function (msg) {
     const response = JSON.parse(msg.data)
-    //console.log("response -",response)
+
     if (response.tk) {
-      //  console.log("response -",response.tk)
+     
       // const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk });
       // if (Make_startegy_token) {
       //   await connectToDB(response.tk, response)
@@ -399,7 +397,7 @@ function openSocketConnection(channelList, userid, userSession1) {
 
       }
     } else {
-      // console.log("else", response)
+
     }
 
 
@@ -425,7 +423,7 @@ function sendChannelList(channelList) {
           t: 't'
       };
       ws.send(JSON.stringify(json));  // Send channel list to server
-      // console.log("Channel list sent:", channelList);
+      
   } else {
     console.log("WebSocket is not open. Cannot send channel list.");
   }
@@ -444,7 +442,7 @@ const getSocket = () => {
 };
 
 const socketRestart = async () => {
-  //console.log("socketRestart")
+
   await Alice_Socket()
 };
 
@@ -667,7 +665,7 @@ async function createViewM3(collectionName) {
 
 
   } catch (err) {
-    // console.log('Error View Create 5 minute:', err);
+   
   }
 
 
@@ -753,7 +751,7 @@ async function createViewM5(collectionName) {
 
 
   } catch (err) {
-    // console.log('Error View Create 5 minute:', err);
+  
   }
 
 

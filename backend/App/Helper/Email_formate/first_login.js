@@ -6,7 +6,7 @@ const company_information = db.company_information;
 var firstOptPass = async (data) => {
   try {
     var Companydata = await company_information.find();
-    console.log("Companydata", Companydata[0].panel_name)
+    
     if (Companydata[0].panel_name == "darixosolution") {
       return `<!doctype html>
               <html lang="en-US">

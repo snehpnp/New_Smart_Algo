@@ -836,7 +836,6 @@ class Tradehistory {
         });
       }
 
-      // console.log("TotalTrade", TotalTrade);
 
       return res.send({
         status: true,

@@ -26,17 +26,10 @@ import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 
 const TradeHistory = () => {
     const dispatch = useDispatch();
-
-
-
-
-
     const token = JSON.parse(localStorage.getItem("user_details")).token;
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
-
     const [showModal, setshowModal] = useState(false);
     const [searchInput, setSearchInput] = useState('');
-
     const [refresh, setrefresh] = useState(false);
     const [ButtonDisabled, setButtonDisabled] = useState(false);
     const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
@@ -46,19 +39,8 @@ const TradeHistory = () => {
     const [PanelKey, setPanelKey] = useState('');
     const [SocketState, setSocketState] = useState("null");
     const [getBrokerUrl, setBrokerUrl] = useState('')
-
     const [selected, setSelected] = useState([]);
     const [selected1, setSelected1] = useState([]);
-
-
-
-
-
-
-
-
-
-
     const [disabled, setDisabled] = useState(false);
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
 
@@ -66,10 +48,7 @@ const TradeHistory = () => {
         setDisabled(true);
     }
 
-
     // --------------- FOR GET PANEL KEY-----------------------
-
-
     const getPanelDetails = async () => {
         await dispatch(GET_COMPANY_INFOS())
 
@@ -80,7 +59,6 @@ const TradeHistory = () => {
                 setBrokerUrl(res.broker_url)
             });
     };
-
 
     const getPanelKey = async (e) => {
         await dispatch(
@@ -97,7 +75,6 @@ const TradeHistory = () => {
 
             });
     };
-
 
     useEffect(() => {
         getPanelDetails()
@@ -150,7 +127,6 @@ const TradeHistory = () => {
     useEffect(() => {
         Get_Position();
     }, [refresh, searchInput]);
-
 
     const columns = [
         {
@@ -369,7 +345,6 @@ const TradeHistory = () => {
 
     const SetStopLostPrice = async (event, name, row, qty_persent, symbol) => {
 
-
         let value = event.target.value
         if (name == "exit_time") {
             value = (event.target.value).replace(":", "")
@@ -423,7 +398,7 @@ const TradeHistory = () => {
                             if (response.status) {
                                 setPanelKey(response.data)
                             }
-                            return
+                       
                             toast.success(response.msg);
                             setrefresh(!refresh)
                             setSelected1([])

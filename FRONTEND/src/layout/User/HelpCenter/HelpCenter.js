@@ -117,7 +117,7 @@ if(activeTab == "form") {
         await dispatch(GET_MESSAGE_BRODS({ id:userId  ,token: token }))
             .unwrap()
             .then((response) => {
-                console.log('response', response);
+             
                 if (response.status) {
                     setBroadcastData(response.data);
                 }
@@ -143,7 +143,6 @@ if(activeTab == "form") {
         // toast.success(`Tab changed to: ${key}`);
     };
 
-    console.log('isgotodashboard', isgotodashboard);
 
     return (
         <>

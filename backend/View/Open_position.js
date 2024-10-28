@@ -337,7 +337,6 @@ async function createView() {
                 pipeline: pipeline
             });
     
-            console.log(`open_position View "${viewName}" created successfully.`);
           }
 
       
@@ -395,7 +394,6 @@ async function open_position_excute(req, res) {
             pipeline: pipeline,
         });
 
-        console.log('open open_position_excute View created successfully.');
        return;
 
     } catch (error) {
