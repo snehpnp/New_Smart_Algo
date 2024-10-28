@@ -107,10 +107,10 @@ app.post("/pm2/update", async (req, res) => {
             conn.end();
           })
           .on("data", (data) => {
-            // console.log(`STDOUT: ${data}`);
+            
           })
           .stderr.on("data", (data) => {
-            // console.log(`STDERR: ${data}`);
+          
           });
       });
     })
@@ -135,9 +135,6 @@ app.get('/UpdateChannel/:c/:e', async (req, res) => {
   
    TruncateTableTokenChainAdd_fiveMinute()
   return res.send({ status: true, msg: 'Channel Update' });
-
-
-
 
   const { updateChannelAndSend } = require('./App/Helper/Alice_Socket')
   

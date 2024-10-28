@@ -150,6 +150,51 @@ class TradeHistory {
             }
 
 
+
+
+
+            const groupedData = await MainSignals.aggregate([
+                {
+                  $match: {
+                    createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
+                    // client_persnal_key: client_persnal_key1,
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "signals",
+                    localField: "signals_id",
+                    foreignField: "_id",
+                    as: "result",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "services",
+                    localField: "symbol",
+                    foreignField: "name",
+                    as: "result1",
+                  },
+                },
+                { $sort: { _id: -1 } },
+                { $match: { $expr: { $gt: [{ $size: "$result" }, 0] } } },
+                { $match: { $expr: { $gt: [{ $size: "$result1" }, 0] } } },
+              ]);
+        
+              const trade_symbols_filter = Object.keys(
+                groupedData.reduce((acc, curr) => {
+                  if (!acc[curr.trade_symbol]) {
+                    acc[curr.trade_symbol] = 1;
+                  } else {
+                    acc[curr.trade_symbol]++;
+                  }
+                  return acc;
+                }, {})
+              );
+
+
+
+
             if (abc1.length > 0) {
 
 
@@ -164,9 +209,14 @@ class TradeHistory {
 
                 const trade_strategy_filter = Object.keys(groupedDataStrategy);
                 if (abc.length > 0) {
-                    return res.send({ status: true, data: abc.flat(), msg: "Get Signals", trade_strategy_filter: trade_strategy_filter });
+                    return res.send({ status: true, data: abc.flat(), msg: "Get Signals", trade_strategy_filter: trade_strategy_filter ,trade_symbols_filter:trade_symbols_filter});
                 }
             }
+
+
+
+
+
 
             return res.send({ status: false, data: [], msg: "Data Empty" });
 

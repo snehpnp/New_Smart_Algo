@@ -68,7 +68,6 @@ cron.schedule("05 23 * * *", () => {
   DeleteTokenAliceToken();
 });
 
-// cron.schedule('55 23 * * *', () => { TruncateTable() });
 
 cron.schedule("10 3 * * *", () => {
   DeleteTokenAliceToken();
