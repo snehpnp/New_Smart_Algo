@@ -1626,7 +1626,6 @@ class Employee {
     }
   }
 
-  // UPDATE BROKER KEY
   async Update_Broker_Keys(req, res) {
     try {
       var userdata = req.body.data;
