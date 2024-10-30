@@ -375,13 +375,13 @@ function openSocketConnection(channelList, userid, userSession1) {
 
   ws.onmessage = async function (msg) {
     const response = JSON.parse(msg.data)
-    //console.log("response -",response)
+    // console.log("response -",response)
     if (response.tk) {
       //  console.log("response -",response.tk)
-      // const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk });
-      // if (Make_startegy_token) {
-      //   await connectToDB(response.tk, response)
-      // }
+      const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk });
+      if (Make_startegy_token) {
+        await connectToDB(response.tk, response)
+      }
 
       if (response.lp != undefined) {
         await stock_live_price.updateOne({ _id: response.tk }

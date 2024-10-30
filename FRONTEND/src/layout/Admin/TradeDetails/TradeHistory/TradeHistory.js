@@ -342,7 +342,8 @@ const TradeHistory = () => {
       text: "Exit Status",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span>{row.exit_status == "-" ? "MT_4" :row.exit_status}</span>
+          {/* <span>{row.exit_status == "-" ?  "MT_4" :row.exit_status}</span> */}
+          <span>{row.exit_status == "-" ?  row.TradeType :row.exit_status}</span>
         </div>
       ),
     },

@@ -1121,128 +1121,6 @@ const holidays = new Holidays();
 const currentDate = new Date();
 let rr = 1
 
-
-
-// async function run() {
-
-
-//   try {
-
-//     // Define the function to be executed
-//     const executeFunction = async () => {
-//       console.log("DONEEE executeFunction")
-//       const data = await dbTest.collection('strategyViewNames').find({ }).toArray();
-//        fetchDataFromViews(data);
-
-//     };
-
-//     const exitOpentrade = async () => {
-//       //console.log("DONEEE exitOpentrade")
-//       if (weekday != 'Sunday' && weekday != 'Saturday') {
-//         try {
-
-//           var openPosition = await open_position_excute.find().toArray();
-//           // console.log("openPosition ",openPosition)
-//           if (openPosition.length > 0) {
-
-//             openPosition && openPosition.map((item) => {
-
-//               let ExitStatus = 'TS'
-//               if (item.isLpInRangeTarget == true) {
-//                 ExitStatus = "TARGET"
-//               } else if (item.isLpInRangeStoploss == true) {
-//                 ExitStatus = "STOPLOSS"
-//               } else if (item.isLpInRange == 1) {
-//                 ExitStatus = "EXIT TIME"
-//               }
-//               else if (item.isLpInRange == 0) {
-//                 ExitStatus = "EXIT TIME"
-//               }
-
-//               const currentTimestamp = Math.floor(Date.now() / 1000);
-//               let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${item.client_persnal_key}|TradeType:${item.TradeType}|ExitStatus:${ExitStatus}|Demo:demo`
-
-
-
-
-//               //console.log("req ",req)
-
-//               //console.log("process.env.BROKER_URL ",process.env.BROKER_URL)
-
-//               let config = {
-//                 method: 'post',
-//                 maxBodyLength: Infinity,
-//                 // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-//                 url: `${process.env.BROKER_URL}`,
-//                 headers: {
-//                   'Content-Type': 'text/plain'
-//                 },
-//                 data: req
-//               };
-
-//               axios.request(config)
-//                 .then(async (response) => {
-
-//                   let tradeSymbol;
-//                   if (item.segment.toLowerCase() == 'o' || item.segment.toLowerCase() == 'co' || item.segment.toLowerCase() == 'fo' || item.segment.toLowerCase() == 'mo') {
-//                     tradeSymbol = item.symbol + "  " + item.expiry + "  " + item.strike + "  " + item.option_type + "  " + " [ " + item.segment + " ] ";
-//                   }
-//                   else if (item.segment.toLowerCase() == 'f' || item.segment.toLowerCase() == 'cf' || item.segment.toLowerCase() == 'mf') {
-//                     tradeSymbol = item.symbol + "  " + item.expiry + "  " + " [ " + item.segment + " ] ";
-//                   }
-//                   else {
-//                     tradeSymbol = item.symbol + "  " + " [ " + item.segment + " ] ";
-//                   }
-//                   const io = await getIO();
-//                   io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: tradeSymbol });
-
-//                   console.log("response Trade Excuted - ", response.data)
-
-//                 })
-//                 .catch((error) => {
-//                   // console.log(error.response.data);
-//                 });
-
-
-//             })
-
-//           } else {
-//             return
-//           }
-//         } catch (error) {
-//           console.log("Error in Open Position", error);
-//         }
-
-//       } else {
-//         //console.log('The stock market is Closed!');
-//       }
-
-
-
-//     }
-
-
-//     // Run the function initially
-//     // await executeFunction();
-
-//     // Use a while loop with setTimeout for a delay
-//     while (true) {
-//       // Delay for 1000 milliseconds (1 second)
-//       await new Promise(resolve => setTimeout(resolve, 1000));
-//        await executeFunction();
-//       //await exitOpentrade()
-//     }
-
-//     // setInterval(async () => {
-//     //   await executeFunction();
-//     // }, 1000);
-
-//   } finally {
-//     // Close the client when you're done
-//   }
-
-// }
-
 async function run() {
   try {
     // Define the function to be executed
@@ -1371,7 +1249,7 @@ async function run() {
       // Delay for 1000 milliseconds (1 second)
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      await executeFunction();
+    //  await executeFunction();
 
       // Open Position Function Evey Second
       const indiaTimezoneOffset = 330;
