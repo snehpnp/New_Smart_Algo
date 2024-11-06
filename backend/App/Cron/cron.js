@@ -27,6 +27,7 @@ const { createView } = require("../../View/Open_position");
 const { logger, getIPAddress } = require("../Helper/logger.helper");
 const { Alice_Socket } = require("../Helper/Alice_Socket11");
 
+
 cron.schedule("10 5 * * *", () => {
   deleteDashboard();
 });
