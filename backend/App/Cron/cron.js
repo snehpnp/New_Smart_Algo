@@ -790,6 +790,8 @@ const LogoutAllUsers = async () => {
     });
   }
 
+
+
   // ADMIN TRADING OFF
   const TradingOffAdmin = await live_price.find({ trading_status: "on" });
   if (TradingOffAdmin.length > 0) {
@@ -799,9 +801,9 @@ const LogoutAllUsers = async () => {
     const result1 = await live_price.updateMany({}, updateOperation1);
 
     const user_login = new user_logs({
-      user_Id: user._id,
+      user_Id: "64c76f1d32067577d02310df",
       login_status: "Trading Off By System",
-      role: user.Role,
+      role: "ADMIN",
       system_ip: getIPAddress(),
     });
     await user_login.save();

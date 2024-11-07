@@ -112,7 +112,14 @@ class OptionChain {
             if (result.length === 0) {
                 return res.json({ status: false, msg: 'Symbol not found.', data: [] });
             }
-            return res.json({ status: true, msg: 'Data found', data: result });
+
+
+         
+            var expiryDatesArray = result.map(item => item.expiryDate >= new Date(formattedDate) ? item : null).filter(item => item !== null);
+          
+
+
+            return res.json({ status: true, msg: 'Data found', data: expiryDatesArray });
 
         } catch (error) {
             console.log("Error:", error);
