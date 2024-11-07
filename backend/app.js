@@ -225,7 +225,6 @@ async function checkAndDrop() {
           const collectionName = element1 + element;
 
           if (collectionNames.includes(collectionName)) {
-              console.log("Dropping view:", typeof collectionName);
                await dbTest.collection(collectionName).drop();
           } else {
               console.log("Collection/View not found:", collectionName);

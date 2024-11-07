@@ -28,18 +28,14 @@ module.exports = function (app) {
     dropOpenPosition,
     open_position_excute,
   } = require("./View/Open_position");
-  const {
-    MainSignalsRemainToken,
-    service_token_update,
-    TokenSymbolUpdate,
-  } = require("./App/Cron/cron");
+  const {TokenSymbolUpdate} = require("./App/Cron/cron");
   const { createViewAlice } = require("./View/Alice_blue");
   const { createViewAngel } = require("./View/Angel");
   const { createViewDhan } = require("./View/dhan");
   const { createViewFivepaisa } = require("./View/fivepaisa");
   const { createViewFyers } = require("./View/fyers");
   const { createViewIifl } = require("./View/Iifl");
-  const { createViewKotakNeo } = require("./View/KotakNeo");
+  const { createViewKotakNeo,deleteViewKotakNeo } = require("./View/KotakNeo");
   const { createViewMarketHub } = require("./View/markethub");
   const { createViewMastertrust } = require("./View/Mastertrust");
   const { createViewMotilalOswal } = require("./View/MotilalOswal");
@@ -56,17 +52,6 @@ module.exports = function (app) {
   });
 
  app.get("/deleteRecord",async(req,res)=>{
-
-    // db.collection.updateMany(
-    //     {
-    //       field_name: { $ne: null }
-    //     },
-    //     {
-    //       $set: { field_name: { $add: ["$field_name", 86400000] } }
-    //     }
-    //   )
-
-
 
 
 const currentDate = new Date();
@@ -928,6 +913,12 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
   };
 
   app.get("/all/brokerview", (req, res) => {
+
+
+    deleteViewKotakNeo();
+
+
+
     DashboardView();
     createViewAlice();
     createViewAngel();
@@ -1095,8 +1086,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
     };
 
     axios(config).then(async function (response) {
-      // res.send(response.data);
-      // Using a loop to extract 'name' and 'instrumenttype'
+  
 
       var unique_key = [];
       let count = 0;
