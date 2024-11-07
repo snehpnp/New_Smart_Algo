@@ -72,7 +72,7 @@ export const admin_sidebar = [
             },
             {
                 id: 42,
-                name: 'Oeder History',
+                name: 'Order History',
                 route: '/admin/tradehistory1?type=admin',
             },
             {

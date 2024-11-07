@@ -99,7 +99,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                         trading_symbol: "",
                         broker_name: "ANGEL",
                         send_request: "",
-                        reject_reason: "Token not received due to wrong trade",
+                        reject_reason: "Token not received due to wrong trade -"+token,
 
                     })
                         .then((BrokerResponseCreate) => {
@@ -571,7 +571,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                         trading_symbol: "",
                         broker_name: "ANGEL",
                         send_request: send_rr,
-                        reject_reason: "Token not received due to wrong trade",
+                        reject_reason: "Token not received due to wrong trade -"+token,
 
                     })
                         .then((BrokerResponseCreate) => {
