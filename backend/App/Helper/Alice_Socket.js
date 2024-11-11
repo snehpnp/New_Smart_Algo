@@ -382,6 +382,8 @@ function openSocketConnection(channelList, userid, userSession1) {
       //   await connectToDB(response.tk, response)
       // }
 
+
+
       if (response.lp != undefined) {
         console.log("response", response.tk)
         await stock_live_price.updateOne({ _id: response.tk }
@@ -394,7 +396,6 @@ function openSocketConnection(channelList, userid, userSession1) {
             },
           },
           { upsert: true });
-
       }
 
 
