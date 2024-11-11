@@ -399,9 +399,6 @@ function openSocketConnection(channelList, userid, userSession1) {
 
 
 
-
-
-
       let updateQueue = {};
 
       function queueUpdate(response) {
@@ -432,22 +429,6 @@ function openSocketConnection(channelList, userid, userSession1) {
         queueUpdate(response);
       }
       
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     } else {
 
