@@ -97,6 +97,7 @@ let response111 = null;
 
 const ConnectSocket = async (EXCHANGE, instrument_token) => {
 
+  console.log("Hit Boker Server socket")
 
   var channel_List = `${EXCHANGE}|${instrument_token}`
 
@@ -1615,7 +1616,7 @@ app.post('/broker-signals', async (req, res) => {
       }
 
     } else {
-     
+      // console.log('receive signals -', req.body);
       return res.send({ status: false, msg: "req is not correct" });
     }
 

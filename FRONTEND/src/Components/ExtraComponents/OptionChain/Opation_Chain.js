@@ -115,8 +115,8 @@ const HelpCenter = () => {
         {
             dataField: 'CALL',
             text: 'BUY/SELL',
-            style: (cell, row) => parseInt(row.strike_price) < parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: 'beige' } :
-                parseInt(row.strike_price) === parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: '#4c584c6b' } : { backgroundColor: '' },
+            style: (cell, row) => parseInt(row.strike_price) < parseInt(OptionChainData.data[21].strike_price) ? { backgroundColor: 'beige' } :
+                parseInt(row.strike_price) === parseInt(OptionChainData.data[21].strike_price) ? { backgroundColor: '#4c584c6b' } : { backgroundColor: '' },
             formatter: (cell, row, rowIndex) => (
                 <div key={rowIndex}
 
@@ -148,8 +148,8 @@ const HelpCenter = () => {
         {
             dataField: 'CALL/LP',
             text: 'CALL/LP',
-            style: (cell, row) => parseInt(row.strike_price) < parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: 'beige' } :
-                parseInt(row.strike_price) === parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: '#4c584c6b' } : { backgroundColor: '' },
+            style: (cell, row) => parseInt(row.strike_price) < parseInt(OptionChainData.data[21].strike_price) ? { backgroundColor: 'beige' } :
+                parseInt(row.strike_price) === parseInt(OptionChainData.data[21].strike_price) ? { backgroundColor: '#4c584c6b' } : { backgroundColor: '' },
             formatter: (cell, row, rowIndex) => (
                 <div >
                     <span className={`Call_Price_${row.call_token} `}></span>
@@ -160,7 +160,7 @@ const HelpCenter = () => {
         {
             dataField: 'strike_price',
             text: 'STRIKE PRICE',
-            style: (cell, row) => parseInt(row.strike_price) == parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: '#4c584c6b' } : { backgroundColor: '' },
+            style: (cell, row) => parseInt(row.strike_price) == parseInt(OptionChainData.data[21].strike_price) ? { backgroundColor: '#4c584c6b' } : { backgroundColor: '' },
             formatter: (cell, row, rowIndex) => (
 
                 <div >
@@ -171,8 +171,8 @@ const HelpCenter = () => {
         {
             dataField: 'PUT/LP',
             text: 'PUT/LP',
-            style: (cell, row) => parseInt(row.strike_price) > parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: 'beige' } :
-                parseInt(row.strike_price) === parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: '#4c584c6b' } : { backgroundColor: '' },
+            style: (cell, row) => parseInt(row.strike_price) > parseInt(OptionChainData.data[21].strike_price) ? { backgroundColor: 'beige' } :
+                parseInt(row.strike_price) === parseInt(OptionChainData.data[21].strike_price) ? { backgroundColor: '#4c584c6b' } : { backgroundColor: '' },
 
             formatter: (cell, row, rowIndex) => (
                 <div
@@ -186,8 +186,8 @@ const HelpCenter = () => {
         {
             dataField: 'PUT',
             text: 'BUY/SELL',
-            style: (cell, row) => parseInt(row.strike_price) > parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: 'beige' } :
-                parseInt(row.strike_price) === parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: '#4c584c6b' } :
+            style: (cell, row) => parseInt(row.strike_price) > parseInt(OptionChainData.data[21].strike_price) ? { backgroundColor: 'beige' } :
+                parseInt(row.strike_price) === parseInt(OptionChainData.data[21].strike_price) ? { backgroundColor: '#4c584c6b' } :
                     { backgroundColor: '' },
             formatter: (cell, row, rowIndex) => (
                 <div key={rowIndex}
@@ -671,8 +671,7 @@ const HelpCenter = () => {
 
         if (expiry) {
             const data = {
-                // expiry: "02112023",
-                // symbol: "NIFTY"
+             
                 expiry: expiry,
                 symbol: symbol
             };

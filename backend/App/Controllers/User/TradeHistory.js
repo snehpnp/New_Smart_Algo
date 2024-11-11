@@ -82,7 +82,9 @@ class TradeHistory {
 
                 const client_persnal_key1 = item.users.web_url === '2' ? item.users.client_key : "";
 
-                const serIndex = serviceIndex === "null" ? item.service.name : serviceIndex;
+                // const serIndex = serviceIndex === "null" ? item.service.name : serviceIndex;
+                const serIndex  = item.service.name 
+
                 const strategyset = selectStrategy === "null" ? item.strategys.strategy_name : selectStrategy;
 
                 const MatchPipeline = {
@@ -193,10 +195,7 @@ class TradeHistory {
               );
 
 
-
-
             if (abc1.length > 0) {
-
 
                 const groupedDataStrategy = abc1.flat().reduce((acc, curr) => {
                     if (!acc[curr.strategy]) {
@@ -207,15 +206,35 @@ class TradeHistory {
                     return acc;
                 }, {});
 
-                const trade_strategy_filter = Object.keys(groupedDataStrategy);
-                if (abc.length > 0) {
-                    return res.send({ status: true, data: abc.flat(), msg: "Get Signals", trade_strategy_filter: trade_strategy_filter ,trade_symbols_filter:trade_symbols_filter});
+                let unique = {};
+                let distinct = [];
+                abc.flat().forEach(function (x) {
+                    if (!unique[x._id]) {
+                        distinct.push(x);
+                        unique[x._id] = true;
+                    }
+                });
+
+                if(serviceIndex === "null"){
+                    const trade_strategy_filter = Object.keys(groupedDataStrategy);
+                if (distinct.length > 0) {
+                    return res.send({ status: true, data: distinct, msg: "Get Signals", trade_strategy_filter: trade_strategy_filter ,trade_symbols_filter:trade_symbols_filter});
                 }
+            }else{
+                
+
+                let SymbolData = distinct.filter(data => data.symbol === serviceIndex);
+              
+
+                const trade_strategy_filter = Object.keys(groupedDataStrategy);
+                if (distinct.length > 0) {
+                    return res.send({ status: true, data: SymbolData, msg: "Get Signals", trade_strategy_filter: trade_strategy_filter ,trade_symbols_filter:trade_symbols_filter});
+                }
+
+
             }
-
-
-
-
+                
+            }
 
 
             return res.send({ status: false, data: [], msg: "Data Empty" });

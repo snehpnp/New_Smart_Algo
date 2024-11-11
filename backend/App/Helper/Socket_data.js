@@ -15,7 +15,7 @@ const Socket_data = async (channelList) => {
 
     const socket = await getSocket();
     if(socket == null){
-       // const socket11 = await Alice_Socket();
+
     }
       if (socket) {
       let json = {

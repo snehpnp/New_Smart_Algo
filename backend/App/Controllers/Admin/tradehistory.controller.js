@@ -404,9 +404,9 @@ class Tradehistory {
                 ? 0
                 : Number(item.result1[0].lotsize) * lotMultypaly1 || "";
 
-            TotalCalculate += item.entry_type = "LE"
-              ? (item.exit_price - item.entry_price) * TotalQty
-              : (item.entry_price - item.exit_price) * TotalQty;
+                TotalCalculate += (item.entry_type === "LE") 
+                ? (item.exit_price - item.entry_price) * TotalQty
+                : (item.entry_price - item.exit_price) * TotalQty;
           }
         });
       }

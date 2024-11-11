@@ -252,7 +252,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     getsignals11();
-  }, [fromDate, toDate, getType,SelectService]);
+  }, [fromDate, toDate, getType,SelectService,SelectServiceIndex]);
 
   useEffect(() => {
     ShowLivePrice();
@@ -343,7 +343,7 @@ const TradeHistory = () => {
               onChange={(e) => setType(e.target.value)}
               value={getType}
             >
-              <option value="Strategy" selected>Starategy</option>z
+              <option value="Strategy" selected>Strategy</option>
               <option value="Trade" selected>Trade</option>
 
             </select>
@@ -372,6 +372,34 @@ const TradeHistory = () => {
                       </option>
                     );
                   })}
+              </select>
+            </div>
+          </div>
+
+          <div className="col-lg-2 px-1">
+            <div className="mb-3">
+              <label for="select" className="form-label">
+                Index Symbol
+              </label>
+              <select
+                className="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectServiceIndex(e.target.value)}
+                value={SelectServiceIndex}
+              >
+                <option value="null" selected>
+                  All
+                </option>
+                <option value="BANKNIFTY" selected>
+                  BANKNIFTY
+                </option>
+                <option value="NIFTY" selected>
+                  NIFTY
+                </option>
+                <option value="FINNIFTY" selected>
+                  FINNIFTY
+                </option>
               </select>
             </div>
           </div>

@@ -28,6 +28,8 @@ import { Update_Broker_Keys } from "../../../ReduxStore/Slice/Users/BrokerUpdate
 import Swal from "sweetalert2";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+
 import * as Config from "../../../Utils/Config";
 
 import { Modal, Button } from "react-bootstrap";
@@ -287,9 +289,10 @@ const Header = ({ ChatBox }) => {
           password: password,
         },
       }).then((res) => {
-        if (res.data.status == true) {
+        if (res.data.status) {
           setKotakStatus1(true);
-        } else if (res.data.status == false) {
+        } else{
+          console.log(res.data.msg);
           toast.error(res.data.msg);
         }
       });
@@ -1171,8 +1174,8 @@ const Header = ({ ChatBox }) => {
                         alignItems: "center",
                       }}
                     >
-                      <div style={{ display: "flex", marginBottom: "10px" }}>
-                        <button
+                      {/* <div style={{ display: "flex", marginBottom: "10px" }}> */}
+                        {/* <button
                           style={{
                             backgroundColor:
                               activeTab === "mobile" ? "#d8ecff" : "white",
@@ -1184,36 +1187,10 @@ const Header = ({ ChatBox }) => {
                           }}
                           onClick={() => handleTabChange("mobile")}
                         >
-                          Login with mobile
-                        </button>
-                        <button
-                          style={{
-                            backgroundColor:
-                              activeTab === "pan" ? "#d8ecff" : "white",
-                            border: "1px solid #ccc",
-                            padding: "10px 20px",
-                            borderRadius: "5px",
-                            cursor: "pointer",
-                            marginRight: "10px",
-                          }}
-                          onClick={() => handleTabChange("pan")}
-                        >
-                          Login with PAN
-                        </button>
-                        <button
-                          style={{
-                            backgroundColor:
-                              activeTab === "qr" ? "#d8ecff" : "white",
-                            border: "1px solid #ccc",
-                            padding: "10px 20px",
-                            borderRadius: "5px",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => handleTabChange("qr")}
-                        >
-                          Scan QR code
-                        </button>
-                      </div>
+                          Login with User ID
+                        </button> */}
+                   
+                      {/* </div> */}
 
                       <div
                         style={{
@@ -1226,7 +1203,7 @@ const Header = ({ ChatBox }) => {
                           type="text"
                           placeholder={
                             activeTab === "mobile"
-                              ? "User Name"
+                              ? "Trading User ID"
                               : activeTab === "pan"
                               ? "PAN number"
                               : "Enter QR code"
@@ -1250,7 +1227,7 @@ const Header = ({ ChatBox }) => {
 
                         <input
                           type="password"
-                          placeholder="Password"
+                          placeholder="Demat Password"
                           value={password}
                           onChange={handlePasswordChange}
                           style={{
@@ -1306,6 +1283,8 @@ const Header = ({ ChatBox }) => {
           </Modal>
         </div>
       )}
+        <ToastButton />
+
     </div>
   );
 };

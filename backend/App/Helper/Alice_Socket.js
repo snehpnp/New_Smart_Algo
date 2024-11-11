@@ -28,6 +28,7 @@ const url = "wss://ws1.aliceblueonline.com/NorenWS/"
 const Alice_Socket = async () => {
   var rr = 0;
  
+
   let channelstradd = "";
   const uniqueTokens = new Set();
   //Main SignalS code
@@ -381,21 +382,73 @@ function openSocketConnection(channelList, userid, userSession1) {
       //   await connectToDB(response.tk, response)
       // }
 
-      if (response.lp != undefined) {
-        await stock_live_price.updateOne({ _id: response.tk }
-          , {
-            $set: {
-              lp: response.lp,
-              exc: response.e,
-              // sp1: response.sp1 != undefined ? response.sp1: response.lp,
-              // bp1: response.bp1 != undefined ? response.bp1: response.lp,
-              curtime: `${new Date().getHours().toString().padStart(2, '0')}${new Date().getMinutes().toString().padStart(2, '0')}`,
-              ft: response.ft
-            },
-          },
-          { upsert: true });
+      // if (response.lp != undefined) {
+      //   console.log("response", response.tk)
+      //   await stock_live_price.updateOne({ _id: response.tk }
+      //     , {
+      //       $set: {
+      //         lp: response.lp,
+      //         exc: response.e,
+      //         curtime: `${new Date().getHours().toString().padStart(2, '0')}${new Date().getMinutes().toString().padStart(2, '0')}`,
+      //         ft: response.ft
+      //       },
+      //     },
+      //     { upsert: true });
 
+      // }
+
+
+
+
+
+
+      let updateQueue = {};
+
+      function queueUpdate(response) {
+        updateQueue[response.tk] = {
+          lp: response.lp,
+          exc: response.e,
+          curtime: `${new Date().getHours().toString().padStart(2, '0')}${new Date().getMinutes().toString().padStart(2, '0')}`,
+          ft: response.ft
+        };
       }
+      
+      setInterval(async () => {
+        const bulkOps = Object.keys(updateQueue).map(id => ({
+          updateOne: {
+            filter: { _id: id },
+            update: { $set: updateQueue[id] },
+            upsert: true
+          }
+        }));
+      
+        if (bulkOps.length > 0) {
+          await stock_live_price.bulkWrite(bulkOps);
+          updateQueue = {}; 
+        }
+      }, 500); 
+      
+      if (response.lp != undefined) {
+        queueUpdate(response);
+      }
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     } else {
 
     }

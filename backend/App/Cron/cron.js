@@ -25,7 +25,7 @@ const company_information = db.company_information;
 const { DashboardView, deleteDashboard } = require("../../View/DashboardData");
 const { createView } = require("../../View/Open_position");
 const { logger, getIPAddress } = require("../Helper/logger.helper");
-const { Alice_Socket } = require("../Helper/Alice_Socket11");
+const { Alice_Socket } = require("../Helper/Alice_Socket");
 
 cron.schedule("10 5 * * *", () => {
   deleteDashboard();
@@ -220,7 +220,7 @@ const TruncateTableTokenChainAdd_fiveMinute = async () => {
 
       await MainSignalsRemainToken();
 
-      await Alice_Socket();
+      // await Alice_Socket();
 
       return;
     }
@@ -238,7 +238,7 @@ const TruncateTableTokenChainAdd = async () => {
 
     await Get_Option_All_Token_Chain_stock();
 
-    await Alice_Socket();
+    // await Alice_Socket();
 
     return;
   }
