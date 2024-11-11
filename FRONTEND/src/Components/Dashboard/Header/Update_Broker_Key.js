@@ -6,6 +6,8 @@ import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import { useDispatch } from "react-redux";
 import { Update_Broker_Keys } from '../../../ReduxStore/Slice/Users/BrokerUpdateSlice';
 import toast, { Toaster } from 'react-hot-toast';
+import * as Config from "../../../Utils/Config";
+import { All_Api_Info_List } from "../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice";
 
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
@@ -21,6 +23,7 @@ const Update_Broker_Key = ({ closeModal }) => {
     const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
     const [Refresh, setRefresh] = useState(false)
     const [UserDetails, setUserDetails] = useState({ loading: true, data: [] });
+    const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
 
     useEffect(() => {
         data();
@@ -37,13 +40,28 @@ const Update_Broker_Key = ({ closeModal }) => {
             .unwrap()
             .then((response) => {
                 if (response.status) {
-             
+    
                     setUserDetails({
                         loading: false,
                         data: response.data,
                     });
                 }
             });
+
+            await dispatch(
+                All_Api_Info_List({
+                  token: user_details.token,
+                  url: Config.react_domain,
+                  brokerId: -1,
+                  key: 1,
+                })
+              )
+                .unwrap()
+                .then((response) => {
+                  if (response.status) {
+                    setGetBrokerInfo(response.data);
+                  }
+                });
     };
   
 
@@ -168,10 +186,14 @@ const Update_Broker_Key = ({ closeModal }) => {
         // }
     }, [UserDetails.data]);
 
+
     return (
         <div>
             {UserDetails && (
                 <>
+                <h4>Broker Name :- {GetBrokerInfo && GetBrokerInfo.find((data)=>data.broker_id == UserDetails?.data?.broker)?.title}</h4>
+
+
                     <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name={(gotodashboard && user_role_goTo == "USER") ? "sneh" : "Update"} title="brokerkey"
                     />
                     <ToastButton />

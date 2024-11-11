@@ -8,10 +8,10 @@ const Dashboard1 = ({ data }) => {
 
   useEffect(() => {
     if (GetThemeId.themeId == 19) {
-      console.log(GetThemeId.themeId);
+    
       // FULL PAGE FONT COLOR CHANGE for BLACK
       const elements = document.getElementsByClassName("income-data");
-      console.log(elements);
+   
       for (let i = 0; i < elements.length; i++) {
         // Add ! important
         elements[i].style.background = "black";

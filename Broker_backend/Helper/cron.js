@@ -415,8 +415,7 @@ module.exports = function (app) {
                 ulrs.map(async (item) => {
                     try {
                         const response = await axios.get(item.url, { responseType: 'arraybuffer' });
-    
-                        console.log("response",response)
+                  
 
                         if (response.status !== 200) {
                             return { filename: item.filename, status: `Failed with status code: ${response.status}` };

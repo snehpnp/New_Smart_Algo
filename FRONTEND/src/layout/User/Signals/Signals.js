@@ -95,7 +95,7 @@ const Signals = () => {
                     onChange={(e) => setSelectServiceIndex(e.target.value)}
                     value={SelectServiceIndex}
                   >
-                    <option value="Strategy" selected>Starategy</option>
+                    <option value="Strategy" selected>Strategy</option>
                     <option value="Trade" selected>Trade</option>
 
                   </select>

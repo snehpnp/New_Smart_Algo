@@ -181,7 +181,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                  
                         Promise.all(requestPromises)
                         .then(responses => {
-                            // console.log("Response:", responses.data);
+                          
             
                         })
                         .catch(errors => {
@@ -207,7 +207,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
             item.postdata.transtype = 'SELL';
         }
 
-        // console.log("price", price)
 
 
         if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
@@ -220,7 +219,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
       // Send all requests concurrently using Promise.all
         Promise.all(requestPromises)
         .then(responses => {
-            // console.log("Response:", responses.data);
+          
         })
         .catch(errors => {
             console.log("errors:", errors);
@@ -322,7 +321,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
     
                                     } else {
     
-                                        console.log("possition_qty Cash trade", possition_qty);
                                         if (possition_qty > 0 && type == 'LX') {
                                             ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
                                         } else if (possition_qty < 0 && type == 'SX') {
@@ -533,7 +531,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
         // Send all requests concurrently using Promise.all
         Promise.all(requestPromises)
             .then(responses => {
-                // console.log("Response:", responses.data);
+          
     
             })
             .catch(errors => {
@@ -577,7 +575,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
         // Send all requests concurrently using Promise.all
             Promise.all(requestPromises)
             .then(responses => {
-                // console.log("Response:", responses.data);
+    
 
             })
             .catch(errors => {
@@ -979,7 +977,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 }
 
 const PendingOrderCancel = async(ExistExitSignal,token ,item ,filePath, signals, signal_req)=>{
-    // console.log("pending order") 
+   
 if(ExistExitSignal != ''){
   if(ExistExitSignal.length > 0){
 
@@ -1001,9 +999,8 @@ axios.request(config)
     if(response.data.length){
         
        
-         console.log("price  -",ExistExitSignal[0].entry_price);
         const Exist_open_trade = response.data.find(item1 => item1.token === token[0].instrument_token && parseFloat(item1.Prc) == parseFloat(ExistExitSignal[0].entry_price)); 
-        //console.log("Exist_open_trade  -",Exist_open_trade); 
+       
         if(Exist_open_trade != undefined && Exist_open_trade.Status == "open"){
 
 
@@ -1029,7 +1026,7 @@ axios.request(config)
             
             axios.request(config)
             .then((response) => {
-              console.log("Cancel Order ",response.data);
+           
             })
             .catch((error) => {
               console.log(error);

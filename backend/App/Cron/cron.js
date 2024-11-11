@@ -25,7 +25,7 @@ const company_information = db.company_information;
 const { DashboardView, deleteDashboard } = require("../../View/DashboardData");
 const { createView } = require("../../View/Open_position");
 const { logger, getIPAddress } = require("../Helper/logger.helper");
-const { Alice_Socket } = require("../Helper/Alice_Socket11");
+const { Alice_Socket } = require("../Helper/Alice_Socket");
 
 
 cron.schedule("10 5 * * *", () => {
@@ -69,7 +69,6 @@ cron.schedule("05 23 * * *", () => {
   DeleteTokenAliceToken();
 });
 
-// cron.schedule('55 23 * * *', () => { TruncateTable() });
 
 cron.schedule("10 3 * * *", () => {
   DeleteTokenAliceToken();
@@ -222,7 +221,7 @@ const TruncateTableTokenChainAdd_fiveMinute = async () => {
 
       await MainSignalsRemainToken();
 
-      await Alice_Socket();
+      // await Alice_Socket();
 
       return;
     }
@@ -240,7 +239,7 @@ const TruncateTableTokenChainAdd = async () => {
 
     await Get_Option_All_Token_Chain_stock();
 
-    await Alice_Socket();
+    // await Alice_Socket();
 
     return;
   }
@@ -792,6 +791,8 @@ const LogoutAllUsers = async () => {
     });
   }
 
+
+
   // ADMIN TRADING OFF
   const TradingOffAdmin = await live_price.find({ trading_status: "on" });
   if (TradingOffAdmin.length > 0) {
@@ -801,9 +802,9 @@ const LogoutAllUsers = async () => {
     const result1 = await live_price.updateMany({}, updateOperation1);
 
     const user_login = new user_logs({
-      user_Id: user._id,
+      user_Id: "64c76f1d32067577d02310df",
       login_status: "Trading Off By System",
-      role: user.Role,
+      role: "ADMIN",
       system_ip: getIPAddress(),
     });
     await user_login.save();
@@ -878,11 +879,11 @@ const DeleteTokenAliceToken = async () => {
     },
   ];
   const result = await Alice_token.aggregate(pipeline);
-  console.log("result", result.length);
+
   if (result.length > 0) {
     const idsToDelete = result.map((item) => item._id);
     await Alice_token.deleteMany({ _id: { $in: result[0].idsToDelete } });
-    console.log(`${result.length} expired tokens deleted.`);
+   
     return;
   } else {
     console.log("No expired tokens found.");
@@ -897,10 +898,9 @@ function createUserDataArray(data, segment) {
   let count = 0;
   return data.map((element) => {
     //   count++
-    //   console.log("element.symbol",element , "count - ",count)
+
     // if (!element.name) {
-    //     console.log(`Skipping element with empty name: ${element}`);
-    //     console.log(`token: ${element.token}`);
+
     //     return null;
     // }
     const option_type = element.symbol.slice(-2);
@@ -935,7 +935,7 @@ function createUserDataArray(data, segment) {
 }
 
 async function insertData(dataArray) {
-  //console.log("dataArray ",dataArray)
+ 
   try {
     const existingTokens = await Alice_token.distinct("instrument_token", {});
     const filteredDataArray = dataArray.filter((userData) => {
@@ -966,7 +966,7 @@ const TokenSymbolUpdate = async () => {
   }
 
   try {
-    console.log("TokenSymbolUpdate Start", " TIME ", new Date());
+    
 
     const config = {
       method: "get",
@@ -1031,20 +1031,20 @@ const TokenSymbolUpdate = async () => {
           element.name != ""
       );
 
-      //console.log("filteredDataBC", filteredDataBC.length)
+
 
       // Segment O -OPTION
       const userDataSegment_O = await createUserDataArray(filteredDataO, "O");
       await insertData(userDataSegment_O);
-      console.log("O");
+  
       // Segment F - FUTURE
       const userDataSegment_F = await createUserDataArray(filteredDataF, "F");
       await insertData(userDataSegment_F);
-      console.log("F");
+      
       // Segment C -CASH
       const userDataSegment_C = await createUserDataArray(filteredDataC, "C");
       await insertData(userDataSegment_C);
-      console.log("C");
+     
 
       // Segment MF MCX FUTURE
       const userDataSegment_MF = await createUserDataArray(
@@ -1052,11 +1052,11 @@ const TokenSymbolUpdate = async () => {
         "MF"
       );
       await insertData(userDataSegment_MF);
-      console.log("MF");
+    
       // Segment MO  MCX OPTION
       const userDataSegment_MO = createUserDataArray(filteredDataMO, "MO");
       await insertData(userDataSegment_MO);
-      console.log("MO");
+   
 
       // Segment CO CURRENCY OPTION
       const userDataSegment_CO = await createUserDataArray(
@@ -1064,7 +1064,7 @@ const TokenSymbolUpdate = async () => {
         "CO"
       );
       await insertData(userDataSegment_CO);
-      console.log("CO");
+
 
       // Segment CF  CURRENCY FUTURE
       const userDataSegment_CF = await createUserDataArray(
@@ -1072,7 +1072,7 @@ const TokenSymbolUpdate = async () => {
         "CF"
       );
       await insertData(userDataSegment_CF);
-      console.log("CF");
+   
 
       // Segment BF
       const userDataSegment_BF = await createUserDataArray(
@@ -1080,14 +1080,14 @@ const TokenSymbolUpdate = async () => {
         "BF"
       );
       await insertData(userDataSegment_BF);
-      console.log("BF");
+
       // Segment BO
       const userDataSegment_BO = await createUserDataArray(
         filteredDataBO,
         "BO"
       );
       await insertData(userDataSegment_BO);
-      console.log("BO");
+ 
 
       // Segment BC
       const userDataSegment_BC = await createUserDataArray(
@@ -1095,7 +1095,7 @@ const TokenSymbolUpdate = async () => {
         "BC"
       );
       await insertData(userDataSegment_BC);
-      console.log("BC");
+   
 
       try {
         var filePath = path.join(__dirname + "/checkTest.txt"); // Adjust the file path as needed

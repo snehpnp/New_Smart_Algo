@@ -487,7 +487,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
             });
             Promise.all(requestPromises)
                 .then(responses => {
-                    // console.log("Response:", responses.data);
+             
 
                 })
                 .catch(errors => {
@@ -612,7 +612,6 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                 }
             });
 
-            console.log("ICICI_DIRECT Erroe", error.response.data);
 
             try {
 

@@ -177,7 +177,6 @@ export async function USER_ACTIVICTY_LOGS(data, token) {
 
 }
 
-// UPDATE BROKER KEYS
 
 export async function UPDATE_BROKER_KEYS(data, token) {
     try {

@@ -45,7 +45,6 @@ class HelpCenter {
 
     async GetAllHelp(req, res) {
         try {
-            console.log("Get All Help Center Data");
             const { user_id } = req.body;
             
             const startOfDay = new Date();

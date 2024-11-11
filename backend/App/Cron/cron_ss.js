@@ -238,7 +238,7 @@ const TruncateTableTokenChainAdd_fiveMinute = async () => {
 
             const updateTokenAfter = await token_chain.find({}).toArray();
             const unmatchedTokenChannel = updateTokenAfter.map(item => `${item.exch}|${item._id}`).join('#');
-           // console.log("unmatchedTokenChannel ",unmatchedTokenChannel)
+           
            // updateChannelAndSend(unmatchedTokenChannel)
              //updateChannelAndSend("NSE|2885")
             //await Alice_Socket();
@@ -246,7 +246,7 @@ const TruncateTableTokenChainAdd_fiveMinute = async () => {
             return;
         }
     }else{
-        //console.log("- Else")
+     
     }
 
 
@@ -852,11 +852,11 @@ const DeleteTokenAliceToken = async () => {
 
     ];
     const result = await Alice_token.aggregate(pipeline)
-    console.log("result", result.length)
+ 
     if (result.length > 0) {
         const idsToDelete = result.map(item => item._id);
         await Alice_token.deleteMany({ _id: { $in: result[0].idsToDelete } });
-        console.log(`${result.length} expired tokens deleted.`);
+       
         return
     } else {
         console.log('No expired tokens found.');
@@ -871,10 +871,9 @@ function createUserDataArray(data, segment) {
     let count = 0
     return data.map(element => {
         //   count++
-        //   console.log("element.symbol",element , "count - ",count)
+       
         // if (!element.name) {
-        //     console.log(`Skipping element with empty name: ${element}`);
-        //     console.log(`token: ${element.token}`);
+      
         //     return null;
         // }
         const option_type = element.symbol.slice(-2);
@@ -909,7 +908,7 @@ function createUserDataArray(data, segment) {
 }
 
 async function insertData(dataArray) {
-    //console.log("dataArray ",dataArray)
+
     try {
         const existingTokens = await Alice_token.distinct("instrument_token", {});
         const filteredDataArray = dataArray.filter(userData => {
@@ -928,7 +927,7 @@ const TokenSymbolUpdate = async () => {
 
     try {
         var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
-        console.log("filePath", filePath)
+       
         fs.appendFile(filePath, "-----TokenSymbolUpdate  - " + new Date() + "----- ***\\n\n", function (err) {
             if (err) {
                 console.log("err filePath", err);
@@ -940,7 +939,7 @@ const TokenSymbolUpdate = async () => {
 
 
     try {
-        console.log("TokenSymbolUpdate Start", " TIME ", new Date());
+       
 
         const config = {
             method: 'get',
@@ -989,12 +988,11 @@ const TokenSymbolUpdate = async () => {
                 element.instrumenttype === "" && element.exch_seg === "BSE" && element.name != ""
             );
 
-            //console.log("filteredDataBC", filteredDataBC.length)
 
             // Segment O -OPTION
             const userDataSegment_O = await createUserDataArray(filteredDataO, "O");
             await insertData(userDataSegment_O);
-            console.log("O")
+    
             // Segment F - FUTURE
             const userDataSegment_F = await createUserDataArray(filteredDataF, "F");
             await insertData(userDataSegment_F);

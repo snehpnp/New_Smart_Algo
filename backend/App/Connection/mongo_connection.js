@@ -14,11 +14,11 @@
 // const connection = mongoose.connection;
 
 // connection.on("error", (error) => {
-//   console.log("MongoDB Connection Error at Time:", new Date(), error);
+
 // });
 
 // connection.once("open", () => {
-//   console.log("Connected to MongoDB at Time:", new Date());
+
 // });
 
 const mongoose = require("mongoose");

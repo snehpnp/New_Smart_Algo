@@ -129,7 +129,16 @@ class Signals {
                     const sortedAndFilteredArray = GetAllClientServices[0].allSignals.flat()
                         .sort((a, b) => b.createdAt - a.createdAt);
 
-                    return res.send({ status: true, data: sortedAndFilteredArray, msg: "Get Signals" })
+                        let unique = {};
+                        let distinct = [];
+                        sortedAndFilteredArray.forEach(function (x) {
+                            if (!unique[x._id]) {
+                                distinct.push(x);
+                                unique[x._id] = true;
+                            }
+                        });
+
+                    return res.send({ status: true, data: distinct, msg: "Get Signals" })
                 } else {
                     return res.send({ status: false, data: [], msg: "Data Empty" })
                 }

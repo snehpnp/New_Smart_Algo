@@ -65,7 +65,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     // Send all requests concurrently using Promise.all
                     Promise.all(requestPromises)
                         .then(responses => {
-                            // console.log("Response:", responses.data);
+                           
                         })
                         .catch(errors => {
                             console.log("errors:", errors);
@@ -336,7 +336,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                 // Send all requests concurrently using Promise.all
                 Promise.all(requestPromises)
                     .then(responses => {
-                        // console.log("Response:", responses.data);
+                        
 
                     })
                     .catch(errors => {
@@ -381,7 +381,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             // Send all requests concurrently using Promise.all
             Promise.all(requestPromises)
                 .then(responses => {
-                    // console.log("Response:", responses.data);
+                   
 
                 })
                 .catch(errors => {

@@ -39,22 +39,21 @@ const server = http.createServer(app);
 app.use(express.json());
 
 // REQUIRE File
-// require("./App/Cron/cron");
+require("./App/Cron/cron");
 // require("./App/Cron/cron_ss");
 // Routes all
 require("./App/Routes")(app);
 // EMERGANCY
 require("./request")(app);
 
-require("./Teting")(app);
+// require("./Teting")(app);
 
 //require("./redisSocketConnect")(app)
 
 // Connect Local backend Socket
 const { setIO, getIO } = require("./App/Helper/BackendSocketIo");
-const { forEach } = require("mathjs");
 
-//  ----------------------------   for help center ------------------
+
 const io = socketIo(server, {
   cors: {
     origin: "*",
@@ -108,10 +107,10 @@ app.post("/pm2/update", async (req, res) => {
             conn.end();
           })
           .on("data", (data) => {
-            // console.log(`STDOUT: ${data}`);
+            
           })
           .stderr.on("data", (data) => {
-            // console.log(`STDERR: ${data}`);
+          
           });
       });
     })
@@ -136,9 +135,6 @@ app.get('/UpdateChannel/:c/:e', async (req, res) => {
   
   TruncateTableTokenChainAdd_fiveMinute()
   return res.send({ status: true, msg: 'Channel Update' });
-
-
-
 
   const { updateChannelAndSend } = require('./App/Helper/Alice_Socket')
   
@@ -230,7 +226,6 @@ async function checkAndDrop() {
           const collectionName = element1 + element;
 
           if (collectionNames.includes(collectionName)) {
-              console.log("Dropping view:", typeof collectionName);
                await dbTest.collection(collectionName).drop();
           } else {
               console.log("Collection/View not found:", collectionName);

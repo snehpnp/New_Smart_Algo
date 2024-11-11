@@ -24,8 +24,7 @@ class KotakNeo {
   // Get GetkotakGetToken
   async GetkotakGetToken(req, res) {
     var user_email = req.body.Email;
-
-    console.log("req.body", req.body.username, req.body.password);
+   
 
     try {
       if (user_email != undefined) {

@@ -97,11 +97,12 @@ let response111 = null;
 
 const ConnectSocket = async (EXCHANGE, instrument_token) => {
 
+  console.log("Hit Boker Server socket")
 
   var channel_List = `${EXCHANGE}|${instrument_token}`
 
   var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE", trading_status: "on" });
-  console.log(broker_infor);
+
   if (broker_infor) {
 
     var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
@@ -153,7 +154,7 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
             socket.send(JSON.stringify(initCon))
           }
 
-          // console.log("Connect Socket");
+
           socket.onmessage = async function (msg) {
             var response = JSON.parse(msg.data);
 
@@ -195,7 +196,7 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
 
 
             } else {
-              // console.log("else", response);
+          
             }
 
             if (response.s === 'OK') {
@@ -210,14 +211,14 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
           }
 
         } catch (error) {
-          //console.log("Error-", error.response);
+         
 
         }
       }
 
 
     }).catch((error) => {
-      // console.log("Error -", error.response.data);
+   
       return error.response.data
     })
 
@@ -313,7 +314,6 @@ app.post('/broker-signals', async (req, res) => {
         }
       });
 
-      console.log("signals - ",signals)
       const epochTimestamp = signals.DTime;
 
 
@@ -1441,7 +1441,6 @@ app.post('/broker-signals', async (req, res) => {
 
           }
 
-          //console.log("findSignal -- strike",findSignal)
 
           // ENTRY OR EXIST CHECK
           if (type == "LE" || type == "le" || type == "SE" || type == "Se") {

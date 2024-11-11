@@ -33,9 +33,9 @@ const BasicDataTable = ({ tableData, TableColumns, tableoptions, rowStyle }) => 
                     keyField="id"
                     data={tableData}
                     columns={TableColumns}
-                    // pagination={paginationFactory(options)}
+                    pagination={paginationFactory(options)}
                     noDataIndication={() => <NoDataIndication />}
-                    headerClasses="bg-primary text-primary text-center header-class fiXed-header"
+                    headerClasses="bg-primary text-primary text-center header-class "
                     rowClasses={`text-center ${rowStyle}`}
 
                 />

@@ -1741,15 +1741,11 @@ module.exports = function (app) {
         get_final_data = get_view_data.map((item) => item.low);
       }
 
-      //  console.log("timeFrameViewData",timeFrameViewData);
+   
 
       const lastElementTimeFrameViewData =
         timeFrameViewData[timeFrameViewData.length - 1];
 
-      console.log(
-        "Last lastElementTimeFrameViewData: 1 ",
-        lastElementTimeFrameViewData
-      );
 
       let averageData = "";
 
@@ -1778,19 +1774,15 @@ module.exports = function (app) {
         }
       }
 
-      console.log(
-        "Last lastElementTimeFrameViewData: 2 ",
-        lastElementTimeFrameViewData
-      );
+  
 
-      // console.log("averageData call strategy",averageData);
+      
       const lastElementAverageData = averageData[averageData.length - 1];
-      // console.log("Last lastElementAverageData:", lastElementAverageData);
+    
 
-      // Split the string based on "&&" or "||" using a regular expression
       if (condition != undefined) {
         const conditionArray = condition.split(/\s*(?:&&|\|\|)\s*/);
-        console.log(conditionArray);
+      
         if (conditionArray.length > 0) {
         }
       }
@@ -1846,19 +1838,19 @@ module.exports = function (app) {
           .aggregate(pipelineGetPrice)
           .toArray();
 
-        console.log("getPriceData - ", getPriceData[0].lp);
+     
 
         sendSignanl(lastElementTimeFrameViewData, element, getPriceData[0].lp);
       }
     } else {
-      // console.log(`Collection ${collectionName} does not exist.`);
+   
     }
   }
 
   function evaluateSingleCondition(condition, data) {
-    console.log("condition", condition);
+
     const [variable, operator, value] = condition.split(/\s*(>|<|>=|<=|=)\s*/);
-    // console.log("value", data[value]);
+
     //const numericValue = parseFloat(value);
     const numericValue = parseFloat(data[value]);
     switch (operator) {
@@ -1878,8 +1870,7 @@ module.exports = function (app) {
   }
 
   function sendSignanl(lastElementTimeFrameViewData, element, price) {
-    console.log("signal sendd element", element);
-    console.log("signal sendd");
+   
     const dt_date = new Date().getTime();
 
     let type = "LE";
@@ -1941,7 +1932,6 @@ module.exports = function (app) {
       "|" +
       client_key +
       "|demo";
-    console.log("request", request);
 
     var axios = require("axios").default;
 
@@ -1959,7 +1949,7 @@ module.exports = function (app) {
     axios
       .request(options)
       .then(function (response) {
-        console.log(response.data);
+  
       })
       .catch(function (error) {
         console.log(error);
@@ -2027,7 +2017,6 @@ module.exports = function (app) {
 
     const result = await UserMakeStrategy.aggregate(pipeline);
 
-    // console.log("result",result)
 
     if (result.length > 0) {
       result.forEach((element) => {
@@ -2049,11 +2038,10 @@ module.exports = function (app) {
 
         if (collectionName != "system.views") {
           await dbTradeTools.collection(collectionName).drop();
-          console.log(`Dropped collection: ${collectionName}`);
+         
         }
       }
 
-      console.log("All collections dropped.");
     } catch (error) {
       console.log("Error:", error);
     } finally {
@@ -2063,7 +2051,6 @@ module.exports = function (app) {
   }
 
   // Call the function to drop all collections in the database
-
   async function TriggerCollection(token) {
     const collection = dbTradeTools.collection(token);
 
@@ -2589,7 +2576,7 @@ module.exports = function (app) {
       // Check if the condition is true or false based on the data
       if (condition) {
         // Your code for when the condition is true
-        // console.log("Condition is true");
+      
       } else {
         // Your code for when the condition is false
         console.log("Condition is false");
@@ -3759,7 +3746,6 @@ module.exports = function (app) {
     }
   });
   
-
   function getCategoryId(categoryResult, segment) {
     const match = categoryResult.find((item) => item.segment === segment);
     return match ? match._id : null;
@@ -3782,13 +3768,6 @@ module.exports = function (app) {
       console.error("Error creating service:", err);
     }
   }
-  
-
-
-
-
-
-
 
 
   async function setupChangeStream() {
@@ -3821,285 +3800,7 @@ module.exports = function (app) {
     }
   }
 
-  // Call the setup function
-  // setupChangeStream();
+
 };
 
-// db.createView(
-//   "emaclose2_M_111435",               // View ka naam
-//   "M_111435",                // Source collection
-//   [
-//     { $sort: { _id: -1 } }, // Sorting to get the latest prices first
-//     // { $limit: 2 },         // Limiting to the period (adjust this based on your period)
-//     { $setWindowFields: {   // Window function to calculate EMA
-//         sortBy: { _id: 1 },
-//         output: {
-//           ema: {
-//             $expMovingAvg: { input: "$close", N: 2 }  // Adjust N based on your period
-//           }
-//         }
-//       }
-//     },
-//     { $project: { ema: 1, _id: 1 } } // Projecting only the ema field, excluding _id
-//   ]
-// )
 
-// const prices = await getHistoricalPrices(collection, 3); // Adjust the period as needed
-
-// if (prices.length < 3) {
-//   console.log('Not enough data to calculate EMA');
-//   continue;
-// }
-// const ema = calculateEMA(prices, 3); // Adjust the period as needed
-
-// function calculateEMA(prices, period) {
-//   const k = 2 / (period + 1);
-//   let emaArray = [prices[0]]; // Initialize with the first price
-
-//   for (let i = 1; i < prices.length; i++) {
-//     emaArray.push(prices[i] * k + emaArray[i - 1] * (1 - k));
-//   }
-
-//   return emaArray;
-// }
-
-// const getHistoricalPrices = async (collection, period) => {
-//   const prices = await collection.find({}).sort({ _id: -1 }).limit(period).toArray();
-//   return prices.map(price => price.close); // Adjust based on your price structure
-// };
-
-// passwords=(
-
-//   'WWmeCDzy37_^4%7*'
-//  'xY3GH3#n^yv?_D89'
-//  '5EslKC&Z7kt4@^*3'
-//  'scR%!487C@yN0@Zn'
-//  'PKjV#vs#6T_196q#'
-//  'd@X19uYAF#9m5#a?'
-//  '8DX_L&x6Qm#i93j*'
-//  'XNgn?52J_&B3&iq8'
-//  '&to6M*#?3LexD5U0'
-//  '&pGhL^3d21f9'
-//  '99@bggU3W5^WIb^@'
-//  'KRNP&27am^v*&69e'
-//  'TpWz638T$Ah&@_b0'
-//  '$vcKz#2O5U!5Mq&9'
-//  '0t_h5sUe8WG^_6N%'
-//  '&1VR3s2@_tv$GhI2'
-//  '^h2M%2$8S7HKjgm_'
-//  'lG@Sp53kK1$#6#Mt'
-//  '*R9triJLZa3O17Spoc0E'
-//  '&cZk0%1XG$3$tMz1'
-//  '6^Di3&9foMAm5?*O'
-//  'WHN6$ixF!n^c^458'
-//  '5X&H5c1^!^1YzFjo'
-//  '%wG_W&1D6r^37Oav'
-//  'YIF#9G3^6$b0vg&g'
-//  'X#fT3A1!5h7#Nzl!'
-//  'XN4KD0_!ex%l84%f'
-//  '&ZF4z77RrfE%*7%p'
-//  'xIOZ0^sP$&$18o2v'
-//  'SbEO&*07ecU%1*r9'
-//  'X1giX&%W4!6hkT9%'
-//  'qm41E2*v&1g&RM%F'
-//  'vX8O2@$axu$S2T2^'
-//  'lA?63$8hhUq&F7*M'
-//  'zm6*nB04USH1b?$@'
-//  '6For57fj2#_Q?ZW@'
-//  '$Jpi4U%y!vQL90&3'
-//  '4!xbiU3SMg$D$6_5'
-//  '55C^oamuW^2T4D*%'
-//  '^uML73&3vw8#JAg%'
-//  '9hVz884$M*o&rFU*'
-//  'J8$PP*d1aC%lp6?8'
-//  'V8*t@k16hJ2qJC^!'
-//  '*oG^cHkU&@J4331c'
-//  '@Wc7r@9UVb!K55q#'
-//  '#%C1OfR5g9@&Dlm0'
-//  '2wQ8c#L&7a&L&Kg9'
-//  '2_4@L^l%7DVfxFq4'
-//  '6zQ^&x%3poK5^L7T'
-//  '^5r&Q!49eM*v1vFB'
-//  'A3!eK%TRcx&457m_'
-//  'zWHVLjdq5@2_9?2%'
-//  '4e#QZ$13%7SHag?s'
-//  'Oir?DV3#y$D23#u0'
-//  'Rbc2!RQv4&s7J1%$'
-//  '@c$Ks!4N0TUp53_w'
-//  '4Ij87*Lvl^@9?ZsS'
-//  'rF8%$d94%RdR0$fU'
-//  '*TqD1&dm99B*J!g5'
-//  'VD&u*6oGn5U!j75_'
-//  'K?pv?GW&ws612G*9'
-//  'hZPt%&wk$%863V4U'
-//  'LtYl?l28O^D?u36?'
-//  '0!^#PYr8_gTv5Ad3'
-//  '_W#r32Udic#E9%Z8'
-//  'J5S!Q8x7##Of%3hi'
-//  '!^UM63_i8m$iAMe9'
-//  '*i#Nt5#183FXuUn!'
-//  'o%%629A!!SE0Faib'
-//  '*D5eI8cm%2^L0?vX'
-//  'eVUch7R8^i^^1!C9'
-
-// )
-
-// const TokenSymbolUpdate = async () => {
-//   console.log("TokenSymbolUpdate");
-
-//   try {
-//     console.log("TokenSymbolUpdate Start", " TIME ", new Date());
-
-//     const config = {
-//       method: 'get',
-//       url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
-//     };
-
-//     const response = await axios(config);
-//     if (response.data.length > 0) {
-//       const pipeline = [
-//         {
-//           $map: {
-//             input: response.data,
-//             as: "element",
-//             in: {
-//               symbol: "$$element.name",
-//               expiry: {
-//                 $dateToString: {
-//                   format: "%d%m%Y",
-//                   date: "$$element.expiry"
-//                 }
-//               },
-//               expiry_month_year: {
-//                 $substr: ["$$element.expiry", 2, 6]
-//               },
-//               expiry_date: {
-//                 $substr: ["$$element.expiry", 0, 2]
-//               },
-//               expiry_str: "$$element.expiry",
-//               strike: {
-//                 $toInt: {
-//                   $substr: ["$$element.strike", 0, -2]
-//                 }
-//               },
-//               option_type: {
-//                 $substr: ["$$element.symbol", -2, 2]
-//               },
-//               segment: {
-//                 $switch: {
-//                   branches: [
-//                     {
-//                       case: { $eq: ["$$element.instrumenttype", "FUTSTK"] },
-//                       then: "F"
-//                     },
-//                     {
-//                       case: { $eq: ["$$element.instrumenttype", "FUTIDX"] },
-//                       then: "F"
-//                     },
-//                     {
-//                       case: { $eq: ["$$element.instrumenttype", "FUTCOM"] },
-//                       then: "MF"
-//                     },
-//                     {
-//                       case: { $eq: ["$$element.instrumenttype", "OPTIDX"] },
-//                       then: "
-
-// const TokenSymbolUpdate = async () => {
-//     console.log("TokenSymbolUpdate");
-
-//     try {
-//       console.log("TokenSymbolUpdate Start", " TIME ", new Date());
-
-//       const config = {
-//         method: 'get',
-//         url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
-//       };
-
-//       const response = await axios(config);
-//       if (response.data.length > 0) {
-//         const pipeline = [
-//           {
-//             $map: {
-//               input: response.data,
-//               as: "element",
-//               in: {
-//                 symbol: "$$element.name",
-//                 expiry: {
-//                   $dateToString: {
-//                     format: "%d%m%Y",
-//                     date: "$$element.expiry"
-//                   }
-//                 },
-//                 expiry_month_year: {
-//                   $substr: ["$$element.expiry", 2, 6]
-//                 },
-//                 expiry_date: {
-//                   $substr: ["$$element.expiry", 0, 2]
-//                 },
-//                 expiry_str: "$$element.expiry",
-//                 strike: {
-//                   $toInt: {
-//                     $substr: ["$$element.strike", 0, -2]
-//                   }
-//                 },
-//                 option_type: {
-//                   $substr: ["$$element.symbol", -2, 2]
-//                 },
-//                 segment: "F",
-//                 instrument_token: "$$element.token",
-//                 lotsize: "$$element.lotsize",
-//                 tradesymbol: "$$element.symbol",
-//                 tradesymbol_m_w: {
-//                   $concat: [
-//                     "$$element.name",
-//                     {
-//                       $substr: ["$$element.expiry", -2, 2]
-//                     },
-//                     {
-//                       $toString: {
-//                         $add: [
-//                           {
-//                             $toInt: {
-//                               $substr: ["$$element.expiry", 2, 2]
-//                             }
-//                           },
-//                           1
-//                         ]
-//                       }
-//                     },
-//                     {
-//                       $substr: ["$$element.expiry", 0, 2]
-//                     },
-//                     {
-//                       $substr: ["$$element.strike", 0, -2]
-//                     },
-//                     {
-//                       $substr: ["$$element.symbol", -2, 2]
-//                     }
-//                   ]
-//                 },
-//                 exch_seg: "$$element.exch_seg"
-//               }
-//             }
-//           },
-//           {
-//             $merge: {
-//               into: "Alice_token",
-//               on: "_id",
-//               whenMatched: "replace",
-//               whenNotMatched: "insert"
-//             }
-//           }
-//         ];
-
-//         await Alice_token.aggregate(pipeline);
-//         console.log("TokenSymbolUpdate End:", " TIME ", new Date());
-//         return;
-//       } else {
-//         return;
-//       }
-//     } catch (error) {
-//       console.log("Error TokenSymbolUpdate Try catch", " TIME ", new Date(), error);
-//       return;
-//     }
-//   }

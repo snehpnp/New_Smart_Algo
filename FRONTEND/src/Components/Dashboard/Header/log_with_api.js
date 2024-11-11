@@ -275,7 +275,7 @@ export const loginWithApi = async (broker_id, UserDetails,check) => {
             },
         }).then((res) => {
 
-            console.log(res.data)
+           
             if (res.data.status) {
                 toast.success(res.data.msg)
                 setTimeout(() => {

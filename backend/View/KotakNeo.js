@@ -94,7 +94,12 @@ async function createViewKotakNeo() {
             api_type: 1,
             demat_userid: 1,
             client_key: 1,
-            web_url: 1
+            web_url: 1,
+            kotakneo_sid: 1,
+            kotakneo_auth: 1,
+            kotakneo_userd: 1,
+            hserverid: 1,
+            oneTimeToken: 1
           }
         },
         {
@@ -324,6 +329,16 @@ async function createViewKotakNeo() {
   } 
 }
 
+// Delete View
+async function deleteViewKotakNeo() {
+  try {
+    await dbTest.collection('kotakneoView').drop();
+    console.log('kotakneo View  deleted successfully.');
+  } catch (error) {
+    return
+  }
+}
 
-module.exports = { createViewKotakNeo }
+
+module.exports = { createViewKotakNeo,deleteViewKotakNeo }
 

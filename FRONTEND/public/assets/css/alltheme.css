@@ -1795,7 +1795,7 @@ button.button_sell.active {
 }
 
 .table-container {
-    max-height: 300px;
+    max-height: auto;
     overflow-y: auto;
   }
   

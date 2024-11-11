@@ -80,7 +80,6 @@ const place_order = async (
         //    const command = `grep -E ".*,(${pattern}),.*.*(${input_symbol}).*" ${filePath_shoonya}`;
         const command = `findstr ${pattern} ${filePath_shoonya}`;
 
-        console.log("command ", command);
 
         exec(command, (error, stdout, stderr) => {
           if (error) {
@@ -88,13 +87,12 @@ const place_order = async (
             // return;
           }
 
-          console.log("stdout", stdout);
 
           if (stdout) {
             const parts = stdout.split(","); // Extract the content inside double quotes
 
             if (parts) {
-              // console.log("Extracted Part:", parts[9]);
+             
               if (segment && segment.toUpperCase() === "C") {
                 tsym = parts[4];
               } else if (
@@ -145,7 +143,7 @@ const place_order = async (
                 // Send all requests concurrently using Promise.all
                 Promise.all(requestPromises)
                   .then((responses) => {
-                    // console.log("Response:", responses.data);
+            
                   })
                   .catch((errors) => {
                     console.log("errors:", errors);
@@ -175,7 +173,7 @@ const place_order = async (
               // Send all requests concurrently using Promise.all
               Promise.all(requestPromises)
                 .then((responses) => {
-                  // console.log("Response:", responses.data);
+                
                 })
                 .catch((errors) => {
                   console.log("errors:", errors);
@@ -207,7 +205,7 @@ const place_order = async (
               // Send all requests concurrently using Promise.all
               Promise.all(requestPromises)
                 .then((responses) => {
-                  // console.log("Response:", responses.data);
+           
                 })
                 .catch((errors) => {
                   console.log("errors:", errors);
@@ -240,10 +238,10 @@ const place_order = async (
             // Send all requests concurrently using Promise.all
             Promise.all(requestPromises)
               .then((responses) => {
-                // console.log("Response:", responses.data);
+            
               })
               .catch((errors) => {
-                console.log("errors:", errors);
+           
               });
           }
         });
@@ -478,10 +476,10 @@ const place_order = async (
         // Send all requests concurrently using Promise.all
         Promise.all(requestPromises)
           .then((responses) => {
-            // console.log("Response:", responses.data);
+        
           })
           .catch((errors) => {
-            console.log("errors:", errors);
+      
           });
       }
     } else {
@@ -511,14 +509,14 @@ const place_order = async (
       // Send all requests concurrently using Promise.all
       Promise.all(requestPromises)
         .then((responses) => {
-          // console.log("Response:", responses.data);
+  
         })
         .catch((errors) => {
-          console.log("errors:", errors);
+       
         });
     }
   } catch (error) {
-    console.log("error", error);
+
   }
 };
 
@@ -708,7 +706,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
           }
         }
       } catch (e) {
-        console.log("error 1", e);
+     
       }
     });
 };
@@ -775,7 +773,6 @@ const ExitPlaceOrder = async (
   axios(config)
     .then(async (response) => {
 
-        console.log("response",response.data)
 
       fs.appendFile(
         filePath,

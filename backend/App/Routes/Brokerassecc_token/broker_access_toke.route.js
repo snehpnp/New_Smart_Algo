@@ -367,7 +367,7 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
       return res.send({ status: false, msg: "broker not found" });
     }
   } else {
-    //console.log("User Not found")
+ 
     return res.send({ status: false, msg: "User Not found" });
   }
 };

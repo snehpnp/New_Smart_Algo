@@ -34,6 +34,8 @@ const TradeHistory = () => {
   const [getType, setType] = useState("Strategy");
   const USerStartDate = useSelector((state) => state.CommonSlice?.profiledata?.data?.CreateDate);
   const formattedStartDate = USerStartDate ? new Date(USerStartDate).toISOString().split('T')[0] : "";
+  const [SelectService, setSelectService] = useState("null");
+  const [ServiceData, setServiceData] = useState([]);
 
 
   const handleFromDateChange = (data) => {
@@ -79,11 +81,21 @@ const TradeHistory = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-          
+
+
+          const FilterData = response.data.filter((item) => {
+            if (SelectService != "null") {
+              return item.trade_symbol === SelectService;
+            }
+            return item;
+          });
+
           setTradeHistoryData({
             loading: false,
-            data: response.data,
+            data:FilterData,
           });
+
+          setServiceData( response.trade_symbols_filter);
 
         } else {
 
@@ -91,6 +103,8 @@ const TradeHistory = () => {
             loading: false,
             data: response.data,
           });
+          setServiceData( response.trade_symbols_filter);
+
         }
       });
   };
@@ -221,14 +235,10 @@ const TradeHistory = () => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
     });
 
-
-
-
   const ShowLivePrice = async () => {
     await FunctionForLivePriceCalculation(CreatechannelList, UserDetails, setSocketState, tradeHistoryData.data &&
       tradeHistoryData.data)
   };
-
 
   const ResetAllData = () => {
     setFromDate("");
@@ -236,14 +246,13 @@ const TradeHistory = () => {
     setType("Strategy");
   };
 
-
   useEffect(() => {
     data();
   }, []);
 
   useEffect(() => {
     getsignals11();
-  }, [fromDate, toDate, getType]);
+  }, [fromDate, toDate, getType,SelectService,SelectServiceIndex]);
 
   useEffect(() => {
     ShowLivePrice();
@@ -334,13 +343,66 @@ const TradeHistory = () => {
               onChange={(e) => setType(e.target.value)}
               value={getType}
             >
-              <option value="Strategy" selected>Starategy</option>z
+              <option value="Strategy" selected>Strategy</option>
               <option value="Trade" selected>Trade</option>
 
             </select>
           </div>
         </div>
+        <div className="col-lg-2 px-1">
+            <div className="mb-3">
+              <label for="select" className="form-label">
+                Symbol
+              </label>
+              <select
+                className="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectService(e.target.value)}
+                value={SelectService}
+              >
+                <option value="null" selected>
+                  All
+                </option>
+                {ServiceData &&
+                  ServiceData.map((item) => {
+                    return (
+                      <option className="mt-1" value={item}>
+                        {item}
+                      </option>
+                    );
+                  })}
+              </select>
+            </div>
+          </div>
 
+          <div className="col-lg-2 px-1">
+            <div className="mb-3">
+              <label for="select" className="form-label">
+                Index Symbol
+              </label>
+              <select
+                className="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectServiceIndex(e.target.value)}
+                value={SelectServiceIndex}
+              >
+                <option value="null" selected>
+                  All
+                </option>
+                <option value="BANKNIFTY" selected>
+                  BANKNIFTY
+                </option>
+                <option value="NIFTY" selected>
+                  NIFTY
+                </option>
+                <option value="FINNIFTY" selected>
+                  FINNIFTY
+                </option>
+              </select>
+            </div>
+          </div>
 
         <div className="col-lg-2  px-1">
           <div className="mt-2">

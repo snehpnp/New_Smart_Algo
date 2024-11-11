@@ -14,7 +14,6 @@ var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
      
-  //console.log("Inside mastertrust")
     
     try {
 
@@ -60,15 +59,15 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                 item.postdata.price = price
             }
-            //  console.log("postData after ", item.postdata);
+          
             EntryPlaceOrder(item, filePath, signals, signal_req)
 
 
            });
-        // Send all requests concurrently using Promise.all
+      
           Promise.all(requestPromises)
           .then(responses => {
-              // console.log("Response:", responses.data);
+
           })
           .catch(errors => {
               console.log("errors:", errors);
@@ -140,9 +139,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                             if(Exist_entry_order != undefined){
                                
                                     const possition_qty = parseInt(Exist_entry_order.buy_quantity) - parseInt(Exist_entry_order.sell_quantity);
-                                    // console.log("possition_qty Cash", possition_qty);
+                                  
                                     if (possition_qty == 0) {
-                                        // console.log("possition_qty Not Available", possition_qty);
+                                  
                                         BrokerResponse.create({
                                             user_id: item._id,
                                             receive_signal: signal_req,
@@ -331,7 +330,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             // Send all requests concurrently using Promise.all
              Promise.all(requestPromises)
             .then(responses => {
-                // console.log("Response:", responses.data);
+        
               })
               .catch(errors => {
                 console.log("errors:", errors);
@@ -377,7 +376,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         // Send all requests concurrently using Promise.all
             Promise.all(requestPromises)
             .then(responses => {
-                // console.log("Response:", responses.data);
+          
 
             })
             .catch(errors => {

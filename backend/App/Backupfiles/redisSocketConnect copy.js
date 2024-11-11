@@ -1,6 +1,6 @@
 module.exports = function (app) {
 
-    const db = require('./App/Models');
+    const db = require('../Models');
     const Alice_token = db.Alice_token;
     // const test_redis_price = db.test_redis_price;
     const stock_live_price = db.stock_live_price;

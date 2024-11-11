@@ -153,10 +153,7 @@ class Dashboard {
         });
       });
     } catch (error) {
-      console.log(
-        "Error In one broker Informations Broker Informations",
-        error
-      );
+     
     }
   }
 }

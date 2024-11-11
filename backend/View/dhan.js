@@ -313,7 +313,6 @@ async function createViewDhan() {
 
       await dbTest.createCollection('dhanView', { viewOn: 'users', pipeline });
 
-      console.log('dhanView View  created successfully.');
       return
     }
 

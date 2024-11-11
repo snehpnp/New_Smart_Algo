@@ -404,7 +404,6 @@ class AliceBlue {
           data: [],
         });
       }
-      console.log("req.body", req.body);
 
       let data = JSON.stringify({
         nestOrderNumber: order_id,
