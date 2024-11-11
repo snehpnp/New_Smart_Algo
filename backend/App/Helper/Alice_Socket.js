@@ -377,59 +377,59 @@ function openSocketConnection(channelList, userid, userSession1) {
 
     if (response.tk) {
      
-      // const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk });
-      // if (Make_startegy_token) {
-      //   await connectToDB(response.tk, response)
-      // }
-
-
-
-      if (response.lp != undefined) {
-        console.log("response", response.tk)
-        await stock_live_price.updateOne({ _id: response.tk }
-          , {
-            $set: {
-              lp: response.lp,
-              exc: response.e,
-              curtime: `${new Date().getHours().toString().padStart(2, '0')}${new Date().getMinutes().toString().padStart(2, '0')}`,
-              ft: response.ft
-            },
-          },
-          { upsert: true });
+      const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk });
+      if (Make_startegy_token) {
+        await connectToDB(response.tk, response)
       }
 
 
 
-
-
-
-      // let updateQueue = {};
-      // function queueUpdate(response) {
-      //   updateQueue[response.tk] = {
-      //     lp: response.lp,
-      //     exc: response.e,
-      //     curtime: `${new Date().getHours().toString().padStart(2, '0')}${new Date().getMinutes().toString().padStart(2, '0')}`,
-      //     ft: response.ft
-      //   };
-      // }
-      // setInterval(async () => {
-      //   const bulkOps = Object.keys(updateQueue).map(id => ({
-      //     updateOne: {
-      //       filter: { _id: id },
-      //       update: { $set: updateQueue[id] },
-      //       upsert: true
-      //     }
-      //   }));
-      
-      //   if (bulkOps.length > 0) {
-      //     await stock_live_price.bulkWrite(bulkOps);
-      //     updateQueue = {}; 
-      //   }
-      // }, 500); 
-      
       // if (response.lp != undefined) {
-      //   queueUpdate(response);
+      //   console.log("response", response.tk)
+      //   await stock_live_price.updateOne({ _id: response.tk }
+      //     , {
+      //       $set: {
+      //         lp: response.lp,
+      //         exc: response.e,
+      //         curtime: `${new Date().getHours().toString().padStart(2, '0')}${new Date().getMinutes().toString().padStart(2, '0')}`,
+      //         ft: response.ft
+      //       },
+      //     },
+      //     { upsert: true });
       // }
+
+
+
+
+
+
+      let updateQueue = {};
+      function queueUpdate(response) {
+        updateQueue[response.tk] = {
+          lp: response.lp,
+          exc: response.e,
+          curtime: `${new Date().getHours().toString().padStart(2, '0')}${new Date().getMinutes().toString().padStart(2, '0')}`,
+          ft: response.ft
+        };
+      }
+      setInterval(async () => {
+        const bulkOps = Object.keys(updateQueue).map(id => ({
+          updateOne: {
+            filter: { _id: id },
+            update: { $set: updateQueue[id] },
+            upsert: true
+          }
+        }));
+      
+        if (bulkOps.length > 0) {
+          await stock_live_price.bulkWrite(bulkOps);
+          updateQueue = {}; 
+        }
+      }, 500); 
+      
+      if (response.lp != undefined) {
+        queueUpdate(response);
+      }
       
 
 
