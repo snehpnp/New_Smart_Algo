@@ -1249,7 +1249,7 @@ async function run() {
       // Delay for 1000 milliseconds (1 second)
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // await executeFunction();
+       await executeFunction();
 
       // Open Position Function Evey Second
       const indiaTimezoneOffset = 330;
