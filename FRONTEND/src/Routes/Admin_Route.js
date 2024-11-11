@@ -151,14 +151,11 @@ const Admin = () => {
                 <Route exact path="/allstarclients" element={<Starclients />} />
                 <Route exact path="/faq" element={<Faq />} />
                 <Route exact path="/refer-earn" element={<ReferralPage />} />
-
                 <Route exact path="/plans" element={<Plans />} />
                 <Route exact path="/plan/add" element={<Addplans />} />
 
-
-
                 <Route exact path="/tradehistory1" element={<TradeHistory1 />} />
-        <Route exact path="/test" element={<Test />} />
+  
 
             </Routes>
         </>
