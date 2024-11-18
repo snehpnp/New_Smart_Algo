@@ -216,7 +216,7 @@ async function checkAndDrop() {
   const collectionNames = collections.map(col => col.name);
   console.log("Existing collections/views:", collectionNames);
   // let arr =  ['22','3045','2885','6705','10666']
-  let arr =  ['33','3045','436237','1333','10666','22']
+  let arr =  ['426307','429116','437992','437993']
   let arr1 =  ['M_','M3_','M5_','M10_','M15_','M30_','M60_','M1DAY_']
   for (const element of arr) {
     console.log("Dropping collection:", element);

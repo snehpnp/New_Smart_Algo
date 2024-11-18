@@ -171,6 +171,7 @@ class MakeStartegy {
                 exch_seg: "$firstDocument.exch_seg",
                 condition_source: "$firstDocument.condition_source",
                 buffer_value: "$firstDocument.buffer_value",
+                statusOnOff: "$firstDocument.statusOnOff",
                 type: { $arrayElemAt: ["$secondDocument.type", 0] }, // Get the type of the first document
                 _id_secondObject: { $arrayElemAt: ["$secondDocument._id", 1] }, // Get the _id of the second document if it exists
                 type_secondObject: { $arrayElemAt: ["$secondDocument.type", 1] }, // Get the type of the second document if it exists
@@ -184,7 +185,7 @@ class MakeStartegy {
 
       const result = await UserMakeStrategy.aggregate(pipeline)
       if (result.length > 0) {
-        console.log("result ", result)
+       // console.log("result ", result)
         res.send({ status: true, msg: "Get All make strategy", data: result });
       } else {
         res.send({ status: false, msg: "Empty data", data: [] });
@@ -217,7 +218,6 @@ class MakeStartegy {
         }
       } catch (error) {
       }
-
       if (matchNameStartegy != null) {
         const matchNameStartegy_exist_view = `M${matchNameStartegy.timeframe}_${matchNameStartegy.tokensymbol}_make_${matchNameStartegy.name}`;
         try {
@@ -229,7 +229,6 @@ class MakeStartegy {
         }
         await UserMakeStrategy.deleteOne({ name: matchNameStartegy.name });
       }
-
       const result = await UserMakeStrategy.deleteOne({ _id: objectId });
       if (result.acknowledged == true) {
         return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
@@ -243,11 +242,74 @@ class MakeStartegy {
   //Delete make strateg Selected
   async DeleteMakeStartegySelected(req, res) {
     try {
+      console.log("req.body.ids_array ", req.body.ids_array) 
+      console.log("req.body.data ", req.body.data) 
 
+      if(req.body.data.length > 0){
+       for(const item of req.body.data){
+        const { _id, timeframe, tokensymbol, name, show_strategy, type } = item;
+        const objectId = new ObjectId(_id);
+        const exist_view = `M${timeframe}_${tokensymbol}_make_${name}`;
 
-      const result = await UserMakeStrategy.deleteMany({ _id: { $in: req.body.ids_array } });
-      if (result.acknowledged == true) {
-        return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
+        let checkType = "BUY"
+        if (type == "BUY") {
+          checkType = "SELL"
+        }
+  
+        const matchNameStartegy = await UserMakeStrategy.findOne({ type: checkType, show_strategy: show_strategy });
+  
+        try {
+          const collectionExists = await dbTest.listCollections({ name: exist_view }).hasNext();
+          if (collectionExists) {
+            await dbTest.collection(exist_view).drop();
+          }
+        } catch (error) {
+        }
+        if (matchNameStartegy != null) {
+          const matchNameStartegy_exist_view = `M${matchNameStartegy.timeframe}_${matchNameStartegy.tokensymbol}_make_${matchNameStartegy.name}`;
+          try {
+            const collectionExists = await dbTest.listCollections({ name: matchNameStartegy_exist_view }).hasNext();
+            if (collectionExists) {
+              await dbTest.collection(matchNameStartegy_exist_view).drop();
+            }
+          } catch (error) {
+          }
+          await UserMakeStrategy.deleteOne({ name: matchNameStartegy.name });
+         }
+        const result = await UserMakeStrategy.deleteOne({ _id: objectId });
+
+       }
+      }
+      return res.send({ status: true, msg: 'Delete All Strategy successfully ', data: [] });
+      // const result = await UserMakeStrategy.deleteMany({ _id: { $in: req.body.ids_array } });
+      // if (result.acknowledged == true) {
+      //   return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
+      // }
+    } catch (error) {
+      res.status(500).send({ status: false, msg: "Internal server error" });
+    }
+  }
+
+   //status change make strateg Selected
+   async StatusChangeMakeStartegy(req, res) {
+    try {
+
+     let status_msg = "Off"
+      if (req.body.status === "1") {
+        status_msg = "On"
+      }
+
+      const filter = { show_strategy: req.body.data.show_strategy };
+      const update_make_strategy = {
+        $set: {
+          statusOnOff: req.body.status,
+        }
+      };
+      const result = await UserMakeStrategy.updateMany(filter, update_make_strategy);
+      if (result.modifiedCount > 0) {
+        return res.send({ status: true, msg: `Strategy ${status_msg} successfully`, data: result.modifiedCount });
+      }else{
+        return res.send({ status: false, msg: `Strategy ${status_msg} failed`, data: result.modifiedCount });
       }
     } catch (error) {
 

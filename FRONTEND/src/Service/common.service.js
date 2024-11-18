@@ -365,6 +365,24 @@ export async function DELETE_MAKE_STRATEGY_SELECTED(data, token) {
     }
 }
 
+// status change make Startegy delete selected
+export async function STATUSCHANGE_MAKE_STRATEGY(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}StatusChangeMakeStartegy`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+
+
+    }
+}
+
+
+
+
 
 // Cancel order by Admin
 export async function CANCEL_ORDER_BY_ADMIN(data, token) {

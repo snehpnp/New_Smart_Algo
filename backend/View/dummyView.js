@@ -4787,6 +4787,7 @@ db.createView("strategyViewNames", "usermakestrategies",
       {
         $match: {
           status: "1",
+          statusOnOff: "1",
         }
       },
       {

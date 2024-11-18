@@ -4,7 +4,7 @@
 const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 
-const { gettimeFrame ,get_sources ,get_comparators,AddMakeStartegy,GetAllMakeStartegy,DeleteMakeStartegy,EditeMakeStartegy,UpdateMakeStartegy,DeleteMakeStartegySelected,getcandledata} = require('../../Controllers/MakeStartegy/makestrategy.controllers')
+const { gettimeFrame ,get_sources ,get_comparators,AddMakeStartegy,GetAllMakeStartegy,DeleteMakeStartegy,EditeMakeStartegy,UpdateMakeStartegy,DeleteMakeStartegySelected,getcandledata,StatusChangeMakeStartegy} = require('../../Controllers/MakeStartegy/makestrategy.controllers')
 
 
 router.post('/get/candledata',verifyToken,getcandledata);
@@ -26,6 +26,11 @@ router.post('/EditeMakeStartegy',verifyToken, EditeMakeStartegy);
 router.post('/UpdateMakeStartegy',verifyToken, UpdateMakeStartegy);
 
 router.post('/DeleteMakeStartegySelected',verifyToken, DeleteMakeStartegySelected);
+
+router.post('/StatusChangeMakeStartegy',verifyToken, StatusChangeMakeStartegy);
+
+
+
 
 
 
