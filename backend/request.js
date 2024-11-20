@@ -13,6 +13,7 @@ module.exports = function (app) {
   const services = db.services;
   const categorie = db.categorie;
   const live_price = db.live_price;
+  const client_services = db.client_services;
   const UserMakeStrategy = db.UserMakeStrategy;
   const Get_Option_Chain_modal = db.option_chain_symbols;
   const company = db.company_information;
@@ -1464,8 +1465,8 @@ app.get("/ssj", async (req, res) => {
       servicesResult.forEach(async (element) => {
         const Sid = new ObjectId(element._id);
         // if(element.name == "TITAN"){
-        
-        const clsResult = await client_services.find({ service_id: Sid });
+
+       const clsResult = await client_services.find({ service_id: Sid });
         if (clsResult.length > 0) {
           clsResult.forEach(async (item) => {
             const filtet = { _id: item._id };
@@ -1482,7 +1483,7 @@ app.get("/ssj", async (req, res) => {
           });
         }
 
-        //}
+       // }
       });
     }
 
