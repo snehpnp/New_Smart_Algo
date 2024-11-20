@@ -1464,7 +1464,7 @@ app.get("/ssj", async (req, res) => {
       servicesResult.forEach(async (element) => {
         const Sid = new ObjectId(element._id);
         // if(element.name == "TITAN"){
-
+        
         const clsResult = await client_services.find({ service_id: Sid });
         if (clsResult.length > 0) {
           clsResult.forEach(async (item) => {
