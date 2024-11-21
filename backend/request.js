@@ -1446,10 +1446,112 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
     });
   };
 
-app.get("/ssj", async (req, res) => {
-  service_token_update1();
-});
+  app.get("/ssj", async (req, res) => {
+    service_token_update1();
+  });
 
+
+  app.get("/UpdateServicesLotSize", async (req, res) => {
+    
+    const pipeline = [
+      {
+        $project: {
+          // Include fields from the original collection
+          segment: 1,
+        },
+      },
+    ];
+    const categoryResult = await categorie.aggregate(pipeline);
+    var axios = require("axios");
+    var config = {
+      method: "get",
+      url: "https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json",
+    };
+
+    axios(config).then(async function (response) {
+      var unique_key = [];
+      let count = 0;
+      await response.data.forEach(async (item) => {
+        if (
+          item.instrumenttype == "OPTSTK" ||
+          item.instrumenttype == "OPTIDX" 
+        ) {
+        
+
+          if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
+            unique_key.push(`${item.name}-${item.instrumenttype}`);
+            
+            if (
+              item.instrumenttype == "OPTSTK" ||
+              item.instrumenttype == "OPTIDX"
+            ) {
+              count++;
+              
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "O"
+              );
+              const category_id = matchingElements[0]._id;
+              //console.log("item", item.name);
+             // console.log("lotsize", item.lotsize);
+             // if(item.name == "BANKNIFTY"){
+                 console.log("lotsize", item.lotsize);
+
+                 if (item.name != undefined) {
+                    
+                    await services.updateMany({ name: item.name }
+                      , {
+                        $set: {
+                          lotsize: item.lotsize
+                        },
+                      },
+                      { upsert: true });
+                  }
+
+             // }
+             
+            }
+
+         
+          }
+        }
+      });
+
+      // return res.send("okkkkkk");
+    });
+
+
+    // const pipeline = [
+    //   {
+    //     $lookup: {
+    //       from: "categories",
+    //       localField: "categorie_id",
+    //       foreignField: "_id",
+    //       as: "categoryResult",
+    //     },
+    //   },
+    //   {
+    //     $unwind: "$categoryResult", // Unwind the 'categoryResult' array
+    //   },
+    //   {
+    //     $match: {
+    //       'categoryResult.segment': { $in: ['F', 'O'] }
+    //     }
+    //   },
+    //   {
+    //     $project: {
+    //       "categoryResult.segment": 1,
+    //       "categoryResult.name": 1,
+    //        name: 1,
+    //        lotsize: 1
+    //     },
+    //   },
+      
+    // ];
+    // const servicesResult = await services.aggregate(pipeline);
+    // console.log("servicesResult", servicesResult);
+
+    return res.send({ status: true, message: "Updating lot size"  });
+  });
 
   app.get("/UpdateQty", async (req, res) => {
     const pipeline = [
