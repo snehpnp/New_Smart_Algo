@@ -46703,3 +46703,12 @@ body {
   height: 51px !important;
   font-size: 20px !important;
 }
+.header-container {
+  display: block !important;
+}
+[data-header-position="fixed"] .header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: block !important;
+}
