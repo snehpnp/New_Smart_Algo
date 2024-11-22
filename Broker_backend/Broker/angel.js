@@ -50,6 +50,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
 
                         item.postdata.tradingsymbol = token[0].tradesymbol;
 
+                        item.postdata.exchange = token[0].exch_seg;
 
                         if (type == 'LE' || type == 'SX') {
                             item.postdata.transactiontype = 'BUY';
@@ -133,9 +134,12 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
             const requestPromises = AllClientData.map(async (item) => {
                 if (token != 0) {
 
+
                     if (segment.toUpperCase() != "C") {
                         item.postdata.symboltoken = token[0].instrument_token;
                         item.postdata.tradingsymbol = token[0].tradesymbol;
+                        item.postdata.exchange = token[0].exch_seg;
+
                     }
 
 

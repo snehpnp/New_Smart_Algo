@@ -14,9 +14,7 @@ var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
 
-
     try {
-
         var dt = signals.DTime;
         var input_symbol = signals.Symbol;
         var type = signals.TType.toUpperCase();
@@ -35,14 +33,13 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         var client_key = signals.Key;
         var demo = signals.Demo;
 
-
         if (token != 0) {
 
             const csvFilePath = '../AllInstrumentToken/upstoxinstrument/complete.csv';
             const filePath_token = path.join(__dirname, csvFilePath);
             const pattern = token[0].instrument_token
 
-            const command = `grep '|${pattern}' ${filePath_token}`;
+            const command = `grep '"${pattern}"' ${filePath_token}`;
 
             exec(command, (error, stdout, stderr) => {
                 if (error) {
@@ -52,7 +49,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                 if (stdout) {
 
-                    const parts = stdout.match(/"([^"]+)"/)[1]; // Extract the content inside double quotes
+                    const parts = stdout.match(/"([^"]+)"/)[1]; 
 
 
                     if (type == 'LE' || type == 'SE') {
@@ -67,11 +64,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                 item.postdata.transaction_type = 'SELL';
                             }
 
-
                             if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                                 item.postdata.price = price
                             }
-
 
                             EntryPlaceOrder(item, filePath, signals, signal_req)
 

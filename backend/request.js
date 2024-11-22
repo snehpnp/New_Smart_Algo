@@ -1,5 +1,3 @@
-const { forEach } = require('mathjs');
-
 module.exports = function (app) {
   const axios = require("axios");
   const db = require("./App/Models");
@@ -20,44 +18,41 @@ module.exports = function (app) {
   const dbTest = db.dbTest;
   const get_open_position_view = db.open_position;
   const MainSignals = db.MainSignals;
-
+  const panel_model = db.panel_model;
   const Broker_information = db.Broker_information;
-  const { DashboardView } = require("./View/DashboardData");
-  const {
-    createView,
-    dropOpenPosition,
-    open_position_excute,
-  } = require("./View/Open_position");
-  const {TokenSymbolUpdate} = require("./App/Cron/cron");
-  const { createViewAlice } = require("./View/Alice_blue");
-  const { createViewAngel } = require("./View/Angel");
-  const { createViewDhan } = require("./View/dhan");
-  const { createViewFivepaisa } = require("./View/fivepaisa");
-  const { createViewFyers } = require("./View/fyers");
-  const { createViewIifl } = require("./View/Iifl");
-  const { createViewKotakNeo,deleteViewKotakNeo } = require("./View/KotakNeo");
-  const { createViewMarketHub } = require("./View/markethub");
-  const { createViewMastertrust } = require("./View/Mastertrust");
-  const { createViewMotilalOswal } = require("./View/MotilalOswal");
-  const { createViewSwastika } = require("./View/swastika");
-  const { createViewUpstox } = require("./View/Upstox");
-  const { createViewZebul } = require("./View/Zebul");
-  const { createViewZerodha } = require("./View/zerodha");
-  const { createViewIcicidirect } = require("./View/Icicidirectview");
-  const {createViewShoonya} = require('./View/Shoonya');
+
+  const { DashboardView,Cilents_service_View } = require("./View/DashboardData");
+  const { createView, dropOpenPosition, open_position_excute } = require("./View/Open_position");
+  const { TokenSymbolUpdate } = require("./App/Cron/cron");
+  const { createViewAlice, dropViewAlice } = require("./View/Alice_blue");
+  const { createViewAngel, dropViewAngel } = require("./View/Angel");
+  const { createViewDhan, dropViewDhan } = require("./View/dhan");
+  const { createViewFivepaisa,dropViewFivepaisa } = require("./View/fivepaisa");
+  const { createViewFyers, dropViewFyers } = require("./View/fyers");
+  const { createViewIifl, dropViewIifl } = require("./View/Iifl");
+  const { createViewKotakNeo, deleteViewKotakNeo } = require("./View/KotakNeo");
+  const { createViewMarketHub,dropViewMarketHub } = require("./View/markethub");
+  const { createViewMastertrust, dropViewMastertrust } = require("./View/Mastertrust");
+  const { createViewMotilalOswal,dropViewMotilalOswal } = require("./View/MotilalOswal");
+  const { createViewSwastika, dropViewSwastika } = require("./View/swastika");
+  const { createViewUpstox, dropViewUpstox } = require("./View/Upstox");
+  const { createViewZebul, dropViewZebul } = require("./View/Zebul");
+  const { createViewZerodha, dropViewZerodha } = require("./View/zerodha");
+  const { createViewIcicidirect,dropViewIcicidirect } = require("./View/Icicidirectview");
+  const { createViewShoonya, dropViewShoonya } = require("./View/Shoonya");
 
   app.get("/tk", (req, res) => {
     TokenSymbolUpdate();
     res.send("ok");
   });
 
- app.get("/deleteRecord",async(req,res)=>{
-
-
-const currentDate = new Date();
-const monthsPrior = 3; // Change this value to 3, 4, or any other number of months
-const millisecondsPerMonth = 2629800000; // approximate milliseconds per month
-const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPerMonth));
+  app.get("/deleteRecord", async (req, res) => {
+    const currentDate = new Date();
+    const monthsPrior = 3; // Change this value to 3, 4, or any other number of months
+    const millisecondsPerMonth = 2629800000; // approximate milliseconds per month
+    const datePrior = new Date(
+      currentDate.getTime() - monthsPrior * millisecondsPerMonth
+    );
 
     await company.updateOne(
       {},
@@ -344,7 +339,6 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
             }
 
             // await dbTest.collection(viewName).drop();
-         
 
             // let viewName = condition[element].source + '_M' + timeframe + '_' + tokensymbol;
             // let collectionViewName = 'M' + timeframe + '_' + tokensymbol;
@@ -543,34 +537,6 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
     res.send("Doneeeeeeeee");
   });
 
-  // function parseConditionString(conditionString) {
-  //     const conditionRegex = /data\.(\w+)\[(\d+)\]([><])data\.(\w+)\[(\d+)\]/g;
-  //     const conditions = [];
-  //     let andFlag = false;
-
-  //     // Handle the && and || parts
-  //     const andParts = conditionString.split('&&');
-  //     andParts.forEach(part => {
-  //         const orParts = part.split('||');
-  //         orParts.forEach((subPart, index) => {
-  //             let match;
-  //             while ((match = conditionRegex.exec(subPart)) !== null) {
-  //                 const [_, field1, index1, operator, field2, index2] = match;
-  //                 conditions.push({
-  //                     operator,
-  //                     field1,
-  //                     index1: parseInt(index1),
-  //                     field2,
-  //                     index2: parseInt(index2),
-  //                     type: index === 0 && andFlag ? 'and' : 'or'
-  //                 });
-  //             }
-  //         });
-  //         andFlag = true;
-  //     });
-
-  //     return conditions;
-  // }
   function parseConditionString(conditionString) {
     const conditionRegex =
       /data\.(\w+)\[(\d+)\]([><=]{1,2})data\.(\w+)\[(\d+)\]/g;
@@ -680,7 +646,6 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
     };
   };
 
-  // ========================================================================================================
 
   var CreateDataBase = async (data) => {
     const uri = data;
@@ -913,12 +878,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
   };
 
   app.get("/all/brokerview", (req, res) => {
-
-
-    deleteViewKotakNeo();
-
-
-
+    Cilents_service_View();
     DashboardView();
     createViewAlice();
     createViewAngel();
@@ -937,9 +897,30 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
     createViewIcicidirect();
     createView();
     open_position_excute();
-    createViewShoonya()
+    createViewShoonya();
 
     return res.send("DONEE");
+  });
+
+  app.get("/all/brokerview/drop", (req, res) => {
+    dropViewAlice();
+    dropViewAngel();
+    dropViewDhan();
+    dropViewFivepaisa();
+    dropViewFyers();
+    dropViewIifl();
+    deleteViewKotakNeo();
+    dropViewMarketHub();
+    dropViewMastertrust();
+    dropViewMotilalOswal();
+    dropViewSwastika();
+    dropViewUpstox();
+    dropViewZebul();
+    dropViewZerodha();
+    dropViewIcicidirect();
+    dropViewShoonya();
+
+    return res.send({ staus: true, msg: "DELETE DONEE", data: "" });
   });
 
   app.post("/all/tabel", async (req, res) => {
@@ -966,7 +947,6 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
 
       const servicesData = await services.find();
       if (servicesData.length == 0) {
-        // service_token_update1();
         service_token_update1();
       }
 
@@ -1071,7 +1051,6 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
     const pipeline = [
       {
         $project: {
-          // Include fields from the original collection
           segment: 1,
         },
       },
@@ -1086,8 +1065,6 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
     };
 
     axios(config).then(async function (response) {
-  
-
       var unique_key = [];
       let count = 0;
       await response.data.forEach(async (item) => {
@@ -1102,11 +1079,8 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
           item.instrumenttype == "OPTFUT" ||
           item.instrumenttype == ""
         ) {
-        
-
           if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
             unique_key.push(`${item.name}-${item.instrumenttype}`);
-            
 
             if (item.symbol.slice(-3) == "-EQ") {
               count++;
@@ -1145,34 +1119,47 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
               item.instrumenttype == "FUTIDX"
             ) {
               count++;
-          
+
               const matchingElements = categoryResult.filter(
                 (item) => item.segment === "F"
               );
               const category_id = matchingElements[0]._id;
 
-              services
-                .create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + "_" + category_id,
-                })
-                .then((createdServices) => {
-                  console.log("User created and saved:", createdServices._id);
-                })
-                .catch((err) => {
-                  try {
-                    console.log("Error creating and saving user:", err);
-                  } catch (e) {
-                    ;
-                  }
-                });
+              // services
+              //   .create({
+              //     name: item.name,
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + "_" + category_id,
+              //   })
+              //   .then((createdServices) => {
+              //     console.log("User created and saved:", createdServices._id);
+              //   })
+              //   .catch((err) => {
+              //     try {
+              //       console.log("Error creating and saving user:", err);
+              //     } catch (e) {
+              //       ;
+              //     }
+              //   });
+
+              await services.updateOne(
+
+                { name: item.name,instrumenttype:item.instrumenttype },
+                {
+                  $set: {
+
+                    lotsize: item.lotsize,
+
+                  },
+                },
+                { upsert: true }
+              );
             }
 
             if (
@@ -1180,7 +1167,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
               item.instrumenttype == "OPTIDX"
             ) {
               count++;
-              
+
               const matchingElements = categoryResult.filter(
                 (item) => item.segment === "O"
               );
@@ -1208,11 +1195,22 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
                     ;
                   }
                 });
+
+              //   { name: item.name,instrumenttype:item.instrumenttype },
+              //   {
+              //     $set: {
+
+              //       lotsize: item.lotsize,
+
+              //     },
+              //   },
+              //   { upsert: true }
+              // );
             }
 
             if (item.instrumenttype == "OPTFUT") {
               count++;
-      
+
               const matchingElements = categoryResult.filter(
                 (item) => item.segment === "MO"
               );
@@ -1308,7 +1306,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
 
             if (item.instrumenttype == "OPTCUR" && item.exch_seg == "CDS") {
               count++;
-             
+
               const matchingElements = categoryResult.filter(
                 (item) => item.segment === "CO"
               );
@@ -1340,7 +1338,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
 
             if (item.instrumenttype == 'FUTSTK' && item.exch_seg=="BFO") {
               count++
-          
+
               const matchingElements = categoryResult.filter(item => item.segment === "BO");
               const category_id = matchingElements[0]._id
 
@@ -1356,13 +1354,13 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
                 unique_column: item.name + '_' + category_id
               })
                 .then((createdServices) => {
-          
+
                 })
                 .catch((err) => {
                   try {
-          
+
                   } catch (e) {
-           
+
                   }
 
                 });
@@ -1371,7 +1369,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
 
             else if (item.instrumenttype == 'FUTIDX' && item.exch_seg=="BFO") {
               count++
-           
+
               const matchingElements = categoryResult.filter(item => item.segment === "BO");
               const category_id = matchingElements[0]._id
 
@@ -1387,13 +1385,13 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
                 unique_column: item.name + '_' + category_id
               })
                 .then((createdServices) => {
-            
+
                 })
                 .catch((err) => {
                   try {
-      
+
                   } catch (e) {
-            
+
                   }
 
                 });
@@ -1411,9 +1409,7 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
               item.instrumenttype == "AUCSO"
             ) {
               count++;
-       
-              // const matchingElements = categoryResult.filter(item => item.segment === "C");
-              // const category_id = matchingElements[0]._id
+
               services
                 .create({
                   name: item.name,
@@ -1427,28 +1423,100 @@ const datePrior = new Date(currentDate.getTime() - (monthsPrior * millisecondsPe
                   unique_column: item.name + "_" + "c9dbdc14a9fefd971c979",
                 })
                 .then((createdServices) => {
-        
+
                 })
                 .catch((err) => {
                   try {
-           
+
                   } catch (e) {
-           
+
                   }
                 });
+            }else
+
+            // BSE CASH TOKEN UPDATE
+            if (
+              item.exch_seg == "BSE" &&
+              item.instrumenttype == "" &&
+              item.expiry == ""
+            ) {
+              count++;
+
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "BC"
+              );
+              const category_id = matchingElements[0]._id;
+
+              await services
+                .create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + "_" + category_id,
+                })
+                .then((createdServices) => {})
+                .catch((err) => {
+                  try {
+                  } catch (e) {}
+                });
+            }
+
+            // BSE BSE STOCK FUTURE  TOKEN UPDATE
+            if (item.exch_seg=="BFO" && item.instrumenttype == 'FUTSTK' ) {
+              count++
+
+              const matchingElements = categoryResult.filter(item => item.segment === "BF");
+              const category_id = matchingElements[0]._id
+
+              await services.create({
+                name: item.name,
+                instrument_token: item.token,
+                zebu_token: item.symbol,
+                kotak_token: "",
+                instrumenttype: item.instrumenttype,
+                exch_seg: item.exch_seg,
+                lotsize: item.lotsize,
+                categorie_id: category_id,
+                unique_column: item.name + '_' + category_id
+              })
+                .then((createdServices) => { })
+                .catch((err) => { try { } catch (e) { } });
+            }
+
+            if (item.exch_seg=="BFO" && item.instrumenttype == 'FUTIDX' ) {
+              count++
+
+              const matchingElements = categoryResult.filter(item => item.segment === "BO");
+              const category_id = matchingElements[0]._id
+
+              await services.create({
+                name: item.name,
+                instrument_token: item.token,
+                zebu_token: item.symbol,
+                kotak_token: "",
+                instrumenttype: item.instrumenttype,
+                exch_seg: item.exch_seg,
+                lotsize: item.lotsize,
+                categorie_id: category_id,
+                unique_column: item.name + '_' + category_id
+              })
+                .then((createdServices) => { })
+                .catch((err) => { try { } catch (e) { } });
             }
           }
         }
       });
-
-      // return res.send("okkkkkk");
     });
   };
 
-app.get("/ssj", async (req, res) => {
-  service_token_update1();
-});
-
+  app.get("/services/update", async (req, res) => {
+    service_token_update1();
+  });
 
   app.get("/UpdateQty", async (req, res) => {
     const pipeline = [
@@ -2067,11 +2135,6 @@ app.get("/ssj", async (req, res) => {
     return res.send({ data: "okk" });
   });
 
-  app.get("/test", (req, res) => {
-    createViewShoonya();
-    return res.send("DONEE");
-  });
-
   app.get("/dropOpenPosition", async (req, res) => {
     dropOpenPosition();
     return res.send({ msg: "Delete Done!!!" });
@@ -2312,8 +2375,6 @@ app.get("/ssj", async (req, res) => {
 
                 channelstr +=
                   element1.exch_seg + "|" + element1.instrument_token + "#";
-
-            
               }
             });
           });
@@ -2366,260 +2427,650 @@ app.get("/ssj", async (req, res) => {
       });
     }
 
+    return res.send({ status: true });
+  });
 
-      return  res.send({ status: true })
+  app.get("/main-signals", async (req, res) => {
+    return res.send({ status: "ok" });
+    const result = await Signals.find({});
+    result.forEach(async (item) => {
+      const {
+        _id,
+        symbol,
+        type,
+        price,
+        qty_percent,
+        exchange,
+        sq_value,
+        sl_value,
+        tsl,
+        tr_price,
+        dt,
+        dt_date,
+        strategy,
+        option_type,
+        strike,
+        expiry,
+        segment,
+        client_persnal_key,
+        TradeType,
+        token,
+        lot_size,
+        MakeStartegyName,
+        exit_status,
+        ft_time,
+        users_id,
+        createdAt,
+        updatedAt,
+      } = item;
+      let trade_symbol = item.trade_symbol;
+      let input_symbol = symbol;
+      let day_expiry = expiry.substr(0, 2);
+      var dateHash = {
+        Jan: "01",
+        Feb: "02",
+        Mar: "03",
+        Apr: "04",
+        May: "05",
+        Jun: "06",
+        Jul: "07",
+        Aug: "08",
+        Sep: "09",
+        Oct: "10",
+        Nov: "11",
+        Dec: "12",
+      }; // 2009-11-10
+      let month_expiry = expiry.substr(2, 2);
 
-    })
+      var d = new Date(createdAt);
+      var current_date =
+        [d.getFullYear(), d.getMonth() + 1, d.getDate()].join("/") +
+        " " +
+        [d.getHours(), d.getMinutes(), d.getSeconds()].join(":");
 
-  //   app.get("/main-signals",async(req,res)=>{
-  //   return res.send({status:"ok"})
-  //    const result = await Signals.find({})
-  //    result.forEach(async(item) => {
-  //       const  {
-  //       _id,
-  //       symbol,
-  //       type,
-  //       price,
-  //       qty_percent,
-  //       exchange,
-  //       sq_value,
-  //       sl_value,
-  //       tsl,
-  //       tr_price,
-  //       dt,
-  //       dt_date,
-  //       strategy,
-  //       option_type,
-  //       strike,
-  //       expiry,
-  //       segment,
-  //       client_persnal_key,
-  //       TradeType,
-  //       token,
-  //       lot_size,
-  //       MakeStartegyName,
-  //       exit_status,
-  //       ft_time,
-  //       users_id,
-  //       createdAt,
-  //       updatedAt,
-  //    } = item
-  // let trade_symbol = item.trade_symbol
-  // let input_symbol = symbol
-  // let day_expiry = expiry.substr(0, 2);
-  // var dateHash = {
-  //   'Jan': '01',
-  //   'Feb': '02',
-  //   'Mar': '03',
-  //   'Apr': '04',
-  //   'May': '05',
-  //   'Jun': '06',
-  //   'Jul': '07',
-  //   'Aug': '08',
-  //   'Sep': '09',
-  //   'Oct': '10',
-  //   'Nov': '11',
-  //   'Dec': '12'
-  // }; // 2009-11-10
-  // let month_expiry = expiry.substr(2, 2);
+      function getKeyByValue(object, value) {
+        return Object.keys(object).find((key) => object[key] == value);
+      }
+      let ex_day_expiry = getKeyByValue(dateHash, month_expiry).toUpperCase();
+      let ex_year_expiry = expiry.substr(-2);
+      if (type == "LE" || type == "le" || type == "SE" || type == "Se") {
+        var Entry_MainSignals_req = {
+          symbol: input_symbol,
+          entry_type: type,
+          exit_type: "",
+          entry_price: parseFloat(price),
+          exit_price: "",
+          entry_qty_percent: parseFloat(qty_percent),
+          entry_qty: Number(lot_size) * Math.ceil(Number(qty_percent) / 100),
+          exit_qty: 0,
+          exit_qty_percent: "",
+          entry_dt_date: current_date,
+          exit_dt_date: "",
+          dt: Math.round(+new Date() / 1000),
+          dt_date: dt_date,
+          exchange: exchange,
+          strategy: strategy,
+          option_type: option_type,
+          strike: strike,
+          expiry: expiry,
+          segment: segment,
+          trade_symbol: trade_symbol + "[" + segment + "]",
+          client_persnal_key: client_persnal_key,
+          TradeType: TradeType,
+          signals_id: _id,
+          token: token,
+          lot_size: lot_size,
+          target: 0,
+          stop_loss: 0,
+          exit_time: 0,
+          exit_time1: 0,
+          complete_trade: 0,
+          sl_status: 0,
+          MakeStartegyName: "abc",
+          Entry_users_id: [],
+          createdAt: createdAt,
+        };
+        const Entry_MainSignals = new MainSignals(Entry_MainSignals_req);
+        await Entry_MainSignals.save();
+      } else if (type == "LX" || type == "lx" || type == "SX" || type == "Sx") {
+        let EXCHANGE = exchange;
+        let Trade_Option_Type = option_type;
 
+        // MT_4 , OPTION_CHAIN , MAKE_STG, SQUAR_OFF
+        var findSignal = {
+          entry_type: "LE",
+          dt_date: dt_date,
+          symbol: input_symbol,
+          expiry: expiry,
+          option_type: expiry,
+          segment: segment,
+          strategy: strategy,
+          entry_type:
+            type === "LE" || type === "LX"
+              ? "LE"
+              : type === "SE" || type === "SX"
+              ? "SE"
+              : "LE",
+          client_persnal_key: "",
+          TradeType: "MT_4",
+        };
 
-  // var d = new Date(createdAt);
-  // var current_date = [d.getFullYear(),
-  // d.getMonth() + 1,
-  // d.getDate(),
-  // ].join('/') + ' ' + [d.getHours(),
-  // d.getMinutes(),
-  // d.getSeconds()
-  // ].join(':');
+        if (segment == "C" || segment == "c") {
+          instrument_query = { name: input_symbol };
+          EXCHANGE = "NSE";
+          trade_symbol = input_symbol;
+          findSignal = {
+            entry_type: "LE",
+            dt_date: dt_date,
+            symbol: input_symbol,
+            segment: segment,
+            strategy: strategy,
+            entry_type:
+              type === "LE" || type === "LX"
+                ? "LE"
+                : type === "SE" || type === "SX"
+                ? "SE"
+                : "LE",
+            client_persnal_key: client_persnal_key,
+            TradeType: TradeType,
+          };
+        } else if (segment == "F" || segment == "f") {
+          instrument_query = {
+            symbol: input_symbol,
+            segment: "F",
+            expiry: expiry,
+          };
+          EXCHANGE = "NFO";
+          trade_symbol =
+            input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + "FUT";
+          findSignal = {
+            entry_type: "LE",
+            dt_date: dt_date,
+            symbol: input_symbol,
+            expiry: expiry,
+            option_type: option_type,
+            segment: segment,
+            strategy: strategy,
+            entry_type:
+              type === "LE" || type === "LX"
+                ? "LE"
+                : type === "SE" || type === "SX"
+                ? "SE"
+                : "LE",
+            client_persnal_key: client_persnal_key,
+            TradeType: TradeType,
+          };
+        } else if (
+          segment == "O" ||
+          segment == "o" ||
+          segment == "FO" ||
+          segment == "fo"
+        ) {
+          instrument_query = {
+            symbol: input_symbol,
+            segment: "O",
+            expiry: expiry,
+            strike: strike,
+            option_type: Trade_Option_Type,
+          };
+          EXCHANGE = "NFO";
+          trade_symbol =
+            input_symbol +
+            day_expiry +
+            ex_day_expiry +
+            ex_year_expiry +
+            strike +
+            Trade_Option_Type;
+          findSignal = {
+            entry_type: "LE",
+            dt_date: dt_date,
+            symbol: input_symbol,
+            expiry: expiry,
+            option_type: option_type,
+            segment: segment,
+            strategy: strategy,
+            entry_type:
+              type === "LE" || type === "LX"
+                ? "LE"
+                : type === "SE" || type === "SX"
+                ? "SE"
+                : "LE",
+            client_persnal_key: client_persnal_key,
+            TradeType: TradeType,
+            strike: strike,
+          };
+        } else if (
+          segment == "BO" ||
+          segment == "bo" ||
+          segment == "BFO" ||
+          segment == "bfo"
+        ) {
+          instrument_query = {
+            symbol: input_symbol,
+            segment: "BO",
+            expiry: expiry,
+            strike: strike,
+            option_type: Trade_Option_Type,
+          };
+          EXCHANGE = "BFO";
+          trade_symbol =
+            input_symbol +
+            day_expiry +
+            ex_day_expiry +
+            ex_year_expiry +
+            strike +
+            Trade_Option_Type;
+          findSignal = {
+            entry_type: "LE",
+            dt_date: dt_date,
+            symbol: input_symbol,
+            expiry: expiry,
+            option_type: option_type,
+            segment: segment,
+            strategy: strategy,
+            entry_type:
+              type === "LE" || type === "LX"
+                ? "LE"
+                : type === "SE" || type === "SX"
+                ? "SE"
+                : "LE",
+            client_persnal_key: client_persnal_key,
+            TradeType: TradeType,
+            strike: strike,
+          };
+        } else if (segment == "MO" || segment == "mo") {
+          instrument_query = {
+            symbol: input_symbol,
+            segment: "MO",
+            expiry: expiry,
+            strike: strike,
+            option_type: Trade_Option_Type,
+          };
+          EXCHANGE = "MCX";
+          trade_symbol =
+            input_symbol +
+            day_expiry +
+            ex_day_expiry +
+            ex_year_expiry +
+            strike +
+            Trade_Option_Type;
+          findSignal = {
+            entry_type: "LE",
+            dt_date: dt_date,
+            symbol: input_symbol,
+            expiry: expiry,
+            option_type: option_type,
+            segment: segment,
+            strategy: strategy,
+            entry_type:
+              type === "LE" || type === "LX"
+                ? "LE"
+                : type === "SE" || type === "SX"
+                ? "SE"
+                : "LE",
+            client_persnal_key: client_persnal_key,
+            TradeType: TradeType,
+            strike: strike,
+          };
+        } else if (segment == "MF" || segment == "mf") {
+          instrument_query = {
+            symbol: input_symbol,
+            segment: "MF",
+            expiry: expiry,
+          };
+          EXCHANGE = "MCX";
+          trade_symbol =
+            input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + "FUT";
+          findSignal = {
+            entry_type: "LE",
+            dt_date: dt_date,
+            symbol: input_symbol,
+            expiry: expiry,
+            option_type: option_type,
+            segment: segment,
+            strategy: strategy,
+            entry_type:
+              type === "LE" || type === "LX"
+                ? "LE"
+                : type === "SE" || type === "SX"
+                ? "SE"
+                : "LE",
+            client_persnal_key: client_persnal_key,
+            TradeType: TradeType,
+          };
+        } else if (segment == "CF" || segment == "Cf") {
+          instrument_query = {
+            symbol: input_symbol,
+            segment: "CF",
+            expiry: expiry,
+            entry_type:
+              type === "LE" || type === "LX"
+                ? "LE"
+                : type === "SE" || type === "SX"
+                ? "SE"
+                : "LE",
+          };
+          EXCHANGE = "CDS";
+        }
 
-  // function getKeyByValue(object, value) {
-  //   return Object.keys(object).find(key => object[key] == value);
-  // }
-  // let ex_day_expiry = getKeyByValue(dateHash, month_expiry).toUpperCase();
-  // let ex_year_expiry = expiry.substr(-2);
-  //     if (type == "LE" || type == "le" || type == "SE" || type == "Se") {
+        const updatedFindSignal = {
+          ...findSignal,
+          exit_qty_percent: "", // Adding the exit_qty_percent field with an empty string value
+        };
 
-      
-  //       var Entry_MainSignals_req = {
-  //         symbol: input_symbol,
-  //         entry_type: type,
-  //         exit_type: "",
-  //         entry_price: parseFloat(price),
-  //         exit_price: "",
-  //         entry_qty_percent: parseFloat(qty_percent),
-  //         entry_qty: Number(lot_size) * (Math.ceil(Number(qty_percent) / 100)),
-  //         exit_qty: 0,
-  //         exit_qty_percent: "",
-  //         entry_dt_date: current_date,
-  //         exit_dt_date: "",
-  //         dt: Math.round(+new Date() / 1000),
-  //         dt_date: dt_date,
-  //         exchange: exchange,
-  //         strategy: strategy,
-  //         option_type: option_type,
-  //         strike: strike,
-  //         expiry: expiry,
-  //         segment: segment,
-  //         trade_symbol: trade_symbol + "[" + segment + "]",
-  //         client_persnal_key: client_persnal_key,
-  //         TradeType: TradeType,
-  //         signals_id: _id,
-  //         token: token,
-  //         lot_size: lot_size,
-  //         target: 0,
-  //         stop_loss: 0,
-  //         exit_time: 0,
-  //         exit_time1: 0,
-  //         complete_trade: 0,
-  //         sl_status: 0,
-  //         MakeStartegyName: "abc",
-  //         Entry_users_id: [],
-  //         createdAt:createdAt
+        var ExitMainSignals = await MainSignals.find(updatedFindSignal);
 
-  //       }
-  //       const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
-  //       await Entry_MainSignals.save();
+        // // ExitMainSignals  FIND IN COLLECTION
+        if (ExitMainSignals.length != 0) {
+          const entry_qty = Number(ExitMainSignals[0].exit_qty) || 0; // Use 0 if entry_qty is undefined or null
+          const lot_size = Number(ExitMainSignals[0].lot_size) || 0; // Use 0 if lot_size is undefined or null
+          const qty_percent1 = Number(qty_percent) || 0; // Use 0 if qty_percent is not a valid number
+          const result = entry_qty + lot_size * Math.ceil(qty_percent1 / 100);
 
-  //     }
-  //       else if (type == "LX" || type == "lx" || type == "SX" || type == "Sx") {
-  //   let EXCHANGE = exchange
-  //   let Trade_Option_Type = option_type;
+          if (
+            (ExitMainSignals[0].exit_price == "" &&
+              ExitMainSignals[0].exit_qty_percent == "") ||
+            isNaN(ExitMainSignals[0].exit_price)
+          ) {
+            var exit_qty_percent1 = 0;
+            if (
+              parseFloat(ExitMainSignals[0].entry_qty_percent) >
+              parseFloat(qty_percent)
+            ) {
+              exit_qty_percent1 = parseFloat(qty_percent);
+            } else {
+              exit_qty_percent1 = parseFloat(
+                ExitMainSignals[0].entry_qty_percent
+              );
+            }
 
-  //       // MT_4 , OPTION_CHAIN , MAKE_STG, SQUAR_OFF
-  //       var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: "", TradeType: "MT_4" }
+            // IF EXIST ENTRY OF THIS EXIT TRADE
+            var updatedData = {
+              exit_type: type,
+              exit_price:
+                parseFloat(price) +
+                (isNaN(ExitMainSignals[0].exit_price) ||
+                ExitMainSignals[0].exit_price === ""
+                  ? 0
+                  : parseFloat(ExitMainSignals[0].exit_price)),
+              exit_qty_percent: exit_qty_percent1,
+              exit_qty: result,
+              exit_dt_date: current_date,
+              exit_status: 0,
+              Exit_users_id: [],
+            };
+            updatedData.$addToSet = { signals_id: _id };
 
-  //       if (segment == 'C' || segment == 'c') {
-  //       instrument_query = { name: input_symbol }
-  //       EXCHANGE = "NSE";
-  //       trade_symbol = input_symbol;
-  //       findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
-  //       } else if (segment == 'F' || segment == 'f') {
-  //       instrument_query = { symbol: input_symbol, segment: "F", expiry: expiry }
-  //       EXCHANGE = "NFO";
-  //       trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
-  //       findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
+            // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL
+            const updatedDocument = await MainSignals.findByIdAndUpdate(
+              ExitMainSignals[0]._id,
+              updatedData
+            );
+          } else {
+            console.log("ExitMainSignals", ExitMainSignals);
 
-  //       } 
-  //       else if (segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
-  //       instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
-  //       EXCHANGE = "NFO";
-  //       trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-  //       findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType, strike: strike }
+            if (
+              parseFloat(ExitMainSignals[0].entry_qty_percent) >=
+              parseFloat(qty_percent) +
+                (isNaN(ExitMainSignals[0].exit_qty_percent) ||
+                ExitMainSignals[0].exit_qty_percent === ""
+                  ? 0
+                  : parseFloat(ExitMainSignals[0].exit_qty_percent))
+            ) {
+              var updatedData = {
+                exit_type: type,
+                exit_price:
+                  (parseFloat(price) * parseFloat(qty_percent) +
+                    (isNaN(ExitMainSignals[0].exit_price) ||
+                    ExitMainSignals[0].exit_price === ""
+                      ? 0
+                      : parseFloat(ExitMainSignals[0].exit_price)) *
+                      (isNaN(ExitMainSignals[0].exit_qty_percent) ||
+                      ExitMainSignals[0].exit_qty_percent === ""
+                        ? 0
+                        : parseFloat(ExitMainSignals[0].exit_qty_percent))) /
+                  ((isNaN(ExitMainSignals[0].exit_qty_percent) ||
+                  ExitMainSignals[0].exit_qty_percent === ""
+                    ? 0
+                    : parseFloat(ExitMainSignals[0].exit_qty_percent)) +
+                    parseFloat(qty_percent)),
 
-  //       } 
-  //       else if (segment == 'BO' || segment == 'bo' || segment == 'BFO' || segment == 'bfo') {
-  //       instrument_query = { symbol: input_symbol, segment: "BO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
-  //       EXCHANGE = "BFO";
-  //       trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-  //       findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType, strike: strike }
+                exit_qty_percent:
+                  parseFloat(qty_percent) +
+                  (isNaN(ExitMainSignals[0].exit_qty_percent) ||
+                  ExitMainSignals[0].exit_qty_percent === ""
+                    ? 0
+                    : parseFloat(ExitMainSignals[0].exit_qty_percent)),
+                exit_qty: result,
+                exit_dt_date: current_date,
+                exit_status: 0,
+                Exit_users_id: [],
+              };
+              updatedData.$addToSet = { signals_id: _id };
+              // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL
+              const updatedDocument = await MainSignals.findByIdAndUpdate(
+                ExitMainSignals[0]._id,
+                updatedData
+              );
+            } else {
+              console.log("---------------------EXTRA SIGNAL GET");
+            }
+          }
+        } else {
+          console.log("PRIVIOUS SIGNAL UPDATE");
+        }
+      }
+    });
 
-  //       } 
-        
-  //       else if (segment == 'MO' || segment == 'mo') {
-  //       instrument_query = { symbol: input_symbol, segment: "MO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
-  //       EXCHANGE = "MCX";
-  //       trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-  //       findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType, strike: strike }
+    return res.send({ status: true, data: result });
+  });
 
-  //       } else if (segment == 'MF' || segment == 'mf') {
-  //       instrument_query = { symbol: input_symbol, segment: "MF", expiry: expiry }
-  //       EXCHANGE = "MCX";
-  //       trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
-  //       findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
+  const service_token_update11 = async () => {
+    const pipeline = [
+      {
+        $project: {
+          // Include fields from the original collection
+          segment: 1,
+        },
+      },
+    ];
 
-  //       } else if (segment == 'CF' || segment == 'Cf') {
-  //       instrument_query = { symbol: input_symbol, segment: "CF", expiry: expiry, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" }
-  //       EXCHANGE = "CDS";
-  //       }
+    const categoryResult = await categorie.aggregate(pipeline);
 
+    var axios = require("axios");
+    var config = {
+      method: "get",
+      url: "https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json",
+    };
 
+    axios(config).then(async function (response) {
+      var unique_key = [];
+      let count = 0;
+      await response.data.forEach(async (item) => {
+        if (
+          item.instrumenttype == "FUTSTK" ||
+          item.instrumenttype == "FUTIDX" ||
+          item.instrumenttype == "FUTCUR" ||
+          item.instrumenttype == "FUTCOM" ||
+          item.instrumenttype == "OPTSTK" ||
+          item.instrumenttype == "OPTIDX" ||
+          item.instrumenttype == "OPTCUR" ||
+          item.instrumenttype == "OPTFUT" ||
+          item.instrumenttype == ""
+        ) {
+          if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
+            unique_key.push(`${item.name}-${item.instrumenttype}`);
 
+            if (
+              item.instrumenttype == "FUTSTK" ||
+              item.instrumenttype == "FUTIDX"
+            ) {
+              count++;
 
-        
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "F"
+              );
+              const category_id = matchingElements[0]._id;
 
-  //           const updatedFindSignal = {
-  //           ...findSignal,
-  //           exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
-  //           };
+              await services.updateOne(
+                { name: item.name, instrumenttype: item.instrumenttype },
+                {
+                  $set: {
+                    lotsize: item.lotsize,
+                  },
+                },
+                { upsert: true }
+              );
+            }
 
-        
+            if (
+              item.instrumenttype == "OPTSTK" ||
+              item.instrumenttype == "OPTIDX"
+            ) {
+              count++;
 
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "O"
+              );
+              const category_id = matchingElements[0]._id;
 
-  //           var ExitMainSignals = await MainSignals.find(updatedFindSignal)
+              await services.updateOne(
+                { name: item.name, instrumenttype: item.instrumenttype },
+                {
+                  $set: {
+                    lotsize: item.lotsize,
+                  },
+                },
+                { upsert: true }
+              );
+            }
+          }
+        }
+      });
 
-  //           // // ExitMainSignals  FIND IN COLLECTION
-  //           if (ExitMainSignals.length != 0) {
+      // return res.send("okkkkkk");
+    });
+  };
 
-  //           const entry_qty = Number(ExitMainSignals[0].exit_qty) || 0; // Use 0 if entry_qty is undefined or null
-  //           const lot_size = Number(ExitMainSignals[0].lot_size) || 0; // Use 0 if lot_size is undefined or null
-  //           const qty_percent1 = Number(qty_percent) || 0; // Use 0 if qty_percent is not a valid number
-  //           const result = entry_qty + (lot_size * Math.ceil(qty_percent1 / 100));
+  app.get("/update/service-token", async (req, res) => {
+    service_token_update11();
+    return res.send({ status: true });
+  });
 
+  app.get("/update/all/panels", async (req, res) => {
+    const arr = [
+      "software.corebizinfotech.com",
+      "trade.codingpandit.com",
+      "software.oneplanetitsolution.com",
+      // "software.adonomist.com",
+      // "software.algobullstradingsolutions.com",
+      "software.intelfintech.com",
+      "software.algokuber.com",
+      "software.finnshri.com",
+      // "software.visioniq.in",
+      "software.believetechnology.in",
+      "software.growskyinfotech.com",
+      "software.inspirealgo.com",
+      "software.uniquetechnology.in",
+      // "software.yourstechexpert.com",
+      // "software.alphapulsepro.com",
+      "software.sumedhainn.com",
+      "software.tradeonn.com",
+      // "software.nationalalgo.com",
+      // "software.growupalgo.com",
+      // "software.robotexfintech.com",
+      "software.metaprogramming.in",
+      "software.fincodify.com",
+      "software.invicontechnology.com",
+      "software.sstechnologiess.com",
+      "software.skwinvestmentadviser.com",
+      // "software.satviktech.com",
+      "software.thinkaumatictechnology.com",
+      "trade.visionresearchandsolution.com",
+      "software.smartwavetechnology.in",
+      "software.inteltrade360.com",
+      "software.fintechit.in",
+      "software.thrivinginfotech.com",
+      "software.visioncodesoftware.com",
+      "trade.brightextech.com",
+      "software.shinesofttrade.in",
+      "software.algoruns.com",
+      "software.brillianttechit.com",
+      "software.newtimetechnologies.com",
+      "software.darixosolution.com",
+      "software.magmamultitrade.com",
+      // "software.intravisor.com",
+      // "software.procodetechnology.com",
+      "software.unitythesmartalgo.com",
+      "software.smartstox.in",
+      "software.visionmatictechnology.com",
+      // "software.winwaysoftwares.com",
+      "software.one-algo.com",
+      "software.unityhubitsolution.com",
+      "software.techelitesolution.in",
+      "software.algosparks.in",
+      "software.ssfintech.com",
+      // "software.rainfotech.com",
+      "software.technofin.tech",
+      "software.evolgo.in",
+      "software.growonntechnologies.com",
+      "software.tradejockey.in",
+      "software.growingtech.in",
+      "software.inovateinfotech.com",
+      "software.algobliss.com",
+      "software.idealalgo.com",
+      "software.algomoneybooster.com",
+      "software.eaglesofttech.com",
+      "software.algoweb.co.in",
+      "software.celestialai.in",
+      "software.dynamictechsolution.com",
+      "app.nextbrand.tech",
+      "software.realcloudtechnology.com",
+      "software.moneyplatform.co.in",
+      "software.infraitsolution.com",
+      "software.fincapex.com",
+      "software.reliablealgo.com",
+      "software.researchfactory.in",
+      "software.visionalgotech.com",
+      "software.linkupinfotech.com",
+      "software.microninfotech.com",
+      "software.growfuturetechnology.com",
+      "software.oneplanetitsolution.com",
+      "software.danoneitsolution.com",
+      "software.ccconnect.live",
+      "software.inspirealgoresearch.com",
+    ];
 
-  //           if ((ExitMainSignals[0].exit_price == "" && ExitMainSignals[0].exit_qty_percent == "") || isNaN(ExitMainSignals[0].exit_price)) {
+    let results = [];
 
-  //               var exit_qty_percent1 = 0
-  //               if (parseFloat(ExitMainSignals[0].entry_qty_percent) > parseFloat(qty_percent)) {
-  //               exit_qty_percent1 = parseFloat(qty_percent)
-  //               } else {
-  //               exit_qty_percent1 = parseFloat(ExitMainSignals[0].entry_qty_percent)
-  //               }
+    for (const item of arr) {
+      try {
+        const response = await axios.get(
+          `https://${item}/backend/all/brokerview`
+        );
+        results.push({ item, status: "Success", data: response.data });
+        console.log(`${item} - Success: ${response.data}`);
+      } catch (error) {
+        if (error.response) {
+          console.error(
+            `${item} - Error: ${error.response.status} - ${error.response.data}`
+          );
+          results.push({ item, status: "Failed", error: error.response.data });
+        } else if (error.request) {
+          console.error(`${item} - Error: No response received`);
+          results.push({
+            item,
+            status: "Failed",
+            error: "No response received",
+          });
+        } else {
+          console.error(`${item} - Error: ${error.message}`);
+          results.push({ item, status: "Failed", error: error.message });
+        }
+      }
+    }
 
-
-  //               // IF EXIST ENTRY OF THIS EXIT TRADE
-  //               var updatedData = {
-  //               exit_type: type,
-  //               exit_price: parseFloat(price) + (isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price)),
-  //               exit_qty_percent: exit_qty_percent1,
-  //               exit_qty: result,
-  //               exit_dt_date: current_date,
-  //               exit_status: 0,
-  //               Exit_users_id:  []
-  //               }
-  //               updatedData.$addToSet = { signals_id: _id };
-
-
-  //               // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
-  //               const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
-
-  //           } else {
-
-  //               console.log("ExitMainSignals", ExitMainSignals)
-                
-  //               if (parseFloat(ExitMainSignals[0].entry_qty_percent) >= (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
-  //               var updatedData = {
-  //                   exit_type: type,
-  //                   exit_price: (((parseFloat(price) * parseFloat(qty_percent)) + ((isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price)) * (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) / ((isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)) + parseFloat(qty_percent))),
-
-  //                   exit_qty_percent: (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent))),
-  //                   exit_qty: result,
-  //                   exit_dt_date: current_date,
-  //                   exit_status: 0,
-  //                   Exit_users_id: []
-  //               }
-  //               updatedData.$addToSet = { signals_id: _id };
-  //               // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
-  //               const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
-  //               } else {
-  //               console.log("---------------------EXTRA SIGNAL GET")
-
-  //               }
-  //           }
-
-  //           } else {
-  //           console.log("PRIVIOUS SIGNAL UPDATE")
-
-  //           }
-  //       }
-
-  //        })
-
-      
-  //       return res.send({status:true , data: result})
-
-  //   })
-
-
-}
-
+    res.json(results);
+  });
+  
+};

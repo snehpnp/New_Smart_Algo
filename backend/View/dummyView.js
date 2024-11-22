@@ -4811,3 +4811,95 @@ db.createView("strategyViewNames", "usermakestrategies",
     ]
 )  
 
+
+db.createView("Cilents_service_stg", "users",
+  [
+    {
+      $match: {
+        $or: [
+          { EndDate: { $gte: new Date() } }, 
+          { EndDate: null } 
+        ]
+      }
+    },
+    {
+      $lookup: {
+        from: 'client_services',
+        localField: '_id', 
+        foreignField: 'user_id', 
+        as: 'client_services'
+      }
+    },
+    {
+      $unwind: '$client_services',
+    },
+    {
+      $match: {
+        'client_services.active_status': '1'
+      }
+    },
+    {
+      $lookup: {
+        from: "services",
+        localField: "client_services.service_id",
+        foreignField: "_id",
+        as: "service",
+      },
+    },
+    {
+      $unwind: '$service',
+    },
+   
+    {
+      $lookup: {
+        from: "services",
+        localField: "service.name",
+        foreignField: "instrumenttype",
+        as: "service1",
+      },
+    },
+    {
+      $unwind: '$service1',
+    },
+    
+    
+    {
+      $lookup: {
+        from: "categories",
+        localField: "service.categorie_id",
+        foreignField: "_id",
+        as: "category",
+      },
+    },
+    {
+      $unwind: '$category',
+    },
+    {
+      $lookup: {
+        from: "strategies",
+        localField: "client_services.strategy_id",
+        foreignField: "_id",
+        as: "strategys",
+      },
+    },
+    {
+      $unwind: '$strategys',
+    },
+    {
+      $project: {
+     
+        id:1,
+        "user_id":"$_id",
+        "service_name": "$service1.name",
+        "service_instrument_token": "$service1.instrument_token",
+        "service_exch_seg": "$service1.exch_seg",
+        "strategy_name": "$strategys.strategy_name",
+      
+     
+        
+      }
+    }      
+   
+  ]
+)
+

@@ -816,27 +816,25 @@ class Tradehistory {
           }
         });
       }
-      var TotalTrade = [];
+      let TotalTrade = [];
 
       if (filteredSignals.length > 0) {
-        filteredSignals.forEach((item) => {
-          if (item.result.length > 0) {
-            item.result.forEach((item1) => {
-              if (item1.type === "LX" || item1.type === "SX") {
-                var cal = (item.exit_price - item.entry_price) * item.entry_qty;
-
-                TotalTrade.push({
-                  ...item1,
-                  cal: cal,
-                });
-              } else {
-                TotalTrade.push({ ...item1, cal: "-" });
+          filteredSignals.forEach((signal) => {
+              if (signal.result.length > 0) {
+                  signal.result.forEach((trade) => {
+                      let cal = "-"; // Default value
+                      if (trade.type === "LX" || trade.type === "SX") {
+                          cal = (signal.exit_price - signal.entry_price) * signal.entry_qty;
+                      }
+      
+                      TotalTrade.push({
+                          ...trade,
+                          cal: cal,
+                      });
+                  });
               }
-            });
-          }
-        });
-      }
-
+          });
+      }    
 
       return res.send({
         status: true,

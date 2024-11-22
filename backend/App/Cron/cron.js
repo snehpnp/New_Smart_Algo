@@ -68,7 +68,6 @@ cron.schedule("05 23 * * *", () => {
   DeleteTokenAliceToken();
 });
 
-
 cron.schedule("10 3 * * *", () => {
   DeleteTokenAliceToken();
 });
@@ -683,8 +682,6 @@ const Get_Option_All_Token_Chain_stock = async () => {
   return;
 };
 
-// =========================================================================================================================
-
 const UpdateGetMonthlyData = async () => {
   try {
     const ExistCompanyData = await company_information
@@ -718,9 +715,7 @@ const UpdateGetMonthlyData = async () => {
   }
 };
 
-// 1. LOGOUT AND TRADING OFF ALL USER
 const LogoutAllUsers = async () => {
-  // APP LOGOUT USERS
   const AppLoginUser = await User.find({ AppLoginStatus: "1" });
 
   if (AppLoginUser.length > 0) {
@@ -789,8 +784,6 @@ const LogoutAllUsers = async () => {
       await user_login.save();
     });
   }
-
-
 
   // ADMIN TRADING OFF
   const TradingOffAdmin = await live_price.find({ trading_status: "on" });
@@ -882,7 +875,7 @@ const DeleteTokenAliceToken = async () => {
   if (result.length > 0) {
     const idsToDelete = result.map((item) => item._id);
     await Alice_token.deleteMany({ _id: { $in: result[0].idsToDelete } });
-   
+
     return;
   } else {
     console.log("No expired tokens found.");
@@ -891,17 +884,10 @@ const DeleteTokenAliceToken = async () => {
   return "";
 };
 
-// TOKEN SYMBOL CREATE
-
 function createUserDataArray(data, segment) {
   let count = 0;
   return data.map((element) => {
-    //   count++
 
-    // if (!element.name) {
-
-    //     return null;
-    // }
     const option_type = element.symbol.slice(-2);
     const expiry_s = dateTime.create(element.expiry);
     const expiry = expiry_s.format("dmY");
@@ -929,12 +915,12 @@ function createUserDataArray(data, segment) {
       tradesymbol: element.symbol,
       tradesymbol_m_w: tradesymbol_m_w,
       exch_seg: element.exch_seg,
+      instrumenttype: element.instrumenttype,
     };
   });
 }
 
 async function insertData(dataArray) {
- 
   try {
     const existingTokens = await Alice_token.distinct("instrument_token", {});
     const filteredDataArray = dataArray.filter((userData) => {
@@ -965,8 +951,6 @@ const TokenSymbolUpdate = async () => {
   }
 
   try {
-    
-
     const config = {
       method: "get",
       url: "https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json",
@@ -1030,20 +1014,17 @@ const TokenSymbolUpdate = async () => {
           element.name != ""
       );
 
-
-
       // Segment O -OPTION
       const userDataSegment_O = await createUserDataArray(filteredDataO, "O");
       await insertData(userDataSegment_O);
-  
+
       // Segment F - FUTURE
       const userDataSegment_F = await createUserDataArray(filteredDataF, "F");
       await insertData(userDataSegment_F);
-      
+
       // Segment C -CASH
       const userDataSegment_C = await createUserDataArray(filteredDataC, "C");
       await insertData(userDataSegment_C);
-     
 
       // Segment MF MCX FUTURE
       const userDataSegment_MF = await createUserDataArray(
@@ -1051,11 +1032,10 @@ const TokenSymbolUpdate = async () => {
         "MF"
       );
       await insertData(userDataSegment_MF);
-    
+
       // Segment MO  MCX OPTION
       const userDataSegment_MO = createUserDataArray(filteredDataMO, "MO");
       await insertData(userDataSegment_MO);
-   
 
       // Segment CO CURRENCY OPTION
       const userDataSegment_CO = await createUserDataArray(
@@ -1064,14 +1044,12 @@ const TokenSymbolUpdate = async () => {
       );
       await insertData(userDataSegment_CO);
 
-
       // Segment CF  CURRENCY FUTURE
       const userDataSegment_CF = await createUserDataArray(
         filteredDataCF,
         "CF"
       );
       await insertData(userDataSegment_CF);
-   
 
       // Segment BF
       const userDataSegment_BF = await createUserDataArray(
@@ -1086,7 +1064,6 @@ const TokenSymbolUpdate = async () => {
         "BO"
       );
       await insertData(userDataSegment_BO);
- 
 
       // Segment BC
       const userDataSegment_BC = await createUserDataArray(
@@ -1094,7 +1071,6 @@ const TokenSymbolUpdate = async () => {
         "BC"
       );
       await insertData(userDataSegment_BC);
-   
 
       try {
         var filePath = path.join(__dirname + "/checkTest.txt"); // Adjust the file path as needed
@@ -1323,121 +1299,6 @@ const tokenFind = async () => {
   }
 };
 
-// const twodaysclient = async () => {
-
-//     const twoDaysClientGet = await User.aggregate(
-//         [
-//             {
-//                 $match: {
-//                     license_type: "0",
-//                     Is_Active: "1",
-//                     Role: "USER",
-//                     $expr: {
-//                         $gte: [
-//                             {
-//                                 $dateToString: {
-//                                     format: "%Y-%m-%d",
-//                                     date: "$EndDate"
-//                                 }
-//                             },
-//                             {
-//                                 $dateToString: {
-//                                     format: "%Y-%m-%d",
-//                                     date: new Date()
-//                                 }
-//                             }
-//                         ]
-//                     }
-//                 }
-//             },
-//             {
-//                 $lookup: {
-//                     from: "broker_responses",
-//                     localField: "_id",
-//                     foreignField: "user_id",
-//                     as: "responses"
-//                 }
-//             },
-//             {
-//                 $match: {
-//                     "responses.order_id": { $ne: "" } // Filter out responses where order_id is not empty
-//                 }
-//             },
-//             {
-//                 $group: {
-//                     _id: 1, // Use a constant value as the _id
-//                     users: { $push: { _id: "$_id", responses: "$responses" } } // Include _id and responses in the 'users' array
-//                 }
-//             },
-//             {
-//                 $project: {
-//                     _id: 0, // Exclude the _id field
-//                     users: {
-//                         $map: {
-//                             input: "$users",
-//                             as: "user",
-//                             in: {
-//                                 _id: "$$user._id",
-//                                 responses: {
-//                                     $map: {
-//                                         input: "$$user.responses",
-//                                         as: "response",
-//                                         in: {
-//                                             createdAt: {
-//                                                 $dateToString: {
-//                                                     format: "%Y-%m-%d",
-//                                                     date: "$$response.createdAt"
-//                                                 }
-//                                             },
-//                                             // Include other fields from the response if needed
-//                                         }
-//                                     }
-//                                 }
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         ])
-
-//     var UniqueDataArr = []
-
-//     if (twoDaysClientGet.length > 0) {
-//         var UserData = twoDaysClientGet[0].users.filter((data) => data.responses.length > 0);
-//         console.log("UserData ",UserData)
-//         if (UserData.length > 0) {
-
-//             UserData.forEach((data) => {
-//                 const uniqueCreatedAtValues = [...new Set(data.responses.map(item => item.createdAt))];
-//                 UniqueDataArr.push({ user_id: data._id, createdAt: uniqueCreatedAtValues })
-//             })
-//         }
-//     }
-
-//     if (UniqueDataArr.length > 0) {
-
-//         UniqueDataArr.forEach(async (data) => {
-//             if (data.createdAt.length >= 2) {
-//                 const filter = { _id: new ObjectId(data.user_id) };
-//                 // Get the current date and time
-//                 const currentDate = new Date();
-
-//                 // Format the date to 'YYYY-MM-DD'
-//                 const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
-
-//                 const result = await User.updateOne(
-//                     filter,
-//                     { $set: { EndDate: formattedDate } }
-//                 );
-
-//             }
-//         })
-
-//     }
-
-//     return UniqueDataArr
-// }
-
 const twodaysclient = async () => {
   try {
     const today = new Date();
@@ -1526,53 +1387,6 @@ const numberOfTrade_count_trade = async () => {
   );
 };
 
-// Accelpix Token Update
-const AccelpixTokenUpdate = async () => {
-  return;
-  let config = {
-    method: "get",
-    maxBodyLength: Infinity,
-    url: "https://apidata5.accelpix.in/api/hsd/Masters/2?fmt=json",
-    headers: {},
-  };
-
-  axios
-    .request(config)
-    .then(async (response) => {
-      const result = await Alice_token.aggregate([
-        {
-          $project: {
-            instrument_token: 1,
-          },
-        },
-      ]);
-
-      result.forEach(async (element) => {
-        const Exist_token = response.data.find(
-          (item1) => item1.tk === parseInt(element.instrument_token)
-        );
-
-        const update = {
-          $set: {
-            tkr: Exist_token.tkr,
-            a3tkr: Exist_token.a3tkr,
-          },
-        };
-
-        const filter = { instrument_token: element.instrument_token };
-
-        const options = {
-          upsert: true, // If no documents match the query, insert a new document
-        };
-
-        let Res = await Alice_token.updateMany(filter, update, options);
-      });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-
 const GetStrickPriceFromSheet = async () => {
   try {
     const indiaTimezoneOffset = 330;
@@ -1650,7 +1464,6 @@ module.exports = {
   TruncateTable,
   tokenFind,
   numberOfTrade_count_trade,
-  AccelpixTokenUpdate,
   GetStrickPriceFromSheet,
   TruncateTableTokenChain,
   TruncateTableTokenChainAdd,
