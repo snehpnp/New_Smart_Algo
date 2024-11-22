@@ -340,20 +340,27 @@ class OptionChain {
 
             // ]);
 
-            var GetTrade = await MainSignals_modal.aggregate([
+            // Get the start and end of the current day (ignoring time)
+const currentDate = new Date();
+const startOfDay = new Date(currentDate.setHours(0, 0, 0, 0)); // Midnight of the current day
+const endOfDay = new Date(currentDate.setHours(23, 59, 59, 999)); // End of the current day (11:59:59.999 PM)
 
-                {
-                    $match: {
-                        $expr: {
-                            $and: [
-                                { $gt: [{ $toInt: "$entry_qty" }, { $toInt: "$exit_qty" }] },
-                                { $eq: ["$dt_date", formattedDate] }
-                            ]
-                        }
-                    }
-                }
+var GetTrade = await MainSignals_modal.aggregate([
+    {
+        $match: {
+            $expr: {
+                $and: [
+                    { $gt: [{ $toInt: "$entry_qty" }, { $toInt: "$exit_qty" }] },
+                    // { $eq: ["$dt_date", formattedDate] },
+                    // Match records where createdAt is within the current day
+                    { $gte: ["$createdAt", startOfDay] },
+                    { $lte: ["$createdAt", endOfDay] }
+                ]
+            }
+        }
+    }
+]);
 
-            ]);
 
 
 

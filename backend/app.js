@@ -235,10 +235,10 @@ async function checkAndDrop() {
 
 
 
+const { Alice_Socket } = require("./App/Helper/Alice_Socket");
 
 // Server start
 server.listen(process.env.PORT, () => {
-  const { Alice_Socket } = require("./App/Helper/Alice_Socket");
   console.log(`Server is running on  http://0.0.0.0:${process.env.PORT}`);
   connectToMongoDB();
   Alice_Socket();

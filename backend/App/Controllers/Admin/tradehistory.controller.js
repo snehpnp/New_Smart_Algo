@@ -817,20 +817,22 @@ class Tradehistory {
         });
       }
       let TotalTrade = [];
+      // console.log("filteredSignals", filteredSignals);
 
       if (filteredSignals.length > 0) {
           filteredSignals.forEach((signal) => {
               if (signal.result.length > 0) {
+
                   signal.result.forEach((trade) => {
-                      let cal = "-"; // Default value
+
+                      let cal = "-"; 
+
                       if (trade.type === "LX" || trade.type === "SX") {
                           cal = (signal.exit_price - signal.entry_price) * signal.entry_qty;
                       }
       
-                      TotalTrade.push({
-                          ...trade,
-                          cal: cal,
-                      });
+                      TotalTrade.push({ ...trade,cal: cal });
+
                   });
               }
           });
