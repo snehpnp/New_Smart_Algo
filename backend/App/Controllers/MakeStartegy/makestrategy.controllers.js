@@ -1553,6 +1553,732 @@ async function fetchDataFromViews(viewNames) {
   }
 }
 
+// async function fetchDataFromViews(viewNames) {
+//   // console.log("viewNames - ", viewNames.length)
+//   try {
+//     if (viewNames.length > 0) {
+//       for (let valView of viewNames) {
+//         // const data = await dbTest.collection(valView.viewName).find({ isCondition: true }).toArray();
+//         while (true) {
+//         const batchSize = 100; // Adjust batch size based on your data and memory constraints
+//         let skip = 0;
+         
+//         // const data = await dbTest.collection(valView.viewName).find({
+//         //   isCondition: true,
+//         //   timeFrameViewData: { $ne: null, $ne: [] }
+//         // }).toArray();
+//         const data = await dbTest.collection(valView.viewName).find({
+//           isCondition: true,
+//           timeFrameViewData: { $ne: null, $ne: [] }
+//         }).skip(skip).limit(batchSize).toArray();
+
+//         if (data.length === 0) {
+//           break; // No more data to fetch
+//         }
+
+//         //console.log(`Data from view ${valView.viewName}:`, data);
+//         if (data.length > 0) {
+//           //console.log(`Data from view ${valView.viewName}:`, data);
+//           let val = data[0];
+
+//           const date = new Date(val.expiry);
+//           val.expiry = format(date, 'ddMMyyyy');
+
+//           let entry_type = 'LE';
+//           if (val.type === 'BUY') {
+//             entry_type = 'SE';
+//           }
+//           let condition_check_previous_trade = {
+//             strategy: val.strategy_name,
+//             symbol: val.symbol_name,
+//             entry_type: entry_type,
+//             segment: val.segment,
+//             client_persnal_key: val.panelKey,
+//             MakeStartegyName: val.show_strategy,
+//             TradeType: 'MAKE_STRATEGY',
+//           };
+//           if (['O', 'FO', 'MO', 'CO'].includes(val.segment.toUpperCase())) {
+//             let option_type = 'CALL';
+//             if (val.option_type === 'PE') {
+//               option_type = 'PUT';
+//             }
+//             condition_check_previous_trade = {
+//               strategy: val.strategy_name,
+//               symbol: val.symbol_name,
+//               entry_type: entry_type,
+//               segment: val.segment,
+//               strike: val.strike_price,
+//               option_type: option_type,
+//               expiry: val.expiry,
+//               client_persnal_key: val.panelKey,
+//               MakeStartegyName: val.show_strategy,
+//               TradeType: 'MAKE_STRATEGY',
+//             };
+//           }
+//           else if (['F', 'MF', 'CF'].includes(val.segment.toUpperCase())) {
+//             condition_check_previous_trade = {
+//               strategy: val.strategy_name,
+//               symbol: val.symbol_name,
+//               entry_type: entry_type,
+//               segment: val.segment,
+//               expiry: val.expiry,
+//               client_persnal_key: val.panelKey,
+//               MakeStartegyName: val.show_strategy,
+//               TradeType: 'MAKE_STRATEGY',
+//             };
+//           }
+
+//           // console.log("condition_check_previous_trade",condition_check_previous_trade)
+//           var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
+
+//           // console.log("checkPreviousTrade ",checkPreviousTrade)
+
+//           const collection_last_price = dbTest.collection(val.tokensymbol);
+//           const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
+//           let price_lp = last_price[0].lp;
+//           if (checkPreviousTrade != null) {
+//             const currentTimestamp = Math.floor(Date.now() / 1000);
+//             let type = 'LX';
+//             let price = checkPreviousTrade.stockInfo_bp1;
+//             if (checkPreviousTrade.entry_type.toUpperCase() === 'SE') {
+//               type = 'SX';
+//               price = checkPreviousTrade.stockInfo_sp1;
+//             }
+//             let strike = checkPreviousTrade.strike;
+//             if (checkPreviousTrade.strike_price === 'NaN') {
+//               strike = '100';
+//             }
+//             let option_type = 'CALL';
+//             if (checkPreviousTrade.option_type.toUpperCase() === 'PUT') {
+//               option_type = 'PUT';
+//             }
+//             let Quntity = checkPreviousTrade.entry_qty_percent;
+//             let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+//             let config = {
+//               method: 'post',
+//               maxBodyLength: Infinity,
+//               // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+//               url: `${process.env.BROKER_URL}`,
+//               headers: {
+//                 'Content-Type': 'text/plain'
+//               },
+//               data: req
+//             };
+//             await axios.request(config)
+//               .then((response) => {
+
+//               })
+//               .catch((error) => {
+//                 console.log('Error ', error);
+//               });
+//           }
+//           const update = {
+//             $set: {
+//               status: '2',
+//             },
+//             $inc: {
+//               numberOfTrade_count_trade: 1, // Increment by 1, you can change this value based on your requirement
+//             },
+//           };
+//           const filter = { _id: val._id };
+//           let Res = await UserMakeStrategy.updateOne(filter, update);
+//           let Check_same_trade_type = 'BUY';
+//           if (val.type === 'BUY') {
+//             Check_same_trade_type = 'SELL';
+//           }
+//           const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
+//           if (Check_same_trade_data) {
+
+
+//             let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
+//               $set: {
+//                 status: "1",
+//                 tsl: "2"
+//               },
+//             });
+
+//             console.log("Res", Res)
+//           }
+//           const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
+//             {
+//               $match: {
+//                 show_strategy: val.show_strategy,
+//                 numberOfTrade: { $ne: '' }
+//               }
+//             },
+//             {
+//               $group: {
+//                 _id: null,
+//                 totalNumberOfTrade_count_trade: { $sum: '$numberOfTrade_count_trade' },
+//               }
+//             },
+//             {
+//               $project: {
+//                 _id: 0,
+//                 totalNumberOfTrade_count_trade: 1,
+//                 anotherField: '$numberOfTrade',
+//                 isTotalSmall: { $lt: ['$totalNumberOfTrade_count_trade', parseInt(val.numberOfTrade)] }
+//               }
+//             }
+//           ]);
+//           if (numberOfTrade_count_trade_count.length > 0) {
+//             if (numberOfTrade_count_trade_count[0].isTotalSmall === false) {
+//               const update_trade_off = {
+//                 $set: {
+//                   status: '2',
+//                 },
+//               };
+//               const filter_trade_off = { show_strategy: val.show_strategy };
+//               let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
+//             }
+//           }
+//           const currentTimestamp = Math.floor(Date.now() / 1000);
+//           let type = 'LE';
+//           if (val.type.toUpperCase() === 'SELL') {
+//             type = 'SE';
+//           }
+//           let price = 0;
+//           let strike = val.strike_price;
+//           if (val.strike_price === 'NaN') {
+//             strike = '100';
+//           }
+//           let option_type = 'CALL';
+//           if (val.option_type.toUpperCase() === 'PE') {
+//             option_type = 'PUT';
+//           }
+//           let Quntity = '100';
+//           const dateObject = new Date(val.exitTime);
+//           const hours = ('0' + dateObject.getUTCHours()).slice(-2);
+//           const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
+//           const ExitTime = `${hours}-${minutes}`;
+//           let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+//           let config = {
+//             method: 'post',
+//             maxBodyLength: Infinity,
+//             // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+//             url: `${process.env.BROKER_URL}`,
+//             headers: {
+//               'Content-Type': 'text/plain'
+//             },
+//             data: req
+//           };
+//           await axios.request(config)
+//             .then((response) => {
+//               // console.log("response Trade Excuted - ", response)
+//             })
+//             .catch((error) => {
+//               console.log('Error ', error);
+//             });
+
+//         }
+      
+//         skip += batchSize
+//       }
+//       }
+
+//     } else {
+//       // console.log("No view names provided");
+//     }
+
+//   } catch (error) {
+//     console.log('Error fetching data:', error);
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////
+
+
+async function runSS() {
+  try {
+    // Define the function to be executed
+    const RunFunction = async () => {
+      // Check for the stream code
+      const data = await dbTest.collection('strategyViewNames').find({}).toArray();
+      await CheckStreamCode(data);
+    };
+
+
+    while (true) {
+      await RunFunction();
+    }
+
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+runSS().catch(console.log);
+
+async function CheckStreamCode(viewNames) {
+  try {
+    if (viewNames.length > 0) {
+      for (let valView of viewNames) {
+        // Open a readable stream from MongoDB
+        const cursor = dbTest.collection(valView.viewName).find({
+          isCondition: true,
+          timeFrameViewData: { $ne: null, $ne: [] }
+        }).stream(); // Stream the data instead of loading everything at once
+
+        // Process each document as it arrives
+        cursor.on('data', async (val) => {
+          // console.log(`Processing document for :`, doc);
+                const date = new Date(val.expiry);
+                val.expiry = format(date, 'ddMMyyyy');
+      
+                let entry_type = 'LE';
+                if (val.type === 'BUY') {
+                  entry_type = 'SE';
+                }
+                let condition_check_previous_trade = {
+                  strategy: val.strategy_name,
+                  symbol: val.symbol_name,
+                  entry_type: entry_type,
+                  segment: val.segment,
+                  client_persnal_key: val.panelKey,
+                  MakeStartegyName: val.show_strategy,
+                  TradeType: 'MAKE_STRATEGY',
+                };
+                if (['O', 'FO', 'MO', 'CO'].includes(val.segment.toUpperCase())) {
+                  let option_type = 'CALL';
+                  if (val.option_type === 'PE') {
+                    option_type = 'PUT';
+                  }
+                  condition_check_previous_trade = {
+                    strategy: val.strategy_name,
+                    symbol: val.symbol_name,
+                    entry_type: entry_type,
+                    segment: val.segment,
+                    strike: val.strike_price,
+                    option_type: option_type,
+                    expiry: val.expiry,
+                    client_persnal_key: val.panelKey,
+                    MakeStartegyName: val.show_strategy,
+                    TradeType: 'MAKE_STRATEGY',
+                  };
+                }
+                else if (['F', 'MF', 'CF'].includes(val.segment.toUpperCase())) {
+                  condition_check_previous_trade = {
+                    strategy: val.strategy_name,
+                    symbol: val.symbol_name,
+                    entry_type: entry_type,
+                    segment: val.segment,
+                    expiry: val.expiry,
+                    client_persnal_key: val.panelKey,
+                    MakeStartegyName: val.show_strategy,
+                    TradeType: 'MAKE_STRATEGY',
+                  };
+                }
+      
+                // console.log("condition_check_previous_trade",condition_check_previous_trade)
+                var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
+      
+                // console.log("checkPreviousTrade ",checkPreviousTrade)
+      
+                const collection_last_price = dbTest.collection(val.tokensymbol);
+                const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
+                let price_lp = last_price[0].lp;
+                if (checkPreviousTrade != null) {
+                  const currentTimestamp = Math.floor(Date.now() / 1000);
+                  let type = 'LX';
+                  let price = checkPreviousTrade.stockInfo_bp1;
+                  if (checkPreviousTrade.entry_type.toUpperCase() === 'SE') {
+                    type = 'SX';
+                    price = checkPreviousTrade.stockInfo_sp1;
+                  }
+                  let strike = checkPreviousTrade.strike;
+                  if (checkPreviousTrade.strike_price === 'NaN') {
+                    strike = '100';
+                  }
+                  let option_type = 'CALL';
+                  if (checkPreviousTrade.option_type.toUpperCase() === 'PUT') {
+                    option_type = 'PUT';
+                  }
+                  let Quntity = checkPreviousTrade.entry_qty_percent;
+                  let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+                  let config = {
+                    method: 'post',
+                    maxBodyLength: Infinity,
+                    // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                    url: `${process.env.BROKER_URL}`,
+                    headers: {
+                      'Content-Type': 'text/plain'
+                    },
+                    data: req
+                  };
+                  await axios.request(config)
+                    .then((response) => {
+      
+                    })
+                    .catch((error) => {
+                      console.log('Error ', error);
+                    });
+                }
+                const update = {
+                  $set: {
+                    status: '2',
+                  },
+                  $inc: {
+                    numberOfTrade_count_trade: 1, // Increment by 1, you can change this value based on your requirement
+                  },
+                };
+                const filter = { _id: val._id };
+                let Res = await UserMakeStrategy.updateOne(filter, update);
+                let Check_same_trade_type = 'BUY';
+                if (val.type === 'BUY') {
+                  Check_same_trade_type = 'SELL';
+                }
+                const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
+                if (Check_same_trade_data) {
+      
+      
+                  let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
+                    $set: {
+                      status: "1",
+                      tsl: "2"
+                    },
+                  });
+      
+                  console.log("Res", Res)
+                }
+                const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
+                  {
+                    $match: {
+                      show_strategy: val.show_strategy,
+                      numberOfTrade: { $ne: '' }
+                    }
+                  },
+                  {
+                    $group: {
+                      _id: null,
+                      totalNumberOfTrade_count_trade: { $sum: '$numberOfTrade_count_trade' },
+                    }
+                  },
+                  {
+                    $project: {
+                      _id: 0,
+                      totalNumberOfTrade_count_trade: 1,
+                      anotherField: '$numberOfTrade',
+                      isTotalSmall: { $lt: ['$totalNumberOfTrade_count_trade', parseInt(val.numberOfTrade)] }
+                    }
+                  }
+                ]);
+                if (numberOfTrade_count_trade_count.length > 0) {
+                  if (numberOfTrade_count_trade_count[0].isTotalSmall === false) {
+                    const update_trade_off = {
+                      $set: {
+                        status: '2',
+                      },
+                    };
+                    const filter_trade_off = { show_strategy: val.show_strategy };
+                    let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
+                  }
+                }
+                const currentTimestamp = Math.floor(Date.now() / 1000);
+                let type = 'LE';
+                if (val.type.toUpperCase() === 'SELL') {
+                  type = 'SE';
+                }
+                let price = 0;
+                let strike = val.strike_price;
+                if (val.strike_price === 'NaN') {
+                  strike = '100';
+                }
+                let option_type = 'CALL';
+                if (val.option_type.toUpperCase() === 'PE') {
+                  option_type = 'PUT';
+                }
+                let Quntity = '100';
+                const dateObject = new Date(val.exitTime);
+                const hours = ('0' + dateObject.getUTCHours()).slice(-2);
+                const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
+                const ExitTime = `${hours}-${minutes}`;
+                let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+                let config = {
+                  method: 'post',
+                  maxBodyLength: Infinity,
+                  // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                  url: `${process.env.BROKER_URL}`,
+                  headers: {
+                    'Content-Type': 'text/plain'
+                  },
+                  data: req
+                };
+                await axios.request(config)
+                  .then((response) => {
+                    // console.log("response Trade Excuted - ", response)
+                  })
+                  .catch((error) => {
+                    console.log('Error ', error);
+                  });
+      
+              
+
+
+
+        });
+
+        // Handle stream events
+        cursor.on('end', () => {
+        //  console.log(`Finished processing stream for ${valView.viewName}`);
+        });
+
+        cursor.on('error', (error) => {
+         // console.error('Stream error:', error);
+        });
+      }
+    }
+  } catch (error) {
+    console.log('Error fetching data:', error);
+  }
+
+
+  // try {
+  //   if (viewNames.length > 0) {
+  //     for (let valView of viewNames) {
+  //       // const data = await dbTest.collection(valView.viewName).find({ isCondition: true }).toArray();
+  //       while (true) {
+  //       const batchSize = 100; // Adjust batch size based on your data and memory constraints
+  //       let skip = 0;
+         
+  //       // const data = await dbTest.collection(valView.viewName).find({
+  //       //   isCondition: true,
+  //       //   timeFrameViewData: { $ne: null, $ne: [] }
+  //       // }).toArray();
+  //       const data = await dbTest.collection(valView.viewName).find({
+  //         isCondition: true,
+  //         timeFrameViewData: { $ne: null, $ne: [] }
+  //       }).skip(skip).limit(batchSize).toArray();
+
+  //       if (data.length === 0) {
+  //         break; // No more data to fetch
+  //       }
+
+  //       //console.log(`Data from view ${valView.viewName}:`, data);
+  //       if (data.length > 0) {
+  //         //console.log(`Data from view ${valView.viewName}:`, data);
+  //         let val = data[0];
+
+  //         const date = new Date(val.expiry);
+  //         val.expiry = format(date, 'ddMMyyyy');
+
+  //         let entry_type = 'LE';
+  //         if (val.type === 'BUY') {
+  //           entry_type = 'SE';
+  //         }
+  //         let condition_check_previous_trade = {
+  //           strategy: val.strategy_name,
+  //           symbol: val.symbol_name,
+  //           entry_type: entry_type,
+  //           segment: val.segment,
+  //           client_persnal_key: val.panelKey,
+  //           MakeStartegyName: val.show_strategy,
+  //           TradeType: 'MAKE_STRATEGY',
+  //         };
+  //         if (['O', 'FO', 'MO', 'CO'].includes(val.segment.toUpperCase())) {
+  //           let option_type = 'CALL';
+  //           if (val.option_type === 'PE') {
+  //             option_type = 'PUT';
+  //           }
+  //           condition_check_previous_trade = {
+  //             strategy: val.strategy_name,
+  //             symbol: val.symbol_name,
+  //             entry_type: entry_type,
+  //             segment: val.segment,
+  //             strike: val.strike_price,
+  //             option_type: option_type,
+  //             expiry: val.expiry,
+  //             client_persnal_key: val.panelKey,
+  //             MakeStartegyName: val.show_strategy,
+  //             TradeType: 'MAKE_STRATEGY',
+  //           };
+  //         }
+  //         else if (['F', 'MF', 'CF'].includes(val.segment.toUpperCase())) {
+  //           condition_check_previous_trade = {
+  //             strategy: val.strategy_name,
+  //             symbol: val.symbol_name,
+  //             entry_type: entry_type,
+  //             segment: val.segment,
+  //             expiry: val.expiry,
+  //             client_persnal_key: val.panelKey,
+  //             MakeStartegyName: val.show_strategy,
+  //             TradeType: 'MAKE_STRATEGY',
+  //           };
+  //         }
+
+  //         // console.log("condition_check_previous_trade",condition_check_previous_trade)
+  //         var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
+
+  //         // console.log("checkPreviousTrade ",checkPreviousTrade)
+
+  //         const collection_last_price = dbTest.collection(val.tokensymbol);
+  //         const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
+  //         let price_lp = last_price[0].lp;
+  //         if (checkPreviousTrade != null) {
+  //           const currentTimestamp = Math.floor(Date.now() / 1000);
+  //           let type = 'LX';
+  //           let price = checkPreviousTrade.stockInfo_bp1;
+  //           if (checkPreviousTrade.entry_type.toUpperCase() === 'SE') {
+  //             type = 'SX';
+  //             price = checkPreviousTrade.stockInfo_sp1;
+  //           }
+  //           let strike = checkPreviousTrade.strike;
+  //           if (checkPreviousTrade.strike_price === 'NaN') {
+  //             strike = '100';
+  //           }
+  //           let option_type = 'CALL';
+  //           if (checkPreviousTrade.option_type.toUpperCase() === 'PUT') {
+  //             option_type = 'PUT';
+  //           }
+  //           let Quntity = checkPreviousTrade.entry_qty_percent;
+  //           let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+  //           let config = {
+  //             method: 'post',
+  //             maxBodyLength: Infinity,
+  //             // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+  //             url: `${process.env.BROKER_URL}`,
+  //             headers: {
+  //               'Content-Type': 'text/plain'
+  //             },
+  //             data: req
+  //           };
+  //           await axios.request(config)
+  //             .then((response) => {
+
+  //             })
+  //             .catch((error) => {
+  //               console.log('Error ', error);
+  //             });
+  //         }
+  //         const update = {
+  //           $set: {
+  //             status: '2',
+  //           },
+  //           $inc: {
+  //             numberOfTrade_count_trade: 1, // Increment by 1, you can change this value based on your requirement
+  //           },
+  //         };
+  //         const filter = { _id: val._id };
+  //         let Res = await UserMakeStrategy.updateOne(filter, update);
+  //         let Check_same_trade_type = 'BUY';
+  //         if (val.type === 'BUY') {
+  //           Check_same_trade_type = 'SELL';
+  //         }
+  //         const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
+  //         if (Check_same_trade_data) {
+
+
+  //           let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
+  //             $set: {
+  //               status: "1",
+  //               tsl: "2"
+  //             },
+  //           });
+
+  //           console.log("Res", Res)
+  //         }
+  //         const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
+  //           {
+  //             $match: {
+  //               show_strategy: val.show_strategy,
+  //               numberOfTrade: { $ne: '' }
+  //             }
+  //           },
+  //           {
+  //             $group: {
+  //               _id: null,
+  //               totalNumberOfTrade_count_trade: { $sum: '$numberOfTrade_count_trade' },
+  //             }
+  //           },
+  //           {
+  //             $project: {
+  //               _id: 0,
+  //               totalNumberOfTrade_count_trade: 1,
+  //               anotherField: '$numberOfTrade',
+  //               isTotalSmall: { $lt: ['$totalNumberOfTrade_count_trade', parseInt(val.numberOfTrade)] }
+  //             }
+  //           }
+  //         ]);
+  //         if (numberOfTrade_count_trade_count.length > 0) {
+  //           if (numberOfTrade_count_trade_count[0].isTotalSmall === false) {
+  //             const update_trade_off = {
+  //               $set: {
+  //                 status: '2',
+  //               },
+  //             };
+  //             const filter_trade_off = { show_strategy: val.show_strategy };
+  //             let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
+  //           }
+  //         }
+  //         const currentTimestamp = Math.floor(Date.now() / 1000);
+  //         let type = 'LE';
+  //         if (val.type.toUpperCase() === 'SELL') {
+  //           type = 'SE';
+  //         }
+  //         let price = 0;
+  //         let strike = val.strike_price;
+  //         if (val.strike_price === 'NaN') {
+  //           strike = '100';
+  //         }
+  //         let option_type = 'CALL';
+  //         if (val.option_type.toUpperCase() === 'PE') {
+  //           option_type = 'PUT';
+  //         }
+  //         let Quntity = '100';
+  //         const dateObject = new Date(val.exitTime);
+  //         const hours = ('0' + dateObject.getUTCHours()).slice(-2);
+  //         const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
+  //         const ExitTime = `${hours}-${minutes}`;
+  //         let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+  //         let config = {
+  //           method: 'post',
+  //           maxBodyLength: Infinity,
+  //           // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+  //           url: `${process.env.BROKER_URL}`,
+  //           headers: {
+  //             'Content-Type': 'text/plain'
+  //           },
+  //           data: req
+  //         };
+  //         await axios.request(config)
+  //           .then((response) => {
+  //             // console.log("response Trade Excuted - ", response)
+  //           })
+  //           .catch((error) => {
+  //             console.log('Error ', error);
+  //           });
+
+  //       }
+      
+  //       skip += batchSize
+  //     }
+  //     }
+
+  //   } else {
+  //     // console.log("No view names provided");
+  //   }
+
+  // } catch (error) {
+  //   console.log('Error fetching data:', error);
+  // }
+}
+
+
 
 
 
