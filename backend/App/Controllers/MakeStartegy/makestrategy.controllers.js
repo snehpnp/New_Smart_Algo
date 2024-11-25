@@ -1314,7 +1314,7 @@ async function run() {
                   const io = await getIO();
                   io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: tradeSymbol });
 
-                  console.log("response Trade Excuted - ", response.data)
+                  // console.log("response Trade Excuted - ", response.data)
 
                 })
                 .catch((error) => {

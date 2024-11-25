@@ -3,7 +3,6 @@ require("dotenv").config();
 // const mongoConnection = require('./App/Connection/mongo_connection')
 const { connectToMongoDB } = require("./App/Connection/mongo_connection");
 
-const { MongoClient, ObjectId } = require("mongodb");
 const express = require("express");
 const app = express();
 
@@ -15,7 +14,7 @@ const cors = require("cors");
 const bodyparser = require("body-parser");
 const { Client } = require("ssh2");
 const db1 = require("./App/Models/index");
-const TttModal = db1.tttModal;
+
 const dbTest = db1.dbTest;
 
 
@@ -84,11 +83,12 @@ app.get("/pp", (req, res) => {
   res.send("DONE");
 });
 
+
 app.post("/pm2/update", async (req, res) => {
   const { host, password } = req.body;
 
-  if (!password) {
-    return res.status(400).send("Password is required");
+  if (!host || !password) {
+    return res.status(400).send("Host and Password are required");
   }
 
   const conn = new Client();
@@ -97,22 +97,51 @@ app.post("/pm2/update", async (req, res) => {
     .on("ready", () => {
       console.log(`Connected to ${host}`);
 
-      // Run pm2 update command
-      conn.exec("pm2 update", (err, stream) => {
-        if (err) throw err;
+      // Step 1: Restart MongoDB
+      conn.exec("systemctl restart mongod", (err, stream) => {
+        if (err) {
+          console.error("Error restarting MongoDB:", err);
+          conn.end();
+          return res.status(500).send({ status: false, msg: "MongoDB restart failed" });
+        }
 
         stream
           .on("close", (code, signal) => {
-            console.log(`Closed connection to ${host} with code ${code}`);
-            conn.end();
+            console.log(`MongoDB restarted on ${host}. Exit code: ${code}`);
+            
+            // Step 2: Update PM2
+            conn.exec("pm2 update", (err, stream) => {
+              if (err) {
+                console.error("Error updating PM2:", err);
+                conn.end();
+                return res.status(500).send({ status: false, msg: "PM2 update failed" });
+              }
+
+              stream
+                .on("close", (code, signal) => {
+                  console.log(`PM2 updated on ${host}. Exit code: ${code}`);
+                  conn.end();
+                  return res.send({ status: true, msg: "Commands executed successfully" });
+                })
+                .on("data", (data) => {
+                  console.log(`PM2 update output: ${data}`);
+                })
+                .stderr.on("data", (data) => {
+                  console.error(`PM2 update error: ${data}`);
+                });
+            });
           })
           .on("data", (data) => {
-            
+            console.log(`MongoDB restart output: ${data}`);
           })
           .stderr.on("data", (data) => {
-          
+            console.error(`MongoDB restart error: ${data}`);
           });
       });
+    })
+    .on("error", (err) => {
+      console.error(`Connection error: ${err}`);
+      return res.status(500).send({ status: false, msg: "SSH Connection Failed" });
     })
     .connect({
       host: host,
@@ -120,11 +149,6 @@ app.post("/pm2/update", async (req, res) => {
       username: "root",
       password: password,
     });
-
-  return res.send({
-    status: true,
-    msg: "PM2 update initiated on all servers.",
-  });
 });
 
 
@@ -147,62 +171,7 @@ app.get('/UpdateChannel/:c/:e', async (req, res) => {
 
 
 
-app.post("/update-customer-files", async (req, res) => {
-  const customerId = req.body.customerId;
-  const updatedIdentityProof = req.body.identity_proof;
 
-  if (!updatedIdentityProof || !Array.isArray(updatedIdentityProof)) {
-    return res.status(400).json({ success: false, message: "Invalid identity proof data." });
-  }
-
-  try {
-    const customer = await TttModal.findOne({ customerId: new ObjectId(customerId) });
-
-    if (!customer) {
-      return res.status(404).json({ success: false, message: "Customer not found." });
-    }
-
-    const currentIdentityProof = customer.identity_proof || [];
-    const currentDocIds = new Set(currentIdentityProof.map(proof => proof.doc_id_number));
-    const updatedDocIds = new Set(updatedIdentityProof.map(proof => proof.doc_id_number));
-
-    // 1. Remove identity proofs that are not in the updated list
-    await TttModal.updateOne(
-      { _id: customer._id },
-      { $pull: { identity_proof: { doc_id_number: { $nin: Array.from(updatedDocIds) } } } }
-    );
-
-    // 2. Prepare promises for updating or adding identity proofs
-    const updatePromises = updatedIdentityProof.map(async (updatedProof) => {
-      const docId = updatedProof.doc_id_number;
-      
-      if (currentDocIds.has(docId)) {
-        // If it exists, update the document
-        return TttModal.updateOne(
-          { _id: customer._id, "identity_proof.doc_id_number": docId },
-          { $set: { "identity_proof.$": updatedProof } }
-        );
-      } else {
-        // If it doesn't exist, add (push) the new document
-        return TttModal.updateOne(
-          { _id: customer._id },
-          { $push: { identity_proof: updatedProof } }
-        );
-      }
-    });
-
-    // Wait for all updates to complete
-    await Promise.all(updatePromises);
-
-    res.json({
-      success: true,
-      message: "Identity proofs updated successfully.",
-    });
-  } catch (error) {
-    console.error("Error updating customer files:", error);
-    res.status(500).json({ success: false, message: "An error occurred." });
-  }
-});
 
 
 app.get("/deleteTableAndView",async(req,res)=>{

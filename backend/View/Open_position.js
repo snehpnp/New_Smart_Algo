@@ -12,7 +12,15 @@ async function createView() {
             return; 
           }else{ 
             const pipeline = [
-
+                
+                {
+                    $match: {
+                        createdAt: {
+                            $gte: new Date(new Date().setHours(0, 0, 0, 0)), // दिन की शुरुआत (00:00:00)
+                            $lt: new Date(new Date().setHours(23, 59, 59, 999)) // दिन का अंत (23:59:59.999)
+                        }
+                    }
+                },
                 {
                     $addFields: {
                         target: {
@@ -346,7 +354,7 @@ async function createView() {
     }
 }
 
-// open_position_excute
+
 async function dropOpenPosition() {
     try {
        
@@ -358,7 +366,7 @@ async function dropOpenPosition() {
     }
 }
 
-// open_position_excute
+
 async function dropExistingView1() {
     try {
 
@@ -405,7 +413,7 @@ async function open_position_excute(req, res) {
 
 module.exports = { dropExistingView1, open_position_excute, createView, dropOpenPosition }
 
-//     {
+
 //         $addFields: {
 //             target: {
 //                 $cond: {

@@ -22,7 +22,7 @@ module.exports = function (app) {
   const Broker_information = db.Broker_information;
 
   const { DashboardView,Cilents_service_View } = require("./View/DashboardData");
-  const { createView, dropOpenPosition, open_position_excute } = require("./View/Open_position");
+  const { createView, dropOpenPosition, open_position_excute ,dropExistingView1} = require("./View/Open_position");
   const { TokenSymbolUpdate } = require("./App/Cron/cron");
   const { createViewAlice, dropViewAlice } = require("./View/Alice_blue");
   const { createViewAngel, dropViewAngel } = require("./View/Angel");
@@ -850,6 +850,40 @@ module.exports = function (app) {
         status: 0,
         CID: "3",
       },
+      {
+        _id:  new ObjectId("66d2c6e5c6e24c59b81a1e13"),
+        category_id: "9",
+        name: "BSE CASH",
+        segment: "BC",
+        status: 0,
+        CID: "9"
+      },
+      {
+        _id:  new ObjectId("66d2c710c6e24c59b81a1e14"),
+        category_id: "9",
+        name: "BSE FUTURE",
+        segment: "BF",
+        status: 0,
+        CID: "10"
+      },
+      {
+        _id:  new ObjectId("66d2c72ec6e24c59b81a1e15"),
+        category_id: "9",
+        name: "BSE OPTION",
+        segment: "BO",
+        status: 0,
+        CID: "11"
+      },
+      {
+        _id:  new ObjectId("66d2c74cc6e24c59b81a1e16"),
+        category_id: "9",
+        name: "BSE FUTURE OPTION",
+        segment: "BFO",
+        status: 0,
+        CID: "12"
+      }
+
+
     ];
 
     for (const data of categoriesData) {
@@ -877,6 +911,19 @@ module.exports = function (app) {
     return live_priceData.save();
   };
 
+
+  app.get("/all/position/view", (req, res) => {
+    createView();
+    open_position_excute();
+  });
+
+  app.get("/dropOpenPosition", async (req, res) => {
+    dropOpenPosition();
+    dropExistingView1();
+    return res.send({ msg: "Delete Done!!!" });
+  });
+
+
   app.get("/all/brokerview", (req, res) => {
     Cilents_service_View();
     DashboardView();
@@ -895,8 +942,6 @@ module.exports = function (app) {
     createViewZebul();
     createViewZerodha();
     createViewIcicidirect();
-    createView();
-    open_position_excute();
     createViewShoonya();
 
     return res.send("DONEE");
@@ -2135,10 +2180,7 @@ module.exports = function (app) {
     return res.send({ data: "okk" });
   });
 
-  app.get("/dropOpenPosition", async (req, res) => {
-    dropOpenPosition();
-    return res.send({ msg: "Delete Done!!!" });
-  });
+
 
   app.get("/dashboard-view", async (req, res) => {
     DashboardView();

@@ -26,11 +26,7 @@ const { DashboardView, deleteDashboard } = require("../../View/DashboardData");
 const { createView } = require("../../View/Open_position");
 const { logger, getIPAddress } = require("../Helper/logger.helper");
 const { Alice_Socket } = require("../Helper/Alice_Socket");
-const {killAllSessions} = require("../Connection/mongo_connection");
 
-  cron.schedule("58 23 * * *", () => {
-    killAllSessions();
-  });
 
 cron.schedule("10 5 * * *", () => {
   deleteDashboard();

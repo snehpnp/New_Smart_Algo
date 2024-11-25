@@ -4026,6 +4026,15 @@ db.createView("dashboard_data", "users",
 /// Open possition
 db.createView("open_position", "mainsignals",
   [
+    {
+
+      $match: {
+        createdAt: {
+          $gte: new Date(new Date().setHours(00, 00, 00)),
+          $lt: new Date(new Date().setHours(23, 59, 59))
+        }
+      }
+    },
 
     {
       $addFields: {
@@ -4101,28 +4110,13 @@ db.createView("open_position", "mainsignals",
     {
       $unwind: '$livePrice',
     },
-
-
-
-
-
     {
       $match: {
         $and: [
           {
             $expr: {
               $and: [
-                // {
-                //     $eq: [
-                //         {
-                //             $dateToString: {
-                //                 format: '%Y/%m/%d',
-                //                 date: new Date(),
-                //             },
-                //         },
-                //         '$dt_date',
-                //     ],
-                // },
+        
                 { $eq: ['$livePrice.trading_status', 'on'] },
                 {
                   $gt: [
@@ -4850,18 +4844,7 @@ db.createView("Cilents_service_stg", "users",
       $unwind: '$service',
     },
    
-    {
-      $lookup: {
-        from: "services",
-        localField: "service.name",
-        foreignField: "instrumenttype",
-        as: "service1",
-      },
-    },
-    {
-      $unwind: '$service1',
-    },
-    
+  
     
     {
       $lookup: {
@@ -4890,9 +4873,9 @@ db.createView("Cilents_service_stg", "users",
      
         id:1,
         "user_id":"$_id",
-        "service_name": "$service1.name",
-        "service_instrument_token": "$service1.instrument_token",
-        "service_exch_seg": "$service1.exch_seg",
+        "service_name": "$service.name",
+        "service_instrument_token": "$service.instrument_token",
+        "service_exch_seg": "$service.exch_seg",
         "strategy_name": "$strategys.strategy_name",
       
      

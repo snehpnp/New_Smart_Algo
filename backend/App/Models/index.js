@@ -69,12 +69,7 @@ module.exports = {
     user_fund_logs:require('./fund_change_logs.model'),
     SuperadminHistoryBackup:require('./Superadminhistorybackup.model'),
     Plansmodel:require('./Plans.model'),
-    tttModal:require('./ttt'),
-
-
     dashboard_data:dashboard_data
-
-
 
 
 };

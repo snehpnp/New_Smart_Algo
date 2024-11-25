@@ -96,7 +96,7 @@ module.exports = function (app) {
     "mongodb://growonntechnologies:AaMWQ5RP%26kT567Gy%26Maa@185.209.75.89:27017/",
     "mongodb://tradejockey:AaMWQ5RP%26kT567Gy%26Ma@185.209.75.90:27017/",
   ];
-  //testtt
+
 
   // Connect to MongoDB and create views
   async function createViewsAllDatabase() {
