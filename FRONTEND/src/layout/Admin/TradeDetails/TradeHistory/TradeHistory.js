@@ -97,7 +97,13 @@ const TradeHistory = () => {
   }, [a]);
 
   useEffect(() => {
-    // ShowLivePrice();
+    console.log("searchTerm", searchTerm);
+    if (!fromDate && !toDate) {
+      ShowLivePrice();
+    } else {
+      $(".LivePrice_").html("");
+      setSocketState("null");
+    }
   }, [tradeHistoryData.data, SocketState, UserDetails]);
 
   useEffect(() => {
@@ -107,6 +113,7 @@ const TradeHistory = () => {
   useEffect(() => {
     Get_TradHistory();
   }, [
+    searchTerm,
     refresh,
     SocketState,
     fromDate,
@@ -116,7 +123,6 @@ const TradeHistory = () => {
     dashboard_filter,
     SelectServiceIndex,
     lotMultypaly,
-    searchTerm,
     getPage,
     getSizePerPage,
     SelectOpenClose,
@@ -126,6 +132,26 @@ const TradeHistory = () => {
     GetAllStrategyName();
     Admin_Trading_data();
   }, []);
+
+  useEffect(() => {
+    if (selector && selector.permission) {
+      if (
+        selector.permission &&
+        selector.permission.data &&
+        selector.permission.data[0]
+      ) {
+        if (selector.permission.data[0].live_price == 0) {
+          columns = columns.filter((data) => data.dataField !== "live");
+        }
+      }
+    }
+  }, [selector]);
+
+  useEffect(() => {
+    if (selectedOptions && selectedOptions.length > 0) {
+      columns = columns.filter((data) => !selectedOptions.includes(data.text));
+    }
+  }, [selectedOptions]);
 
   const Get_TradHistory = async (e) => {
     let abc = new Date();
@@ -155,6 +181,12 @@ const TradeHistory = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
+          setTotal(response.pagination.totalItems);
+          setServiceData({
+            loading: false,
+            data: response.trade_symbols_filter,
+          });
+
           let filterData = response.data.filter((item) => {
             if (searchTerm === "") return item;
 
@@ -173,12 +205,6 @@ const TradeHistory = () => {
             data: filterData,
             pagination: response.pagination,
             TotalCalculate: response.TotalCalculate,
-          });
-          setTotal(response.pagination.totalItems);
-
-          setServiceData({
-            loading: false,
-            data: response.trade_symbols_filter,
           });
         } else {
           setTradeHistoryData({
@@ -212,12 +238,12 @@ const TradeHistory = () => {
     });
   };
 
- 
   let columns = [
     {
       dataField: "index",
       text: "S.No.",
-      formatter: (cell, row, rowIndex) => (getPage-1) * getSizePerPage + rowIndex + 1,
+      formatter: (cell, row, rowIndex) =>
+        (getPage - 1) * getSizePerPage + rowIndex + 1,
     },
 
     {
@@ -853,7 +879,6 @@ const TradeHistory = () => {
       });
   };
 
-
   const data = async () => {
     if (a < 2) {
     }
@@ -931,8 +956,6 @@ const TradeHistory = () => {
       });
   };
 
-  
-
   const handleInputChange = (e) => {
     const value = e.target.value;
     const isValidNumber = /^\d+$/.test(value);
@@ -955,8 +978,6 @@ const TradeHistory = () => {
     // Get_TradHistory(updatedOptions);
   };
 
-  
-
   const handleTableChange = (type, { page, sizePerPage }) => {
     setPage(page);
     setSizePerPage(sizePerPage);
@@ -978,22 +999,6 @@ const TradeHistory = () => {
     </>
   );
 
-  if (selector && selector.permission) {
-    if (
-      selector.permission &&
-      selector.permission.data &&
-      selector.permission.data[0]
-    ) {
-      if (selector.permission.data[0].live_price == 0) {
-        columns = columns.filter((data) => data.dataField !== "live");
-      }
-    }
-  }
-
-  if (selectedOptions && selectedOptions.length > 0) {
-    columns = columns.filter((data) => !selectedOptions.includes(data.text));
-  }
-
   const columnTexts = [
     "S.No.",
     "Signals Entry time",
@@ -1011,6 +1016,7 @@ const TradeHistory = () => {
     "Exit Status",
     "Details View",
   ];
+
   return (
     <>
       <Content
@@ -1145,9 +1151,9 @@ const TradeHistory = () => {
                   All
                 </option>
                 {ServiceData.data &&
-                  ServiceData.data.map((item) => {
+                  ServiceData.data.map((item, index) => {
                     return (
-                      <option className="mt-1" value={item}>
+                      <option key={index} className="mt-1" value={item}>
                         {item}
                       </option>
                     );
@@ -1198,9 +1204,9 @@ const TradeHistory = () => {
                   All
                 </option>
                 {getAllStrategyName.data &&
-                  getAllStrategyName.data.map((item) => {
+                  getAllStrategyName.data.map((item, index) => {
                     return (
-                      <option value={item.strategy_name}>
+                      <option key={index} value={item.strategy_name}>
                         {item.strategy_name}
                       </option>
                     );
@@ -1351,10 +1357,10 @@ const TradeHistory = () => {
                 <BootstrapTable
                   keyField="_id"
                   data={tradeHistoryData.data}
-                  columns={columns} 
-                  remote 
-                  onTableChange={handleTableChange} 
-                  {...paginationTableProps} 
+                  columns={columns}
+                  remote
+                  onTableChange={handleTableChange}
+                  {...paginationTableProps}
                   headerClasses="bg-primary text-primary text-center header-class"
                   rowClasses={`text-center`}
                   noDataIndication={() => <NoDataIndication />}

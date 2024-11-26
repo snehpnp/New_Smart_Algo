@@ -23,9 +23,6 @@ import { Get_All_Service } from "../../../ReduxStore/Slice/Admin/AdminSlice";
 import { GET_ADMIN_TRADE_STATUS } from "../../../ReduxStore/Slice/Admin/TradehistorySlice";
 import { today } from "../../../Utils/Date_formet";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-
-
-
 import $ from "jquery";
 
 const TradeHistory = () => {
@@ -39,17 +36,6 @@ const TradeHistory = () => {
   const [toDate, setToDate] = useState("");
   const [CheckUser, setCheckUser] = useState(check_Device());
   const [refresh, setrefresh] = useState(false);
-
-
-
-  const handleFromDateChange = (e) => {
-    setFromDate(e.target.value);
-  };
-
-  const handleToDateChange = (e) => {
-    setToDate(e.target.value);
-  };
-
   const [rowData, setRowData] = useState({ loading: true, data: [], });
   const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [], });
   const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
@@ -63,16 +49,21 @@ const TradeHistory = () => {
   const [ForGetCSV, setForGetCSV] = useState([])
   const [adminTradingStatus, setAdminTradingStatus] = useState(false);
   const [lotMultypaly, SetlotMultypaly] = useState(1);
-
-
-
   const checkStatusReff = useRef(false);
+  const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
+
 
   useEffect(() => {
     GetAdminTradingStatus()
   }, []);
 
+  const handleFromDateChange = (e) => {
+    setFromDate(e.target.value);
+  };
 
+  const handleToDateChange = (e) => {
+    setToDate(e.target.value);
+  };
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -98,7 +89,8 @@ const TradeHistory = () => {
     let endDate = getActualDateFormate(toDate);
 
     await dispatch(
-      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, serviceIndex: null, type: "ADMIN", lotMultypaly: lotMultypaly, token: token })
+      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, serviceIndex: null, type: "ADMIN", lotMultypaly: lotMultypaly, token: token,        serviceIndex: SelectServiceIndex,
+      })
     ).unwrap()
       .then((response) => {
         if (response.status) {
@@ -123,7 +115,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     Get_TradHistory();
-  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter,lotMultypaly]);
+  }, [refresh, SocketState,SelectServiceIndex, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter,lotMultypaly]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");
@@ -580,7 +572,13 @@ const TradeHistory = () => {
 
 
   useEffect(() => {
-    ShowLivePrice();
+
+     if (!fromDate && !toDate) {
+      ShowLivePrice();
+    } else {
+      $(".LivePrice_").html("");
+      setSocketState("null");
+    }
   }, [tradeHistoryData.data, SocketState, UserDetails]);
 
   //  GET ALL SERVICE NAME
@@ -788,6 +786,33 @@ const TradeHistory = () => {
                       </option>
                     );
                   })}
+              </select>
+            </div>
+          </div>
+          <div className="col-lg-2 px-1">
+            <div className="mb-3">
+              <label for="select" className="form-label">
+                Index Symbol
+              </label>
+              <select
+                className="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectServiceIndex(e.target.value)}
+                value={SelectServiceIndex}
+              >
+                <option value="null" selected>
+                  All
+                </option>
+                <option value="BANKNIFTY" selected>
+                  BANKNIFTY
+                </option>
+                <option value="NIFTY" selected>
+                  NIFTY
+                </option>
+                <option value="FINNIFTY" selected>
+                  FINNIFTY
+                </option>
               </select>
             </div>
           </div>

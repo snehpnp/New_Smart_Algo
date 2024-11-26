@@ -24,63 +24,38 @@ class Tradehistory {
         limit,
         openClose,
       } = req.body;
-
-      var page1 = page || 1;
-      var limit1 = limit || 1000;
-
-      var client_persnal_key1 = "";
-      if (type != undefined || type != "undefined") {
-        if (type.toUpperCase() == "ADMIN") {
-          client_persnal_key1 = "";
-        } else {
-          client_persnal_key1 = { $ne: "" };
-        }
-      }
-
-      var lotMultypaly1 =
-        lotMultypaly === undefined || lotMultypaly === "undefined"
-          ? 1
-          : Number(lotMultypaly);
-
-      let startDateObj = new Date(startDate ? startDate : new Date());
-      let endDateObj = new Date(endDate ? endDate : new Date());
-
-      const strategyWord = strategy.trim();
-
-      let serIndex =
-        typeof serviceIndex === "object" || serviceIndex === "null"
-          ? { $exists: true }
-          : serviceIndex;
-      let stg1 = strategyWord === "null" ? { $exists: true } : strategyWord;
-      let ser1 = service === "null" ? { $exists: true } : service;
-
-      if (startDate == startDate) {
-        endDateObj.setDate(endDateObj.getDate() + 1);
-      }
-
-
-      let openClose1 = { exit_qty_percent: "" };
-      if (openClose === "Open") {
-        openClose1 = { exit_qty_percent: "" };
-      } else if (openClose === "Close") {
-        openClose1 = { exit_qty_percent: { $ne: "" } };
-      } else {
-        openClose1 = {};
-      }
-
+  
+      const page1 = Number(page || 1);
+      const limit1 = Number(limit || 1000);
+  
+      const client_persnal_key1 = type?.toUpperCase() === "ADMIN" ? "" : { $ne: "" };
+      const lotMultypaly1 = Number(lotMultypaly || 1);
+  
+      const startDateObj = new Date(startDate || new Date());
+      const endDateObj = new Date(endDate || new Date());
+      endDateObj.setDate(endDateObj.getDate() + 1);
+  
+      const strategyWord = strategy?.trim();
+      const serIndex = serviceIndex === "null" || typeof serviceIndex === "object" ? { $exists: true } : serviceIndex;
+      const stg1 = strategyWord === "null" ? { $exists: true } : strategyWord;
+      const ser1 = service === "null" ? { $exists: true } : service;
+  
+      const openClose1 = openClose === "Open"
+        ? { exit_qty_percent: "" }
+        : openClose === "Close"
+        ? { exit_qty_percent: { $ne: "" } }
+        : {};
+  
       const matchStage = {
-        createdAt: {
-          $gte: new Date(startDateObj),
-          $lte: new Date(endDateObj),
-        },
+        createdAt: { $gte: startDateObj, $lte: endDateObj },
         strategy: stg1,
         trade_symbol: ser1,
         symbol: serIndex,
         client_persnal_key: client_persnal_key1,
         ...openClose1,
       };
-
-
+  
+      // Aggregation pipeline for paginated results
       const filteredSignals = await MainSignals_modal.aggregate([
         { $match: matchStage },
         {
@@ -89,6 +64,7 @@ class Tradehistory {
             localField: "signals_id",
             foreignField: "_id",
             as: "result",
+            pipeline: [{ $project: { _id: 1 } }],
           },
         },
         {
@@ -97,144 +73,61 @@ class Tradehistory {
             localField: "symbol",
             foreignField: "name",
             as: "result1",
+            pipeline: [{ $project: { lotsize: 1, name: 1 } }],
           },
         },
-        { $sort: { _id: -1 } },
         { $match: { $expr: { $gt: [{ $size: "$result" }, 0] } } },
         { $match: { $expr: { $gt: [{ $size: "$result1" }, 0] } } },
+        { $sort: { _id: -1 } },
         { $skip: (page1 - 1) * limit1 },
         { $limit: limit1 },
-      ]);
+       
 
+      ]);
+  
       const totalItems = await MainSignals_modal.countDocuments(matchStage);
-
-      const groupedData = await MainSignals_modal.aggregate([
-        {
-          $match: {
-            createdAt: {
-              $gte: new Date(startDateObj),
-              $lte: new Date(endDateObj),
-            },
-            client_persnal_key: client_persnal_key1,
-          },
-        },
-        {
-          $lookup: {
-            from: "signals",
-            localField: "signals_id",
-            foreignField: "_id",
-            as: "result",
-          },
-        },
-        {
-          $lookup: {
-            from: "services",
-            localField: "symbol",
-            foreignField: "name",
-            as: "result1",
-          },
-        },
-        { $sort: { _id: -1 } },
-        { $match: { $expr: { $gt: [{ $size: "$result" }, 0] } } },
-        { $match: { $expr: { $gt: [{ $size: "$result1" }, 0] } } },
-      ]);
-
-      const trade_symbols_filter = Object.keys(
-        groupedData.reduce((acc, curr) => {
-          if (!acc[curr.trade_symbol]) {
-            acc[curr.trade_symbol] = 1;
-          } else {
-            acc[curr.trade_symbol]++;
-          }
-          return acc;
-        }, {})
-      );
-
-      if (filteredSignals.length > 0) {
-        filteredSignals.forEach((item) => {
-          item.entry_qty_percent =
-            Number(item.result1[0].lotsize) *
-            Math.ceil(Number(item.entry_qty_percent) / 100);
-          item.exit_qty_percent =
-            Number(item.result1[0].lotsize) *
-            Math.ceil(Number(item.exit_qty_percent) / 100);
-          item.entry_qty = Number(item.result1[0].lotsize) * lotMultypaly1 || 1;
-          item.exit_qty =
-            item.exit_qty_percent == "" || "" || 0
-              ? 0
-              : Number(item.result1[0].lotsize) * lotMultypaly1 || "";
-        });
-      }
-
-      const filteredSignals1 = await MainSignals_modal.aggregate([
-        { $match: matchStage },
-        {
-          $lookup: {
-            from: "signals",
-            localField: "signals_id",
-            foreignField: "_id",
-            as: "result",
-          },
-        },
-        {
-          $lookup: {
-            from: "services",
-            localField: "symbol",
-            foreignField: "name",
-            as: "result1",
-          },
-        },
-        { $sort: { _id: -1 } },
-        { $match: { $expr: { $gt: [{ $size: "$result" }, 0] } } },
-        { $match: { $expr: { $gt: [{ $size: "$result1" }, 0] } } },
-      ]);
-
+  
+      // Calculate TotalProfit/Loss
       let TotalCalculate = 0;
-      if (filteredSignals1.length > 0) {
-        filteredSignals1.forEach((item) => {
-          if (item.entry_price != "" && item.exit_price != "") {
-            var TotalQty = Number(item.result1[0].lotsize) * lotMultypaly1 || 1;
-
-            item.entry_qty_percent =
-              Number(item.result1[0].lotsize) *
-              Math.ceil(Number(item.entry_qty_percent) / 100);
-            item.exit_qty_percent =
-              Number(item.result1[0].lotsize) *
-              Math.ceil(Number(item.exit_qty_percent) / 100);
-            item.entry_qty =
-              Number(item.result1[0].lotsize) * lotMultypaly1 || 1;
-            item.exit_qty =
-              item.exit_qty_percent == "" || "" || 0
-                ? 0
-                : Number(item.result1[0].lotsize) * lotMultypaly1 || "";
-
-                TotalCalculate += (item.entry_type === "LE") 
-                ? (item.exit_price - item.entry_price) * TotalQty
-                : (item.entry_price - item.exit_price) * TotalQty;
-          }
-        });
-      }
-
+      filteredSignals.forEach((item) => {
+        if (item.entry_price && item.exit_price) {
+          const lotsize = Number(item.result1[0]?.lotsize || 1);
+          const TotalQty = lotsize * lotMultypaly1;
+  
+          TotalCalculate += item.entry_type === "LE"
+            ? (item.exit_price - item.entry_price) * TotalQty
+            : (item.entry_price - item.exit_price) * TotalQty;
+  
+          item.entry_qty_percent = Math.ceil((item.entry_qty_percent / 100) * lotsize);
+          item.exit_qty_percent = Math.ceil((item.exit_qty_percent / 100) * lotsize);
+          item.entry_qty = TotalQty;
+          item.exit_qty = item.exit_qty_percent || 0;
+        }
+      });
+  
+      // Trade symbols for filtering
+      const trade_symbols_filter = Array.from(new Set(filteredSignals.map((item) => item.trade_symbol)));
+  
+      // Response
       return res.send({
         status: true,
         msg: "Filtered Trade history",
         data: filteredSignals,
-        trade_symbols_filter: trade_symbols_filter,
+        trade_symbols_filter,
         pagination: {
-          page: Number(page1),
-          limit: Number(limit1),
+          page: page1,
+          limit: limit1,
           totalItems,
           totalPages: Math.ceil(totalItems / limit1),
         },
-        TotalCalculate: TotalCalculate ? TotalCalculate : 0,
+        TotalCalculate,
       });
     } catch (error) {
-      console.log("Error Trade History Error-", error);
-      return res
-        .status(500)
-        .send({ status: false, msg: "Internal Server Error" });
+      console.error("Error in Trade History:", error);
+      return res.status(500).send({ status: false, msg: "Internal Server Error" });
     }
   }
+  
 
   // GET ADMIN SIGNALS
   async GetAdminsevenTradeHistory(req, res) {

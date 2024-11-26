@@ -533,6 +533,11 @@ app.post('/broker-signals', async (req, res) => {
           });
 
 
+          const currentDate = new Date();
+          const hours = currentDate.getHours().toString().padStart(2, '0');
+          const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+          const currentTime = `${hours}${minutes}`; // 1130
+
 
           if (segment == 'C' || segment == 'c') {
 
@@ -547,8 +552,13 @@ app.post('/broker-signals', async (req, res) => {
               if (signals.TradeType == "MT_4") {
 
                 if (price_live_second.length > 0) {
-                  price = price_live_second[0].lp
-                  ft_time = price_live_second[0].ft
+
+                  if(price_live_second[0].curtime == currentTime || price_live_second[0].curtime == (currentTime -1)){
+                    price = price_live_second[0].lp
+                    ft_time = price_live_second[0].ft
+                  }else{
+                    price = signals.Price
+                  }
                 } else {
                   price = signals.Price
                 }
