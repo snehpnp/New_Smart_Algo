@@ -1,6 +1,6 @@
 module.exports = function (app, io) {
 
-    const db = require('./App/Models');
+    const db = require('../App/Models');
     var axios = require('axios');
     const WebSocket = require('ws');
     var CryptoJS = require("crypto-js");

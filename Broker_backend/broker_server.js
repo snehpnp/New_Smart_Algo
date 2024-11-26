@@ -492,7 +492,6 @@ app.post('/broker-signals', async (req, res) => {
             token = await Alice_token.find(instrument_query).maxTimeMS(20000).exec();
           }
            
-          console.log("token ",token)
           var instrument_token = 0
           if (token.length == 0) {
             instrument_token = 0
@@ -1528,7 +1527,6 @@ app.post('/broker-signals', async (req, res) => {
               exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
             };
 
-            //console.log("updatedFindSignal ",updatedFindSignal)
 
 
             var ExitMainSignals = await MainSignals.find(updatedFindSignal)
@@ -1572,8 +1570,7 @@ app.post('/broker-signals', async (req, res) => {
 
               } else {
 
-                console.log("ExitMainSignals", ExitMainSignals)
-
+            
                 if (parseFloat(ExitMainSignals[0].entry_qty_percent) >= (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
 
 

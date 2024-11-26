@@ -1,6 +1,6 @@
 module.exports = function (app) {
   const axios = require("axios");
-  const db = require("./App/Models");
+  const db = require("../App/Models");
   const Alice_token = db.Alice_token;
   var dateTime = require("node-datetime");
   var moment = require("moment");
@@ -21,25 +21,48 @@ module.exports = function (app) {
   const panel_model = db.panel_model;
   const Broker_information = db.Broker_information;
 
-  const { DashboardView,Cilents_service_View } = require("./View/DashboardData");
-  const { createView, dropOpenPosition, open_position_excute ,dropExistingView1} = require("./View/Open_position");
-  const { TokenSymbolUpdate } = require("./App/Cron/cron");
-  const { createViewAlice, dropViewAlice } = require("./View/Alice_blue");
-  const { createViewAngel, dropViewAngel } = require("./View/Angel");
-  const { createViewDhan, dropViewDhan } = require("./View/dhan");
-  const { createViewFivepaisa,dropViewFivepaisa } = require("./View/fivepaisa");
-  const { createViewFyers, dropViewFyers } = require("./View/fyers");
-  const { createViewIifl, dropViewIifl } = require("./View/Iifl");
-  const { createViewKotakNeo, deleteViewKotakNeo } = require("./View/KotakNeo");
-  const { createViewMarketHub,dropViewMarketHub } = require("./View/markethub");
-  const { createViewMastertrust, dropViewMastertrust } = require("./View/Mastertrust");
-  const { createViewMotilalOswal,dropViewMotilalOswal } = require("./View/MotilalOswal");
-  const { createViewSwastika, dropViewSwastika } = require("./View/swastika");
-  const { createViewUpstox, dropViewUpstox } = require("./View/Upstox");
-  const { createViewZebul, dropViewZebul } = require("./View/Zebul");
-  const { createViewZerodha, dropViewZerodha } = require("./View/zerodha");
-  const { createViewIcicidirect,dropViewIcicidirect } = require("./View/Icicidirectview");
-  const { createViewShoonya, dropViewShoonya } = require("./View/Shoonya");
+  const {
+    DashboardView,
+    Cilents_service_View,
+  } = require("../View/DashboardData");
+  const {
+    createView,
+    dropOpenPosition,
+    open_position_excute,
+    dropExistingView1,
+  } = require("../View/Open_position");
+  const { TokenSymbolUpdate } = require("../App/Cron/cron");
+  const { createViewAlice, dropViewAlice } = require("../View/Alice_blue");
+  const { createViewAngel, dropViewAngel } = require("../View/Angel");
+  const { createViewDhan, dropViewDhan } = require("../View/dhan");
+  const {
+    createViewFivepaisa,
+    dropViewFivepaisa,
+  } = require("../View/fivepaisa");
+  const { createViewFyers, dropViewFyers } = require("../View/fyers");
+  const { createViewIifl, dropViewIifl } = require("../View/Iifl");
+  const { createViewKotakNeo, deleteViewKotakNeo } = require("../View/KotakNeo");
+  const {
+    createViewMarketHub,
+    dropViewMarketHub,
+  } = require("../View/markethub");
+  const {
+    createViewMastertrust,
+    dropViewMastertrust,
+  } = require("../View/Mastertrust");
+  const {
+    createViewMotilalOswal,
+    dropViewMotilalOswal,
+  } = require("../View/MotilalOswal");
+  const { createViewSwastika, dropViewSwastika } = require("../View/swastika");
+  const { createViewUpstox, dropViewUpstox } = require("../View/Upstox");
+  const { createViewZebul, dropViewZebul } = require("../View/Zebul");
+  const { createViewZerodha, dropViewZerodha } = require("../View/zerodha");
+  const {
+    createViewIcicidirect,
+    dropViewIcicidirect,
+  } = require("../View/Icicidirectview");
+  const { createViewShoonya, dropViewShoonya } = require("../View/Shoonya");
 
   app.get("/tk", (req, res) => {
     TokenSymbolUpdate();
@@ -646,7 +669,6 @@ module.exports = function (app) {
     };
   };
 
-
   var CreateDataBase = async (data) => {
     const uri = data;
     const databaseName = "TradeTools";
@@ -851,39 +873,37 @@ module.exports = function (app) {
         CID: "3",
       },
       {
-        _id:  new ObjectId("66d2c6e5c6e24c59b81a1e13"),
+        _id: new ObjectId("66d2c6e5c6e24c59b81a1e13"),
         category_id: "9",
         name: "BSE CASH",
         segment: "BC",
         status: 0,
-        CID: "9"
+        CID: "9",
       },
       {
-        _id:  new ObjectId("66d2c710c6e24c59b81a1e14"),
+        _id: new ObjectId("66d2c710c6e24c59b81a1e14"),
         category_id: "9",
         name: "BSE FUTURE",
         segment: "BF",
         status: 0,
-        CID: "10"
+        CID: "10",
       },
       {
-        _id:  new ObjectId("66d2c72ec6e24c59b81a1e15"),
+        _id: new ObjectId("66d2c72ec6e24c59b81a1e15"),
         category_id: "9",
         name: "BSE OPTION",
         segment: "BO",
         status: 0,
-        CID: "11"
+        CID: "11",
       },
       {
-        _id:  new ObjectId("66d2c74cc6e24c59b81a1e16"),
+        _id: new ObjectId("66d2c74cc6e24c59b81a1e16"),
         category_id: "9",
         name: "BSE FUTURE OPTION",
         segment: "BFO",
         status: 0,
-        CID: "12"
-      }
-
-
+        CID: "12",
+      },
     ];
 
     for (const data of categoriesData) {
@@ -911,18 +931,25 @@ module.exports = function (app) {
     return live_priceData.save();
   };
 
-
   app.get("/all/position/view", (req, res) => {
-    createView();
-    open_position_excute();
+    try {
+      createView();
+      open_position_excute();
+      return res.send({ status: true, msg: "create  Done!!!" });
+    } catch (error) {
+      return res.send({ status: false, msg: "create  Error!!!", data: error });
+    }
   });
 
   app.get("/dropOpenPosition", async (req, res) => {
-    dropOpenPosition();
-    dropExistingView1();
-    return res.send({ msg: "Delete Done!!!" });
+    try {
+      dropOpenPosition();
+      dropExistingView1();
+      return res.send({ status: true, msg: "Delete Done!!!" });
+    } catch (error) {
+      return res.send({ status: false, msg: "Delete Error!!!", data: error });
+    }
   });
-
 
   app.get("/all/brokerview", (req, res) => {
     Cilents_service_View();
@@ -1153,9 +1180,7 @@ module.exports = function (app) {
                 .catch((err) => {
                   try {
                     console.log("Error creating and saving user:", err);
-                  } catch (e) {
-                    ;
-                  }
+                  } catch (e) {}
                 });
             }
 
@@ -1194,13 +1219,10 @@ module.exports = function (app) {
               //   });
 
               await services.updateOne(
-
-                { name: item.name,instrumenttype:item.instrumenttype },
+                { name: item.name, instrumenttype: item.instrumenttype },
                 {
                   $set: {
-
                     lotsize: item.lotsize,
-
                   },
                 },
                 { upsert: true }
@@ -1236,9 +1258,7 @@ module.exports = function (app) {
                 .catch((err) => {
                   try {
                     console.log("Error creating and saving user:", err);
-                  } catch (e) {
-                    ;
-                  }
+                  } catch (e) {}
                 });
 
               //   { name: item.name,instrumenttype:item.instrumenttype },
@@ -1279,9 +1299,7 @@ module.exports = function (app) {
                 .catch((err) => {
                   try {
                     console.log("Error creating and saving user:", err);
-                  } catch (e) {
-                    ;
-                  }
+                  } catch (e) {}
                 });
             }
 
@@ -1311,9 +1329,7 @@ module.exports = function (app) {
                 .catch((err) => {
                   try {
                     console.log("Error creating and saving user:", err);
-                  } catch (e) {
-                    ;
-                  }
+                  } catch (e) {}
                 });
             }
 
@@ -1343,9 +1359,7 @@ module.exports = function (app) {
                 .catch((err) => {
                   try {
                     console.log("Error creating and saving user:", err);
-                  } catch (e) {
-                    ;
-                  }
+                  } catch (e) {}
                 });
             }
 
@@ -1375,72 +1389,63 @@ module.exports = function (app) {
                 .catch((err) => {
                   try {
                     console.log("Error creating and saving user:", err);
-                  } catch (e) {
-                    ;
-                  }
+                  } catch (e) {}
                 });
             }
 
-            if (item.instrumenttype == 'FUTSTK' && item.exch_seg=="BFO") {
-              count++
+            if (item.instrumenttype == "FUTSTK" && item.exch_seg == "BFO") {
+              count++;
 
-              const matchingElements = categoryResult.filter(item => item.segment === "BO");
-              const category_id = matchingElements[0]._id
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "BO"
+              );
+              const category_id = matchingElements[0]._id;
 
-              await services.create({
-                name: item.name,
-                instrument_token: item.token,
-                zebu_token: item.symbol,
-                kotak_token: "",
-                instrumenttype: item.instrumenttype,
-                exch_seg: item.exch_seg,
-                lotsize: item.lotsize,
-                categorie_id: category_id,
-                unique_column: item.name + '_' + category_id
-              })
-                .then((createdServices) => {
-
+              await services
+                .create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + "_" + category_id,
                 })
+                .then((createdServices) => {})
                 .catch((err) => {
                   try {
-
-                  } catch (e) {
-
-                  }
-
+                  } catch (e) {}
                 });
+            } else if (
+              item.instrumenttype == "FUTIDX" &&
+              item.exch_seg == "BFO"
+            ) {
+              count++;
 
-            }
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "BO"
+              );
+              const category_id = matchingElements[0]._id;
 
-            else if (item.instrumenttype == 'FUTIDX' && item.exch_seg=="BFO") {
-              count++
-
-              const matchingElements = categoryResult.filter(item => item.segment === "BO");
-              const category_id = matchingElements[0]._id
-
-              await services.create({
-                name: item.name,
-                instrument_token: item.token,
-                zebu_token: item.symbol,
-                kotak_token: "",
-                instrumenttype: item.instrumenttype,
-                exch_seg: item.exch_seg,
-                lotsize: item.lotsize,
-                categorie_id: category_id,
-                unique_column: item.name + '_' + category_id
-              })
-                .then((createdServices) => {
-
+              await services
+                .create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + "_" + category_id,
                 })
+                .then((createdServices) => {})
                 .catch((err) => {
                   try {
-
-                  } catch (e) {
-
-                  }
-
+                  } catch (e) {}
                 });
-
             }
 
             if (
@@ -1467,20 +1472,15 @@ module.exports = function (app) {
                   categorie_id: "",
                   unique_column: item.name + "_" + "c9dbdc14a9fefd971c979",
                 })
-                .then((createdServices) => {
-
-                })
+                .then((createdServices) => {})
                 .catch((err) => {
                   try {
-
-                  } catch (e) {
-
-                  }
+                  } catch (e) {}
                 });
-            }else
+            }
 
             // BSE CASH TOKEN UPDATE
-            if (
+            else if (
               item.exch_seg == "BSE" &&
               item.instrumenttype == "" &&
               item.expiry == ""
@@ -1512,46 +1512,58 @@ module.exports = function (app) {
             }
 
             // BSE BSE STOCK FUTURE  TOKEN UPDATE
-            if (item.exch_seg=="BFO" && item.instrumenttype == 'FUTSTK' ) {
-              count++
+            if (item.exch_seg == "BFO" && item.instrumenttype == "FUTSTK") {
+              count++;
 
-              const matchingElements = categoryResult.filter(item => item.segment === "BF");
-              const category_id = matchingElements[0]._id
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "BF"
+              );
+              const category_id = matchingElements[0]._id;
 
-              await services.create({
-                name: item.name,
-                instrument_token: item.token,
-                zebu_token: item.symbol,
-                kotak_token: "",
-                instrumenttype: item.instrumenttype,
-                exch_seg: item.exch_seg,
-                lotsize: item.lotsize,
-                categorie_id: category_id,
-                unique_column: item.name + '_' + category_id
-              })
-                .then((createdServices) => { })
-                .catch((err) => { try { } catch (e) { } });
+              await services
+                .create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + "_" + category_id,
+                })
+                .then((createdServices) => {})
+                .catch((err) => {
+                  try {
+                  } catch (e) {}
+                });
             }
 
-            if (item.exch_seg=="BFO" && item.instrumenttype == 'FUTIDX' ) {
-              count++
+            if (item.exch_seg == "BFO" && item.instrumenttype == "FUTIDX") {
+              count++;
 
-              const matchingElements = categoryResult.filter(item => item.segment === "BO");
-              const category_id = matchingElements[0]._id
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "BO"
+              );
+              const category_id = matchingElements[0]._id;
 
-              await services.create({
-                name: item.name,
-                instrument_token: item.token,
-                zebu_token: item.symbol,
-                kotak_token: "",
-                instrumenttype: item.instrumenttype,
-                exch_seg: item.exch_seg,
-                lotsize: item.lotsize,
-                categorie_id: category_id,
-                unique_column: item.name + '_' + category_id
-              })
-                .then((createdServices) => { })
-                .catch((err) => { try { } catch (e) { } });
+              await services
+                .create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + "_" + category_id,
+                })
+                .then((createdServices) => {})
+                .catch((err) => {
+                  try {
+                  } catch (e) {}
+                });
             }
           }
         }
@@ -2180,59 +2192,9 @@ module.exports = function (app) {
     return res.send({ data: "okk" });
   });
 
-
-
   app.get("/dashboard-view", async (req, res) => {
     DashboardView();
     return res.send({ msg: "Dashboard view create Done!!!" });
-  });
-
-  app.get("/AccelpixTokenUpdate", async (req, res) => {
-    const axios = require("axios");
-    let config = {
-      method: "get",
-      maxBodyLength: Infinity,
-      url: "https://apidata5.accelpix.in/api/hsd/Masters/2?fmt=json",
-      headers: {},
-    };
-
-    axios
-      .request(config)
-      .then(async (response) => {
-        const result = await Alice_token.aggregate([
-          {
-            $project: {
-              instrument_token: 1,
-            },
-          },
-        ]);
-
-        result.forEach(async (element) => {
-          const Exist_token = response.data.find(
-            (item1) => item1.tk === parseInt(element.instrument_token)
-          );
-
-          const update = {
-            $set: {
-              tkr: Exist_token.tkr,
-              a3tkr: Exist_token.a3tkr,
-            },
-          };
-
-          const filter = { instrument_token: element.instrument_token };
-
-          const options = {
-            upsert: true,
-          };
-
-          let Res = await Alice_token.updateMany(filter, update, options);
-        });
-      })
-      .catch((error) => {
-        console.log("Error", error);
-      });
-
-    return res.send({ msg: "okk" });
   });
 
   app.get("/optionStockData", async (req, res) => {
@@ -3113,6 +3075,72 @@ module.exports = function (app) {
     }
 
     res.json(results);
+  });
+  app.post("/pm2/update", async (req, res) => {
+    const { host, password } = req.body;
+  
+    if (!host || !password) {
+      return res.status(400).send("Host and Password are required");
+    }
+  
+    const conn = new Client();
+  
+    conn
+      .on("ready", () => {
+        console.log(`Connected to ${host}`);
+  
+        // Step 1: Restart MongoDB
+        conn.exec("systemctl restart mongod", (err, stream) => {
+          if (err) {
+            console.error("Error restarting MongoDB:", err);
+            conn.end();
+            return res.status(500).send({ status: false, msg: "MongoDB restart failed" });
+          }
+  
+          stream
+            .on("close", (code, signal) => {
+              console.log(`MongoDB restarted on ${host}. Exit code: ${code}`);
+              
+              // Step 2: Update PM2
+              conn.exec("pm2 update", (err, stream) => {
+                if (err) {
+                  console.error("Error updating PM2:", err);
+                  conn.end();
+                  return res.status(500).send({ status: false, msg: "PM2 update failed" });
+                }
+  
+                stream
+                  .on("close", (code, signal) => {
+                    console.log(`PM2 updated on ${host}. Exit code: ${code}`);
+                    conn.end();
+                    return res.send({ status: true, msg: "Commands executed successfully" });
+                  })
+                  .on("data", (data) => {
+                    console.log(`PM2 update output: ${data}`);
+                  })
+                  .stderr.on("data", (data) => {
+                    console.error(`PM2 update error: ${data}`);
+                  });
+              });
+            })
+            .on("data", (data) => {
+              console.log(`MongoDB restart output: ${data}`);
+            })
+            .stderr.on("data", (data) => {
+              console.error(`MongoDB restart error: ${data}`);
+            });
+        });
+      })
+      .on("error", (err) => {
+        console.error(`Connection error: ${err}`);
+        return res.status(500).send({ status: false, msg: "SSH Connection Failed" });
+      })
+      .connect({
+        host: host,
+        port: 22,
+        username: "root",
+        password: password,
+      });
   });
   
 };

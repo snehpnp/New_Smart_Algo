@@ -2,7 +2,7 @@ module.exports = function (app) {
   const WebSocket = require("ws");
   var CryptoJS = require("crypto-js");
 
-  const db = require("./App/Models");
+  const db = require("../App/Models");
 
   const services = db.services;
   const categorie = db.categorie;

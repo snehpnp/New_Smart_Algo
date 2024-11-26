@@ -40,7 +40,6 @@ const paginationOptions = {
   page: 1, // Starting page
 };
 
-
 const TradeHistory = () => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -52,7 +51,6 @@ const TradeHistory = () => {
   const [SelectService, setSelectService] = useState("null");
   const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
   const [SelectOpenClose, setSelectopenclose] = useState("null");
-
   const [SocketState, setSocketState] = useState("null");
   const [ForGetCSV, setForGetCSV] = useState([]);
   const [adminTradingStatus, setAdminTradingStatus] = useState(false);
@@ -79,8 +77,7 @@ const TradeHistory = () => {
   const [getPage, setPage] = useState(1);
   const [getSizePerPage, setSizePerPage] = useState(10);
   const [total1, setTotal] = useState(0);
-
-
+  var a = 2;
   const handleShow = () => setShowModal6(true);
   const handleClose = () => setShowModal6(false);
 
@@ -100,7 +97,7 @@ const TradeHistory = () => {
   }, [a]);
 
   useEffect(() => {
-    ShowLivePrice();
+    // ShowLivePrice();
   }, [tradeHistoryData.data, SocketState, UserDetails]);
 
   useEffect(() => {
@@ -120,8 +117,9 @@ const TradeHistory = () => {
     SelectServiceIndex,
     lotMultypaly,
     searchTerm,
-    getPage, getSizePerPage,
-    SelectOpenClose
+    getPage,
+    getSizePerPage,
+    SelectOpenClose,
   ]);
 
   useEffect(() => {
@@ -139,7 +137,6 @@ const TradeHistory = () => {
     let startDate = getActualDateFormate(fromDate);
     let endDate = getActualDateFormate(toDate);
 
-
     await dispatch(
       Get_Tradehisotry({
         startDate: !fromDate ? full : startDate,
@@ -152,7 +149,7 @@ const TradeHistory = () => {
         token: token,
         page: getPage,
         limit: getSizePerPage,
-        openClose:SelectOpenClose
+        openClose: SelectOpenClose,
       })
     )
       .unwrap()
@@ -160,24 +157,22 @@ const TradeHistory = () => {
         if (response.status) {
           let filterData = response.data.filter((item) => {
             if (searchTerm === "") return item;
-          
+
             return (
-              item.trade_symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              item.trade_symbol
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase()) ||
               item.strategy.toLowerCase().includes(searchTerm.toLowerCase()) ||
               item.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              item.entry_price.toLowerCase().includes(searchTerm.toLowerCase()) 
-
+              item.entry_price.toLowerCase().includes(searchTerm.toLowerCase())
             );
           });
-          
-
 
           setTradeHistoryData({
             loading: false,
             data: filterData,
             pagination: response.pagination,
-            TotalCalculate:response.TotalCalculate
-
+            TotalCalculate: response.TotalCalculate,
           });
           setTotal(response.pagination.totalItems);
 
@@ -217,11 +212,12 @@ const TradeHistory = () => {
     });
   };
 
+ 
   let columns = [
     {
       dataField: "index",
       text: "S.No.",
-      formatter: (cell, row, rowIndex) => rowIndex + 1,
+      formatter: (cell, row, rowIndex) => (getPage-1) * getSizePerPage + rowIndex + 1,
     },
 
     {
@@ -289,7 +285,9 @@ const TradeHistory = () => {
       dataField: "exit_qty",
       text: "Exit Qty",
       formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== ""  || cell != 0 ? parseInt(cell) : "-"}</span>
+        <span className="text">
+          {cell !== "" || cell != 0 ? parseInt(cell) : "-"}
+        </span>
       ),
     },
     {
@@ -342,7 +340,7 @@ const TradeHistory = () => {
       text: "Exit Status",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span>{row.exit_status == "-" ? "MT_4" :row.exit_status}</span>
+          <span>{row.exit_status == "-" ? "MT_4" : row.exit_status}</span>
         </div>
       ),
     },
@@ -363,7 +361,6 @@ const TradeHistory = () => {
       ),
     },
   ];
-
 
   var CreatechannelList = "";
   let total = 0;
@@ -856,7 +853,7 @@ const TradeHistory = () => {
       });
   };
 
-  var a = 2;
+
   const data = async () => {
     if (a < 2) {
     }
@@ -924,7 +921,6 @@ const TradeHistory = () => {
     }
   };
 
-
   const GetAdminTradingStatus = async (e) => {
     await dispatch(GET_ADMIN_TRADE_STATUS({ broker_name: "ALICE_BLUE" }))
       .unwrap()
@@ -935,17 +931,7 @@ const TradeHistory = () => {
       });
   };
 
-  if (selector && selector.permission) {
-    if (
-      selector.permission &&
-      selector.permission.data &&
-      selector.permission.data[0]
-    ) {
-      if (selector.permission.data[0].live_price == 0) {
-        columns = columns.filter((data) => data.dataField !== "live");
-      }
-    }
-  }
+  
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -969,7 +955,45 @@ const TradeHistory = () => {
     // Get_TradHistory(updatedOptions);
   };
 
- 
+  
+
+  const handleTableChange = (type, { page, sizePerPage }) => {
+    setPage(page);
+    setSizePerPage(sizePerPage);
+  };
+
+  const handleSizePerPageChange = (e) => {
+    const value = parseInt(e.target.value);
+    setSizePerPage(value);
+    setPage(1);
+  };
+
+  const NoDataIndication = () => (
+    <>
+      <img
+        src="../../../../assets/images/norecordfound.png"
+        alt="sss"
+        className="mx-auto d-flex"
+      />
+    </>
+  );
+
+  if (selector && selector.permission) {
+    if (
+      selector.permission &&
+      selector.permission.data &&
+      selector.permission.data[0]
+    ) {
+      if (selector.permission.data[0].live_price == 0) {
+        columns = columns.filter((data) => data.dataField !== "live");
+      }
+    }
+  }
+
+  if (selectedOptions && selectedOptions.length > 0) {
+    columns = columns.filter((data) => !selectedOptions.includes(data.text));
+  }
+
   const columnTexts = [
     "S.No.",
     "Signals Entry time",
@@ -986,36 +1010,7 @@ const TradeHistory = () => {
     "Entry Status",
     "Exit Status",
     "Details View",
-
   ];
-
- 
-   const handleTableChange = (type, { page, sizePerPage }) => {
-    setPage(page);
-    setSizePerPage(sizePerPage);
-  };
-
-
-  const handleSizePerPageChange = (e) => {
-    const value = parseInt(e.target.value);
-    setSizePerPage(value);
-    setPage(1);
-  };
-
-  const NoDataIndication = () => (
-    <>
-        <img src='../../../../assets/images/norecordfound.png' alt="sss"
-            className='mx-auto d-flex'
-        />
-    </>
-);
-
-
-if (selectedOptions && selectedOptions.length > 0) {
-  columns = columns.filter((data) => !selectedOptions.includes(data.text));
-}
-
-
   return (
     <>
       <Content
@@ -1028,7 +1023,6 @@ if (selectedOptions && selectedOptions.length > 0) {
         csv_title="TradeHistory"
       >
         <div className="row d-flex  align-items-center justify-content-start">
-       
           {dashboard_filter === "client" ? (
             ""
           ) : (
@@ -1228,10 +1222,10 @@ if (selectedOptions && selectedOptions.length > 0) {
                   All
                 </option>
                 <option value="Open" selected>
-                Open
+                  Open
                 </option>
                 <option value="Close" selected>
-                Close
+                  Close
                 </option>
               </select>
             </div>
@@ -1251,7 +1245,7 @@ if (selectedOptions && selectedOptions.length > 0) {
 
           <div className="col-lg-2  px-1">
             <div className="mb-3">
-            <label className="col-lg-12">Search Here</label>
+              <label className="col-lg-12">Search Here</label>
 
               <input
                 type="text"
@@ -1266,7 +1260,7 @@ if (selectedOptions && selectedOptions.length > 0) {
           <div className="col-lg-2 px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
               <div className="custom-dropdown">
-            <label className="col-lg-12">Select Option</label>
+                <label className="col-lg-12">Select Option</label>
 
                 <button
                   className="btn btn-primary dropdown-toggle"
@@ -1300,7 +1294,7 @@ if (selectedOptions && selectedOptions.length > 0) {
 
           <div className="col-lg-2  px-1">
             <div className="mb-3">
-            <label className="col-lg-12">Reset</label>
+              <label className="col-lg-12">Reset</label>
 
               <button
                 className="btn btn-primary"
@@ -1310,87 +1304,97 @@ if (selectedOptions && selectedOptions.length > 0) {
               </button>
             </div>
           </div>
-
-        
         </div>
 
         <div className="table-responsive">
-        {tradeHistoryData.data.length > 0 ? ( tradeHistoryData.TotalCalculate &&
+          {tradeHistoryData.data.length > 0 ? (
+            tradeHistoryData.TotalCalculate &&
             tradeHistoryData.TotalCalculate >= 0 ? (
               <h3>
-               <b>Total Realised P/L</b>  :{" "}
-               <b><span style={{ color: "green" }}> {tradeHistoryData.TotalCalculate ? tradeHistoryData.TotalCalculate.toFixed(2):"-" }</span>{" "}</b> 
+                <b>Total Realised P/L</b> :{" "}
+                <b>
+                  <span style={{ color: "green" }}>
+                    {" "}
+                    {tradeHistoryData.TotalCalculate
+                      ? tradeHistoryData.TotalCalculate.toFixed(2)
+                      : "-"}
+                  </span>{" "}
+                </b>
               </h3>
             ) : (
               <h3>
                 <b>Total Realised P/L</b> :{" "}
-                <b><span style={{ color: "red" }}> {tradeHistoryData.TotalCalculate ? tradeHistoryData.TotalCalculate.toFixed(2) : "-"}</span>{" "}</b> 
+                <b>
+                  <span style={{ color: "red" }}>
+                    {" "}
+                    {tradeHistoryData.TotalCalculate
+                      ? tradeHistoryData.TotalCalculate.toFixed(2)
+                      : "-"}
+                  </span>{" "}
+                </b>
               </h3>
             )
           ) : (
             ""
           )}
 
-<PaginationProvider
-        pagination={paginationFactory({
-          ...paginationOptions,
-          totalSize: total1,
-          page: getPage,
-          sizePerPage: getSizePerPage,
-        })}
-      >
-        {({ paginationProps, paginationTableProps }) => (
-          <div>
-            <BootstrapTable
-              keyField="_id" // Assuming "_id" is the unique key in your data
-              data={tradeHistoryData.data} // Data from API
-              columns={columns} // Table columns
-              remote // Indicate that pagination and data are remotely controlled
-              onTableChange={handleTableChange} // Handle pagination changes
-              {...paginationTableProps} // Attach pagination props
-              headerClasses="bg-primary text-primary text-center header-class"
-              rowClasses={`text-center`}
-              noDataIndication={() => <NoDataIndication />}
+          <PaginationProvider
+            pagination={paginationFactory({
+              ...paginationOptions,
+              totalSize: total1,
+              page: getPage,
+              sizePerPage: getSizePerPage,
+            })}
+          >
+            {({ paginationProps, paginationTableProps }) => (
+              <div>
+                <BootstrapTable
+                  keyField="_id"
+                  data={tradeHistoryData.data}
+                  columns={columns} 
+                  remote 
+                  onTableChange={handleTableChange} 
+                  {...paginationTableProps} 
+                  headerClasses="bg-primary text-primary text-center header-class"
+                  rowClasses={`text-center`}
+                  noDataIndication={() => <NoDataIndication />}
+                />
 
-            />
+                <div className="mb-2 d-flex justify-content-between align-items-start mt-2">
+                  <div className="d-flex align-items-center">
+                    <label htmlFor="sizePerPageSelect" className="mx-2">
+                      Items per page:
+                    </label>
+                    <select
+                      id="sizePerPageSelect"
+                      value={getSizePerPage}
+                      onChange={handleSizePerPageChange}
+                    >
+                      <option value={10}>10</option>
+                      <option value={25}>25</option>
+                      <option value={50}>50</option>
+                      <option value={100}>100</option>
+                      <option value={200}>200</option>
 
-<div className="mb-2 d-flex justify-content-between align-items-start mt-2">
-<div className="d-flex align-items-center">
-  <label htmlFor="sizePerPageSelect" className="mx-2" >
-    Items per page:
-  </label>
-  <select
-    id="sizePerPageSelect"
-    value={getSizePerPage}
-    onChange={handleSizePerPageChange}
-  
-  >
-    <option value={10}>10</option>
-    <option value={25}>25</option>
-    <option value={50}>50</option>
-    <option value={100}>100</option>
-    <option value={200}>200</option>
-
-    <option value={500}>500</option>
-    <option value={1000}>1000</option>
-    <option value={1500}>1500</option>
-
-
-  </select>
-</div>
-  <div className="d-flex align-items-center">
-    <PaginationTotalStandalone {...paginationProps} className="mr-3" /> {/* Add margin to the right for spacing */}
-  </div>
-  <div className="d-flex align-items-end">
-  <PaginationListStandalone {...paginationProps} />
-  </div>
-  
-</div>
-
-            
-          </div>
-        )}
-      </PaginationProvider>
+                      {/* <option value={500}>500</option>
+                      <option value={1000}>1000</option>
+                      <option value={1500}>1500</option> */}
+                    </select>
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <PaginationTotalStandalone
+                      {...paginationProps}
+                      className="mr-3"
+                    />{" "}
+                    {/* Add margin to the right for spacing */}
+                  </div>
+                  <div className="d-flex align-items-end">
+                    <PaginationListStandalone {...paginationProps} />
+                  </div>
+                </div>
+              </div>
+            )}
+          </PaginationProvider>
         </div>
 
         <DetailsView

@@ -12,7 +12,7 @@ const https = require("https");
 const socketIo = require("socket.io");
 const cors = require("cors");
 const bodyparser = require("body-parser");
-const { Client } = require("ssh2");
+
 const db1 = require("./App/Models/index");
 
 const dbTest = db1.dbTest;
@@ -43,7 +43,7 @@ require("./App/Cron/cron");
 // Routes all
 require("./App/Routes")(app);
 // EMERGANCY
-require("./request")(app);
+require("./Utils/request")(app);
 
 // require("./Teting")(app);
 
@@ -84,72 +84,6 @@ app.get("/pp", (req, res) => {
 });
 
 
-app.post("/pm2/update", async (req, res) => {
-  const { host, password } = req.body;
-
-  if (!host || !password) {
-    return res.status(400).send("Host and Password are required");
-  }
-
-  const conn = new Client();
-
-  conn
-    .on("ready", () => {
-      console.log(`Connected to ${host}`);
-
-      // Step 1: Restart MongoDB
-      conn.exec("systemctl restart mongod", (err, stream) => {
-        if (err) {
-          console.error("Error restarting MongoDB:", err);
-          conn.end();
-          return res.status(500).send({ status: false, msg: "MongoDB restart failed" });
-        }
-
-        stream
-          .on("close", (code, signal) => {
-            console.log(`MongoDB restarted on ${host}. Exit code: ${code}`);
-            
-            // Step 2: Update PM2
-            conn.exec("pm2 update", (err, stream) => {
-              if (err) {
-                console.error("Error updating PM2:", err);
-                conn.end();
-                return res.status(500).send({ status: false, msg: "PM2 update failed" });
-              }
-
-              stream
-                .on("close", (code, signal) => {
-                  console.log(`PM2 updated on ${host}. Exit code: ${code}`);
-                  conn.end();
-                  return res.send({ status: true, msg: "Commands executed successfully" });
-                })
-                .on("data", (data) => {
-                  console.log(`PM2 update output: ${data}`);
-                })
-                .stderr.on("data", (data) => {
-                  console.error(`PM2 update error: ${data}`);
-                });
-            });
-          })
-          .on("data", (data) => {
-            console.log(`MongoDB restart output: ${data}`);
-          })
-          .stderr.on("data", (data) => {
-            console.error(`MongoDB restart error: ${data}`);
-          });
-      });
-    })
-    .on("error", (err) => {
-      console.error(`Connection error: ${err}`);
-      return res.status(500).send({ status: false, msg: "SSH Connection Failed" });
-    })
-    .connect({
-      host: host,
-      port: 22,
-      username: "root",
-      password: password,
-    });
-});
 
 
 app.get('/UpdateChannel/:c/:e', async (req, res) => {
@@ -164,13 +98,6 @@ app.get('/UpdateChannel/:c/:e', async (req, res) => {
   
    //updateChannelAndSend(c)
 });
-
-
-
-
-
-
-
 
 
 
@@ -201,6 +128,8 @@ async function checkAndDrop() {
       }
   }
 }
+
+
 
 
 
