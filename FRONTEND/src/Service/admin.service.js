@@ -1113,3 +1113,16 @@ export async function DeletePlans(data, token) {
         return await err
     }
 }
+
+export async function GetSignalsAdmin(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/signals/admin`, data,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}

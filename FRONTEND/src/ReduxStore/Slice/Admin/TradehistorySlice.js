@@ -1,7 +1,7 @@
 
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { GET_TRADEHISTORY,GET_TRADEHISTORY1, GET_SEVAN_TRADEHISTORY, GET_ADMIN_TRADING_STATUS, AdminTradingStatusGet } from "../../../Service/admin.service";
+import { GET_TRADEHISTORY,GET_TRADEHISTORY1, GET_SEVAN_TRADEHISTORY, GET_ADMIN_TRADING_STATUS, AdminTradingStatusGet ,GetSignalsAdmin} from "../../../Service/admin.service";
 
 
 export const Get_Tradehisotry = createAsyncThunk("admin/tradhistory", async (apireq) => {
@@ -63,6 +63,18 @@ export const ADMINGETTRADINGSTATUS = createAsyncThunk("admin/trading/status/get"
     }
 });
 
+export const GetSignalsAdmins = createAsyncThunk("get/signals/admin", async (data) => {
+
+    try {
+        const res = await GetSignalsAdmin(data);
+
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+
 
 const TradehistorySlice = createSlice({
     name: "TradehistorySlice",
@@ -75,6 +87,7 @@ const TradehistorySlice = createSlice({
         trading_status: [],
         gettradingstatus: [],
         tradehisotry1: [],
+        getAdminSignals:[]
 
 
 
@@ -95,6 +108,9 @@ const TradehistorySlice = createSlice({
         },
         [ADMINGETTRADINGSTATUS.fulfilled]: (state, { payload }) => {
             return { ...state, gettradingstatus: payload, isLoading: false };
+        },
+        [GetSignalsAdmins.fulfilled]: (state, { payload }) => {
+            return { ...state, getAdminSignals: payload, isLoading: false };
         },
 
 

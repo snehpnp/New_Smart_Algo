@@ -533,6 +533,13 @@ const TradeHistory = () => {
 
   };
 
+  const ShowLivePrice1 = async () => {
+    tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
+      const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
+      calcultateRPL(row, null, previousRow);
+    });
+  }
+
 
   const calcultateRPL = (row, livePrice, pre_row) => {
 
@@ -578,6 +585,8 @@ const TradeHistory = () => {
     } else {
       $(".LivePrice_").html("");
       setSocketState("null");
+      ShowLivePrice1();
+
     }
   }, [tradeHistoryData.data, SocketState, UserDetails]);
 

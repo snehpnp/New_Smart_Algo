@@ -97,12 +97,12 @@ const TradeHistory = () => {
   }, [a]);
 
   useEffect(() => {
-    console.log("searchTerm", searchTerm);
     if (!fromDate && !toDate) {
       ShowLivePrice();
     } else {
       $(".LivePrice_").html("");
       setSocketState("null");
+      ShowLivePrice1();
     }
   }, [tradeHistoryData.data, SocketState, UserDetails]);
 
@@ -814,6 +814,14 @@ const TradeHistory = () => {
     }
   };
 
+  const ShowLivePrice1 = async () => {
+    tradeHistoryData.data &&
+    tradeHistoryData.data.forEach((row, i) => {
+      const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
+      calcultateRPL(row, null, previousRow);
+    });
+  }
+
   const calcultateRPL = (row, livePrice, pre_row) => {
     let get_ids = "_id_" + row.token + "_" + row._id;
     let get_id_token = $("." + get_ids).html();
@@ -1312,18 +1320,18 @@ const TradeHistory = () => {
           </div>
         </div>
 
+
         <div className="table-responsive">
           {tradeHistoryData.data.length > 0 ? (
-            tradeHistoryData.TotalCalculate &&
+            
             tradeHistoryData.TotalCalculate >= 0 ? (
               <h3>
                 <b>Total Realised P/L</b> :{" "}
                 <b>
                   <span style={{ color: "green" }}>
                     {" "}
-                    {tradeHistoryData.TotalCalculate
-                      ? tradeHistoryData.TotalCalculate.toFixed(2)
-                      : "-"}
+                    {tradeHistoryData.TotalCalculate == null || tradeHistoryData.TotalCalculate == undefined ? 0 : tradeHistoryData.TotalCalculate.toFixed(2)}
+                    
                   </span>{" "}
                 </b>
               </h3>

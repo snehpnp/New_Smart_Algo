@@ -263,43 +263,8 @@ const EditClient = () => {
     },
   });
 
-  useEffect(() => {
-    let Service_Month_Arr = [];
 
-
-    // console.log(UserData.data.data[0].EndDate);
-    console.log("-", new Date(UserData.data.data[0].EndDate) > new Date());
-
-    for (let index = 1; index <= 1; index++) {
-
-
-      const currentDate =
-      // UserData.data?.data?.[0]?.license_type === 2 &&
-      new Date(UserData.data.data[0].EndDate) > new Date()
-        ? new Date(UserData.data.data[0].EndDate)
-        : new Date();
-    
-
-
-console.log("currentDate", currentDate);
-
-
-
-
-      const currentYear = currentDate.getFullYear();
-      const currentMonth = currentDate.getMonth();
-      const endMonth = (currentMonth + index) % 12;
-      const endYear = currentYear + Math.floor((currentMonth + index) / 12);
-
-      // Create the end date string
-      const endDate = `${index} Month Licence Expires On ${currentDate.getDate()}-${
-        endMonth + 1
-      }-${endYear}`;
-
-      Service_Month_Arr.push({ month: index, endDate });
-    }
-    setfirst(Service_Month_Arr);
-  }, [UserData.data.data]);
+  
 
   let fields = [
     {
@@ -1020,6 +985,29 @@ console.log("currentDate", currentDate);
       });
   };
 
+
+  useEffect(() => {
+    if (UserData?.data?.data?.[0]?.EndDate) {
+      const Service_Month_Arr = [];
+      const currentDate =
+        new Date(UserData.data.data[0].EndDate) > new Date()
+          ? new Date(UserData.data.data[0].EndDate)
+          : new Date();
+  
+      for (let index = 1; index <= 1; index++) { // Adjust range as needed
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth();
+        const endMonth = (currentMonth + index) % 12;
+        const endYear = currentYear + Math.floor((currentMonth + index) / 12);
+  
+        const endDate = `${index} Month Licence Expires On ${currentDate.getDate()}-${
+          endMonth + 1
+        }-${endYear}`;
+        Service_Month_Arr.push({ month: index, endDate });
+      }
+      setfirst(Service_Month_Arr);
+    }
+  }, [UserData?.data?.data]);
   return (
     <>
       <Content
