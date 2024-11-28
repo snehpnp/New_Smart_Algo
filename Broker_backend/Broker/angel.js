@@ -298,19 +298,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                                
                                 if (ExistUserPositionData != undefined) {
                                     
-                                    // await PositionAgainProcess(ExistUserPositionData.data.response,
-                                    //     ExistUserPositionData.data.item,
-                                    //     ExistUserPositionData.data.token,
-                                    //     ExistUserPositionData.data.signal_req,
-                                    //     ExistUserPositionData.data.strategy,
-                                    //     ExistUserPositionData.data.type,
-                                    //     ExistUserPositionData.data.input_symbol,
-                                    //     ExistUserPositionData.data.send_rr,
-                                    //     ExistUserPositionData.data.filePath,
-                                    //     ExistUserPositionData.data.signals,
-                                    //     ExistUserPositionData.data.ExistExitSignal,
-                                    //     ExistUserPositionData.data.segment
-                                    //  )
+                                 
                                     
                                     try {
                                         await PositionAgainProcess(ExistUserPositionData.data.response, ExistUserPositionData.data.item,token, signal_req, strategy, type, input_symbol, send_rr, filePath, signals, ExistExitSignal, segment
@@ -361,20 +349,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                                
                         if (ExistUserPositionData != undefined) {
                             
-                            // await PositionAgainProcess(ExistUserPositionData.data.response,
-                            //     ExistUserPositionData.data.item,
-                            //     ExistUserPositionData.data.token,
-                            //     ExistUserPositionData.data.signal_req,
-                            //     ExistUserPositionData.data.strategy,
-                            //     ExistUserPositionData.data.type,
-                            //     ExistUserPositionData.data.input_symbol,
-                            //     ExistUserPositionData.data.send_rr,
-                            //     ExistUserPositionData.data.filePath,
-                            //     ExistUserPositionData.data.signals,
-                            //     ExistUserPositionData.data.ExistExitSignal,
-                            //     ExistUserPositionData.data.segment 
-                            //  )
-
+                      
                            
 
                              await PositionAgainProcess(ExistUserPositionData.data.response, ExistUserPositionData.data.item,token, signal_req, strategy, type, input_symbol, send_rr, filePath, signals, ExistExitSignal, segment
@@ -1061,7 +1036,7 @@ const PendingOrderCancel = async (ExistExitSignal, token, item, filePath, signal
 
 const PositionAgainProcess = async (data, item, token, signal_req, strategy, type, input_symbol, send_rr, filePath, signals, ExistExitSignal, segment) => {
 
-    fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION AFTER PositionAgainProcess  INSIDE- ' + item.UserName + ' ERROR - ' + JSON.stringify(data) + '\n', function (err) {
+    fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION AFTER PositionAgainProcess1  INSIDE- ' + item.UserName + ' ERROR - ' + JSON.stringify(data) + '\n', function (err) {
         if (err) {
             return console.log(err);
         }
@@ -1070,7 +1045,7 @@ const PositionAgainProcess = async (data, item, token, signal_req, strategy, typ
     const response = JSON.parse(data);
     if (response.data.data != null && response.data.message == "SUCCESS") {
 
-        fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION AFTER PositionAgainProcess  INSIDE- IFF ' + item.UserName + ' ERROR - ' + JSON.stringify(response.data.data) + '\n', function (err) {
+        fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION AFTER PositionAgainProcess1  INSIDE- IFF ' + item.UserName + ' ERROR - ' + JSON.stringify(response.data.data) + '\n', function (err) {
             if (err) {
                 return console.log(err);
             }

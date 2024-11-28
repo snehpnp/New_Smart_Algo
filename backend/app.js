@@ -1,8 +1,6 @@
 "use strict";
 require("dotenv").config();
-// const mongoConnection = require('./App/Connection/mongo_connection')
 const { connectToMongoDB } = require("./App/Connection/mongo_connection");
-
 const express = require("express");
 const app = express();
 
@@ -12,10 +10,10 @@ const https = require("https");
 const socketIo = require("socket.io");
 const cors = require("cors");
 const bodyparser = require("body-parser");
-
 const db1 = require("./App/Models/index");
 
-const dbTest = db1.dbTest;
+const { setIO, getIO } = require("./App/Helper/BackendSocketIo");
+
 
 
 const corsOpts = {
@@ -28,54 +26,48 @@ const corsOpts = {
     "authorization",
   ],
 };
-app.use(cors(corsOpts));
 
+app.use(cors(corsOpts));
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json({ limit: "10mb", extended: true }));
-
 app.use(bodyparser.json());
-const server = http.createServer(app);
 app.use(express.json());
 
-// REQUIRE File
+const server = http.createServer(app);
+
 require("./App/Cron/cron");
-// require("./App/Cron/cron_ss");
-
 require("./App/Routes")(app);
-
 require("./Utils/request")(app);
 
-// require("./Teting")(app);
-//require("./redisSocketConnect")(app)
-
-// Connect Local backend Socket
-const { setIO, getIO } = require("./App/Helper/BackendSocketIo");
 
 
-const io = socketIo(server, {
-  cors: {
-    origin: "*",
-    credentials: true,
-  },
-});
 
-io.on("connection", (socket) => {
-  socket.on("help_from_client", (data) => {
-    socket.broadcast.emit("test_msg_Response", data);
-  });
+// const io = socketIo(server, {
+//   cors: {
+//     origin: "*",
+//     credentials: true,
+//   },
+// });
 
-  socket.on("logout_user_from_other_device_req", (data111) => {
-    socket.broadcast.emit("logout_user_from_other_device_res", data111);
-  });
-});
+// io.on("connection", (socket) => {
+//   socket.on("help_from_client", (data) => {
+//     socket.broadcast.emit("test_msg_Response", data);
+//   });
 
-setIO(io)
-  .then(() => {
-    getIO()
-      .then((ioObject) => {})
-      .catch((error) => {});
-  })
-  .catch((error) => {});
+//   socket.on("logout_user_from_other_device_req", (data111) => {
+//     socket.broadcast.emit("logout_user_from_other_device_res", data111);
+//   });
+// });
+
+// setIO(io)
+//   .then(() => {
+//     getIO()
+//       .then((ioObject) => {})
+//       .catch((error) => {});
+//   })
+//   .catch((error) => {});
+
+
 
 app.get("/pp", (req, res) => {
   io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: "okkkk" });
@@ -84,12 +76,10 @@ app.get("/pp", (req, res) => {
 
 
 
-
-
 // Server start
 server.listen(process.env.PORT, () => {
   console.log(`Server is running on  http://0.0.0.0:${process.env.PORT}`);
   const { Alice_Socket } = require("./App/Helper/Alice_Socket");
   connectToMongoDB();
-  Alice_Socket();
+  // Alice_Socket();
 });

@@ -1,0 +1,633 @@
+
+NEW TRADE TIME Thu Nov 28 2024 15:22:29 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:22:29 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Thu Nov 28 2024 15:22:30 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:30 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:22:30 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:30 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:30 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:30 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:30 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:30 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"-0.00","ltp":"2.12","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"0.00","avgnetprice":"8.35","netvalue":"-16.69","netqty":"2","totalbuyvalue":"16.69","totalsellvalue":"0.00","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"0.00","netprice":"8.34","buyqty":"2","sellqty":"0","buyamount":"16.69","sellamount":"0.00","pnl":"0.04","realised":"-0.00","unrealised":"0.04","ltp":"8.37","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:22:30 GMT+0530 (India Standard Time) ANGEL BEFORE PLACE ORDER USER EXIT- angel REQUEST -{"variety":"NORMAL","tradingsymbol":"IDEA-EQ","symboltoken":"14366","transactiontype":"SELL","exchange":"NSE","ordertype":"MARKET","producttype":"INTRADAY","duration":"DAY","triggerprice":0,"price":0,"squareoff":0,"stoploss":0,"quantity":"1","trailingStopLoss":""}
+TIME Thu Nov 28 2024 15:22:30 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:30 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:30 GMT+0530 (India Standard Time) ANGEL AFTER PLACE ORDER USER EXIT- angel RESPONSE -{"status":true,"message":"SUCCESS","errorcode":"","data":{"script":"IDEA-EQ","orderid":"241128101600830","uniqueorderid":"0db6c365-5f42-42f3-98f9-1c8c61e1732e"}}
+TIME Thu Nov 28 2024 15:22:30 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:30 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:31 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:31 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:31 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:31 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:31 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:22:50 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:22:50 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"0.00","ltp":"2.11","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"0.00","avgnetprice":"8.35","netvalue":"-16.69","netqty":"2","totalbuyvalue":"16.69","totalsellvalue":"0.00","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"0.00","netprice":"8.34","buyqty":"2","sellqty":"0","buyamount":"16.69","sellamount":"0.00","pnl":"0.04","realised":"-0.00","unrealised":"0.04","ltp":"8.37","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) ANGEL BEFORE PLACE ORDER USER EXIT- angel REQUEST -{"variety":"NORMAL","tradingsymbol":"IDEA-EQ","symboltoken":"14366","transactiontype":"SELL","exchange":"NSE","ordertype":"MARKET","producttype":"DELIVERY","duration":"DAY","triggerprice":0,"price":0,"squareoff":0,"stoploss":0,"quantity":"1","trailingStopLoss":""}
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) ANGEL AFTER PLACE ORDER USER EXIT- angel RESPONSE -{"status":true,"message":"SUCCESS","errorcode":"","data":{"script":"IDEA-EQ","orderid":"241128101601750","uniqueorderid":"07408392-5c37-411f-86ac-ccb48c558475"}}
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:22:51 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:23:03 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:23:03 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Thu Nov 28 2024 15:23:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"-0.00","ltp":"2.12","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"8.36","avgnetprice":"8.33","netvalue":"-8.33","netqty":"1","totalbuyvalue":"16.69","totalsellvalue":"8.36","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"8.36","netprice":"8.33","buyqty":"2","sellqty":"1","buyamount":"16.69","sellamount":"8.36","pnl":"0.03","realised":"0.01","unrealised":"0.02","ltp":"8.37","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) ANGEL BEFORE PLACE ORDER USER EXIT- angel REQUEST -{"variety":"NORMAL","tradingsymbol":"IDEA-EQ","symboltoken":"14366","transactiontype":"SELL","exchange":"NSE","ordertype":"MARKET","producttype":"DELIVERY","duration":"DAY","triggerprice":0,"price":0,"squareoff":0,"stoploss":0,"quantity":"1","trailingStopLoss":""}
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) ANGEL AFTER PLACE ORDER USER EXIT- angel RESPONSE -{"status":true,"message":"SUCCESS","errorcode":"","data":{"script":"IDEA-EQ","orderid":"241128101602280","uniqueorderid":"17df0633-8217-4cd9-a55a-067d71bcb30e"}}
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:23:04 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:23:05 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Thu Nov 28 2024 15:23:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:23:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:05 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"-0.00","ltp":"2.12","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"8.36","avgnetprice":"0.00","netvalue":"0.02","netqty":"0","totalbuyvalue":"16.69","totalsellvalue":"16.71","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"8.36","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"16.69","sellamount":"16.71","pnl":"0.02","realised":"0.02","unrealised":"-0.00","ltp":"8.37","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:23:05 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:05 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:05 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:05 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:05 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:05 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:05 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"-0.00","ltp":"2.12","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"8.36","avgnetprice":"0.00","netvalue":"0.02","netqty":"0","totalbuyvalue":"16.69","totalsellvalue":"16.71","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"8.36","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"16.69","sellamount":"16.71","pnl":"0.02","realised":"0.02","unrealised":"-0.00","ltp":"8.37","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:06 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:07 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:07 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:07 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:07 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:07 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:07 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:07 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:07 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:23:07 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.13","sellavgprice":"0.00","avgnetprice":"2.13","netvalue":"-2.13","netqty":"1","totalbuyvalue":"2.13","totalsellvalue":"0.00","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.13","totalsellavgprice":"0.00","netprice":"2.13","buyqty":"1","sellqty":"0","buyamount":"2.13","sellamount":"0.00","pnl":"-0.01","realised":"-0.00","unrealised":"-0.01","ltp":"2.12","close":"2.08"},{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"-0.00","ltp":"2.12","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"8.36","avgnetprice":"8.35","netvalue":"-8.35","netqty":"1","totalbuyvalue":"25.06","totalsellvalue":"16.71","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"8.36","netprice":"8.35","buyqty":"3","sellqty":"2","buyamount":"25.06","sellamount":"16.71","pnl":"0.05","realised":"0.02","unrealised":"0.03","ltp":"8.38","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) ANGEL BEFORE PLACE ORDER USER EXIT- angel REQUEST -{"variety":"NORMAL","tradingsymbol":"IDEA-EQ","symboltoken":"14366","transactiontype":"SELL","exchange":"NSE","ordertype":"MARKET","producttype":"DELIVERY","duration":"DAY","triggerprice":0,"price":0,"squareoff":0,"stoploss":0,"quantity":"1","trailingStopLoss":""}
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) ANGEL AFTER PLACE ORDER USER EXIT- angel RESPONSE -{"status":true,"message":"SUCCESS","errorcode":"","data":{"script":"IDEA-EQ","orderid":"241128101606426","uniqueorderid":"57d0aaa9-3ec8-4d5c-b367-a54e16b29956"}}
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:34 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:35 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:35 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:35 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:24:36 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:24:36 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Thu Nov 28 2024 15:24:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:24:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:36 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.13","sellavgprice":"0.00","avgnetprice":"2.13","netvalue":"-2.13","netqty":"1","totalbuyvalue":"2.13","totalsellvalue":"0.00","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.13","totalsellavgprice":"0.00","netprice":"2.13","buyqty":"1","sellqty":"0","buyamount":"2.13","sellamount":"0.00","pnl":"-0.01","realised":"-0.00","unrealised":"-0.01","ltp":"2.12","close":"2.08"},{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"-0.00","ltp":"2.12","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"8.36","avgnetprice":"0.00","netvalue":"0.02","netqty":"0","totalbuyvalue":"25.06","totalsellvalue":"25.08","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"8.36","netprice":"0.00","buyqty":"3","sellqty":"3","buyamount":"25.06","sellamount":"25.08","pnl":"0.03","realised":"0.03","unrealised":"-0.00","ltp":"8.38","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:24:36 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:36 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:36 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:36 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:36 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:36 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:36 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:37 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:37 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:37 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:37 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:37 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:24:38 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:24:38 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Thu Nov 28 2024 15:24:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:24:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:38 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.13","sellavgprice":"0.00","avgnetprice":"2.13","netvalue":"-2.13","netqty":"1","totalbuyvalue":"2.13","totalsellvalue":"0.00","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.13","totalsellavgprice":"0.00","netprice":"2.13","buyqty":"1","sellqty":"0","buyamount":"2.13","sellamount":"0.00","pnl":"0.00","realised":"-0.00","unrealised":"0.00","ltp":"2.13","close":"2.08"},{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"-0.00","ltp":"2.13","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"8.36","avgnetprice":"0.00","netvalue":"0.02","netqty":"0","totalbuyvalue":"25.06","totalsellvalue":"25.08","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"8.36","netprice":"0.00","buyqty":"3","sellqty":"3","buyamount":"25.06","sellamount":"25.08","pnl":"0.03","realised":"0.03","unrealised":"-0.00","ltp":"8.39","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:24:38 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:38 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:38 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:39 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:39 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:39 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:39 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:39 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:39 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:39 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:39 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:39 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:24:40 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:IDEA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:24:40 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Thu Nov 28 2024 15:24:40 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:40 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:24:40 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:40 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:41 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.13","sellavgprice":"0.00","avgnetprice":"2.13","netvalue":"-2.13","netqty":"1","totalbuyvalue":"2.13","totalsellvalue":"0.00","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.13","totalsellavgprice":"0.00","netprice":"2.13","buyqty":"1","sellqty":"0","buyamount":"2.13","sellamount":"0.00","pnl":"0.00","realised":"-0.00","unrealised":"0.00","ltp":"2.13","close":"2.08"},{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"-0.00","ltp":"2.13","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"8.36","avgnetprice":"0.00","netvalue":"0.02","netqty":"0","totalbuyvalue":"25.06","totalsellvalue":"25.08","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"8.36","netprice":"0.00","buyqty":"3","sellqty":"3","buyamount":"25.06","sellamount":"25.08","pnl":"0.03","realised":"0.03","unrealised":"-0.00","ltp":"8.38","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:24:41 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:41 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:41 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:41 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:41 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:41 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:41 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:41 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:41 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:41 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:41 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:24:41 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:25:40 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 13745
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:41 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:42 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.13","sellavgprice":"0.00","avgnetprice":"2.13","netvalue":"-2.13","netqty":"1","totalbuyvalue":"2.13","totalsellvalue":"0.00","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.13","totalsellavgprice":"0.00","netprice":"2.13","buyqty":"1","sellqty":"0","buyamount":"2.13","sellamount":"0.00","pnl":"0.00","realised":"-0.00","unrealised":"0.00","ltp":"2.13","close":"2.08"},{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"-0.00","ltp":"2.13","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"8.36","avgnetprice":"0.00","netvalue":"0.02","netqty":"0","totalbuyvalue":"25.06","totalsellvalue":"25.08","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"8.36","netprice":"0.00","buyqty":"3","sellqty":"3","buyamount":"25.06","sellamount":"25.08","pnl":"0.03","realised":"0.03","unrealised":"-0.00","ltp":"8.38","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:25:42 GMT+0530 (India Standard Time) ANGEL BEFORE PLACE ORDER USER EXIT- angel REQUEST -{"variety":"NORMAL","tradingsymbol":"GTLINFRA-EQ","symboltoken":"13745","transactiontype":"SELL","exchange":"NSE","ordertype":"MARKET","producttype":"DELIVERY","duration":"DAY","triggerprice":0,"price":0,"squareoff":0,"stoploss":0,"quantity":"1","trailingStopLoss":""}
+TIME Thu Nov 28 2024 15:25:42 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:42 GMT+0530 (India Standard Time) ANGEL AFTER PLACE ORDER USER EXIT- angel RESPONSE -{"status":true,"message":"SUCCESS","errorcode":"","data":{"script":"GTLINFRA-EQ","orderid":"241128101609163","uniqueorderid":"a42fef38-12f9-4400-aa56-ad62464147ee"}}
+
+NEW TRADE TIME Thu Nov 28 2024 15:25:42 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:25:42 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 13745
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.13","sellavgprice":"2.12","avgnetprice":"0.00","netvalue":"-0.01","netqty":"0","totalbuyvalue":"2.13","totalsellvalue":"2.12","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.13","totalsellavgprice":"2.12","netprice":"0.00","buyqty":"1","sellqty":"1","buyamount":"2.13","sellamount":"2.12","pnl":"-0.01","realised":"-0.01","unrealised":"0.00","ltp":"2.12","close":"2.08"},{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"-0.00","ltp":"2.12","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"8.36","avgnetprice":"0.00","netvalue":"0.02","netqty":"0","totalbuyvalue":"25.06","totalsellvalue":"25.08","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"8.36","netprice":"0.00","buyqty":"3","sellqty":"3","buyamount":"25.06","sellamount":"25.08","pnl":"0.03","realised":"0.03","unrealised":"-0.00","ltp":"8.38","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:25:43 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:27:52 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23450,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:27:52 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:27:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:27:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:52 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:52 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:52 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:53 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:53 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:53 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:53 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:53 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:53 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:53 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:53 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:53 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:27:53 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23450,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:27:53 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:27:53 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:53 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:27:54 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:54 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:54 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:54 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:54 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:54 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:54 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:54 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:54 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:54 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:54 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:54 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:54 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:27:54 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:29:10 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:29:10 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:29:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:10 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:10 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:10 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:10 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:10 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:10 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:10 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:10 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:11 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:11 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:11 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:11 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:29:11 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:12 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:13 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:29:13 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:29:13 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:29:13 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:14 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:29:15 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:29:15 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:29:15 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:15 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:15 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:15 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:15 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:15 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:15 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:15 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:15 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:15 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:15 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:15 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:16 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:16 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:16 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:16 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:29:16 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:29:16 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:29:16 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:16 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:16 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:16 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:16 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:17 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:17 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:17 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:17 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:17 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:17 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:17 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:17 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:17 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:17 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:17 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:29:17 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:29:17 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:18 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:29:19 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:29:19 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:29:19 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:19 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:20 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:20 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:20 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:20 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:20 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:20 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:20 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:20 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:20 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:20 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:20 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:20 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:20 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:20 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:29:21 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:29:21 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:29:21 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:21 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:21 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:21 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:21 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:21 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:21 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:22 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:22 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:22 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:22 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:22 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:22 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:22 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:22 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:22 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:29:23 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:29:23 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:29:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:23 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:23 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:23 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:23 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:23 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:24 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:24 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:24 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:24 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:24 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:24 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:29:24 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:30:52 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:30:52 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:30:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:53 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:53 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:53 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:53 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:53 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:53 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:53 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:53 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:53 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:53 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:53 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:53 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:53 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:30:55 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:30:55 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:30:55 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:55 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:55 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:55 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:55 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:55 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:55 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:55 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:55 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:55 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:55 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:55 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:56 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:56 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:56 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:56 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:30:57 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:30:57 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:30:57 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:57 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:57 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:57 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:57 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:57 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:57 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:57 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:57 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:57 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:58 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:58 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:58 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:58 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:58 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:30:58 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:30:59 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:30:59 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Thu Nov 28 2024 15:30:59 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:00 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:31:20 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:31:20 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 13745
+TIME Thu Nov 28 2024 15:31:20 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:20 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:31:20 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:20 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"42916","symbolname":"NIFTY","instrumenttype":"OPTIDX","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NFO","producttype":"CARRYFORWARD","tradingsymbol":"NIFTY28NOV2423450PE","symbolgroup":"XX","strikeprice":"23450.0","optiontype":"PE","expirydate":"28NOV2024","lotsize":"25","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"0.05","sellavgprice":"0.00","avgnetprice":"0.05","netvalue":"-1.25","netqty":"25","totalbuyvalue":"1.25","totalsellvalue":"0.00","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"0.05","totalsellavgprice":"0.00","netprice":"0.05","buyqty":"25","sellqty":"0","buyamount":"1.25","sellamount":"0.00","pnl":"0.00","realised":"-0.00","unrealised":"0.00","ltp":"0.05","close":"1.55"},{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.13","sellavgprice":"2.12","avgnetprice":"2.13","netvalue":"-8.53","netqty":"4","totalbuyvalue":"10.65","totalsellvalue":"2.12","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.13","totalsellavgprice":"2.12","netprice":"2.13","buyqty":"5","sellqty":"1","buyamount":"10.65","sellamount":"2.12","pnl":"-0.01","realised":"-0.01","unrealised":"0.00","ltp":"2.13","close":"2.08"},{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"-0.00","ltp":"2.13","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"8.36","avgnetprice":"0.00","netvalue":"0.02","netqty":"0","totalbuyvalue":"25.06","totalsellvalue":"25.08","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"8.36","netprice":"0.00","buyqty":"3","sellqty":"3","buyamount":"25.06","sellamount":"25.08","pnl":"0.03","realised":"0.03","unrealised":"-0.00","ltp":"8.43","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) ANGEL BEFORE PLACE ORDER USER EXIT- angel REQUEST -{"variety":"NORMAL","tradingsymbol":"GTLINFRA-EQ","symboltoken":"13745","transactiontype":"SELL","exchange":"NSE","ordertype":"MARKET","producttype":"DELIVERY","duration":"DAY","triggerprice":0,"price":0,"squareoff":0,"stoploss":0,"quantity":"1","trailingStopLoss":""}
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) ANGEL AFTER PLACE ORDER USER EXIT- angel RESPONSE -{"status":true,"message":"SUCCESS","errorcode":"","data":{"script":"GTLINFRA-EQ","orderid":"241128101622845","uniqueorderid":"93224c2b-2d27-467e-b4b7-d002e65046f4"}}
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:21 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:31:23 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:31:23 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 13745
+TIME Thu Nov 28 2024 15:31:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:31:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:23 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"42916","symbolname":"NIFTY","instrumenttype":"OPTIDX","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NFO","producttype":"CARRYFORWARD","tradingsymbol":"NIFTY28NOV2423450PE","symbolgroup":"XX","strikeprice":"23450.0","optiontype":"PE","expirydate":"28NOV2024","lotsize":"25","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"0.05","sellavgprice":"0.00","avgnetprice":"0.05","netvalue":"-1.25","netqty":"25","totalbuyvalue":"1.25","totalsellvalue":"0.00","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"0.05","totalsellavgprice":"0.00","netprice":"0.05","buyqty":"25","sellqty":"0","buyamount":"1.25","sellamount":"0.00","pnl":"0.00","realised":"-0.00","unrealised":"0.00","ltp":"0.05","close":"1.55"},{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.13","sellavgprice":"2.12","avgnetprice":"2.13","netvalue":"-8.53","netqty":"4","totalbuyvalue":"10.65","totalsellvalue":"2.12","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.13","totalsellavgprice":"2.12","netprice":"2.13","buyqty":"5","sellqty":"1","buyamount":"10.65","sellamount":"2.12","pnl":"-0.01","realised":"-0.01","unrealised":"0.00","ltp":"2.13","close":"2.08"},{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"-0.00","ltp":"2.13","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"8.36","avgnetprice":"0.00","netvalue":"0.02","netqty":"0","totalbuyvalue":"25.06","totalsellvalue":"25.08","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"8.36","netprice":"0.00","buyqty":"3","sellqty":"3","buyamount":"25.06","sellamount":"25.08","pnl":"0.03","realised":"0.03","unrealised":"-0.00","ltp":"8.43","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:31:23 GMT+0530 (India Standard Time) ANGEL BEFORE PLACE ORDER USER EXIT- angel REQUEST -{"variety":"NORMAL","tradingsymbol":"GTLINFRA-EQ","symboltoken":"13745","transactiontype":"SELL","exchange":"NSE","ordertype":"MARKET","producttype":"DELIVERY","duration":"DAY","triggerprice":0,"price":0,"squareoff":0,"stoploss":0,"quantity":"1","trailingStopLoss":""}
+TIME Thu Nov 28 2024 15:31:23 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:23 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:23 GMT+0530 (India Standard Time) ANGEL AFTER PLACE ORDER USER EXIT- angel RESPONSE -{"status":true,"message":"SUCCESS","errorcode":"","data":{"script":"GTLINFRA-EQ","orderid":"241128101622871","uniqueorderid":"355d02aa-95b7-49e7-89a1-ead9d90c2699"}}
+TIME Thu Nov 28 2024 15:31:23 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:24 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:24 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:24 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:24 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:24 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:24 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:24 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:24 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:24 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:31:25 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:31:25 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 13745
+TIME Thu Nov 28 2024 15:31:25 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:25 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:31:25 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:25 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:25 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"42916","symbolname":"NIFTY","instrumenttype":"OPTIDX","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NFO","producttype":"CARRYFORWARD","tradingsymbol":"NIFTY28NOV2423450PE","symbolgroup":"XX","strikeprice":"23450.0","optiontype":"PE","expirydate":"28NOV2024","lotsize":"25","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"0.05","sellavgprice":"0.00","avgnetprice":"0.05","netvalue":"-1.25","netqty":"25","totalbuyvalue":"1.25","totalsellvalue":"0.00","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"0.05","totalsellavgprice":"0.00","netprice":"0.05","buyqty":"25","sellqty":"0","buyamount":"1.25","sellamount":"0.00","pnl":"0.00","realised":"-0.00","unrealised":"0.00","ltp":"0.05","close":"1.55"},{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.13","sellavgprice":"2.12","avgnetprice":"2.13","netvalue":"-8.53","netqty":"4","totalbuyvalue":"10.65","totalsellvalue":"2.12","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.13","totalsellavgprice":"2.12","netprice":"2.13","buyqty":"5","sellqty":"1","buyamount":"10.65","sellamount":"2.12","pnl":"-0.01","realised":"-0.01","unrealised":"0.00","ltp":"2.13","close":"2.08"},{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"-0.00","ltp":"2.13","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"8.36","avgnetprice":"0.00","netvalue":"0.02","netqty":"0","totalbuyvalue":"25.06","totalsellvalue":"25.08","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"8.36","netprice":"0.00","buyqty":"3","sellqty":"3","buyamount":"25.06","sellamount":"25.08","pnl":"0.03","realised":"0.03","unrealised":"0.00","ltp":"8.36","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:31:25 GMT+0530 (India Standard Time) ANGEL BEFORE PLACE ORDER USER EXIT- angel REQUEST -{"variety":"NORMAL","tradingsymbol":"GTLINFRA-EQ","symboltoken":"13745","transactiontype":"SELL","exchange":"NSE","ordertype":"MARKET","producttype":"DELIVERY","duration":"DAY","triggerprice":0,"price":0,"squareoff":0,"stoploss":0,"quantity":"1","trailingStopLoss":""}
+TIME Thu Nov 28 2024 15:31:26 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:26 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:26 GMT+0530 (India Standard Time) ANGEL AFTER PLACE ORDER USER EXIT- angel RESPONSE -{"status":true,"message":"SUCCESS","errorcode":"","data":{"script":"GTLINFRA-EQ","orderid":"241128101622883","uniqueorderid":"6e9921f9-0d5f-48a5-862a-b4b0ef4c88bb"}}
+TIME Thu Nov 28 2024 15:31:26 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:26 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:26 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:26 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:26 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:26 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:26 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:26 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:26 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:26 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Nov 28 2024 15:31:27 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:GTLINFRA#,TType:LX,Tr_Price:0.00000000,Price:290,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:24200,OType:PUT,Expiry:26112024,Strategy:New,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000,sl_status:1,Target:1000,StopLoss:1,ExitTime:1529
+TIME Thu Nov 28 2024 15:31:27 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 13745
+TIME Thu Nov 28 2024 15:31:27 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:27 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Nov 28 2024 15:31:27 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":[{"symboltoken":"42916","symbolname":"NIFTY","instrumenttype":"OPTIDX","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NFO","producttype":"CARRYFORWARD","tradingsymbol":"NIFTY28NOV2423450PE","symbolgroup":"XX","strikeprice":"23450.0","optiontype":"PE","expirydate":"28NOV2024","lotsize":"25","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"0.05","sellavgprice":"0.00","avgnetprice":"0.05","netvalue":"-1.25","netqty":"25","totalbuyvalue":"1.25","totalsellvalue":"0.00","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"0.05","totalsellavgprice":"0.00","netprice":"0.05","buyqty":"25","sellqty":"0","buyamount":"1.25","sellamount":"0.00","pnl":"0.00","realised":"-0.00","unrealised":"0.00","ltp":"0.05","close":"1.55"},{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.13","sellavgprice":"2.12","avgnetprice":"2.13","netvalue":"-8.53","netqty":"4","totalbuyvalue":"10.65","totalsellvalue":"2.12","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.13","totalsellavgprice":"2.12","netprice":"2.13","buyqty":"5","sellqty":"1","buyamount":"10.65","sellamount":"2.12","pnl":"-0.09","realised":"-0.01","unrealised":"-0.08","ltp":"2.11","close":"2.08"},{"symboltoken":"13745","symbolname":"GTLINFRA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"INTRADAY","tradingsymbol":"GTLINFRA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"2.12","sellavgprice":"2.11","avgnetprice":"0.00","netvalue":"-0.03","netqty":"0","totalbuyvalue":"4.25","totalsellvalue":"4.22","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"2.12","totalsellavgprice":"2.11","netprice":"0.00","buyqty":"2","sellqty":"2","buyamount":"4.25","sellamount":"4.22","pnl":"-0.02","realised":"-0.02","unrealised":"0.00","ltp":"2.11","close":"2.08"},{"symboltoken":"14366","symbolname":"IDEA","instrumenttype":"","priceden":"1.00","pricenum":"1.00","genden":"1.00","gennum":"1.00","precision":"2","multiplier":"-1","boardlotsize":"1","exchange":"NSE","producttype":"DELIVERY","tradingsymbol":"IDEA-EQ","symbolgroup":"EQ","strikeprice":"-1.0","optiontype":"","expirydate":"","lotsize":"1","cfbuyqty":"0","cfsellqty":"0","cfbuyamount":"0.00","cfsellamount":"0.00","buyavgprice":"8.35","sellavgprice":"8.36","avgnetprice":"0.00","netvalue":"0.02","netqty":"0","totalbuyvalue":"25.06","totalsellvalue":"25.08","cfbuyavgprice":"0.00","cfsellavgprice":"0.00","totalbuyavgprice":"8.35","totalsellavgprice":"8.36","netprice":"0.00","buyqty":"3","sellqty":"3","buyamount":"25.06","sellamount":"25.08","pnl":"0.03","realised":"0.03","unrealised":"0.00","ltp":"8.36","close":"8.34"}]}
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) ANGEL BEFORE PLACE ORDER USER EXIT- angel REQUEST -{"variety":"NORMAL","tradingsymbol":"GTLINFRA-EQ","symboltoken":"13745","transactiontype":"SELL","exchange":"NSE","ordertype":"MARKET","producttype":"DELIVERY","duration":"DAY","triggerprice":0,"price":0,"squareoff":0,"stoploss":0,"quantity":"1","trailingStopLoss":""}
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) ANGEL AFTER PLACE ORDER USER EXIT- angel RESPONSE -{"status":true,"message":"SUCCESS","errorcode":"","data":{"script":"GTLINFRA-EQ","orderid":"241128101622897","uniqueorderid":"dc5d4ae6-ad9d-49a7-99ae-2b211ad93d93"}}
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
+TIME Thu Nov 28 2024 15:31:28 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 0
