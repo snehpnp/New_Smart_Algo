@@ -535,6 +535,22 @@ export async function GET_TRADEHISTORY(data, token) {
 
 }
 
+export async function GET_TRADEHISTORY_cal(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/tradhistory/cal`, data, {
+            headers: header(token),
+            data: { data },
+        })
+        return await res?.data;
+    }
+    catch (err) {
+
+        return err
+        // custom error
+    }
+
+}
+
 // GET TRADEHISTORY
 export async function GET_TRADEHISTORY1(data, token) {
     try {

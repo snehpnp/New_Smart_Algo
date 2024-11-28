@@ -338,7 +338,7 @@ class Login {
         var disclaimerData = await disclaimer();
 
         var toEmail = EmailCheck.Email;
-        var subjectEmail = "disclaimer";
+        var subjectEmail = "Disclaimer";
         CommonEmail(toEmail, subjectEmail, disclaimerData);
       }
 
@@ -618,7 +618,7 @@ class Login {
       }
 
       var toEmail = Email;
-      var subjectEmail = "Logut And Re-Login Email";
+      var subjectEmail = "Log out And Re-Login Email";
       var htmlEmail = "otp - " + OTP;
       var textEmail = "otp - " + OTP;
 

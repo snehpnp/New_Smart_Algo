@@ -3,7 +3,7 @@ import Content from "../../../../Components/Dashboard/Content/Content";
 import Loader from "../../../../Utils/Loader";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
-import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
+import FullDataTable from "../../../../Components/ExtraComponents/Datatable/ClientDataTable";
 import {
   GET_ALL_CLIENTS,
   GO_TO_DASHBOARDS,
@@ -66,15 +66,17 @@ const AllClients = () => {
 
       return filter1Match && filter3Match && filter2Match && searchTermMatch;
     });
+    var Ddata =
+      searchInput ||
+      PanelStatus !== "2" ||
+      ClientStatus !== "null" ||
+      selectBroker !== "null"
+        ? filteredData
+        : originalData;
+
     setAllClients({
-      loading: false,
-      data:
-        searchInput ||
-        PanelStatus !== "2" ||
-        ClientStatus !== "null" ||
-        selectBroker !== "null"
-          ? filteredData
-          : originalData,
+      loading: Ddata.length > 0 ? false : true,
+      data: Ddata,
     });
   }, [searchInput, originalData, PanelStatus, ClientStatus, selectBroker]);
 
@@ -173,8 +175,8 @@ const AllClients = () => {
 
                 if (dashboard_filter === "2" || dashboard_filter === 2) {
                   return (
-                    item.license_type == dashboard_filter && 
-                    item.Is_Active == "1" 
+                    item.license_type == dashboard_filter &&
+                    item.Is_Active == "1"
                   );
                 }
                 if (dashboard_filter === "21" || dashboard_filter === 21) {
@@ -233,13 +235,13 @@ const AllClients = () => {
                 }
               });
             setAllClients({
-              loading: false,
+              loading: abc.length > 0 ? false : true,
               data: abc,
             });
             return;
           }
           setAllClients({
-            loading: false,
+            loading: response.data.length > 0 ? false : true,
             data: response.data,
           });
         } else {
@@ -348,11 +350,8 @@ const AllClients = () => {
         .then((response) => {
           if (response.status) {
             setIsStarred(newStarStatus ? "1" : "0");
-            setrefresh(!refresh);
-            // toast.success(response.msg);
-          } else {
-            // toast.error(response.msg);
-          }
+            setrefresh(!refresh);  
+          } 
         });
     };
 
@@ -387,7 +386,6 @@ const AllClients = () => {
     {
       dataField: "UserName",
       text: "User Name",
-   
     },
     {
       dataField: "Email",
@@ -624,7 +622,7 @@ const AllClients = () => {
     setSelectBroker("null");
     setPanelStatus("2");
     setAllClients({
-      loading: false,
+      loading: originalData.length > 0 ? false : true,
       data: originalData,
     });
   };
@@ -793,14 +791,7 @@ const AllClients = () => {
             </div>
           </div>
 
-          {!getAllClients.loading ? (
-            <FullDataTable
-              TableColumns={columns}
-              tableData={getAllClients.data}
-            />
-          ) : (
-            <Loader />
-          )}
+          <FullDataTable TableColumns={columns} tableData={getAllClients} />
 
           <ToastButton />
         </Content>

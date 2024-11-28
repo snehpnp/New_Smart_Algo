@@ -1,7 +1,7 @@
 
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { GET_TRADEHISTORY,GET_TRADEHISTORY1, GET_SEVAN_TRADEHISTORY, GET_ADMIN_TRADING_STATUS, AdminTradingStatusGet ,GetSignalsAdmin} from "../../../Service/admin.service";
+import { GET_TRADEHISTORY,GET_TRADEHISTORY_cal,GET_TRADEHISTORY1, GET_SEVAN_TRADEHISTORY, GET_ADMIN_TRADING_STATUS, AdminTradingStatusGet ,GetSignalsAdmin} from "../../../Service/admin.service";
 
 
 export const Get_Tradehisotry = createAsyncThunk("admin/tradhistory", async (apireq) => {
@@ -20,6 +20,18 @@ export const Get_Tradehisotry1 = createAsyncThunk("admin/tradhistory1", async (a
     const { startDate, endDate, service, strategy, type, serviceIndex, lotMultypaly, token ,page,limit} = apireq
     try {
         const res = await GET_TRADEHISTORY1({ startDate: startDate, endDate: endDate, service: service, strategy: strategy, type, serviceIndex: serviceIndex, lotMultypaly: lotMultypaly,page:page,limit:limit }, token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+
+export const Get_Tradehisotry_Cal = createAsyncThunk("get/tradhistory/cal", async (apireq) => {
+
+    const { startDate, endDate, service, strategy, type, serviceIndex, lotMultypaly, token ,page,limit} = apireq
+    try {
+        const res = await GET_TRADEHISTORY_cal({ startDate: startDate, endDate: endDate, service: service, strategy: strategy, type, serviceIndex: serviceIndex, lotMultypaly: lotMultypaly,page:page,limit:limit }, token);
         return await res;
     } catch (err) {
         return err;
@@ -87,7 +99,8 @@ const TradehistorySlice = createSlice({
         trading_status: [],
         gettradingstatus: [],
         tradehisotry1: [],
-        getAdminSignals:[]
+        getAdminSignals:[],
+        calCulations:[]
 
 
 
@@ -112,6 +125,11 @@ const TradehistorySlice = createSlice({
         [GetSignalsAdmins.fulfilled]: (state, { payload }) => {
             return { ...state, getAdminSignals: payload, isLoading: false };
         },
+        [
+            Get_Tradehisotry_Cal.fulfilled]: (state, { payload }) => {
+            return { ...state, calCulations: payload, isLoading: false };
+
+            }
 
 
     },

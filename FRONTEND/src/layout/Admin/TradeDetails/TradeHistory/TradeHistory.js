@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable2";
-import { Get_Tradehisotry } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
+import { Get_Tradehisotry ,Get_Tradehisotry_Cal} from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { fDateTimeSuffix } from "../../../../Utils/Date_formet";
 import { Eye } from "lucide-react";
@@ -112,6 +112,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     Get_TradHistory();
+    Get_Tradehisotry_Calculations();
   }, [
     searchTerm,
     refresh,
@@ -127,6 +128,15 @@ const TradeHistory = () => {
     getSizePerPage,
     SelectOpenClose,
   ]);
+
+
+  useEffect(() => {
+  
+    setSizePerPage(10);
+    setPage(1);
+
+  }, [StrategyClientStatus]);
+
 
   useEffect(() => {
     GetAllStrategyName();
@@ -152,6 +162,44 @@ const TradeHistory = () => {
       columns = columns.filter((data) => !selectedOptions.includes(data.text));
     }
   }, [selectedOptions]);
+
+const Get_Tradehisotry_Calculations = async (e) => {
+  let abc = new Date();
+  let month = abc.getMonth() + 1;
+  let date = abc.getDate();
+  let year = abc.getFullYear();
+  let full = `${year}/${month}/${date}`;
+
+  let startDate = getActualDateFormate(fromDate);
+  let endDate = getActualDateFormate(toDate);
+
+  await dispatch(
+    Get_Tradehisotry_Cal({
+      startDate: !fromDate ? full : startDate,
+      endDate: !toDate ? (fromDate ? "" : full) : endDate,
+      service: SelectService,
+      strategy: StrategyClientStatus,
+      type: dashboard_filter,
+      serviceIndex: SelectServiceIndex,
+      lotMultypaly: lotMultypaly,
+      token: token,
+      page: getPage,
+      limit: getSizePerPage,
+      openClose: SelectOpenClose,
+    })
+  )
+    .unwrap()
+    .then((response) => {
+      if (response.status) {
+    console.log(response)
+      } else {
+      
+      }
+    });
+
+}
+
+
 
   const Get_TradHistory = async (e) => {
     let abc = new Date();
@@ -983,7 +1031,7 @@ const TradeHistory = () => {
       updatedOptions = updatedOptions.filter((item) => item !== option);
     }
     setSelectedOptions(updatedOptions);
-    // Get_TradHistory(updatedOptions);
+    
   };
 
   const handleTableChange = (type, { page, sizePerPage }) => {

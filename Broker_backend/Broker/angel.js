@@ -1076,7 +1076,7 @@ const PositionAgainProcess = async (data, item, token, signal_req, strategy, typ
             }
         });
 
-        const Exist_entry_order = response.data.data.find(item1 => item1.symboltoken === token[0].instrument_token);
+        const Exist_entry_order = response.data.data.find(item1 => item1.symboltoken == token[0].instrument_token);
 
         if (Exist_entry_order !== undefined) {
             let possition_qty;

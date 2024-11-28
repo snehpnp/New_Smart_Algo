@@ -40,13 +40,12 @@ app.use(express.json());
 // REQUIRE File
 require("./App/Cron/cron");
 // require("./App/Cron/cron_ss");
-// Routes all
+
 require("./App/Routes")(app);
-// EMERGANCY
+
 require("./Utils/request")(app);
 
 // require("./Teting")(app);
-
 //require("./redisSocketConnect")(app)
 
 // Connect Local backend Socket
@@ -86,67 +85,11 @@ app.get("/pp", (req, res) => {
 
 
 
-app.get('/UpdateChannel/:c/:e', async (req, res) => {
-  const {  TruncateTableTokenChainAdd_fiveMinute } = require('./App/Cron/cron_ss')
-  const { c ,e} = req.params;
-
-  
-  TruncateTableTokenChainAdd_fiveMinute()
-  return res.send({ status: true, msg: 'Channel Update' });
-
-  const { updateChannelAndSend } = require('./App/Helper/Alice_Socket')
-  
-   //updateChannelAndSend(c)
-});
-
-
-
-app.get("/deleteTableAndView",async(req,res)=>{
-  await checkAndDrop();
-  return res.send({ status: true, msg: 'Table and View Deleted' });
-})
-
-
-async function checkAndDrop() {
-  const collections = await dbTest.listCollections().toArray();
-  const collectionNames = collections.map(col => col.name);
-  console.log("Existing collections/views:", collectionNames);
-  let arr =  ['22','3045','2885','6705','10666']
-  let arr1 =  ['M_','M3_','M5_','M10_','M15_','M30_','M60_','M1DAY_']
-  for (const element of arr) {
-    console.log("Dropping collection:", element);
-    await dbTest.collection(element).drop();
-      for (const element1 of arr1) {
-
-          const collectionName = element1 + element;
-
-          if (collectionNames.includes(collectionName)) {
-               await dbTest.collection(collectionName).drop();
-          } else {
-              console.log("Collection/View not found:", collectionName);
-          }
-      }
-  }
-}
-
-
-// setInterval(() => {
-//   const memoryUsage = process.memoryUsage();
-//   console.log('Memory Usage:');
-//   console.log(`RSS: ${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`); // Resident Set Size
-//   console.log(`Heap Total: ${(memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB`);
-//   console.log(`Heap Used: ${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
-//   console.log(`External: ${(memoryUsage.external / 1024 / 1024).toFixed(2)} MB`);
-//   console.log(`Array Buffers: ${(memoryUsage.arrayBuffers / 1024 / 1024).toFixed(2)} MB`);
-// }, 5000); // Logs every 5 seconds
-
-
-
-const { Alice_Socket } = require("./App/Helper/Alice_Socket");
 
 // Server start
 server.listen(process.env.PORT, () => {
   console.log(`Server is running on  http://0.0.0.0:${process.env.PORT}`);
+  const { Alice_Socket } = require("./App/Helper/Alice_Socket");
   connectToMongoDB();
   Alice_Socket();
 });

@@ -55,7 +55,7 @@ const Alice_Socket = async () => {
     var type = { "loginType": "API" }
 
     if (broker_infor.user_id !== undefined && broker_infor.access_token !== undefined && broker_infor.trading_status == "on") {
-      console.log("Shocket channelList - ", channelList);
+      
         try {
           
             await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
@@ -86,7 +86,7 @@ const Alice_Socket = async () => {
                       
                       ws.onmessage = async function (msg) {
                         const response = JSON.parse(msg.data)
-                        console.log("response -",response)
+                  
                         if (response.tk) {
                           // const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk });
                           // if (Make_startegy_token) {

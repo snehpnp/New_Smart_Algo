@@ -239,7 +239,6 @@ const disclaimer = async () => {
                                 <table width="670px" border="0" cellspacing="0" cellpadding="0" style="background:#fff; border-radius:3px; padding: 30px;">
                                     <tr>
                                         <td align="center">
-                                            <img src="data:image/png;base64,${companyData[0].logo}" alt="${companyData[0].panel_name}" style="max-width: 150px;">
                                             <h2>${companyData[0].panel_name}</h2>
                                         </td>
                                     </tr>

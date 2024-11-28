@@ -500,9 +500,7 @@ class Employee {
         new_licence = req.licence1;
       }
 
-      console.log("new_licence", new_licence);
-      console.log("TotalLicense", TotalLicense);
-      console.log("Panel_key[0].licenses", Panel_key[0].licenses);
+    
 
 
       if (Number(new_licence) > 0) {

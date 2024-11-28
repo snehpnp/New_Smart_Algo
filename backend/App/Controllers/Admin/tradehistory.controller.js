@@ -62,31 +62,53 @@ class Tradehistory {
 
       // Aggregation pipeline for paginated results
       const filteredSignals = await MainSignals_modal.aggregate([
-        { $match: matchStage },
-        {
-          $lookup: {
-            from: "signals",
-            localField: "signals_id",
-            foreignField: "_id",
-            as: "result",
-            pipeline: [{ $project: { _id: 1 } }],
-          },
+        { 
+            $match: matchStage // Initial filtering
         },
         {
-          $lookup: {
-            from: "services",
-            localField: "symbol",
-            foreignField: "name",
-            as: "result1",
-            pipeline: [{ $project: { lotsize: 1, name: 1 } }],
-          },
+            $lookup: {
+                from: "signals",
+                localField: "signals_id",
+                foreignField: "_id",
+                as: "result",
+                pipeline: [
+                    { $project: { _id: 1 } }
+                ],
+            },
         },
-        { $match: { $expr: { $gt: [{ $size: "$result" }, 0] } } },
-        { $match: { $expr: { $gt: [{ $size: "$result1" }, 0] } } },
-        { $sort: { _id: -1 } },
-        { $skip: (page1 - 1) * limit1 },
-        { $limit: limit1 },
-      ]);
+        {
+            $lookup: {
+                from: "services",
+                localField: "symbol",
+                foreignField: "name",
+                as: "result1",
+                pipeline: [
+                    { $project: { lotsize: 1, name: 1 } } 
+                ],
+            },
+        },
+        {
+            $match: { 
+                $expr: { $gt: [{ $size: "$result" }, 0] } 
+            }
+        },
+        {
+            $match: { 
+                $expr: { $gt: [{ $size: "$result1" }, 0] } 
+            }
+        },
+        {
+            $sort: { _id: -1 } 
+        },
+        {
+            $skip: (page1 - 1) * limit1 
+        },
+        {
+            $limit: limit1 
+        },
+    ]);
+
+   
 
       const totalItems = await MainSignals_modal.countDocuments(matchStage);
 
@@ -139,6 +161,156 @@ class Tradehistory {
         .send({ status: false, msg: "Internal Server Error" });
     }
   }
+
+
+  async GetAdminTradeHistoryCal(req, res) {
+    try {
+      const {
+        startDate,
+        endDate,
+        strategy,
+        service,
+        type,
+        serviceIndex,
+        lotMultypaly,
+        page,
+        limit,
+        openClose,
+      } = req.body;
+
+      const page1 = Number(page || 1);
+      const limit1 = Number(limit || 1000);
+
+      const client_persnal_key1 =
+        type?.toUpperCase() === "ADMIN" ? "" : { $ne: "" };
+      const lotMultypaly1 = Number(lotMultypaly || 1);
+
+      const startDateObj = new Date(startDate || new Date());
+      const endDateObj = new Date(endDate || new Date());
+      endDateObj.setDate(endDateObj.getDate() + 1);
+
+      const strategyWord = strategy?.trim();
+      const serIndex =
+        serviceIndex === "null" || typeof serviceIndex === "object"
+          ? { $exists: true }
+          : serviceIndex;
+      const stg1 = strategyWord === "null" ? { $exists: true } : strategyWord;
+      const ser1 = service === "null" ? { $exists: true } : service;
+
+      const openClose1 =
+        openClose === "Open"
+          ? { exit_qty_percent: "" }
+          : openClose === "Close"
+          ? { exit_qty_percent: { $ne: "" } }
+          : {};
+
+      const matchStage = {
+        createdAt: { $gte: startDateObj, $lte: endDateObj },
+        strategy: stg1,
+        trade_symbol: ser1,
+        symbol: serIndex,
+        client_persnal_key: client_persnal_key1,
+        ...openClose1,
+      };
+
+      // Aggregation pipeline for paginated results
+      const filteredSignals = await MainSignals_modal.aggregate([
+        { 
+            $match: matchStage // Initial filtering
+        },
+        {
+            $lookup: {
+                from: "signals",
+                localField: "signals_id",
+                foreignField: "_id",
+                as: "result",
+                pipeline: [
+                    { $project: { _id: 1 } }
+                ],
+            },
+        },
+        {
+            $lookup: {
+                from: "services",
+                localField: "symbol",
+                foreignField: "name",
+                as: "result1",
+                pipeline: [
+                    { $project: { lotsize: 1, name: 1 } } 
+                ],
+            },
+        },
+        {
+            $match: { 
+                $expr: { $gt: [{ $size: "$result" }, 0] } 
+            }
+        },
+        {
+            $match: { 
+                $expr: { $gt: [{ $size: "$result1" }, 0] } 
+            }
+        },
+        // {
+        //     $sort: { _id: -1 } 
+        // },
+        // {
+        //     $skip: (page1 - 1) * limit1 
+        // },
+        // {
+        //     $limit: limit1 
+        // },
+    ]);
+
+   
+
+      const totalItems = await MainSignals_modal.countDocuments(matchStage);
+
+      // Calculate TotalProfit/Loss
+      let TotalCalculate = 0;
+      filteredSignals.forEach((item) => {
+        if (item.entry_price && item.exit_price) {
+          const lotsize = Number(item.result1[0]?.lotsize || 1);
+          const TotalQty = lotsize * lotMultypaly1;
+
+          TotalCalculate +=
+            item.entry_type === "LE"
+              ? (item.exit_price - item.entry_price) * TotalQty
+              : (item.entry_price - item.exit_price) * TotalQty;
+
+          item.entry_qty_percent = Math.ceil(
+            (item.entry_qty_percent / 100) * lotsize
+          );
+          item.exit_qty_percent = Math.ceil(
+            (item.exit_qty_percent / 100) * lotsize
+          );
+          item.entry_qty = TotalQty;
+          item.exit_qty = item.exit_qty_percent > 0 ? TotalQty : 1 || 0;
+        }
+      });
+
+      // Trade symbols for filtering
+      const trade_symbols_filter = Array.from(
+        new Set(filteredSignals.map((item) => item.trade_symbol))
+      );
+
+      // console.log("---------------")
+      // Response
+      return res.send({
+        status: true,
+        msg: "Filtered Trade history",
+        data: filteredSignals,
+        trade_symbols_filter,
+        
+        TotalCalculate,
+      });
+    } catch (error) {
+      console.error("Error in Trade History:", error);
+      return res
+        .status(500)
+        .send({ status: false, msg: "Internal Server Error" });
+    }
+  }
+
 
   // GET ADMIN SIGNALS
   async GetAdminsevenTradeHistory(req, res) {
@@ -374,7 +546,6 @@ class Tradehistory {
         client_persnal_key: client_persnal_key1,
       };
 
-      console.log("lotMultypaly1", lotMultypaly1);
 
       const pipeline = [
         { $match: matchStage },
