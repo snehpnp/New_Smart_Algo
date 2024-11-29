@@ -462,8 +462,6 @@ const TradeHistory = () => {
       } else {
         if (res.data.stat) {
           const handleResponse = async (response) => {
-           
-
             if (response) {
               $(".BP1_Put_Price_" + response.tk).html();
               $(".SP1_Call_Price_" + response.tk).html();
@@ -648,12 +646,13 @@ const TradeHistory = () => {
                   } else {
                   }
                 });
-            }else{
+            } else {
               tradeHistoryData.data &&
-              tradeHistoryData.data.forEach((row, i) => {
-                const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
-                calcultateRPL(row, null, previousRow);
-              });
+                tradeHistoryData.data.forEach((row, i) => {
+                  const previousRow =
+                    i > 0 ? tradeHistoryData.data[i - 1] : null;
+                  calcultateRPL(row, null, previousRow);
+                });
             }
 
             // }
@@ -993,11 +992,12 @@ const TradeHistory = () => {
 
   const handleInputChange = (e) => {
     const value = e.target.value;
-
     const isValidNumber = /^\d+$/.test(value);
 
     if (isValidNumber) {
-      SetlotMultypaly(value === "" || Number(value) <= 0 ? 1 : Number(value));
+      SetlotMultypaly(value === "" || value == 0 ? 1 : Number(value));
+    } else if (value === "") {
+      SetlotMultypaly(value);
     } else {
       SetlotMultypaly(1);
     }

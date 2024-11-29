@@ -26,8 +26,6 @@ const { DashboardView, deleteDashboard } = require("../../View/DashboardData");
 const { createView } = require("../../View/Open_position");
 const { logger, getIPAddress } = require("../Helper/logger.helper");
 
-
-
 cron.schedule("10 5 * * *", () => {
   deleteDashboard();
 });
@@ -84,6 +82,26 @@ cron.schedule("50 8 * * *", () => {
 cron.schedule("1 1 * * *", () => {
   UpdateGetMonthlyData();
 });
+cron.schedule("0 */8 * * *", () => {
+  UpdateCurrentTime();
+});
+
+const UpdateCurrentTime = async () => {
+  try {
+    const update = {
+      $set: {
+        current_date: new Date(),
+      },
+    };
+
+    // Use an empty filter to target all documents
+    const updateResult = await company_information.updateMany({}, update);
+
+    console.log(`Updated ${updateResult.modifiedCount} documents.`);
+  } catch (error) {
+    console.error("Error updating documents:", error);
+  }
+};
 
 const MainSignalsRemainToken = async () => {
   const pipeline = [
@@ -220,7 +238,6 @@ const TruncateTableTokenChainAdd_fiveMinute = async () => {
 
       await MainSignalsRemainToken();
 
-
       return;
     }
   }
@@ -236,7 +253,6 @@ const TruncateTableTokenChainAdd = async () => {
     await Get_Option_All_Token_Chain();
 
     await Get_Option_All_Token_Chain_stock();
-
 
     return;
   }
@@ -886,7 +902,6 @@ const DeleteTokenAliceToken = async () => {
 function createUserDataArray(data, segment) {
   let count = 0;
   return data.map((element) => {
-
     const option_type = element.symbol.slice(-2);
     const expiry_s = dateTime.create(element.expiry);
     const expiry = expiry_s.format("dmY");

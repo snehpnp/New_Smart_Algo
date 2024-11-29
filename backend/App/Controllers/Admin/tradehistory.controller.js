@@ -114,7 +114,6 @@ class Tradehistory {
 
       // Calculate TotalProfit/Loss
       let TotalCalculate = 0;
-
       filteredSignals.forEach((item) => {
         if (item.entry_price && item.exit_price) {
           const lotsize = Number(item.result1[0]?.lotsize || 1);
@@ -122,8 +121,8 @@ class Tradehistory {
 
           TotalCalculate +=
             item.entry_type === "LE"
-              ? (item.exit_price - item.entry_price) * TotalQty == 0 ? 1:TotalQty
-              : (item.entry_price - item.exit_price) * TotalQty == 0 ? 1:TotalQty;
+              ? (item.exit_price - item.entry_price) * TotalQty
+              : (item.entry_price - item.exit_price) * TotalQty;
 
           item.entry_qty_percent = Math.ceil(
             (item.entry_qty_percent / 100) * lotsize
@@ -133,6 +132,16 @@ class Tradehistory {
           );
           item.entry_qty = TotalQty;
           item.exit_qty = item.exit_qty_percent > 0 ? TotalQty : 1 || 0;
+        }else{
+        
+          const lotsize = Number(item.result1[0]?.lotsize || 1);
+          const TotalQty = lotsize * lotMultypaly1;
+
+          item.entry_qty_percent = Math.ceil(
+            (item.entry_qty_percent / 100) * lotsize
+          );
+          
+          item.entry_qty = TotalQty;
         }
       });
 
@@ -140,7 +149,6 @@ class Tradehistory {
       const trade_symbols_filter = Array.from(
         new Set(filteredSignals.map((item) => item.trade_symbol))
       );
-
 
       // Response
       return res.send({
@@ -180,6 +188,8 @@ class Tradehistory {
         openClose,
       } = req.body;
 
+      const page1 = Number(page || 1);
+      const limit1 = Number(limit || 1000);
 
       const client_persnal_key1 =
         type?.toUpperCase() === "ADMIN" ? "" : { $ne: "" };
@@ -250,19 +260,12 @@ class Tradehistory {
                 $expr: { $gt: [{ $size: "$result1" }, 0] } 
             }
         },
-        // {
-        //     $sort: { _id: -1 } 
-        // },
-        // {
-        //     $skip: (page1 - 1) * limit1 
-        // },
-        // {
-        //     $limit: limit1 
-        // },
+       
     ]);
 
    
 
+      const totalItems = await MainSignals_modal.countDocuments(matchStage);
 
       // Calculate TotalProfit/Loss
       let TotalCalculate = 0;
@@ -284,26 +287,60 @@ class Tradehistory {
           );
           item.entry_qty = TotalQty;
           item.exit_qty = item.exit_qty_percent > 0 ? TotalQty : 1 || 0;
+        }else{
+        
+          const lotsize = Number(item.result1[0]?.lotsize || 1);
+          const TotalQty = lotsize * lotMultypaly1;
+
+          item.entry_qty_percent = Math.ceil(
+            (item.entry_qty_percent / 100) * lotsize
+          );
+          
+          item.entry_qty = TotalQty;
         }
       });
 
-   
-     
+      // Trade symbols for filtering
+      const trade_symbols_filter = Array.from(
+        new Set(filteredSignals.map((item) => item.trade_symbol))
+      );
+
+      // Response
       return res.send({
         status: true,
         msg: "Filtered Trade history",
-        data: [],
-        trade_symbols_filter:[],
-        
+        data: filteredSignals,
+        trade_symbols_filter,
+        pagination: {
+          page: page1,
+          limit: limit1,
+          totalItems,
+          totalPages: Math.ceil(totalItems / limit1),
+        },
         TotalCalculate,
       });
     } catch (error) {
-      console.log("Error in Trade History Calculation:", error);
+      console.log("Error in Trade History:", error);
       return res
         .status(500)
-        .send({ status: false, msg: "Internal Server Error Calculation" });
+        .send({ status: false, msg: "Internal Server Error" });
     }
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   // GET ADMIN SIGNALS

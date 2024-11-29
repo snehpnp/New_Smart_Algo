@@ -39,7 +39,7 @@ const DropDown = () => {
           localStorage.removeItem("user_details");
           localStorage.clear();
           setTimeout(() => {
-            navigate("/");
+            navigate("/login");
           }, 1500);
         }
       })

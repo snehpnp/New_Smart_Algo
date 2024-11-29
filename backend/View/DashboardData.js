@@ -467,14 +467,14 @@ async function Cilents_service_View() {
     }
 
     const pipeline =   [
-      {
-        $match: {
-          $or: [
-            { EndDate: { $gte: new Date() } }, 
-            { EndDate: null } 
-          ]
-        }
-      },
+      // {
+      //   $match: {
+      //     $or: [
+      //       { EndDate: { $gte: new Date() } }, 
+      //       { EndDate: null } 
+      //     ]
+      //   }
+      // },
       {
         $lookup: {
           from: 'client_services',
@@ -503,17 +503,6 @@ async function Cilents_service_View() {
         $unwind: '$service',
       },
      
-      {
-        $lookup: {
-          from: "services",
-          localField: "service.name",
-          foreignField: "instrumenttype",
-          as: "service1",
-        },
-      },
-      {
-        $unwind: '$service1',
-      },
       
       
       {
@@ -543,9 +532,9 @@ async function Cilents_service_View() {
        
           id:1,
           "user_id":"$_id",
-          "service_name": "$service1.name",
-          "service_instrument_token": "$service1.instrument_token",
-          "service_exch_seg": "$service1.exch_seg",
+          "service_name": "$service.name",
+          "service_instrument_token": "$service.instrument_token",
+          "service_exch_seg": "$service.exch_seg",
           "strategy_name": "$strategys.strategy_name",
         
        

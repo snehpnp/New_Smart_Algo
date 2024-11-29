@@ -252,7 +252,7 @@ const AdminsList = () => {
       text: "Panel Name",
       formatter: (cell, row) => (
         <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-          <Link to={`${row.domain}`} target="_blank" rel="noopener noreferrer">
+          <Link to={`${row.domain}/#/login`} target="_blank" rel="noopener noreferrer">
             {row.panel_name}
           </Link>
         </span>

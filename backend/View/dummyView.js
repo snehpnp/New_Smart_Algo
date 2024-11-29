@@ -4808,14 +4808,7 @@ db.createView("strategyViewNames", "usermakestrategies",
 
 db.createView("Cilents_service_stg", "users",
   [
-    {
-      $match: {
-        $or: [
-          { EndDate: { $gte: new Date() } }, 
-          { EndDate: null } 
-        ]
-      }
-    },
+ 
     {
       $lookup: {
         from: 'client_services',
