@@ -6,8 +6,7 @@ const { MongoClient } = require("mongodb");
 // Function to connect to MongoDB
 const connectToMongoDB = async() => {
   try {
-  //  await killAllSessions()
-    // Connect to MongoDB using mongoose
+
     const db_connect = process.env.MONGO_URI;
     mongoose.connect(db_connect, {
       useNewUrlParser: true,
@@ -39,47 +38,6 @@ const connectToMongoDB = async() => {
   }
 };
 
-// Function to kill all sessions
-const killAllSessions = async () => {
-  const uri = process.env.MONGO_URI;
-  const client = new MongoClient(uri);
 
-  try {
-    await client.connect();
 
-    // Step 1: Fetch and display connection status
-    const serverStatus = await client.db().admin().command({ serverStatus: 1 });
-    const connections = serverStatus.connections;
-    console.log("Connections Status:");
-    console.log(`- Current Connections: ${connections.current}`);
-    console.log(`- Available Connections: ${connections.available}`);
-    console.log(`- Total Connections Created: ${connections.totalCreated}`);
-    console.log(`- Active Connections: ${connections.active}`);
-
-    // Step 2: List and kill sessions if applicable
-    // const adminDb = client.db().admin();
-
-    // // Using serverStatus to show connections without listSessions
-    // const sessions = await adminDb.command({ listSessions: { allUsers: true } });
-
-    // console.log("\nSessions List:");
-    // for (const session of sessions.cursor.firstBatch) {
-    //   console.log(`- Session ID: ${JSON.stringify(session.id)}`);
-    // }
-
-    // Uncomment to kill sessions
-    // console.log("\nKilling All Sessions...");
-    // for (const session of sessions.cursor.firstBatch) {
-    //     await adminDb.command({ killSessions: [session.id] });
-    //     console.log(`Killed Session: ${JSON.stringify(session.id)}`);
-    // }
-
-    console.log("All Sessions Terminated.");
-  } catch (err) {
-    console.error("Error during connection check or session termination:", err);
-  } finally {
-    await client.close();
-  }
-};
-
-module.exports = { connectToMongoDB, killAllSessions };
+module.exports = { connectToMongoDB };

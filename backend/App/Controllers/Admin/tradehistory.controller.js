@@ -5,7 +5,7 @@ const Signals = db.Signals;
 
 const live_price = db.live_price;
 const user_logs = db.user_logs;
-const { logger, getIPAddress } = require("../../Helper/logger.helper");
+const {  getIPAddress } = require("../../Helper/logger.helper");
 
 const { formattedDateTime } = require("../../Helper/time.helper");
 
@@ -114,6 +114,7 @@ class Tradehistory {
 
       // Calculate TotalProfit/Loss
       let TotalCalculate = 0;
+
       filteredSignals.forEach((item) => {
         if (item.entry_price && item.exit_price) {
           const lotsize = Number(item.result1[0]?.lotsize || 1);
@@ -121,8 +122,8 @@ class Tradehistory {
 
           TotalCalculate +=
             item.entry_type === "LE"
-              ? (item.exit_price - item.entry_price) * TotalQty
-              : (item.entry_price - item.exit_price) * TotalQty;
+              ? (item.exit_price - item.entry_price) * TotalQty == 0 ? 1:TotalQty
+              : (item.entry_price - item.exit_price) * TotalQty == 0 ? 1:TotalQty;
 
           item.entry_qty_percent = Math.ceil(
             (item.entry_qty_percent / 100) * lotsize
@@ -140,6 +141,7 @@ class Tradehistory {
         new Set(filteredSignals.map((item) => item.trade_symbol))
       );
 
+
       // Response
       return res.send({
         status: true,
@@ -155,7 +157,7 @@ class Tradehistory {
         TotalCalculate,
       });
     } catch (error) {
-      console.error("Error in Trade History:", error);
+      console.log("Error in Trade History:", error);
       return res
         .status(500)
         .send({ status: false, msg: "Internal Server Error" });
@@ -178,8 +180,6 @@ class Tradehistory {
         openClose,
       } = req.body;
 
-      const page1 = Number(page || 1);
-      const limit1 = Number(limit || 1000);
 
       const client_persnal_key1 =
         type?.toUpperCase() === "ADMIN" ? "" : { $ne: "" };
@@ -263,7 +263,6 @@ class Tradehistory {
 
    
 
-      const totalItems = await MainSignals_modal.countDocuments(matchStage);
 
       // Calculate TotalProfit/Loss
       let TotalCalculate = 0;
@@ -288,26 +287,21 @@ class Tradehistory {
         }
       });
 
-      // Trade symbols for filtering
-      const trade_symbols_filter = Array.from(
-        new Set(filteredSignals.map((item) => item.trade_symbol))
-      );
-
-      // console.log("---------------")
-      // Response
+   
+     
       return res.send({
         status: true,
         msg: "Filtered Trade history",
-        data: filteredSignals,
-        trade_symbols_filter,
+        data: [],
+        trade_symbols_filter:[],
         
         TotalCalculate,
       });
     } catch (error) {
-      console.error("Error in Trade History:", error);
+      console.log("Error in Trade History Calculation:", error);
       return res
         .status(500)
-        .send({ status: false, msg: "Internal Server Error" });
+        .send({ status: false, msg: "Internal Server Error Calculation" });
     }
   }
 
@@ -641,7 +635,7 @@ class Tradehistory {
         TotalCalculate: totalCalculate,
       });
     } catch (error) {
-      console.error("Error Trade History Error-", error);
+      console.log("Error Trade History Error-", error);
       return res
         .status(500)
         .send({ status: false, msg: "Internal Server Error" });

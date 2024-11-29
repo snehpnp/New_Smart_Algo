@@ -65,7 +65,7 @@ const AdminHelps = () => {
         setSignalId("");
       }
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   };
 
@@ -238,7 +238,7 @@ const AdminHelps = () => {
       }
     } catch (err) {
       toast.error("Error deleting user, please try again.");
-      console.error("Deletion error:", err); // Log error for debugging
+      console.log("Deletion error:", err); // Log error for debugging
     }
   };
 

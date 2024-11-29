@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable2";
-import { Get_Tradehisotry ,Get_Tradehisotry_Cal} from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
+import {
+  Get_Tradehisotry,
+  Get_Tradehisotry_Cal,
+} from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { fDateTimeSuffix } from "../../../../Utils/Date_formet";
 import { Eye } from "lucide-react";
@@ -77,6 +80,8 @@ const TradeHistory = () => {
   const [getPage, setPage] = useState(1);
   const [getSizePerPage, setSizePerPage] = useState(10);
   const [total1, setTotal] = useState(0);
+  const [getTotalPnl, setTotalPnl] = useState(0);
+
   var a = 2;
   const handleShow = () => setShowModal6(true);
   const handleClose = () => setShowModal6(false);
@@ -129,14 +134,10 @@ const TradeHistory = () => {
     SelectOpenClose,
   ]);
 
-
   useEffect(() => {
-  
     setSizePerPage(10);
     setPage(1);
-
   }, [StrategyClientStatus]);
-
 
   useEffect(() => {
     GetAllStrategyName();
@@ -157,49 +158,39 @@ const TradeHistory = () => {
     }
   }, [selector]);
 
-  useEffect(() => {
-    if (selectedOptions && selectedOptions.length > 0) {
-      columns = columns.filter((data) => !selectedOptions.includes(data.text));
-    }
-  }, [selectedOptions]);
+  const Get_Tradehisotry_Calculations = async (e) => {
+    let abc = new Date();
+    let month = abc.getMonth() + 1;
+    let date = abc.getDate();
+    let year = abc.getFullYear();
+    let full = `${year}/${month}/${date}`;
 
-const Get_Tradehisotry_Calculations = async (e) => {
-  let abc = new Date();
-  let month = abc.getMonth() + 1;
-  let date = abc.getDate();
-  let year = abc.getFullYear();
-  let full = `${year}/${month}/${date}`;
+    let startDate = getActualDateFormate(fromDate);
+    let endDate = getActualDateFormate(toDate);
 
-  let startDate = getActualDateFormate(fromDate);
-  let endDate = getActualDateFormate(toDate);
-
-  await dispatch(
-    Get_Tradehisotry_Cal({
-      startDate: !fromDate ? full : startDate,
-      endDate: !toDate ? (fromDate ? "" : full) : endDate,
-      service: SelectService,
-      strategy: StrategyClientStatus,
-      type: dashboard_filter,
-      serviceIndex: SelectServiceIndex,
-      lotMultypaly: lotMultypaly,
-      token: token,
-      page: getPage,
-      limit: getSizePerPage,
-      openClose: SelectOpenClose,
-    })
-  )
-    .unwrap()
-    .then((response) => {
-      if (response.status) {
-    console.log(response)
-      } else {
-      
-      }
-    });
-
-}
-
-
+    await dispatch(
+      Get_Tradehisotry_Cal({
+        startDate: !fromDate ? full : startDate,
+        endDate: !toDate ? (fromDate ? "" : full) : endDate,
+        service: SelectService,
+        strategy: StrategyClientStatus,
+        type: dashboard_filter,
+        serviceIndex: SelectServiceIndex,
+        lotMultypaly: lotMultypaly,
+        token: token,
+        page: getPage,
+        limit: getSizePerPage,
+        openClose: SelectOpenClose,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setTotalPnl(response.TotalCalculate);
+        } else {
+        }
+      });
+  };
 
   const Get_TradHistory = async (e) => {
     let abc = new Date();
@@ -437,34 +428,10 @@ const Get_Tradehisotry_Calculations = async (e) => {
   ];
 
   var CreatechannelList = "";
-  let total = 0;
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
-      if (
-        parseInt(item.exit_qty) == parseInt(item.entry_qty) &&
-        item.entry_price != "" &&
-        item.exit_price
-      ) {
-        if (item.entry_type === "LE") {
-          let total1 =
-            (parseFloat(item.exit_price) - parseFloat(item.entry_price)) *
-            parseInt(item.exit_qty);
-          if (!isNaN(total1)) {
-            total += total1;
-          }
-        } else {
-          let total1 =
-            (parseFloat(item.entry_price) - parseFloat(item.exit_price)) *
-            parseInt(item.exit_qty);
-
-          if (!isNaN(total1)) {
-            total += total1;
-          }
-        }
-      }
     });
-
   const ShowLivePrice = async () => {
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
@@ -495,190 +462,203 @@ const Get_Tradehisotry_Calculations = async (e) => {
       } else {
         if (res.data.stat) {
           const handleResponse = async (response) => {
-            $(".BP1_Put_Price_" + response.tk).html();
-            $(".SP1_Call_Price_" + response.tk).html();
-            $(".LivePrice_" + response.tk).html(response.lp);
-            $(".ClosePrice_" + response.tk).html(response.c);
+           
 
-            var live_price = response.lp === undefined ? "" : response.lp;
+            if (response) {
+              $(".BP1_Put_Price_" + response.tk).html();
+              $(".SP1_Call_Price_" + response.tk).html();
+              $(".LivePrice_" + response.tk).html(response.lp);
+              $(".ClosePrice_" + response.tk).html(response.c);
 
-            tradeHistoryData.data &&
-              tradeHistoryData.data.forEach((row, i) => {
-                let get_ids = "_id_" + response.tk + "_" + row._id;
-                let get_id_token = $("." + get_ids).html();
+              var live_price = response.lp === undefined ? "" : response.lp;
 
-                const get_entry_qty = $(
-                  ".entry_qty_" + response.tk + "_" + row._id
-                ).html();
-                const get_exit_qty = $(
-                  ".exit_qty_" + response.tk + "_" + row._id
-                ).html();
-                const get_exit_price = $(
-                  ".exit_price_" + response.tk + "_" + row._id
-                ).html();
-                const get_entry_price = $(
-                  ".entry_price_" + response.tk + "_" + row._id
-                ).html();
-                const get_entry_type = $(
-                  ".entry_type_" + response.tk + "_" + row._id
-                ).html();
-                const get_exit_type = $(
-                  ".exit_type_" + response.tk + "_" + row._id
-                ).html();
-                const get_Strategy = $(
-                  ".strategy_" + response.tk + "_" + row._id
-                ).html();
+              tradeHistoryData.data &&
+                tradeHistoryData.data.forEach((row, i) => {
+                  let get_ids = "_id_" + response.tk + "_" + row._id;
+                  let get_id_token = $("." + get_ids).html();
 
-                if (
-                  (get_entry_type === "LE" && get_exit_type === "LX") ||
-                  (get_entry_type === "SE" && get_exit_type === "SX")
-                ) {
-                  if (get_entry_qty !== "" && get_exit_qty !== "") {
-                    if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
-                      let rpl =
-                        (parseFloat(get_exit_price) -
-                          parseFloat(get_entry_price)) *
-                        parseInt(get_exit_qty);
+                  const get_entry_qty = $(
+                    ".entry_qty_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_exit_qty = $(
+                    ".exit_qty_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_exit_price = $(
+                    ".exit_price_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_entry_price = $(
+                    ".entry_price_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_entry_type = $(
+                    ".entry_type_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_exit_type = $(
+                    ".exit_type_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_Strategy = $(
+                    ".strategy_" + response.tk + "_" + row._id
+                  ).html();
 
-                      if (get_entry_type === "SE") {
-                        rpl =
-                          (parseFloat(get_entry_price) -
-                            parseFloat(get_exit_price)) *
-                          parseInt(get_exit_qty);
-                      }
-
-                      if (
-                        ["FO", "MFO", "CFO", "BFO"].includes(
-                          row.segment.toUpperCase()
-                        ) &&
-                        row.option_type.toUpperCase() == "PUT"
-                      ) {
-                        rpl =
-                          (parseFloat(get_entry_price) -
-                            parseFloat(get_exit_price)) *
+                  if (
+                    (get_entry_type === "LE" && get_exit_type === "LX") ||
+                    (get_entry_type === "SE" && get_exit_type === "SX")
+                  ) {
+                    if (get_entry_qty !== "" && get_exit_qty !== "") {
+                      if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
+                        let rpl =
+                          (parseFloat(get_exit_price) -
+                            parseFloat(get_entry_price)) *
                           parseInt(get_exit_qty);
 
                         if (get_entry_type === "SE") {
                           rpl =
-                            (parseFloat(get_exit_price) -
-                              parseFloat(get_entry_price)) *
+                            (parseFloat(get_entry_price) -
+                              parseFloat(get_exit_price)) *
                             parseInt(get_exit_qty);
                         }
-                      }
 
-                      let upl =
-                        parseInt(get_exit_qty) - parseInt(get_entry_qty);
-                      let finalyupl =
-                        (parseFloat(get_entry_price) - parseFloat(live_price)) *
-                        upl;
+                        if (
+                          ["FO", "MFO", "CFO", "BFO"].includes(
+                            row.segment.toUpperCase()
+                          ) &&
+                          row.option_type.toUpperCase() == "PUT"
+                        ) {
+                          rpl =
+                            (parseFloat(get_entry_price) -
+                              parseFloat(get_exit_price)) *
+                            parseInt(get_exit_qty);
 
-                      if (isNaN(finalyupl) || isNaN(rpl)) {
-                        return "-";
-                      } else {
-                        $(".show_rpl_" + response.tk + "_" + get_id_token).html(
-                          rpl.toFixed(2)
-                        );
-                        $(".UPL_" + response.tk + "_" + get_id_token).html(
-                          finalyupl.toFixed(2)
-                        );
-                        $(".TPL_" + response.tk + "_" + get_id_token).html(
-                          (finalyupl + rpl).toFixed(2)
-                        );
+                          if (get_entry_type === "SE") {
+                            rpl =
+                              (parseFloat(get_exit_price) -
+                                parseFloat(get_entry_price)) *
+                              parseInt(get_exit_qty);
+                          }
+                        }
 
-                        ShowColor1(
-                          ".show_rpl_" + response.tk + "_" + get_id_token,
-                          rpl.toFixed(2),
-                          response.tk,
-                          get_id_token
-                        );
-                        ShowColor1(
-                          ".UPL_" + response.tk + "_" + get_id_token,
-                          finalyupl.toFixed(2),
-                          response.tk,
-                          get_id_token
-                        );
-                        ShowColor1(
-                          ".TPL_" + response.tk + "_" + get_id_token,
-                          (finalyupl + rpl).toFixed(2),
-                          response.tk,
-                          get_id_token
-                        );
+                        let upl =
+                          parseInt(get_exit_qty) - parseInt(get_entry_qty);
+                        let finalyupl =
+                          (parseFloat(get_entry_price) -
+                            parseFloat(live_price)) *
+                          upl;
+
+                        if (isNaN(finalyupl) || isNaN(rpl)) {
+                          return "-";
+                        } else {
+                          $(
+                            ".show_rpl_" + response.tk + "_" + get_id_token
+                          ).html(rpl.toFixed(2));
+                          $(".UPL_" + response.tk + "_" + get_id_token).html(
+                            finalyupl.toFixed(2)
+                          );
+                          $(".TPL_" + response.tk + "_" + get_id_token).html(
+                            (finalyupl + rpl).toFixed(2)
+                          );
+
+                          ShowColor1(
+                            ".show_rpl_" + response.tk + "_" + get_id_token,
+                            rpl.toFixed(2),
+                            response.tk,
+                            get_id_token
+                          );
+                          ShowColor1(
+                            ".UPL_" + response.tk + "_" + get_id_token,
+                            finalyupl.toFixed(2),
+                            response.tk,
+                            get_id_token
+                          );
+                          ShowColor1(
+                            ".TPL_" + response.tk + "_" + get_id_token,
+                            (finalyupl + rpl).toFixed(2),
+                            response.tk,
+                            get_id_token
+                          );
+                        }
                       }
                     }
-                  }
-                } else if (
-                  (get_entry_type === "LE" && get_exit_type === "") ||
-                  (get_entry_type === "SE" && get_exit_type === "")
-                ) {
-                  let abc = (
-                    (parseFloat(live_price) - parseFloat(get_entry_price)) *
-                    parseInt(get_entry_qty)
-                  ).toFixed();
-
-                  if (get_entry_type === "SE") {
-                    abc = (
-                      (parseFloat(get_entry_price) - parseFloat(live_price)) *
+                  } else if (
+                    (get_entry_type === "LE" && get_exit_type === "") ||
+                    (get_entry_type === "SE" && get_exit_type === "")
+                  ) {
+                    let abc = (
+                      (parseFloat(live_price) - parseFloat(get_entry_price)) *
                       parseInt(get_entry_qty)
                     ).toFixed();
-                  }
-
-                  if (
-                    ["FO", "MFO", "CFO", "BFO"].includes(
-                      row.segment.toUpperCase()
-                    ) &&
-                    row.option_type.toUpperCase() == "PUT"
-                  ) {
-                    abc =
-                      (parseFloat(get_entry_price) - parseFloat(live_price)) *
-                      parseInt(get_exit_qty);
 
                     if (get_entry_type === "SE") {
+                      abc = (
+                        (parseFloat(get_entry_price) - parseFloat(live_price)) *
+                        parseInt(get_entry_qty)
+                      ).toFixed();
+                    }
+
+                    if (
+                      ["FO", "MFO", "CFO", "BFO"].includes(
+                        row.segment.toUpperCase()
+                      ) &&
+                      row.option_type.toUpperCase() == "PUT"
+                    ) {
                       abc =
-                        (parseFloat(live_price) - parseFloat(get_entry_price)) *
+                        (parseFloat(get_entry_price) - parseFloat(live_price)) *
                         parseInt(get_exit_qty);
+
+                      if (get_entry_type === "SE") {
+                        abc =
+                          (parseFloat(live_price) -
+                            parseFloat(get_entry_price)) *
+                          parseInt(get_exit_qty);
+                      }
+                    }
+
+                    if (isNaN(abc)) {
+                      return "-";
+                    } else {
+                      $(".show_rpl_" + response.tk + "_" + get_id_token).html(
+                        "-"
+                      );
+                      $(".UPL_" + response.tk + "_" + get_id_token).html(abc);
+                      $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
+                      ShowColor1(
+                        ".show_rpl_" + response.tk + "_" + get_id_token,
+                        "-",
+                        response.tk,
+                        get_id_token
+                      );
+                      ShowColor1(
+                        ".UPL_" + response.tk + "_" + get_id_token,
+                        abc,
+                        response.tk,
+                        get_id_token
+                      );
+                      ShowColor1(
+                        ".TPL_" + response.tk + "_" + get_id_token,
+                        abc,
+                        response.tk,
+                        get_id_token
+                      );
                     }
                   }
 
-                  if (isNaN(abc)) {
-                    return "-";
+                  //  if Only Exist qty Exist
+                  else if (
+                    (get_entry_type === "" && get_exit_type === "LX") ||
+                    (get_entry_type === "" && get_exit_type === "SX")
+                  ) {
                   } else {
-                    $(".show_rpl_" + response.tk + "_" + get_id_token).html(
-                      "-"
-                    );
-                    $(".UPL_" + response.tk + "_" + get_id_token).html(abc);
-                    $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
-                    ShowColor1(
-                      ".show_rpl_" + response.tk + "_" + get_id_token,
-                      "-",
-                      response.tk,
-                      get_id_token
-                    );
-                    ShowColor1(
-                      ".UPL_" + response.tk + "_" + get_id_token,
-                      abc,
-                      response.tk,
-                      get_id_token
-                    );
-                    ShowColor1(
-                      ".TPL_" + response.tk + "_" + get_id_token,
-                      abc,
-                      response.tk,
-                      get_id_token
-                    );
                   }
-                }
-
-                //  if Only Exist qty Exist
-                else if (
-                  (get_entry_type === "" && get_exit_type === "LX") ||
-                  (get_entry_type === "" && get_exit_type === "SX")
-                ) {
-                } else {
-                }
+                });
+            }else{
+              tradeHistoryData.data &&
+              tradeHistoryData.data.forEach((row, i) => {
+                const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
+                calcultateRPL(row, null, previousRow);
               });
+            }
 
             // }
           };
+
           await ConnctSocket(
             handleResponse,
             channelList,
@@ -864,11 +844,11 @@ const Get_Tradehisotry_Calculations = async (e) => {
 
   const ShowLivePrice1 = async () => {
     tradeHistoryData.data &&
-    tradeHistoryData.data.forEach((row, i) => {
-      const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
-      calcultateRPL(row, null, previousRow);
-    });
-  }
+      tradeHistoryData.data.forEach((row, i) => {
+        const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
+        calcultateRPL(row, null, previousRow);
+      });
+  };
 
   const calcultateRPL = (row, livePrice, pre_row) => {
     let get_ids = "_id_" + row.token + "_" + row._id;
@@ -876,12 +856,11 @@ const Get_Tradehisotry_Calculations = async (e) => {
 
     if (row.entry_type !== "" && row.exit_type !== "") {
       if (row.entry_type === "LE" || row.entry_type === "SE") {
-        const entryQty = parseInt(row.entry_qty_percent);
-        const exitQty = parseInt(row.exit_qty_percent);
+        const entryQty = parseInt(row.entry_qty);
+        const exitQty = parseInt(row.exit_qty);
         const entryPrice = parseFloat(row.entry_price);
         const exitPrice = parseFloat(row.exit_price);
         const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
-
         $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
         $(".UPL_" + row.token + "_" + get_id_token).html("-");
         $(".TPL_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
@@ -1014,10 +993,11 @@ const Get_Tradehisotry_Calculations = async (e) => {
 
   const handleInputChange = (e) => {
     const value = e.target.value;
+
     const isValidNumber = /^\d+$/.test(value);
 
     if (isValidNumber) {
-      SetlotMultypaly(value === "" || value == 0 ? 1 : Number(value));
+      SetlotMultypaly(value === "" || Number(value) <= 0 ? 1 : Number(value));
     } else {
       SetlotMultypaly(1);
     }
@@ -1031,7 +1011,6 @@ const Get_Tradehisotry_Calculations = async (e) => {
       updatedOptions = updatedOptions.filter((item) => item !== option);
     }
     setSelectedOptions(updatedOptions);
-    
   };
 
   const handleTableChange = (type, { page, sizePerPage }) => {
@@ -1072,6 +1051,12 @@ const Get_Tradehisotry_Calculations = async (e) => {
     "Exit Status",
     "Details View",
   ];
+
+  useEffect(() => {
+    if (selectedOptions && selectedOptions.length > 0) {
+      columns = columns.filter((data) => !selectedOptions.includes(data.text));
+    }
+  }, [selectedOptions]);
 
   return (
     <>
@@ -1116,47 +1101,6 @@ const Get_Tradehisotry_Calculations = async (e) => {
                   <span className="slider round"></span>
                 </label>
               </div>
-
-              {/* Modal */}
-              <Modal show={showModal6} onHide={handleClose} size="lg">
-                <Modal.Header closeButton>
-                  <Modal.Title>Trading Status Information</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  {adminTradingStatus.length > 0 ? (
-                    <Table striped bordered hover>
-                      <thead>
-                        <tr>
-                          <th style={{ color: "black" }}>#</th>
-                          {/* <th style={{ color: "black" }}>Login Status</th> */}
-                          <th style={{ color: "black" }}>Trading Status</th>
-                          <th style={{ color: "black" }}>Device</th>
-                          <th style={{ color: "black" }}>Created At</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {adminTradingStatus.map((item, index) => (
-                          <tr key={item._id}>
-                            <td>{index + 1}</td>
-                            {/* <td>{item.login_status || "-"}</td> */}
-                            <td>{item.trading_status || "-"}</td>
-
-                            <td>{item.device}</td>
-                            <td>{new Date(item.createdAt).toLocaleString()}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  ) : (
-                    <p>No trading status information available.</p>
-                  )}
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={handleClose}>
-                    Close
-                  </Button>
-                </Modal.Footer>
-              </Modal>
             </div>
           )}
 
@@ -1297,10 +1241,10 @@ const Get_Tradehisotry_Calculations = async (e) => {
             <div className="form-check custom-checkbox mb-3 ps-0">
               <label className="col-lg-12">Lots</label>
               <input
-                type="number"
                 className="default-select wide form-control"
-                defaultValue={lotMultypaly}
-                onChange={(e) => handleInputChange(e)}
+                type="text"
+                value={lotMultypaly}
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -1320,35 +1264,33 @@ const Get_Tradehisotry_Calculations = async (e) => {
           </div>
 
           <div className="col-lg-2 px-1">
-            <div className="form-check custom-checkbox mb-3 ps-0">
-              <div className="custom-dropdown">
-                <label className="col-lg-12">Select Option</label>
+            <div className="mb-3">
+              <label className="col-lg-12">Select Option</label>
 
-                <button
-                  className="btn btn-primary dropdown-toggle"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Select options
-                </button>
-                <div className="dropdown-menu">
-                  <div className="row">
-                    {columnTexts.length > 0 &&
-                      columnTexts.map((data, index) => (
-                        <div key={index} className="col-3">
-                          <li className="dropdown-item d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="form-check-input me-2"
-                              value={data}
-                              onChange={(e) => handleCheckboxChange(e, data)}
-                            />
-                            <label className="form-check-label">{data}</label>
-                          </li>
-                        </div>
-                      ))}
-                  </div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Select Options ..."
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              />
+
+              <div className="dropdown-menu">
+                <div className="row">
+                  {columnTexts.length > 0 &&
+                    columnTexts.map((data, index) => (
+                      <div key={index} className="col-3">
+                        <li className="dropdown-item d-flex align-items-center">
+                          <input
+                            type="checkbox"
+                            className="form-check-input me-2"
+                            value={data}
+                            onChange={(e) => handleCheckboxChange(e, data)}
+                          />
+                          <label className="form-check-label">{data}</label>
+                        </li>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>
@@ -1368,37 +1310,15 @@ const Get_Tradehisotry_Calculations = async (e) => {
           </div>
         </div>
 
-
         <div className="table-responsive">
-          {tradeHistoryData.data.length > 0 ? (
-            
-            tradeHistoryData.TotalCalculate >= 0 ? (
-              <h3>
-                <b>Total Realised P/L</b> :{" "}
-                <b>
-                  <span style={{ color: "green" }}>
-                    {" "}
-                    {tradeHistoryData.TotalCalculate == null || tradeHistoryData.TotalCalculate == undefined ? 0 : tradeHistoryData.TotalCalculate.toFixed(2)}
-                    
-                  </span>{" "}
-                </b>
-              </h3>
-            ) : (
-              <h3>
-                <b>Total Realised P/L</b> :{" "}
-                <b>
-                  <span style={{ color: "red" }}>
-                    {" "}
-                    {tradeHistoryData.TotalCalculate
-                      ? tradeHistoryData.TotalCalculate.toFixed(2)
-                      : "-"}
-                  </span>{" "}
-                </b>
-              </h3>
-            )
-          ) : (
-            ""
-          )}
+          <h3>
+            <b>Total Realised P/L</b> :{" "}
+            <b>
+              <span style={{ color: getTotalPnl >= 0 ? "green" : "red" }}>
+                {getTotalPnl ? getTotalPnl.toFixed(2) : "0.00"}
+              </span>
+            </b>
+          </h3>
 
           <PaginationProvider
             pagination={paginationFactory({
@@ -1413,7 +1333,7 @@ const Get_Tradehisotry_Calculations = async (e) => {
                 <BootstrapTable
                   keyField="_id"
                   data={tradeHistoryData.data}
-                  columns={columns}
+                  columns={columns && columns}
                   remote
                   onTableChange={handleTableChange}
                   {...paginationTableProps}
@@ -1437,10 +1357,6 @@ const Get_Tradehisotry_Calculations = async (e) => {
                       <option value={50}>50</option>
                       <option value={100}>100</option>
                       <option value={200}>200</option>
-
-                      {/* <option value={500}>500</option>
-                      <option value={1000}>1000</option>
-                      <option value={1500}>1500</option> */}
                     </select>
                   </div>
                   <div className="d-flex align-items-center">
@@ -1484,6 +1400,47 @@ const Get_Tradehisotry_Calculations = async (e) => {
           </b>
         </h6>
       </Content>
+
+      {/* Modal */}
+      <Modal show={showModal6} onHide={handleClose} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Trading Status Information</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {adminTradingStatus.length > 0 ? (
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th style={{ color: "black" }}>#</th>
+                  {/* <th style={{ color: "black" }}>Login Status</th> */}
+                  <th style={{ color: "black" }}>Trading Status</th>
+                  <th style={{ color: "black" }}>Device</th>
+                  <th style={{ color: "black" }}>Created At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {adminTradingStatus.map((item, index) => (
+                  <tr key={item._id}>
+                    <td>{index + 1}</td>
+                    {/* <td>{item.login_status || "-"}</td> */}
+                    <td>{item.trading_status || "-"}</td>
+
+                    <td>{item.device}</td>
+                    <td>{new Date(item.createdAt).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          ) : (
+            <p>No trading status information available.</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

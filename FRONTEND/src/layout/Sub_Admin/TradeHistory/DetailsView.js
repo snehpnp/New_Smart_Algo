@@ -23,8 +23,7 @@ const DetailsView = ({ showModal, setshowModal, tradeHistoryData }) => {
   
     useEffect(() => {
       if (showModal && tradeHistoryData && tradeHistoryData.result) {
-        console.log("showModal", showModal);
-        console.log("tradeHistoryData", tradeHistoryData);
+ 
         GetSignalsAdmin(tradeHistoryData.result);
       }
     }, [showModal, tradeHistoryData]);

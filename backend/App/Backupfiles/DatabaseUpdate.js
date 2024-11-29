@@ -298,7 +298,7 @@
 //     const result = await collection.bulkWrite(bulkOps);
 //     console.log(`Bulk update result for ${uri}:`, result);
 //   } catch (error) {
-//     console.error(`Error updating categories for ${uri}:`, error);
+//     console.log(`Error updating categories for ${uri}:`, error);
 //   } finally {
 //     await client.close();
 //   }
@@ -311,4 +311,4 @@
 // }
 
 // // Run the update
-// updateAllDatabases().catch(console.error);
+// updateAllDatabases().catch(console.log);

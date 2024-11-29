@@ -471,7 +471,7 @@ const AdminsList = () => {
             toast.success(response.data.msg);
           } else {
             toast.error(response.data.msg);
-            console.log(response.data);
+        
           }
         })
         .catch((error) => {
@@ -517,7 +517,7 @@ const AdminsList = () => {
             toast.success(response.data.msg);
           } else {
             toast.error(response.data.msg);
-            console.log(response.data);
+        
           }
         })
         .catch((error) => {

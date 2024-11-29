@@ -117,7 +117,7 @@ class Shoonya {
         });
       }
     } catch (error) {
-      console.error("Error occurred:", error);
+      console.log("Error occurred:", error);
 
       if (error.response) {
         return res.send({

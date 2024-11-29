@@ -3056,19 +3056,19 @@ module.exports = function (app) {
         console.log(`${item} - Success: ${response.data}`);
       } catch (error) {
         if (error.response) {
-          console.error(
+          console.log(
             `${item} - Error: ${error.response.status} - ${error.response.data}`
           );
           results.push({ item, status: "Failed", error: error.response.data });
         } else if (error.request) {
-          console.error(`${item} - Error: No response received`);
+          console.log(`${item} - Error: No response received`);
           results.push({
             item,
             status: "Failed",
             error: "No response received",
           });
         } else {
-          console.error(`${item} - Error: ${error.message}`);
+          console.log(`${item} - Error: ${error.message}`);
           results.push({ item, status: "Failed", error: error.message });
         }
       }
@@ -3092,7 +3092,7 @@ module.exports = function (app) {
         // Step 1: Restart MongoDB
         conn.exec("systemctl restart mongod", (err, stream) => {
           if (err) {
-            console.error("Error restarting MongoDB:", err);
+            console.log("Error restarting MongoDB:", err);
             conn.end();
             return res.status(500).send({ status: false, msg: "MongoDB restart failed" });
           }
@@ -3104,7 +3104,7 @@ module.exports = function (app) {
               // Step 2: Update PM2
               conn.exec("pm2 update", (err, stream) => {
                 if (err) {
-                  console.error("Error updating PM2:", err);
+                  console.log("Error updating PM2:", err);
                   conn.end();
                   return res.status(500).send({ status: false, msg: "PM2 update failed" });
                 }
@@ -3119,7 +3119,7 @@ module.exports = function (app) {
                     console.log(`PM2 update output: ${data}`);
                   })
                   .stderr.on("data", (data) => {
-                    console.error(`PM2 update error: ${data}`);
+                    console.log(`PM2 update error: ${data}`);
                   });
               });
             })
@@ -3127,12 +3127,12 @@ module.exports = function (app) {
               console.log(`MongoDB restart output: ${data}`);
             })
             .stderr.on("data", (data) => {
-              console.error(`MongoDB restart error: ${data}`);
+              console.log(`MongoDB restart error: ${data}`);
             });
         });
       })
       .on("error", (err) => {
-        console.error(`Connection error: ${err}`);
+        console.log(`Connection error: ${err}`);
         return res.status(500).send({ status: false, msg: "SSH Connection Failed" });
       })
       .connect({

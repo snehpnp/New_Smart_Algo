@@ -122,6 +122,11 @@ const CompanySchema = new mongoose.Schema({
     refer_points: {
         type: Number
     },
+  current_date: {
+    type: Date,
+    default: null
+    },
+
     Trade_type: {
         type: Number,
         enum: [0, 1, 2], // 0 for all, 1 for Full Auto, 2 for Semi Auto

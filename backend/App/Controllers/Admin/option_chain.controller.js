@@ -650,7 +650,7 @@ var GetTrade = await MainSignals_modal.aggregate([
                     const result = await token_chain_collection.bulkWrite(bulkOps);
                  
                 } catch (error) {
-                    console.error("Error updating tokens:", error);
+                    console.log("Error updating tokens:", error);
                 }
             }
 

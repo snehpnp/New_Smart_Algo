@@ -8,15 +8,9 @@ const Papa = require('papaparse')
 
 
 const { logger, getIPAddress } = require('../Helper/logger.helper')
-
-const { Alice_Socket , updateChannelAndSend } = require("../Helper/Alice_Socket");
-
-
-
 const { DashboardView, deleteDashboard } = require('../../View/DashboardData')
 const { createView } = require('../../View/Open_position')
-// const { logger, getIPAddress } = require('../Helper/logger.helper')
-// const { Alice_Socket } = require("../Helper/Alice_Socket11");
+
 
 var dateTime = require('node-datetime');
 var moment = require('moment');
@@ -207,13 +201,7 @@ const MainSignalsRemainToken = async () => {
 }
 
 const TruncateTableTokenChainAdd_fiveMinute = async () => {
-    // const filter = { _id: c };
-    // const update = {
-    //     $set: { _id: c , exch: e },
-    // };
-    // const update_token = await token_chain.updateOne(filter, update, { upsert: true });
-  
-    // updateChannelAndSend(e+"|"+c)
+ 
    
     const indiaTimezoneOffset = 330;
     const currentTimeInMinutes = new Date().getUTCHours() * 60 + new Date().getUTCMinutes() + indiaTimezoneOffset;
@@ -239,9 +227,7 @@ const TruncateTableTokenChainAdd_fiveMinute = async () => {
             const updateTokenAfter = await token_chain.find({}).toArray();
             const unmatchedTokenChannel = updateTokenAfter.map(item => `${item.exch}|${item._id}`).join('#');
            
-           // updateChannelAndSend(unmatchedTokenChannel)
-             //updateChannelAndSend("NSE|2885")
-            //await Alice_Socket();
+   
 
             return;
         }
@@ -263,7 +249,6 @@ const TruncateTableTokenChainAdd = async () => {
 
         await Get_Option_All_Token_Chain_stock()
 
-        await Alice_Socket();
 
         return;
     }
@@ -1392,7 +1377,7 @@ const twodaysclient = async () => {
 
         return twoDaysClientGet[0].users;
     } catch (error) {
-        console.error("Error occurred:", error);
+        console.log("Error occurred:", error);
         return [];
     }
 };

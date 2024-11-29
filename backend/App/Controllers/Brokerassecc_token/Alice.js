@@ -14,7 +14,7 @@ const live_price = db.live_price;
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
-const { logger, getIPAddress } = require("../../Helper/logger.helper");
+const { getIPAddress } = require("../../Helper/logger.helper");
 const { Alice_Socket } = require("../../Helper/Alice_Socket");
 
 class AliceBlue {
@@ -526,7 +526,7 @@ const GetAllBrokerResponse = async (user_id, res) => {
 
 const UpdateProfile = async (userId, token) => {
   if (!userId || !token) {
-    console.error("Invalid userId or token provided");
+    console.log("Invalid userId or token provided");
     return;
   }
 
@@ -559,19 +559,19 @@ const UpdateProfile = async (userId, token) => {
           );
 
         } else {
-          console.error(
+          console.log(
             "User not found with the provided demat_userid:",
             userId
           );
         }
       } catch (dbError) {
-        console.error("Database error occurred:", dbError.message);
+        console.log("Database error occurred:", dbError.message);
       }
     } else {
-      console.error("No valid response data received from API.");
+      console.log("No valid response data received from API.");
     }
   } catch (apiError) {
-    console.error("Error making API request:", apiError.message);
+    console.log("Error making API request:", apiError.message);
   }
 };
 

@@ -21,7 +21,7 @@ var dt = dateTime.create();
 
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
-const { logger, logger1, getIPAddress } = require("../../Helper/logger.helper");
+const {  getIPAddress } = require("../../Helper/logger.helper");
 
 class Dashboard {
   // ONE USER GET ALL TRADING STATUS

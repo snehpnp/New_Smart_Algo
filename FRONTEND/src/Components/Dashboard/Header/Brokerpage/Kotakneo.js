@@ -114,7 +114,7 @@ function Kotakneo() {
         if (res.data.status) {
           setKotakStatus1(true);
         } else{
-          console.log(res.data.msg);
+      
           toast.error(res.data.msg);
         }
       });

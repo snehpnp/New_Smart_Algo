@@ -23,7 +23,7 @@ const token_chain = db.token_chain;
 const stock_live_price = db.stock_live_price;
 const { DashboardView, deleteDashboard } = require('../../View/DashboardData')
 const { createView } = require('../../View/Open_position')
-const { logger, getIPAddress } = require('../Helper/logger.helper')
+const {  getIPAddress } = require('../Helper/logger.helper')
 const { Alice_Socket } = require("../Helper/Alice_Socket11");
 
 
@@ -1362,7 +1362,7 @@ const twodaysclient = async () => {
 
         return twoDaysClientGet[0].users;
     } catch (error) {
-        console.error("Error occurred:", error);
+        console.log("Error occurred:", error);
         return [];
     }
 };

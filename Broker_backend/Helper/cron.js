@@ -358,7 +358,7 @@ module.exports = function (app) {
         }
       });
     } catch (err) {
-      console.error("Unexpected error in downloadAndSwastika:", err);
+      console.log("Unexpected error in downloadAndSwastika:", err);
       return;
     }
   }
@@ -560,7 +560,7 @@ module.exports = function (app) {
         }
       });
     } catch (err) {
-      console.error("Unexpected error in downloadAndSwastika:", err);
+      console.log("Unexpected error in downloadAndSwastika:", err);
       return;
     }
   }

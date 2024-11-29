@@ -23,7 +23,6 @@ const serviceGroupName = db.serviceGroupName;
 const { CommonEmail } = require("../../Helper/CommonEmail");
 const { firstOptPass } = require("../../Helper/Email_formate/first_login");
 
-const { logger, logger1, getIPAddress } = require("../../Helper/logger.helper");
 
 var dateTime = require("node-datetime");
 var dt = dateTime.create();
@@ -385,11 +384,7 @@ class Employee {
             var EmailData = await firstOptPass(email_data);
             CommonEmail(toEmail, subjectEmail, EmailData);
 
-            logger1.info("Add User By Admin", {
-              Email: data[0].Email,
-              role: data[0].Role,
-              user_id: data[0]._id,
-            });
+         
             res.send({ status: true, msg: "successfully Add!", data: data[0] });
           }
         })
@@ -480,7 +475,6 @@ class Employee {
         },
       ]);
 
-      console.log("totalLicense", totalLicense);
 
       if (totalLicense.length > 0) {
         var TotalLicense = totalLicense[0].totalLicense;
@@ -1413,7 +1407,7 @@ class Employee {
         data: GetAlluser_logs,
       });
     } catch (error) {
-      console.error("Error trading status Error-", error);
+      console.log("Error trading status Error-", error);
       return res.status(500).json({
         status: false,
         msg: "Internal server error",
@@ -1521,11 +1515,7 @@ class Employee {
 
       var DeleteUser = await User_model.deleteOne({ _id: get_user[0]._id });
 
-      logger1.info(`Delete User Successfully`, {
-        Email: get_user[0].Email,
-        role: get_user[0].Role,
-        user_id: get_user[0]._id,
-      });
+ 
 
       return res.send({
         status: true,

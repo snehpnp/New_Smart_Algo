@@ -3741,7 +3741,7 @@ module.exports = function (app) {
   
       return res.send("okkkkkk");
     } catch (error) {
-      console.error("Error processing stocks:", error);
+      console.log("Error processing stocks:", error);
       return res.status(500).send("Internal Server Error");
     }
   });
@@ -3765,7 +3765,7 @@ module.exports = function (app) {
         unique_column: `${item.name}${suffix}_${category_id}`,
       });
     } catch (err) {
-      console.error("Error creating service:", err);
+      console.log("Error creating service:", err);
     }
   }
 

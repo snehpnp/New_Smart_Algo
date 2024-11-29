@@ -292,7 +292,7 @@ const Header = ({ ChatBox }) => {
         if (res.data.status) {
           setKotakStatus1(true);
         } else{
-          console.log(res.data.msg);
+       
           toast.error(res.data.msg);
         }
       });
@@ -629,7 +629,7 @@ const Header = ({ ChatBox }) => {
         }
       })
       .catch((error) => {
-        console.error("Error: ", error);
+        console.log("Error: ", error);
       });
   };
 

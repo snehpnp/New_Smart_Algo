@@ -20,7 +20,7 @@ const Subadmin_Permission = db.Subadmin_Permission;
 const { CommonEmail } = require("../../Helper/CommonEmail");
 const { firstOptPass } = require("../../Helper/Email_formate/first_login");
 
-const { logger, logger1, getIPAddress } = require("../../Helper/logger.helper");
+const {  getIPAddress } = require("../../Helper/logger.helper");
 
 var dateTime = require("node-datetime");
 var dt = dateTime.create();
@@ -392,11 +392,7 @@ class Employee {
 
           CommonEmail(toEmail, subjectEmail, EmailData);
 
-          logger1.info("Add User By Admin", {
-            Email: data.Email,
-            role: data.Role,
-            user_id: data._id,
-          });
+      
           return res.send({ status: true, msg: "successfully Add!", data: data });
         })
         .catch((err) => {
@@ -1341,11 +1337,6 @@ class Employee {
 
       var DeleteUser = await User_model.deleteOne({ _id: get_user[0]._id });
 
-      logger1.info(`Delete User Successfully`, {
-        Email: get_user[0].Email,
-        role: get_user[0].Role,
-        user_id: get_user[0]._id,
-      });
 
       return res.send({
         status: true,
