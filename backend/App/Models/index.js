@@ -71,6 +71,8 @@ module.exports = {
     Plansmodel:require('./Plans.model'),
     tttModal:require('./ttt'),
 
+    makecallABR:require("./makecallABR.model"),
+
 
     dashboard_data:dashboard_data
 

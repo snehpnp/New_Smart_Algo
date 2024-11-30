@@ -62,6 +62,8 @@ import Addplans  from '../layout/Admin/Service/Plans/Addplan'
 import TradeHistory1 from "../layout/Admin/TradeDetails/TradeHistory/Tradehistory1"
 import Test from '../layout/Test'
 
+import Makecall from '../layout/Comman/Make/Makecall.js';
+
 import { useDispatch } from "react-redux";
 
 const Admin = () => {
@@ -155,9 +157,11 @@ const Admin = () => {
                 <Route exact path="/allstarclients" element={<Starclients />} />
                 <Route exact path="/faq" element={<Faq />} />
                 <Route exact path="/refer-earn" element={<ReferralPage />} />
-
                 <Route exact path="/plans" element={<Plans />} />
                 <Route exact path="/plan/add" element={<Addplans />} />
+
+
+                <Route exact path="/makecall" element={<Makecall />} />
 
 
 

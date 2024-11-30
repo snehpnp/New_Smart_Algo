@@ -2,6 +2,14 @@
 module.exports = function (app) {
     // Auth Route
     app.use(require("./Auth/login.route"));
+
+    // Comman Route
+    app.use(require("./Comman/Userinfo.routes"))
+    app.use(require("./Comman/Makecall.routes"))
+    // app.use(require("./Comman/Brokeraccesstoken.routes"))
+    // app.use(require("./Comman/Optionchain.routes"))
+    // app.use(require("./Comman/Activity.routes"))
+    // app.use(require("./Comman/Createorder.routes"))
  
 
     // SuperAdmin Route
