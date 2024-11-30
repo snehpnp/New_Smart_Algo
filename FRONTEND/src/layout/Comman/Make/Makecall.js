@@ -1996,7 +1996,7 @@ const Makecall = () => {
 
 
     return (
-        <div>
+        <div className="content-body">
             <div className="content container-fluid">
                 <div className="card">
                     <div className="card-header d-flex justify-content-between align-items-center border-bottom">

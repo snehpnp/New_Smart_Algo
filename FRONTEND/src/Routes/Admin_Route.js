@@ -63,6 +63,8 @@ import TradeHistory1 from "../layout/Admin/TradeDetails/TradeHistory/Tradehistor
 import Test from '../layout/Test'
 
 import Makecall from '../layout/Comman/Make/Makecall.js';
+import MakeCallPendingPosition from '../layout/Comman/Make/MakeCallPendingPosition.js';
+
 
 import { useDispatch } from "react-redux";
 
@@ -162,6 +164,7 @@ const Admin = () => {
 
 
                 <Route exact path="/makecall" element={<Makecall />} />
+                <Route exact path="/makecallpendingposition" element={<MakeCallPendingPosition />} />
 
 
 
