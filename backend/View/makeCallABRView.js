@@ -265,8 +265,6 @@ async function makecallabrView() {
     }
 }
 
-
-
 async function makecallabrView_excute(req, res) {
 
     try {

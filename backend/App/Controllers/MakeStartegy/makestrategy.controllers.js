@@ -1199,7 +1199,7 @@ async function run() {
       if (weekday != 'Sunday' && weekday != 'Saturday') {
         try {
 
-          var openPosition = await open_position_excute.find().toArray();
+          let openPosition = await open_position_excute.find().toArray();
           // console.log("openPosition ",openPosition)
           if (openPosition.length > 0) {
 
@@ -1264,6 +1264,9 @@ async function run() {
 
             })
 
+            openPosition = null
+            return
+
           } else {
             return
           }
@@ -1311,7 +1314,7 @@ async function run() {
       // Delay for 1000 milliseconds (1 second)
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-       await executeFunction();
+      // await executeFunction();
 
       // Open Position Function Evey Second
       const indiaTimezoneOffset = 330;

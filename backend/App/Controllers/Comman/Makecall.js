@@ -948,6 +948,7 @@ async function run() {
   try {
 
     const makecallabrView_excute_run = async () => {
+      // console.log("makecallabrView_excute_run")
       try {
 
         let rr = true
@@ -955,7 +956,7 @@ async function run() {
           // if (holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
 
           // const viewName = 'open_position_excute';
-          var makecallabrView_excute_result = await makecallabrView_excute_view.find().toArray();
+          let makecallabrView_excute_result = await makecallabrView_excute_view.find().toArray();
 
      
           if (makecallabrView_excute_result.length > 0) {
@@ -1056,7 +1057,7 @@ async function run() {
                 data: req
               };
 
-              axios.request(config)
+             await axios.request(config)
                 .then(async (response) => {
 
                 //  const io = await getIO();
@@ -1073,7 +1074,8 @@ async function run() {
             })
 
 
-
+            makecallabrView_excute_result = null
+            return
 
           } else {
           }
@@ -1090,91 +1092,10 @@ async function run() {
 
     }
 
-    const exitOpentrade = async () => {
-      try {
-
-        var openPosition = await open_position_excute.find().toArray();
-
-        if (openPosition.length > 0) {
-
-          openPosition && openPosition.map(async(item) => {
-
-            let ExitStatus = 'TS'
-            if (item.isLpInRangeTarget == true) {
-              ExitStatus = "TARGET"
-            } else if (item.isLpInRangeStoploss == true) {
-              ExitStatus = "STOPLOSS"
-            } else if (item.isLpInRange == 1) {
-              ExitStatus = "EXIT TIME"
-            }
-            else if (item.isLpInRange == 0) {
-              ExitStatus = "EXIT TIME"
-            }
-
-
-              
-
-            const currentTimestamp = Math.floor(Date.now() / 1000);
-            let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${item.client_persnal_key}|TradeType:${item.TradeType}|ExitStatus:${ExitStatus}|Demo:demo`
-
-
-
-
-
-            let config = {
-              method: 'post',
-              maxBodyLength: Infinity,
-              url: `${process.env.BROKER_URL}`,
-              headers: {
-                'Content-Type': 'text/plain'
-              },
-              data: req
-            };
-
-            axios.request(config)
-              .then(async (response) => {
-
-                //  let tradeSymbol;
-                //  if(item.segment.toLowerCase() == 'o' || item.segment.toLowerCase() == 'co' || item.segment.toLowerCase() == 'fo' || item.segment.toLowerCase() == 'mo')
-                //  {
-                //   tradeSymbol = item.symbol+"  "+item.expiry+"  "+item.strike+"  "+item.option_type+"  "+" [ "+item.segment+" ] ";
-                //  }
-                //  else if(item.segment.toLowerCase() == 'f' || item.segment.toLowerCase() == 'cf' || item.segment.toLowerCase() == 'mf')
-                //  {
-                //   tradeSymbol = item.symbol+"  "+item.expiry+"  "+" [ "+item.segment+" ] ";
-                //  }
-                //  else{
-                //   tradeSymbol = item.symbol+"  "+" [ "+item.segment+" ] ";
-                //  }
-                //  const io = await getIO();
-                //  io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: tradeSymbol });
-
-                //  const io = await getIO();
-                //  io.emit("TRADE_NOTIFICATION", { data: item , type : "OPENPOSITION" , ExitStatus : ExitStatus });
-
-
-              })
-              .catch((error) => {
-              });
-
-
-          })
-
-        } else {
-          return
-        }
-      } catch (error) {
-        console.log("Error in Open Position", error);
-      }
-
-
-
-    }
-
     const noTradeTimeExcuteSetStatus = async () => {
       try {
 
-        var NotradeTimeExucuted = await makecall_NotradeTime_status_excute.find().toArray();
+        let NotradeTimeExucuted = await makecall_NotradeTime_status_excute.find().toArray();
 
         if (NotradeTimeExucuted.length > 0) {
           const items = NotradeTimeExucuted.map(item => item)
@@ -1187,6 +1108,8 @@ async function run() {
           // const io = await getIO();
           // io.emit("TRADE_NOTIFICATION", { data: items ,type : "MAKECALL" , type_makecall : "NO_TRADE"});
 
+          NotradeTimeExucuted = null
+
           return
 
         } else {
@@ -1199,16 +1122,16 @@ async function run() {
     }
 
 
-    // Run the function initially
-    await makecallabrView_excute_run();
+    
 
     // Use a while loop with setTimeout for a delay
     while (true) {
       // Delay for 1000 milliseconds (1 second)
       await new Promise(resolve => setTimeout(resolve, 500));
+      await noTradeTimeExcuteSetStatus();
+      // Run the function initially
       await makecallabrView_excute_run();
-      await exitOpentrade();
-      await noTradeTimeExcuteSetStatus()
+
     }
   } finally {
     // Close the client when you're done
@@ -1218,9 +1141,6 @@ async function run() {
 
 
  run().catch(console.error);
-
-
-//////////////////----- makecallabrView_excute_run --//////////////////////////////
 
 
 //////////////////----- makecallabrView_excute_run --/////////////////////////

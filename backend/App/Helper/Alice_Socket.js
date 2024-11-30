@@ -423,7 +423,7 @@ function openSocketConnection(channelList, userid, userSession1) {
       
         if (bulkOps.length > 0) {
           await stock_live_price.bulkWrite(bulkOps);
-          updateQueue = {}; 
+          updateQueue = {};
         }
       }, 500); 
       
