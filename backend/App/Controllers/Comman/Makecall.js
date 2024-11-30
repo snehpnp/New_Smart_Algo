@@ -821,37 +821,39 @@ class Makecall {
   //Update data above beleow range
   async UpdateDataMakeCall(req, res) {
 
+    console.log("req.body",req.body)
+
     try {
 
-      let ExstToken = []
-      for (let index = 0; index < req.body.token.length; index++) {
-        const val = req.body.token[index];
+      // let ExstToken = []
+      // for (let index = 0; index < req.body.token.length; index++) {
+      //   const val = req.body.token[index];
          
-        let exch = "NFO"
+      //   let exch = "NFO"
 
-        if (val.Segment == "C") {
-          exch = "NSE"
-        }
-        else if (val.Segment == "MO" || val.Segment == "MF") {
-          exch = "MCX"
-        }
-        else if (val.Segment == "CO" || val.Segment == "CF") {
-          exch = "CDS"
-        }
+      //   if (val.Segment == "C") {
+      //     exch = "NSE"
+      //   }
+      //   else if (val.Segment == "MO" || val.Segment == "MF") {
+      //     exch = "MCX"
+      //   }
+      //   else if (val.Segment == "CO" || val.Segment == "CF") {
+      //     exch = "CDS"
+      //   }
  
 
-        const tokenExisst = await token_chain.findOne({ _id: val.token })
+      //   const tokenExisst = await token_chain.findOne({ _id: val.token })
       
-        if (tokenExisst != null) {
+      //   if (tokenExisst != null) {
             
-        } else {
-          ExstToken.push(val.token)
-          const filter = { _id: val.token };
-          const update = { $set: { _id: val.token, exch: exch } };
-          await token_chain.updateOne(filter, update, { upsert: true });
-        }
+      //   } else {
+      //     ExstToken.push(val.token)
+      //     const filter = { _id: val.token };
+      //     const update = { $set: { _id: val.token, exch: exch } };
+      //     await token_chain.updateOne(filter, update, { upsert: true });
+      //   }
     
-      }
+      // }
 
    
 
@@ -869,9 +871,9 @@ class Makecall {
       }
 
 
-      if(ExstToken.length > 0){
-       // Alice_Socket()
-      }
+      // if(ExstToken.length > 0){
+      //   Alice_Socket()
+      // }
 
 
 
@@ -879,6 +881,7 @@ class Makecall {
 
 
     } catch (error) {
+      console.error("error",error);
       return res.send({ status: false, msg: "server Error" });
     }
 

@@ -1677,7 +1677,7 @@ const Makecall = () => {
 
                           setRefreshscreen(!refreshscreen);
                           setTimeout(() => {
-                            navigate("/subadmin/open-position")
+                            navigate("/admin/makecallpendingposition")
                             //window.location.reload()
                           }, 1500);
 
@@ -1808,7 +1808,7 @@ const Makecall = () => {
                           });
                           setRefreshscreen(!refreshscreen);
                           setTimeout(() => {
-                            navigate("/subadmin/open-position")
+                            navigate("/admin/makecallpendingposition")
                             //window.location.reload()
                           }, 1500);
 
@@ -1914,7 +1914,7 @@ const Makecall = () => {
                           });
                           setRefreshscreen(!refreshscreen);
                           setTimeout(() => {
-                            navigate("/subadmin/open-position")
+                            navigate("/admin/makecallpendingposition")
                             //window.location.reload()
                           }, 1500);
 

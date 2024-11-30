@@ -640,7 +640,7 @@ const MakeCallPendingPosition = () => {
             // alert("please input any field");
             Swal.fire({
                 text: "please Input Any Field",
-                icon: "error",
+                icon: "warning",
                 timer: 1500,
                 timerProgressBar: true
             });
@@ -725,7 +725,6 @@ const MakeCallPendingPosition = () => {
         ))
             .unwrap()
             .then((response) => {
-                console.log("DDDD", response)
                 if (response.status) {
                     setAboveBelowRangData({
                         loading: false,
