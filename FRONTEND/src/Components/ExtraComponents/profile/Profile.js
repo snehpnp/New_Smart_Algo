@@ -4,7 +4,7 @@ import Content from "../../Dashboard/Content/Content";
 import Formikform from "../Form/Formik_form1";
 import { useFormik } from "formik";
 import * as valid_err from "../../../Utils/Common_Messages";
-import { fDate } from "../../../Utils/Date_formet";
+import { fDate, fDateTime } from "../../../Utils/Date_formet";
 import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import { Reset_Password } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import toast from "react-hot-toast";
@@ -17,7 +17,6 @@ import {
 } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 
 import { GET_COMPANY_INFOS } from "../../../ReduxStore/Slice/Admin/AdminSlice";
-
 import { UPDATE_PRICE_PERMISSION } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 
 const UserProfile = () => {
@@ -38,6 +37,8 @@ const UserProfile = () => {
   const [pricePermission, setPricePermission] = useState("0");
 
   const [UserLogs, setUserLogs] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [showLogsData, setShowLogsData] = useState([]);
 
   useEffect(() => {
     data();
@@ -96,6 +97,8 @@ const UserProfile = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
+          console.log(response.Permission_Logs_data);
+          setShowLogsData(response.Permission_Logs_data);
           setPricePermission(response.data[0].price_permission);
         }
       });
@@ -508,6 +511,12 @@ const UserProfile = () => {
                         <div className="profile-personal-info pt-3">
                           <h4 className="text-primary mb-4">
                             Permission Update
+                            {/* ADD I BUUTON */}
+                            <i
+                              className="bi bi-info-circle"
+                              style={{ marginLeft: "5px" }}
+                              onClick={(e) => setShowModal(true)}
+                            ></i>
                           </h4>
 
                           <div className="row mb-2">
@@ -771,6 +780,48 @@ const UserProfile = () => {
             </Button>
           </Modal.Footer>
         </Modal>
+
+        {showModal && (
+          <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Price Permission Logs</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {showLogsData && showLogsData.length > 0 ? (
+                <div className="table-responsive">
+                  <table className="table table-bordered">
+                    <thead className="thead-light">
+                      <tr>
+                        <th style={{ color: "black" }}>ID</th>
+                        <th style={{ color: "black" }}>Status</th>
+                        <th style={{ color: "black" }}>Message</th>
+                        <th style={{ color: "black" }}>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {showLogsData.map((data, index) => (
+                        <tr key={index}>
+                          <td>{index + 1 || "N/A"}</td>
+                          <td>{data.status === 1 ? "On" : "Off"}</td>
+                          <td>{data.msg || "No Message"}</td>
+                          <td>{fDateTime(data.createdAt)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p>No logs available.</p>
+              )}
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowModal(false)}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
       </Content>
     </>
   );

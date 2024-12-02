@@ -153,7 +153,10 @@ const DetailsView = ({ showModal, setshowModal, tradeHistoryData }) => {
       dataField: "strategy",
       text: "Strategy",
     },
-
+    {
+      dataField: "price_type",
+      text: "price_type",
+    },
     {
       dataField: "createdAt",
       text: "Signals time",

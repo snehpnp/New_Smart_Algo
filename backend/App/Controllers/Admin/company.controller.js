@@ -1,5 +1,4 @@
 "use strict";
-const {connectToMongoDB} = require('../../Connection/mongo_connection');
 const db = require('../../Models');
 const mongoose = require('mongoose')
 const company_information = db.company_information
@@ -70,13 +69,16 @@ class Company {
         try {
 
             var compantInfo = await company_information.find()
+            var Permission_Logs_data = await Permission_Logs.find()
+
+
             if (!compantInfo) {
                 return res.send({ status: false, msg: 'Server issue Not find Company information.', data: [] });
             }
-            return res.send({ status: true, msg: 'Done', data: compantInfo });
+            return res.send({ status: true, msg: 'Done', data: compantInfo,Permission_Logs_data:Permission_Logs_data });
         } catch (error) {
             console.log("Error Company Information Get -", error);
-            connectToMongoDB()
+           
             return
         }
     }
@@ -94,8 +96,7 @@ class Company {
 
         } catch (error) {
             console.log("Error Company Logo Get -", error);
-            connectToMongoDB()
-            return
+          
 
         }
     }

@@ -1,6 +1,6 @@
-var axios = require('axios');
+let axios = require('axios');
 const WebSocket = require('ws');
-var CryptoJS = require("crypto-js");
+let CryptoJS = require("crypto-js");
 const db = require('../Models');
 
 const live_price = db.live_price;
@@ -26,11 +26,10 @@ const url = "wss://ws1.aliceblueonline.com/NorenWS/"
 
 
 const Alice_Socket = async () => {
-  var rr = 0;
- 
 
   let channelstradd = "";
   const uniqueTokens = new Set();
+
   //Main SignalS code
   const pipeline = [
     {
@@ -220,6 +219,7 @@ const Alice_Socket = async () => {
     }
 
   ]
+  
   const resultMakeStrategy = await UserMakeStrategy.aggregate(pipelineMakeStrategy) 
   if (resultMakeStrategy.length > 0) {
     const resultStringMakeStrategy = resultMakeStrategy.reduce((acc, { tokensymbol, exch_seg }) => {
@@ -297,33 +297,24 @@ const Alice_Socket = async () => {
   }
 
 
-  var socket = null
-  var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
+  let broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
 
   if (!broker_infor) {
     return null
   }
 
 
-  // var channelstr = ""
-  // if (updateToken.length > 0) {
-  //   updateToken.forEach((data) => {
-  //     if (data.exch != null && data._id != null) {
 
-  //       channelstr += data.exch + "|" + data._id + "#"
-  //     }
-  //   })
-  // }
   // Display fetched documents
-  var alltokenchannellist = channelstradd.substring(0, channelstradd.length - 1);
+  let alltokenchannellist = channelstradd.substring(0, channelstradd.length - 1);
 
 
-  var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
-  var userid = broker_infor.user_id
-  var userSession1 = broker_infor.access_token
-  var trading_status = broker_infor.trading_status
-  var channelList = alltokenchannellist
-  var type = { "loginType": "API" }
+  let aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
+  let userid = broker_infor.user_id
+  let userSession1 = broker_infor.access_token
+  let trading_status = broker_infor.trading_status
+  let channelList = alltokenchannellist
+  let type = { "loginType": "API" }
 
 
   if (broker_infor.user_id !== undefined && broker_infor.access_token !== undefined && broker_infor.trading_status == "on") {
@@ -359,8 +350,8 @@ const Alice_Socket = async () => {
 function openSocketConnection(channelList, userid, userSession1) {
   ws = new WebSocket(url);
   ws.onopen = function () {
-    var encrcptToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession1).toString()).toString();
-    var initCon = {
+    let encrcptToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession1).toString()).toString();
+    let initCon = {
       susertoken: encrcptToken,
       t: "c",
       actid: userid + "_" + "API",
@@ -369,7 +360,6 @@ function openSocketConnection(channelList, userid, userSession1) {
     }
     ws.send(JSON.stringify(initCon))
     sendChannelList(channelList);
-    // reconnectAttempt = 0; // Reset reconnect attempts on successful connection
   };
 
   ws.onmessage = async function (msg) {
@@ -476,7 +466,6 @@ const getSocket = () => {
 };
 
 const socketRestart = async () => {
-
   await Alice_Socket()
 };
 
@@ -538,15 +527,7 @@ async function connectToDB(collectionName, response) {
 
       const collection = dbTest.collection(collectionName);
 
-      // if (message.price != undefined && message.volume != undefined) {
-      //     const customTimestamp = new Date();
-      //     let singleDocument = {
-      //         _id: customTimestamp,
-      //         lp: parseFloat(message.price),
-      //         v: parseFloat(message.volume)
-      //     };
-      //     const insertResult = await collection.insertOne(singleDocument);
-      // }
+  
       if (response.lp != undefined && response.v != undefined) {
 
         const customTimestamp = new Date();

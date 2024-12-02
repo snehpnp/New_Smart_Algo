@@ -109,6 +109,10 @@ const SignalsSchema = Schema({
         enum: ['0', '1'], // 1 = Admin panel status , 2 = Tradinview status
         default: '0'
     },
+    price_type: {
+        type: String,
+        default: ''
+    },
     users_id: [
         {
             type: mongoose.Schema.Types.ObjectId,

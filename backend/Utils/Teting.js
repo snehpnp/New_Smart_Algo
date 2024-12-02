@@ -3336,69 +3336,7 @@ module.exports = function (app) {
 
     return;
 
-    // const cluster = require('cluster');
-    // const http = require('http');
-    // const numCPUs = require('os').cpus().length;
-
-    // // Sample data
-    // const objects = [
-    //   { id: 1, name: "Object 1" },
-    //   { id: 2, name: "Object 2" },
-    //   // Add more objects here...
-    // ];
-
-    // if (cluster.isMaster) {
-    //   // Fork workers for each CPU core
-    //   for (let i = 0; i < numCPUs; i++) {
-    //     cluster.fork();
-    //   }
-
-    //   cluster.on('exit', (worker, code, signal) => {
-    //     console.log(`Worker ${worker.process.pid} died`);
-    //   });
-
-    //   // Aggregate results from workers
-    //   const aggregatedResults = [];
-
-    //   cluster.on('message', (worker, message) => {
-    //     aggregatedResults.push(...message);
-
-    //     if (aggregatedResults.length === objects.length) {
-    //       console.log("All tasks completed:", aggregatedResults);
-    //       // Here you can process the aggregated results as needed
-    //       // For example, send them as a response to a client
-    //     }
-    //   });
-    // } else {
-    //   // This is the worker process
-    //   const workerId = cluster.worker.id;
-    //   const workerResults = [];
-
-    //   // Distribute objects among worker processes
-    //   for (let i = workerId - 1; i < objects.length; i += numCPUs) {
-    //     const obj = objects[i];
-    //     // Simulate an asynchronous task
-    //     const result = await performTaskForObject(obj);
-    //     workerResults.push(result);
-    //   }
-
-    //   // Send the worker's results back to the master process
-    //   process.send(workerResults);
-
-    //   process.exit(0);
-    // }
-
-    // // Sample function to perform a task on an object
-    // async function performTaskForObject(obj) {
-    //   // Simulate an asynchronous task
-    //   return new Promise((resolve) => {
-    //     setTimeout(() => {
-    //       console.log(`Task performed on object: ${obj.id}`);
-    //       resolve(obj);
-    //     }, 1000); // Simulating a delay of 1 second
-    //   });
-    // }
-
+   
     return res.send("okkk");
   });
 

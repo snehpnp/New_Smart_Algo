@@ -467,14 +467,7 @@ async function Cilents_service_View() {
     }
 
     const pipeline =   [
-      // {
-      //   $match: {
-      //     $or: [
-      //       { EndDate: { $gte: new Date() } }, 
-      //       { EndDate: null } 
-      //     ]
-      //   }
-      // },
+     
       {
         $lookup: {
           from: 'client_services',

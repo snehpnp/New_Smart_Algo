@@ -85,6 +85,9 @@ cron.schedule("1 1 * * *", () => {
 cron.schedule("0 */8 * * *", () => {
   UpdateCurrentTime();
 });
+cron.schedule("5 1 * * *", () => {
+  UpdateCurrentTime();
+});
 
 const UpdateCurrentTime = async () => {
   try {

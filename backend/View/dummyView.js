@@ -4026,15 +4026,7 @@ db.createView("dashboard_data", "users",
 /// Open possition
 db.createView("open_position", "mainsignals",
   [
-    {
-
-      $match: {
-        createdAt: {
-          $gte: new Date(new Date().setHours(00, 00, 00)),
-          $lt: new Date(new Date().setHours(23, 59, 59))
-        }
-      }
-    },
+ 
 
     {
       $addFields: {
@@ -4050,8 +4042,6 @@ db.createView("open_position", "mainsignals",
             },
             then: 0,
             else: {
-
-              //$add: [{ $toDouble: '$target' }, { $toDouble: '$entry_price' }]
               $add: [{ $toDouble: '$target' }]
 
             },
@@ -4063,14 +4053,11 @@ db.createView("open_position", "mainsignals",
               $or: [
                 { $eq: ['$stop_loss', 0] },
                 { $eq: ['$stop_loss', "0"] },
-                { $eq: ['$stop_loss', '0'] }, // Check if stop_loss is the string "0"
+                { $eq: ['$stop_loss', '0'] }, 
               ],
             },
             then: 0,
             else: {
-
-              // $subtract: [{ $toDouble: '$entry_price' }, { $toDouble: '$stop_loss' }]
-
               $add: [{ $toDouble: '$stop_loss' }]
 
             },
@@ -4086,8 +4073,8 @@ db.createView("open_position", "mainsignals",
                   $or: [
                     { $eq: ['$exit_qty_percent', 0] },
                     { $eq: ['$exit_qty_percent', "0"] },
-                    { $eq: ['$exit_qty_percent', '0'] }, // Check if stop_loss is the string "0"
-                    { $eq: ['$exit_qty_percent', ''] }, // Check if stop_loss is the string "0"
+                    { $eq: ['$exit_qty_percent', '0'] },
+                    { $eq: ['$exit_qty_percent', ''] }, 
 
                   ],
                 },
@@ -4120,8 +4107,8 @@ db.createView("open_position", "mainsignals",
                 { $eq: ['$livePrice.trading_status', 'on'] },
                 {
                   $gt: [
-                    { $toDouble: '$entry_qty' }, // Convert entry_qty to number
-                    { $toDouble: '$exit_qty' },  // Convert exit_qty to number
+                    { $toDouble: '$entry_qty' }, 
+                    { $toDouble: '$exit_qty' },  
                   ]
                 }
               ],
@@ -4263,14 +4250,32 @@ db.createView("open_position", "mainsignals",
       }
     },
 
-    {
-      $lookup: {
-        from: 'companies',
-        let: {},
-        pipeline: [],
-        as: 'companyData'
-      }
-    },
+    
+      {
+        $lookup: {
+          from: 'companies',
+          let: {},
+          pipeline: [], 
+          as: 'companyData'
+        }
+      },
+      {
+        $addFields: {
+          companyDate: {
+            $arrayElemAt: ['$companyData.current_date', 0] 
+          }
+        }
+      },
+      {
+        $match: {
+          $expr: {
+            $and: [
+              { $gte: ['$createdAt', { $dateFromString: { dateString: { $substr: ['$companyDate', 0, 10] } } }] }, 
+              { $lt: ['$createdAt', { $dateAdd: { startDate: { $dateFromString: { dateString: { $substr: ['$companyDate', 0, 10] } } }, unit: 'day', amount: 1 } }] } 
+            ]
+          }
+        }
+      },
     {
       $project: {
         _id: 1,
