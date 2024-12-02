@@ -14,8 +14,6 @@ const db1 = require("./App/Models/index");
 
 const { setIO, getIO } = require("./App/Helper/BackendSocketIo");
 
-
-
 const corsOpts = {
   origin: "*",
   methods: ["GET", "POST"],
@@ -38,9 +36,6 @@ const server = http.createServer(app);
 require("./App/Cron/cron");
 require("./App/Routes")(app);
 require("./Utils/request")(app);
-
-
-
 
 // const io = socketIo(server, {
 //   cors: {
@@ -68,13 +63,18 @@ require("./Utils/request")(app);
 //   .catch((error) => {});
 
 
-
 app.get("/pp", (req, res) => {
   io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: "okkkk" });
   res.send("DONE");
 });
 
 
+const { Alice_Socket } = require("./App/Helper/Alice_Socket");
+
+app.get("/restart/socket", (req, res) => {
+  Alice_Socket();
+  res.send("DONE");
+});
 
 // Server start
 server.listen(process.env.PORT, () => {

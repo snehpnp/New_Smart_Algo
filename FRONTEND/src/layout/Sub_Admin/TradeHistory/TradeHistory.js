@@ -38,9 +38,9 @@ import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.m
 
 const paginationOptions = {
   custom: true,
-  totalSize: 0, // This will be updated dynamically
-  sizePerPage: 10, // Default number of items per page
-  page: 1, // Starting page
+  totalSize: 0, 
+  sizePerPage: 10, 
+  page: 1, 
 };
 
 const TradeHistory = () => {
@@ -133,11 +133,11 @@ const TradeHistory = () => {
     getSizePerPage,
     SelectOpenClose,
   ]);
-
   useEffect(() => {
     setSizePerPage(10);
     setPage(1);
-  }, [StrategyClientStatus]);
+  }, [StrategyClientStatus,SelectOpenClose,SelectServiceIndex,SelectService]);
+
 
   useEffect(() => {
     GetAllStrategyName();
@@ -937,10 +937,8 @@ const TradeHistory = () => {
           "Entry Time": item.entry_dt_date,
           "Exit Time": item.exit_dt_date,
           Exchange: item.exchange,
-          Strategy: item.strategy,
-          "Released-P/L": $(".show_rpl_" + item.token).html(),
-          "Unreleased-P/L": $(".UPL_" + item.token),
-          "Total-PL": $(".TPL_" + item.token),
+          Strategy: item.strategy,      
+          "Total-PL": $(".TPL_" + item.token)
         });
       });
 

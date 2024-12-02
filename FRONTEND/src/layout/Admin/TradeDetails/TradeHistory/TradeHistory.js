@@ -137,26 +137,14 @@ const TradeHistory = () => {
   useEffect(() => {
     setSizePerPage(10);
     setPage(1);
-  }, [StrategyClientStatus]);
+  }, [StrategyClientStatus,SelectOpenClose,SelectServiceIndex,SelectService]);
 
   useEffect(() => {
     GetAllStrategyName();
     Admin_Trading_data();
   }, []);
 
-  useEffect(() => {
-    if (selector && selector.permission) {
-      if (
-        selector.permission &&
-        selector.permission.data &&
-        selector.permission.data[0]
-      ) {
-        if (selector.permission.data[0].live_price == 0) {
-          columns = columns.filter((data) => data.dataField !== "live");
-        }
-      }
-    }
-  }, [selector]);
+
 
   const Get_Tradehisotry_Calculations = async (e) => {
     let abc = new Date();
@@ -957,8 +945,9 @@ const TradeHistory = () => {
   const forCSVdata = () => {
     let csvArr = [];
     if (tradeHistoryData.data.length > 0) {
-      tradeHistoryData.data.map((item) => {
+      tradeHistoryData.data.map((item,index) => {
         return csvArr.push({
+          id:index+1,
           symbol: item.trade_symbol,
           EntryType: item.entry_type ? item.entry_type : "-",
           ExitType: item.exit_type ? item.exit_type : "-",
@@ -970,9 +959,7 @@ const TradeHistory = () => {
           "Exit Time": item.exit_dt_date,
           Exchange: item.exchange,
           Strategy: item.strategy,
-          "Released-P/L": $(".show_rpl_" + item.token).html(),
-          "Unreleased-P/L": $(".UPL_" + item.token),
-          "Total-PL": $(".TPL_" + item.token),
+        
         });
       });
 
@@ -1057,6 +1044,22 @@ const TradeHistory = () => {
       columns = columns.filter((data) => !selectedOptions.includes(data.text));
     }
   }, [selectedOptions]);
+
+  useEffect(() => {
+    if (selector && selector.permission) {
+      if (
+        selector.permission &&
+        selector.permission.data &&
+        selector.permission.data[0]
+      ) {
+        if (selector.permission.data[0].live_price == 0) {
+          columns = columns.filter((data) => data.dataField !== "live");
+        }
+      }
+    }
+  }, [selector]);
+
+
 
   return (
     <>
@@ -1263,7 +1266,7 @@ const TradeHistory = () => {
             </div>
           </div>
 
-          <div className="col-lg-2 px-1">
+          {/* <div className="col-lg-2 px-1">
             <div className="mb-3">
               <label className="col-lg-12">Select Option</label>
 
@@ -1294,7 +1297,7 @@ const TradeHistory = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="col-lg-2  px-1">
             <div className="mb-3">
@@ -1333,7 +1336,7 @@ const TradeHistory = () => {
                 <BootstrapTable
                   keyField="_id"
                   data={tradeHistoryData.data}
-                  columns={columns && columns}
+                  columns={columns }
                   remote
                   onTableChange={handleTableChange}
                   {...paginationTableProps}

@@ -33,6 +33,8 @@ const AllClients = () => {
     });
   }, []);
 
+  var headerName = "All Clients";
+
   const navigate = useNavigate();
   const location = useLocation();
   var dashboard_filter = location.search.split("=")[1];
@@ -75,10 +77,28 @@ const AllClients = () => {
         : originalData;
 
     setAllClients({
-      loading: Ddata.length > 0 ? false : true,
+      loading:false,
       data: Ddata,
     });
   }, [searchInput, originalData, PanelStatus, ClientStatus, selectBroker]);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await Brokerdata();
+        await data();
+      } catch (error) {
+        return;
+      }
+    };
+
+    fetchData();
+  }, [refresh]);
+
+  useEffect(() => {
+    forCSVdata();
+  }, [getAllClients.data]);
 
   const Brokerdata = async () => {
     await dispatch(
@@ -118,7 +138,6 @@ const AllClients = () => {
     }
   };
 
-  var headerName = "All Clients";
 
   if (dashboard_filter !== undefined) {
     if (dashboard_filter === "000") {
@@ -235,13 +254,13 @@ const AllClients = () => {
                 }
               });
             setAllClients({
-              loading: abc.length > 0 ? false : true,
+              loading: false ,
               data: abc,
             });
             return;
           }
           setAllClients({
-            loading: response.data.length > 0 ? false : true,
+            loading:  false ,
             data: response.data,
           });
         } else {
@@ -255,22 +274,7 @@ const AllClients = () => {
       });
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await Brokerdata();
-        await data();
-      } catch (error) {
-        return;
-      }
-    };
 
-    fetchData();
-  }, [refresh]);
-
-  useEffect(() => {
-    forCSVdata();
-  }, [getAllClients.data]);
 
   const goToDashboard = async (row, asyncid, email) => {
     if (row.AppLoginStatus == "1" || row.WebLoginStatus == "1") {
@@ -434,22 +438,7 @@ const AllClients = () => {
             ></div>
           </label>
 
-          {/* {row.StartDate == null && row.EndDate == null ?
-            ''
-            :
-            <label className="toggle mt-3">
-              <input
-                className="toggle-checkbox bg-primary"
-                type="checkbox"
-                checked={row.ActiveStatus === "1" ? true : false}
-                onChange={(e) => {
-                  activeUser(e, row);
-                }}
-              />
-              <div className={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
-            </label>
-
-          } */}
+        
         </>
       ),
     },
@@ -622,7 +611,7 @@ const AllClients = () => {
     setSelectBroker("null");
     setPanelStatus("2");
     setAllClients({
-      loading: originalData.length > 0 ? false : true,
+      loading:  false ,
       data: originalData,
     });
   };
