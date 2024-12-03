@@ -78,7 +78,7 @@ const Alice_Socket = async () => {
         })
         .then((res) => {
           if (res.data.stat == "Ok") {
-            console.log("Alice Socket Connected"+ new Date());
+            console.log("Alice Socket Connected ", new Date());
 
             try {
               const ws = new WebSocket(url);
@@ -148,44 +148,45 @@ const Alice_Socket = async () => {
               };
 
               ws.onclose = async function () {
-                console.log("WebSocket is closed. Reconnect will be attempted in 1 second.", new Date());
-                const indiaTimezoneOffset = 330;
-                const currentTimeInMinutes =
-                  new Date().getUTCHours() * 60 +
-                  new Date().getUTCMinutes() +
-                  indiaTimezoneOffset;
-
-                const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
-                const currentMinute = currentTimeInMinutes % 60;
-
-                if (
-                  currentHour >= 9 &&
-                  currentMinute >= 15 &&
-                  currentHour <= 15 &&
-                  currentMinute <= 30
-                ) {
+                console.log(
+                  "WebSocket is closed. Reconnect will be attempted in 1 second.", new Date());
+              
+                const isTimeInRange = (hourStart, minuteStart, hourEnd, minuteEnd) => {
+                  const indiaTimezoneOffset = 330;
+                  const currentTimeInMinutes =
+                    new Date().getUTCHours() * 60 +
+                    new Date().getUTCMinutes() +
+                    indiaTimezoneOffset;
+              
+                  const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
+                  const currentMinute = currentTimeInMinutes % 60;
+              
+                  const startMinutes = hourStart * 60 + minuteStart;
+                  const endMinutes = hourEnd * 60 + minuteEnd;
+                  const currentMinutes = currentHour * 60 + currentMinute;
+              
+                  return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
+                };
+              
+                if (isTimeInRange(9, 15, 15, 30)) {
                   const result = checkExchangeSegment(channelList, "NFO");
-                  if (result == true) {
+                  if (result === true) {
                     await socketRestart();
                     return;
                   }
                 }
-
-                if (
-                  currentHour >= 9 &&
-                  currentMinute >= 15 &&
-                  currentHour <= 23 &&
-                  currentMinute <= 30
-                ) {
+              
+                if (isTimeInRange(9, 15, 23, 30)) {
                   const result = checkExchangeSegment(channelList, "MCX");
-                  if (result == true) {
+                  if (result === true) {
                     await socketRestart();
                     return;
                   }
                 }
               };
+              
             } catch (error) {
-              console.log("Error Shocket"+new Date()+ error);
+              console.log("Error Shocket",new Date()+ error);
               socketRestart();
             }
           }
