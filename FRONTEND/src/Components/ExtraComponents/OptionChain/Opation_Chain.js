@@ -568,12 +568,20 @@ const HelpCenter = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-          set_All_Symbols({
-            loading: false,
-            data: response.data,
+
+        // SORT NIFTY BANKNIFTY FINNIFTY ON THE TOP
+          let SortIndexWise = response.data.sort((a, b) => {
+            return a.symbol === "NIFTY" ? -1 : a.symbol === "BANKNIFTY" ? -1 : a.symbol === "FINNIFTY" ? -1 : a.symbol === "SENSEX" ? -1 : 1;
+
           });
 
-          const filteredSelectedData = response.data
+     
+          set_All_Symbols({
+            loading: false,
+            data: SortIndexWise,
+          });
+
+          const filteredSelectedData = SortIndexWise
             .filter((item) => item.token === "1")
             .map((item) => item.symbol);
 
@@ -908,6 +916,7 @@ const HelpCenter = () => {
                   <option value="">Select Stock Name</option>
                   {All_Symbols.data &&
                     All_Symbols.data.map((item) => {
+
                       return (
                         <option value={item.symbol} name={item.price}>
                           {item.symbol}
