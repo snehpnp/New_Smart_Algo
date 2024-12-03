@@ -4022,7 +4022,6 @@ db.createView("dashboard_data", "users",
   ]
 )
 
-
 /// Open possition
 db.createView("open_position", "mainsignals",
   [
