@@ -467,7 +467,14 @@ async function Cilents_service_View() {
     }
 
     const pipeline =   [
-     
+      {
+        $match: {
+          $and: [
+            { Role: "USER", Is_Active: "1" ,EndDate  : { $gte: new Date() } }
+          ]
+        }  
+  
+      },
       {
         $lookup: {
           from: 'client_services',
