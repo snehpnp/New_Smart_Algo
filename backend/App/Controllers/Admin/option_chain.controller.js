@@ -19,24 +19,58 @@ class OptionChain {
     async Get_Option_Symbol(req, res) {
         try {
 
-            // var symbols = await Get_Option_Chain_modal.find().select('symbol token price').sort({ symbol: 1 });
+            const validSymbols = [
+                "NIFTY_50","NIFTY_BANK","NIFTY_FIN_SERVICE","SENSEX",
+                "ADANIENT", "MCX", "LTIM", "SBIN", "GRASIM", "PNB", "RBLBANK", "GRANULES",
+                "NIFTYNXT50", "PAGEIND", "TATACONSUM", "HEROMOTOCO", "CIPLA", "DIVISLAB",
+                "HINDPETRO", "IGL", "011NSETEST", "041NSETEST", "VEDL", "ULTRACEMCO",
+                "HINDCOPPER", "FINNIFTY", "021NSETEST", "SUNPHARMA", "GMRINFRA", "PFC",
+                "BOSCHLTD", "RECLTD", "INDIAMART", "NIFTY", "BAJAJFINSV", "031NSETEST",
+                "071NSETEST", "MARUTI", "TVSMOTOR", "IDFC", "VOLTAS", "ASHOKLEY", "131NSETEST",
+                "EXIDEIND", "HDFCAMC", "GLENMARK", "MIDCPNIFTY", "ALKEM", "BANKBARODA",
+                "181NSETEST", "METROPOLIS", "BHARATFORG", "TCS", "COLPAL", "BAJFINANCE",
+                "PETRONET", "HDFCBANK", "CHOLAFIN", "SHRIRAMFIN", "POLYCAB", "ASTRAL",
+                "MANAPPURAM", "BHARTIARTL", "ABB", "TATAPOWER", "POWERGRID", "HDFCLIFE",
+                "UNITDSPR", "PIIND", "IDEA", "NAVINFLUOR", "GNFC", "INDHOTEL", "171NSETEST",
+                "101NSETEST", "HAVELLS", "PERSISTENT", "SBILIFE", "BALKRISIND", "IEX", "OFSS",
+                "PIDILITIND", "INFY", "WIPRO", "LALPATHLAB", "NESTLEIND", "SYNGENE", "DABUR",
+                "ASIANPAINT", "ZYDUSLIFE", "FEDERALBNK", "MOTHERSON", "LT", "BPCL", "161NSETEST",
+                "SRF", "BAJAJ-AUTO", "ITC", "121NSETEST", "NAUKRI", "081NSETEST", "141NSETEST",
+                "GODREJPROP", "CROMPTON", "BRITANNIA", "IOC", "SIEMENS", "NATIONALUM", "CHAMBLFERT",
+                "BHEL", "MFSL", "MRF", "MUTHOOTFIN", "LTTS", "IDFCFIRSTB", "M&MFIN", "NMDC",
+                "DEEPAKNTR", "COROMANDEL", "BEL", "KOTAKBANK", "CONCOR", "APOLLOHOSP", "HAL",
+                "IRCTC", "BERGEPAINT", "ABBOTINDIA", "CUMMINSIND", "TATACOMM", "AMBUJACEM",
+                "HINDUNILVR", "BIOCON", "ICICIBANK", "TRENT", "LAURUSLABS", "HCLTECH", "GUJGASLTD",
+                "PVRINOX", "ONGC", "TECHM", "MARICO", "BANDHANBNK", "JINDALSTEL", "ICICIPRULI",
+                "SHREECEM", "JSWSTEEL", "BATAINDIA", "GAIL", "ADANIPORTS", "DIXON", "UBL", "TATACHEM",
+                "NTPC", "AXISBANK", "CUB", "ESCORTS", "COFORGE", "111NSETEST", "AARTIIND", "APOLLOTYRE",
+                "RAMCOCEM", "MGL", "UPL", "LTF", "TATAMOTORS", "LICHSGFIN", "COALINDIA", "EICHERMOT",
+                "IPCALAB", "BANKNIFTY", "HINDALCO", "OBEROIRLTY", "LUPIN", "ICICIGI", "SAIL",
+                "CANFINHOME", "TITAN", "SBICARD", "INDUSTOWER", "ABFRL", "INDUSINDBK", "TORNTPHARM",
+                "CANBK", "DLF", "ATUL", "JUBLFOOD", "INDIGO", "RELIANCE", "SUNTV", "PEL", "GODREJCP",
+                "TATASTEEL", "AUBANK", "JKCEMENT", "061NSETEST", "ACC", "091NSETEST", "M&M", "BSOFT",
+                "051NSETEST", "151NSETEST", "DRREDDY", "AUROPHARMA", "ABCAPITAL", "DALBHARAT", "MPHASIS"
+                
+            ];
+    
 
-            var symbols1 = await Get_Option_Chain_modal.find({ symbol: { $in: ["NIFTY", "BANKNIFTY", "FINNIFTY"] } })
+            var symbols1 = await Get_Option_Chain_modal.find({ symbol: { $in:validSymbols } })
                 .select('symbol token price')
                 .sort({ symbol: 1 });
 
-            var otherSymbols = await Get_Option_Chain_modal.find({ symbol: { $nin: ["NIFTY", "BANKNIFTY", "FINNIFTY"] } })
-                .select('symbol token price');
+       
+
+            // Filter a symbols1 array and set op Nifty banknifty finnifty and senxex on top in tha array 
 
 
-            var symbols = symbols1.concat(otherSymbols);
 
 
-            if (!symbols) {
+
+            if (!symbols1) {
                 return res.send({ status: false, msg: 'Server issue Not find .', data: [] });
             }
 
-            return res.send({ status: true, msg: 'Done', data: symbols });
+            return res.send({ status: true, msg: 'Done', data: symbols1 });
 
         } catch (error) {
             console.log("Error Get Option symbol-", error);
@@ -62,11 +96,18 @@ class OptionChain {
 
             const formattedDate = previousDate.toISOString();
 
+            var match = { symbol: symbol, segment: "O"} 
+
+            if(symbol == "SENSEX"){
+                match = { symbol: symbol, segment: "BO"} 
+            }
+
 
             const pipeline = [
                 {
-                    $match: { symbol: symbol }
+                    $match: match
                 },
+                
                 {
                     $group: {
                         _id: "$symbol",
@@ -109,6 +150,7 @@ class OptionChain {
 
             const result = await Alice_token.aggregate(pipeline);
 
+          
             if (result.length === 0) {
                 return res.json({ status: false, msg: 'Symbol not found.', data: [] });
             }
@@ -340,20 +382,27 @@ class OptionChain {
 
             // ]);
 
-            var GetTrade = await MainSignals_modal.aggregate([
+            // Get the start and end of the current day (ignoring time)
+const currentDate = new Date();
+const startOfDay = new Date(currentDate.setHours(0, 0, 0, 0)); // Midnight of the current day
+const endOfDay = new Date(currentDate.setHours(23, 59, 59, 999)); // End of the current day (11:59:59.999 PM)
 
-                {
-                    $match: {
-                        $expr: {
-                            $and: [
-                                { $gt: [{ $toInt: "$entry_qty" }, { $toInt: "$exit_qty" }] },
-                                { $eq: ["$dt_date", formattedDate] }
-                            ]
-                        }
-                    }
-                }
+var GetTrade = await MainSignals_modal.aggregate([
+    {
+        $match: {
+            $expr: {
+                $and: [
+                    { $gt: [{ $toInt: "$entry_qty" }, { $toInt: "$exit_qty" }] },
+                    // { $eq: ["$dt_date", formattedDate] },
+                    // Match records where createdAt is within the current day
+                    { $gte: ["$createdAt", startOfDay] },
+                    { $lte: ["$createdAt", endOfDay] }
+                ]
+            }
+        }
+    }
+]);
 
-            ]);
 
 
 
@@ -601,7 +650,7 @@ class OptionChain {
                     const result = await token_chain_collection.bulkWrite(bulkOps);
                  
                 } catch (error) {
-                    console.error("Error updating tokens:", error);
+                    console.log("Error updating tokens:", error);
                 }
             }
 

@@ -152,10 +152,7 @@ class Panel {
         })
         .catch((err) => {
           if (err.keyValue) {
-            logger.error("Key duplicate", {
-              role: "SUPERADMIN",
-              user_id: parent_id,
-            });
+           
             return res
               .status(409)
               .send({
@@ -166,7 +163,7 @@ class Panel {
           }
         });
     } catch (error) {
-      logger.error("Server Error", { role: "SUPERADMIN", user_id: parent_id });
+      
     }
   }
 
@@ -600,14 +597,14 @@ class Panel {
             .status(409)
             .send({ status: false, msg: "Company not update", data: [] });
         }
-        // logger.info('Update Successfully', { role: "SUPERADMIN", user_id: parent_id });
+       
         return res
           .status(200)
           .send({ status: true, msg: "Update Successfully.", data: result });
       });
     } catch (error) {
       console.log("Error APi Info error-", error);
-      // logger.error('Server Error', { role: "SUPERADMIN", user_id: parent_id });
+     
     }
   }
 

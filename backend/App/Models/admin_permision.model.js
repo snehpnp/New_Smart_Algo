@@ -17,6 +17,7 @@ const Admin_Permission_Schema = new mongoose.Schema({
         enum: [0, 1],
         default: 0
     },
+    
 
     user_id: {
         type: mongoose.Schema.Types.ObjectId,

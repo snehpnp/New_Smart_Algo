@@ -2,7 +2,6 @@
 const db = require('../../Models');
 const mongoose = require('mongoose');
 const { format } = require('date-fns');
-// const MongoClient = require('mongodb').MongoClient;
 const axios = require('axios');
 const ObjectId = mongoose.Types.ObjectId;
 const timeFrame = db.timeFrame
@@ -19,22 +18,10 @@ const dbTradeTools = db.dbTest;
 const dbTest = db.dbTest;
 
 
-
-
-
-const { Alice_Socket, getSocket, updateChannelAndSend } = require('../../Helper/Alice_Socket');
-
-const { Socket_data } = require('../../Helper/Socket_data');
-
+const {  updateChannelAndSend } = require('../../Helper/Alice_Socket');
 const { getIO } = require('../../Helper/BackendSocketIo');
 
 
-// const uri = process.env.MONGO_URI
-// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-// const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
-// const db_GET_VIEW = client.db(process.env.DB_NAME);
-// const get_open_position_view = db_GET_VIEW.collection('open_position');
-// const token_chain = db_GET_VIEW.collection('token_chain');
 
 class MakeStartegy {
 
@@ -1254,7 +1241,7 @@ async function run() {
                   const io = await getIO();
                   io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: tradeSymbol });
 
-                  console.log("response Trade Excuted - ", response.data)
+                  // console.log("response Trade Excuted - ", response.data)
 
                 })
                 .catch((error) => {

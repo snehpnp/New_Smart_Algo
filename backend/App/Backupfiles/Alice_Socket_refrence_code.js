@@ -29,7 +29,7 @@ function openSocketConnection() {
 
     ws.on('message', async function incoming(msg) {
         const response = JSON.parse(msg);
-        console.log("Message received from server:", response);
+     
 
         if (response.s === 'OK') {
             console.log("Connection acknowledged by server");
@@ -37,12 +37,11 @@ function openSocketConnection() {
     });
 
     ws.on('close', function close() {
-        console.log("WebSocket closed");
-        // Handle reconnection logic if needed
+     
     });
 
     ws.on('error', function error(error) {
-        console.error("WebSocket error:", error);
+        console.log("WebSocket error:", error);
     });
 }
 
@@ -54,7 +53,7 @@ function sendChannelList() {
             t: 't'
         };
         ws.send(JSON.stringify(json));  // Send channel list to server
-        // console.log("Channel list sent:", channelList);
+     
     } else {
         console.log("WebSocket is not open. Cannot send channel list.");
     }
@@ -63,7 +62,7 @@ function sendChannelList() {
 // Function to dynamically update the channelList and send it
 function updateChannelAndSend(newChannel) {
     channelList += newChannel;  // Add the new channel to the existing list
-    console.log("Updated channelList:", channelList);
+   
     sendChannelList();  // Send updated channel list
 }
 

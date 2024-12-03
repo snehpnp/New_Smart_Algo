@@ -3,7 +3,7 @@ import Content from "../../../../Components/Dashboard/Content/Content";
 import Loader from "../../../../Utils/Loader";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
-import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
+import FullDataTable from "../../../../Components/ExtraComponents/Datatable/ClientDataTable";
 import {
   GET_ALL_CLIENTS,
   GO_TO_DASHBOARDS,
@@ -32,6 +32,8 @@ const AllClients = () => {
       setIp(response.data.ip);
     });
   }, []);
+
+  var headerName = "All Clients";
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -66,17 +68,37 @@ const AllClients = () => {
 
       return filter1Match && filter3Match && filter2Match && searchTermMatch;
     });
+    var Ddata =
+      searchInput ||
+      PanelStatus !== "2" ||
+      ClientStatus !== "null" ||
+      selectBroker !== "null"
+        ? filteredData
+        : originalData;
+
     setAllClients({
-      loading: false,
-      data:
-        searchInput ||
-        PanelStatus !== "2" ||
-        ClientStatus !== "null" ||
-        selectBroker !== "null"
-          ? filteredData
-          : originalData,
+      loading:false,
+      data: Ddata,
     });
   }, [searchInput, originalData, PanelStatus, ClientStatus, selectBroker]);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await Brokerdata();
+        await data();
+      } catch (error) {
+        return;
+      }
+    };
+
+    fetchData();
+  }, [refresh]);
+
+  useEffect(() => {
+    forCSVdata();
+  }, [getAllClients.data]);
 
   const Brokerdata = async () => {
     await dispatch(
@@ -116,7 +138,6 @@ const AllClients = () => {
     }
   };
 
-  var headerName = "All Clients";
 
   if (dashboard_filter !== undefined) {
     if (dashboard_filter === "000") {
@@ -173,8 +194,8 @@ const AllClients = () => {
 
                 if (dashboard_filter === "2" || dashboard_filter === 2) {
                   return (
-                    item.license_type == dashboard_filter && 
-                    item.Is_Active == "1" 
+                    item.license_type == dashboard_filter &&
+                    item.Is_Active == "1"
                   );
                 }
                 if (dashboard_filter === "21" || dashboard_filter === 21) {
@@ -233,13 +254,13 @@ const AllClients = () => {
                 }
               });
             setAllClients({
-              loading: false,
+              loading: false ,
               data: abc,
             });
             return;
           }
           setAllClients({
-            loading: false,
+            loading:  false ,
             data: response.data,
           });
         } else {
@@ -253,22 +274,7 @@ const AllClients = () => {
       });
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await Brokerdata();
-        await data();
-      } catch (error) {
-        return;
-      }
-    };
 
-    fetchData();
-  }, [refresh]);
-
-  useEffect(() => {
-    forCSVdata();
-  }, [getAllClients.data]);
 
   const goToDashboard = async (row, asyncid, email) => {
     if (row.AppLoginStatus == "1" || row.WebLoginStatus == "1") {
@@ -348,11 +354,8 @@ const AllClients = () => {
         .then((response) => {
           if (response.status) {
             setIsStarred(newStarStatus ? "1" : "0");
-            setrefresh(!refresh);
-            // toast.success(response.msg);
-          } else {
-            // toast.error(response.msg);
-          }
+            setrefresh(!refresh);  
+          } 
         });
     };
 
@@ -387,7 +390,6 @@ const AllClients = () => {
     {
       dataField: "UserName",
       text: "User Name",
-   
     },
     {
       dataField: "Email",
@@ -436,22 +438,7 @@ const AllClients = () => {
             ></div>
           </label>
 
-          {/* {row.StartDate == null && row.EndDate == null ?
-            ''
-            :
-            <label className="toggle mt-3">
-              <input
-                className="toggle-checkbox bg-primary"
-                type="checkbox"
-                checked={row.ActiveStatus === "1" ? true : false}
-                onChange={(e) => {
-                  activeUser(e, row);
-                }}
-              />
-              <div className={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
-            </label>
-
-          } */}
+        
         </>
       ),
     },
@@ -624,7 +611,7 @@ const AllClients = () => {
     setSelectBroker("null");
     setPanelStatus("2");
     setAllClients({
-      loading: false,
+      loading:  false ,
       data: originalData,
     });
   };
@@ -793,14 +780,7 @@ const AllClients = () => {
             </div>
           </div>
 
-          {!getAllClients.loading ? (
-            <FullDataTable
-              TableColumns={columns}
-              tableData={getAllClients.data}
-            />
-          ) : (
-            <Loader />
-          )}
+          <FullDataTable TableColumns={columns} tableData={getAllClients} />
 
           <ToastButton />
         </Content>

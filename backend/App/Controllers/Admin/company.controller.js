@@ -1,14 +1,12 @@
 "use strict";
-const {connectToMongoDB} = require('../../Connection/mongo_connection');
 const db = require('../../Models');
 const mongoose = require('mongoose')
 const company_information = db.company_information
 const { formattedDateTime } = require('../../Helper/time.helper')
 const ObjectId = mongoose.Types.ObjectId;
-
+const Permission_Logs = db.Permission_Logs;
 class Company {
 
-    // EDIT COMPANY INFORMATION
     async EditCompany(req, res) {
         try {
             var companydata = req.body.data
@@ -34,7 +32,6 @@ class Company {
         }
     }
 
-    // update company
     async UpdateDisclaimer(req, res) {
         try {
             const { id, disclaimer, dataArr, disclaimer_status } = req.body;
@@ -67,25 +64,25 @@ class Company {
             return res.status(500).send({ status: false, msg: 'Server Error', data: [] });
         }
     }
-    
 
-    // GET COMPANY DETALIS
     async GetCompanyInfo(req, res) {
         try {
 
             var compantInfo = await company_information.find()
+            var Permission_Logs_data = await Permission_Logs.find()
+
+
             if (!compantInfo) {
                 return res.send({ status: false, msg: 'Server issue Not find Company information.', data: [] });
             }
-            return res.send({ status: true, msg: 'Done', data: compantInfo });
+            return res.send({ status: true, msg: 'Done', data: compantInfo,Permission_Logs_data:Permission_Logs_data });
         } catch (error) {
             console.log("Error Company Information Get -", error);
-            connectToMongoDB()
+           
             return
         }
     }
 
-    // GET COMPANY DETALIS
     async GetCompany_logo(req, res) {
         try {
 
@@ -99,13 +96,11 @@ class Company {
 
         } catch (error) {
             console.log("Error Company Logo Get -", error);
-            connectToMongoDB()
-            return
+          
 
         }
     }
 
-    // EDIT COMPANY Email INFORMATION
     async EditEmailInfo(req, res) {
 
         try {
@@ -134,6 +129,46 @@ class Company {
             console.log("Error Edit Email Information-", error);
         }
     }
+
+    async UpdatePricePermission(req, res) {
+        try {
+            const Status = req.body.status;
+    
+            const Match = await company_information.findOne().select('price_permission');
+    
+            if (!Match) {
+                return res.send({ status: false, msg: 'Server issue: Company information not found.', data: [] });
+            }
+    
+            if (Match.price_permission == Status) {
+                
+               
+                return res.send({ status: false, msg: 'Price Permission is already set to the desired status.', data: [] });
+            }
+    
+            const filter = { _id: Match._id };
+            const updateOperation = { $set: { price_permission: Status } };
+            const result = await company_information.updateOne(filter, updateOperation);
+    
+            var permission_logs = new Permission_Logs({
+                status: Status,
+                msg: 'Price Permission ' + (Status == 1 ? "on" : "off") + ' updated',
+            });
+            await permission_logs.save();
+    
+            if (result.nModified === 0) {
+                return res.send({ status: false, msg: 'Company not updated', data: [] });
+            }
+    
+    
+            return res.send({ status: true, msg: 'Update Successfully.', data: [] });
+    
+        } catch (error) {
+            console.log("Error Update Price Permission -", error);
+            return res.send({ status: false, msg: 'Something went wrong. Please try again.', data: [] });
+        }
+    }
+    
 
 }
 

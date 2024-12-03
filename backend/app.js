@@ -1,9 +1,6 @@
 "use strict";
 require("dotenv").config();
-// const mongoConnection = require('./App/Connection/mongo_connection')
 const { connectToMongoDB } = require("./App/Connection/mongo_connection");
-
-const { MongoClient, ObjectId } = require("mongodb");
 const express = require("express");
 const app = express();
 
@@ -13,11 +10,9 @@ const https = require("https");
 const socketIo = require("socket.io");
 const cors = require("cors");
 const bodyparser = require("body-parser");
-const { Client } = require("ssh2");
 const db1 = require("./App/Models/index");
-const TttModal = db1.tttModal;
-const dbTest = db1.dbTest;
 
+const { setIO, getIO } = require("./App/Helper/BackendSocketIo");
 
 const corsOpts = {
   origin: "*",
@@ -29,102 +24,56 @@ const corsOpts = {
     "authorization",
   ],
 };
-app.use(cors(corsOpts));
 
+app.use(cors(corsOpts));
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json({ limit: "10mb", extended: true }));
-
 app.use(bodyparser.json());
-const server = http.createServer(app);
 app.use(express.json());
 
-// REQUIRE File
+const server = http.createServer(app);
+
 require("./App/Cron/cron");
-// require("./App/Cron/cron_ss");
-// Routes all
 require("./App/Routes")(app);
-// EMERGANCY
-require("./request")(app);
+require("./Utils/request")(app);
 
-// require("./Teting")(app);
+// const io = socketIo(server, {
+//   cors: {
+//     origin: "*",
+//     credentials: true,
+//   },
+// });
 
-//require("./redisSocketConnect")(app)
+// io.on("connection", (socket) => {
+//   socket.on("help_from_client", (data) => {
+//     socket.broadcast.emit("test_msg_Response", data);
+//   });
 
-// Connect Local backend Socket
-const { setIO, getIO } = require("./App/Helper/BackendSocketIo");
+//   socket.on("logout_user_from_other_device_req", (data111) => {
+//     socket.broadcast.emit("logout_user_from_other_device_res", data111);
+//   });
+// });
 
+// setIO(io)
+//   .then(() => {
+//     getIO()
+//       .then((ioObject) => {})
+//       .catch((error) => {});
+//   })
+//   .catch((error) => {});
 
-const io = socketIo(server, {
-  cors: {
-    origin: "*",
-    credentials: true,
-  },
-});
-
-io.on("connection", (socket) => {
-  socket.on("help_from_client", (data) => {
-    socket.broadcast.emit("test_msg_Response", data);
-  });
-
-  socket.on("logout_user_from_other_device_req", (data111) => {
-    socket.broadcast.emit("logout_user_from_other_device_res", data111);
-  });
-});
-
-setIO(io)
-  .then(() => {
-    getIO()
-      .then((ioObject) => {})
-      .catch((error) => {});
-  })
-  .catch((error) => {});
 
 app.get("/pp", (req, res) => {
   io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: "okkkk" });
   res.send("DONE");
 });
 
-app.post("/pm2/update", async (req, res) => {
-  const { host, password } = req.body;
 
-  if (!password) {
-    return res.status(400).send("Password is required");
-  }
+const { Alice_Socket } = require("./App/Helper/Alice_Socket");
 
-  const conn = new Client();
-
-  conn
-    .on("ready", () => {
-      console.log(`Connected to ${host}`);
-
-      // Run pm2 update command
-      conn.exec("pm2 update", (err, stream) => {
-        if (err) throw err;
-
-        stream
-          .on("close", (code, signal) => {
-            console.log(`Closed connection to ${host} with code ${code}`);
-            conn.end();
-          })
-          .on("data", (data) => {
-            
-          })
-          .stderr.on("data", (data) => {
-          
-          });
-      });
-    })
-    .connect({
-      host: host,
-      port: 22,
-      username: "root",
-      password: password,
-    });
-
-  return res.send({
-    status: true,
-    msg: "PM2 update initiated on all servers.",
-  });
+app.get("/restart/socket", (req, res) => {
+  Alice_Socket();
+  res.send("DONE");
 });
 
 
@@ -245,8 +194,6 @@ async function checkAndDrop() {
 
 // Server start
 server.listen(process.env.PORT, () => {
-  const { Alice_Socket } = require("./App/Helper/Alice_Socket");
   console.log(`Server is running on  http://0.0.0.0:${process.env.PORT}`);
   connectToMongoDB();
-  //Alice_Socket();
 });

@@ -4,7 +4,7 @@ import Content from "../../Dashboard/Content/Content";
 import Formikform from "../Form/Formik_form1";
 import { useFormik } from "formik";
 import * as valid_err from "../../../Utils/Common_Messages";
-import { fDate } from "../../../Utils/Date_formet";
+import { fDate, fDateTime } from "../../../Utils/Date_formet";
 import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import { Reset_Password } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import toast from "react-hot-toast";
@@ -15,6 +15,9 @@ import {
   USER_FUND_UPDATE_API,
   USER_FUND_GETALL_API,
 } from "../../../ReduxStore/Slice/Users/DashboardSlice";
+
+import { GET_COMPANY_INFOS } from "../../../ReduxStore/Slice/Admin/AdminSlice";
+import { UPDATE_PRICE_PERMISSION } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
@@ -31,8 +34,11 @@ const UserProfile = () => {
   const [percentageValue, setPercentageValue] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [show, setShow] = useState(false);
+  const [pricePermission, setPricePermission] = useState("0");
 
   const [UserLogs, setUserLogs] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [showLogsData, setShowLogsData] = useState([]);
 
   useEffect(() => {
     data();
@@ -72,13 +78,28 @@ const UserProfile = () => {
     await dispatch(USER_FUND_GETALL_API({ user_id: userId, token: token }))
       .unwrap()
       .then((response) => {
-
         if (response.status) {
-      
           setUserLogs(response.data || []);
         } else {
           setUserLogs([]);
-         
+        }
+      });
+  };
+
+  useEffect(() => {
+    if (user_role === "ADMIN") {
+      CompanyName();
+    }
+  }, [user_role]);
+
+  const CompanyName = async () => {
+    await dispatch(GET_COMPANY_INFOS())
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+     
+          setShowLogsData(response.Permission_Logs_data);
+          setPricePermission(response.data[0].price_permission);
         }
       });
   };
@@ -185,7 +206,6 @@ const UserProfile = () => {
     dispatch(USER_FUND_UPDATE_API(requestData))
       .unwrap()
       .then((response) => {
-   
         if (response.status) {
           toast.success(response.msg);
         } else {
@@ -200,6 +220,26 @@ const UserProfile = () => {
   const handleClose = () => setShow(false);
   const handleShowModal = () => setShow(true);
 
+  const handleSubmit1 = () => {
+  
+
+    let requestData = {
+      status: pricePermission,
+    };
+
+    dispatch(UPDATE_PRICE_PERMISSION(requestData))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          toast.success(response.msg);
+        } else {
+          toast.error(response.msg);
+        }
+      })
+      .catch((error) => {
+        toast.error("An error occurred while updating the fund.");
+      });
+  };
 
   return (
     <>
@@ -263,6 +303,19 @@ const UserProfile = () => {
                           </a>
                         </li>
                       )}
+
+                      {user_role === "ADMIN" && (
+                        <li className="nav-item">
+                          <a
+                            href="#permission"
+                            data-bs-toggle="tab"
+                            className="nav-link"
+                          >
+                            Change Permission
+                          </a>
+                        </li>
+                      )}
+
                       {user_role === "USER" ? (
                         <li className="nav-item">
                           <a
@@ -287,17 +340,18 @@ const UserProfile = () => {
                         ""
                       )}
 
-                      {(UserDetails.license_type == "2" && UserDetails.broker == "19")  && (
-                        <li className="nav-item">
-                          <a
-                            href="#fund-management"
-                            data-bs-toggle="tab"
-                            className="nav-link"
-                          >
-                            Stock Fund
-                          </a>
-                        </li>
-                      )} 
+                      {UserDetails.license_type == "2" &&
+                        UserDetails.broker == "19" && (
+                          <li className="nav-item">
+                            <a
+                              href="#fund-management"
+                              data-bs-toggle="tab"
+                              className="nav-link"
+                            >
+                              Stock Fund
+                            </a>
+                          </li>
+                        )}
                     </ul>
 
                     <div className="tab-content">
@@ -357,7 +411,9 @@ const UserProfile = () => {
                             </div>
                           </div>
 
-                          { user_role === "USER" ||( isgotodashboard == true && gotodashboard.Role=="USER" )? (
+                          {user_role === "USER" ||
+                          (isgotodashboard == true &&
+                            gotodashboard.Role == "USER") ? (
                             <>
                               <div className="row mb-2">
                                 <div className="col-sm-3 col-5">
@@ -412,12 +468,14 @@ const UserProfile = () => {
                           )}
                         </div>
                       </div>
+
                       <div id="modify" className="tab-pane fade mt-3">
                         <h4 className="text-primary mb-4">Modify Updates</h4>
                         <Modify_update
                           UserDetails={UserDetails && UserDetails}
                         />
                       </div>
+
                       {user_role === "USER" ||
                       user_role === "ADMIN" ||
                       !gotodashboard ? (
@@ -448,6 +506,86 @@ const UserProfile = () => {
                       ) : (
                         ""
                       )}
+
+                      <div id="permission" className="tab-pane fade mt-3">
+                        <div className="profile-personal-info pt-3">
+                          <h4 className="text-primary mb-4">
+                            Permission Update
+                            {/* ADD I BUUTON */}
+                            <i
+                              className="bi bi-info-circle"
+                              style={{ marginLeft: "5px" }}
+                              onClick={(e) => setShowModal(true)}
+                            ></i>
+                          </h4>
+
+                          <div className="row mb-2">
+                            <div className="col-sm-9 col-7">
+                              {/* Radio Buttons */}
+                              <div className="form-check form-check-inline">
+                                <input
+                                  type="radio"
+                                  className="form-check-input"
+                                  id="mt4Option"
+                                  name="Mt 4"
+                                  value="0"
+                                  checked={pricePermission == "0"}
+                                  onChange={(e) =>
+                                    setPricePermission(e.target.value)
+                                  }
+                                  disabled={isgotodashboard}
+                                />
+                                <label
+                                  className="form-check-label"
+                                  htmlFor="mt4Option"
+                                >
+                                  MT 4
+                                </label>
+                              </div>
+
+                              <div className="form-check form-check-inline">
+                                <input
+                                  type="radio"
+                                  className="form-check-input"
+                                  id="livePriceOption"
+                                  name="liveprice"
+                                  value="1"
+                                  checked={pricePermission == "1"}
+                                  onChange={(e) =>
+                                    setPricePermission(e.target.value)
+                                  }
+                                  disabled={isgotodashboard}
+                                />
+                                <label
+                                  className="form-check-label"
+                                  htmlFor="livePriceOption"
+                                >
+                                  Live Price
+                                </label>
+                              </div>
+
+                              {/* Error Message */}
+                              {errorMessage && (
+                                <div className="text-danger mt-2">
+                                  {errorMessage}
+                                </div>
+                              )}
+
+                              {/* Submit Button */}
+                              {isgotodashboard === null && (
+                                <div className="mt-3">
+                                  <button
+                                    className="btn btn-primary"
+                                    onClick={handleSubmit1}
+                                  >
+                                    Submit
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
                       <div id="fund-management" className="tab-pane fade">
                         <div className="profile-personal-info pt-3">
@@ -498,7 +636,6 @@ const UserProfile = () => {
                                     checked={selectedOption === "fund"}
                                     onChange={handleOptionChange}
                                     disabled={isgotodashboard}
-
                                   />
                                   <label
                                     className="form-check-label"
@@ -518,7 +655,6 @@ const UserProfile = () => {
                                     checked={selectedOption === "percentage"}
                                     onChange={handleOptionChange}
                                     disabled={isgotodashboard}
-
                                   />
                                   <label
                                     className="form-check-label"
@@ -540,8 +676,7 @@ const UserProfile = () => {
                                       className="form-control"
                                       placeholder="Enter fund amount"
                                       value={fundValue}
-                                    disabled={isgotodashboard}
-
+                                      disabled={isgotodashboard}
                                       onChange={(e) =>
                                         setFundValue(e.target.value)
                                       }
@@ -560,8 +695,7 @@ const UserProfile = () => {
                                       className="form-control"
                                       placeholder="Enter percentage (1 to 100)"
                                       value={percentageValue}
-                                    disabled={isgotodashboard}
-
+                                      disabled={isgotodashboard}
                                       min={1}
                                       max={100}
                                       onChange={(e) =>
@@ -579,16 +713,16 @@ const UserProfile = () => {
                                 )}
 
                                 {/* Submit Button */}
-                                {isgotodashboard  == null && <div className="mt-3">
-                                 
-                                  <button
-                                    className="btn btn-primary"
-                                    onClick={handleSubmit}
-                                  >
-                                    Submit
-                                  </button>
-
-                                </div>}
+                                {isgotodashboard == null && (
+                                  <div className="mt-3">
+                                    <button
+                                      className="btn btn-primary"
+                                      onClick={handleSubmit}
+                                    >
+                                      Submit
+                                    </button>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -646,6 +780,48 @@ const UserProfile = () => {
             </Button>
           </Modal.Footer>
         </Modal>
+
+        {showModal && (
+          <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Price Permission Logs</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {showLogsData && showLogsData.length > 0 ? (
+                <div className="table-responsive">
+                  <table className="table table-bordered">
+                    <thead className="thead-light">
+                      <tr>
+                        <th style={{ color: "black" }}>ID</th>
+                        <th style={{ color: "black" }}>Status</th>
+                        <th style={{ color: "black" }}>Message</th>
+                        <th style={{ color: "black" }}>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {showLogsData.map((data, index) => (
+                        <tr key={index}>
+                          <td>{index + 1 || "N/A"}</td>
+                          <td>{data.status === 1 ? "On" : "Off"}</td>
+                          <td>{data.msg || "No Message"}</td>
+                          <td>{fDateTime(data.createdAt)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p>No logs available.</p>
+              )}
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowModal(false)}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
       </Content>
     </>
   );

@@ -21,7 +21,7 @@ import Userreferal from '../layout/User/Profile/ReferralPage';
 import Faq from '../layout/Admin/Faq/Faq';
 import Userplan from '../layout/User/HelpCenter/Userplan';
 
-
+import Kotakneo from '../Components/Dashboard/Header/Brokerpage/Kotakneo'
 
 
 // strategydesc
@@ -52,7 +52,7 @@ const Admin = () => {
                 <Route exact path="/refer-earn" element={<Userreferal />} />
                 <Route exact path="/faq" element={<Faq />} />
                 <Route exact path="/plan" element={<Userplan />} />
-                
+                <Route exact path="/kotakneo" element={<Kotakneo />} />
 
             </Routes>
 

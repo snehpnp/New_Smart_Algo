@@ -86,6 +86,33 @@ const SignalsSchema = Schema({
         type: String,
         default: null
     },
+
+    target: {
+        type: String,
+        default:0
+    },
+    stop_loss: {
+        type: String,
+        default:0
+
+    },
+    exit_time: {
+        type: String,
+        default:0
+    },
+    exit_time1: {
+        type: String,
+        default:0
+    },
+    sl_status: {
+        type: String,
+        enum: ['0', '1'], // 1 = Admin panel status , 2 = Tradinview status
+        default: '0'
+    },
+    price_type: {
+        type: String,
+        default: ''
+    },
     users_id: [
         {
             type: mongoose.Schema.Types.ObjectId,

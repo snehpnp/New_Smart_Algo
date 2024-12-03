@@ -292,7 +292,7 @@ const Header = ({ ChatBox }) => {
         if (res.data.status) {
           setKotakStatus1(true);
         } else{
-          console.log(res.data.msg);
+       
           toast.error(res.data.msg);
         }
       });
@@ -629,7 +629,7 @@ const Header = ({ ChatBox }) => {
         }
       })
       .catch((error) => {
-        console.error("Error: ", error);
+        console.log("Error: ", error);
       });
   };
 
@@ -1006,7 +1006,7 @@ const Header = ({ ChatBox }) => {
 
       {/* KOTAL LOGIN PAGE */}
       {kotakStatus && (
-        <div>
+          <div>
           <Modal
             show={kotakStatus}
             centered
@@ -1015,29 +1015,23 @@ const Header = ({ ChatBox }) => {
             onHide={() => setKotakStatus(false)}
             fullscreen={true}
           >
-            <Modal.Body>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100vh",
+            <Modal.Body style={{
+                 display: "flex",
+                 alignItems: "center",
                   backgroundColor: "#d8ecff",
-                }}
-              >
-                <div
-                  style={{
-                    padding: "50px",
-                    textAlign: "left",
-                    borderRadius: "10px",
-                    marginRight: "50px",
-                  }}
+                }}>
+             <div className="col-12 col-md-8 mx-auto">
+                <div className="row">
+                  <div className="col-md-6"> 
+                  <div
+                
                 >
                   <img
-                    src="https://play-lh.googleusercontent.com/CUTVJwc4BtMonGBPZlx1gd7CmViH6yk4qMdTmBF7Pdq-FgKHXSPJa7gA0TuVtaS_0KM"
+                    src="./assets/images/kotakneo.png"
                     alt="Kotak Neo"
                     style={{ width: "66px" }}
                   />
+                  
                   <h1
                     style={{
                       color: "#1b3e81",
@@ -1063,16 +1057,15 @@ const Header = ({ ChatBox }) => {
                     <li style={{ marginBottom: "10px" }}>Years of trust</li>
                   </ul>
                 </div>
-
-                <div
-                  style={{
+                  </div>
+                  <div className="col-md-6">
+                    <div style={{
                     backgroundColor: "white",
                     padding: "50px",
                     borderRadius: "10px",
                     boxShadow: "0 0 15px rgba(0, 0, 0, 0.1)",
-                    width: kotakStatus1 ? "400px" : "580px",
-                  }}
-                >
+                   
+                  }}>
                   {kotakStatus1 ? (
                     // OTP Section
                     <div>
@@ -1276,9 +1269,11 @@ const Header = ({ ChatBox }) => {
                         </button>
                       </div>
                     </div>
-                  )}
-                </div>
-              </div>
+                  )} </div>  
+                </div>   
+</div>
+           </div>
+              
             </Modal.Body>
           </Modal>
         </div>

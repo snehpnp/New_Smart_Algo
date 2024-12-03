@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_HELP_REQUEST } from "../../../Service/admin.service";
+import { GET_HELP_REQUEST ,UpdatePricePermission} from "../../../Service/admin.service";
 
 
 export const GET_HELPS = createAsyncThunk("user/all/helps", async (data) => {
@@ -14,13 +14,26 @@ export const GET_HELPS = createAsyncThunk("user/all/helps", async (data) => {
     }
 });
 
+export const UPDATE_PRICE_PERMISSION = createAsyncThunk("update/pricepermission", async (data) => {
+    const { status, token } = data
+    try {
+        const res = await UpdatePricePermission({ status: status }, token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+
+
 const AdminHelpSlice = createSlice({
     name: "AdminHelpSlice",
     initialState: {
         isLoading: false,
         isError: false,
         helps: [],
-        status: false
+        status: false,
+        permissionStatus : false
     },
 
     recuders: {},
@@ -37,6 +50,18 @@ const AdminHelpSlice = createSlice({
         [GET_HELPS.rejected]: (state, action) => {
             // return { ...state, get_dashboard: action, isLoading: false };
         },
+        [UPDATE_PRICE_PERMISSION.pending]: (state, { payload }) => {
+            // state.isLoading = false;
+            // return { ...state, get_dashboard: [], isLoading: true };
+        },
+        [UPDATE_PRICE_PERMISSION.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, permissionStatus: payload, isLoading: false };
+        },
+        [UPDATE_PRICE_PERMISSION.rejected]: (state, action) => {
+            // return { ...state, get_dashboard: action, isLoading: false };
+        },
+        
 
     },
 });

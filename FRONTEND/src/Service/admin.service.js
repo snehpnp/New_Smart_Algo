@@ -535,6 +535,22 @@ export async function GET_TRADEHISTORY(data, token) {
 
 }
 
+export async function GET_TRADEHISTORY_cal(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/tradhistory/cal`, data, {
+            headers: header(token),
+            data: { data },
+        })
+        return await res?.data;
+    }
+    catch (err) {
+
+        return err
+        // custom error
+    }
+
+}
+
 // GET TRADEHISTORY
 export async function GET_TRADEHISTORY1(data, token) {
     try {
@@ -1104,6 +1120,33 @@ export async function GetLastUserName() {
 export async function DeletePlans(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}deleteplans`, data,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}
+
+export async function GetSignalsAdmin(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/signals/admin`, data,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}
+
+
+export async function UpdatePricePermission(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/pricepermission`, data,{
             headers: header(token),
             data: {},
         })

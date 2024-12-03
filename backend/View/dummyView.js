@@ -4026,6 +4026,7 @@ db.createView("dashboard_data", "users",
 /// Open possition
 db.createView("open_position", "mainsignals",
   [
+ 
 
     {
       $addFields: {
@@ -4041,8 +4042,6 @@ db.createView("open_position", "mainsignals",
             },
             then: 0,
             else: {
-
-              //$add: [{ $toDouble: '$target' }, { $toDouble: '$entry_price' }]
               $add: [{ $toDouble: '$target' }]
 
             },
@@ -4054,14 +4053,11 @@ db.createView("open_position", "mainsignals",
               $or: [
                 { $eq: ['$stop_loss', 0] },
                 { $eq: ['$stop_loss', "0"] },
-                { $eq: ['$stop_loss', '0'] }, // Check if stop_loss is the string "0"
+                { $eq: ['$stop_loss', '0'] }, 
               ],
             },
             then: 0,
             else: {
-
-              // $subtract: [{ $toDouble: '$entry_price' }, { $toDouble: '$stop_loss' }]
-
               $add: [{ $toDouble: '$stop_loss' }]
 
             },
@@ -4077,8 +4073,8 @@ db.createView("open_position", "mainsignals",
                   $or: [
                     { $eq: ['$exit_qty_percent', 0] },
                     { $eq: ['$exit_qty_percent', "0"] },
-                    { $eq: ['$exit_qty_percent', '0'] }, // Check if stop_loss is the string "0"
-                    { $eq: ['$exit_qty_percent', ''] }, // Check if stop_loss is the string "0"
+                    { $eq: ['$exit_qty_percent', '0'] },
+                    { $eq: ['$exit_qty_percent', ''] }, 
 
                   ],
                 },
@@ -4101,33 +4097,18 @@ db.createView("open_position", "mainsignals",
     {
       $unwind: '$livePrice',
     },
-
-
-
-
-
     {
       $match: {
         $and: [
           {
             $expr: {
               $and: [
-                // {
-                //     $eq: [
-                //         {
-                //             $dateToString: {
-                //                 format: '%Y/%m/%d',
-                //                 date: new Date(),
-                //             },
-                //         },
-                //         '$dt_date',
-                //     ],
-                // },
+        
                 { $eq: ['$livePrice.trading_status', 'on'] },
                 {
                   $gt: [
-                    { $toDouble: '$entry_qty' }, // Convert entry_qty to number
-                    { $toDouble: '$exit_qty' },  // Convert exit_qty to number
+                    { $toDouble: '$entry_qty' }, 
+                    { $toDouble: '$exit_qty' },  
                   ]
                 }
               ],
@@ -4269,14 +4250,32 @@ db.createView("open_position", "mainsignals",
       }
     },
 
-    {
-      $lookup: {
-        from: 'companies',
-        let: {},
-        pipeline: [],
-        as: 'companyData'
-      }
-    },
+    
+      {
+        $lookup: {
+          from: 'companies',
+          let: {},
+          pipeline: [], 
+          as: 'companyData'
+        }
+      },
+      {
+        $addFields: {
+          companyDate: {
+            $arrayElemAt: ['$companyData.current_date', 0] 
+          }
+        }
+      },
+      {
+        $match: {
+          $expr: {
+            $and: [
+              { $gte: ['$createdAt', { $dateFromString: { dateString: { $substr: ['$companyDate', 0, 10] } } }] }, 
+              { $lt: ['$createdAt', { $dateAdd: { startDate: { $dateFromString: { dateString: { $substr: ['$companyDate', 0, 10] } } }, unit: 'day', amount: 1 } }] } 
+            ]
+          }
+        }
+      },
     {
       $project: {
         _id: 1,
@@ -4811,4 +4810,78 @@ db.createView("strategyViewNames", "usermakestrategies",
       }   
     ]
 )  
+
+
+db.createView("Cilents_service_stg", "users",
+  [
+ 
+    {
+      $lookup: {
+        from: 'client_services',
+        localField: '_id', 
+        foreignField: 'user_id', 
+        as: 'client_services'
+      }
+    },
+    {
+      $unwind: '$client_services',
+    },
+    {
+      $match: {
+        'client_services.active_status': '1'
+      }
+    },
+    {
+      $lookup: {
+        from: "services",
+        localField: "client_services.service_id",
+        foreignField: "_id",
+        as: "service",
+      },
+    },
+    {
+      $unwind: '$service',
+    },
+   
+  
+    
+    {
+      $lookup: {
+        from: "categories",
+        localField: "service.categorie_id",
+        foreignField: "_id",
+        as: "category",
+      },
+    },
+    {
+      $unwind: '$category',
+    },
+    {
+      $lookup: {
+        from: "strategies",
+        localField: "client_services.strategy_id",
+        foreignField: "_id",
+        as: "strategys",
+      },
+    },
+    {
+      $unwind: '$strategys',
+    },
+    {
+      $project: {
+     
+        id:1,
+        "user_id":"$_id",
+        "service_name": "$service.name",
+        "service_instrument_token": "$service.instrument_token",
+        "service_exch_seg": "$service.exch_seg",
+        "strategy_name": "$strategys.strategy_name",
+      
+     
+        
+      }
+    }      
+   
+  ]
+)
 

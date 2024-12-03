@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable2";
-import { Get_Tradehisotry } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
+import {
+  Get_Tradehisotry,
+  Get_Tradehisotry_Cal,
+} from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { fDateTimeSuffix } from "../../../../Utils/Date_formet";
 import { Eye } from "lucide-react";
@@ -40,7 +43,6 @@ const paginationOptions = {
   page: 1, // Starting page
 };
 
-
 const TradeHistory = () => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -52,7 +54,6 @@ const TradeHistory = () => {
   const [SelectService, setSelectService] = useState("null");
   const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
   const [SelectOpenClose, setSelectopenclose] = useState("null");
-
   const [SocketState, setSocketState] = useState("null");
   const [ForGetCSV, setForGetCSV] = useState([]);
   const [adminTradingStatus, setAdminTradingStatus] = useState(false);
@@ -79,8 +80,9 @@ const TradeHistory = () => {
   const [getPage, setPage] = useState(1);
   const [getSizePerPage, setSizePerPage] = useState(10);
   const [total1, setTotal] = useState(0);
+  const [getTotalPnl, setTotalPnl] = useState(0);
 
-
+  var a = 2;
   const handleShow = () => setShowModal6(true);
   const handleClose = () => setShowModal6(false);
 
@@ -100,7 +102,13 @@ const TradeHistory = () => {
   }, [a]);
 
   useEffect(() => {
-    ShowLivePrice();
+    if (!fromDate && !toDate) {
+      ShowLivePrice();
+    } else {
+      $(".LivePrice_").html("");
+      setSocketState("null");
+      ShowLivePrice1();
+    }
   }, [tradeHistoryData.data, SocketState, UserDetails]);
 
   useEffect(() => {
@@ -109,7 +117,9 @@ const TradeHistory = () => {
 
   useEffect(() => {
     Get_TradHistory();
+    Get_Tradehisotry_Calculations();
   }, [
+    searchTerm,
     refresh,
     SocketState,
     fromDate,
@@ -119,15 +129,56 @@ const TradeHistory = () => {
     dashboard_filter,
     SelectServiceIndex,
     lotMultypaly,
-    searchTerm,
-    getPage, getSizePerPage,
-    SelectOpenClose
+    getPage,
+    getSizePerPage,
+    SelectOpenClose,
   ]);
+
+  useEffect(() => {
+    setSizePerPage(10);
+    setPage(1);
+  }, [StrategyClientStatus,SelectOpenClose,SelectServiceIndex,SelectService]);
 
   useEffect(() => {
     GetAllStrategyName();
     Admin_Trading_data();
   }, []);
+
+
+
+  const Get_Tradehisotry_Calculations = async (e) => {
+    let abc = new Date();
+    let month = abc.getMonth() + 1;
+    let date = abc.getDate();
+    let year = abc.getFullYear();
+    let full = `${year}/${month}/${date}`;
+
+    let startDate = getActualDateFormate(fromDate);
+    let endDate = getActualDateFormate(toDate);
+
+    await dispatch(
+      Get_Tradehisotry_Cal({
+        startDate: !fromDate ? full : startDate,
+        endDate: !toDate ? (fromDate ? "" : full) : endDate,
+        service: SelectService,
+        strategy: StrategyClientStatus,
+        type: dashboard_filter,
+        serviceIndex: SelectServiceIndex,
+        lotMultypaly: lotMultypaly,
+        token: token,
+        page: getPage,
+        limit: getSizePerPage,
+        openClose: SelectOpenClose,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setTotalPnl(response.TotalCalculate);
+        } else {
+        }
+      });
+  };
 
   const Get_TradHistory = async (e) => {
     let abc = new Date();
@@ -138,7 +189,6 @@ const TradeHistory = () => {
 
     let startDate = getActualDateFormate(fromDate);
     let endDate = getActualDateFormate(toDate);
-
 
     await dispatch(
       Get_Tradehisotry({
@@ -152,38 +202,36 @@ const TradeHistory = () => {
         token: token,
         page: getPage,
         limit: getSizePerPage,
-        openClose:SelectOpenClose
+        openClose: SelectOpenClose,
       })
     )
       .unwrap()
       .then((response) => {
         if (response.status) {
+          setTotal(response.pagination.totalItems);
+          setServiceData({
+            loading: false,
+            data: response.trade_symbols_filter,
+          });
+
           let filterData = response.data.filter((item) => {
             if (searchTerm === "") return item;
-          
+
             return (
-              item.trade_symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              item.trade_symbol
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase()) ||
               item.strategy.toLowerCase().includes(searchTerm.toLowerCase()) ||
               item.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              item.entry_price.toLowerCase().includes(searchTerm.toLowerCase()) 
-
+              item.entry_price.toLowerCase().includes(searchTerm.toLowerCase())
             );
           });
-          
-
 
           setTradeHistoryData({
             loading: false,
             data: filterData,
             pagination: response.pagination,
-            TotalCalculate:response.TotalCalculate
-
-          });
-          setTotal(response.pagination.totalItems);
-
-          setServiceData({
-            loading: false,
-            data: response.trade_symbols_filter,
+            TotalCalculate: response.TotalCalculate,
           });
         } else {
           setTradeHistoryData({
@@ -221,7 +269,8 @@ const TradeHistory = () => {
     {
       dataField: "index",
       text: "S.No.",
-      formatter: (cell, row, rowIndex) => rowIndex + 1,
+      formatter: (cell, row, rowIndex) =>
+        (getPage - 1) * getSizePerPage + rowIndex + 1,
     },
 
     {
@@ -289,7 +338,9 @@ const TradeHistory = () => {
       dataField: "exit_qty",
       text: "Exit Qty",
       formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== ""  || cell != 0 ? parseInt(cell) : "-"}</span>
+        <span className="text">
+          {cell !== "" || cell != 0 ? parseInt(cell) : "-"}
+        </span>
       ),
     },
     {
@@ -342,8 +393,7 @@ const TradeHistory = () => {
       text: "Exit Status",
       formatter: (cell, row, rowIndex) => (
         <div>
-          {/* <span>{row.exit_status == "-" ?  "MT_4" :row.exit_status}</span> */}
-          <span>{row.exit_status == "-" ?  row.TradeType :row.exit_status}</span>
+          <span>{row.exit_status == "-" ? "MT_4" : row.exit_status}</span>
         </div>
       ),
     },
@@ -365,36 +415,11 @@ const TradeHistory = () => {
     },
   ];
 
-
   var CreatechannelList = "";
-  let total = 0;
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
-      if (
-        parseInt(item.exit_qty) == parseInt(item.entry_qty) &&
-        item.entry_price != "" &&
-        item.exit_price
-      ) {
-        if (item.entry_type === "LE") {
-          let total1 =
-            (parseFloat(item.exit_price) - parseFloat(item.entry_price)) *
-            parseInt(item.exit_qty);
-          if (!isNaN(total1)) {
-            total += total1;
-          }
-        } else {
-          let total1 =
-            (parseFloat(item.entry_price) - parseFloat(item.exit_price)) *
-            parseInt(item.exit_qty);
-
-          if (!isNaN(total1)) {
-            total += total1;
-          }
-        }
-      }
     });
-
   const ShowLivePrice = async () => {
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
@@ -425,190 +450,202 @@ const TradeHistory = () => {
       } else {
         if (res.data.stat) {
           const handleResponse = async (response) => {
-            $(".BP1_Put_Price_" + response.tk).html();
-            $(".SP1_Call_Price_" + response.tk).html();
-            $(".LivePrice_" + response.tk).html(response.lp);
-            $(".ClosePrice_" + response.tk).html(response.c);
+            if (response) {
+              $(".BP1_Put_Price_" + response.tk).html();
+              $(".SP1_Call_Price_" + response.tk).html();
+              $(".LivePrice_" + response.tk).html(response.lp);
+              $(".ClosePrice_" + response.tk).html(response.c);
 
-            var live_price = response.lp === undefined ? "" : response.lp;
+              var live_price = response.lp === undefined ? "" : response.lp;
 
-            tradeHistoryData.data &&
-              tradeHistoryData.data.forEach((row, i) => {
-                let get_ids = "_id_" + response.tk + "_" + row._id;
-                let get_id_token = $("." + get_ids).html();
+              tradeHistoryData.data &&
+                tradeHistoryData.data.forEach((row, i) => {
+                  let get_ids = "_id_" + response.tk + "_" + row._id;
+                  let get_id_token = $("." + get_ids).html();
 
-                const get_entry_qty = $(
-                  ".entry_qty_" + response.tk + "_" + row._id
-                ).html();
-                const get_exit_qty = $(
-                  ".exit_qty_" + response.tk + "_" + row._id
-                ).html();
-                const get_exit_price = $(
-                  ".exit_price_" + response.tk + "_" + row._id
-                ).html();
-                const get_entry_price = $(
-                  ".entry_price_" + response.tk + "_" + row._id
-                ).html();
-                const get_entry_type = $(
-                  ".entry_type_" + response.tk + "_" + row._id
-                ).html();
-                const get_exit_type = $(
-                  ".exit_type_" + response.tk + "_" + row._id
-                ).html();
-                const get_Strategy = $(
-                  ".strategy_" + response.tk + "_" + row._id
-                ).html();
+                  const get_entry_qty = $(
+                    ".entry_qty_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_exit_qty = $(
+                    ".exit_qty_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_exit_price = $(
+                    ".exit_price_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_entry_price = $(
+                    ".entry_price_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_entry_type = $(
+                    ".entry_type_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_exit_type = $(
+                    ".exit_type_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_Strategy = $(
+                    ".strategy_" + response.tk + "_" + row._id
+                  ).html();
 
-                if (
-                  (get_entry_type === "LE" && get_exit_type === "LX") ||
-                  (get_entry_type === "SE" && get_exit_type === "SX")
-                ) {
-                  if (get_entry_qty !== "" && get_exit_qty !== "") {
-                    if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
-                      let rpl =
-                        (parseFloat(get_exit_price) -
-                          parseFloat(get_entry_price)) *
-                        parseInt(get_exit_qty);
-
-                      if (get_entry_type === "SE") {
-                        rpl =
-                          (parseFloat(get_entry_price) -
-                            parseFloat(get_exit_price)) *
-                          parseInt(get_exit_qty);
-                      }
-
-                      if (
-                        ["FO", "MFO", "CFO", "BFO"].includes(
-                          row.segment.toUpperCase()
-                        ) &&
-                        row.option_type.toUpperCase() == "PUT"
-                      ) {
-                        rpl =
-                          (parseFloat(get_entry_price) -
-                            parseFloat(get_exit_price)) *
+                  if (
+                    (get_entry_type === "LE" && get_exit_type === "LX") ||
+                    (get_entry_type === "SE" && get_exit_type === "SX")
+                  ) {
+                    if (get_entry_qty !== "" && get_exit_qty !== "") {
+                      if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
+                        let rpl =
+                          (parseFloat(get_exit_price) -
+                            parseFloat(get_entry_price)) *
                           parseInt(get_exit_qty);
 
                         if (get_entry_type === "SE") {
                           rpl =
-                            (parseFloat(get_exit_price) -
-                              parseFloat(get_entry_price)) *
+                            (parseFloat(get_entry_price) -
+                              parseFloat(get_exit_price)) *
                             parseInt(get_exit_qty);
                         }
-                      }
 
-                      let upl =
-                        parseInt(get_exit_qty) - parseInt(get_entry_qty);
-                      let finalyupl =
-                        (parseFloat(get_entry_price) - parseFloat(live_price)) *
-                        upl;
+                        if (
+                          ["FO", "MFO", "CFO", "BFO"].includes(
+                            row.segment.toUpperCase()
+                          ) &&
+                          row.option_type.toUpperCase() == "PUT"
+                        ) {
+                          rpl =
+                            (parseFloat(get_entry_price) -
+                              parseFloat(get_exit_price)) *
+                            parseInt(get_exit_qty);
 
-                      if (isNaN(finalyupl) || isNaN(rpl)) {
-                        return "-";
-                      } else {
-                        $(".show_rpl_" + response.tk + "_" + get_id_token).html(
-                          rpl.toFixed(2)
-                        );
-                        $(".UPL_" + response.tk + "_" + get_id_token).html(
-                          finalyupl.toFixed(2)
-                        );
-                        $(".TPL_" + response.tk + "_" + get_id_token).html(
-                          (finalyupl + rpl).toFixed(2)
-                        );
+                          if (get_entry_type === "SE") {
+                            rpl =
+                              (parseFloat(get_exit_price) -
+                                parseFloat(get_entry_price)) *
+                              parseInt(get_exit_qty);
+                          }
+                        }
 
-                        ShowColor1(
-                          ".show_rpl_" + response.tk + "_" + get_id_token,
-                          rpl.toFixed(2),
-                          response.tk,
-                          get_id_token
-                        );
-                        ShowColor1(
-                          ".UPL_" + response.tk + "_" + get_id_token,
-                          finalyupl.toFixed(2),
-                          response.tk,
-                          get_id_token
-                        );
-                        ShowColor1(
-                          ".TPL_" + response.tk + "_" + get_id_token,
-                          (finalyupl + rpl).toFixed(2),
-                          response.tk,
-                          get_id_token
-                        );
+                        let upl =
+                          parseInt(get_exit_qty) - parseInt(get_entry_qty);
+                        let finalyupl =
+                          (parseFloat(get_entry_price) -
+                            parseFloat(live_price)) *
+                          upl;
+
+                        if (isNaN(finalyupl) || isNaN(rpl)) {
+                          return "-";
+                        } else {
+                          $(
+                            ".show_rpl_" + response.tk + "_" + get_id_token
+                          ).html(rpl.toFixed(2));
+                          $(".UPL_" + response.tk + "_" + get_id_token).html(
+                            finalyupl.toFixed(2)
+                          );
+                          $(".TPL_" + response.tk + "_" + get_id_token).html(
+                            (finalyupl + rpl).toFixed(2)
+                          );
+
+                          ShowColor1(
+                            ".show_rpl_" + response.tk + "_" + get_id_token,
+                            rpl.toFixed(2),
+                            response.tk,
+                            get_id_token
+                          );
+                          ShowColor1(
+                            ".UPL_" + response.tk + "_" + get_id_token,
+                            finalyupl.toFixed(2),
+                            response.tk,
+                            get_id_token
+                          );
+                          ShowColor1(
+                            ".TPL_" + response.tk + "_" + get_id_token,
+                            (finalyupl + rpl).toFixed(2),
+                            response.tk,
+                            get_id_token
+                          );
+                        }
                       }
                     }
-                  }
-                } else if (
-                  (get_entry_type === "LE" && get_exit_type === "") ||
-                  (get_entry_type === "SE" && get_exit_type === "")
-                ) {
-                  let abc = (
-                    (parseFloat(live_price) - parseFloat(get_entry_price)) *
-                    parseInt(get_entry_qty)
-                  ).toFixed();
-
-                  if (get_entry_type === "SE") {
-                    abc = (
-                      (parseFloat(get_entry_price) - parseFloat(live_price)) *
+                  } else if (
+                    (get_entry_type === "LE" && get_exit_type === "") ||
+                    (get_entry_type === "SE" && get_exit_type === "")
+                  ) {
+                    let abc = (
+                      (parseFloat(live_price) - parseFloat(get_entry_price)) *
                       parseInt(get_entry_qty)
                     ).toFixed();
-                  }
-
-                  if (
-                    ["FO", "MFO", "CFO", "BFO"].includes(
-                      row.segment.toUpperCase()
-                    ) &&
-                    row.option_type.toUpperCase() == "PUT"
-                  ) {
-                    abc =
-                      (parseFloat(get_entry_price) - parseFloat(live_price)) *
-                      parseInt(get_exit_qty);
 
                     if (get_entry_type === "SE") {
+                      abc = (
+                        (parseFloat(get_entry_price) - parseFloat(live_price)) *
+                        parseInt(get_entry_qty)
+                      ).toFixed();
+                    }
+
+                    if (
+                      ["FO", "MFO", "CFO", "BFO"].includes(
+                        row.segment.toUpperCase()
+                      ) &&
+                      row.option_type.toUpperCase() == "PUT"
+                    ) {
                       abc =
-                        (parseFloat(live_price) - parseFloat(get_entry_price)) *
+                        (parseFloat(get_entry_price) - parseFloat(live_price)) *
                         parseInt(get_exit_qty);
+
+                      if (get_entry_type === "SE") {
+                        abc =
+                          (parseFloat(live_price) -
+                            parseFloat(get_entry_price)) *
+                          parseInt(get_exit_qty);
+                      }
+                    }
+
+                    if (isNaN(abc)) {
+                      return "-";
+                    } else {
+                      $(".show_rpl_" + response.tk + "_" + get_id_token).html(
+                        "-"
+                      );
+                      $(".UPL_" + response.tk + "_" + get_id_token).html(abc);
+                      $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
+                      ShowColor1(
+                        ".show_rpl_" + response.tk + "_" + get_id_token,
+                        "-",
+                        response.tk,
+                        get_id_token
+                      );
+                      ShowColor1(
+                        ".UPL_" + response.tk + "_" + get_id_token,
+                        abc,
+                        response.tk,
+                        get_id_token
+                      );
+                      ShowColor1(
+                        ".TPL_" + response.tk + "_" + get_id_token,
+                        abc,
+                        response.tk,
+                        get_id_token
+                      );
                     }
                   }
 
-                  if (isNaN(abc)) {
-                    return "-";
+                  //  if Only Exist qty Exist
+                  else if (
+                    (get_entry_type === "" && get_exit_type === "LX") ||
+                    (get_entry_type === "" && get_exit_type === "SX")
+                  ) {
                   } else {
-                    $(".show_rpl_" + response.tk + "_" + get_id_token).html(
-                      "-"
-                    );
-                    $(".UPL_" + response.tk + "_" + get_id_token).html(abc);
-                    $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
-                    ShowColor1(
-                      ".show_rpl_" + response.tk + "_" + get_id_token,
-                      "-",
-                      response.tk,
-                      get_id_token
-                    );
-                    ShowColor1(
-                      ".UPL_" + response.tk + "_" + get_id_token,
-                      abc,
-                      response.tk,
-                      get_id_token
-                    );
-                    ShowColor1(
-                      ".TPL_" + response.tk + "_" + get_id_token,
-                      abc,
-                      response.tk,
-                      get_id_token
-                    );
                   }
-                }
-
-                //  if Only Exist qty Exist
-                else if (
-                  (get_entry_type === "" && get_exit_type === "LX") ||
-                  (get_entry_type === "" && get_exit_type === "SX")
-                ) {
-                } else {
-                }
-              });
+                });
+            } else {
+              tradeHistoryData.data &&
+                tradeHistoryData.data.forEach((row, i) => {
+                  const previousRow =
+                    i > 0 ? tradeHistoryData.data[i - 1] : null;
+                  calcultateRPL(row, null, previousRow);
+                });
+            }
 
             // }
           };
+
           await ConnctSocket(
             handleResponse,
             channelList,
@@ -792,18 +829,25 @@ const TradeHistory = () => {
     }
   };
 
+  const ShowLivePrice1 = async () => {
+    tradeHistoryData.data &&
+      tradeHistoryData.data.forEach((row, i) => {
+        const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
+        calcultateRPL(row, null, previousRow);
+      });
+  };
+
   const calcultateRPL = (row, livePrice, pre_row) => {
     let get_ids = "_id_" + row.token + "_" + row._id;
     let get_id_token = $("." + get_ids).html();
 
     if (row.entry_type !== "" && row.exit_type !== "") {
       if (row.entry_type === "LE" || row.entry_type === "SE") {
-        const entryQty = parseInt(row.entry_qty_percent);
-        const exitQty = parseInt(row.exit_qty_percent);
+        const entryQty = parseInt(row.entry_qty);
+        const exitQty = parseInt(row.exit_qty);
         const entryPrice = parseFloat(row.entry_price);
         const exitPrice = parseFloat(row.exit_price);
         const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
-
         $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
         $(".UPL_" + row.token + "_" + get_id_token).html("-");
         $(".TPL_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
@@ -857,7 +901,6 @@ const TradeHistory = () => {
       });
   };
 
-  var a = 2;
   const data = async () => {
     if (a < 2) {
     }
@@ -902,8 +945,9 @@ const TradeHistory = () => {
   const forCSVdata = () => {
     let csvArr = [];
     if (tradeHistoryData.data.length > 0) {
-      tradeHistoryData.data.map((item) => {
+      tradeHistoryData.data.map((item,index) => {
         return csvArr.push({
+          id:index+1,
           symbol: item.trade_symbol,
           EntryType: item.entry_type ? item.entry_type : "-",
           ExitType: item.exit_type ? item.exit_type : "-",
@@ -915,16 +959,13 @@ const TradeHistory = () => {
           "Exit Time": item.exit_dt_date,
           Exchange: item.exchange,
           Strategy: item.strategy,
-          "Released-P/L": $(".show_rpl_" + item.token).html(),
-          "Unreleased-P/L": $(".UPL_" + item.token),
-          "Total-PL": $(".TPL_" + item.token),
+        
         });
       });
 
       setForGetCSV(csvArr);
     }
   };
-
 
   const GetAdminTradingStatus = async (e) => {
     await dispatch(GET_ADMIN_TRADE_STATUS({ broker_name: "ALICE_BLUE" }))
@@ -936,24 +977,14 @@ const TradeHistory = () => {
       });
   };
 
-  if (selector && selector.permission) {
-    if (
-      selector.permission &&
-      selector.permission.data &&
-      selector.permission.data[0]
-    ) {
-      if (selector.permission.data[0].live_price == 0) {
-        columns = columns.filter((data) => data.dataField !== "live");
-      }
-    }
-  }
-
   const handleInputChange = (e) => {
     const value = e.target.value;
     const isValidNumber = /^\d+$/.test(value);
 
     if (isValidNumber) {
       SetlotMultypaly(value === "" || value == 0 ? 1 : Number(value));
+    } else if (value === "") {
+      SetlotMultypaly(value);
     } else {
       SetlotMultypaly(1);
     }
@@ -967,10 +998,29 @@ const TradeHistory = () => {
       updatedOptions = updatedOptions.filter((item) => item !== option);
     }
     setSelectedOptions(updatedOptions);
-    // Get_TradHistory(updatedOptions);
   };
 
- 
+  const handleTableChange = (type, { page, sizePerPage }) => {
+    setPage(page);
+    setSizePerPage(sizePerPage);
+  };
+
+  const handleSizePerPageChange = (e) => {
+    const value = parseInt(e.target.value);
+    setSizePerPage(value);
+    setPage(1);
+  };
+
+  const NoDataIndication = () => (
+    <>
+      <img
+        src="../../../../assets/images/norecordfound.png"
+        alt="sss"
+        className="mx-auto d-flex"
+      />
+    </>
+  );
+
   const columnTexts = [
     "S.No.",
     "Signals Entry time",
@@ -987,34 +1037,28 @@ const TradeHistory = () => {
     "Entry Status",
     "Exit Status",
     "Details View",
-
   ];
 
- 
-   const handleTableChange = (type, { page, sizePerPage }) => {
-    setPage(page);
-    setSizePerPage(sizePerPage);
-  };
+  useEffect(() => {
+    if (selectedOptions && selectedOptions.length > 0) {
+      columns = columns.filter((data) => !selectedOptions.includes(data.text));
+    }
+  }, [selectedOptions]);
 
+  useEffect(() => {
+    if (selector && selector.permission) {
+      if (
+        selector.permission &&
+        selector.permission.data &&
+        selector.permission.data[0]
+      ) {
+        if (selector.permission.data[0].live_price == 0) {
+          columns = columns.filter((data) => data.dataField !== "live");
+        }
+      }
+    }
+  }, [selector]);
 
-  const handleSizePerPageChange = (e) => {
-    const value = parseInt(e.target.value);
-    setSizePerPage(value);
-    setPage(1);
-  };
-
-  const NoDataIndication = () => (
-    <>
-        <img src='../../../../assets/images/norecordfound.png' alt="sss"
-            className='mx-auto d-flex'
-        />
-    </>
-);
-
-
-if (selectedOptions && selectedOptions.length > 0) {
-  columns = columns.filter((data) => !selectedOptions.includes(data.text));
-}
 
 
   return (
@@ -1029,7 +1073,6 @@ if (selectedOptions && selectedOptions.length > 0) {
         csv_title="TradeHistory"
       >
         <div className="row d-flex  align-items-center justify-content-start">
-       
           {dashboard_filter === "client" ? (
             ""
           ) : (
@@ -1061,47 +1104,6 @@ if (selectedOptions && selectedOptions.length > 0) {
                   <span className="slider round"></span>
                 </label>
               </div>
-
-              {/* Modal */}
-              <Modal show={showModal6} onHide={handleClose} size="lg">
-                <Modal.Header closeButton>
-                  <Modal.Title>Trading Status Information</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  {adminTradingStatus.length > 0 ? (
-                    <Table striped bordered hover>
-                      <thead>
-                        <tr>
-                          <th style={{ color: "black" }}>#</th>
-                          {/* <th style={{ color: "black" }}>Login Status</th> */}
-                          <th style={{ color: "black" }}>Trading Status</th>
-                          <th style={{ color: "black" }}>Device</th>
-                          <th style={{ color: "black" }}>Created At</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {adminTradingStatus.map((item, index) => (
-                          <tr key={item._id}>
-                            <td>{index + 1}</td>
-                            {/* <td>{item.login_status || "-"}</td> */}
-                            <td>{item.trading_status || "-"}</td>
-
-                            <td>{item.device}</td>
-                            <td>{new Date(item.createdAt).toLocaleString()}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  ) : (
-                    <p>No trading status information available.</p>
-                  )}
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={handleClose}>
-                    Close
-                  </Button>
-                </Modal.Footer>
-              </Modal>
             </div>
           )}
 
@@ -1152,9 +1154,9 @@ if (selectedOptions && selectedOptions.length > 0) {
                   All
                 </option>
                 {ServiceData.data &&
-                  ServiceData.data.map((item) => {
+                  ServiceData.data.map((item, index) => {
                     return (
-                      <option className="mt-1" value={item}>
+                      <option key={index} className="mt-1" value={item}>
                         {item}
                       </option>
                     );
@@ -1205,9 +1207,9 @@ if (selectedOptions && selectedOptions.length > 0) {
                   All
                 </option>
                 {getAllStrategyName.data &&
-                  getAllStrategyName.data.map((item) => {
+                  getAllStrategyName.data.map((item, index) => {
                     return (
-                      <option value={item.strategy_name}>
+                      <option key={index} value={item.strategy_name}>
                         {item.strategy_name}
                       </option>
                     );
@@ -1229,10 +1231,10 @@ if (selectedOptions && selectedOptions.length > 0) {
                   All
                 </option>
                 <option value="Open" selected>
-                Open
+                  Open
                 </option>
                 <option value="Close" selected>
-                Close
+                  Close
                 </option>
               </select>
             </div>
@@ -1242,17 +1244,17 @@ if (selectedOptions && selectedOptions.length > 0) {
             <div className="form-check custom-checkbox mb-3 ps-0">
               <label className="col-lg-12">Lots</label>
               <input
-                type="number"
                 className="default-select wide form-control"
-                defaultValue={lotMultypaly}
-                onChange={(e) => handleInputChange(e)}
+                type="text"
+                value={lotMultypaly}
+                onChange={handleInputChange}
               />
             </div>
           </div>
 
           <div className="col-lg-2  px-1">
             <div className="mb-3">
-            <label className="col-lg-12">Search Here</label>
+              <label className="col-lg-12">Search Here</label>
 
               <input
                 type="text"
@@ -1264,44 +1266,42 @@ if (selectedOptions && selectedOptions.length > 0) {
             </div>
           </div>
 
-          <div className="col-lg-2 px-1">
-            <div className="form-check custom-checkbox mb-3 ps-0">
-              <div className="custom-dropdown">
-            <label className="col-lg-12">Select Option</label>
+          {/* <div className="col-lg-2 px-1">
+            <div className="mb-3">
+              <label className="col-lg-12">Select Option</label>
 
-                <button
-                  className="btn btn-primary dropdown-toggle"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Select options
-                </button>
-                <div className="dropdown-menu">
-                  <div className="row">
-                    {columnTexts.length > 0 &&
-                      columnTexts.map((data, index) => (
-                        <div key={index} className="col-3">
-                          <li className="dropdown-item d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="form-check-input me-2"
-                              value={data}
-                              onChange={(e) => handleCheckboxChange(e, data)}
-                            />
-                            <label className="form-check-label">{data}</label>
-                          </li>
-                        </div>
-                      ))}
-                  </div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Select Options ..."
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              />
+
+              <div className="dropdown-menu">
+                <div className="row">
+                  {columnTexts.length > 0 &&
+                    columnTexts.map((data, index) => (
+                      <div key={index} className="col-3">
+                        <li className="dropdown-item d-flex align-items-center">
+                          <input
+                            type="checkbox"
+                            className="form-check-input me-2"
+                            value={data}
+                            onChange={(e) => handleCheckboxChange(e, data)}
+                          />
+                          <label className="form-check-label">{data}</label>
+                        </li>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="col-lg-2  px-1">
             <div className="mb-3">
-            <label className="col-lg-12">Reset</label>
+              <label className="col-lg-12">Reset</label>
 
               <button
                 className="btn btn-primary"
@@ -1311,87 +1311,71 @@ if (selectedOptions && selectedOptions.length > 0) {
               </button>
             </div>
           </div>
-
-        
         </div>
 
         <div className="table-responsive">
-        {tradeHistoryData.data.length > 0 ? ( tradeHistoryData.TotalCalculate &&
-            tradeHistoryData.TotalCalculate >= 0 ? (
-              <h3>
-               <b>Total Realised P/L</b>  :{" "}
-               <b><span style={{ color: "green" }}> {tradeHistoryData.TotalCalculate ? tradeHistoryData.TotalCalculate.toFixed(2):"-" }</span>{" "}</b> 
-              </h3>
-            ) : (
-              <h3>
-                <b>Total Realised P/L</b> :{" "}
-                <b><span style={{ color: "red" }}> {tradeHistoryData.TotalCalculate ? tradeHistoryData.TotalCalculate.toFixed(2) : "-"}</span>{" "}</b> 
-              </h3>
-            )
-          ) : (
-            ""
-          )}
+          <h3>
+            <b>Total Realised P/L</b> :{" "}
+            <b>
+              <span style={{ color: getTotalPnl >= 0 ? "green" : "red" }}>
+                {getTotalPnl ? getTotalPnl.toFixed(2) : "0.00"}
+              </span>
+            </b>
+          </h3>
 
-<PaginationProvider
-        pagination={paginationFactory({
-          ...paginationOptions,
-          totalSize: total1,
-          page: getPage,
-          sizePerPage: getSizePerPage,
-        })}
-      >
-        {({ paginationProps, paginationTableProps }) => (
-          <div>
-            <BootstrapTable
-              keyField="_id" // Assuming "_id" is the unique key in your data
-              data={tradeHistoryData.data} // Data from API
-              columns={columns} // Table columns
-              remote // Indicate that pagination and data are remotely controlled
-              onTableChange={handleTableChange} // Handle pagination changes
-              {...paginationTableProps} // Attach pagination props
-              headerClasses="bg-primary text-primary text-center header-class"
-              rowClasses={`text-center`}
-              noDataIndication={() => <NoDataIndication />}
+          <PaginationProvider
+            pagination={paginationFactory({
+              ...paginationOptions,
+              totalSize: total1,
+              page: getPage,
+              sizePerPage: getSizePerPage,
+            })}
+          >
+            {({ paginationProps, paginationTableProps }) => (
+              <div>
+                <BootstrapTable
+                  keyField="_id"
+                  data={tradeHistoryData.data}
+                  columns={columns }
+                  remote
+                  onTableChange={handleTableChange}
+                  {...paginationTableProps}
+                  headerClasses="bg-primary text-primary text-center header-class"
+                  rowClasses={`text-center`}
+                  noDataIndication={() => <NoDataIndication />}
+                />
 
-            />
-
-<div className="mb-2 d-flex justify-content-between align-items-start mt-2">
-<div className="d-flex align-items-center">
-  <label htmlFor="sizePerPageSelect" className="mx-2" >
-    Items per page:
-  </label>
-  <select
-    id="sizePerPageSelect"
-    value={getSizePerPage}
-    onChange={handleSizePerPageChange}
-  
-  >
-    <option value={10}>10</option>
-    <option value={25}>25</option>
-    <option value={50}>50</option>
-    <option value={100}>100</option>
-    <option value={200}>200</option>
-
-    <option value={500}>500</option>
-    <option value={1000}>1000</option>
-    <option value={1500}>1500</option>
-
-
-  </select>
-</div>
-  <div className="d-flex align-items-center">
-    <PaginationTotalStandalone {...paginationProps} className="mr-3" /> {/* Add margin to the right for spacing */}
-  </div>
-  <div className="d-flex align-items-end">
-  <PaginationListStandalone {...paginationProps} />
-  </div>
-  
-</div>
-
-            
-          </div>
-        )}
-      </PaginationProvider>
+                <div className="mb-2 d-flex justify-content-between align-items-start mt-2">
+                  <div className="d-flex align-items-center">
+                    <label htmlFor="sizePerPageSelect" className="mx-2">
+                      Items per page:
+                    </label>
+                    <select
+                      id="sizePerPageSelect"
+                      value={getSizePerPage}
+                      onChange={handleSizePerPageChange}
+                    >
+                      <option value={10}>10</option>
+                      <option value={25}>25</option>
+                      <option value={50}>50</option>
+                      <option value={100}>100</option>
+                      <option value={200}>200</option>
+                    </select>
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <PaginationTotalStandalone
+                      {...paginationProps}
+                      className="mr-3"
+                    />{" "}
+                    {/* Add margin to the right for spacing */}
+                  </div>
+                  <div className="d-flex align-items-end">
+                    <PaginationListStandalone {...paginationProps} />
+                  </div>
+                </div>
+              </div>
+            )}
+          </PaginationProvider>
         </div>
 
         <DetailsView
@@ -1419,6 +1403,47 @@ if (selectedOptions && selectedOptions.length > 0) {
           </b>
         </h6>
       </Content>
+
+      {/* Modal */}
+      <Modal show={showModal6} onHide={handleClose} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Trading Status Information</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {adminTradingStatus.length > 0 ? (
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th style={{ color: "black" }}>#</th>
+                  {/* <th style={{ color: "black" }}>Login Status</th> */}
+                  <th style={{ color: "black" }}>Trading Status</th>
+                  <th style={{ color: "black" }}>Device</th>
+                  <th style={{ color: "black" }}>Created At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {adminTradingStatus.map((item, index) => (
+                  <tr key={item._id}>
+                    <td>{index + 1}</td>
+                    {/* <td>{item.login_status || "-"}</td> */}
+                    <td>{item.trading_status || "-"}</td>
+
+                    <td>{item.device}</td>
+                    <td>{new Date(item.createdAt).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          ) : (
+            <p>No trading status information available.</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

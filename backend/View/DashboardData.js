@@ -450,6 +450,108 @@ async function DashboardView() {
   }
 }
 
+
+
+async function Cilents_service_View() {
+  try {
+    await client.connect();
+
+    const views = await dbTest
+      .listCollections({ name: "Cilents_service_stg" })
+      .toArray();
+
+    // If the view exists, exit the function
+    if (views.length > 0) {
+
+      return;
+    }
+
+    const pipeline =   [
+     
+      {
+        $lookup: {
+          from: 'client_services',
+          localField: '_id', 
+          foreignField: 'user_id', 
+          as: 'client_services'
+        }
+      },
+      {
+        $unwind: '$client_services',
+      },
+      {
+        $match: {
+          'client_services.active_status': '1'
+        }
+      },
+      {
+        $lookup: {
+          from: "services",
+          localField: "client_services.service_id",
+          foreignField: "_id",
+          as: "service",
+        },
+      },
+      {
+        $unwind: '$service',
+      },
+     
+      
+      
+      {
+        $lookup: {
+          from: "categories",
+          localField: "service.categorie_id",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $unwind: '$category',
+      },
+      {
+        $lookup: {
+          from: "strategies",
+          localField: "client_services.strategy_id",
+          foreignField: "_id",
+          as: "strategys",
+        },
+      },
+      {
+        $unwind: '$strategys',
+      },
+      {
+        $project: {
+       
+          id:1,
+          "user_id":"$_id",
+          "service_name": "$service.name",
+          "service_instrument_token": "$service.instrument_token",
+          "service_exch_seg": "$service.exch_seg",
+          "strategy_name": "$strategys.strategy_name",
+        
+       
+          
+        }
+      }      
+     
+    ];
+
+    await dbTest.createCollection("Cilents_service_stg", {
+      viewOn: "users",
+      pipeline,
+    });
+    
+    return;
+  } catch (error) {
+    console.log("Error Cilents_service_stg Create:", error);
+  }
+}
+
+
+
+
+
 async function deleteDashboard() {
   try {
     // Drop the view if it exists
@@ -460,4 +562,4 @@ async function deleteDashboard() {
   }
 }
 
-module.exports = { DashboardView, deleteDashboard };
+module.exports = {Cilents_service_View, DashboardView, deleteDashboard };

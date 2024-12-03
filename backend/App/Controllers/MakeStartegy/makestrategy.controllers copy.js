@@ -326,7 +326,7 @@ class MakeStartegy {
                 console.log(`View ${viewName} already exists`);
               }
             } catch (error) {
-              console.error(`Error creating view ${viewName}:`, error);
+              console.log(`Error creating view ${viewName}:`, error);
             }
 
 
@@ -411,7 +411,7 @@ class MakeStartegy {
                 console.log(`View ${viewName} already exists`);
               }
             } catch (error) {
-              console.error(`Error creating view ${viewName}:`, error);
+              console.log(`Error creating view ${viewName}:`, error);
             }
 
     } else {
@@ -471,7 +471,7 @@ class MakeStartegy {
              console.log(`View ${viewName} already exists`);
            }
          } catch (error) {
-           console.error(`Error creating view ${viewName}:`, error);
+           console.log(`Error creating view ${viewName}:`, error);
          }
     }
 
@@ -638,7 +638,7 @@ class MakeStartegy {
                       console.log(`View ${viewName} already exists`);
                     }
                   } catch (error) {
-                    console.error(`Error creating view ${viewName}:`, error);
+                    console.log(`Error creating view ${viewName}:`, error);
                   }
 
 
@@ -718,7 +718,7 @@ class MakeStartegy {
                       console.log(`View ${viewName} already exists`);
                     }
                   } catch (error) {
-                    console.error(`Error creating view ${viewName}:`, error);
+                    console.log(`Error creating view ${viewName}:`, error);
                   }
 
           } else {
@@ -773,7 +773,7 @@ class MakeStartegy {
                    console.log(`View ${viewName} already exists`);
                  }
                } catch (error) {
-                 console.error(`Error creating view ${viewName}:`, error);
+                 console.log(`Error creating view ${viewName}:`, error);
                }
           }
 
@@ -1130,18 +1130,16 @@ async function run() {
                         } 
                         
                         else {
-                        //console.log('source ELSEEEE' ,source);
+                   
                         let indicatorCollectionName = source+'_M' + val.timeframe + '_' + val.tokensymbol;
                         const indicatorView = await dbTradeTools.collection(indicatorCollectionName);
                         const get_view_data_indicator = await indicatorView.aggregate([{ $sort: { _id: -1 } }]).toArray();
 
-                       // console.log("source ", source)
-                       // console.log("get_view_data ", get_view_data)
 
                         if(get_view_data_indicator.length > 0){
                           let sourceVal = get_view_data_indicator.map(item => item.ema);
                           data[source] = sourceVal;
-                          //console.log("source ELSE INSIDE DATA", source)
+                       
                         } 
                         }
                       }
@@ -1149,11 +1147,9 @@ async function run() {
                   }
                   try {
 
-                    // console.log("val.condition", val.condition)
-                    // console.log("val.condition", val.type)
-                    // console.log("data", data)
+              
                     const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
-                    console.log("condition", condition)
+                   
                     
                     if (condition) {
                       let entry_type = 'LE';
@@ -1415,7 +1411,7 @@ async function run() {
                   const io = await getIO();
                   io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: tradeSymbol });
 
-                  console.log("response Trade Excuted - ", response.data)
+                  // console.log("response Trade Excuted - ", response.data)
 
                 })
                 .catch((error) => {

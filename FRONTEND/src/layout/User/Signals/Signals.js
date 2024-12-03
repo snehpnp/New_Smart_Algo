@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
-import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
+import FullDataTable from "../../../Components/ExtraComponents/Datatable/SignalsDatatabel"
 import Loader from '../../../Utils/Loader'
 import { fDateTimeSuffix } from '../../../Utils/Date_formet'
 import { Get_Signals } from "../../../ReduxStore/Slice/Users/SignalsSlice"

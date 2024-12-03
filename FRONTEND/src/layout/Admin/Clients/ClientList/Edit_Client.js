@@ -83,7 +83,7 @@ const EditClient = () => {
             loading: false,
             data: response,
           });
-         
+
           setSelectedPlan(response.data[0].plan_id);
         }
       });
@@ -197,17 +197,19 @@ const EditClient = () => {
       return errors;
     },
     onSubmit: async (values) => {
-
-
       if (values.licence == 2) {
-       if(values.licence1 == null){
-        if(values.tomonth == null || values.tomonth == "" || values.tomonth == undefined || values.tomonth == "0"){
-          toast.error("Please Select Licence");
-          return;
+        if (values.licence1 == null) {
+          if (
+            values.tomonth == null ||
+            values.tomonth == "" ||
+            values.tomonth == undefined ||
+            values.tomonth == "0"
+          ) {
+            toast.error("Please Select Licence");
+            return;
+          }
         }
-       }
       }
-
 
       const req = {
         FullName: values.fullName,
@@ -246,7 +248,6 @@ const EditClient = () => {
         plan_id: selectedPlan,
       };
 
-
       await dispatch(Update_User({ req: req, token: user_details.token }))
         .unwrap()
         .then((response) => {
@@ -262,31 +263,8 @@ const EditClient = () => {
     },
   });
 
-  useEffect(() => {
-    let Service_Month_Arr = [];
-    for (let index = 1; index <= 1; index++) {
-      const currentDate =
-        UserData.data.data !== undefined
-          ? new Date(
-              UserData.data.data[0].license_type == 2
-                ? UserData.data.data[0].EndDate
-                : new Date()
-            )
-          : new Date();
-      const currentYear = currentDate.getFullYear();
-      const currentMonth = currentDate.getMonth();
-      const endMonth = (currentMonth + index) % 12;
-      const endYear = currentYear + Math.floor((currentMonth + index) / 12);
 
-      // Create the end date string
-      const endDate = `${index} Month Licence Expires On ${currentDate.getDate()}-${
-        endMonth + 1
-      }-${endYear}`;
-
-      Service_Month_Arr.push({ month: index, endDate });
-    }
-    setfirst(Service_Month_Arr);
-  }, [UserData.data.data]);
+  
 
   let fields = [
     {
@@ -425,7 +403,7 @@ const EditClient = () => {
           ? "App Key"
           : formik.values.broker == 25
           ? "Api Key"
-           : formik.values.broker == 27
+          : formik.values.broker == 27
           ? "Api Key"
           : "'Api Key",
       type: "text",
@@ -460,14 +438,13 @@ const EditClient = () => {
           ? "User"
           : formik.values.broker == 4
           ? "Client Code"
-     
           : formik.values.broker == 9
           ? "Vander Id"
           : formik.values.broker == 11
           ? "Client Code"
           : formik.values.broker == 11
           ? "client_code"
-           : formik.values.broker == 27
+          : formik.values.broker == 27
           ? "Vendor Code"
           : "User Id",
       type: "text",
@@ -590,14 +567,13 @@ const EditClient = () => {
       label:
         formik.values.broker == 5
           ? "DOB"
-          // : formik.values.broker == 7
+          : // : formik.values.broker == 7
           // ? "Trade Api Password"
-          : formik.values.broker == 9
+          formik.values.broker == 9
           ? "Encryption IV"
-          
           : "Api Secret",
       type: "text",
-      showWhen: (values) => values.broker === "9" ,
+      showWhen: (values) => values.broker === "9",
       label_size: 12,
       col_size: 6,
       disable: false,
@@ -994,9 +970,7 @@ const EditClient = () => {
   ];
 
   // Handler to update state when radio button is selected
-  const handlePlanChange = (e) => {
- 
-  };
+  const handlePlanChange = (e) => {};
 
   const GetAllPlansData = async () => {
     await dispatch(Get_All_Plans())
@@ -1011,6 +985,29 @@ const EditClient = () => {
       });
   };
 
+
+  useEffect(() => {
+    if (UserData?.data?.data?.[0]?.EndDate) {
+      const Service_Month_Arr = [];
+      const currentDate =
+        new Date(UserData.data.data[0].EndDate) > new Date()
+          ? new Date(UserData.data.data[0].EndDate)
+          : new Date();
+  
+      for (let index = 1; index <= 1; index++) { // Adjust range as needed
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth();
+        const endMonth = (currentMonth + index) % 12;
+        const endYear = currentYear + Math.floor((currentMonth + index) / 12);
+  
+        const endDate = `${index} Month Licence Expires On ${currentDate.getDate()}-${
+          endMonth + 1
+        }-${endYear}`;
+        Service_Month_Arr.push({ month: index, endDate });
+      }
+      setfirst(Service_Month_Arr);
+    }
+  }, [UserData?.data?.data]);
   return (
     <>
       <Content

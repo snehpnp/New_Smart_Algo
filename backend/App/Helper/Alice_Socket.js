@@ -28,10 +28,9 @@ const url = "wss://ws1.aliceblueonline.com/NorenWS/"
 const Alice_Socket = async () => {
   var rr = 0;
  
-
   let channelstradd = "";
   const uniqueTokens = new Set();
-  //Main SignalS code
+
   const pipeline = [
     {
       $match: {
@@ -153,7 +152,7 @@ const Alice_Socket = async () => {
 
   ]
   const result = await MainSignals_modal.aggregate(pipeline)
-  
+ 
   if (result.length > 0) {
    
     const resultString = result.reduce((acc, { token, exch_seg }) => {
@@ -297,6 +296,7 @@ const Alice_Socket = async () => {
   }
 
 
+
   var socket = null
   var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
 
@@ -316,6 +316,7 @@ const Alice_Socket = async () => {
   // }
   // Display fetched documents
   var alltokenchannellist = channelstradd.substring(0, channelstradd.length - 1);
+
 
 
   var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
@@ -374,67 +375,30 @@ function openSocketConnection(channelList, userid, userSession1) {
 
   ws.onmessage = async function (msg) {
     const response = JSON.parse(msg.data)
-
+   
     if (response.tk) {
      
       const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk });
       if (Make_startegy_token) {
+        
         await connectToDB(response.tk, response)
       }
 
-
-
-      // if (response.lp != undefined) {
-      //   console.log("response", response.tk)
-      //   await stock_live_price.updateOne({ _id: response.tk }
-      //     , {
-      //       $set: {
-      //         lp: response.lp,
-      //         exc: response.e,
-      //         curtime: `${new Date().getHours().toString().padStart(2, '0')}${new Date().getMinutes().toString().padStart(2, '0')}`,
-      //         ft: response.ft
-      //       },
-      //     },
-      //     { upsert: true });
-      // }
-
-
-
-
-
-
-      let updateQueue = {};
-      function queueUpdate(response) {
-        updateQueue[response.tk] = {
-          lp: response.lp,
-          exc: response.e,
-          curtime: `${new Date().getHours().toString().padStart(2, '0')}${new Date().getMinutes().toString().padStart(2, '0')}`,
-          ft: response.ft
-        };
-      }
-      setInterval(async () => {
-        const bulkOps = Object.keys(updateQueue).map(id => ({
-          updateOne: {
-            filter: { _id: id },
-            update: { $set: updateQueue[id] },
-            upsert: true
-          }
-        }));
-      
-        if (bulkOps.length > 0) {
-          await stock_live_price.bulkWrite(bulkOps);
-          updateQueue = {};
-        }
-      }, 500); 
-      
       if (response.lp != undefined) {
-        queueUpdate(response);
+        await stock_live_price.updateOne({ _id: response.tk }
+          , {
+            $set: {
+              lp: response.lp,
+              exc: response.e,
+              // sp1: response.sp1 != undefined ? response.sp1: response.lp,
+              // bp1: response.bp1 != undefined ? response.bp1: response.lp,
+              curtime: `${new Date().getHours().toString().padStart(2, '0')}${new Date().getMinutes().toString().padStart(2, '0')}`,
+              ft: response.ft
+            },
+          },
+          { upsert: true });
+
       }
-      
-
-
-    } else {
-
     }
 
 
@@ -455,12 +419,12 @@ function openSocketConnection(channelList, userid, userSession1) {
 // Function to send the current channel list
 function sendChannelList(channelList) {
   if (ws && ws.readyState === WebSocket.OPEN) {
-      const json = {
-          k: channelList,
-          t: 't'
-      };
-      ws.send(JSON.stringify(json));  // Send channel list to server
-      
+    const json = {
+      k: channelList,
+      t: 't'
+    };
+    ws.send(JSON.stringify(json));  // Send channel list to server
+    console.log("Channel list sent:", channelList);
   } else {
     console.log("WebSocket is not open. Cannot send channel list.");
   }
@@ -469,8 +433,7 @@ function sendChannelList(channelList) {
 
 // Function to dynamically update the channelList and send it
 function updateChannelAndSend(newChannel) {
-  // channelList += newChannel;  // Add the new channel to the existing list
-  console.log("Updated channelList:", newChannel);
+
   sendChannelList(newChannel);  // Send updated channel list
 }
 
@@ -702,7 +665,7 @@ async function createViewM3(collectionName) {
 
 
   } catch (err) {
-   
+
   }
 
 
@@ -788,7 +751,7 @@ async function createViewM5(collectionName) {
 
 
   } catch (err) {
-  
+
   }
 
 
@@ -874,7 +837,7 @@ async function createViewM10(collectionName) {
 
 
   } catch (err) {
-    // console.log('Error View Create 5 minute:', err);
+
   }
 
 
@@ -960,7 +923,7 @@ async function createViewM15(collectionName) {
 
 
   } catch (err) {
-    // console.log('Error View Create 5 minute:', err);
+  
   }
 
 
@@ -1046,7 +1009,7 @@ async function createViewM30(collectionName) {
 
 
   } catch (err) {
-    // console.log('Error View Create 5 minute:', err);
+  
   }
 
 
@@ -1131,7 +1094,7 @@ async function createViewM60(collectionName) {
 
 
   } catch (err) {
-    // console.log('Error View Create 5 minute:', err);
+ 
   }
 
 
@@ -1210,7 +1173,7 @@ async function createViewM1DAY(collectionName) {
 
 
   } catch (err) {
-    // console.log('Error View Create 5 minute:', err);
+
   }
 
 

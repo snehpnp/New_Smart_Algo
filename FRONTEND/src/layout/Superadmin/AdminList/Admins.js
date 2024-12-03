@@ -32,11 +32,12 @@ const AdminsList = () => {
   const [themeData, setThemeData] = useState({ loading: true, data: [] });
   const [filteredData, setFilteredData] = useState([]);
   const [excelData, setExcelData] = useState([]);
-  const [ statusData , setStatusData ] = useState("");
+  const [statusData, setStatusData] = useState("");
 
   useEffect(() => {
     fetchAllPanels();
   }, []);
+
   useEffect(() => {
     if (themeData.data.length > 0) {
       const filteredData = themeData.data.filter((item) => {
@@ -44,24 +45,24 @@ const AdminsList = () => {
           !searchInput ||
           item.panel_name.toLowerCase().includes(searchInput.toLowerCase()) ||
           item.domain.toLowerCase().includes(searchInput.toLowerCase());
-  
+
         const matchStatus =
           !statusData || item.is_active === Number(statusData);
-  
+
         return matchSearch && matchStatus;
       });
-  
+
       const ExportData = filteredData.map((item) => ({
         "Panel Name": item.panel_name,
         "Theme Name": item.theme_name,
         "Is Active": item.is_active === 0 ? "Active" : "Inactive",
       }));
-  
+
       setExcelData(ExportData);
       setFilteredData(filteredData);
     }
   }, [searchInput, themeData.data, statusData]);
-  
+
   const GetAllThemes = async () => {
     try {
       const response = await dispatch(Get_All_Theme()).unwrap();
@@ -77,13 +78,15 @@ const AdminsList = () => {
     try {
       const response = await dispatch(All_Panel_List()).unwrap();
       if (response.status) {
-        let ExportData = response.data && response.data.map((item) => {
-          return {
-            "Panel Name": item.panel_name,
-            "Theme Name": item.theme_name,
-            "Is Active": item.is_active === 0 ? "Active" : "Inactive",
-          };
-        });
+        let ExportData =
+          response.data &&
+          response.data.map((item) => {
+            return {
+              "Panel Name": item.panel_name,
+              "Theme Name": item.theme_name,
+              "Is Active": item.is_active === 0 ? "Active" : "Inactive",
+            };
+          });
 
         setExcelData(ExportData);
 
@@ -189,27 +192,9 @@ const AdminsList = () => {
       text: "SR. No.",
       formatter: (cell, row, rowIndex) => rowIndex + 1,
     },
-
-    {
-      dataField: "panel_name",
-      text: "Panel Name",
-      formatter: (cell, row) => (
-        <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-          <Link to={`${row.domain}`} target="_blank" rel="noopener noreferrer">
-            {row.domain}
-          </Link>
-        </span>
-      ),
-    },
-
-    {
-      dataField: "theme_name",
-      text: "Set theme",
-      formatter: (cell, row) => <span>{cell} </span>,
-    },
     {
       dataField: "is_active",
-      text: "Close Panel",
+      text: "On/Off",
       formatter: (cell, row) => (
         <label className="toggle mt-3 ">
           <input
@@ -228,7 +213,7 @@ const AdminsList = () => {
     },
     {
       dataField: "a",
-      text: "Update Theme",
+      text: "Theme",
       formatter: (cell, row) => (
         <span data-toggle="tooltip" data-placement="top" title="Edit">
           <Pointer
@@ -261,6 +246,25 @@ const AdminsList = () => {
         </div>
       ),
     },
+
+    {
+      dataField: "panel_name",
+      text: "Panel Name",
+      formatter: (cell, row) => (
+        <span data-toggle="tooltip" data-placement="top" title="Panel Views">
+          <Link to={`${row.domain}/#/login`} target="_blank" rel="noopener noreferrer">
+            {row.panel_name}
+          </Link>
+        </span>
+      ),
+    },
+
+    {
+      dataField: "theme_name",
+      text: "Set theme",
+      formatter: (cell, row) => <span>{cell} </span>,
+    },
+
     {
       dataField: "a",
       text: "Tabels",
@@ -324,6 +328,40 @@ const AdminsList = () => {
               strokeWidth={2}
               className="mx-1 pointer-icon"
               onClick={() => PanelReload(row)}
+            />
+          </div>
+        </span>
+      ),
+    },
+    {
+      dataField: "a",
+      text: "Create Position View",
+      formatter: (cell, row) => (
+        <span style={{ display: "flex" }}>
+          <div className="tooltip-wrapper" title="Craete View">
+            <RefreshCcw
+              size={20}
+              color="#198754"
+              strokeWidth={2}
+              className="mx-1 pointer-icon"
+              onClick={() => CraetePositionView(row)}
+            />
+          </div>
+        </span>
+      ),
+    },
+    {
+      dataField: "a",
+      text: "Delete Position View",
+      formatter: (cell, row) => (
+        <span style={{ display: "flex" }}>
+          <div className="tooltip-wrapper" title="Delete View">
+            <RefreshCcw
+              size={20}
+              color="#198754"
+              strokeWidth={2}
+              className="mx-1 pointer-icon"
+              onClick={() => DeletePositionView(row)}
             />
           </div>
         </span>
@@ -398,6 +436,98 @@ const AdminsList = () => {
     }
   };
 
+  const DeletePositionView = async (row) => {
+    try {
+      const { value: password } = await Swal.fire({
+        title: "Enter your password",
+        input: "password",
+        inputLabel: "Password",
+        inputPlaceholder: "Enter your password",
+        inputAttributes: {
+          maxlength: "10",
+          autocapitalize: "off",
+          autocorrect: "off",
+        },
+      });
+
+      if (password !== "7700") {
+        Swal.fire("Incorrect password");
+        window.location.reload();
+        return;
+      }
+
+
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: row.backend_rul + "/dropOpenPosition",
+        headers: {},
+      };
+
+      axios
+        .request(config)
+        .then((response) => {
+          if (response.data.status) {
+            toast.success(response.data.msg);
+          } else {
+            toast.error(response.data.msg);
+        
+          }
+        })
+        .catch((error) => {
+          console.log("Error Drop Position ",error);
+        });
+    } catch (error) {
+      toast.error("An error occurred while closing the panel");
+    }
+  };
+
+  const CraetePositionView = async (row) => {
+    try {
+      const { value: password } = await Swal.fire({
+        title: "Enter your password",
+        input: "password",
+        inputLabel: "Password",
+        inputPlaceholder: "Enter your password",
+        inputAttributes: {
+          maxlength: "10",
+          autocapitalize: "off",
+          autocorrect: "off",
+        },
+      });
+
+      if (password !== "7700") {
+        Swal.fire("Incorrect password");
+        window.location.reload();
+        return;
+      }
+
+
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: row.backend_rul + "all/position/view",
+        headers: {},
+      };
+
+      axios
+        .request(config)
+        .then((response) => {
+          if (response.data.status) {
+            toast.success(response.data.msg);
+          } else {
+            toast.error(response.data.msg);
+        
+          }
+        })
+        .catch((error) => {
+          console.log("Error Create Potisition ",error);
+        });
+    } catch (error) {
+      toast.error("An error occurred while closing the panel");
+    }
+  };
+
   const UpdateLivePrive = async (row) => {
     try {
       const { value: password } = await Swal.fire({
@@ -468,7 +598,6 @@ const AdminsList = () => {
         title: "Information",
         text: "An issue occurred during the server update. The UI will remain unaffected.",
       });
-
     }
   };
 
@@ -542,29 +671,7 @@ const AdminsList = () => {
     }
   };
 
-  const changeView = (e) => {
-    const value = e.target.value;
-    if (value === "") {
-      setFilteredData(themeData.data);
-    } else {
-      const filteredData = themeData.data.filter((item) => {
-        return item.is_active === Number(value);
-      });
 
-
-      let ExportData = filteredData && filteredData.map((item) => {
-        return {
-          "Panel Name": item.panel_name,
-          "Theme Name": item.theme_name,
-          "Is Active": item.is_active === 0 ? "Active" : "Inactive",
-        };
-      });
-
-      setExcelData(ExportData);
-
-      setFilteredData(filteredData);
-    }
-  };
 
   const fields = [
     {

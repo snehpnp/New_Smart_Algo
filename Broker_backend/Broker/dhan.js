@@ -14,7 +14,6 @@ var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
 
-    console.log("DHANNNNN")
 
 
     try {
@@ -399,6 +398,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
+   try{
     var dt = signals.DTime;
     var input_symbol = signals.Symbol;
     var type = signals.TType.toUpperCase();
@@ -579,6 +579,9 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
         });
 
+   }catch(e){
+         console.log("Dhan Entry error",e);
+    }
 
 
 }
