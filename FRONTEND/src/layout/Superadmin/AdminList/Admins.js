@@ -475,7 +475,7 @@ const AdminsList = () => {
           }
         })
         .catch((error) => {
-          console.log(error);
+          console.log("Error Drop Position ",error);
         });
     } catch (error) {
       toast.error("An error occurred while closing the panel");
@@ -521,7 +521,7 @@ const AdminsList = () => {
           }
         })
         .catch((error) => {
-          console.log(error);
+          console.log("Error Create Potisition ",error);
         });
     } catch (error) {
       toast.error("An error occurred while closing the panel");

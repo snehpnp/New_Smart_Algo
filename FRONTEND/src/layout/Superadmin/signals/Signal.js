@@ -65,7 +65,7 @@ const AdminHelps = () => {
         setSignalId("");
       }
     } catch (err) {
-      console.log(err);
+      console.log("Error Update Price",err);
     }
   };
 

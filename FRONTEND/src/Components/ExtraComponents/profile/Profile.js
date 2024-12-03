@@ -97,7 +97,7 @@ const UserProfile = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-          console.log(response.Permission_Logs_data);
+     
           setShowLogsData(response.Permission_Logs_data);
           setPricePermission(response.data[0].price_permission);
         }
@@ -221,7 +221,7 @@ const UserProfile = () => {
   const handleShowModal = () => setShow(true);
 
   const handleSubmit1 = () => {
-    console.log(pricePermission);
+  
 
     let requestData = {
       status: pricePermission,
