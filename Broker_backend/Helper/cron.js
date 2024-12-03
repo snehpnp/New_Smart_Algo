@@ -9,6 +9,7 @@ module.exports = function (app) {
     downloadFyerstoken();
   });
 
+  
   cron.schedule("10 6 * * *", () => {
     downloadAndSwastika();
   });
@@ -230,6 +231,10 @@ module.exports = function (app) {
       {
         url: "https://public.fyers.in/sym_details/NSE_CD.csv",
         key: "FYERS_CDS",
+      },
+      {
+        url: "https://public.fyers.in/sym_details/BSE_FO.csv",
+        key: "FYERS_BFO",
       },
     ];
 

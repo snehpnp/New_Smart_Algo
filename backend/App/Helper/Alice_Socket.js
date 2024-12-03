@@ -39,7 +39,7 @@ const Alice_Socket = async () => {
 
 
     if(curtime1 > 1531){
-      console.log("Market Close");
+      console.log("Market Close"+new Date());
       return null;
     }
 
@@ -54,15 +54,14 @@ const Alice_Socket = async () => {
     });
   }
 
-  var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
+  let alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
 
-  var aliceBaseUrl =
+  let aliceBaseUrl =
     "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/";
-  var userid = broker_infor.user_id;
-  var userSession1 = broker_infor.access_token;
-  var trading_status = broker_infor.trading_status;
-  var channelList = alltokenchannellist;
-  var type = { loginType: "API" };
+  let userid = broker_infor.user_id;
+  let userSession1 = broker_infor.access_token;
+  let channelList = alltokenchannellist;
+  let type = { loginType: "API" };
 
   if (
     broker_infor.user_id !== undefined &&
@@ -79,7 +78,7 @@ const Alice_Socket = async () => {
         })
         .then((res) => {
           if (res.data.stat == "Ok") {
-            console.log("Alice Socket Connected");
+            console.log("Alice Socket Connected"+ new Date());
 
             try {
               const ws = new WebSocket(url);
@@ -149,6 +148,7 @@ const Alice_Socket = async () => {
               };
 
               ws.onclose = async function () {
+                console.log("WebSocket is closed. Reconnect will be attempted in 1 second.", new Date());
                 const indiaTimezoneOffset = 330;
                 const currentTimeInMinutes =
                   new Date().getUTCHours() * 60 +
@@ -185,7 +185,7 @@ const Alice_Socket = async () => {
                 }
               };
             } catch (error) {
-              console.log("Error Shocket", error);
+              console.log("Error Shocket"+new Date()+ error);
               socketRestart();
             }
           }
@@ -869,3 +869,5 @@ async function createViewM1DAY(collectionName) {
 }
 
 module.exports = { Alice_Socket, getSocket };
+
+
