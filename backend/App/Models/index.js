@@ -69,7 +69,7 @@ module.exports = {
     user_fund_logs:require('./fund_change_logs.model'),
     SuperadminHistoryBackup:require('./Superadminhistorybackup.model'),
     Plansmodel:require('./Plans.model'),
-    tttModal:require('./ttt'),
+    
     makecallABR:require("./makecallABR.model"),
     Permission_Logs:require('./Permission_logs.model'),
     dashboard_data:dashboard_data
