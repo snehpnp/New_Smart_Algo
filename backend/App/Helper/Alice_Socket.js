@@ -19,11 +19,12 @@ const maxReconnectAttempts = 10;
 const reconnectInterval = 5000; // Initial reconnect interval in ms
 
 const Alice_Socket = async () => {
-  var rr = 0;
+
   const url = "wss://ws1.aliceblueonline.com/NorenWS/";
-  var socket = null;
-  var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
+  let broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" ,trading_status:"on"}).sort({ _id: -1 });
+
   if (!broker_infor) {
+    console.log("Broker Trading Off");
     return null;
   }
 
@@ -44,7 +45,7 @@ const Alice_Socket = async () => {
 
 
   const updateToken = await token_chain.find({}).toArray();
-  var channelstr = "";
+  let channelstr = "";
   if (updateToken.length > 0) {
     updateToken.forEach((data) => {
       if (data.exch != null && data._id != null) {
@@ -115,8 +116,6 @@ const Alice_Socket = async () => {
                         .getMinutes()
                         .toString()
                         .padStart(2, "0")}`;
-
-                      // USE bulkWrite
 
                       if (curtime < 1530) {
                         await stock_live_price.updateOne(
