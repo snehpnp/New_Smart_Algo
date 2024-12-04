@@ -82,9 +82,7 @@ cron.schedule("50 8 * * *", () => {
 cron.schedule("1 1 * * *", () => {
   UpdateGetMonthlyData();
 });
-cron.schedule("0 */8 * * *", () => {
-  UpdateCurrentTime();
-});
+
 cron.schedule("5 1 * * *", () => {
   UpdateCurrentTime();
 });

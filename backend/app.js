@@ -76,6 +76,30 @@ app.get("/restart/socket", (req, res) => {
   res.send("DONE");
 });
 
+const axios = require("axios");
+
+app.get("/all/socket/restart", (req, res) => {
+
+  let UrlArr = [
+    "https://software.tradeonn.com/backend/restart/socket",
+    "https://software.corebizinfotech.com/backend/restart/socket",
+    "https://newpenal.pandpinfotech.com/backend/restart/socket",
+  ]
+
+  UrlArr.forEach((url) => {
+    axios.get(url).then((response) => {
+      console.log(url ," => ",response.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  });
+
+  res.send("DONE");
+
+
+
+});
+
 // Server start
 server.listen(process.env.PORT, () => {
   console.log(`Server is running on  http://0.0.0.0:${process.env.PORT}`);

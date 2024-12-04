@@ -19,7 +19,7 @@ class OptionChain {
     async Get_Option_Symbol(req, res) {
         try {
 
-            const validSymbols = [
+            const validSymbols = ["NIFTY_50","NIFTY_BANK","NIFTY_FIN_SERVICE","SENSEX","FINNIFTY","BANKNIFTY","NIFTY",
                 "INFY", "LT", "PEL", "CIPLA", "LUPIN", "LALPATHLAB", "IEX", "HINDALCO", 
                 "INDIACEM", "INDIAMART", "TATASTEEL", "BALRAMCHIN", "MARUTI", "UPL", 
                 "ZYDUSLIFE", "ULTRACEMCO", "ASTRAL", "SBICARD", "HEROMOTOCO", "TCS", 

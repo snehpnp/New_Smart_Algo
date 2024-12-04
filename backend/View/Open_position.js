@@ -440,33 +440,20 @@ module.exports = {
 // db.createView("open_position", "mainsignals",
 //   [
 //     {
-
-//       $match: {
-//         createdAt: {
-//           $gte: new Date(new Date().setHours(00, 00, 00)),
-//           $lt: new Date(new Date().setHours(23, 59, 59))
-//         }
-//       }
-//     },
-
-//     {
 //       $addFields: {
 //         target: {
 //           $cond: {
 //             if: {
 //               $or: [
-
-//                 { $eq: ['$target', 0] },
-//                 { $eq: ['$target', "0"] },
-//                 { $eq: ['$target', '0'] },
+//                 { $eq: ["$target", 0] },
+//                 { $eq: ["$target", "0"] },
+//                 { $eq: ["$target", "0"] },
 //               ],
 //             },
 //             then: 0,
 //             else: {
-
 //               //$add: [{ $toDouble: '$target' }, { $toDouble: '$entry_price' }]
-//               $add: [{ $toDouble: '$target' }]
-
+//               $add: [{ $toDouble: "$target" }],
 //             },
 //           },
 //         },
@@ -474,38 +461,34 @@ module.exports = {
 //           $cond: {
 //             if: {
 //               $or: [
-//                 { $eq: ['$stop_loss', 0] },
-//                 { $eq: ['$stop_loss', "0"] },
-//                 { $eq: ['$stop_loss', '0'] }, // Check if stop_loss is the string "0"
+//                 { $eq: ["$stop_loss", 0] },
+//                 { $eq: ["$stop_loss", "0"] },
+//                 { $eq: ["$stop_loss", "0"] }, // Check if stop_loss is the string "0"
 //               ],
 //             },
 //             then: 0,
 //             else: {
-
 //               // $subtract: [{ $toDouble: '$entry_price' }, { $toDouble: '$stop_loss' }]
 
-//               $add: [{ $toDouble: '$stop_loss' }]
-
+//               $add: [{ $toDouble: "$stop_loss" }],
 //             },
-
 //           },
 //         },
 //         entry_qty_percent: {
 //           $subtract: [
-//             { $toDouble: '$entry_qty_percent' },
+//             { $toDouble: "$entry_qty_percent" },
 //             {
 //               $cond: {
 //                 if: {
 //                   $or: [
-//                     { $eq: ['$exit_qty_percent', 0] },
-//                     { $eq: ['$exit_qty_percent', "0"] },
-//                     { $eq: ['$exit_qty_percent', '0'] }, // Check if stop_loss is the string "0"
-//                     { $eq: ['$exit_qty_percent', ''] }, // Check if stop_loss is the string "0"
-
+//                     { $eq: ["$exit_qty_percent", 0] },
+//                     { $eq: ["$exit_qty_percent", "0"] },
+//                     { $eq: ["$exit_qty_percent", "0"] }, // Check if stop_loss is the string "0"
+//                     { $eq: ["$exit_qty_percent", ""] }, // Check if stop_loss is the string "0"
 //                   ],
 //                 },
 //                 then: 0,
-//                 else: { $ifNull: [{ $toDouble: '$exit_qty_percent' }, 0] },
+//                 else: { $ifNull: [{ $toDouble: "$exit_qty_percent" }, 0] },
 //               },
 //             },
 //           ],
@@ -514,14 +497,14 @@ module.exports = {
 //     },
 //     {
 //       $lookup: {
-//         from: 'live_prices',
+//         from: "live_prices",
 //         let: {},
 //         pipeline: [],
-//         as: 'livePrice',
-//       }
+//         as: "livePrice",
+//       },
 //     },
 //     {
-//       $unwind: '$livePrice',
+//       $unwind: "$livePrice",
 //     },
 //     {
 //       $match: {
@@ -529,14 +512,24 @@ module.exports = {
 //           {
 //             $expr: {
 //               $and: [
-        
-//                 { $eq: ['$livePrice.trading_status', 'on'] },
+//                 // {
+//                 //     $eq: [
+//                 //         {
+//                 //             $dateToString: {
+//                 //                 format: '%Y/%m/%d',
+//                 //                 date: new Date(),
+//                 //             },
+//                 //         },
+//                 //         '$dt_date',
+//                 //     ],
+//                 // },
+//                 { $eq: ["$livePrice.trading_status", "on"] },
 //                 {
 //                   $gt: [
-//                     { $toDouble: '$entry_qty' }, // Convert entry_qty to number
-//                     { $toDouble: '$exit_qty' },  // Convert exit_qty to number
-//                   ]
-//                 }
+//                     { $toDouble: "$entry_qty" }, // Convert entry_qty to number
+//                     { $toDouble: "$exit_qty" }, // Convert exit_qty to number
+//                   ],
+//                 },
 //               ],
 //             },
 //           },
@@ -546,63 +539,61 @@ module.exports = {
 
 //     {
 //       $lookup: {
-//         from: 'stock_live_price',
-//         localField: 'token',
-//         foreignField: '_id',
-//         as: 'stockInfo',
+//         from: "stock_live_price",
+//         localField: "token",
+//         foreignField: "_id",
+//         as: "stockInfo",
 //       },
 //     },
 //     {
 //       $addFields: {
 //         stockInfo: {
 //           $ifNull: [
-//             { $arrayElemAt: ['$stockInfo', 0] },
-//             { curtime: 0, lp: 0, bp1: 0, sp1: 0 }
-//           ]
+//             { $arrayElemAt: ["$stockInfo", 0] },
+//             { curtime: 0, lp: 0, bp1: 0, sp1: 0 },
+//           ],
 //         },
 //         stockInfo_lp: {
 //           $ifNull: [
-//             { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
-//             0
-//           ]
+//             { $toDouble: { $arrayElemAt: ["$stockInfo.lp", 0] } },
+//             0,
+//           ],
 //         },
 //         stockInfo_bp1: {
 //           $ifNull: [
-//             { $toDouble: { $arrayElemAt: ['$stockInfo.bp1', 0] } },
-//             0
-//           ]
+//             { $toDouble: { $arrayElemAt: ["$stockInfo.bp1", 0] } },
+//             0,
+//           ],
 //         },
 //         stockInfo_sp1: {
 //           $ifNull: [
-//             { $toDouble: { $arrayElemAt: ['$stockInfo.sp1', 0] } },
-//             0
-//           ]
+//             { $toDouble: { $arrayElemAt: ["$stockInfo.sp1", 0] } },
+//             0,
+//           ],
 //         },
 //         stockInfo_curtime: {
-//           $ifNull: [
-//             { $arrayElemAt: ['$stockInfo.curtime', 0] },
-//             0
-//           ]
+//           $ifNull: [{ $arrayElemAt: ["$stockInfo.curtime", 0] }, 0],
 //         },
 
 //         isLpInRangeTarget: {
 //           $cond: {
 //             if: {
 //               $or: [
-//                 { $eq: ['$target', 0] },
+//                 { $eq: ["$target", 0] },
 //                 {
 //                   $eq: [
 //                     {
 //                       $ifNull: [
-//                         { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
-//                         0
-//                       ]
+//                         {
+//                           $toDouble: { $arrayElemAt: ["$stockInfo.lp", 0] },
+//                         },
+//                         0,
+//                       ],
 //                     },
-//                     0
+//                     0,
 //                   ],
 //                 },
 //               ],
-
 //             },
 //             then: false,
 //             else: {
@@ -611,14 +602,15 @@ module.exports = {
 //                   $gte: [
 //                     {
 //                       $ifNull: [
-//                         { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
-//                         0
-//                       ]
+//                         {
+//                           $toDouble: { $arrayElemAt: ["$stockInfo.lp", 0] },
+//                         },
+//                         0,
+//                       ],
 //                     },
-//                     '$target',
+//                     "$target",
 //                   ],
 //                 },
-
 //               ],
 //             },
 //           },
@@ -628,20 +620,21 @@ module.exports = {
 //           $cond: {
 //             if: {
 //               $or: [
-//                 { $eq: ['$stop_loss', 0] },
+//                 { $eq: ["$stop_loss", 0] },
 //                 {
 //                   $eq: [
 //                     {
 //                       $ifNull: [
-//                         { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
-//                         0
-//                       ]
+//                         {
+//                           $toDouble: { $arrayElemAt: ["$stockInfo.lp", 0] },
+//                         },
+//                         0,
+//                       ],
 //                     },
-//                     0
+//                     0,
 //                   ],
 //                 },
 //               ],
-
 //             },
 //             then: false,
 //             else: {
@@ -650,14 +643,15 @@ module.exports = {
 //                   $lte: [
 //                     {
 //                       $ifNull: [
-//                         { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
-//                         0
-//                       ]
+//                         {
+//                           $toDouble: { $arrayElemAt: ["$stockInfo.lp", 0] },
+//                         },
+//                         0,
+//                       ],
 //                     },
-//                     '$stop_loss',
+//                     "$stop_loss",
 //                   ],
 //                 },
-
 //               ],
 //             },
 //           },
@@ -670,19 +664,60 @@ module.exports = {
 //         exit_time_test: {
 //           $concat: [
 //             { $substr: ["$exit_time", 0, 2] },
-//             { $substr: ["$exit_time", 3, 2] }
-//           ]
-//         }
-//       }
+//             { $substr: ["$exit_time", 3, 2] },
+//           ],
+//         },
+//       },
 //     },
 
 //     {
 //       $lookup: {
-//         from: 'companies',
+//         from: "companies",
 //         let: {},
 //         pipeline: [],
-//         as: 'companyData'
-//       }
+//         as: "companyData",
+//       },
+//     },
+//     {
+//       $addFields: {
+//         companyDate: {
+//           $arrayElemAt: ["$companyData.current_date", 0],
+//         },
+//       },
+//     },
+//     {
+//       $match: {
+//         $expr: {
+//           $and: [
+//             {
+//               $gte: [
+//                 "$createdAt",
+//                 {
+//                   $dateFromString: {
+//                     dateString: { $substr: ["$companyDate", 0, 10] },
+//                   },
+//                 },
+//               ],
+//             },
+//             {
+//               $lt: [
+//                 "$createdAt",
+//                 {
+//                   $dateAdd: {
+//                     startDate: {
+//                       $dateFromString: {
+//                         dateString: { $substr: ["$companyDate", 0, 10] },
+//                       },
+//                     },
+//                     unit: "day",
+//                     amount: 1,
+//                   },
+//                 },
+//               ],
+//             },
+//           ],
+//         },
+//       },
 //     },
 //     {
 //       $project: {
@@ -708,9 +743,9 @@ module.exports = {
 //                 { $eq: ["$client_persnal_key", null] },
 //               ],
 //             },
-//             then: { $arrayElemAt: ['$companyData.panel_key', 0] },
-//             else: '$client_persnal_key' // Keep the existing value if not empty or null
-//           }
+//             then: { $arrayElemAt: ["$companyData.panel_key", 0] },
+//             else: "$client_persnal_key", // Keep the existing value if not empty or null
+//           },
 //         },
 
 //         TradeType: 1,
@@ -736,23 +771,21 @@ module.exports = {
 //           $cond: {
 //             if: {
 //               $or: [
-//                 { $eq: ['$exit_time', "0"] },
-//                 { $eq: ['$exit_time', '0'] },
-//                 { $eq: ['$exit_time', 0] },
+//                 { $eq: ["$exit_time_test", "0"] },
+//                 { $eq: ["$exit_time_test", "0"] },
+//                 { $eq: ["$exit_time_test", 0] },
 //               ],
 //             },
 //             then: -1,
 //             else: {
 //               $cmp: [
-//                 { $toInt: '$stockInfo.curtime' },
-//                 { $toInt: '$exit_time' },
+//                 { $toInt: "$stockInfo.curtime" },
+//                 { $toInt: "$exit_time_test" },
 //               ],
 //             },
 //           },
 //         },
 //       },
-//     }
-
-
+//     },
 //   ]
 // )

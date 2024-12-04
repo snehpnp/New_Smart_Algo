@@ -952,7 +952,7 @@ module.exports = function (app) {
   });
 
   app.get("/all/brokerview", (req, res) => {
-    Cilents_service_View();
+    
     DashboardView();
     createViewAlice();
     createViewAngel();
