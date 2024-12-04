@@ -1157,7 +1157,6 @@ async function createViewM1DAY(collectionName) {
 
     if (collectionExists) {
 
-
     } else {
       // Create the view with a name (e.g., "myview")
       const viewName = 'M1DAY_' + collectionName;
@@ -1165,9 +1164,7 @@ async function createViewM1DAY(collectionName) {
         viewOn: collectionName,
         pipeline: pipeline,
       });
-
       console.log(`View "${viewName}" created successfully.`);
-
     }
 
 
