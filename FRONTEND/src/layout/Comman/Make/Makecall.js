@@ -739,7 +739,9 @@ const Makecall = () => {
         await dispatch(GetBrokerDatas(data))
             .unwrap()
             .then(async (response) => {
+                console.log( "console.log(response.data) " ,response.data)
                 if (response.status) {
+                    
                     seUserDetails(response.data)
                 }
             });

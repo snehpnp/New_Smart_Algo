@@ -17,6 +17,8 @@ class Optionchain {
     async getBrokerCredential(req, res) {
         try {
             const { id } = req.body
+
+            console.log("req.body", id)
             var Get_User = await User_model.find({ _id: id }).select('TradingStatus parent_id  Role api_secret access_token demat_userid client_key');
             if (Get_User.length == 0) {
                 return res.send({ status: false, msg: "Id Wrong" });

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const MongoClient = require('mongodb').MongoClient;
-
 const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
@@ -13,6 +12,9 @@ const stock_live_price = db_GET_VIEW.collection('stock_live_price');
 const open_position = db_GET_VIEW.collection('open_position');
 const open_position_excute = db_GET_VIEW.collection('open_position_excute');
 const dashboard_data = db_GET_VIEW.collection('dashboard_data');
+
+const makecallabrView_excute_view = db_GET_VIEW.collection('makecallabrView_excute');
+const makecall_NotradeTime_status_excute = db_GET_VIEW.collection('makecall_NotradeTime_status_excute');
 
 
 
@@ -72,7 +74,10 @@ module.exports = {
     
     makecallABR:require("./makecallABR.model"),
     Permission_Logs:require('./Permission_logs.model'),
-    dashboard_data:dashboard_data
+    dashboard_data:dashboard_data,
+    makecall_NotradeTime_status_excute:makecall_NotradeTime_status_excute,
+    makecallabrView_excute_view:makecallabrView_excute_view
+
 
 
 };

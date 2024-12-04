@@ -31,6 +31,7 @@ const strategy_model = db.strategy;
 const live_price_token = db.live_price_token;
 const makecallABR = db.makecallABR;
 // const { Alice_Socket } = require("../../Helpers/Alice_Socket");
+const {  updateChannelAndSend } = require('../../Helper/Alice_Socket');
 
 
 // const { getIO } = require('../../Helpers/BackendSocketIo');
@@ -737,6 +738,13 @@ class Makecall {
           const filter = { _id: token };
           const update = { $set: { _id: token, exch: exch } };
           await token_chain.updateOne(filter, update, { upsert: true });
+
+      
+          console.log("token",token)
+          console.log("exch",exch)
+          
+          let channelList = exch + '|' + token;
+          updateChannelAndSend(channelList);
          // Alice_Socket()
           return res.send({ status: true, msg: "Data Add Successfully....", data: result });
 
@@ -751,6 +759,7 @@ class Makecall {
 
 
     } catch (error) {
+      console.log(error);
       return res.send({ status: false, msg: "Server Error" });
     }
 
@@ -958,6 +967,8 @@ async function run() {
           // const viewName = 'open_position_excute';
           let makecallabrView_excute_result = await makecallabrView_excute_view.find().toArray();
 
+         
+
      
           if (makecallabrView_excute_result.length > 0) {
 
@@ -1037,6 +1048,7 @@ async function run() {
 
               }
 
+             
 
               const currentTimestamp = Math.floor(Date.now() / 1000);
               let req = `DTime:${currentTimestamp}|Symbol:${item.Symbol}|TType:${item.TType}|Tr_Price:${item.Tr_Price}|Price:${item.stockInfo_lp}|Sq_Value:${item.Sq_Value}|Sl_Value:${item.Sl_Value}|TSL:${item.TSL}|Segment:${item.Segment}|Strike:${item.Strike}|OType:${item.OType}|Expiry:${item.Expiry}|Strategy:${item.Strategy}|Quntity:${item.Quntity}|Key:${item.Key}|TradeType:${item.TradeType}|Target:${Target}|StopLoss:${StopLoss}|ExitTime:${item.ExitTime}|sl_status:${item.sl_status}|ExitStatus:${item.ABR_TYPE}|Demo:demo`
@@ -1059,7 +1071,8 @@ async function run() {
 
              await axios.request(config)
                 .then(async (response) => {
-
+                   
+                    // console.log("response makecall abr ", response.data)
                 //  const io = await getIO();
                 //  io.emit("TRADE_NOTIFICATION", { data: item ,type : "MAKECALL" , type_makecall : "TRADE"});
 
@@ -1140,7 +1153,7 @@ async function run() {
 }
 
 
- run().catch(console.error);
+ //run().catch(console.error);
 
 
 //////////////////----- makecallabrView_excute_run --/////////////////////////

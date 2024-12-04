@@ -11,6 +11,7 @@ const dbTest = db.dbTest;
 const MainSignals_modal = db.MainSignals;
 const Alice_token = db.Alice_token;
 const Get_Option_Chain_modal = db.option_chain_symbols;
+const makecallABR = db.makecallABR
 
 const currentDate = new Date();
 const hours = currentDate.getHours().toString().padStart(2, '0');
@@ -27,10 +28,126 @@ const url = "wss://ws1.aliceblueonline.com/NorenWS/"
 
 const Alice_Socket = async () => {
   var rr = 0;
- 
+   
+  await MakecallABRCloseExpiry();
+
   let channelstradd = "";
   const uniqueTokens = new Set();
 
+  // Make Call Token
+  const pipeline_makecall = [
+    {
+        $match: {
+            $and: [
+                { status: 0 },
+                { ABR_TYPE: { $ne: "at" } }
+            ]
+        }
+    },
+    {
+        $addFields: {
+            expiry_date: {
+                $dateFromString: {
+                    dateString: "$Expiry",
+                    format: "%d%m%Y"
+                }
+            },
+
+
+            exch_seg: {
+                $cond: {
+                    if: { $eq: ['$Segment', 'C'] }, // Your condition here
+                    then: 'NSE',
+                    else: {
+                        $cond: {
+                            if: {
+                                $or: [
+                                    { $eq: ['$Segment', 'F'] },
+                                    { $eq: ['$Segment', 'O'] },
+                                    { $eq: ['$Segment', 'FO'] }
+                                ]
+                            },
+                            then: 'NFO',
+                            else: {
+
+                                $cond: {
+                                    if: {
+                                        $or: [
+                                            { $eq: ['$Segment', 'MF'] },
+                                            { $eq: ['$Segment', 'MO'] }
+                                        ]
+                                    },
+                                    then: 'MCX',
+                                    else: {
+
+                                        $cond: {
+                                            if: {
+                                                $or: [
+                                                    { $eq: ['$Segment', 'CF'] },
+                                                    { $eq: ['$Segment', 'CO'] }
+                                                ]
+                                            },
+                                            then: 'CDS',
+
+                                            // all not exist condition 
+                                            else: "NFO"
+
+                                        }
+
+                                    }
+
+                                }
+
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            },
+
+        }
+    },
+    {
+        $match: {
+            expiry_date: {
+                $gte: new Date(new Date().setHours(0, 0, 0, 0)) // Get the current date with time set to midnight
+            }
+        }
+    },
+
+    {
+        $sort: {
+            _id: -1 // Sort in ascending order. Use -1 for descending.
+        }
+    },
+    {
+        $project: {
+            _id: 0,
+            exch_seg: 1,
+            token: 1
+        }
+    }
+
+
+]
+
+const result_makecall = await makecallABR.aggregate(pipeline_makecall)
+if (result_makecall.length > 0) {
+   
+  const resultString = result_makecall.reduce((acc, { token, exch_seg }) => {
+    if (!uniqueTokens.has(token)) {
+      uniqueTokens.add(token); 
+      acc += `${exch_seg}|${token}#`; 
+    }
+    return acc;
+  }, '');
+  channelstradd += resultString;
+}
+
+  /// Main Signal Token
   const pipeline = [
     {
       $match: {
@@ -168,6 +285,7 @@ const Alice_Socket = async () => {
 
  
 
+
  //Make Startegy code
   const pipelineMakeStrategy = [
     {
@@ -230,6 +348,8 @@ const Alice_Socket = async () => {
     }, '');
     channelstradd += resultStringMakeStrategy;
   }
+
+
 
   // NFO SET TOKEN
   const symbols = ["NIFTY", "BANKNIFTY", "FINNIFTY"];
@@ -1174,6 +1294,68 @@ async function createViewM1DAY(collectionName) {
   }
 
 
+}
+
+
+const MakecallABRCloseExpiry = async () => {
+  try {
+
+    const pipeline = [
+      {
+          $match: {
+           status: { $in: [0, 2] }
+          }
+      },
+      {
+          $addFields: {
+              expiry_date: {
+                  $dateFromString: {
+                      dateString: "$Expiry",
+                      format: "%d%m%Y"
+                  }
+              },
+          }
+      },
+      {
+          $match: {
+              expiry_date: {
+                  $lt: new Date(new Date().setHours(0, 0, 0, 0)) 
+              }
+          }
+      },
+
+      {
+          $sort: {
+              _id: -1 
+          }
+      },
+      {
+          $project: {
+              _id: 1,
+              Expiry: 1,
+              status: 1,
+              Symbol: 1
+          }
+      }
+
+
+  ]
+
+  const result = await makecallABR.aggregate(pipeline);
+  if(result.length > 0){
+    const ids = result.map(item => item._id)
+    const UpdateData = await makecallABR.updateMany(
+            { _id: { $in: ids } },
+            { $set: { status: 1 } }
+       );
+  }
+  return
+
+
+  } catch (error) {
+    console.log("MakecallABRCloseExpiry", error);
+    return
+  }
 }
 
 
