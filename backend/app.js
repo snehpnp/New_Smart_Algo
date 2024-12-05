@@ -84,13 +84,15 @@ app.get("/all/socket/restart", (req, res) => {
     "https://software.tradeonn.com/backend/restart/socket",
     "https://software.corebizinfotech.com/backend/restart/socket",
     "https://newpenal.pandpinfotech.com/backend/restart/socket",
+    "https://software.sumedhainn.com/backend/restart/socket",
+
   ]
 
   UrlArr.forEach((url) => {
     axios.get(url).then((response) => {
       console.log(url ," => ",response.data);
     }).catch((error) => {
-      console.log(error);
+      console.log(error.response.data);
     });
   });
 

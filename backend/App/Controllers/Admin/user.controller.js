@@ -23,7 +23,6 @@ const serviceGroupName = db.serviceGroupName;
 const { CommonEmail } = require("../../Helper/CommonEmail");
 const { firstOptPass } = require("../../Helper/Email_formate/first_login");
 
-
 var dateTime = require("node-datetime");
 var dt = dateTime.create();
 
@@ -54,7 +53,7 @@ class Employee {
         demat_userid,
         group_service,
         multiple_strategy_select,
-        plan_id
+        plan_id,
       } = req.body;
 
       var Role = "USER";
@@ -269,7 +268,7 @@ class Employee {
           demat_userid: demat_userid,
           service_given_month: service_given_month,
           multiple_strategy_select: multiple_strategy_select,
-          plan_id:plan_id
+          plan_id: plan_id,
         },
         // Add more documents if needed
       ])
@@ -384,7 +383,6 @@ class Employee {
             var EmailData = await firstOptPass(email_data);
             CommonEmail(toEmail, subjectEmail, EmailData);
 
-         
             res.send({ status: true, msg: "successfully Add!", data: data[0] });
           }
         })
@@ -475,7 +473,6 @@ class Employee {
         },
       ]);
 
-
       if (totalLicense.length > 0) {
         var TotalLicense = totalLicense[0].totalLicense;
       } else {
@@ -493,9 +490,6 @@ class Employee {
       } else {
         new_licence = req.licence1;
       }
-
-    
-
 
       if (Number(new_licence) > 0) {
         if (
@@ -865,7 +859,7 @@ class Employee {
         service_given_month: req.service_given_month,
         multiple_strategy_select: req.multiple_strategy_select,
         Is_Active: "1",
-        plan_id:req.plan_id
+        plan_id: req.plan_id,
       };
 
       const User_Update = await User_model.updateOne(
@@ -1085,34 +1079,44 @@ class Employee {
   // GET ALL GetAllClients
   async GetAllClients(req, res) {
     try {
-      const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
+      const { Find_Role, user_ID, stgId } = req.body;
 
-      // GET ALL CLIENTS
-      var AdminMatch;
 
-      if (Find_Role == "ADMIN") {
-        AdminMatch = { Role: "USER",
-          Is_Active: "1" };
-      } else if (Find_Role == "SUBADMIN") {
+      // Define admin match filter
+      let AdminMatch = {};
+      if (Find_Role === "ADMIN") {
+        AdminMatch = { Role: "USER", Is_Active: "1" };
+      } else if (Find_Role === "SUBADMIN") {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
 
+      // Handle StgId
+      const strategyId =
+        stgId == "all"
+          ? new ObjectId("6685429d79916530293aa444")
+          : new ObjectId(stgId);
+
+      // Find Users based on strategy_id
+      let FindUsers = await client_services.aggregate([
+        { $match: { strategy_id: { $in: [new ObjectId(strategyId)] } } },
+        { $group: { _id: "$user_id" } },
+      ]);
+
+      FindUsers = FindUsers.map((user) => user._id.toString());
+
+      // Get All Clients with aggregation
       const getAllClients = await User_model.aggregate([
-        {
-          $match: AdminMatch,
-        },
+        { $match: AdminMatch },
         {
           $lookup: {
             from: "companies",
-            let: {
-              endDate: "$EndDate", // endDate field
-            },
+            let: { endDate: "$EndDate" },
             pipeline: [
               {
                 $match: {
                   $expr: {
                     $or: [
-                      { $eq: ["$$endDate", null] }, // Handle null endDate
+                      { $eq: ["$$endDate", null] },
                       {
                         $gt: [
                           {
@@ -1137,41 +1141,42 @@ class Employee {
             as: "companyData",
           },
         },
-        {
-          $unwind: "$companyData",
-        },
-        {
-          $sort: { CreateDate: -1 },
-        },
-        {
-          $project: {
-            companyData: 0,
-          },
-        },
+        { $unwind: { path: "$companyData", preserveNullAndEmptyArrays: true } },
+        { $sort: { CreateDate: -1 } },
+
+        { $project: { companyData: 0 } },
       ]);
-      
-      // IF DATA NOT EXIST
-      if (getAllClients.length == 0) {
-        return res.send({
+
+      if (getAllClients.length === 0) {
+        return res.status(200).send({
           status: false,
           msg: "Empty data",
           data: [],
-          // totalCount: totalCount,
         });
       }
 
-      // DATA GET SUCCESSFULLY
-      return res.send({
+
+      const finalClients = getAllClients.filter((client) => {
+        if (stgId === "all") {
+          return true; 
+        }
+        return FindUsers.includes(client._id.toString()); 
+      });
+      
+
+
+      // Send success response
+      return res.status(200).send({
         status: true,
         msg: "Get All Clients",
-        data: getAllClients,
+        data: finalClients,
       });
     } catch (error) {
-      return res.send({
+      console.error("Error fetching clients:", error);
+      return res.status(500).send({
         status: false,
-        msg: "Empty data",
-        data: [],
-        // totalCount: totalCount,
+        msg: "Server error",
+        error: error.message,
       });
     }
   }
@@ -1515,8 +1520,6 @@ class Employee {
 
       var DeleteUser = await User_model.deleteOne({ _id: get_user[0]._id });
 
- 
-
       return res.send({
         status: true,
         msg: "Delete Successfully",
@@ -1594,7 +1597,7 @@ class Employee {
             demat_userid: 1,
             broker: 1,
             multiple_strategy_select: 1,
-            plan_id:1
+            plan_id: 1,
           },
         },
       ];
@@ -2041,17 +2044,17 @@ class Employee {
   }
 
   async GetLastUserName(req, res) {
-    try{
+    try {
+      let lastUser = await User_model.findOne({})
+        .sort({ _id: -1 })
+        .select("UserName");
 
-      let lastUser = await User_model.findOne({}).sort({ _id: -1 }).select("UserName");
-      
       return res.send({
         status: true,
         msg: "Get Last User Name",
         data: lastUser,
       });
-
-    }catch(error){
+    } catch (error) {
       console.log("Error in GetLastUserName:", error);
       return res.status(500).send({
         status: false,
@@ -2060,7 +2063,6 @@ class Employee {
       });
     }
   }
-
 }
 
 module.exports = new Employee();

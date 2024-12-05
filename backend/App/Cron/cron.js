@@ -87,6 +87,35 @@ cron.schedule("5 1 * * *", () => {
   UpdateCurrentTime();
 });
 
+
+// unning a task every 10 minutes
+cron.schedule("*/10 9-15 * * *", () => {
+  console.log("Running a task every 10 minutes from 9 AM to 3:30 PM");
+  UpdatePrice();
+});
+
+
+let UpdatePrice = ()=>{
+  let UrlArr = [
+    "https://software.tradeonn.com/backend/restart/socket",
+    "https://software.corebizinfotech.com/backend/restart/socket",
+    "https://newpenal.pandpinfotech.com/backend/restart/socket",
+    "https://software.sumedhainn.com/backend/restart/socket",
+
+  ]
+
+  UrlArr.forEach((url) => {
+    axios.get(url).then((response) => {
+      console.log(url ," => ",response.data);
+    }).catch((error) => {
+      console.log(error.response.data);
+    });
+  });
+
+}
+
+
+
 const UpdateCurrentTime = async () => {
   try {
     const update = {

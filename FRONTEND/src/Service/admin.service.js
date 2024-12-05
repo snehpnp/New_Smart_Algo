@@ -6,15 +6,7 @@ import { header } from "../Utils/ApiHeader";
 // ALL CLIENTS
 export async function ALL_CLIENTS(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}getall/clients`, data, {
-            headers: header(token),
-            data: {
-
-                "page": "5",
-                "limit": "1"
-
-            },
-        })
+        const res = await axios.post(`${Config.base_url}getall/clients`, data)
         return await res?.data;
     }
     catch (err) {

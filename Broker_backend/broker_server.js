@@ -216,11 +216,6 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
   }
 };
 
-app.get("/r", (req, res) => {
-  // Request on Socket Server 1
-  ConnectSocket();
-  res.send("Request sent to Socket Server 2");
-});
 
 // ==================================================================================================
 // MT_4 , OPTION_CHAIN , MAKE_STG, SQUARE_OFF
@@ -2355,7 +2350,6 @@ app.post("/broker-signals", async (req, res) => {
 
 // Server start
 app.listen(process.env.PORT, () => {
-  connectToMongoDB();
-  // ConnectSocket()
   console.log(`Broker Server is running on http://0.0.0.0:${process.env.PORT}`);
+  connectToMongoDB();
 });
