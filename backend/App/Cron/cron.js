@@ -96,30 +96,30 @@ cron.schedule("*/10 9-15 * * *", () => {
   UpdatePrice();
 });
 
-cron.schedule("* * * * *", () => {
-  UpdatePrice();
+// cron.schedule("* * * * *", () => {
+//   UpdatePrice();
 
-});
+// });
 
-let UpdatePrice = async () => {
-  let UrlFind = await company_information.find({}).select("domain_url");
+// let UpdatePrice = async () => {
+//   let UrlFind = await company_information.find({}).select("domain_url");
   
-  if(UrlFind){
+//   if(UrlFind){
   
-      axios
-        .get(UrlFind)
-        .then((response) => {
-          console.log(UrlFind, " => ", response.data);
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-        });
+//       axios
+//         .get(UrlFind)
+//         .then((response) => {
+//           console.log(UrlFind, " => ", response.data);
+//         })
+//         .catch((error) => {
+//           console.log(error.response.data);
+//         });
   
-  }
+//   }
 
 
 
-};
+// };
 
 const UpdateCurrentTime = async () => {
   try {

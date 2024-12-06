@@ -21,7 +21,7 @@ const makecallabrView_excute_view = db.makecallabrView_excute_view;
 const makecallABR = db.makecallABR;
 
 
-const {  updateChannelAndSend } = require('../../Helper/Alice_Socket');
+const { updateChannelAndSend } = require('../../Helper/Alice_Socket');
 const { getIO } = require('../../Helper/BackendSocketIo');
 
 
@@ -131,43 +131,43 @@ class MakeStartegy {
     try {
 
       const pipeline = [
-        
+
         {
-            $group: {
-                _id: "$show_strategy", // Group by show_strategy
-                firstDocument: { $first: "$$ROOT" }, // Get the first document in each group
-                secondDocument: { $push: "$$ROOT" } // Collect all documents in this group
-            }
+          $group: {
+            _id: "$show_strategy", // Group by show_strategy
+            firstDocument: { $first: "$$ROOT" }, // Get the first document in each group
+            secondDocument: { $push: "$$ROOT" } // Collect all documents in this group
+          }
         },
         {
-            $project: {
-                _id: "$firstDocument._id",
-                user_id: "$firstDocument.user_id",
-                name: "$firstDocument.name",
-                tokensymbol: "$firstDocument.tokensymbol",
-                show_strategy: "$firstDocument.show_strategy",
-                symbol_name: "$firstDocument.symbol_name",
-                strategy_name: "$firstDocument.strategy_name",
-                segment: "$firstDocument.segment",
-                strike_price: "$firstDocument.strike_price",
-                option_type: "$firstDocument.option_type",
-                expiry: "$firstDocument.expiry",
-                indicator: "$firstDocument.indicator",
-                timeframe: "$firstDocument.timeframe",
-                price_source: "$firstDocument.price_source",
-                period: "$firstDocument.period",
-                inside_indicator: "$firstDocument.inside_indicator",
-                condition: "$firstDocument.condition",
-                exch_seg: "$firstDocument.exch_seg",
-                condition_source: "$firstDocument.condition_source",
-                buffer_value: "$firstDocument.buffer_value",
-                statusOnOff: "$firstDocument.statusOnOff",
-                type: { $arrayElemAt: ["$secondDocument.type", 0] }, // Get the type of the first document
-                _id_secondObject: { $arrayElemAt: ["$secondDocument._id", 1] }, // Get the _id of the second document if it exists
-                type_secondObject: { $arrayElemAt: ["$secondDocument.type", 1] }, // Get the type of the second document if it exists
-                createdAt: "$firstDocument.createdAt",
-                updatedAt: "$firstDocument.updatedAt",
-            }
+          $project: {
+            _id: "$firstDocument._id",
+            user_id: "$firstDocument.user_id",
+            name: "$firstDocument.name",
+            tokensymbol: "$firstDocument.tokensymbol",
+            show_strategy: "$firstDocument.show_strategy",
+            symbol_name: "$firstDocument.symbol_name",
+            strategy_name: "$firstDocument.strategy_name",
+            segment: "$firstDocument.segment",
+            strike_price: "$firstDocument.strike_price",
+            option_type: "$firstDocument.option_type",
+            expiry: "$firstDocument.expiry",
+            indicator: "$firstDocument.indicator",
+            timeframe: "$firstDocument.timeframe",
+            price_source: "$firstDocument.price_source",
+            period: "$firstDocument.period",
+            inside_indicator: "$firstDocument.inside_indicator",
+            condition: "$firstDocument.condition",
+            exch_seg: "$firstDocument.exch_seg",
+            condition_source: "$firstDocument.condition_source",
+            buffer_value: "$firstDocument.buffer_value",
+            statusOnOff: "$firstDocument.statusOnOff",
+            type: { $arrayElemAt: ["$secondDocument.type", 0] }, // Get the type of the first document
+            _id_secondObject: { $arrayElemAt: ["$secondDocument._id", 1] }, // Get the _id of the second document if it exists
+            type_secondObject: { $arrayElemAt: ["$secondDocument.type", 1] }, // Get the type of the second document if it exists
+            createdAt: "$firstDocument.createdAt",
+            updatedAt: "$firstDocument.updatedAt",
+          }
         },
 
         { $sort: { _id: -1 } }
@@ -175,7 +175,7 @@ class MakeStartegy {
 
       const result = await UserMakeStrategy.aggregate(pipeline)
       if (result.length > 0) {
-       // console.log("result ", result)
+        // console.log("result ", result)
         res.send({ status: true, msg: "Get All make strategy", data: result });
       } else {
         res.send({ status: false, msg: "Empty data", data: [] });
@@ -232,43 +232,43 @@ class MakeStartegy {
   //Delete make strateg Selected
   async DeleteMakeStartegySelected(req, res) {
     try {
-      console.log("req.body.ids_array ", req.body.ids_array) 
-      console.log("req.body.data ", req.body.data) 
+      console.log("req.body.ids_array ", req.body.ids_array)
+      console.log("req.body.data ", req.body.data)
 
-      if(req.body.data.length > 0){
-       for(const item of req.body.data){
-        const { _id, timeframe, tokensymbol, name, show_strategy, type } = item;
-        const objectId = new ObjectId(_id);
-        const exist_view = `M${timeframe}_${tokensymbol}_make_${name}`;
+      if (req.body.data.length > 0) {
+        for (const item of req.body.data) {
+          const { _id, timeframe, tokensymbol, name, show_strategy, type } = item;
+          const objectId = new ObjectId(_id);
+          const exist_view = `M${timeframe}_${tokensymbol}_make_${name}`;
 
-        let checkType = "BUY"
-        if (type == "BUY") {
-          checkType = "SELL"
-        }
-  
-        const matchNameStartegy = await UserMakeStrategy.findOne({ type: checkType, show_strategy: show_strategy });
-  
-        try {
-          const collectionExists = await dbTest.listCollections({ name: exist_view }).hasNext();
-          if (collectionExists) {
-            await dbTest.collection(exist_view).drop();
+          let checkType = "BUY"
+          if (type == "BUY") {
+            checkType = "SELL"
           }
-        } catch (error) {
-        }
-        if (matchNameStartegy != null) {
-          const matchNameStartegy_exist_view = `M${matchNameStartegy.timeframe}_${matchNameStartegy.tokensymbol}_make_${matchNameStartegy.name}`;
+
+          const matchNameStartegy = await UserMakeStrategy.findOne({ type: checkType, show_strategy: show_strategy });
+
           try {
-            const collectionExists = await dbTest.listCollections({ name: matchNameStartegy_exist_view }).hasNext();
+            const collectionExists = await dbTest.listCollections({ name: exist_view }).hasNext();
             if (collectionExists) {
-              await dbTest.collection(matchNameStartegy_exist_view).drop();
+              await dbTest.collection(exist_view).drop();
             }
           } catch (error) {
           }
-          await UserMakeStrategy.deleteOne({ name: matchNameStartegy.name });
-         }
-        const result = await UserMakeStrategy.deleteOne({ _id: objectId });
+          if (matchNameStartegy != null) {
+            const matchNameStartegy_exist_view = `M${matchNameStartegy.timeframe}_${matchNameStartegy.tokensymbol}_make_${matchNameStartegy.name}`;
+            try {
+              const collectionExists = await dbTest.listCollections({ name: matchNameStartegy_exist_view }).hasNext();
+              if (collectionExists) {
+                await dbTest.collection(matchNameStartegy_exist_view).drop();
+              }
+            } catch (error) {
+            }
+            await UserMakeStrategy.deleteOne({ name: matchNameStartegy.name });
+          }
+          const result = await UserMakeStrategy.deleteOne({ _id: objectId });
 
-       }
+        }
       }
       return res.send({ status: true, msg: 'Delete All Strategy successfully ', data: [] });
       // const result = await UserMakeStrategy.deleteMany({ _id: { $in: req.body.ids_array } });
@@ -280,11 +280,11 @@ class MakeStartegy {
     }
   }
 
-   //status change make strateg Selected
-   async StatusChangeMakeStartegy(req, res) {
+  //status change make strateg Selected
+  async StatusChangeMakeStartegy(req, res) {
     try {
 
-     let status_msg = "Off"
+      let status_msg = "Off"
       if (req.body.status === "1") {
         status_msg = "On"
       }
@@ -298,7 +298,7 @@ class MakeStartegy {
       const result = await UserMakeStrategy.updateMany(filter, update_make_strategy);
       if (result.modifiedCount > 0) {
         return res.send({ status: true, msg: `Strategy ${status_msg} successfully`, data: result.modifiedCount });
-      }else{
+      } else {
         return res.send({ status: false, msg: `Strategy ${status_msg} failed`, data: result.modifiedCount });
       }
     } catch (error) {
@@ -1178,7 +1178,7 @@ async function run() {
 
 
     const makecallabrView_excute_run = async () => {
-      console.log("makecallabrView_excute_run")
+
       try {
 
         let rr = true
@@ -1188,9 +1188,9 @@ async function run() {
           // const viewName = 'open_position_excute';
           let makecallabrView_excute_result = await makecallabrView_excute_view.find().toArray();
 
-         
 
-     
+
+
           if (makecallabrView_excute_result.length > 0) {
 
 
@@ -1269,7 +1269,7 @@ async function run() {
 
               }
 
-             
+
 
               const currentTimestamp = Math.floor(Date.now() / 1000);
               let req = `DTime:${currentTimestamp}|Symbol:${item.Symbol}|TType:${item.TType}|Tr_Price:${item.Tr_Price}|Price:${item.stockInfo_lp}|Sq_Value:${item.Sq_Value}|Sl_Value:${item.Sl_Value}|TSL:${item.TSL}|Segment:${item.Segment}|Strike:${item.Strike}|OType:${item.OType}|Expiry:${item.Expiry}|Strategy:${item.Strategy}|Quntity:${item.Quntity}|Key:${item.Key}|TradeType:${item.TradeType}|Target:${Target}|StopLoss:${StopLoss}|ExitTime:${item.ExitTime}|sl_status:${item.sl_status}|ExitStatus:${item.ABR_TYPE}|Demo:demo`
@@ -1279,6 +1279,8 @@ async function run() {
                 { $set: { status: 1 } } // Update operation
               );
 
+
+              console.log("req ", req)
 
               let config = {
                 method: 'post',
@@ -1290,12 +1292,12 @@ async function run() {
                 data: req
               };
 
-             await axios.request(config)
+              await axios.request(config)
                 .then(async (response) => {
-                   
-                    // console.log("response makecall abr ", response.data)
-                //  const io = await getIO();
-                //  io.emit("TRADE_NOTIFICATION", { data: item ,type : "MAKECALL" , type_makecall : "TRADE"});
+
+                  // console.log("response makecall abr ", response.data)
+                  //  const io = await getIO();
+                  //  io.emit("TRADE_NOTIFICATION", { data: item ,type : "MAKECALL" , type_makecall : "TRADE"});
 
 
                 })
@@ -1327,7 +1329,7 @@ async function run() {
     }
 
     const noTradeTimeExcuteSetStatus = async () => {
-      console.log("noTradeTimeExcuteSetStatus")
+
       try {
 
         let NotradeTimeExucuted = await makecall_NotradeTime_status_excute.find().toArray();
@@ -1365,14 +1367,12 @@ async function run() {
     };
 
     const exitOpentrade = async () => {
-      console.log("DONEEE exitOpentrade")
-
 
       if (weekday != 'Sunday' && weekday != 'Saturday') {
         try {
 
           // let openPosition = await open_position_excute.find().toArray();
-      
+
           // if (openPosition.length > 0) {
 
           //    openPosition && openPosition.map(async(item) => {
@@ -1445,71 +1445,69 @@ async function run() {
 
 
           let openPosition = await open_position_excute.find().toArray();
-//console.log("openPosition ", openPosition)
-// console.log("openPosition ", openPosition.length)
 
-if (openPosition.length > 0) {
-  // Use a for...of loop instead of map to ensure async actions are awaited
-  for (const item of openPosition) {
-    let ExitStatus = 'TS'
-    if (item.isLpInRangeTarget == true) {
-      ExitStatus = "TARGET"
-    } else if (item.isLpInRangeStoploss == true) {
-      ExitStatus = "STOPLOSS"
-    } else if (item.isLpInRange == 1) {
-      ExitStatus = "EXIT TIME"
-    }
-    else if (item.isLpInRange == 0) {
-      ExitStatus = "EXIT TIME"
-    }
+          if (openPosition.length > 0) {
+            // Use a for...of loop instead of map to ensure async actions are awaited
+            for (const item of openPosition) {
+              let ExitStatus = 'TS'
+              if (item.isLpInRangeTarget == true) {
+                ExitStatus = "TARGET"
+              } else if (item.isLpInRangeStoploss == true) {
+                ExitStatus = "STOPLOSS"
+              } else if (item.isLpInRange == 1) {
+                ExitStatus = "EXIT TIME"
+              }
+              else if (item.isLpInRange == 0) {
+                ExitStatus = "EXIT TIME"
+              }
 
-    const currentTimestamp = Math.floor(Date.now() / 1000);
-    let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${item.client_persnal_key}|TradeType:${item.TradeType}|ExitStatus:${ExitStatus}|Demo:demo`
+              const currentTimestamp = Math.floor(Date.now() / 1000);
+              let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${item.client_persnal_key}|TradeType:${item.TradeType}|ExitStatus:${ExitStatus}|Demo:demo`
 
-    console.log("req ", req)
+              console.log("req ", req)
 
-    //console.log("process.env.BROKER_URL ",process.env.BROKER_URL)
+              //console.log("process.env.BROKER_URL ",process.env.BROKER_URL)
 
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-      url: `${process.env.BROKER_URL}`,
-      headers: {
-        'Content-Type': 'text/plain'
-      },
-      data: req
-    };
+              let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                url: `${process.env.BROKER_URL}`,
+                headers: {
+                  'Content-Type': 'text/plain'
+                },
+                data: req
+              };
 
-    try {
-      const response = await axios.request(config); // Ensure this is awaited
-      let tradeSymbol;
-      if (item.segment.toLowerCase() == 'o' || item.segment.toLowerCase() == 'co' || item.segment.toLowerCase() == 'fo' || item.segment.toLowerCase() == 'mo') {
-        tradeSymbol = item.symbol + "  " + item.expiry + "  " + item.strike + "  " + item.option_type + "  " + " [ " + item.segment + " ] ";
-      }
-      else if (item.segment.toLowerCase() == 'f' || item.segment.toLowerCase() == 'cf' || item.segment.toLowerCase() == 'mf') {
-        tradeSymbol = item.symbol + "  " + item.expiry + "  " + " [ " + item.segment + " ] ";
-      }
-      else {
-        tradeSymbol = item.symbol + "  " + " [ " + item.segment + " ] ";
-      }
-      const io = await getIO();
-      io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: tradeSymbol });
+              try {
+                const response = await axios.request(config); // Ensure this is awaited
+                let tradeSymbol;
+                if (item.segment.toLowerCase() == 'o' || item.segment.toLowerCase() == 'co' || item.segment.toLowerCase() == 'fo' || item.segment.toLowerCase() == 'mo') {
+                  tradeSymbol = item.symbol + "  " + item.expiry + "  " + item.strike + "  " + item.option_type + "  " + " [ " + item.segment + " ] ";
+                }
+                else if (item.segment.toLowerCase() == 'f' || item.segment.toLowerCase() == 'cf' || item.segment.toLowerCase() == 'mf') {
+                  tradeSymbol = item.symbol + "  " + item.expiry + "  " + " [ " + item.segment + " ] ";
+                }
+                else {
+                  tradeSymbol = item.symbol + "  " + " [ " + item.segment + " ] ";
+                }
+                const io = await getIO();
+                io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: tradeSymbol });
 
-      // console.log("response Trade Excuted - ", response.data)
+                // console.log("response Trade Excuted - ", response.data)
 
-    } catch (error) {
-      // Handle error if necessary
-      // console.log(error.response.data);
-    }
-  }
+              } catch (error) {
+                // Handle error if necessary
+                // console.log(error.response.data);
+              }
+            }
 
-  // openPosition = null
-  // return
+            openPosition = null
+            return
 
-} else {
-  return
-}
+          } else {
+            return
+          }
 
         } catch (error) {
           console.log("Error in Open Position", error);
@@ -1809,7 +1807,7 @@ async function fetchDataFromViews(viewNames) {
 //         while (true) {
 //         const batchSize = 100; // Adjust batch size based on your data and memory constraints
 //         let skip = 0;
-         
+
 //         // const data = await dbTest.collection(valView.viewName).find({
 //         //   isCondition: true,
 //         //   timeFrameViewData: { $ne: null, $ne: [] }
@@ -2018,7 +2016,7 @@ async function fetchDataFromViews(viewNames) {
 //             });
 
 //         }
-      
+
 //         skip += batchSize
 //       }
 //       }
@@ -2049,481 +2047,481 @@ async function fetchDataFromViews(viewNames) {
 ////////////////////////////////////
 
 
-async function runSS() {
-  try {
-    // Define the function to be executed
-    const RunFunction = async () => {
-      // Check for the stream code
-      const data = await dbTest.collection('strategyViewNames').find({}).toArray();
-      await CheckStreamCode(data);
-    };
+// async function runSS() {
+//   try {
+//     // Define the function to be executed
+//     const RunFunction = async () => {
+//       // Check for the stream code
+//       const data = await dbTest.collection('strategyViewNames').find({}).toArray();
+//       await CheckStreamCode(data);
+//     };
 
 
-    while (true) {
-      await RunFunction();
-    }
+//     while (true) {
+//       await RunFunction();
+//     }
 
 
-  } catch (error) {
-    console.log(error);
-  }
-}
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 
-runSS().catch(console.log);
+// runSS().catch(console.log);
 
-async function CheckStreamCode(viewNames) {
-  try {
-    if (viewNames.length > 0) {
-      for (let valView of viewNames) {
-        // Open a readable stream from MongoDB
-        const cursor = dbTest.collection(valView.viewName).find({
-          isCondition: true,
-          timeFrameViewData: { $ne: null, $ne: [] }
-        }).stream(); // Stream the data instead of loading everything at once
+// async function CheckStreamCode(viewNames) {
+//   try {
+//     if (viewNames.length > 0) {
+//       for (let valView of viewNames) {
+//         // Open a readable stream from MongoDB
+//         const cursor = dbTest.collection(valView.viewName).find({
+//           isCondition: true,
+//           timeFrameViewData: { $ne: null, $ne: [] }
+//         }).stream(); // Stream the data instead of loading everything at once
 
-        // Process each document as it arrives
-        cursor.on('data', async (val) => {
-          // console.log(`Processing document for :`, doc);
-                const date = new Date(val.expiry);
-                val.expiry = format(date, 'ddMMyyyy');
-      
-                let entry_type = 'LE';
-                if (val.type === 'BUY') {
-                  entry_type = 'SE';
-                }
-                let condition_check_previous_trade = {
-                  strategy: val.strategy_name,
-                  symbol: val.symbol_name,
-                  entry_type: entry_type,
-                  segment: val.segment,
-                  client_persnal_key: val.panelKey,
-                  MakeStartegyName: val.show_strategy,
-                  TradeType: 'MAKE_STRATEGY',
-                };
-                if (['O', 'FO', 'MO', 'CO'].includes(val.segment.toUpperCase())) {
-                  let option_type = 'CALL';
-                  if (val.option_type === 'PE') {
-                    option_type = 'PUT';
-                  }
-                  condition_check_previous_trade = {
-                    strategy: val.strategy_name,
-                    symbol: val.symbol_name,
-                    entry_type: entry_type,
-                    segment: val.segment,
-                    strike: val.strike_price,
-                    option_type: option_type,
-                    expiry: val.expiry,
-                    client_persnal_key: val.panelKey,
-                    MakeStartegyName: val.show_strategy,
-                    TradeType: 'MAKE_STRATEGY',
-                  };
-                }
-                else if (['F', 'MF', 'CF'].includes(val.segment.toUpperCase())) {
-                  condition_check_previous_trade = {
-                    strategy: val.strategy_name,
-                    symbol: val.symbol_name,
-                    entry_type: entry_type,
-                    segment: val.segment,
-                    expiry: val.expiry,
-                    client_persnal_key: val.panelKey,
-                    MakeStartegyName: val.show_strategy,
-                    TradeType: 'MAKE_STRATEGY',
-                  };
-                }
-      
-                // console.log("condition_check_previous_trade",condition_check_previous_trade)
-                var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
-      
-                // console.log("checkPreviousTrade ",checkPreviousTrade)
-      
-                const collection_last_price = dbTest.collection(val.tokensymbol);
-                const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
-                let price_lp = last_price[0].lp;
-                if (checkPreviousTrade != null) {
-                  const currentTimestamp = Math.floor(Date.now() / 1000);
-                  let type = 'LX';
-                  let price = checkPreviousTrade.stockInfo_bp1;
-                  if (checkPreviousTrade.entry_type.toUpperCase() === 'SE') {
-                    type = 'SX';
-                    price = checkPreviousTrade.stockInfo_sp1;
-                  }
-                  let strike = checkPreviousTrade.strike;
-                  if (checkPreviousTrade.strike_price === 'NaN') {
-                    strike = '100';
-                  }
-                  let option_type = 'CALL';
-                  if (checkPreviousTrade.option_type.toUpperCase() === 'PUT') {
-                    option_type = 'PUT';
-                  }
-                  let Quntity = checkPreviousTrade.entry_qty_percent;
-                  let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
-                  let config = {
-                    method: 'post',
-                    maxBodyLength: Infinity,
-                    // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-                    url: `${process.env.BROKER_URL}`,
-                    headers: {
-                      'Content-Type': 'text/plain'
-                    },
-                    data: req
-                  };
-                  await axios.request(config)
-                    .then((response) => {
-      
-                    })
-                    .catch((error) => {
-                      console.log('Error ', error);
-                    });
-                }
-                const update = {
-                  $set: {
-                    status: '2',
-                  },
-                  $inc: {
-                    numberOfTrade_count_trade: 1, // Increment by 1, you can change this value based on your requirement
-                  },
-                };
-                const filter = { _id: val._id };
-                let Res = await UserMakeStrategy.updateOne(filter, update);
-                let Check_same_trade_type = 'BUY';
-                if (val.type === 'BUY') {
-                  Check_same_trade_type = 'SELL';
-                }
-                const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
-                if (Check_same_trade_data) {
-      
-      
-                  let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
-                    $set: {
-                      status: "1",
-                      tsl: "2"
-                    },
-                  });
-      
-                  console.log("Res", Res)
-                }
-                const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
-                  {
-                    $match: {
-                      show_strategy: val.show_strategy,
-                      numberOfTrade: { $ne: '' }
-                    }
-                  },
-                  {
-                    $group: {
-                      _id: null,
-                      totalNumberOfTrade_count_trade: { $sum: '$numberOfTrade_count_trade' },
-                    }
-                  },
-                  {
-                    $project: {
-                      _id: 0,
-                      totalNumberOfTrade_count_trade: 1,
-                      anotherField: '$numberOfTrade',
-                      isTotalSmall: { $lt: ['$totalNumberOfTrade_count_trade', parseInt(val.numberOfTrade)] }
-                    }
-                  }
-                ]);
-                if (numberOfTrade_count_trade_count.length > 0) {
-                  if (numberOfTrade_count_trade_count[0].isTotalSmall === false) {
-                    const update_trade_off = {
-                      $set: {
-                        status: '2',
-                      },
-                    };
-                    const filter_trade_off = { show_strategy: val.show_strategy };
-                    let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
-                  }
-                }
-                const currentTimestamp = Math.floor(Date.now() / 1000);
-                let type = 'LE';
-                if (val.type.toUpperCase() === 'SELL') {
-                  type = 'SE';
-                }
-                let price = 0;
-                let strike = val.strike_price;
-                if (val.strike_price === 'NaN') {
-                  strike = '100';
-                }
-                let option_type = 'CALL';
-                if (val.option_type.toUpperCase() === 'PE') {
-                  option_type = 'PUT';
-                }
-                let Quntity = '100';
-                const dateObject = new Date(val.exitTime);
-                const hours = ('0' + dateObject.getUTCHours()).slice(-2);
-                const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
-                const ExitTime = `${hours}-${minutes}`;
-                let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
-                let config = {
-                  method: 'post',
-                  maxBodyLength: Infinity,
-                  // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-                  url: `${process.env.BROKER_URL}`,
-                  headers: {
-                    'Content-Type': 'text/plain'
-                  },
-                  data: req
-                };
-                await axios.request(config)
-                  .then((response) => {
-                    // console.log("response Trade Excuted - ", response)
-                  })
-                  .catch((error) => {
-                    console.log('Error ', error);
-                  });
-      
-              
+//         // Process each document as it arrives
+//         cursor.on('data', async (val) => {
+//           // console.log(`Processing document for :`, doc);
+//                 const date = new Date(val.expiry);
+//                 val.expiry = format(date, 'ddMMyyyy');
+
+//                 let entry_type = 'LE';
+//                 if (val.type === 'BUY') {
+//                   entry_type = 'SE';
+//                 }
+//                 let condition_check_previous_trade = {
+//                   strategy: val.strategy_name,
+//                   symbol: val.symbol_name,
+//                   entry_type: entry_type,
+//                   segment: val.segment,
+//                   client_persnal_key: val.panelKey,
+//                   MakeStartegyName: val.show_strategy,
+//                   TradeType: 'MAKE_STRATEGY',
+//                 };
+//                 if (['O', 'FO', 'MO', 'CO'].includes(val.segment.toUpperCase())) {
+//                   let option_type = 'CALL';
+//                   if (val.option_type === 'PE') {
+//                     option_type = 'PUT';
+//                   }
+//                   condition_check_previous_trade = {
+//                     strategy: val.strategy_name,
+//                     symbol: val.symbol_name,
+//                     entry_type: entry_type,
+//                     segment: val.segment,
+//                     strike: val.strike_price,
+//                     option_type: option_type,
+//                     expiry: val.expiry,
+//                     client_persnal_key: val.panelKey,
+//                     MakeStartegyName: val.show_strategy,
+//                     TradeType: 'MAKE_STRATEGY',
+//                   };
+//                 }
+//                 else if (['F', 'MF', 'CF'].includes(val.segment.toUpperCase())) {
+//                   condition_check_previous_trade = {
+//                     strategy: val.strategy_name,
+//                     symbol: val.symbol_name,
+//                     entry_type: entry_type,
+//                     segment: val.segment,
+//                     expiry: val.expiry,
+//                     client_persnal_key: val.panelKey,
+//                     MakeStartegyName: val.show_strategy,
+//                     TradeType: 'MAKE_STRATEGY',
+//                   };
+//                 }
+
+//                 // console.log("condition_check_previous_trade",condition_check_previous_trade)
+//                 var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
+
+//                 // console.log("checkPreviousTrade ",checkPreviousTrade)
+
+//                 const collection_last_price = dbTest.collection(val.tokensymbol);
+//                 const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
+//                 let price_lp = last_price[0].lp;
+//                 if (checkPreviousTrade != null) {
+//                   const currentTimestamp = Math.floor(Date.now() / 1000);
+//                   let type = 'LX';
+//                   let price = checkPreviousTrade.stockInfo_bp1;
+//                   if (checkPreviousTrade.entry_type.toUpperCase() === 'SE') {
+//                     type = 'SX';
+//                     price = checkPreviousTrade.stockInfo_sp1;
+//                   }
+//                   let strike = checkPreviousTrade.strike;
+//                   if (checkPreviousTrade.strike_price === 'NaN') {
+//                     strike = '100';
+//                   }
+//                   let option_type = 'CALL';
+//                   if (checkPreviousTrade.option_type.toUpperCase() === 'PUT') {
+//                     option_type = 'PUT';
+//                   }
+//                   let Quntity = checkPreviousTrade.entry_qty_percent;
+//                   let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+//                   let config = {
+//                     method: 'post',
+//                     maxBodyLength: Infinity,
+//                     // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+//                     url: `${process.env.BROKER_URL}`,
+//                     headers: {
+//                       'Content-Type': 'text/plain'
+//                     },
+//                     data: req
+//                   };
+//                   await axios.request(config)
+//                     .then((response) => {
+
+//                     })
+//                     .catch((error) => {
+//                       console.log('Error ', error);
+//                     });
+//                 }
+//                 const update = {
+//                   $set: {
+//                     status: '2',
+//                   },
+//                   $inc: {
+//                     numberOfTrade_count_trade: 1, // Increment by 1, you can change this value based on your requirement
+//                   },
+//                 };
+//                 const filter = { _id: val._id };
+//                 let Res = await UserMakeStrategy.updateOne(filter, update);
+//                 let Check_same_trade_type = 'BUY';
+//                 if (val.type === 'BUY') {
+//                   Check_same_trade_type = 'SELL';
+//                 }
+//                 const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
+//                 if (Check_same_trade_data) {
+
+
+//                   let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
+//                     $set: {
+//                       status: "1",
+//                       tsl: "2"
+//                     },
+//                   });
+
+//                   console.log("Res", Res)
+//                 }
+//                 const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
+//                   {
+//                     $match: {
+//                       show_strategy: val.show_strategy,
+//                       numberOfTrade: { $ne: '' }
+//                     }
+//                   },
+//                   {
+//                     $group: {
+//                       _id: null,
+//                       totalNumberOfTrade_count_trade: { $sum: '$numberOfTrade_count_trade' },
+//                     }
+//                   },
+//                   {
+//                     $project: {
+//                       _id: 0,
+//                       totalNumberOfTrade_count_trade: 1,
+//                       anotherField: '$numberOfTrade',
+//                       isTotalSmall: { $lt: ['$totalNumberOfTrade_count_trade', parseInt(val.numberOfTrade)] }
+//                     }
+//                   }
+//                 ]);
+//                 if (numberOfTrade_count_trade_count.length > 0) {
+//                   if (numberOfTrade_count_trade_count[0].isTotalSmall === false) {
+//                     const update_trade_off = {
+//                       $set: {
+//                         status: '2',
+//                       },
+//                     };
+//                     const filter_trade_off = { show_strategy: val.show_strategy };
+//                     let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
+//                   }
+//                 }
+//                 const currentTimestamp = Math.floor(Date.now() / 1000);
+//                 let type = 'LE';
+//                 if (val.type.toUpperCase() === 'SELL') {
+//                   type = 'SE';
+//                 }
+//                 let price = 0;
+//                 let strike = val.strike_price;
+//                 if (val.strike_price === 'NaN') {
+//                   strike = '100';
+//                 }
+//                 let option_type = 'CALL';
+//                 if (val.option_type.toUpperCase() === 'PE') {
+//                   option_type = 'PUT';
+//                 }
+//                 let Quntity = '100';
+//                 const dateObject = new Date(val.exitTime);
+//                 const hours = ('0' + dateObject.getUTCHours()).slice(-2);
+//                 const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
+//                 const ExitTime = `${hours}-${minutes}`;
+//                 let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+//                 let config = {
+//                   method: 'post',
+//                   maxBodyLength: Infinity,
+//                   // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+//                   url: `${process.env.BROKER_URL}`,
+//                   headers: {
+//                     'Content-Type': 'text/plain'
+//                   },
+//                   data: req
+//                 };
+//                 await axios.request(config)
+//                   .then((response) => {
+//                     // console.log("response Trade Excuted - ", response)
+//                   })
+//                   .catch((error) => {
+//                     console.log('Error ', error);
+//                   });
 
 
 
-        });
-
-        // Handle stream events
-        cursor.on('end', () => {
-        //  console.log(`Finished processing stream for ${valView.viewName}`);
-        });
-
-        cursor.on('error', (error) => {
-         // console.error('Stream error:', error);
-        });
-      }
-    }
-  } catch (error) {
-    console.log('Error fetching data:', error);
-  }
 
 
-  // try {
-  //   if (viewNames.length > 0) {
-  //     for (let valView of viewNames) {
-  //       // const data = await dbTest.collection(valView.viewName).find({ isCondition: true }).toArray();
-  //       while (true) {
-  //       const batchSize = 100; // Adjust batch size based on your data and memory constraints
-  //       let skip = 0;
-         
-  //       // const data = await dbTest.collection(valView.viewName).find({
-  //       //   isCondition: true,
-  //       //   timeFrameViewData: { $ne: null, $ne: [] }
-  //       // }).toArray();
-  //       const data = await dbTest.collection(valView.viewName).find({
-  //         isCondition: true,
-  //         timeFrameViewData: { $ne: null, $ne: [] }
-  //       }).skip(skip).limit(batchSize).toArray();
+//         });
 
-  //       if (data.length === 0) {
-  //         break; // No more data to fetch
-  //       }
+//         // Handle stream events
+//         cursor.on('end', () => {
+//         //  console.log(`Finished processing stream for ${valView.viewName}`);
+//         });
 
-  //       //console.log(`Data from view ${valView.viewName}:`, data);
-  //       if (data.length > 0) {
-  //         //console.log(`Data from view ${valView.viewName}:`, data);
-  //         let val = data[0];
-
-  //         const date = new Date(val.expiry);
-  //         val.expiry = format(date, 'ddMMyyyy');
-
-  //         let entry_type = 'LE';
-  //         if (val.type === 'BUY') {
-  //           entry_type = 'SE';
-  //         }
-  //         let condition_check_previous_trade = {
-  //           strategy: val.strategy_name,
-  //           symbol: val.symbol_name,
-  //           entry_type: entry_type,
-  //           segment: val.segment,
-  //           client_persnal_key: val.panelKey,
-  //           MakeStartegyName: val.show_strategy,
-  //           TradeType: 'MAKE_STRATEGY',
-  //         };
-  //         if (['O', 'FO', 'MO', 'CO'].includes(val.segment.toUpperCase())) {
-  //           let option_type = 'CALL';
-  //           if (val.option_type === 'PE') {
-  //             option_type = 'PUT';
-  //           }
-  //           condition_check_previous_trade = {
-  //             strategy: val.strategy_name,
-  //             symbol: val.symbol_name,
-  //             entry_type: entry_type,
-  //             segment: val.segment,
-  //             strike: val.strike_price,
-  //             option_type: option_type,
-  //             expiry: val.expiry,
-  //             client_persnal_key: val.panelKey,
-  //             MakeStartegyName: val.show_strategy,
-  //             TradeType: 'MAKE_STRATEGY',
-  //           };
-  //         }
-  //         else if (['F', 'MF', 'CF'].includes(val.segment.toUpperCase())) {
-  //           condition_check_previous_trade = {
-  //             strategy: val.strategy_name,
-  //             symbol: val.symbol_name,
-  //             entry_type: entry_type,
-  //             segment: val.segment,
-  //             expiry: val.expiry,
-  //             client_persnal_key: val.panelKey,
-  //             MakeStartegyName: val.show_strategy,
-  //             TradeType: 'MAKE_STRATEGY',
-  //           };
-  //         }
-
-  //         // console.log("condition_check_previous_trade",condition_check_previous_trade)
-  //         var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
-
-  //         // console.log("checkPreviousTrade ",checkPreviousTrade)
-
-  //         const collection_last_price = dbTest.collection(val.tokensymbol);
-  //         const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
-  //         let price_lp = last_price[0].lp;
-  //         if (checkPreviousTrade != null) {
-  //           const currentTimestamp = Math.floor(Date.now() / 1000);
-  //           let type = 'LX';
-  //           let price = checkPreviousTrade.stockInfo_bp1;
-  //           if (checkPreviousTrade.entry_type.toUpperCase() === 'SE') {
-  //             type = 'SX';
-  //             price = checkPreviousTrade.stockInfo_sp1;
-  //           }
-  //           let strike = checkPreviousTrade.strike;
-  //           if (checkPreviousTrade.strike_price === 'NaN') {
-  //             strike = '100';
-  //           }
-  //           let option_type = 'CALL';
-  //           if (checkPreviousTrade.option_type.toUpperCase() === 'PUT') {
-  //             option_type = 'PUT';
-  //           }
-  //           let Quntity = checkPreviousTrade.entry_qty_percent;
-  //           let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
-  //           let config = {
-  //             method: 'post',
-  //             maxBodyLength: Infinity,
-  //             // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-  //             url: `${process.env.BROKER_URL}`,
-  //             headers: {
-  //               'Content-Type': 'text/plain'
-  //             },
-  //             data: req
-  //           };
-  //           await axios.request(config)
-  //             .then((response) => {
-
-  //             })
-  //             .catch((error) => {
-  //               console.log('Error ', error);
-  //             });
-  //         }
-  //         const update = {
-  //           $set: {
-  //             status: '2',
-  //           },
-  //           $inc: {
-  //             numberOfTrade_count_trade: 1, // Increment by 1, you can change this value based on your requirement
-  //           },
-  //         };
-  //         const filter = { _id: val._id };
-  //         let Res = await UserMakeStrategy.updateOne(filter, update);
-  //         let Check_same_trade_type = 'BUY';
-  //         if (val.type === 'BUY') {
-  //           Check_same_trade_type = 'SELL';
-  //         }
-  //         const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
-  //         if (Check_same_trade_data) {
+//         cursor.on('error', (error) => {
+//          // console.error('Stream error:', error);
+//         });
+//       }
+//     }
+//   } catch (error) {
+//     console.log('Error fetching data:', error);
+//   }
 
 
-  //           let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
-  //             $set: {
-  //               status: "1",
-  //               tsl: "2"
-  //             },
-  //           });
+//   // try {
+//   //   if (viewNames.length > 0) {
+//   //     for (let valView of viewNames) {
+//   //       // const data = await dbTest.collection(valView.viewName).find({ isCondition: true }).toArray();
+//   //       while (true) {
+//   //       const batchSize = 100; // Adjust batch size based on your data and memory constraints
+//   //       let skip = 0;
 
-  //           console.log("Res", Res)
-  //         }
-  //         const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
-  //           {
-  //             $match: {
-  //               show_strategy: val.show_strategy,
-  //               numberOfTrade: { $ne: '' }
-  //             }
-  //           },
-  //           {
-  //             $group: {
-  //               _id: null,
-  //               totalNumberOfTrade_count_trade: { $sum: '$numberOfTrade_count_trade' },
-  //             }
-  //           },
-  //           {
-  //             $project: {
-  //               _id: 0,
-  //               totalNumberOfTrade_count_trade: 1,
-  //               anotherField: '$numberOfTrade',
-  //               isTotalSmall: { $lt: ['$totalNumberOfTrade_count_trade', parseInt(val.numberOfTrade)] }
-  //             }
-  //           }
-  //         ]);
-  //         if (numberOfTrade_count_trade_count.length > 0) {
-  //           if (numberOfTrade_count_trade_count[0].isTotalSmall === false) {
-  //             const update_trade_off = {
-  //               $set: {
-  //                 status: '2',
-  //               },
-  //             };
-  //             const filter_trade_off = { show_strategy: val.show_strategy };
-  //             let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
-  //           }
-  //         }
-  //         const currentTimestamp = Math.floor(Date.now() / 1000);
-  //         let type = 'LE';
-  //         if (val.type.toUpperCase() === 'SELL') {
-  //           type = 'SE';
-  //         }
-  //         let price = 0;
-  //         let strike = val.strike_price;
-  //         if (val.strike_price === 'NaN') {
-  //           strike = '100';
-  //         }
-  //         let option_type = 'CALL';
-  //         if (val.option_type.toUpperCase() === 'PE') {
-  //           option_type = 'PUT';
-  //         }
-  //         let Quntity = '100';
-  //         const dateObject = new Date(val.exitTime);
-  //         const hours = ('0' + dateObject.getUTCHours()).slice(-2);
-  //         const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
-  //         const ExitTime = `${hours}-${minutes}`;
-  //         let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
-  //         let config = {
-  //           method: 'post',
-  //           maxBodyLength: Infinity,
-  //           // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-  //           url: `${process.env.BROKER_URL}`,
-  //           headers: {
-  //             'Content-Type': 'text/plain'
-  //           },
-  //           data: req
-  //         };
-  //         await axios.request(config)
-  //           .then((response) => {
-  //             // console.log("response Trade Excuted - ", response)
-  //           })
-  //           .catch((error) => {
-  //             console.log('Error ', error);
-  //           });
+//   //       // const data = await dbTest.collection(valView.viewName).find({
+//   //       //   isCondition: true,
+//   //       //   timeFrameViewData: { $ne: null, $ne: [] }
+//   //       // }).toArray();
+//   //       const data = await dbTest.collection(valView.viewName).find({
+//   //         isCondition: true,
+//   //         timeFrameViewData: { $ne: null, $ne: [] }
+//   //       }).skip(skip).limit(batchSize).toArray();
 
-  //       }
-      
-  //       skip += batchSize
-  //     }
-  //     }
+//   //       if (data.length === 0) {
+//   //         break; // No more data to fetch
+//   //       }
 
-  //   } else {
-  //     // console.log("No view names provided");
-  //   }
+//   //       //console.log(`Data from view ${valView.viewName}:`, data);
+//   //       if (data.length > 0) {
+//   //         //console.log(`Data from view ${valView.viewName}:`, data);
+//   //         let val = data[0];
 
-  // } catch (error) {
-  //   console.log('Error fetching data:', error);
-  // }
-}
+//   //         const date = new Date(val.expiry);
+//   //         val.expiry = format(date, 'ddMMyyyy');
+
+//   //         let entry_type = 'LE';
+//   //         if (val.type === 'BUY') {
+//   //           entry_type = 'SE';
+//   //         }
+//   //         let condition_check_previous_trade = {
+//   //           strategy: val.strategy_name,
+//   //           symbol: val.symbol_name,
+//   //           entry_type: entry_type,
+//   //           segment: val.segment,
+//   //           client_persnal_key: val.panelKey,
+//   //           MakeStartegyName: val.show_strategy,
+//   //           TradeType: 'MAKE_STRATEGY',
+//   //         };
+//   //         if (['O', 'FO', 'MO', 'CO'].includes(val.segment.toUpperCase())) {
+//   //           let option_type = 'CALL';
+//   //           if (val.option_type === 'PE') {
+//   //             option_type = 'PUT';
+//   //           }
+//   //           condition_check_previous_trade = {
+//   //             strategy: val.strategy_name,
+//   //             symbol: val.symbol_name,
+//   //             entry_type: entry_type,
+//   //             segment: val.segment,
+//   //             strike: val.strike_price,
+//   //             option_type: option_type,
+//   //             expiry: val.expiry,
+//   //             client_persnal_key: val.panelKey,
+//   //             MakeStartegyName: val.show_strategy,
+//   //             TradeType: 'MAKE_STRATEGY',
+//   //           };
+//   //         }
+//   //         else if (['F', 'MF', 'CF'].includes(val.segment.toUpperCase())) {
+//   //           condition_check_previous_trade = {
+//   //             strategy: val.strategy_name,
+//   //             symbol: val.symbol_name,
+//   //             entry_type: entry_type,
+//   //             segment: val.segment,
+//   //             expiry: val.expiry,
+//   //             client_persnal_key: val.panelKey,
+//   //             MakeStartegyName: val.show_strategy,
+//   //             TradeType: 'MAKE_STRATEGY',
+//   //           };
+//   //         }
+
+//   //         // console.log("condition_check_previous_trade",condition_check_previous_trade)
+//   //         var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
+
+//   //         // console.log("checkPreviousTrade ",checkPreviousTrade)
+
+//   //         const collection_last_price = dbTest.collection(val.tokensymbol);
+//   //         const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
+//   //         let price_lp = last_price[0].lp;
+//   //         if (checkPreviousTrade != null) {
+//   //           const currentTimestamp = Math.floor(Date.now() / 1000);
+//   //           let type = 'LX';
+//   //           let price = checkPreviousTrade.stockInfo_bp1;
+//   //           if (checkPreviousTrade.entry_type.toUpperCase() === 'SE') {
+//   //             type = 'SX';
+//   //             price = checkPreviousTrade.stockInfo_sp1;
+//   //           }
+//   //           let strike = checkPreviousTrade.strike;
+//   //           if (checkPreviousTrade.strike_price === 'NaN') {
+//   //             strike = '100';
+//   //           }
+//   //           let option_type = 'CALL';
+//   //           if (checkPreviousTrade.option_type.toUpperCase() === 'PUT') {
+//   //             option_type = 'PUT';
+//   //           }
+//   //           let Quntity = checkPreviousTrade.entry_qty_percent;
+//   //           let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+//   //           let config = {
+//   //             method: 'post',
+//   //             maxBodyLength: Infinity,
+//   //             // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+//   //             url: `${process.env.BROKER_URL}`,
+//   //             headers: {
+//   //               'Content-Type': 'text/plain'
+//   //             },
+//   //             data: req
+//   //           };
+//   //           await axios.request(config)
+//   //             .then((response) => {
+
+//   //             })
+//   //             .catch((error) => {
+//   //               console.log('Error ', error);
+//   //             });
+//   //         }
+//   //         const update = {
+//   //           $set: {
+//   //             status: '2',
+//   //           },
+//   //           $inc: {
+//   //             numberOfTrade_count_trade: 1, // Increment by 1, you can change this value based on your requirement
+//   //           },
+//   //         };
+//   //         const filter = { _id: val._id };
+//   //         let Res = await UserMakeStrategy.updateOne(filter, update);
+//   //         let Check_same_trade_type = 'BUY';
+//   //         if (val.type === 'BUY') {
+//   //           Check_same_trade_type = 'SELL';
+//   //         }
+//   //         const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
+//   //         if (Check_same_trade_data) {
+
+
+//   //           let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
+//   //             $set: {
+//   //               status: "1",
+//   //               tsl: "2"
+//   //             },
+//   //           });
+
+//   //           console.log("Res", Res)
+//   //         }
+//   //         const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
+//   //           {
+//   //             $match: {
+//   //               show_strategy: val.show_strategy,
+//   //               numberOfTrade: { $ne: '' }
+//   //             }
+//   //           },
+//   //           {
+//   //             $group: {
+//   //               _id: null,
+//   //               totalNumberOfTrade_count_trade: { $sum: '$numberOfTrade_count_trade' },
+//   //             }
+//   //           },
+//   //           {
+//   //             $project: {
+//   //               _id: 0,
+//   //               totalNumberOfTrade_count_trade: 1,
+//   //               anotherField: '$numberOfTrade',
+//   //               isTotalSmall: { $lt: ['$totalNumberOfTrade_count_trade', parseInt(val.numberOfTrade)] }
+//   //             }
+//   //           }
+//   //         ]);
+//   //         if (numberOfTrade_count_trade_count.length > 0) {
+//   //           if (numberOfTrade_count_trade_count[0].isTotalSmall === false) {
+//   //             const update_trade_off = {
+//   //               $set: {
+//   //                 status: '2',
+//   //               },
+//   //             };
+//   //             const filter_trade_off = { show_strategy: val.show_strategy };
+//   //             let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
+//   //           }
+//   //         }
+//   //         const currentTimestamp = Math.floor(Date.now() / 1000);
+//   //         let type = 'LE';
+//   //         if (val.type.toUpperCase() === 'SELL') {
+//   //           type = 'SE';
+//   //         }
+//   //         let price = 0;
+//   //         let strike = val.strike_price;
+//   //         if (val.strike_price === 'NaN') {
+//   //           strike = '100';
+//   //         }
+//   //         let option_type = 'CALL';
+//   //         if (val.option_type.toUpperCase() === 'PE') {
+//   //           option_type = 'PUT';
+//   //         }
+//   //         let Quntity = '100';
+//   //         const dateObject = new Date(val.exitTime);
+//   //         const hours = ('0' + dateObject.getUTCHours()).slice(-2);
+//   //         const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
+//   //         const ExitTime = `${hours}-${minutes}`;
+//   //         let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+//   //         let config = {
+//   //           method: 'post',
+//   //           maxBodyLength: Infinity,
+//   //           // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+//   //           url: `${process.env.BROKER_URL}`,
+//   //           headers: {
+//   //             'Content-Type': 'text/plain'
+//   //           },
+//   //           data: req
+//   //         };
+//   //         await axios.request(config)
+//   //           .then((response) => {
+//   //             // console.log("response Trade Excuted - ", response)
+//   //           })
+//   //           .catch((error) => {
+//   //             console.log('Error ', error);
+//   //           });
+
+//   //       }
+
+//   //       skip += batchSize
+//   //     }
+//   //     }
+
+//   //   } else {
+//   //     // console.log("No view names provided");
+//   //   }
+
+//   // } catch (error) {
+//   //   console.log('Error fetching data:', error);
+//   // }
+// }
 
 
 

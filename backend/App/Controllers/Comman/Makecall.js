@@ -656,7 +656,6 @@ class Makecall {
         Segment,
         Strike,
         OType,
-        Expiry,
         Strategy,
         Quntity,
         Key,
@@ -674,7 +673,14 @@ class Makecall {
         WiseTypeDropdown
       } = req.body;
 
+      console.log("Segment",Segment)
+      
+      let Expiry = req.body.Expiry
     
+      if(Segment.toUpperCase() == "C"){
+       Expiry = "10102050"
+      }
+
 
       //crete data
       const makecallABR_insert = new makecallABR({
