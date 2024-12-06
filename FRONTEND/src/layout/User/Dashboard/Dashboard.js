@@ -374,7 +374,7 @@ const BrokerResponse = () => {
                             <Button
                               variant="primary"
                               onClick={() => handleShowStartegyModal(data)}
-                              disabled={gotodashboard}
+                             // disabled={gotodashboard}
 
                             >
                               Selected Strategy
@@ -568,14 +568,19 @@ const BrokerResponse = () => {
               : ""}
           </div>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseStartegyModal}>
-            Canccel
-          </Button>
-          <Button variant="secondary" onClick={(e) => UpdateDashboard(e)}>
-            Update
-          </Button>
-        </Modal.Footer>
+        {gotodashboard ? ( 
+          ""
+        ) : (
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseStartegyModal}>
+              Cancel
+            </Button>
+            <Button variant="secondary" onClick={(e) => UpdateDashboard(e)}>
+              Update
+            </Button>
+          </Modal.Footer>
+        )}
+       
       </Modal>
 
       {gotodashboard ? (

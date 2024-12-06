@@ -235,6 +235,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     filePath_token = '/Fyers/FYERS_CDS.csv';
                 } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
                     filePath_token = '/Fyers/FYERS_MCX.csv';
+                }else if (segment && (segment.toUpperCase() === 'BO' || segment.toUpperCase() === 'BO')) {
+                    filePath_token = '/Fyers/FYERS_BFO.csv';
                 } else {
 
                     console.log('Invalid segment value');
@@ -261,6 +263,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         } else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
                             symbol = parts[9]
                         } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
+                            symbol = parts[9]
+                        }else if (segment && (segment.toUpperCase() === 'BF' || segment.toUpperCase() === 'BO')) {
                             symbol = parts[9]
                         } else {
                             console.log('Invalid segment value');

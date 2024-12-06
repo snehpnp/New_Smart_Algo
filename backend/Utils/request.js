@@ -953,7 +953,7 @@ module.exports = function (app) {
   });
 
   app.get("/all/brokerview", (req, res) => {
-    Cilents_service_View();
+    
     DashboardView();
     createViewAlice();
     createViewAngel();
@@ -1018,10 +1018,10 @@ module.exports = function (app) {
         CreateBrokerinfo();
       }
 
-      const servicesData = await services.find();
-      if (servicesData.length == 0) {
-        service_token_update1();
-      }
+      // const servicesData = await services.find();
+      // if (servicesData.length == 0) {
+      //   service_token_update1();
+      // }
 
       const Alice_tokenData = await Alice_token.find();
       if (Alice_tokenData.length == 0) {
@@ -1155,35 +1155,35 @@ module.exports = function (app) {
           if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
             unique_key.push(`${item.name}-${item.instrumenttype}`);
 
-            if (item.symbol.slice(-3) == "-EQ") {
-              count++;
+            // if (item.symbol.slice(-3) == "-EQ") {
+            //   count++;
 
-              const matchingElements = categoryResult.filter(
-                (item) => item.segment === "C"
-              );
-              const category_id = matchingElements[0]._id;
+            //   const matchingElements = categoryResult.filter(
+            //     (item) => item.segment === "C"
+            //   );
+            //   const category_id = matchingElements[0]._id;
 
-              services
-                .create({
-                  name: item.name + "#",
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + "#_" + category_id,
-                })
-                .then((createdServices) => {
-                  console.log("User created and saved:", createdServices._id);
-                })
-                .catch((err) => {
-                  try {
-                    console.log("Error creating and saving user:", err);
-                  } catch (e) {}
-                });
-            }
+            //   services
+            //     .create({
+            //       name: item.name + "#",
+            //       instrument_token: item.token,
+            //       zebu_token: item.symbol,
+            //       kotak_token: "",
+            //       instrumenttype: item.instrumenttype,
+            //       exch_seg: item.exch_seg,
+            //       lotsize: item.lotsize,
+            //       categorie_id: category_id,
+            //       unique_column: item.name + "#_" + category_id,
+            //     })
+            //     .then((createdServices) => {
+            //       console.log("User created and saved:", createdServices._id);
+            //     })
+            //     .catch((err) => {
+            //       try {
+            //         console.log("Error creating and saving user:", err);
+            //       } catch (e) {}
+            //     });
+            // }
 
             if (
               item.instrumenttype == "FUTSTK" ||
@@ -1196,38 +1196,30 @@ module.exports = function (app) {
               );
               const category_id = matchingElements[0]._id;
 
-              // services
-              //   .create({
-              //     name: item.name,
-              //     instrument_token: item.token,
-              //     zebu_token: item.symbol,
-              //     kotak_token: "",
-              //     instrumenttype: item.instrumenttype,
-              //     exch_seg: item.exch_seg,
-              //     lotsize: item.lotsize,
-              //     categorie_id: category_id,
-              //     unique_column: item.name + "_" + category_id,
-              //   })
-              //   .then((createdServices) => {
-              //     console.log("User created and saved:", createdServices._id);
-              //   })
-              //   .catch((err) => {
-              //     try {
-              //       console.log("Error creating and saving user:", err);
-              //     } catch (e) {
-              //       ;
-              //     }
-              //   });
+              services
+                .create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + "_" + category_id,
+                })
+                .then((createdServices) => {
+                  console.log("User created and saved:", createdServices._id);
+                })
+                .catch((err) => {
+                  try {
+                    console.log("Error creating and saving user:", err);
+                  } catch (e) {
+                    ;
+                  }
+                });
 
-              await services.updateOne(
-                { name: item.name, instrumenttype: item.instrumenttype },
-                {
-                  $set: {
-                    lotsize: item.lotsize,
-                  },
-                },
-                { upsert: true }
-              );
+           
             }
 
             if (
@@ -1262,312 +1254,304 @@ module.exports = function (app) {
                   } catch (e) {}
                 });
 
-              //   { name: item.name,instrumenttype:item.instrumenttype },
-              //   {
-              //     $set: {
-
-              //       lotsize: item.lotsize,
-
-              //     },
-              //   },
-              //   { upsert: true }
-              // );
+            
             }
 
-            if (item.instrumenttype == "OPTFUT") {
-              count++;
+            // if (item.instrumenttype == "OPTFUT") {
+            //   count++;
 
-              const matchingElements = categoryResult.filter(
-                (item) => item.segment === "MO"
-              );
-              const category_id = matchingElements[0]._id;
+            //   const matchingElements = categoryResult.filter(
+            //     (item) => item.segment === "MO"
+            //   );
+            //   const category_id = matchingElements[0]._id;
 
-              services
-                .create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + "_" + category_id,
-                })
-                .then((createdServices) => {
-                  console.log("User created and saved:", createdServices._id);
-                })
-                .catch((err) => {
-                  try {
-                    console.log("Error creating and saving user:", err);
-                  } catch (e) {}
-                });
-            }
+            //   services
+            //     .create({
+            //       name: item.name,
+            //       instrument_token: item.token,
+            //       zebu_token: item.symbol,
+            //       kotak_token: "",
+            //       instrumenttype: item.instrumenttype,
+            //       exch_seg: item.exch_seg,
+            //       lotsize: item.lotsize,
+            //       categorie_id: category_id,
+            //       unique_column: item.name + "_" + category_id,
+            //     })
+            //     .then((createdServices) => {
+            //       console.log("User created and saved:", createdServices._id);
+            //     })
+            //     .catch((err) => {
+            //       try {
+            //         console.log("Error creating and saving user:", err);
+            //       } catch (e) {}
+            //     });
+            // }
 
-            if (item.instrumenttype == "FUTCOM") {
-              count++;
-              console.log("item - MF " + count + " ", item);
-              const matchingElements = categoryResult.filter(
-                (item) => item.segment === "MF"
-              );
-              const category_id = matchingElements[0]._id;
+            // if (item.instrumenttype == "FUTCOM") {
+            //   count++;
+            //   console.log("item - MF " + count + " ", item);
+            //   const matchingElements = categoryResult.filter(
+            //     (item) => item.segment === "MF"
+            //   );
+            //   const category_id = matchingElements[0]._id;
 
-              services
-                .create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + "_" + category_id,
-                })
-                .then((createdServices) => {
-                  console.log("User created and saved:", createdServices._id);
-                })
-                .catch((err) => {
-                  try {
-                    console.log("Error creating and saving user:", err);
-                  } catch (e) {}
-                });
-            }
+            //   services
+            //     .create({
+            //       name: item.name,
+            //       instrument_token: item.token,
+            //       zebu_token: item.symbol,
+            //       kotak_token: "",
+            //       instrumenttype: item.instrumenttype,
+            //       exch_seg: item.exch_seg,
+            //       lotsize: item.lotsize,
+            //       categorie_id: category_id,
+            //       unique_column: item.name + "_" + category_id,
+            //     })
+            //     .then((createdServices) => {
+            //       console.log("User created and saved:", createdServices._id);
+            //     })
+            //     .catch((err) => {
+            //       try {
+            //         console.log("Error creating and saving user:", err);
+            //       } catch (e) {}
+            //     });
+            // }
 
-            if (item.instrumenttype == "FUTCUR") {
-              count++;
-              console.log("item - CF " + count + " ", item);
-              const matchingElements = categoryResult.filter(
-                (item) => item.segment === "CF"
-              );
-              const category_id = matchingElements[0]._id;
+            // if (item.instrumenttype == "FUTCUR") {
+            //   count++;
+            //   console.log("item - CF " + count + " ", item);
+            //   const matchingElements = categoryResult.filter(
+            //     (item) => item.segment === "CF"
+            //   );
+            //   const category_id = matchingElements[0]._id;
 
-              services
-                .create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + "_" + category_id,
-                })
-                .then((createdServices) => {
-                  console.log("User created and saved:", createdServices._id);
-                })
-                .catch((err) => {
-                  try {
-                    console.log("Error creating and saving user:", err);
-                  } catch (e) {}
-                });
-            }
+            //   services
+            //     .create({
+            //       name: item.name,
+            //       instrument_token: item.token,
+            //       zebu_token: item.symbol,
+            //       kotak_token: "",
+            //       instrumenttype: item.instrumenttype,
+            //       exch_seg: item.exch_seg,
+            //       lotsize: item.lotsize,
+            //       categorie_id: category_id,
+            //       unique_column: item.name + "_" + category_id,
+            //     })
+            //     .then((createdServices) => {
+            //       console.log("User created and saved:", createdServices._id);
+            //     })
+            //     .catch((err) => {
+            //       try {
+            //         console.log("Error creating and saving user:", err);
+            //       } catch (e) {}
+            //     });
+            // }
 
-            if (item.instrumenttype == "OPTCUR" && item.exch_seg == "CDS") {
-              count++;
+            // if (item.instrumenttype == "OPTCUR" && item.exch_seg == "CDS") {
+            //   count++;
 
-              const matchingElements = categoryResult.filter(
-                (item) => item.segment === "CO"
-              );
-              const category_id = matchingElements[0]._id;
+            //   const matchingElements = categoryResult.filter(
+            //     (item) => item.segment === "CO"
+            //   );
+            //   const category_id = matchingElements[0]._id;
 
-              services
-                .create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + "_" + category_id,
-                })
-                .then((createdServices) => {
-                  console.log("User created and saved:", createdServices._id);
-                })
-                .catch((err) => {
-                  try {
-                    console.log("Error creating and saving user:", err);
-                  } catch (e) {}
-                });
-            }
+            //   services
+            //     .create({
+            //       name: item.name,
+            //       instrument_token: item.token,
+            //       zebu_token: item.symbol,
+            //       kotak_token: "",
+            //       instrumenttype: item.instrumenttype,
+            //       exch_seg: item.exch_seg,
+            //       lotsize: item.lotsize,
+            //       categorie_id: category_id,
+            //       unique_column: item.name + "_" + category_id,
+            //     })
+            //     .then((createdServices) => {
+            //       console.log("User created and saved:", createdServices._id);
+            //     })
+            //     .catch((err) => {
+            //       try {
+            //         console.log("Error creating and saving user:", err);
+            //       } catch (e) {}
+            //     });
+            // }
 
-            if (item.instrumenttype == "FUTSTK" && item.exch_seg == "BFO") {
-              count++;
+            // if (item.instrumenttype == "FUTSTK" && item.exch_seg == "BFO") {
+            //   count++;
 
-              const matchingElements = categoryResult.filter(
-                (item) => item.segment === "BO"
-              );
-              const category_id = matchingElements[0]._id;
+            //   const matchingElements = categoryResult.filter(
+            //     (item) => item.segment === "BO"
+            //   );
+            //   const category_id = matchingElements[0]._id;
 
-              await services
-                .create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + "_" + category_id,
-                })
-                .then((createdServices) => {})
-                .catch((err) => {
-                  try {
-                  } catch (e) {}
-                });
-            } else if (
-              item.instrumenttype == "FUTIDX" &&
-              item.exch_seg == "BFO"
-            ) {
-              count++;
+            //   await services
+            //     .create({
+            //       name: item.name,
+            //       instrument_token: item.token,
+            //       zebu_token: item.symbol,
+            //       kotak_token: "",
+            //       instrumenttype: item.instrumenttype,
+            //       exch_seg: item.exch_seg,
+            //       lotsize: item.lotsize,
+            //       categorie_id: category_id,
+            //       unique_column: item.name + "_" + category_id,
+            //     })
+            //     .then((createdServices) => {})
+            //     .catch((err) => {
+            //       try {
+            //       } catch (e) {}
+            //     });
+            // } else if (
+            //   item.instrumenttype == "FUTIDX" &&
+            //   item.exch_seg == "BFO"
+            // ) {
+            //   count++;
 
-              const matchingElements = categoryResult.filter(
-                (item) => item.segment === "BO"
-              );
-              const category_id = matchingElements[0]._id;
+            //   const matchingElements = categoryResult.filter(
+            //     (item) => item.segment === "BO"
+            //   );
+            //   const category_id = matchingElements[0]._id;
 
-              await services
-                .create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + "_" + category_id,
-                })
-                .then((createdServices) => {})
-                .catch((err) => {
-                  try {
-                  } catch (e) {}
-                });
-            }
+            //   await services
+            //     .create({
+            //       name: item.name,
+            //       instrument_token: item.token,
+            //       zebu_token: item.symbol,
+            //       kotak_token: "",
+            //       instrumenttype: item.instrumenttype,
+            //       exch_seg: item.exch_seg,
+            //       lotsize: item.lotsize,
+            //       categorie_id: category_id,
+            //       unique_column: item.name + "_" + category_id,
+            //     })
+            //     .then((createdServices) => {})
+            //     .catch((err) => {
+            //       try {
+            //       } catch (e) {}
+            //     });
+            // }
 
-            if (
-              item.instrumenttype == "AMXIDX" ||
-              item.instrumenttype == "OPTIRC" ||
-              item.instrumenttype == "UNDIRC" ||
-              item.instrumenttype == "FUTIRC" ||
-              item.instrumenttype == "UNDCUR" ||
-              item.instrumenttype == "INDEX" ||
-              item.instrumenttype == "COMDTY" ||
-              item.instrumenttype == "AUCSO"
-            ) {
-              count++;
+            // if (
+            //   item.instrumenttype == "AMXIDX" ||
+            //   item.instrumenttype == "OPTIRC" ||
+            //   item.instrumenttype == "UNDIRC" ||
+            //   item.instrumenttype == "FUTIRC" ||
+            //   item.instrumenttype == "UNDCUR" ||
+            //   item.instrumenttype == "INDEX" ||
+            //   item.instrumenttype == "COMDTY" ||
+            //   item.instrumenttype == "AUCSO"
+            // ) {
+            //   count++;
 
-              services
-                .create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: "",
-                  unique_column: item.name + "_" + "c9dbdc14a9fefd971c979",
-                })
-                .then((createdServices) => {})
-                .catch((err) => {
-                  try {
-                  } catch (e) {}
-                });
-            }
+            //   services
+            //     .create({
+            //       name: item.name,
+            //       instrument_token: item.token,
+            //       zebu_token: item.symbol,
+            //       kotak_token: "",
+            //       instrumenttype: item.instrumenttype,
+            //       exch_seg: item.exch_seg,
+            //       lotsize: item.lotsize,
+            //       categorie_id: "",
+            //       unique_column: item.name + "_" + "c9dbdc14a9fefd971c979",
+            //     })
+            //     .then((createdServices) => {})
+            //     .catch((err) => {
+            //       try {
+            //       } catch (e) {}
+            //     });
+            // }
 
-            // BSE CASH TOKEN UPDATE
-            else if (
-              item.exch_seg == "BSE" &&
-              item.instrumenttype == "" &&
-              item.expiry == ""
-            ) {
-              count++;
+            // // BSE CASH TOKEN UPDATE
+            // else if (
+            //   item.exch_seg == "BSE" &&
+            //   item.instrumenttype == "" &&
+            //   item.expiry == ""
+            // ) {
+            //   count++;
 
-              const matchingElements = categoryResult.filter(
-                (item) => item.segment === "BC"
-              );
-              const category_id = matchingElements[0]._id;
+            //   const matchingElements = categoryResult.filter(
+            //     (item) => item.segment === "BC"
+            //   );
+            //   const category_id = matchingElements[0]._id;
 
-              await services
-                .create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + "_" + category_id,
-                })
-                .then((createdServices) => {})
-                .catch((err) => {
-                  try {
-                  } catch (e) {}
-                });
-            }
+            //   await services
+            //     .create({
+            //       name: item.name,
+            //       instrument_token: item.token,
+            //       zebu_token: item.symbol,
+            //       kotak_token: "",
+            //       instrumenttype: item.instrumenttype,
+            //       exch_seg: item.exch_seg,
+            //       lotsize: item.lotsize,
+            //       categorie_id: category_id,
+            //       unique_column: item.name + "_" + category_id,
+            //     })
+            //     .then((createdServices) => {})
+            //     .catch((err) => {
+            //       try {
+            //       } catch (e) {}
+            //     });
+            // }
 
-            // BSE BSE STOCK FUTURE  TOKEN UPDATE
-            if (item.exch_seg == "BFO" && item.instrumenttype == "FUTSTK") {
-              count++;
+            // // BSE BSE STOCK FUTURE  TOKEN UPDATE
+            // if (item.exch_seg == "BFO" && item.instrumenttype == "FUTSTK") {
+            //   count++;
 
-              const matchingElements = categoryResult.filter(
-                (item) => item.segment === "BF"
-              );
-              const category_id = matchingElements[0]._id;
+            //   const matchingElements = categoryResult.filter(
+            //     (item) => item.segment === "BF"
+            //   );
+            //   const category_id = matchingElements[0]._id;
 
-              await services
-                .create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + "_" + category_id,
-                })
-                .then((createdServices) => {})
-                .catch((err) => {
-                  try {
-                  } catch (e) {}
-                });
-            }
+            //   await services
+            //     .create({
+            //       name: item.name,
+            //       instrument_token: item.token,
+            //       zebu_token: item.symbol,
+            //       kotak_token: "",
+            //       instrumenttype: item.instrumenttype,
+            //       exch_seg: item.exch_seg,
+            //       lotsize: item.lotsize,
+            //       categorie_id: category_id,
+            //       unique_column: item.name + "_" + category_id,
+            //     })
+            //     .then((createdServices) => {})
+            //     .catch((err) => {
+            //       try {
+            //       } catch (e) {}
+            //     });
+            // }
 
-            if (item.exch_seg == "BFO" && item.instrumenttype == "FUTIDX") {
-              count++;
+            // if (item.exch_seg == "BFO" && item.instrumenttype == "FUTIDX") {
+            //   count++;
 
-              const matchingElements = categoryResult.filter(
-                (item) => item.segment === "BO"
-              );
-              const category_id = matchingElements[0]._id;
+            //   const matchingElements = categoryResult.filter(
+            //     (item) => item.segment === "BO"
+            //   );
+            //   const category_id = matchingElements[0]._id;
 
-              await services
-                .create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + "_" + category_id,
-                })
-                .then((createdServices) => {})
-                .catch((err) => {
-                  try {
-                  } catch (e) {}
-                });
-            }
+            //   await services
+            //     .create({
+            //       name: item.name,
+            //       instrument_token: item.token,
+            //       zebu_token: item.symbol,
+            //       kotak_token: "",
+            //       instrumenttype: item.instrumenttype,
+            //       exch_seg: item.exch_seg,
+            //       lotsize: item.lotsize,
+            //       categorie_id: category_id,
+            //       unique_column: item.name + "_" + category_id,
+            //     })
+            //     .then((createdServices) => {})
+            //     .catch((err) => {
+            //       try {
+            //       } catch (e) {}
+            //     });
+            // }
           }
         }
+
       });
     });
   };

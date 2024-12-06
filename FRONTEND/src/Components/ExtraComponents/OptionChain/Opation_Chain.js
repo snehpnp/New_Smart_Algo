@@ -386,8 +386,8 @@ const HelpCenter = () => {
     const cutoffTimeIST = new Date();
     cutoffTimeIST.setHours(15, 30, 0, 0);
     // Check if the current time is after 3:30 PM in IST timezone
-    const isAfterCutoffTime =
-      new Date(currentDateIST).getTime() > cutoffTimeIST.getTime();
+    // const isAfterCutoffTime =
+    //   new Date(currentDateIST).getTime() > cutoffTimeIST.getTime();
 
     // if (!holidays.isHoliday(currentDate) && weekday !== 'Sunday' && weekday !== 'Saturday' && isAfterCutoffTime) {
     //     alert("Market Time Is Off")

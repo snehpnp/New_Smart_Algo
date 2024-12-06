@@ -1,0 +1,9 @@
+.env
+/node_modules
+activity.log
+BACKEND\activity.log
+activity
+
+/Logs
+
+/App/Cron/checkTest.txt

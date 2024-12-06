@@ -841,6 +841,7 @@ const AddClient = () => {
         <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name={isgotodashboard && isgotodashboard ? null : "Update"}
           fromDate={formik.values.fromDate}
           toDate={formik.values.todate}
+          hidebtn={isgotodashboard && isgotodashboard}
           additional_field={
             <>
               <h5 className='mt-5'> All Group Services </h5>

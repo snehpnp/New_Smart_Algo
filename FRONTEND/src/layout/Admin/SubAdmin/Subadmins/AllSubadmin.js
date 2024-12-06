@@ -217,14 +217,33 @@ const AllSubadmin = () => {
       text: "Dashboard",
       formatter: (cell, row) => (
         <>
+        {row.ActiveStatus == 0 ? (
           <span
-            className={`btn-success btn btn-new-block`}
-            onClick={() => goToDashboard(row._id, row.Email)}
-          // disabled={row.AppLoginStatus === "0" && row.WebLoginStatus === "0"}
+            style={{
+              cursor: "not-allowed",
+              color: "white",
+              opacity: 0.6,
+              backgroundColor:row.ActiveStatus == 0 ? "red" : "green"
+
+            }}
+            className="btn btn-new-block"
           >
             Dashboard
           </span>
-        </>
+        ) : (
+          <span
+            style={{
+              cursor: "pointer",
+              color: "white",
+            }}
+            className="btn-success btn btn-new-block"
+            onClick={() => goToDashboard(row._id, row.Email)}
+          >
+            Dashboard
+          </span>
+        )}
+      </>
+      
       ),
     },
     {

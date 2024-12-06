@@ -23,6 +23,8 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { GET_IP } from "../../../../Service/common.service";
 import Swal from "sweetalert2";
+import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
+
 
 const AllClients = () => {
   const [ip, setIp] = useState("");
@@ -40,7 +42,6 @@ const AllClients = () => {
   var dashboard_filter = location.search.split("=")[1];
   const dispatch = useDispatch();
   const user_details = JSON.parse(localStorage.getItem("user_details"));
-
   const [refresh, setrefresh] = useState(false);
   const [originalData, setOriginalData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
@@ -50,6 +51,9 @@ const AllClients = () => {
   const [BrokerDetails, setBrokerDetails] = useState([]);
   const [ForGetCSV, setForGetCSV] = useState([]);
   const [getAllClients, setAllClients] = useState({ loading: true, data: [] });
+  const [getAllStrategyNameData, setAllStrategyName] = useState([]);
+  const [StrategyClientStatus, setStrategyClientStatus] = useState("all");
+
 
   useEffect(() => {
     const filteredData = originalData.filter((item) => {
@@ -94,11 +98,18 @@ const AllClients = () => {
     };
 
     fetchData();
+    GetAllStrategyName();
   }, [refresh]);
 
   useEffect(() => {
     forCSVdata();
   }, [getAllClients.data]);
+
+
+  useEffect(() => {
+    data();
+  }, [StrategyClientStatus]);
+
 
   const Brokerdata = async () => {
     await dispatch(
@@ -113,6 +124,20 @@ const AllClients = () => {
       .then((response) => {
         if (response.status) {
           setBrokerDetails(response.data);
+        }
+      });
+  };
+  const GetAllStrategyName = async (e) => {
+    await dispatch(
+      Get_All_Service_for_Client({
+        req: {},
+        token: user_details?.token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setAllStrategyName( response.data);
         }
       });
   };
@@ -166,9 +191,11 @@ const AllClients = () => {
   }
 
   const data = async () => {
+    console.log("dashboard_filter", StrategyClientStatus);
     var req1 = {
       Find_Role: user_details && user_details.Role,
       user_ID: user_details && user_details.user_id,
+      stgId: StrategyClientStatus,
     };
     await dispatch(GET_ALL_CLIENTS(req1))
       .unwrap()
@@ -691,7 +718,7 @@ const AllClients = () => {
           csv_title="Client-List"
         >
           <div className="row">
-            <div className="col-lg-3">
+            <div className="col-lg-2">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
                   Search Something Here
@@ -770,14 +797,38 @@ const AllClients = () => {
               </div>
             </div>
 
-            <div className="col-lg-2 mt-4">
+            <div className="col-lg-2">
+              <div className="mb-3">
+                <label for="select" className="form-label">
+                Strategies
+                </label>
+                <select
+                  className="default-select wide form-control"
+                  aria-label="Default select example"
+                  id="select"
+                  onChange={(e) => setStrategyClientStatus(e.target.value)}
+                  value={StrategyClientStatus}
+                >
+                  <option value="all">All</option>
+
+                  {getAllStrategyNameData &&
+                    getAllStrategyNameData.map((item,index) => (
+                      <option key={index} value={item._id}>
+                        {item.strategy_name}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            </div>
+
+            {/* <div className="col-lg-2 mt-4">
               <button
                 className="btn btn-primary mt-1"
                 onClick={(e) => ResetDate(e)}
               >
                 Reset
               </button>
-            </div>
+            </div> */}
           </div>
 
           <FullDataTable TableColumns={columns} tableData={getAllClients} />

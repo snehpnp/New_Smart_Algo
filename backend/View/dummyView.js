@@ -4813,6 +4813,14 @@ db.createView("strategyViewNames", "usermakestrategies",
 
 db.createView("Cilents_service_stg", "users",
   [
+    {
+      $match: {
+        $and: [
+          { Role: "USER", Is_Active: "1" ,EndDate  : { $gte: new Date() } }
+        ]
+      }  
+
+    },
  
     {
       $lookup: {

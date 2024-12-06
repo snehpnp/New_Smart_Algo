@@ -66,6 +66,7 @@ import MakeCallPendingPosition from '../layout/Comman/Make/MakeCallPendingPositi
 
 import { useDispatch } from "react-redux";
 
+
 const Admin = () => {
 
     const location = useLocation();
@@ -167,6 +168,8 @@ const Admin = () => {
 
 
                 <Route exact path="/tradehistory1" element={<TradeHistory1 />} />
+   
+
   
 
             </Routes>

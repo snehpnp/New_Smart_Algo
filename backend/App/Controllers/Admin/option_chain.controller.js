@@ -19,40 +19,44 @@ class OptionChain {
     async Get_Option_Symbol(req, res) {
         try {
 
-            const validSymbols = [
-                "NIFTY_50","NIFTY_BANK","NIFTY_FIN_SERVICE","SENSEX",
-                "ADANIENT", "MCX", "LTIM", "SBIN", "GRASIM", "PNB", "RBLBANK", "GRANULES",
-                "NIFTYNXT50", "PAGEIND", "TATACONSUM", "HEROMOTOCO", "CIPLA", "DIVISLAB",
-                "HINDPETRO", "IGL", "011NSETEST", "041NSETEST", "VEDL", "ULTRACEMCO",
-                "HINDCOPPER", "FINNIFTY", "021NSETEST", "SUNPHARMA", "GMRINFRA", "PFC",
-                "BOSCHLTD", "RECLTD", "INDIAMART", "NIFTY", "BAJAJFINSV", "031NSETEST",
-                "071NSETEST", "MARUTI", "TVSMOTOR", "IDFC", "VOLTAS", "ASHOKLEY", "131NSETEST",
-                "EXIDEIND", "HDFCAMC", "GLENMARK", "MIDCPNIFTY", "ALKEM", "BANKBARODA",
-                "181NSETEST", "METROPOLIS", "BHARATFORG", "TCS", "COLPAL", "BAJFINANCE",
-                "PETRONET", "HDFCBANK", "CHOLAFIN", "SHRIRAMFIN", "POLYCAB", "ASTRAL",
-                "MANAPPURAM", "BHARTIARTL", "ABB", "TATAPOWER", "POWERGRID", "HDFCLIFE",
-                "UNITDSPR", "PIIND", "IDEA", "NAVINFLUOR", "GNFC", "INDHOTEL", "171NSETEST",
-                "101NSETEST", "HAVELLS", "PERSISTENT", "SBILIFE", "BALKRISIND", "IEX", "OFSS",
-                "PIDILITIND", "INFY", "WIPRO", "LALPATHLAB", "NESTLEIND", "SYNGENE", "DABUR",
-                "ASIANPAINT", "ZYDUSLIFE", "FEDERALBNK", "MOTHERSON", "LT", "BPCL", "161NSETEST",
-                "SRF", "BAJAJ-AUTO", "ITC", "121NSETEST", "NAUKRI", "081NSETEST", "141NSETEST",
-                "GODREJPROP", "CROMPTON", "BRITANNIA", "IOC", "SIEMENS", "NATIONALUM", "CHAMBLFERT",
-                "BHEL", "MFSL", "MRF", "MUTHOOTFIN", "LTTS", "IDFCFIRSTB", "M&MFIN", "NMDC",
-                "DEEPAKNTR", "COROMANDEL", "BEL", "KOTAKBANK", "CONCOR", "APOLLOHOSP", "HAL",
-                "IRCTC", "BERGEPAINT", "ABBOTINDIA", "CUMMINSIND", "TATACOMM", "AMBUJACEM",
-                "HINDUNILVR", "BIOCON", "ICICIBANK", "TRENT", "LAURUSLABS", "HCLTECH", "GUJGASLTD",
-                "PVRINOX", "ONGC", "TECHM", "MARICO", "BANDHANBNK", "JINDALSTEL", "ICICIPRULI",
-                "SHREECEM", "JSWSTEEL", "BATAINDIA", "GAIL", "ADANIPORTS", "DIXON", "UBL", "TATACHEM",
-                "NTPC", "AXISBANK", "CUB", "ESCORTS", "COFORGE", "111NSETEST", "AARTIIND", "APOLLOTYRE",
-                "RAMCOCEM", "MGL", "UPL", "LTF", "TATAMOTORS", "LICHSGFIN", "COALINDIA", "EICHERMOT",
-                "IPCALAB", "BANKNIFTY", "HINDALCO", "OBEROIRLTY", "LUPIN", "ICICIGI", "SAIL",
-                "CANFINHOME", "TITAN", "SBICARD", "INDUSTOWER", "ABFRL", "INDUSINDBK", "TORNTPHARM",
-                "CANBK", "DLF", "ATUL", "JUBLFOOD", "INDIGO", "RELIANCE", "SUNTV", "PEL", "GODREJCP",
-                "TATASTEEL", "AUBANK", "JKCEMENT", "061NSETEST", "ACC", "091NSETEST", "M&M", "BSOFT",
-                "051NSETEST", "151NSETEST", "DRREDDY", "AUROPHARMA", "ABCAPITAL", "DALBHARAT", "MPHASIS"
-                
-            ];
-    
+            const validSymbols = ["NIFTY_50","NIFTY_BANK","NIFTY_FIN_SERVICE","SENSEX","FINNIFTY","BANKNIFTY","NIFTY",
+                "INFY", "LT", "PEL", "CIPLA", "LUPIN", "LALPATHLAB", "IEX", "HINDALCO", 
+                "INDIACEM", "INDIAMART", "TATASTEEL", "BALRAMCHIN", "MARUTI", "UPL", 
+                "ZYDUSLIFE", "ULTRACEMCO", "ASTRAL", "SBICARD", "HEROMOTOCO", "TCS", 
+                "INDIGO", "INDHOTEL", "BSOFT", "IDFC", "TATACONSUM", "BERGEPAINT", "SAIL", 
+                "MANAPPURAM", "ICICIGI", "WIPRO", "BATAINDIA", "TATACHEM", "COROMANDEL", 
+                "VOLTAS", "OBEROIRLTY", "BHARATFORG", "DALBHARAT", "ACC", "CHAMBLFERT", 
+                "TECHM", "JUBLFOOD", "IGL", "INDUSTOWER", "BHARTIARTL", "LTIM", "HCLTECH", 
+                "L&TFH", "NAUKRI", "DIVISLAB", "MUTHOOTFIN", "RBLBANK", "GAIL", "CROMPTON", 
+                "RECLTD", "ALKEM", "IDFCFIRSTB", "LICHSGFIN", "PAGEIND", "NTPC", "BOSCHLTD", 
+                "LTTS", "ATUL", "PETRONET", "BEL", "CANFINHOME", "GRANULES", "RELIANCE", 
+                "MCX", "BPCL", "COALINDIA", "BAJAJFINSV", "TRENT", "IPCALAB", "SUNTV", 
+                "JSWSTEEL", "ICICIBANK", "AXISBANK", "NAVINFLUOR", "IOC", "MCDOWELL-N", 
+                "HAL", "MRF", "POWERGRID", "HDFCLIFE", "HAVELLS", "APOLLOHOSP", "ADANIENT", 
+                "M&MFIN", "ASHOKLEY", "JINDALSTEL", "BRITANNIA", "BAJAJ-AUTO", "CHOLAFIN", 
+                "ESCORTS", "EICHERMOT", "POLYCAB", "VEDL", "M&M", "GODREJCP", "SYNGENE", 
+                "BALKRISIND", "HINDPETRO", "HDFCBANK", "PFC", "ABFRL", "PERSISTENT", "ZEEL", 
+                "PIDILITIND", "NESTLEIND", "ICICIPRULI", "DLF", "ABBOTINDIA", "TATACOMM", 
+                "SBIN", "AMBUJACEM", "TVSMOTOR", "IRCTC", "DABUR", "COFORGE", "GRASIM", 
+                "DEEPAKNTR", "EXIDEIND", "IBULHSGFIN", "CUMMINSIND", "DRREDDY", "HINDCOPPER", 
+                "GMRINFRA", "ITC", "GODREJPROP", "APOLLOTYRE", "BAJFINANCE", "CANBK", 
+                "NMDC", "HINDUNILVR", "ASIANPAINT", "SBILIFE", "NATIONALUM", "GNFC", "MFSL", 
+                "AARTIIND", "PNB", "MPHASIS", "MARICO", "AUROPHARMA", "TATAPOWER", "MOTHERSON", 
+                "AUBANK", "ABB", "TATAMOTORS", "ONGC", "HDFCAMC", "BANDHANBNK", "FEDERALBNK", 
+                "KOTAKBANK", "BIOCON", "GLENMARK", "LAURUSLABS", "CUB", "OFSS", "TORNTPHARM", 
+                "DIXON", "JKCEMENT", "PIIND", "SRF", "BHEL", "METROPOLIS", "ADANIPORTS", 
+                "CONCOR", "RAMCOCEM", "MGL", "UBL", "ABCAPITAL", "PVRINOX", "SUNPHARMA", 
+                "TITAN", "INDUSINDBK", "SHREECEM", "COLPAL", "IDEA", "SIEMENS", "DELTACORP", 
+                "SHRIRAMFIN", "BANKBARODA", "GUJGASLTD", "LTF", "UNITDSPR", "OPTSTK", 
+                "BSE-OPTSTK", "KALYANKJIL", "KPITTECH", "LICI", "LODHA", "KEI", "MAXHEALTH", 
+                "NCC", "NHPC", "NYKAA", "OIL", "PAYTM", "POLICYBZR", "POONAWALLA", "PRESTIGE", 
+                "SJVN", "SONACOMS", "SUPREMEIND", "TATAELXSI", "TIINDIA", "UNIONBANK", 
+                "YESBANK", "ZOMATO", "VBL", "ADANIGREEN", "ADANIENSOL", "ANGELONE", 
+                "APLAPOLLO", "ATGL", "BANKINDIA", "BSE", "CAMS", "CDSL", "CESC", "CGPOWER", 
+                "CYIENT", "DELHIVERY", "HFCL", "HUDCO", "INDIANB", "IRB", "IRFC", "JIOFIN", 
+                "JSL", "JSWENERGY", "DMART"
+              ];
+              
 
             var symbols1 = await Get_Option_Chain_modal.find({ symbol: { $in:validSymbols } })
                 .select('symbol token price')

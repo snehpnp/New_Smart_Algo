@@ -286,6 +286,7 @@ if (result_makecall.length > 0) {
  
 
 
+<<<<<<< HEAD
  //Make Startegy code
   const pipelineMakeStrategy = [
     {
@@ -310,6 +311,134 @@ if (result_makecall.length > 0) {
           {
             segment: { $ne: 'C' },
             expiry_date: { $gte: new Date(new Date().setHours(0, 0, 0, 0)) }
+=======
+  if (
+    broker_infor.user_id !== undefined &&
+    broker_infor.access_token !== undefined &&
+    broker_infor.trading_status == "on"
+  ) {
+    try {
+      await axios
+        .post(`${aliceBaseUrl}ws/createSocketSess`, type, {
+          headers: {
+            Authorization: `Bearer ${userid} ${userSession1}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          if (res.data.stat == "Ok") {
+            console.log("Alice Socket Connected ", new Date());
+
+            try {
+              const ws = new WebSocket(url);
+              ws.onopen = function () {
+                var encrcptToken = CryptoJS.SHA256(
+                  CryptoJS.SHA256(userSession1).toString()
+                ).toString();
+                var initCon = {
+                  susertoken: encrcptToken,
+                  t: "c",
+                  actid: userid + "_" + "API",
+                  uid: userid + "_" + "API",
+                  source: "API",
+                };
+                ws.send(JSON.stringify(initCon));
+                reconnectAttempt = 0;
+              };
+
+              ws.onmessage = async function (msg) {
+                const response = JSON.parse(msg.data);
+
+                if (response.tk) {
+                  try {
+                    if (
+                      response.lp !== undefined &&
+                      response.e !== undefined &&
+                      response.ft !== undefined
+                    ) {
+                      const now = new Date();
+                      const curtime = `${now
+                        .getHours()
+                        .toString()
+                        .padStart(2, "0")}${now
+                        .getMinutes()
+                        .toString()
+                        .padStart(2, "0")}`;
+
+                      if (curtime < 1530) {
+                        await stock_live_price.updateOne(
+                          { _id: response.tk },
+                          {
+                            $set: {
+                              lp: response.lp,
+                              exc: response.e,
+                              curtime: curtime,
+                              ft: response.ft,
+                            },
+                          },
+                          { upsert: true }
+                        );
+                      }
+                    }
+                  } catch (error) {}
+                } else if (response.s === "OK") {
+                  let json = {
+                    k: channelList,
+                    t: "t",
+                  };
+                  await ws.send(JSON.stringify(json));
+                  socketObject = ws;
+                }
+              };
+
+              ws.onerror = function (error) {
+                console.log(`WebSocket error: ${error}`);
+                socketRestart();
+              };
+
+              ws.onclose = async function () {
+                console.log(
+                  "WebSocket is closed. Reconnect will be attempted in 1 second.", new Date());
+              
+                const isTimeInRange = (hourStart, minuteStart, hourEnd, minuteEnd) => {
+                  const indiaTimezoneOffset = 330;
+                  const currentTimeInMinutes =
+                    new Date().getUTCHours() * 60 +
+                    new Date().getUTCMinutes() +
+                    indiaTimezoneOffset;
+              
+                  const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
+                  const currentMinute = currentTimeInMinutes % 60;
+              
+                  const startMinutes = hourStart * 60 + minuteStart;
+                  const endMinutes = hourEnd * 60 + minuteEnd;
+                  const currentMinutes = currentHour * 60 + currentMinute;
+              
+                  return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
+                };
+              
+                if (isTimeInRange(9, 15, 15, 30)) {
+                  const result = checkExchangeSegment(channelList, "NFO");
+                  if (result === true) {
+                    await socketRestart();
+                    return;
+                  }
+                }
+              
+                if (isTimeInRange(9, 15, 23, 30)) {
+                  const result = checkExchangeSegment(channelList, "MCX");
+                  if (result === true) {
+                    await socketRestart();
+                    return;
+                  }
+                }
+              };
+              
+            } catch (error) {
+              console.log("Error Shocket",new Date()+ error);
+              socketRestart();
+            }
+>>>>>>> 01c874fb416ecb965568ac5d957ba33b15afc8fb
           }
         ]
       }

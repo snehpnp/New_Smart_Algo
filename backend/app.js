@@ -69,12 +69,12 @@ app.get("/pp", (req, res) => {
 });
 
 
-const { Alice_Socket } = require("./App/Helper/Alice_Socket");
+// const { Alice_Socket } = require("./App/Helper/Alice_Socket");
 
-app.get("/restart/socket", (req, res) => {
-  Alice_Socket();
-  res.send("DONE");
-});
+// app.get("/restart/socket", (req, res) => {
+//   Alice_Socket();
+//   res.send("DONE");
+// });
 
 
 app.get('/UpdateChannel/:c/:e', async (req, res) => {
@@ -85,7 +85,7 @@ app.get('/UpdateChannel/:c/:e', async (req, res) => {
   TruncateTableTokenChainAdd_fiveMinute()
   return res.send({ status: true, msg: 'Channel Update' });
 
-  const { updateChannelAndSend } = require('./App/Helper/Alice_Socket')
+  // const { updateChannelAndSend } = require('./App/Helper/Alice_Socket')
   
    //updateChannelAndSend(c)
 });
@@ -188,6 +188,8 @@ async function checkAndDrop() {
    
   }
 }
+
+
 
 
 

@@ -216,11 +216,6 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
   }
 };
 
-app.get("/r", (req, res) => {
-  // Request on Socket Server 1
-  ConnectSocket();
-  res.send("Request sent to Socket Server 2");
-});
 
 // ==================================================================================================
 // MT_4 , OPTION_CHAIN , MAKE_STG, SQUARE_OFF
@@ -760,6 +755,8 @@ app.post("/broker-signals", async (req, res) => {
                 // Non "MT_4" TradeType case
                 if (price_live_second.length > 0) {
                   ft_time = price_live_second[0].ft;
+                  PriceType = "Live";
+
                 }
               }
             } catch (error) {
@@ -2131,6 +2128,7 @@ app.post("/broker-signals", async (req, res) => {
 
           const Filter_users = await Filter_user.aggregate(pipeline).toArray();
 
+
           const uniqueUserIds = Filter_users.map((user) => user._id);
 
           try {
@@ -2354,7 +2352,6 @@ app.post("/broker-signals", async (req, res) => {
 
 // Server start
 app.listen(process.env.PORT, () => {
-  connectToMongoDB();
-  // ConnectSocket()
   console.log(`Broker Server is running on http://0.0.0.0:${process.env.PORT}`);
+  connectToMongoDB();
 });
