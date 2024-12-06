@@ -27,7 +27,7 @@ const connectToMongoDB = async() => {
 
     connection.once("open", () => {
       console.log("Connected to MongoDB at Time:", new Date());
-    Alice_Socket();
+    // Alice_Socket();
     
     });
 
