@@ -87,8 +87,6 @@ cron.schedule("5 1 * * *", () => {
   UpdateCurrentTime();
 });
 
-
-
 // unning a task every 10 minutes
 cron.schedule("*/10 9-15 * * *", () => {
   console.log("Running a task every 10 minutes from 9 AM to 3:30 PM");
@@ -97,27 +95,21 @@ cron.schedule("*/10 9-15 * * *", () => {
 
 cron.schedule("* * * * *", () => {
   UpdatePrice();
-
 });
 
 let UpdatePrice = async () => {
   let UrlFind = await company_information.find({}).select("domain_url");
-  
-  if(UrlFind){
-  
-      axios
-        .get(UrlFind)
-        .then((response) => {
-          console.log(UrlFind, " => ", response.data);
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-        });
-  
+
+  if (UrlFind) {
+    axios
+      .get(UrlFind)
+      .then((response) => {
+        console.log(UrlFind, " => ", response.data);
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
   }
-
-
-
 };
 
 const UpdateCurrentTime = async () => {
@@ -145,7 +137,6 @@ const UpdateCurrentTime = async () => {
     console.error("Error updating documents:", error);
   }
 };
-
 
 const MainSignalsRemainToken = async () => {
   const pipeline = [
