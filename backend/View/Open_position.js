@@ -242,7 +242,6 @@ async function createView() {
             },
           },
         },
-
         {
           $lookup: {
             from: "companies",
@@ -256,38 +255,17 @@ async function createView() {
             companyDate: {
               $arrayElemAt: ["$companyData.current_date", 0],
             },
+            companyEndDate: {
+              $arrayElemAt: ["$companyData.current_End_date", 0],
+            },
           },
         },
         {
           $match: {
             $expr: {
               $and: [
-                {
-                  $gte: [
-                    "$createdAt",
-                    {
-                      $dateFromString: {
-                        dateString: { $substr: ["$companyDate", 0, 10] },
-                      },
-                    },
-                  ],
-                },
-                {
-                  $lt: [
-                    "$createdAt",
-                    {
-                      $dateAdd: {
-                        startDate: {
-                          $dateFromString: {
-                            dateString: { $substr: ["$companyDate", 0, 10] },
-                          },
-                        },
-                        unit: "day",
-                        amount: 1,
-                      },
-                    },
-                  ],
-                },
+                { $gte: ["$createdAt", "$companyDate"] },
+                { $lt: ["$createdAt", "$companyEndDate"] },
               ],
             },
           },
@@ -427,15 +405,6 @@ module.exports = {
   createView,
   dropOpenPosition,
 };
-
-
-
-
-
-
-
-
-
 
 // db.createView("open_position", "mainsignals",
 //   [
@@ -671,54 +640,33 @@ module.exports = {
 //     },
 
 //     {
-//       $lookup: {
-//         from: "companies",
-//         let: {},
-//         pipeline: [],
-//         as: "companyData",
-//       },
+//   $lookup: {
+//     from: "companies",
+//     let: {}, // Add variables here if needed
+//     pipeline: [],
+//     as: "companyData",
+//   },
+// },
+// {
+//   $addFields: {
+//     companyDate: {
+//       $arrayElemAt: ["$companyData.current_date", 0],
 //     },
-//     {
-//       $addFields: {
-//         companyDate: {
-//           $arrayElemAt: ["$companyData.current_date", 0],
-//         },
-//       },
+//     companyEndDate: {
+//       $arrayElemAt: ["$companyData.current_End_date", 0],
 //     },
-//     {
-//       $match: {
-//         $expr: {
-//           $and: [
-//             {
-//               $gte: [
-//                 "$createdAt",
-//                 {
-//                   $dateFromString: {
-//                     dateString: { $substr: ["$companyDate", 0, 10] },
-//                   },
-//                 },
-//               ],
-//             },
-//             {
-//               $lt: [
-//                 "$createdAt",
-//                 {
-//                   $dateAdd: {
-//                     startDate: {
-//                       $dateFromString: {
-//                         dateString: { $substr: ["$companyDate", 0, 10] },
-//                       },
-//                     },
-//                     unit: "day",
-//                     amount: 1,
-//                   },
-//                 },
-//               ],
-//             },
-//           ],
-//         },
-//       },
+//   },
+// },
+// {
+//   $match: {
+//     $expr: {
+//       $and: [
+//         { $gte: ["$createdAt", "$companyDate"] },
+//         { $lt: ["$createdAt", "$companyEndDate"] },
+//       ],
 //     },
+//   },
+// },
 //     {
 //       $project: {
 //         _id: 1,
@@ -789,7 +737,6 @@ module.exports = {
 //     },
 //   ]
 // )
-
 
 // db.createView("open_position", "mainsignals",
 //   [
@@ -883,7 +830,7 @@ module.exports = {
 //           {
 //             $expr: {
 //               $and: [
-        
+
 //                 { $eq: ['$livePrice.trading_status', 'on'] },
 //                 {
 //                   $gt: [
@@ -1106,7 +1053,6 @@ module.exports = {
 //         },
 //       },
 //     }
-
 
 //   ]
 // )

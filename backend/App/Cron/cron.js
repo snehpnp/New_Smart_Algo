@@ -88,39 +88,52 @@ cron.schedule("5 1 * * *", () => {
 });
 
 
+
 // unning a task every 10 minutes
 cron.schedule("*/10 9-15 * * *", () => {
   console.log("Running a task every 10 minutes from 9 AM to 3:30 PM");
   UpdatePrice();
 });
 
+cron.schedule("* * * * *", () => {
+  UpdatePrice();
 
-let UpdatePrice = ()=>{
-  let UrlArr = [
-    "https://software.tradeonn.com/backend/restart/socket",
-    "https://software.corebizinfotech.com/backend/restart/socket",
-    "https://newpenal.pandpinfotech.com/backend/restart/socket",
-    "https://software.sumedhainn.com/backend/restart/socket",
+});
 
-  ]
+let UpdatePrice = async () => {
+  let UrlFind = await company_information.find({}).select("domain_url");
+  
+  if(UrlFind){
+  
+      axios
+        .get(UrlFind)
+        .then((response) => {
+          console.log(UrlFind, " => ", response.data);
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
+  
+  }
 
-  UrlArr.forEach((url) => {
-    axios.get(url).then((response) => {
-      console.log(url ," => ",response.data);
-    }).catch((error) => {
-      console.log(error.response.data);
-    });
-  });
-
-}
 
 
+};
 
 const UpdateCurrentTime = async () => {
   try {
+    // Get today's date and set time to 1:00 AM
+    const today = new Date();
+    today.setHours(1, 0, 0, 0);
+
+    // Create the end date by adding 24 hours to `today`
+    const endDate = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+
+    // Prepare the update object
     const update = {
       $set: {
-        current_date: new Date(),
+        current_date: today,
+        current_End_date: endDate,
       },
     };
 
@@ -132,6 +145,7 @@ const UpdateCurrentTime = async () => {
     console.error("Error updating documents:", error);
   }
 };
+
 
 const MainSignalsRemainToken = async () => {
   const pipeline = [

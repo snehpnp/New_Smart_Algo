@@ -755,6 +755,8 @@ app.post("/broker-signals", async (req, res) => {
                 // Non "MT_4" TradeType case
                 if (price_live_second.length > 0) {
                   ft_time = price_live_second[0].ft;
+                  PriceType = "Live";
+
                 }
               }
             } catch (error) {

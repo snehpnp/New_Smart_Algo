@@ -130,7 +130,10 @@ const CompanySchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
-
+    current_End_date: {
+      type: Date,
+      default: null,
+    },
     price_permission: {
       type: Number,
       default: 0,

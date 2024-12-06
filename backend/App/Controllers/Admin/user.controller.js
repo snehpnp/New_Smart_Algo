@@ -1081,6 +1081,90 @@ class Employee {
     try {
       const { Find_Role, user_ID, stgId } = req.body;
 
+      if(stgId == null || stgId == undefined){
+         // GET ALL CLIENTS
+      var AdminMatch;
+
+      if (Find_Role == "ADMIN") {
+        AdminMatch = { Role: "USER",
+          Is_Active: "1" };
+      } else if (Find_Role == "SUBADMIN") {
+        AdminMatch = { Role: "USER", parent_id: user_ID };
+      }
+
+      const getAllClients = await User_model.aggregate([
+        {
+          $match: AdminMatch,
+        },
+        {
+          $lookup: {
+            from: "companies",
+            let: {
+              endDate: "$EndDate", // endDate field
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $or: [
+                      { $eq: ["$$endDate", null] }, // Handle null endDate
+                      {
+                        $gt: [
+                          {
+                            $dateToString: {
+                              format: "%Y-%m-%d",
+                              date: "$$endDate",
+                            },
+                          },
+                          {
+                            $dateToString: {
+                              format: "%Y-%m-%d",
+                              date: "$month_ago_date",
+                            },
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+            as: "companyData",
+          },
+        },
+        {
+          $unwind: "$companyData",
+        },
+        {
+          $sort: { CreateDate: -1 },
+        },
+        {
+          $project: {
+            companyData: 0,
+          },
+        },
+      ]);
+      
+      // IF DATA NOT EXIST
+      if (getAllClients.length == 0) {
+        return res.send({
+          status: false,
+          msg: "Empty data",
+          data: [],
+          // totalCount: totalCount,
+        });
+      }
+
+      // DATA GET SUCCESSFULLY
+      return res.send({
+        status: true,
+        msg: "Get All Clients",
+        data: getAllClients,
+      });
+
+      }else{
+
+      
 
       // Define admin match filter
       let AdminMatch = {};
@@ -1171,6 +1255,8 @@ class Employee {
         msg: "Get All Clients",
         data: finalClients,
       });
+
+    }
     } catch (error) {
       console.error("Error fetching clients:", error);
       return res.status(500).send({
