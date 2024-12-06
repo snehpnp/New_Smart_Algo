@@ -93,21 +93,21 @@ cron.schedule("*/10 9-15 * * *", () => {
   UpdatePrice();
 });
 
-cron.schedule("* * * * *", () => {
-  UpdatePrice();
-});
+
 
 let UpdatePrice = async () => {
   let UrlFind = await company_information.find({}).select("domain_url");
+  let UrlCreate =  `https://${UrlFind[0].domain_url}/backend/restart/socket`;
 
-  if (UrlFind) {
+
+  if (UrlCreate) {
     axios
-      .get(UrlFind)
+      .get(UrlCreate)
       .then((response) => {
-        console.log(UrlFind, " => ", response.data);
+        console.log(UrlCreate, " => ", response.data);
       })
       .catch((error) => {
-        console.log(error.response.data);
+        console.log(error.response);
       });
   }
 };

@@ -16,7 +16,7 @@ const minutes = currentDate.getMinutes().toString().padStart(2, "0");
 let socketObject = null;
 let reconnectAttempt = 0;
 const maxReconnectAttempts = 10;
-const reconnectInterval = 5000; // Initial reconnect interval in ms
+const reconnectInterval = 5000; 
 
 const Alice_Socket = async () => {
 
