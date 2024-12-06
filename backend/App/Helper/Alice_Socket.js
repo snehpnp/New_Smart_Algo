@@ -286,32 +286,6 @@ if (result_makecall.length > 0) {
  
 
 
-<<<<<<< HEAD
- //Make Startegy code
-  const pipelineMakeStrategy = [
-    {
-      $match: {
-        $or: [
-          { statusOnOff: '1' }
-        ],
-      }
-    },
-    {
-      $addFields: {
-        expiry_date: {
-          $toDate: "$expiry" 
-        }
-      }
-    },
-    {
-      $match: {
-              
-        $or: [
-          { segment: 'C' },
-          {
-            segment: { $ne: 'C' },
-            expiry_date: { $gte: new Date(new Date().setHours(0, 0, 0, 0)) }
-=======
   if (
     broker_infor.user_id !== undefined &&
     broker_infor.access_token !== undefined &&
@@ -438,7 +412,6 @@ if (result_makecall.length > 0) {
               console.log("Error Shocket",new Date()+ error);
               socketRestart();
             }
->>>>>>> 01c874fb416ecb965568ac5d957ba33b15afc8fb
           }
         ]
       }
