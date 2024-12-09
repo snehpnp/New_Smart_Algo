@@ -26,7 +26,7 @@ const createSocketSession = async (userId, userSession) => {
       return true;
     }
   } catch (error) {
-    console.error("Error creating socket session:", error);
+    console.log("Error creating socket session:", error);
     return false;
   }
 };
@@ -104,7 +104,7 @@ const processStockPrice = async (response) => {
       }
     }
   } catch (error) {
-    console.error("Error processing stock price:", error);
+    console.log("Error processing stock price:", error);
   }
 };
 

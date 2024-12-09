@@ -1258,7 +1258,7 @@ class Employee {
 
     }
     } catch (error) {
-      console.error("Error fetching clients:", error);
+      console.log("Error fetching clients:", error);
       return res.status(500).send({
         status: false,
         msg: "Server error",

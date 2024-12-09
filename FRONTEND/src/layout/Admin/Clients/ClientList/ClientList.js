@@ -191,7 +191,7 @@ const AllClients = () => {
   }
 
   const data = async () => {
-    console.log("dashboard_filter", StrategyClientStatus);
+   
     var req1 = {
       Find_Role: user_details && user_details.Role,
       user_ID: user_details && user_details.user_id,

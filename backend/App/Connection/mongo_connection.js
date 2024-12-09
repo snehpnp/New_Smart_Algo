@@ -1,8 +1,6 @@
 "use strict";
 
 const mongoose = require("mongoose");
-const { MongoClient } = require("mongodb");
-const { Alice_Socket } = require("../../App/Helper/Alice_Socket");
 
 
 // Function to connect to MongoDB

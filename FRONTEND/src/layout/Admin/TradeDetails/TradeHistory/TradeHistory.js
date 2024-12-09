@@ -1252,7 +1252,7 @@ const TradeHistory = () => {
             </div>
           </div>
 
-          <div className="col-lg-2  px-1">
+          {/* <div className="col-lg-2  px-1">
             <div className="mb-3">
               <label className="col-lg-12">Search Here</label>
 
@@ -1264,7 +1264,7 @@ const TradeHistory = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-          </div>
+          </div> */}
 
           {/* <div className="col-lg-2 px-1">
             <div className="mb-3">

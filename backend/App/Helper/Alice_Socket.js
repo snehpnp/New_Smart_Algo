@@ -16,7 +16,7 @@ const minutes = currentDate.getMinutes().toString().padStart(2, "0");
 let socketObject = null;
 let reconnectAttempt = 0;
 const maxReconnectAttempts = 10;
-const reconnectInterval = 5000; // Initial reconnect interval in ms
+const reconnectInterval = 5000; 
 
 let ws;
 const url = "wss://ws1.aliceblueonline.com/NorenWS/"
@@ -376,7 +376,7 @@ async function connectToDB(collectionName, response) {
       //     const insertResult = await collection.insertOne(singleDocument);
       // }
       if (response.lp != undefined && response.v != undefined) {
-        console.log("IFFF ELSE ", collectionName);
+       
         const customTimestamp = new Date();
         let singleDocument = {
           _id: customTimestamp,

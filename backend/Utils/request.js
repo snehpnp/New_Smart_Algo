@@ -1176,11 +1176,11 @@ module.exports = function (app) {
             //       unique_column: item.name + "#_" + category_id,
             //     })
             //     .then((createdServices) => {
-            //       console.log("User created and saved:", createdServices._id);
+            //      
             //     })
             //     .catch((err) => {
             //       try {
-            //         console.log("Error creating and saving user:", err);
+            //       
             //       } catch (e) {}
             //     });
             // }

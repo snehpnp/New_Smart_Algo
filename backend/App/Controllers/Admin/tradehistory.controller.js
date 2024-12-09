@@ -5,7 +5,7 @@ const Signals = db.Signals;
 
 const live_price = db.live_price;
 const user_logs = db.user_logs;
-const {  getIPAddress } = require("../../Helper/logger.helper");
+const { getIPAddress } = require("../../Helper/logger.helper");
 
 const { formattedDateTime } = require("../../Helper/time.helper");
 
@@ -62,53 +62,47 @@ class Tradehistory {
 
       // Aggregation pipeline for paginated results
       const filteredSignals = await MainSignals_modal.aggregate([
-        { 
-            $match: matchStage // Initial filtering
+        {
+          $match: matchStage, // Initial filtering
         },
         {
-            $lookup: {
-                from: "signals",
-                localField: "signals_id",
-                foreignField: "_id",
-                as: "result",
-                pipeline: [
-                    { $project: { _id: 1 } }
-                ],
-            },
+          $lookup: {
+            from: "signals",
+            localField: "signals_id",
+            foreignField: "_id",
+            as: "result",
+            pipeline: [{ $project: { _id: 1 } }],
+          },
         },
         {
-            $lookup: {
-                from: "services",
-                localField: "symbol",
-                foreignField: "name",
-                as: "result1",
-                pipeline: [
-                    { $project: { lotsize: 1, name: 1 } } 
-                ],
-            },
+          $lookup: {
+            from: "services",
+            localField: "symbol",
+            foreignField: "name",
+            as: "result1",
+            pipeline: [{ $project: { lotsize: 1, name: 1 } }],
+          },
         },
         {
-            $match: { 
-                $expr: { $gt: [{ $size: "$result" }, 0] } 
-            }
+          $match: {
+            $expr: { $gt: [{ $size: "$result" }, 0] },
+          },
         },
         {
-            $match: { 
-                $expr: { $gt: [{ $size: "$result1" }, 0] } 
-            }
+          $match: {
+            $expr: { $gt: [{ $size: "$result1" }, 0] },
+          },
         },
         {
-            $sort: { _id: -1 } 
+          $sort: { _id: -1 },
         },
         {
-            $skip: (page1 - 1) * limit1 
+          $skip: (page1 - 1) * limit1,
         },
         {
-            $limit: limit1 
+          $limit: limit1,
         },
-    ]);
-
-   
+      ]);
 
       const totalItems = await MainSignals_modal.countDocuments(matchStage);
 
@@ -132,15 +126,14 @@ class Tradehistory {
           );
           item.entry_qty = TotalQty;
           item.exit_qty = item.exit_qty_percent > 0 ? TotalQty : 1 || 0;
-        }else{
-        
+        } else {
           const lotsize = Number(item.result1[0]?.lotsize || 1);
           const TotalQty = lotsize * lotMultypaly1;
 
           item.entry_qty_percent = Math.ceil(
             (item.entry_qty_percent / 100) * lotsize
           );
-          
+
           item.entry_qty = TotalQty;
         }
       });
@@ -171,7 +164,6 @@ class Tradehistory {
         .send({ status: false, msg: "Internal Server Error" });
     }
   }
-
 
   async GetAdminTradeHistoryCal(req, res) {
     try {
@@ -207,12 +199,14 @@ class Tradehistory {
       const stg1 = strategyWord === "null" ? { $exists: true } : strategyWord;
       const ser1 = service === "null" ? { $exists: true } : service;
 
-      const openClose1 =
-        openClose === "Open"
-          ? { exit_qty_percent: "" }
-          : openClose === "Close"
-          ? { exit_qty_percent: { $ne: "" } }
-          : {};
+      // const openClose1 =
+      //   openClose === "Open"
+      //     ? { exit_qty_percent: "" }
+      //     : openClose === "Close"
+      //     ? { exit_qty_percent: { $ne: "" } }
+      //     : {};
+
+      const openClose1 = { exit_qty_percent: { $ne: "" } };
 
       const matchStage = {
         createdAt: { $gte: startDateObj, $lte: endDateObj },
@@ -225,54 +219,51 @@ class Tradehistory {
 
       // Aggregation pipeline for paginated results
       const filteredSignals = await MainSignals_modal.aggregate([
-        { 
-            $match: matchStage // Initial filtering
+        {
+          $match: matchStage, // Initial filtering
         },
         {
-            $lookup: {
-                from: "signals",
-                localField: "signals_id",
-                foreignField: "_id",
-                as: "result",
-                pipeline: [
-                    { $project: { _id: 1 } }
-                ],
-            },
+          $lookup: {
+            from: "signals",
+            localField: "signals_id",
+            foreignField: "_id",
+            as: "result",
+            pipeline: [{ $project: { _id: 1 } }],
+          },
         },
         {
-            $lookup: {
-                from: "services",
-                localField: "symbol",
-                foreignField: "name",
-                as: "result1",
-                pipeline: [
-                    { $project: { lotsize: 1, name: 1 } } 
-                ],
-            },
+          $lookup: {
+            from: "services",
+            localField: "symbol",
+            foreignField: "name",
+            as: "result1",
+            pipeline: [{ $project: { lotsize: 1, name: 1 } }],
+          },
         },
         {
-            $match: { 
-                $expr: { $gt: [{ $size: "$result" }, 0] } 
-            }
+          $match: {
+            $expr: { $gt: [{ $size: "$result" }, 0] },
+          },
         },
         {
-            $match: { 
-                $expr: { $gt: [{ $size: "$result1" }, 0] } 
-            }
+          $match: {
+            $expr: { $gt: [{ $size: "$result1" }, 0] },
+          },
         },
-       
-    ]);
-
-   
+      ]);
 
       const totalItems = await MainSignals_modal.countDocuments(matchStage);
 
       // Calculate TotalProfit/Loss
       let TotalCalculate = 0;
+
       filteredSignals.forEach((item) => {
-        if (item.entry_price && item.exit_price) {
-          const lotsize = Number(item.result1[0]?.lotsize || 1);
-          const TotalQty = lotsize * lotMultypaly1;
+        const entryPrice = Number(item.entry_price);
+        const exitPrice = Number(item.exit_price);
+
+        if (Number.isFinite(entryPrice) && Number.isFinite(exitPrice)) {
+          const lotsize = Number(item.result1?.[0]?.lotsize || 1);
+          const TotalQty = lotsize * (lotMultypaly1 || 1);
 
           TotalCalculate +=
             item.entry_type === "LE"
@@ -280,25 +271,26 @@ class Tradehistory {
               : (item.entry_price - item.exit_price) * TotalQty;
 
           item.entry_qty_percent = Math.ceil(
-            (item.entry_qty_percent / 100) * lotsize
+            (Number(item.entry_qty_percent || 0) / 100) * lotsize
           );
           item.exit_qty_percent = Math.ceil(
-            (item.exit_qty_percent / 100) * lotsize
+            (Number(item.exit_qty_percent || 0) / 100) * lotsize
           );
           item.entry_qty = TotalQty;
           item.exit_qty = item.exit_qty_percent > 0 ? TotalQty : 1 || 0;
-        }else{
-        
-          const lotsize = Number(item.result1[0]?.lotsize || 1);
-          const TotalQty = lotsize * lotMultypaly1;
+        } else {
+          const lotsize = Number(item.result1?.[0]?.lotsize || 1);
+          const TotalQty = lotsize * (lotMultypaly1 || 1); // Ensure lotMultypaly1 has a valid value
 
           item.entry_qty_percent = Math.ceil(
-            (item.entry_qty_percent / 100) * lotsize
+            (Number(item.entry_qty_percent || 0) / 100) * lotsize
           );
-          
+
           item.entry_qty = TotalQty;
         }
       });
+
+
 
       // Trade symbols for filtering
       const trade_symbols_filter = Array.from(
@@ -309,8 +301,8 @@ class Tradehistory {
       return res.send({
         status: true,
         msg: "Filtered Trade history",
-        data: filteredSignals,
-        trade_symbols_filter,
+        data: [],
+        trade_symbols_filter: trade_symbols_filter,
         pagination: {
           page: page1,
           limit: limit1,
@@ -326,22 +318,6 @@ class Tradehistory {
         .send({ status: false, msg: "Internal Server Error" });
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   // GET ADMIN SIGNALS
   async GetAdminsevenTradeHistory(req, res) {
@@ -577,7 +553,6 @@ class Tradehistory {
         client_persnal_key: client_persnal_key1,
       };
 
-
       const pipeline = [
         { $match: matchStage },
         {
@@ -687,11 +662,15 @@ class Tradehistory {
         return res.send({ status: false, msg: "Empty Data" });
       } else {
         var GetSinglas = await Signals.find({ _id: { $in: SignalsIds } });
-        
-        if(GetSinglas.length == 0){
+
+        if (GetSinglas.length == 0) {
           return res.send({ status: false, msg: "Empty Data" });
         }
-        return res.send({ status: true, msg: "Get All Data", data: GetSinglas });
+        return res.send({
+          status: true,
+          msg: "Get All Data",
+          data: GetSinglas,
+        });
       }
     } catch (error) {
       console.log("Error Get All Trade History Data-", error);

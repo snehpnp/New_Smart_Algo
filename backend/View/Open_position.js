@@ -322,16 +322,16 @@ async function createView() {
               $cond: {
                 if: {
                   $or: [
-                    { $eq: ["$exit_time_test", "0"] },
-                    { $eq: ["$exit_time_test", "0"] },
-                    { $eq: ["$exit_time_test", 0] },
+                    { $eq: ["$exit_time", "0"] },
+                    { $eq: ["$exit_time", "0"] },
+                    { $eq: ["$exit_time", 0] },
                   ],
                 },
                 then: -1,
                 else: {
                   $cmp: [
                     { $toInt: "$stockInfo.curtime" },
-                    { $toInt: "$exit_time_test" },
+                    { $toInt: "$exit_time" },
                   ],
                 },
               },
@@ -382,6 +382,8 @@ async function open_position_excute(req, res) {
             { isLpInRangeTarget: true },
             { isLpInRangeStoploss: true },
             { isLpInRange: 1 },
+            { isLpInRange: 0 },
+
           ],
         },
       },
@@ -719,16 +721,16 @@ module.exports = {
 //           $cond: {
 //             if: {
 //               $or: [
-//                 { $eq: ["$exit_time_test", "0"] },
-//                 { $eq: ["$exit_time_test", "0"] },
-//                 { $eq: ["$exit_time_test", 0] },
+//                 { $eq: ["$exit_time", "0"] },
+//                 { $eq: ["$exit_time", "0"] },
+//                 { $eq: ["$exit_time", 0] },
 //               ],
 //             },
 //             then: -1,
 //             else: {
 //               $cmp: [
 //                 { $toInt: "$stockInfo.curtime" },
-//                 { $toInt: "$exit_time_test" },
+//                 { $toInt: "$exit_time" },
 //               ],
 //             },
 //           },

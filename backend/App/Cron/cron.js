@@ -88,8 +88,6 @@ cron.schedule("5 1 * * *", () => {
   UpdateCurrentTime();
 });
 
-
-
 // unning a task every 10 minutes
 cron.schedule("*/10 9-15 * * *", () => {
   console.log("Running a task every 10 minutes from 9 AM to 3:30 PM");
@@ -121,6 +119,24 @@ cron.schedule("*/10 9-15 * * *", () => {
 
 // };
 
+
+let UpdatePrice = async () => {
+  let UrlFind = await company_information.find({}).select("domain_url");
+  let UrlCreate =  `https://${UrlFind[0].domain_url}/backend/restart/socket`;
+
+
+  if (UrlCreate) {
+    axios
+      .get(UrlCreate)
+      .then((response) => {
+        console.log(UrlCreate, " => ", response.data);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  }
+};
+
 const UpdateCurrentTime = async () => {
   try {
     // Get today's date and set time to 1:00 AM
@@ -143,10 +159,9 @@ const UpdateCurrentTime = async () => {
 
     console.log(`Updated ${updateResult.modifiedCount} documents.`);
   } catch (error) {
-    console.error("Error updating documents:", error);
+    console.log("Error updating documents:", error);
   }
 };
-
 
 const MainSignalsRemainToken = async () => {
   const pipeline = [
@@ -1146,7 +1161,6 @@ const TokenSymbolUpdate = async () => {
       } catch (error) {
         console.log("err filePath Try catch", error);
       }
-      console.log("TokenSymbolUpdate End:", " TIME ", new Date());
       return;
     } else {
       return;
@@ -1317,7 +1331,7 @@ const TokenSymbolUpdate1 = async () => {
       } catch (error) {
         console.log("err filePath Try catch", error);
       }
-      console.log("TokenSymbolUpdate End:", " TIME ", new Date());
+   
       return;
     } else {
       return;
