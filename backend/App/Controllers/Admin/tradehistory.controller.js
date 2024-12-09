@@ -205,7 +205,7 @@ class Tradehistory {
       //     : openClose === "Close"
       //     ? { exit_qty_percent: { $ne: "" } }
       //     : {};
-      
+
       const openClose1 = { exit_qty_percent: { $ne: "" } };
 
       const matchStage = {
@@ -257,42 +257,39 @@ class Tradehistory {
       // Calculate TotalProfit/Loss
       let TotalCalculate = 0;
 
-filteredSignals.forEach((item) => {
-  const entryPrice = Number(item.entry_price);
-  const exitPrice = Number(item.exit_price);
+      filteredSignals.forEach((item) => {
+        const entryPrice = Number(item.entry_price);
+        const exitPrice = Number(item.exit_price);
 
-  if (Number.isFinite(entryPrice) && Number.isFinite(exitPrice)) {
-   
-    const lotsize = Number(item.result1?.[0]?.lotsize || 1); 
-    const TotalQty = lotsize * (lotMultypaly1 || 1); 
+        if (Number.isFinite(entryPrice) && Number.isFinite(exitPrice)) {
+          const lotsize = Number(item.result1?.[0]?.lotsize || 1);
+          const TotalQty = lotsize * (lotMultypaly1 || 1);
 
-    TotalCalculate +=
-      item.entry_type === "LE"
-        ? (item.exit_price - item.entry_price) * TotalQty
-        : (item.entry_price - item.exit_price) * TotalQty;
+          TotalCalculate +=
+            item.entry_type === "LE"
+              ? (item.exit_price - item.entry_price) * TotalQty
+              : (item.entry_price - item.exit_price) * TotalQty;
 
-    item.entry_qty_percent = Math.ceil(
-      (Number(item.entry_qty_percent || 0) / 100) * lotsize
-    );
-    item.exit_qty_percent = Math.ceil(
-      (Number(item.exit_qty_percent || 0) / 100) * lotsize
-    );
-    item.entry_qty = TotalQty;
-    item.exit_qty = item.exit_qty_percent > 0 ? TotalQty : 1 || 0;
-  } else {
-    const lotsize = Number(item.result1?.[0]?.lotsize || 1);
-    const TotalQty = lotsize * (lotMultypaly1 || 1); // Ensure lotMultypaly1 has a valid value
+          item.entry_qty_percent = Math.ceil(
+            (Number(item.entry_qty_percent || 0) / 100) * lotsize
+          );
+          item.exit_qty_percent = Math.ceil(
+            (Number(item.exit_qty_percent || 0) / 100) * lotsize
+          );
+          item.entry_qty = TotalQty;
+          item.exit_qty = item.exit_qty_percent > 0 ? TotalQty : 1 || 0;
+        } else {
+          const lotsize = Number(item.result1?.[0]?.lotsize || 1);
+          const TotalQty = lotsize * (lotMultypaly1 || 1); // Ensure lotMultypaly1 has a valid value
 
-    item.entry_qty_percent = Math.ceil(
-      (Number(item.entry_qty_percent || 0) / 100) * lotsize
-    );
+          item.entry_qty_percent = Math.ceil(
+            (Number(item.entry_qty_percent || 0) / 100) * lotsize
+          );
 
-    item.entry_qty = TotalQty;
-  }
-});
+          item.entry_qty = TotalQty;
+        }
+      });
 
-// Log TotalCalculate to debug
-console.log("TotalCalculate:", TotalCalculate);
 
 
       // Trade symbols for filtering
@@ -305,7 +302,7 @@ console.log("TotalCalculate:", TotalCalculate);
         status: true,
         msg: "Filtered Trade history",
         data: [],
-        trade_symbols_filter: [],
+        trade_symbols_filter: trade_symbols_filter,
         pagination: {
           page: page1,
           limit: limit1,

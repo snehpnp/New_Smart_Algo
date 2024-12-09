@@ -4,6 +4,7 @@ const { connectToMongoDB } = require("./App/Connection/mongo_connection");
 const express = require("express");
 const app = express();
 
+const axios = require("axios");
 // HELLO SNEH JAISWAL
 const http = require("http");
 const https = require("https");
@@ -76,7 +77,6 @@ app.get("/restart/socket", (req, res) => {
   res.send("DONE");
 });
 
-const axios = require("axios");
 
 app.get("/all/socket/restart", (req, res) => {
 
@@ -102,9 +102,11 @@ app.get("/all/socket/restart", (req, res) => {
 
 });
 
+
 // Server start
 server.listen(process.env.PORT, () => {
   console.log(`Server is running on  http://0.0.0.0:${process.env.PORT}`);
   connectToMongoDB();
+  Alice_Socket()
 
 });

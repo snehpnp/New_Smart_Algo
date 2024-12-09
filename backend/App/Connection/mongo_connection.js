@@ -1,8 +1,6 @@
 "use strict";
 
 const mongoose = require("mongoose");
-const { MongoClient } = require("mongodb");
-const { Alice_Socket } = require("../../App/Helper/Alice_Socket");
 
 
 // Function to connect to MongoDB
@@ -27,7 +25,7 @@ const connectToMongoDB = async() => {
 
     connection.once("open", () => {
       console.log("Connected to MongoDB at Time:", new Date());
-      Alice_Socket();
+    
     });
 
     // Reconnect if the connection is lost
