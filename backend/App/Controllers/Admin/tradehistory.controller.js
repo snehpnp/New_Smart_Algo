@@ -199,12 +199,7 @@ class Tradehistory {
       const stg1 = strategyWord === "null" ? { $exists: true } : strategyWord;
       const ser1 = service === "null" ? { $exists: true } : service;
 
-      // const openClose1 =
-      //   openClose === "Open"
-      //     ? { exit_qty_percent: "" }
-      //     : openClose === "Close"
-      //     ? { exit_qty_percent: { $ne: "" } }
-      //     : {};
+
 
       const openClose1 = { exit_qty_percent: { $ne: "" } };
 
@@ -290,11 +285,53 @@ class Tradehistory {
         }
       });
 
+// ========================================CHANGE TO CODE=======================================
+const matchStage1 = {
+  createdAt: { $gte: startDateObj, $lte: endDateObj },
+  strategy: stg1,
+  symbol: serIndex,
 
+};
+
+
+
+const filteredSignals1 = await MainSignals_modal.aggregate([
+  {
+    $match: matchStage1, // Initial filtering
+  },
+  {
+    $lookup: {
+      from: "signals",
+      localField: "signals_id",
+      foreignField: "_id",
+      as: "result",
+      pipeline: [{ $project: { _id: 1 } }],
+    },
+  },
+  {
+    $lookup: {
+      from: "services",
+      localField: "symbol",
+      foreignField: "name",
+      as: "result1",
+      pipeline: [{ $project: { lotsize: 1, name: 1 } }],
+    },
+  },
+  {
+    $match: {
+      $expr: { $gt: [{ $size: "$result" }, 0] },
+    },
+  },
+  {
+    $match: {
+      $expr: { $gt: [{ $size: "$result1" }, 0] },
+    },
+  },
+]);
 
       // Trade symbols for filtering
       const trade_symbols_filter = Array.from(
-        new Set(filteredSignals.map((item) => item.trade_symbol))
+        new Set(filteredSignals1.map((item) => item.trade_symbol))
       );
 
       // Response
