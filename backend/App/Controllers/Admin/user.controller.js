@@ -1080,115 +1080,31 @@ class Employee {
   async GetAllClients(req, res) {
     try {
       const { Find_Role, user_ID, stgId } = req.body;
-
-      if(stgId == null || stgId == undefined){
-         // GET ALL CLIENTS
-      var AdminMatch;
-
-      if (Find_Role == "ADMIN") {
-        AdminMatch = { Role: "USER",
-          Is_Active: "1" };
-      } else if (Find_Role == "SUBADMIN") {
-        AdminMatch = { Role: "USER", parent_id: user_ID };
-      }
-
-      const getAllClients = await User_model.aggregate([
-        {
-          $match: AdminMatch,
-        },
-        {
-          $lookup: {
-            from: "companies",
-            let: {
-              endDate: "$EndDate", // endDate field
-            },
-            pipeline: [
-              {
-                $match: {
-                  $expr: {
-                    $or: [
-                      { $eq: ["$$endDate", null] }, // Handle null endDate
-                      {
-                        $gt: [
-                          {
-                            $dateToString: {
-                              format: "%Y-%m-%d",
-                              date: "$$endDate",
-                            },
-                          },
-                          {
-                            $dateToString: {
-                              format: "%Y-%m-%d",
-                              date: "$month_ago_date",
-                            },
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                },
-              },
-            ],
-            as: "companyData",
-          },
-        },
-        {
-          $unwind: "$companyData",
-        },
-        {
-          $sort: { CreateDate: -1 },
-        },
-        {
-          $project: {
-            companyData: 0,
-          },
-        },
-      ]);
-      
-      // IF DATA NOT EXIST
-      if (getAllClients.length == 0) {
-        return res.send({
-          status: false,
-          msg: "Empty data",
-          data: [],
-          // totalCount: totalCount,
-        });
-      }
-
-      // DATA GET SUCCESSFULLY
-      return res.send({
-        status: true,
-        msg: "Get All Clients",
-        data: getAllClients,
-      });
-
-      }else{
-
-      
-
-      // Define admin match filter
+  
+      // Define AdminMatch based on Find_Role
       let AdminMatch = {};
       if (Find_Role === "ADMIN") {
         AdminMatch = { Role: "USER", Is_Active: "1" };
       } else if (Find_Role === "SUBADMIN") {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
-
-      // Handle StgId
-      const strategyId =
-        stgId == "all"
-          ? new ObjectId("6685429d79916530293aa444")
-          : new ObjectId(stgId);
-
-      // Find Users based on strategy_id
-      let FindUsers = await client_services.aggregate([
-        { $match: { strategy_id: { $in: [new ObjectId(strategyId)] } } },
-        { $group: { _id: "$user_id" } },
-      ]);
-
-      FindUsers = FindUsers.map((user) => user._id.toString());
-
-      // Get All Clients with aggregation
+  
+      // Handle 'stgId' logic
+      let strategyId = null;
+      let FindUsers = [];
+      if (stgId && stgId !== "all") {
+        strategyId = new ObjectId(stgId);
+  
+        // Find users related to the given strategy ID
+        const users = await client_services.aggregate([
+          { $match: { strategy_id: { $in: [strategyId] } } },
+          { $group: { _id: "$user_id" } },
+        ]);
+  
+        FindUsers = users.map((user) => user._id.toString());
+      }
+  
+      // Fetch clients with aggregation
       const getAllClients = await User_model.aggregate([
         { $match: AdminMatch },
         {
@@ -1227,38 +1143,31 @@ class Employee {
         },
         { $unwind: { path: "$companyData", preserveNullAndEmptyArrays: true } },
         { $sort: { CreateDate: -1 } },
-
         { $project: { companyData: 0 } },
       ]);
-
-      if (getAllClients.length === 0) {
+  
+      // If no clients found, return an empty response
+      if (!getAllClients.length) {
         return res.status(200).send({
           status: false,
           msg: "Empty data",
           data: [],
         });
       }
-
-
-      const finalClients = getAllClients.filter((client) => {
-        if (stgId === "all") {
-          return true; 
-        }
-        return FindUsers.includes(client._id.toString()); 
-      });
-      
-
-
+  
+      // Filter clients based on strategy ID, if applicable
+      const finalClients = stgId && stgId !== "all"
+        ? getAllClients.filter((client) => FindUsers.includes(client._id.toString()))
+        : getAllClients;
+  
       // Send success response
       return res.status(200).send({
         status: true,
         msg: "Get All Clients",
         data: finalClients,
       });
-
-    }
     } catch (error) {
-      console.log("Error fetching clients:", error);
+      console.error("Error fetching clients:", error);
       return res.status(500).send({
         status: false,
         msg: "Server error",
@@ -1266,6 +1175,7 @@ class Employee {
       });
     }
   }
+  
 
   // GET ALL LOGIN CLIENTS
   async loginClients(req, res) {
