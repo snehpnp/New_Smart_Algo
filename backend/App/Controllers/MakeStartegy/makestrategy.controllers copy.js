@@ -344,11 +344,7 @@ class MakeStartegy {
         const conditions = await parseConditionString(req.body.condition);
 
         const matchStage = await generateMongoCondition(conditions);
-        console.log("req.body.status ",req.body.status);
-        console.log("req.body.timeframe ",req.body.timeframe);
-        console.log("req.body.tokensymbol ",req.body.tokensymbol);
-        console.log("req.body.name ",req.body.name);
-        console.log("req.body.condition ",req.body.condition);
+      
        
 
         pipeline.push({

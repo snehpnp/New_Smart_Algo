@@ -981,21 +981,21 @@ const TokenSymbolUpdate = async () => {
             // Segment F - FUTURE
             const userDataSegment_F = await createUserDataArray(filteredDataF, "F");
             await insertData(userDataSegment_F);
-            console.log("F")
+
             // Segment C -CASH
             const userDataSegment_C = await createUserDataArray(filteredDataC, "C");
             await insertData(userDataSegment_C);
-            console.log("C")
+           
 
 
             // Segment MF MCX FUTURE
             const userDataSegment_MF = await createUserDataArray(filteredDataMF, "MF");
             await insertData(userDataSegment_MF);
-            console.log("MF")
+           
             // Segment MO  MCX OPTION
             const userDataSegment_MO = createUserDataArray(filteredDataMO, "MO");
             await insertData(userDataSegment_MO);
-            console.log("MO")
+          
 
 
 
@@ -1003,31 +1003,31 @@ const TokenSymbolUpdate = async () => {
             // Segment CO CURRENCY OPTION
             const userDataSegment_CO = await createUserDataArray(filteredDataCO, "CO");
             await insertData(userDataSegment_CO);
-            console.log("CO")
+         
 
             // Segment CF  CURRENCY FUTURE
             const userDataSegment_CF = await createUserDataArray(filteredDataCF, "CF");
             await insertData(userDataSegment_CF);
-            console.log("CF")
+        
 
             // Segment BF
             const userDataSegment_BF = await createUserDataArray(filteredDataBF, "BF");
             await insertData(userDataSegment_BF);
-            console.log("BF")
+           
             // Segment BO
             const userDataSegment_BO = await createUserDataArray(filteredDataBO, "BO");
             await insertData(userDataSegment_BO);
-            console.log("BO")
+           
 
             // Segment BC
             const userDataSegment_BC = await createUserDataArray(filteredDataBC, "BC");
             await insertData(userDataSegment_BC);
-            console.log("BC")
+          
             
 
             try {
                 var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
-                console.log("filePath", filePath)
+           
                 fs.appendFile(filePath, "-----TokenSymbolUpdate End - " + new Date() + "----- ***\\n\n", function (err) {
                     if (err) {
                         console.log("err filePath", err);
@@ -1053,7 +1053,7 @@ const TokenSymbolUpdate1 = async () => {
 
     try {
         var filePath = path.join(__dirname + '/checkTest.txt'); // Adjust the file path as needed
-        console.log("filePath", filePath)
+       
         fs.appendFile(filePath, "-----TokenSymbolUpdate  - " + new Date() + "----- ***\\n\n", function (err) {
             if (err) {
                 console.log("err filePath", err);
@@ -1285,7 +1285,7 @@ const tokenFind = async () => {
 
 //     if (twoDaysClientGet.length > 0) {
 //         var UserData = twoDaysClientGet[0].users.filter((data) => data.responses.length > 0);
-//         console.log("UserData ",UserData)
+
 //         if (UserData.length > 0) {
 
 //             UserData.forEach((data) => {

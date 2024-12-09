@@ -134,7 +134,7 @@ const UpdateCurrentTime = async () => {
 
     console.log(`Updated ${updateResult.modifiedCount} documents.`);
   } catch (error) {
-    console.error("Error updating documents:", error);
+    console.log("Error updating documents:", error);
   }
 };
 
@@ -1136,7 +1136,6 @@ const TokenSymbolUpdate = async () => {
       } catch (error) {
         console.log("err filePath Try catch", error);
       }
-      console.log("TokenSymbolUpdate End:", " TIME ", new Date());
       return;
     } else {
       return;
@@ -1307,7 +1306,7 @@ const TokenSymbolUpdate1 = async () => {
       } catch (error) {
         console.log("err filePath Try catch", error);
       }
-      console.log("TokenSymbolUpdate End:", " TIME ", new Date());
+   
       return;
     } else {
       return;

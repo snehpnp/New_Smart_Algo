@@ -287,7 +287,7 @@ async function connectToDB(collectionName, response) {
       //     const insertResult = await collection.insertOne(singleDocument);
       // }
       if (response.lp != undefined && response.v != undefined) {
-        console.log("IFFF ELSE ", collectionName);
+       
         const customTimestamp = new Date();
         let singleDocument = {
           _id: customTimestamp,

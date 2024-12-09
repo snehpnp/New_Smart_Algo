@@ -9,7 +9,7 @@ const connectToMongoDB = async () => {
     console.log('MongoDB connected successfully');
     Alice_Socket();
   } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
+    console.log('Error connecting to MongoDB:', error);
     process.exit(1);
   }
 };

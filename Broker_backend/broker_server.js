@@ -760,7 +760,7 @@ app.post("/broker-signals", async (req, res) => {
                 }
               }
             } catch (error) {
-              console.error("Error in price update:", error);
+              console.log("Error in price update:", error);
             }
 
             if (price == null) {

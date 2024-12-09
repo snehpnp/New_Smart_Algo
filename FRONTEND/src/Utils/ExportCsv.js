@@ -9,7 +9,7 @@ export default function ExportToExcel({ apiData = [], fileName, headers = [] }) 
 
   const exportToExcel = (apiData, fileName, headers) => {
     if (!Array.isArray(headers) || headers.length === 0) {
-      console.error("Headers must be a non-empty array.");
+      console.log("Headers must be a non-empty array.");
       return;
     }
 
