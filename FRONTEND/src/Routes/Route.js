@@ -45,11 +45,14 @@ const Routing = () => {
       navigate("/login");
       return;
     }
-    
-    if(location.pathname.includes("/admin/" || "/subadmin/") && gotodashboard != null){
+
+    if (
+      location.pathname.includes("/admin/" || "/subadmin/") &&
+      gotodashboard != null
+    ) {
       localStorage.removeItem("gotodashboard");
       localStorage.removeItem("user_role_goTo");
-      localStorage.removeItem("user_details_goTo")
+      localStorage.removeItem("user_details_goTo");
       window.location.reload();
     }
 
@@ -68,7 +71,6 @@ const Routing = () => {
         window.location.reload();
       }
     } else if (gotodashboard != null) {
-
       if (user_role_goTo === "USER" && location.pathname === "/") {
         navigate("/client/dashboard");
       } else if (roles === "SUBADMIN" && location.pathname === "/") {
@@ -129,10 +131,8 @@ const Routing = () => {
           }
         />
         <Route path="/login" element={<Login />} />
-
         <Route path="/newsignup/:id" element={<NewSignUp />} />
         <Route path="/newsignup" element={<NewSignUp />} />
-
         <Route path="/forget" element={<ForgetPassword />} />
         <Route path="/profile" element={<ForgetPassword />} />
         <Route path="/update/:id" element={<UpdatePassword />} />
