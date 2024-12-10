@@ -20,13 +20,6 @@ const reconnectInterval = 5000;
 
 const Alice_Socket = async () => {
 
-  const url = "wss://ws1.aliceblueonline.com/NorenWS/";
-  let broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" ,trading_status:"on"}).sort({ _id: -1 });
-
-  if (!broker_infor) {
-    console.log("Broker Trading Off");
-    return null;
-  }
 
   const now1 = new Date();
   const curtime1 = `${now1
@@ -39,9 +32,18 @@ const Alice_Socket = async () => {
 
 
     if(curtime1 > 1531){
-      console.log("Market Close"+new Date());
+      console.log("Market Close "+new Date());
       return null;
     }
+
+
+  const url = "wss://ws1.aliceblueonline.com/NorenWS/";
+  let broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" ,trading_status:"on"}).sort({ _id: -1 });
+
+  if (!broker_infor) {
+    console.log("Broker Trading Off");
+    return null;
+  }
 
 
   const updateToken = await token_chain.find({}).toArray();

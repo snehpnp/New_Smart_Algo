@@ -2,15 +2,13 @@
 
 const mongoose = require("mongoose");
 
-
 // Function to connect to MongoDB
-const connectToMongoDB = async() => {
+const connectToMongoDB = async () => {
   try {
-
     const db_connect = process.env.MONGO_URI;
+
+    // Connect to MongoDB without deprecated options
     mongoose.connect(db_connect, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
       dbName: process.env.DB_NAME,
       serverSelectionTimeoutMS: 50000, // 50 seconds
       socketTimeoutMS: 45000, // 45 seconds for I/O operations
@@ -25,7 +23,6 @@ const connectToMongoDB = async() => {
 
     connection.once("open", () => {
       console.log("Connected to MongoDB at Time:", new Date());
-    
     });
 
     // Reconnect if the connection is lost
@@ -38,7 +35,5 @@ const connectToMongoDB = async() => {
     console.log("Failed to connect to MongoDB at Time:", new Date(), error);
   }
 };
-
-
 
 module.exports = { connectToMongoDB };
