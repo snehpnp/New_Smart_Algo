@@ -137,14 +137,17 @@ const TradeHistory = () => {
   useEffect(() => {
     setSizePerPage(10);
     setPage(1);
-  }, [StrategyClientStatus,SelectOpenClose,SelectServiceIndex,SelectService]);
+  }, [
+    StrategyClientStatus,
+    SelectOpenClose,
+    SelectServiceIndex,
+    SelectService,
+  ]);
 
   useEffect(() => {
     GetAllStrategyName();
     Admin_Trading_data();
   }, []);
-
-
 
   const Get_Tradehisotry_Calculations = async (e) => {
     let abc = new Date();
@@ -636,6 +639,7 @@ const TradeHistory = () => {
                     (get_entry_type === "" && get_exit_type === "SX")
                   ) {
                   } else {
+                    calcultateRPL(row, null, "");
                   }
                 });
             } else {
@@ -851,29 +855,55 @@ const TradeHistory = () => {
         const exitQty = parseInt(row.exit_qty);
         const entryPrice = parseFloat(row.entry_price);
         const exitPrice = parseFloat(row.exit_price);
-        const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
-        $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
-        $(".UPL_" + row.token + "_" + get_id_token).html("-");
-        $(".TPL_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+        if (row.entry_type == "SE") {
+          const rpl = (entryPrice - exitPrice) * Math.min(entryQty, exitQty);
+          $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+          $(".UPL_" + row.token + "_" + get_id_token).html("-");
+          $(".TPL_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
 
-        ShowColor1(
-          ".show_rpl_" + row.token + "_" + get_id_token,
-          rpl.toFixed(2),
-          row.token,
-          get_id_token
-        );
-        ShowColor1(
-          ".UPL_" + row.token + "_" + get_id_token,
-          "-",
-          row.token,
-          get_id_token
-        );
-        ShowColor1(
-          ".TPL_" + row.token + "_" + get_id_token,
-          rpl.toFixed(2),
-          row.token,
-          get_id_token
-        );
+          ShowColor1(
+            ".show_rpl_" + row.token + "_" + get_id_token,
+            rpl.toFixed(2),
+            row.token,
+            get_id_token
+          );
+          ShowColor1(
+            ".UPL_" + row.token + "_" + get_id_token,
+            "-",
+            row.token,
+            get_id_token
+          );
+          ShowColor1(
+            ".TPL_" + row.token + "_" + get_id_token,
+            rpl.toFixed(2),
+            row.token,
+            get_id_token
+          );
+        } else {
+          const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
+          $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+          $(".UPL_" + row.token + "_" + get_id_token).html("-");
+          $(".TPL_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+
+          ShowColor1(
+            ".show_rpl_" + row.token + "_" + get_id_token,
+            rpl.toFixed(2),
+            row.token,
+            get_id_token
+          );
+          ShowColor1(
+            ".UPL_" + row.token + "_" + get_id_token,
+            "-",
+            row.token,
+            get_id_token
+          );
+          ShowColor1(
+            ".TPL_" + row.token + "_" + get_id_token,
+            rpl.toFixed(2),
+            row.token,
+            get_id_token
+          );
+        }
       }
     } else if (row.entry_type && row.exit_type === "") {
       $(".show_rpl_" + row.token + "_" + row._id).html("-");
@@ -949,9 +979,9 @@ const TradeHistory = () => {
   const forCSVdata = () => {
     let csvArr = [];
     if (tradeHistoryData.data.length > 0) {
-      tradeHistoryData.data.map((item,index) => {
+      tradeHistoryData.data.map((item, index) => {
         return csvArr.push({
-          id:index+1,
+          id: index + 1,
           symbol: item.trade_symbol,
           EntryType: item.entry_type ? item.entry_type : "-",
           ExitType: item.exit_type ? item.exit_type : "-",
@@ -963,7 +993,6 @@ const TradeHistory = () => {
           "Exit Time": item.exit_dt_date,
           Exchange: item.exchange,
           Strategy: item.strategy,
-        
         });
       });
 
@@ -1062,8 +1091,6 @@ const TradeHistory = () => {
       }
     }
   }, [selector]);
-
-
 
   return (
     <>
@@ -1166,6 +1193,9 @@ const TradeHistory = () => {
                 <option value="FINNIFTY" selected>
                   FINNIFTY
                 </option>
+                <option value="SENSEX" selected>
+                SENSEX
+                </option>
               </select>
             </div>
           </div>
@@ -1195,7 +1225,7 @@ const TradeHistory = () => {
               </select>
             </div>
           </div>
-          
+
           <div className="col-lg-2  px-1">
             <div className="mb-3">
               <label for="select" className="form-label">
@@ -1341,7 +1371,7 @@ const TradeHistory = () => {
                 <BootstrapTable
                   keyField="_id"
                   data={tradeHistoryData.data}
-                  columns={columns }
+                  columns={columns}
                   remote
                   onTableChange={handleTableChange}
                   {...paginationTableProps}

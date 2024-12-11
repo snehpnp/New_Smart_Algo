@@ -16,30 +16,20 @@ const minutes = currentDate.getMinutes().toString().padStart(2, "0");
 let socketObject = null;
 let reconnectAttempt = 0;
 const maxReconnectAttempts = 10;
-const reconnectInterval = 5000; 
+const reconnectInterval = 5000;
 
-
-
-
-
-
-
-
-
-
-const aliceBaseUrl = process.env.ALICE_BASE_URL || "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/";
-
+const aliceBaseUrl =
+  process.env.ALICE_BASE_URL ||
+  "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/";
 
 let updateQueue = [];
-let retryDelay = 1000; 
+let retryDelay = 1000;
 let messageQueue = [];
 let processing = false;
-
 
 const processUpdates = async () => {
   if (updateQueue.length > 0) {
     try {
-
       await stock_live_price.bulkWrite(updateQueue);
       updateQueue = [];
     } catch (error) {
@@ -48,8 +38,7 @@ const processUpdates = async () => {
   }
 };
 
-setInterval(processUpdates, 1000); 
-
+setInterval(processUpdates, 1000);
 
 const processMessages = async () => {
   if (!processing && messageQueue.length > 0) {
@@ -62,16 +51,18 @@ const processMessages = async () => {
         const { lp, tk, e, ft } = msg;
         if (lp && tk) {
           const now = new Date();
-          const curtime = `${now.getHours().toString().padStart(2, "0")}${now.getMinutes().toString().padStart(2, "0")}`;
+          const curtime = `${now.getHours().toString().padStart(2, "0")}${now
+            .getMinutes()
+            .toString()
+            .padStart(2, "0")}`;
 
-            updateQueue.push({
-              updateOne: {
-                filter: { _id: tk },
-                update: { $set: { lp, exc: e, curtime, ft } },
-                upsert: true,
-              },
-            });
-          
+          updateQueue.push({
+            updateOne: {
+              filter: { _id: tk },
+              update: { $set: { lp, exc: e, curtime, ft } },
+              upsert: true,
+            },
+          });
         }
       } catch (error) {
         console.error("Error processing message:", error);
@@ -84,9 +75,8 @@ const processMessages = async () => {
 
 setInterval(processMessages, 100);
 
-
 const isTimeInRange = (hourStart, minuteStart, hourEnd, minuteEnd) => {
-  const indiaTimezoneOffset = 330; 
+  const indiaTimezoneOffset = 330;
   const currentTimeInMinutes =
     new Date().getUTCHours() * 60 +
     new Date().getUTCMinutes() +
@@ -105,15 +95,19 @@ const isTimeInRange = (hourStart, minuteStart, hourEnd, minuteEnd) => {
 // WebSocket Logic
 const Alice_Socket = async () => {
   const now = new Date();
-  const curtime = `${now.getHours().toString().padStart(2, "0")}${now.getMinutes().toString().padStart(2, "0")}`;
+  const curtime = `${now.getHours().toString().padStart(2, "0")}${now
+    .getMinutes()
+    .toString()
+    .padStart(2, "0")}`;
 
   // if (curtime > 1531) {
   //   console.log("Market Closed:", new Date());
   //   return null;
   // }
 
-
-  const broker_info = await live_price.findOne({ broker_name: "ALICE_BLUE", trading_status: "on" }).sort({ _id: -1 });
+  const broker_info = await live_price
+    .findOne({ broker_name: "ALICE_BLUE", trading_status: "on" })
+    .sort({ _id: -1 });
 
   if (!broker_info) {
     console.log("Broker Trading Off");
@@ -134,15 +128,16 @@ const Alice_Socket = async () => {
   const { user_id: userId, access_token: userSession } = broker_info;
 
   try {
-    const response = await axios.post(`${aliceBaseUrl}ws/createSocketSess`, { loginType: "API" }, {
-      headers: {
-        Authorization: `Bearer ${userId} ${userSession}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-
-    
+    const response = await axios.post(
+      `${aliceBaseUrl}ws/createSocketSess`,
+      { loginType: "API" },
+      {
+        headers: {
+          Authorization: `Bearer ${userId} ${userSession}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (response.data.stat === "Ok") {
       console.log("Alice Socket Connected:", new Date());
@@ -151,7 +146,9 @@ const Alice_Socket = async () => {
       socketObject = ws;
 
       ws.onopen = () => {
-        const encryptedToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession).toString()).toString();
+        const encryptedToken = CryptoJS.SHA256(
+          CryptoJS.SHA256(userSession).toString()
+        ).toString();
         const initCon = {
           susertoken: encryptedToken,
           t: "c",
@@ -188,7 +185,6 @@ const Alice_Socket = async () => {
           socketRestart();
         }
       };
-      
     }
   } catch (error) {
     console.error("Error creating socket session:", error);
@@ -207,30 +203,16 @@ const socketRestart = async () => {
     retryDelay = 1000; // Reset delay on success
   } catch (error) {
     retryDelay = Math.min(retryDelay * 2, 30000); // Cap at 30 seconds
-    console.error("Reconnect failed, retrying in:", retryDelay / 1000, "seconds");
+    console.error(
+      "Reconnect failed, retrying in:",
+      retryDelay / 1000,
+      "seconds"
+    );
     setTimeout(socketRestart, retryDelay);
   }
 };
 
 const getSocket = () => socketObject;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // ===============================================================================
 
@@ -304,7 +286,6 @@ async function connectToDB(collectionName, response) {
       //     const insertResult = await collection.insertOne(singleDocument);
       // }
       if (response.lp != undefined && response.v != undefined) {
-       
         const customTimestamp = new Date();
         let singleDocument = {
           _id: customTimestamp,
@@ -887,5 +868,3 @@ async function createViewM1DAY(collectionName) {
 }
 
 module.exports = { Alice_Socket, getSocket };
-
-

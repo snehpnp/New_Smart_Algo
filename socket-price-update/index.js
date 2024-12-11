@@ -27,6 +27,7 @@ app.use(bodyparser.json({ limit: "10mb", extended: true }));
 app.use(bodyparser.json());
 app.use(express.json());
 
+require("./Cron")
 
 const {Alice_Socket} = require("./Alicesocket");
 
