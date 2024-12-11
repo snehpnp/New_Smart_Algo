@@ -89,7 +89,7 @@ cron.schedule("5 1 * * *", () => {
 
 // unning a task every 10 minutes
 cron.schedule("*/10 9-15 * * *", () => {
-  console.log("Running a task every 10 minutes from 9 AM to 3:30 PM");
+ // console.log("Running a task every 10 minutes from 9 AM to 3:30 PM");
   UpdatePrice();
 });
 
@@ -104,7 +104,7 @@ let UpdatePrice = async () => {
     axios
       .get(UrlCreate)
       .then((response) => {
-        console.log(UrlCreate, " => ", response.data);
+     //   console.log(UrlCreate, " => ", response.data);
       })
       .catch((error) => {
         console.log(error.response);
@@ -132,7 +132,7 @@ const UpdateCurrentTime = async () => {
     // Use an empty filter to target all documents
     const updateResult = await company_information.updateMany({}, update);
 
-    console.log(`Updated ${updateResult.modifiedCount} documents.`);
+  //  console.log(`Updated ${updateResult.modifiedCount} documents.`);
   } catch (error) {
     console.log("Error updating documents:", error);
   }
@@ -1168,7 +1168,7 @@ const TokenSymbolUpdate1 = async () => {
   }
 
   try {
-    console.log("TokenSymbolUpdate Start", " TIME ", new Date());
+   // console.log("TokenSymbolUpdate Start", " TIME ", new Date());
 
     const config = {
       method: "get",

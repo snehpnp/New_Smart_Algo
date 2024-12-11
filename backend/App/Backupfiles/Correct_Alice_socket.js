@@ -78,7 +78,7 @@ const Alice_Socket = async () => {
         })
         .then((res) => {
           if (res.data.stat == "Ok") {
-            console.log("Alice Socket Connected ", new Date());
+            // console.log("Alice Socket Connected ", new Date());
 
             try {
               const ws = new WebSocket(url);
@@ -148,8 +148,7 @@ const Alice_Socket = async () => {
               };
 
               ws.onclose = async function () {
-                console.log(
-                  "WebSocket is closed. Reconnect will be attempted in 1 second.", new Date());
+             
               
                 const isTimeInRange = (hourStart, minuteStart, hourEnd, minuteEnd) => {
                   const indiaTimezoneOffset = 330;

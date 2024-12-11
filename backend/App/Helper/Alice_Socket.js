@@ -18,206 +18,221 @@ let reconnectAttempt = 0;
 const maxReconnectAttempts = 10;
 const reconnectInterval = 5000; 
 
-const Alice_Socket = async () => {
 
 
-  const now1 = new Date();
-  const curtime1 = `${now1
-    .getHours()
-    .toString()
-    .padStart(2, "0")}${now1
-    .getMinutes()
-    .toString()
-    .padStart(2, "0")}`;
 
 
-    if(curtime1 > 1531){
-      console.log("Market Close "+new Date());
-      return null;
+
+
+
+
+
+const aliceBaseUrl = process.env.ALICE_BASE_URL || "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/";
+
+
+let updateQueue = [];
+let retryDelay = 1000; 
+let messageQueue = [];
+let processing = false;
+
+
+const processUpdates = async () => {
+  if (updateQueue.length > 0) {
+    try {
+
+      await stock_live_price.bulkWrite(updateQueue);
+      updateQueue = [];
+    } catch (error) {
+      console.error("Database update error:", error);
+    }
+  }
+};
+
+setInterval(processUpdates, 1000); 
+
+
+const processMessages = async () => {
+  if (!processing && messageQueue.length > 0) {
+    processing = true;
+    const messages = [...messageQueue];
+    messageQueue = [];
+
+    for (const msg of messages) {
+      try {
+        const { lp, tk, e, ft } = msg;
+        if (lp && tk) {
+          const now = new Date();
+          const curtime = `${now.getHours().toString().padStart(2, "0")}${now.getMinutes().toString().padStart(2, "0")}`;
+
+            updateQueue.push({
+              updateOne: {
+                filter: { _id: tk },
+                update: { $set: { lp, exc: e, curtime, ft } },
+                upsert: true,
+              },
+            });
+          
+        }
+      } catch (error) {
+        console.error("Error processing message:", error);
+      }
     }
 
+    processing = false;
+  }
+};
 
-  const url = "wss://ws1.aliceblueonline.com/NorenWS/";
-  let broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" ,trading_status:"on"}).sort({ _id: -1 });
+setInterval(processMessages, 100);
 
-  if (!broker_infor) {
+
+const isTimeInRange = (hourStart, minuteStart, hourEnd, minuteEnd) => {
+  const indiaTimezoneOffset = 330; 
+  const currentTimeInMinutes =
+    new Date().getUTCHours() * 60 +
+    new Date().getUTCMinutes() +
+    indiaTimezoneOffset;
+
+  const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
+  const currentMinute = currentTimeInMinutes % 60;
+
+  const startMinutes = hourStart * 60 + minuteStart;
+  const endMinutes = hourEnd * 60 + minuteEnd;
+  const currentMinutes = currentHour * 60 + currentMinute;
+
+  return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
+};
+
+// WebSocket Logic
+const Alice_Socket = async () => {
+  const now = new Date();
+  const curtime = `${now.getHours().toString().padStart(2, "0")}${now.getMinutes().toString().padStart(2, "0")}`;
+
+  // if (curtime > 1531) {
+  //   console.log("Market Closed:", new Date());
+  //   return null;
+  // }
+
+
+  const broker_info = await live_price.findOne({ broker_name: "ALICE_BLUE", trading_status: "on" }).sort({ _id: -1 });
+
+  if (!broker_info) {
     console.log("Broker Trading Off");
     return null;
   }
 
-
   const updateToken = await token_chain.find({}).toArray();
-  let channelstr = "";
-  if (updateToken.length > 0) {
-    updateToken.forEach((data) => {
-      if (data.exch != null && data._id != null) {
-        channelstr += data.exch + "|" + data._id + "#";
-      }
+  const channelList = updateToken
+    .map((data) => (data.exch && data._id ? `${data.exch}|${data._id}` : null))
+    .filter(Boolean)
+    .join("#");
+
+  if (!channelList) {
+    console.log("No tokens found for subscription");
+    return;
+  }
+
+  const { user_id: userId, access_token: userSession } = broker_info;
+
+  try {
+    const response = await axios.post(`${aliceBaseUrl}ws/createSocketSess`, { loginType: "API" }, {
+      headers: {
+        Authorization: `Bearer ${userId} ${userSession}`,
+        "Content-Type": "application/json",
+      },
     });
-  }
 
-  let alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
 
-  let aliceBaseUrl =
-    "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/";
-  let userid = broker_infor.user_id;
-  let userSession1 = broker_infor.access_token;
-  let channelList = alltokenchannellist;
-  let type = { loginType: "API" };
+    
 
-  if (
-    broker_infor.user_id !== undefined &&
-    broker_infor.access_token !== undefined &&
-    broker_infor.trading_status == "on"
-  ) {
-    try {
-      await axios
-        .post(`${aliceBaseUrl}ws/createSocketSess`, type, {
-          headers: {
-            Authorization: `Bearer ${userid} ${userSession1}`,
-            "Content-Type": "application/json",
-          },
-        })
-        .then((res) => {
-          if (res.data.stat == "Ok") {
-            console.log("Alice Socket Connected ", new Date());
+    if (response.data.stat === "Ok") {
+      console.log("Alice Socket Connected:", new Date());
 
-            try {
-              const ws = new WebSocket(url);
-              ws.onopen = function () {
-                var encrcptToken = CryptoJS.SHA256(
-                  CryptoJS.SHA256(userSession1).toString()
-                ).toString();
-                var initCon = {
-                  susertoken: encrcptToken,
-                  t: "c",
-                  actid: userid + "_" + "API",
-                  uid: userid + "_" + "API",
-                  source: "API",
-                };
-                ws.send(JSON.stringify(initCon));
-                reconnectAttempt = 0;
-              };
+      const ws = new WebSocket("wss://ws1.aliceblueonline.com/NorenWS/");
+      socketObject = ws;
 
-              ws.onmessage = async function (msg) {
-                const response = JSON.parse(msg.data);
+      ws.onopen = () => {
+        const encryptedToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession).toString()).toString();
+        const initCon = {
+          susertoken: encryptedToken,
+          t: "c",
+          actid: `${userId}_API`,
+          uid: `${userId}_API`,
+          source: "API",
+        };
+        ws.send(JSON.stringify(initCon));
+      };
 
-                if (response.tk) {
-                  try {
-                    if (
-                      response.lp !== undefined &&
-                      response.e !== undefined &&
-                      response.ft !== undefined
-                    ) {
-                      const now = new Date();
-                      const curtime = `${now
-                        .getHours()
-                        .toString()
-                        .padStart(2, "0")}${now
-                        .getMinutes()
-                        .toString()
-                        .padStart(2, "0")}`;
+      ws.onmessage = (msg) => {
+        const response = JSON.parse(msg.data);
+        if (response.tk) {
+          messageQueue.push(response);
+        } else if (response.s === "OK") {
+          const subscriptionMessage = {
+            k: channelList,
+            t: "t",
+          };
+          ws.send(JSON.stringify(subscriptionMessage));
+        }
+      };
 
-                      if (curtime < 1530) {
-                        await stock_live_price.updateOne(
-                          { _id: response.tk },
-                          {
-                            $set: {
-                              lp: response.lp,
-                              exc: response.e,
-                              curtime: curtime,
-                              ft: response.ft,
-                            },
-                          },
-                          { upsert: true }
-                        );
-                      }
-                    }
-                  } catch (error) {}
-                } else if (response.s === "OK") {
-                  let json = {
-                    k: channelList,
-                    t: "t",
-                  };
-                  await ws.send(JSON.stringify(json));
-                  socketObject = ws;
-                }
-              };
+      ws.onerror = (error) => {
+        console.error("WebSocket error:", error);
+        socketRestart();
+      };
 
-              ws.onerror = function (error) {
-                console.log(`WebSocket error: ${error}`);
-                socketRestart();
-              };
-
-              ws.onclose = async function () {
-                console.log(
-                  "WebSocket is closed. Reconnect will be attempted in 1 second.", new Date());
-              
-                const isTimeInRange = (hourStart, minuteStart, hourEnd, minuteEnd) => {
-                  const indiaTimezoneOffset = 330;
-                  const currentTimeInMinutes =
-                    new Date().getUTCHours() * 60 +
-                    new Date().getUTCMinutes() +
-                    indiaTimezoneOffset;
-              
-                  const currentHour = Math.floor(currentTimeInMinutes / 60) % 24;
-                  const currentMinute = currentTimeInMinutes % 60;
-              
-                  const startMinutes = hourStart * 60 + minuteStart;
-                  const endMinutes = hourEnd * 60 + minuteEnd;
-                  const currentMinutes = currentHour * 60 + currentMinute;
-              
-                  return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
-                };
-              
-                if (isTimeInRange(9, 15, 15, 30)) {
-                  const result = checkExchangeSegment(channelList, "NFO");
-                  if (result === true) {
-                    await socketRestart();
-                    return;
-                  }
-                }
-              
-                if (isTimeInRange(9, 15, 23, 30)) {
-                  const result = checkExchangeSegment(channelList, "MCX");
-                  if (result === true) {
-                    await socketRestart();
-                    return;
-                  }
-                }
-              };
-              
-            } catch (error) {
-              console.log("Error Shocket",new Date()+ error);
-              socketRestart();
-            }
-          }
-        })
-        .catch((error) => {
+      ws.onclose = (event) => {
+        console.log(
+          `WebSocket closed: Code=${event.code}, Reason=${event.reason}, Clean=${event.wasClean}`
+        );
+        if (isTimeInRange(9, 15, 23, 30)) {
           socketRestart();
-          return "error";
-        });
-    } catch (error) {
-      console.log("Error createSocketSess", error);
+        }
+      };
+      
     }
+  } catch (error) {
+    console.error("Error creating socket session:", error);
+    socketRestart();
   }
 };
 
-const getSocket = () => {
-  return socketObject;
-};
-
+// Reconnect Logic with Exponential Backoff
 const socketRestart = async () => {
-  await Alice_Socket();
+  try {
+    if (socketObject) {
+      socketObject.close();
+    }
+    await new Promise((resolve) => setTimeout(resolve, retryDelay));
+    await Alice_Socket();
+    retryDelay = 1000; // Reset delay on success
+  } catch (error) {
+    retryDelay = Math.min(retryDelay * 2, 30000); // Cap at 30 seconds
+    console.error("Reconnect failed, retrying in:", retryDelay / 1000, "seconds");
+    setTimeout(socketRestart, retryDelay);
+  }
 };
 
-function checkExchangeSegment(input, exchange) {
-  if (input.includes(exchange)) {
-    return true;
-  } else {
-    return false;
-  }
-}
+const getSocket = () => socketObject;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ===============================================================================
 
 const attemptReconnect = () => {
   if (reconnectAttempt < maxReconnectAttempts) {
