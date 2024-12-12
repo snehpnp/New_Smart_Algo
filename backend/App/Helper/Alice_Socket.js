@@ -98,10 +98,10 @@ const Alice_Socket = async () => {
     .toString()
     .padStart(2, "0")}`;
 
-  // if (curtime > 1531) {
-  //   console.log("Market Closed:", new Date());
-  //   return null;
-  // }
+  if (curtime > 1531) {
+    console.log("Market Closed:", new Date());
+    return null;
+  }
 
   const broker_info = await live_price
     .findOne({ broker_name: "ALICE_BLUE", trading_status: "on" })
