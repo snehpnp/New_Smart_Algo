@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
-import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable2";
 import {
   Get_Tradehisotry,
   Get_Tradehisotry_Cal,
@@ -18,7 +17,6 @@ import {
   GetAccessToken,
 } from "../../../../Service/Alice_Socket";
 import { ShowColor1 } from "../../../../Utils/ShowTradeColor";
-import { Get_All_Service } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import {
   GET_ADMIN_TRADE_STATUS,
   ADMINGETTRADINGSTATUS,
@@ -639,7 +637,7 @@ const TradeHistory = () => {
                     (get_entry_type === "" && get_exit_type === "SX")
                   ) {
                   } else {
-                    calcultateRPL(row, null, "");
+                    // calcultateRPL(row, null, "");
                   }
                 });
             } else {

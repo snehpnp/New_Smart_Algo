@@ -47,9 +47,10 @@ cron.schedule("10 1 * * *", () => {
   numberOfTrade_count_trade();
 });
 
-cron.schedule("*/15 * * * *", () => {
+cron.schedule("*/10 9-15 * * *", () => {
   GetStrickPriceFromSheet();
 });
+
 
 cron.schedule("50 23 * * *", () => {
   twodaysclient();
@@ -59,7 +60,7 @@ cron.schedule("30 6 * * *", () => {
   TruncateTableTokenChain();
 });
 
-cron.schedule("*/15 * * * *", async () => {
+cron.schedule("*/10 9-15 * * *", async () => {
   await TruncateTableTokenChainAdd_fiveMinute();
 });
 
@@ -75,9 +76,6 @@ cron.schedule("20 3 * * *", () => {
   TokenSymbolUpdate();
 });
 
-cron.schedule("50 8 * * *", () => {
-  TokenSymbolUpdate();
-});
 
 cron.schedule("1 1 * * *", () => {
   UpdateGetMonthlyData();
@@ -89,22 +87,19 @@ cron.schedule("5 1 * * *", () => {
 
 // unning a task every 10 minutes
 cron.schedule("*/10 9-15 * * *", () => {
- // console.log("Running a task every 10 minutes from 9 AM to 3:30 PM");
+  // console.log("Running a task every 10 minutes from 9 AM to 3:30 PM");
   UpdatePrice();
 });
 
-
-
 let UpdatePrice = async () => {
   let UrlFind = await company_information.find({}).select("domain_url");
-  let UrlCreate =  `https://${UrlFind[0].domain_url}/backend/restart/socket`;
-
+  let UrlCreate = `https://${UrlFind[0].domain_url}/backend/restart/socket`;
 
   if (UrlCreate) {
     axios
       .get(UrlCreate)
       .then((response) => {
-     //   console.log(UrlCreate, " => ", response.data);
+        //   console.log(UrlCreate, " => ", response.data);
       })
       .catch((error) => {
         console.log(error.response);
@@ -132,7 +127,7 @@ const UpdateCurrentTime = async () => {
     // Use an empty filter to target all documents
     const updateResult = await company_information.updateMany({}, update);
 
-  //  console.log(`Updated ${updateResult.modifiedCount} documents.`);
+    //  console.log(`Updated ${updateResult.modifiedCount} documents.`);
   } catch (error) {
     console.log("Error updating documents:", error);
   }
@@ -971,24 +966,39 @@ function createUserDataArray(data, segment) {
 
 async function insertData(dataArray) {
   try {
+
     const existingTokens = await Alice_token.distinct("instrument_token", {});
+
     const filteredDataArray = dataArray.filter((userData) => {
       return !existingTokens.includes(userData.instrument_token);
     });
 
-    await Alice_token.insertMany(filteredDataArray);
+   
+    const bulkOps = filteredDataArray.map((userData) => ({
+      updateOne: {
+        filter: { instrument_token: userData.instrument_token },
+        update: { $set: userData },
+        upsert: true,
+      },
+    }));
+
+    if (bulkOps.length > 0) {
+      await Alice_token.bulkWrite(bulkOps);
+    }
+
   } catch (error) {
     console.log("Error in insertData:", error);
   }
 }
 
+
 const TokenSymbolUpdate = async () => {
   try {
-    var filePath = path.join(__dirname + "/checkTest.txt"); // Adjust the file path as needed
+    var filePath = path.join(__dirname + "/checkTest.txt"); 
 
     fs.appendFile(
       filePath,
-      "-----TokenSymbolUpdate  - " + new Date() + "----- ***\\n\n",
+      "-----Token Symbol Update  - " + new Date() + "----- ***\\n\n",
       function (err) {
         if (err) {
           console.log("err filePath", err);
@@ -1126,7 +1136,7 @@ const TokenSymbolUpdate = async () => {
 
         fs.appendFile(
           filePath,
-          "-----TokenSymbolUpdate End - " + new Date() + "----- ***\\n\n",
+          "-----Token Symbol Update End - " + new Date() + "----- ***\\n\n",
           function (err) {
             if (err) {
               console.log("err filePath", err);
@@ -1142,7 +1152,7 @@ const TokenSymbolUpdate = async () => {
     }
   } catch (error) {
     console.log(
-      "Error TokenSymbolUpdate Try catch",
+      "Error Token Symbol Update Try catch",
       " TIME ",
       new Date(),
       error
@@ -1156,7 +1166,7 @@ const TokenSymbolUpdate1 = async () => {
 
     fs.appendFile(
       filePath,
-      "-----TokenSymbolUpdate  - " + new Date() + "----- ***\\n\n",
+      "-----Token Symbol Update  - " + new Date() + "----- ***\\n\n",
       function (err) {
         if (err) {
           console.log("err filePath", err);
@@ -1168,7 +1178,6 @@ const TokenSymbolUpdate1 = async () => {
   }
 
   try {
-   // console.log("TokenSymbolUpdate Start", " TIME ", new Date());
 
     const config = {
       method: "get",
@@ -1280,7 +1289,7 @@ const TokenSymbolUpdate1 = async () => {
           }
         } catch (dbError) {
           console.log(
-            "Database Error during TokenSymbolUpdate loop:",
+            "Database Error during Token Symbol Update loop:",
             dbError,
             " TIME ",
             new Date(),
@@ -1296,7 +1305,7 @@ const TokenSymbolUpdate1 = async () => {
 
         fs.appendFile(
           filePath,
-          "-----TokenSymbolUpdate End - " + new Date() + "----- ***\\n\n",
+          "-----Token Symbol Update End - " + new Date() + "----- ***\\n\n",
           function (err) {
             if (err) {
               console.log("err filePath", err);
@@ -1306,14 +1315,14 @@ const TokenSymbolUpdate1 = async () => {
       } catch (error) {
         console.log("err filePath Try catch", error);
       }
-   
+
       return;
     } else {
       return;
     }
   } catch (error) {
     console.log(
-      "Error TokenSymbolUpdate Try catch",
+      "Error Token Symbol Update Try catch",
       " TIME ",
       new Date(),
       error
@@ -1479,21 +1488,33 @@ const GetStrickPriceFromSheet = async () => {
 
           sheet_Data.sort((a, b) => a.SYMBOL.localeCompare(b.SYMBOL));
 
-          await Promise.all(
-            sheet_Data.map(async (data) => {
-              if (
-                data.CPrice != undefined &&
-                data.CPrice != "" &&
-                data.CPrice != "#N/A"
-              ) {
-                const result = await Get_Option_Chain_modal.updateOne(
-                  { symbol: data.SYMBOL },
-                  { $set: { price: data.CPrice } },
-                  { upsert: true }
-                );
-              }
-            })
-          );
+          const bulkOperations = sheet_Data
+            .filter(
+              (data) =>
+                data.CPrice !== undefined &&
+                data.CPrice !== "" &&
+                data.CPrice !== "#N/A"
+            )
+            .map((data) => ({
+              updateOne: {
+                filter: { symbol: data.SYMBOL }, 
+                update: { $set: { price: data.CPrice } },
+                upsert: true, 
+              },
+            }));
+
+          if (bulkOperations.length > 0) {
+            try {
+              const result = await Get_Option_Chain_modal.bulkWrite(
+                bulkOperations
+              );
+              // console.log("Bulk write successful:", result);
+            } catch (error) {
+              console.log("Error during bulk write:", error);
+            }
+          } else {
+            console.log("No valid data for bulk write.");
+          }
 
           return;
         },

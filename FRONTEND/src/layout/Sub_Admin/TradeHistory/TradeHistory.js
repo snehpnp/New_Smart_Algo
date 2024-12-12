@@ -637,7 +637,7 @@ const TradeHistory = () => {
                   (get_entry_type === "" && get_exit_type === "SX")
                 ) {
                 } else {
-                  calcultateRPL(row, null, "");
+                  // calcultateRPL(row, null, "");
                 }
               });
 

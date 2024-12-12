@@ -18,9 +18,7 @@ let reconnectAttempt = 0;
 const maxReconnectAttempts = 10;
 const reconnectInterval = 5000;
 
-const aliceBaseUrl =
-  process.env.ALICE_BASE_URL ||
-  "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/";
+const aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/";
 
 let updateQueue = [];
 let retryDelay = 1000;
@@ -187,8 +185,8 @@ const Alice_Socket = async () => {
       };
     }
   } catch (error) {
-    console.error("Error creating socket session:", error);
-    socketRestart();
+    console.log("Error creating socket session:", error.response.data);
+    // socketRestart();
   }
 };
 

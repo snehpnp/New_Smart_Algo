@@ -9,7 +9,7 @@ const db_GET_VIEW = client.db(process.env.DB_NAME);
 const get_open_position_view = db_GET_VIEW.collection('open_position');
 const aliceblueView = db_GET_VIEW.collection('aliceblueView');
 const token_chain = db_GET_VIEW.collection('token_chain');
-const stock_live_price = db_GET_VIEW.collection('stock_live_price');
+// const stock_live_price = db_GET_VIEW.collection('stock_live_price');
 const open_position = db_GET_VIEW.collection('open_position');
 const open_position_excute = db_GET_VIEW.collection('open_position_excute');
 const dashboard_data = db_GET_VIEW.collection('dashboard_data');
@@ -57,7 +57,7 @@ module.exports = {
     OldMainSignals : require('./OldMainSignals.model'),
     OldSignals : require('./Old_signal.modal'),
     token_chain:token_chain,
-    stock_live_price:stock_live_price,
+    stock_live_price:require('./Stock_live_price'),
     open_position:open_position,
     open_position_excute:open_position_excute,
     dbTradeTools:dbTradeTools,
