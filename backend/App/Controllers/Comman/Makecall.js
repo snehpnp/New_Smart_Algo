@@ -28,7 +28,7 @@ const categorie = db.categorie;
 const group_services = db.groupService_User;
 const Alice_token = db.Alice_token;
 const strategy_model = db.strategy;
-const live_price_token = db.live_price_token;
+const live_price_token = db.live_price;
 const makecallABR = db.makecallABR;
 // const { Alice_Socket } = require("../../Helpers/Alice_Socket");
 const {  updateChannelAndSend } = require('../../Helper/Alice_Socket');
@@ -605,21 +605,8 @@ class Makecall {
     try {
 
 
-      let result = null
-
-      if (req.body.exist_user == "none") {
-        result = await live_price_token.findOne().limit(1).select('demate_user_id access_token trading_status');
-      } else {
-        // result = await live_price_token.findOne({demate_user_id:req.body.exist_user}).limit(1).select('demate_user_id access_token');
-
-        result = await live_price_token.findOne({
-          _id: { $gt: req.body.exist_user_details._id } // Assuming result is the previously found document
-        }).select('demate_user_id access_token trading_status').limit(1);
-
-
-      }
-
-
+      let  result = await live_price_token.findOne().limit(1).select('user_id access_token trading_status');
+    
       if (result != null) {
         return res.send({ status: true, msg: "Data Get", data: result });
       } else {

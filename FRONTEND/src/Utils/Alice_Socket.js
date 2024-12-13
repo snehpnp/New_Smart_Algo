@@ -31,6 +31,9 @@ export async function GetAccessToken(data) {
 export async function CreateSocketSession(type, userid, userSession1) {
       try {
         
+       console.log("userid",userid)
+         console.log("userSession1",userSession1)
+
         return axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
             headers: {
                 // 'Authorization': `Bearer ${userid} ${token}`,
