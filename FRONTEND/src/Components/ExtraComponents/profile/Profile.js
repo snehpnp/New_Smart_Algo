@@ -45,11 +45,11 @@ const UserProfile = () => {
     data();
   }, []);
 
-  useEffect(() => {
-    if (user_role === "ADMIN") {
-      CompanyName();
-    }
-  }, [user_role]);
+  // useEffect(() => {
+  //   if (user_role === "ADMIN") {
+  //     CompanyName();
+  //   }
+  // }, [user_role]);
 
   const data = async () => {
     const userId = isgotodashboard
@@ -298,7 +298,7 @@ const UserProfile = () => {
                         </li>
                       )}
 
-                      {user_role === "ADMIN" && user_role_goTo == null && (
+                      {/* {user_role === "ADMIN" && user_role_goTo == null && (
                         <li className="nav-item">
                           <a
                             href="#permission"
@@ -308,7 +308,7 @@ const UserProfile = () => {
                             Change Permission
                           </a>
                         </li>
-                      )}
+                      )} */}
 
                       {user_role === "USER" ? (
                         <li className="nav-item">

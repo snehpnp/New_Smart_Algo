@@ -96,7 +96,7 @@ app.get("/all/socket/restart", (req, res) => {
     });
   });
 
-  res.send("DONE");
+ return res.send("DONE");
 
 
 

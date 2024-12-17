@@ -6,12 +6,19 @@ import Swal from "sweetalert2";
 import {
   UPDATE_PNL_POSITION,
   GET_PNL_POSITION,
+  UPDATE_PRICE_PERMISSION,
 } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
+import { Modal, Button, Table } from "react-bootstrap";
+import { fDate, fDateTime } from "../../../Utils/Date_formet";
+import { GET_COMPANY_INFOS } from "../../../ReduxStore/Slice/Admin/AdminSlice";
 
 const SettingsPage = () => {
   const dispatch = useDispatch();
   const [theme, setTheme] = useState([]);
   const token = localStorage.getItem("token");
+  const [pricePermission, setPricePermission] = useState("0");
+  const [showModal, setShowModal] = useState(false);
+  const [showLogsData, setShowLogsData] = useState([]);
 
   // State to manage permissions
   const [permissions, setPermissions] = useState([
@@ -22,13 +29,32 @@ const SettingsPage = () => {
       options: ["Top", "Bottom"],
       selected: "Top",
     },
-    { id: 2, name: "View All Themes", type: "theme", selected: "Yes" },
+    //{ id: 2, name: "View All Themes", type: "theme", selected: "Yes" },
+    {
+      id: 3,
+      name: "Trade Permission",
+      type: "select1",
+      options: ["MT 4", "Live Price"],
+      selected: "MT 4",
+    },
   ]);
 
   useEffect(() => {
     GetAllThems();
     GetPnlPosition();
+    CompanyName();
   }, []);
+
+  const CompanyName = async () => {
+    await dispatch(GET_COMPANY_INFOS())
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setShowLogsData(response.Permission_Logs_data);
+          setPricePermission(response.data[0].price_permission);
+        }
+      });
+  };
 
   const GetAllThems = async () => {
     console.log("Fetching themes...");
@@ -117,6 +143,38 @@ const SettingsPage = () => {
     }
   };
 
+  const handleSubmit1 = (e) => {
+    e.preventDefault();
+    let requestData = {
+      status: e.target.value,
+    };
+
+    dispatch(UPDATE_PRICE_PERMISSION(requestData))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          Swal.fire({
+            title: "Price Permission Updated",
+            icon: "success",
+          });
+
+          setPricePermission(e.target.value);
+        } else {
+          Swal.fire({
+            title: response.msg,
+            icon: "error",
+          });
+        }
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Update Failed",
+          text: "Something went wrong. Please try again.",
+          icon: "error",
+        });
+      });
+  };
+
   return (
     <Content Page_title={"Settings"} button_status={false}>
       <div style={{ padding: "16px" }}>
@@ -135,54 +193,63 @@ const SettingsPage = () => {
               alignItems: "center",
             }}
           >
-            <h4 style={{ marginBottom: "8px" }}>{perm.name}</h4>
+            <h4 style={{ marginBottom: "8px" }}>
+              {perm.name}{" "}
+              {perm.name == "Trade Permission" && (
+                <i
+                  className="bi bi-info-circle"
+                  style={{ marginLeft: "5px" }}
+                  onClick={(e) => setShowModal(true)}
+                ></i>
+              )}
+            </h4>
+
             <div className="d-flex align-items-center">
               <div className="d-flex align-items-center">
                 {perm.type === "select" && (
-                  <div
-                    className="form-check form-switch"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      padding: "8px",
-                      backgroundColor: "#f8f9fa",
-                      borderRadius: "8px",
-                      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-                    }}
-                  >
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="flexSwitchCheckDefault"
-                      checked={perm.selected === "Top"}
-                      onChange={(e) => {
-                        const newValue = e.target.checked ? "Top" : "Bottom";
-                        UPDATE_PNL_POSITION_API(newValue, e, perm);
-                      }}
-                      style={{
-                        width: "3rem",
-                        height: "1.5rem",
-                        cursor: "pointer",
-                        border: "1px solid #ccc",
-                        backgroundColor: "#ddd",
-                        transition:
-                          "background-color 0.3s ease, transform 0.3s ease",
-                      }}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexSwitchCheckDefault"
-                      style={{
-                        fontSize: "1rem",
-                        fontWeight: "600",
-                        color: "#333",
-                        userSelect: "none",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {perm.selected}
-                    </label>
+                  <div className="row mb-2 d-flex align-items-center justify-content-center">
+                    <div className="col-12 d-flex justify-content-between">
+                      {/* Radio Button - Top */}
+                      <div className="form-check form-check-inline">
+                        <input
+                          type="radio"
+                          className="form-check-input"
+                          id="topOption"
+                          name="priceOption"
+                          value="Top"
+                          checked={perm.selected === "Top"}
+                          onChange={(e) => {
+                            const newValue = e.target.value;
+                            UPDATE_PNL_POSITION_API(newValue, e, perm);
+                          }}
+                        />
+                        <label className="form-check-label" htmlFor="topOption">
+                          Top
+                        </label>
+                      </div>
+
+                      {/* Radio Button - Bottom */}
+                      <div className="form-check form-check-inline">
+                        <input
+                          type="radio"
+                          className="form-check-input"
+                          id="bottomOption"
+                          name="priceOption"
+                          value="Bottom"
+                          checked={perm.selected === "Bottom"}
+                          onChange={(e) => {
+                            const newValue = e.target.value;
+                            UPDATE_PNL_POSITION_API(newValue, e, perm);
+                          }}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="bottomOption"
+                        >
+                          Bottom
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 )}
 
@@ -240,11 +307,91 @@ const SettingsPage = () => {
                     ))}
                   </div>
                 )}
+
+                {perm.type === "select1" && (
+                  <div className="row mb-2 d-flex align-items-center justify-content-center">
+                    <div className="col-12 d-flex justify-content-between">
+                      {/* Radio Buttons */}
+                      <div className="form-check form-check-inline">
+                        <input
+                          type="radio"
+                          className="form-check-input"
+                          id="mt4Option1"
+                          name="priceOption1"
+                          value="0"
+                          checked={pricePermission == "0"}
+                          onChange={(e) => handleSubmit1(e)}
+                        />
+                        <label className="form-check-label" htmlFor="mt4Option">
+                          MT 4
+                        </label>
+                      </div>
+
+                      <div className="form-check form-check-inline">
+                        <input
+                          type="radio"
+                          className="form-check-input"
+                          id="livePriceOption1"
+                          name="priceOption1"
+                          value="1"
+                          checked={pricePermission == "1"}
+                          onChange={(e) => handleSubmit1(e)}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="livePriceOption"
+                        >
+                          Live Price
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Price Permission Logs</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {showLogsData && showLogsData.length > 0 ? (
+            <div className="table-responsive">
+              <table className="table table-bordered">
+                <thead className="thead-light">
+                  <tr>
+                    <th style={{ color: "black" }}>ID</th>
+                    <th style={{ color: "black" }}>Status</th>
+                    <th style={{ color: "black" }}>Message</th>
+                    <th style={{ color: "black" }}>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {showLogsData.map((data, index) => (
+                    <tr key={index}>
+                      <td>{index + 1 || "N/A"}</td>
+                      <td>{data.status === 1 ? "On" : "Off"}</td>
+                      <td>{data.msg || "No Message"}</td>
+                      <td>{fDateTime(data.createdAt)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p>No logs available.</p>
+          )}
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Content>
   );
 };
