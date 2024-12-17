@@ -33,6 +33,8 @@ import paginationFactory, {
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 
+import { GET_PNL_POSITION } from "../../../../ReduxStore/Slice/Admin/AdminHelpSlice";
+
 const paginationOptions = {
   custom: true,
   totalSize: 0, // This will be updated dynamically
@@ -76,6 +78,7 @@ const TradeHistory = () => {
   const [getPage, setPage] = useState(1);
   const [getSizePerPage, setSizePerPage] = useState(10);
   const [total1, setTotal] = useState(0);
+  const [PnlStatus, setPnlStatus] = useState("Top");
 
   const handleShow = () => setShowModal6(true);
   const handleClose = () => setShowModal6(false);
@@ -123,7 +126,17 @@ const TradeHistory = () => {
   useEffect(() => {
     GetAllStrategyName();
     Admin_Trading_data();
+    GetPnlPosition();
   }, []);
+
+  const GetPnlPosition = async () => {
+    const res = await dispatch(GET_PNL_POSITION({ token: token })).unwrap();
+    if (res?.data) {
+      const pnlPosition = res.data[0].pnl_position;
+
+      setPnlStatus(pnlPosition);
+    }
+  };
 
   const Get_TradHistory = async (e) => {
     let abc = new Date();
@@ -1007,6 +1020,8 @@ const TradeHistory = () => {
     </>
   );
 
+  console.log("PnlStatus", PnlStatus);
+
   return (
     <>
       <Content
@@ -1143,31 +1158,40 @@ const TradeHistory = () => {
         </div>
 
         <div className="table-responsive">
-          {tradeHistoryData.data.length > 0 ? (
-            
-            tradeHistoryData.TotalCalculate >= 0 ? (
-              <h3>
-                <b>Total Realised P/L</b> :{" "}
-                <b>
-                  <span style={{ color: "green" }}>
-                    {" "}
-                    {tradeHistoryData.TotalCalculate == null || tradeHistoryData.TotalCalculate == undefined ? 0 : tradeHistoryData.TotalCalculate.toFixed(2)}
-                  </span>{" "}
-                </b>
-              </h3>
-            ) : (
-              <h3>
-                <b>Total Realised P/L</b> :{" "}
-                <b>
-                  <span style={{ color: "red" }}>
-                    {" "}
-                    {tradeHistoryData.TotalCalculate == null || tradeHistoryData.TotalCalculate == undefined ? 0 : tradeHistoryData.TotalCalculate.toFixed(2)}
-                  </span>{" "}
-                </b>
-              </h3>
-            )
-          ) : (
-            ""
+          {PnlStatus == "Top" && (
+            <>
+              {tradeHistoryData.data.length > 0 ? (
+                tradeHistoryData.TotalCalculate >= 0 ? (
+                  <h3>
+                    <b>Total Realised P/L</b> :{" "}
+                    <b>
+                      <span style={{ color: "green" }}>
+                        {" "}
+                        {tradeHistoryData.TotalCalculate == null ||
+                        tradeHistoryData.TotalCalculate == undefined
+                          ? 0
+                          : tradeHistoryData.TotalCalculate.toFixed(2)}
+                      </span>{" "}
+                    </b>
+                  </h3>
+                ) : (
+                  <h3>
+                    <b>Total Realised P/L</b> :{" "}
+                    <b>
+                      <span style={{ color: "red" }}>
+                        {" "}
+                        {tradeHistoryData.TotalCalculate == null ||
+                        tradeHistoryData.TotalCalculate == undefined
+                          ? 0
+                          : tradeHistoryData.TotalCalculate.toFixed(2)}
+                      </span>{" "}
+                    </b>
+                  </h3>
+                )
+              ) : (
+                ""
+              )}
+            </>
           )}
 
           <PaginationProvider
@@ -1217,6 +1241,47 @@ const TradeHistory = () => {
                   </div>
                   <div className="d-flex align-items-end">
                     <PaginationListStandalone {...paginationProps} />
+                  </div>
+                  <div className="d-flex align-items-end">
+                    {PnlStatus == "Bottom" && (
+                      <>
+                        {tradeHistoryData.data.length > 0 ? (
+                          tradeHistoryData.TotalCalculate >= 0 ? (
+                            <h3>
+                              <b>Total Realised P/L</b> :{" "}
+                              <b>
+                                <span style={{ color: "green" }}>
+                                  {" "}
+                                  {tradeHistoryData.TotalCalculate == null ||
+                                  tradeHistoryData.TotalCalculate == undefined
+                                    ? 0
+                                    : tradeHistoryData.TotalCalculate.toFixed(
+                                        2
+                                      )}
+                                </span>{" "}
+                              </b>
+                            </h3>
+                          ) : (
+                            <h3>
+                              <b>Total Realised P/L</b> :{" "}
+                              <b>
+                                <span style={{ color: "red" }}>
+                                  {" "}
+                                  {tradeHistoryData.TotalCalculate == null ||
+                                  tradeHistoryData.TotalCalculate == undefined
+                                    ? 0
+                                    : tradeHistoryData.TotalCalculate.toFixed(
+                                        2
+                                      )}
+                                </span>{" "}
+                              </b>
+                            </h3>
+                          )
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

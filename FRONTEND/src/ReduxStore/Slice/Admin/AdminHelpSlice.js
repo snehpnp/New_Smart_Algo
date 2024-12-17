@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_HELP_REQUEST ,UpdatePricePermission} from "../../../Service/admin.service";
+import { GET_HELP_REQUEST ,UpdatePricePermission,pnlpositionUpdate,GetPnlPostion} from "../../../Service/admin.service";
 
 
 export const GET_HELPS = createAsyncThunk("user/all/helps", async (data) => {
@@ -24,6 +24,27 @@ export const UPDATE_PRICE_PERMISSION = createAsyncThunk("update/pricepermission"
     }
 });
 
+export const UPDATE_PNL_POSITION = createAsyncThunk("update/pnlposition", async (data) => {
+    const { pnlposition, token } = data
+    try {
+        const res = await pnlpositionUpdate({ pnlposition: pnlposition }, token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+
+export const GET_PNL_POSITION = createAsyncThunk("get/pnlposition", async (data) => {
+    const { token } = data
+    try {
+        const res = await GetPnlPostion({ token: token });
+        return await res;
+    } catch (err) {
+        return
+    }
+});
+
 
 
 const AdminHelpSlice = createSlice({
@@ -33,7 +54,9 @@ const AdminHelpSlice = createSlice({
         isError: false,
         helps: [],
         status: false,
-        permissionStatus : false
+        permissionStatus : false,
+        pnlpositionStatus : false,
+        pnlposition: [],
     },
 
     recuders: {},
@@ -61,6 +84,29 @@ const AdminHelpSlice = createSlice({
         [UPDATE_PRICE_PERMISSION.rejected]: (state, action) => {
             // return { ...state, get_dashboard: action, isLoading: false };
         },
+        [UPDATE_PNL_POSITION.pending]: (state, { payload }) => {
+            // state.isLoading = false;
+            // return { ...state, get_dashboard: [], isLoading: true };
+        },
+        [UPDATE_PNL_POSITION.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, pnlpositionStatus: payload, isLoading: false };
+        },
+        [UPDATE_PNL_POSITION.rejected]: (state, action) => {
+            // return { ...state, get_dashboard: action, isLoading:
+        },
+        [GET_PNL_POSITION.pending]: (state, { payload }) => {
+            // state.isLoading = false;
+            // return { ...state, get_dashboard: [], isLoading: true };
+        },
+        [GET_PNL_POSITION.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, pnlposition: payload, isLoading: false };
+        },
+        [GET_PNL_POSITION.rejected]: (state, action) => {
+            // return { ...state, get_dashboard: action, isLoading: false };
+        },
+        
         
 
     },

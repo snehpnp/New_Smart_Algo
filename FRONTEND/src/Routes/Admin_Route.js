@@ -59,6 +59,7 @@ import Plans  from '../layout/Admin/Service/Plans/Plans'
 import Addplans  from '../layout/Admin/Service/Plans/Addplan'
 import TradeHistory1 from "../layout/Admin/TradeDetails/TradeHistory/Tradehistory1"
 import { useDispatch } from "react-redux";
+import Settings from '../layout/Admin/Profile/Settings';
 
 
 const Admin = () => {
@@ -156,6 +157,7 @@ const Admin = () => {
                 <Route exact path="/plan/add" element={<Addplans />} />
 
                 <Route exact path="/tradehistory1" element={<TradeHistory1 />} />
+                <Route exact path="/settings" element={<Settings />} />
    
 
   

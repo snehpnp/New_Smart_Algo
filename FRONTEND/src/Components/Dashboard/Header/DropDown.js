@@ -6,7 +6,7 @@ import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import { useDispatch } from "react-redux";
 import { check_Device } from "../../../Utils/find_device";
 import toast from "react-hot-toast";
-import { User, LogOut, Settings, Award } from "lucide-react";
+import { User, LogOut, Settings, Award ,Wrench  } from "lucide-react";
 import { Get_Pmermission } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 import * as Config from "../../../Utils/Config";
 
@@ -125,7 +125,7 @@ const DropDown = () => {
               to="/admin/system"
               className="dropdown-item d-flex align-items-center"
             >
-              <Settings className="me-2" size={16} />
+              <Wrench  className="me-2" size={16} />
               System
             </Link>
           </li>
@@ -157,6 +157,19 @@ const DropDown = () => {
         ) : (
           ""
         )}
+
+{Role === "ADMIN" && gotodashboard == null && (
+          <li>
+            <Link
+              to="/admin/settings"
+              className="dropdown-item d-flex align-items-center"
+            >
+              <Settings className="me-2" size={16} />
+              Settings
+            </Link>
+          </li>
+        ) }
+
 
         {gotodashboard == null && (
           <li>

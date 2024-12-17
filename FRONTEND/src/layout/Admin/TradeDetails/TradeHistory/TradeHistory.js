@@ -34,6 +34,7 @@ import paginationFactory, {
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 
+import { GET_PNL_POSITION } from "../../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 const paginationOptions = {
   custom: true,
   totalSize: 0, // This will be updated dynamically
@@ -69,6 +70,7 @@ const TradeHistory = () => {
     loading: true,
     data: [],
   });
+  const [PnlStatus, setPnlStatus] = useState("Top");
   const [ServiceData, setServiceData] = useState({ loading: true, data: [] });
   const [lotMultypaly, SetlotMultypaly] = useState(1);
   const selector = useSelector((state) => state.DashboardSlice);
@@ -143,9 +145,19 @@ const TradeHistory = () => {
   ]);
 
   useEffect(() => {
+    GetPnlPosition();
     GetAllStrategyName();
     Admin_Trading_data();
   }, []);
+
+  const GetPnlPosition = async () => {
+    const res = await dispatch(GET_PNL_POSITION({ token: token })).unwrap();
+    if (res?.data) {
+      const pnlPosition = res.data[0].pnl_position;
+
+      setPnlStatus(pnlPosition);
+    }
+  };
 
   const Get_Tradehisotry_Calculations = async (e) => {
     let abc = new Date();
@@ -214,10 +226,6 @@ const TradeHistory = () => {
       .then((response) => {
         if (response.status) {
           setTotal(response.pagination.totalItems);
-          // setServiceData({
-          //   loading: false,
-          //   data: response.trade_symbols_filter,
-          // });
 
           let filterData = response.data.filter((item) => {
             if (searchTerm === "") return item;
@@ -1090,6 +1098,8 @@ const TradeHistory = () => {
     }
   }, [selector]);
 
+  console.log("PnlStatus", PnlStatus);
+
   return (
     <>
       <Content
@@ -1192,7 +1202,7 @@ const TradeHistory = () => {
                   FINNIFTY
                 </option>
                 <option value="SENSEX" selected>
-                SENSEX
+                  SENSEX
                 </option>
               </select>
             </div>
@@ -1347,14 +1357,16 @@ const TradeHistory = () => {
         </div>
 
         <div className="table-responsive">
-          <h3>
-            <b>Total Realised P/L</b> :{" "}
-            <b>
-              <span style={{ color: getTotalPnl >= 0 ? "green" : "red" }}>
-                {getTotalPnl ? getTotalPnl.toFixed(2) : "0.00"}
-              </span>
-            </b>
-          </h3>
+          {PnlStatus == "Top" && (
+            <h3>
+              <b>Total Realised P/L</b> :{" "}
+              <b>
+                <span style={{ color: getTotalPnl >= 0 ? "green" : "red" }}>
+                  {getTotalPnl ? getTotalPnl.toFixed(2) : "0.00"}
+                </span>
+              </b>
+            </h3>
+          )}
 
           <PaginationProvider
             pagination={paginationFactory({
@@ -1404,6 +1416,22 @@ const TradeHistory = () => {
                   </div>
                   <div className="d-flex align-items-end">
                     <PaginationListStandalone {...paginationProps} />
+                  </div>
+                  <div className="d-flex align-items-end">
+                    {PnlStatus == "Bottom" && (
+                      <h3>
+                        <b>Total Realised P/L</b> :{" "}
+                        <b>
+                          <span
+                            style={{
+                              color: getTotalPnl >= 0 ? "green" : "red",
+                            }}
+                          >
+                            {getTotalPnl ? getTotalPnl.toFixed(2) : "0.00"}
+                          </span>
+                        </b>
+                      </h3>
+                    )}
                   </div>
                 </div>
               </div>

@@ -1148,3 +1148,29 @@ export async function UpdatePricePermission(data, token) {
         return await err
     }
 }
+
+export async function pnlpositionUpdate(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/pnlposition`, data,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}
+
+export async function GetPnlPostion(data, token) {
+    try {
+        const res = await axios.get(`${Config.base_url}get/pnlposition`, data,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+}
