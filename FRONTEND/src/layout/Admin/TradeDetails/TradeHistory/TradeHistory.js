@@ -272,6 +272,7 @@ const TradeHistory = () => {
     setSelectServiceIndex("null");
     setToDate("");
     SetlotMultypaly(1);
+    setSelectopenclose("null");
     setTradeHistoryData({
       loading: false,
       data: tradeHistoryData.data,
