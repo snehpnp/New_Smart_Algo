@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
-import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable2";
 import {
   Get_Tradehisotry,
   Get_Tradehisotry_Cal,
@@ -18,7 +17,6 @@ import {
   GetAccessToken,
 } from "../../../../Service/Alice_Socket";
 import { ShowColor1 } from "../../../../Utils/ShowTradeColor";
-import { Get_All_Service } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import {
   GET_ADMIN_TRADE_STATUS,
   ADMINGETTRADINGSTATUS,
@@ -36,6 +34,7 @@ import paginationFactory, {
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 
+import { GET_PNL_POSITION } from "../../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 const paginationOptions = {
   custom: true,
   totalSize: 0, // This will be updated dynamically
@@ -71,6 +70,7 @@ const TradeHistory = () => {
     loading: true,
     data: [],
   });
+  const [PnlStatus, setPnlStatus] = useState("Top");
   const [ServiceData, setServiceData] = useState({ loading: true, data: [] });
   const [lotMultypaly, SetlotMultypaly] = useState(1);
   const selector = useSelector((state) => state.DashboardSlice);
@@ -137,14 +137,27 @@ const TradeHistory = () => {
   useEffect(() => {
     setSizePerPage(10);
     setPage(1);
-  }, [StrategyClientStatus,SelectOpenClose,SelectServiceIndex,SelectService]);
+  }, [
+    StrategyClientStatus,
+    SelectOpenClose,
+    SelectServiceIndex,
+    SelectService,
+  ]);
 
   useEffect(() => {
+    GetPnlPosition();
     GetAllStrategyName();
     Admin_Trading_data();
   }, []);
 
+  const GetPnlPosition = async () => {
+    const res = await dispatch(GET_PNL_POSITION({ token: token })).unwrap();
+    if (res?.data) {
+      const pnlPosition = res.data[0].pnl_position;
 
+      setPnlStatus(pnlPosition);
+    }
+  };
 
   const Get_Tradehisotry_Calculations = async (e) => {
     let abc = new Date();
@@ -175,6 +188,10 @@ const TradeHistory = () => {
       .then((response) => {
         if (response.status) {
           setTotalPnl(response.TotalCalculate);
+          setServiceData({
+            loading: false,
+            data: response.trade_symbols_filter,
+          });
         } else {
         }
       });
@@ -209,10 +226,6 @@ const TradeHistory = () => {
       .then((response) => {
         if (response.status) {
           setTotal(response.pagination.totalItems);
-          setServiceData({
-            loading: false,
-            data: response.trade_symbols_filter,
-          });
 
           let filterData = response.data.filter((item) => {
             if (searchTerm === "") return item;
@@ -259,6 +272,7 @@ const TradeHistory = () => {
     setSelectServiceIndex("null");
     setToDate("");
     SetlotMultypaly(1);
+    setSelectopenclose("null");
     setTradeHistoryData({
       loading: false,
       data: tradeHistoryData.data,
@@ -632,6 +646,7 @@ const TradeHistory = () => {
                     (get_entry_type === "" && get_exit_type === "SX")
                   ) {
                   } else {
+                    // calcultateRPL(row, null, "");
                   }
                 });
             } else {
@@ -847,29 +862,55 @@ const TradeHistory = () => {
         const exitQty = parseInt(row.exit_qty);
         const entryPrice = parseFloat(row.entry_price);
         const exitPrice = parseFloat(row.exit_price);
-        const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
-        $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
-        $(".UPL_" + row.token + "_" + get_id_token).html("-");
-        $(".TPL_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+        if (row.entry_type == "SE") {
+          const rpl = (entryPrice - exitPrice) * Math.min(entryQty, exitQty);
+          $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+          $(".UPL_" + row.token + "_" + get_id_token).html("-");
+          $(".TPL_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
 
-        ShowColor1(
-          ".show_rpl_" + row.token + "_" + get_id_token,
-          rpl.toFixed(2),
-          row.token,
-          get_id_token
-        );
-        ShowColor1(
-          ".UPL_" + row.token + "_" + get_id_token,
-          "-",
-          row.token,
-          get_id_token
-        );
-        ShowColor1(
-          ".TPL_" + row.token + "_" + get_id_token,
-          rpl.toFixed(2),
-          row.token,
-          get_id_token
-        );
+          ShowColor1(
+            ".show_rpl_" + row.token + "_" + get_id_token,
+            rpl.toFixed(2),
+            row.token,
+            get_id_token
+          );
+          ShowColor1(
+            ".UPL_" + row.token + "_" + get_id_token,
+            "-",
+            row.token,
+            get_id_token
+          );
+          ShowColor1(
+            ".TPL_" + row.token + "_" + get_id_token,
+            rpl.toFixed(2),
+            row.token,
+            get_id_token
+          );
+        } else {
+          const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
+          $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+          $(".UPL_" + row.token + "_" + get_id_token).html("-");
+          $(".TPL_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+
+          ShowColor1(
+            ".show_rpl_" + row.token + "_" + get_id_token,
+            rpl.toFixed(2),
+            row.token,
+            get_id_token
+          );
+          ShowColor1(
+            ".UPL_" + row.token + "_" + get_id_token,
+            "-",
+            row.token,
+            get_id_token
+          );
+          ShowColor1(
+            ".TPL_" + row.token + "_" + get_id_token,
+            rpl.toFixed(2),
+            row.token,
+            get_id_token
+          );
+        }
       }
     } else if (row.entry_type && row.exit_type === "") {
       $(".show_rpl_" + row.token + "_" + row._id).html("-");
@@ -945,9 +986,9 @@ const TradeHistory = () => {
   const forCSVdata = () => {
     let csvArr = [];
     if (tradeHistoryData.data.length > 0) {
-      tradeHistoryData.data.map((item,index) => {
+      tradeHistoryData.data.map((item, index) => {
         return csvArr.push({
-          id:index+1,
+          id: index + 1,
           symbol: item.trade_symbol,
           EntryType: item.entry_type ? item.entry_type : "-",
           ExitType: item.exit_type ? item.exit_type : "-",
@@ -959,7 +1000,6 @@ const TradeHistory = () => {
           "Exit Time": item.exit_dt_date,
           Exchange: item.exchange,
           Strategy: item.strategy,
-        
         });
       });
 
@@ -1059,7 +1099,7 @@ const TradeHistory = () => {
     }
   }, [selector]);
 
-
+  console.log("PnlStatus", PnlStatus);
 
   return (
     <>
@@ -1141,6 +1181,36 @@ const TradeHistory = () => {
           <div className="col-lg-2 px-1">
             <div className="mb-3">
               <label for="select" className="form-label">
+                Index Symbol
+              </label>
+              <select
+                className="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectServiceIndex(e.target.value)}
+                value={SelectServiceIndex}
+              >
+                <option value="null" selected>
+                  All
+                </option>
+                <option value="BANKNIFTY" selected>
+                  BANKNIFTY
+                </option>
+                <option value="NIFTY" selected>
+                  NIFTY
+                </option>
+                <option value="FINNIFTY" selected>
+                  FINNIFTY
+                </option>
+                <option value="SENSEX" selected>
+                  SENSEX
+                </option>
+              </select>
+            </div>
+          </div>
+          <div className="col-lg-2 px-1">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Symbol
               </label>
               <select
@@ -1164,33 +1234,7 @@ const TradeHistory = () => {
               </select>
             </div>
           </div>
-          <div className="col-lg-2 px-1">
-            <div className="mb-3">
-              <label for="select" className="form-label">
-                Index Symbol
-              </label>
-              <select
-                className="default-select wide form-control"
-                aria-label="Default select example"
-                id="select"
-                onChange={(e) => setSelectServiceIndex(e.target.value)}
-                value={SelectServiceIndex}
-              >
-                <option value="null" selected>
-                  All
-                </option>
-                <option value="BANKNIFTY" selected>
-                  BANKNIFTY
-                </option>
-                <option value="NIFTY" selected>
-                  NIFTY
-                </option>
-                <option value="FINNIFTY" selected>
-                  FINNIFTY
-                </option>
-              </select>
-            </div>
-          </div>
+
           <div className="col-lg-2  px-1">
             <div className="mb-3">
               <label for="select" className="form-label">
@@ -1314,14 +1358,16 @@ const TradeHistory = () => {
         </div>
 
         <div className="table-responsive">
-          <h3>
-            <b>Total Realised P/L</b> :{" "}
-            <b>
-              <span style={{ color: getTotalPnl >= 0 ? "green" : "red" }}>
-                {getTotalPnl ? getTotalPnl.toFixed(2) : "0.00"}
-              </span>
-            </b>
-          </h3>
+          {PnlStatus == "Top" && (
+            <h3>
+              <b>Total Realised P/L</b> :{" "}
+              <b>
+                <span style={{ color: getTotalPnl >= 0 ? "green" : "red" }}>
+                  {getTotalPnl ? getTotalPnl.toFixed(2) : "0.00"}
+                </span>
+              </b>
+            </h3>
+          )}
 
           <PaginationProvider
             pagination={paginationFactory({
@@ -1336,7 +1382,7 @@ const TradeHistory = () => {
                 <BootstrapTable
                   keyField="_id"
                   data={tradeHistoryData.data}
-                  columns={columns }
+                  columns={columns}
                   remote
                   onTableChange={handleTableChange}
                   {...paginationTableProps}
@@ -1371,6 +1417,22 @@ const TradeHistory = () => {
                   </div>
                   <div className="d-flex align-items-end">
                     <PaginationListStandalone {...paginationProps} />
+                  </div>
+                  <div className="d-flex align-items-end">
+                    {PnlStatus == "Bottom" && (
+                      <h3>
+                        <b>Total Realised P/L</b> :{" "}
+                        <b>
+                          <span
+                            style={{
+                              color: getTotalPnl >= 0 ? "green" : "red",
+                            }}
+                          >
+                            {getTotalPnl ? getTotalPnl.toFixed(2) : "0.00"}
+                          </span>
+                        </b>
+                      </h3>
+                    )}
                   </div>
                 </div>
               </div>

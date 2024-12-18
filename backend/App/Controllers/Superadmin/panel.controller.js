@@ -5,10 +5,9 @@ const panel_model = db.panel_model;
 const User = db.user;
 const ApiCreateInfo = db.api_create_info;
 const Superadmin_History = db.Superadmin_History;
-const SuperadminHistoryBackup = db.SuperadminHistoryBackup;
 const Plansmodel = db.Plansmodel;
 const Faq_Data = db.Faq_Data;
-
+const theme_list = db.theme_list;
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -64,6 +63,7 @@ class Panel {
       });
       AddPanel.save()
         .then(async (data) => {
+          console.log("data", data);
           const filter = { panal_name: "111" };
           const update = {
             $set: {
@@ -144,6 +144,19 @@ class Panel {
           fetchBrokerView1();
           AdminAdd();
 
+
+          const ThemeData = await theme_list.findOne(
+            { _id: theme_id},  // Query condition
+            { image: 0 }      // Projection: Exclude 'image' and 'theme_name'
+          );
+          
+
+          UpdateAdminPermission(
+            data.backend_rul,
+            data,
+            ThemeData
+          );
+
           return res.send({
             status: true,
             msg: "successfully Add!",
@@ -152,19 +165,14 @@ class Panel {
         })
         .catch((err) => {
           if (err.keyValue) {
-           
-            return res
-              .status(409)
-              .send({
-                status: false,
-                msg: "Key duplicate",
-                data: err.keyValue,
-              });
+            return res.status(409).send({
+              status: false,
+              msg: "Key duplicate",
+              data: err.keyValue,
+            });
           }
         });
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 
   // ADD PANEL IN A COLLECTION
@@ -238,37 +246,49 @@ class Panel {
         options
       );
 
+      const ThemeData = await theme_list.findOne(
+        { _id: panel_data[0].theme_id },  // Query condition
+        { image: 0 }      // Projection: Exclude 'image' and 'theme_name'
+      );
+      
+
+      UpdateAdminPermission(
+        panel_data[0].backend_rul,
+        panel_data[0],
+        ThemeData
+      );
+
       return res
         .status(200)
         .send({ status: true, msg: "Update Successfully.", data: result });
-    } catch (error) {}
+    } catch (error) {
+      console.log("Error Edit Panel error-", error);
+    }
   }
 
   // USER PROFILE TO GET USER
   async UserProfile(req, res) {
     try {
       const { id } = req.body;
-  
+
       // FIND USER BY ID
       let EmailCheck = await User.findOne({ _id: id });
-  
+
       if (!EmailCheck) {
         return res
           .status(409)
           .send({ status: false, msg: "User Not exists", data: [] });
       }
-  
 
-     
       // Try to get the PlanName
       let PlanName;
       try {
         const plan = await Plansmodel.findOne({ _id: EmailCheck.plan_id });
         PlanName = plan ? plan.name : "";
       } catch (planError) {
-        PlanName = ""; 
+        PlanName = "";
       }
-  
+
       return res.send({
         status: true,
         msg: "Get User",
@@ -282,7 +302,6 @@ class Panel {
         .send({ status: false, msg: "Server Error", data: [] });
     }
   }
-  
 
   // GET ONE PANEL AND HIS THEME INFORMATION
   async GetPanleinformation(req, res) {
@@ -597,14 +616,13 @@ class Panel {
             .status(409)
             .send({ status: false, msg: "Company not update", data: [] });
         }
-       
+
         return res
           .status(200)
           .send({ status: true, msg: "Update Successfully.", data: result });
       });
     } catch (error) {
       console.log("Error APi Info error-", error);
-     
     }
   }
 
@@ -809,13 +827,11 @@ class Panel {
       });
 
       const savedData = await AddPanel.save();
-      res
-        .status(201)
-        .json({
-          status: true,
-          msg: "FAQ successfully added!",
-          data: savedData,
-        });
+      res.status(201).json({
+        status: true,
+        msg: "FAQ successfully added!",
+        data: savedData,
+      });
     } catch (error) {
       if (error.code === 11000) {
         res
@@ -832,13 +848,11 @@ class Panel {
     try {
       const faqData = await Faq_Data.find();
 
-      res
-        .status(200)
-        .json({
-          status: true,
-          msg: "FAQs retrieved successfully",
-          data: faqData,
-        });
+      res.status(200).json({
+        status: true,
+        msg: "FAQs retrieved successfully",
+        data: faqData,
+      });
     } catch (error) {
       console.log("Error retrieving FAQs:", error);
       res.status(500).json({ status: false, msg: "Server error", error });
@@ -855,13 +869,11 @@ class Panel {
         return res.status(404).json({ status: false, msg: "FAQ not found" });
       }
 
-      res
-        .status(200)
-        .json({
-          status: true,
-          msg: "FAQ deleted successfully",
-          data: deletedFaq,
-        });
+      res.status(200).json({
+        status: true,
+        msg: "FAQ deleted successfully",
+        data: deletedFaq,
+      });
     } catch (error) {
       console.log("Error deleting FAQ:", error);
       res.status(500).json({ status: false, msg: "Server error", error });
@@ -887,18 +899,38 @@ class Panel {
 
       const updatedFaq = await existingFaq.save();
 
-      res
-        .status(200)
-        .json({
-          status: true,
-          msg: "FAQ updated successfully",
-          data: updatedFaq,
-        });
+      res.status(200).json({
+        status: true,
+        msg: "FAQ updated successfully",
+        data: updatedFaq,
+      });
     } catch (error) {
       console.log("Error updating FAQ:", error);
       res.status(500).json({ status: false, msg: "Server error", error });
     }
   }
 }
+
+const UpdateAdminPermission = async (url, tabe, theme) => {
+  try {
+    // console.log("url", url);
+    // console.log("tabe", tabe);
+    // console.log("theme", theme);
+
+    // const Url = url + "update/adminpermission";
+    const Url = 'http://localhost:7700/' + "update/adminpermission";
+
+    const data = {
+      panel: tabe,
+      theme: theme,
+    };
+    axios.post(Url, data).then((response) => {
+      console.log("response", response.data);
+    });
+
+  } catch (error) {
+    console.log("Error UpdateAdminPermission error-", error);
+  }
+};
 
 module.exports = new Panel();

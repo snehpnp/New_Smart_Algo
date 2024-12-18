@@ -193,6 +193,10 @@ const TradeHistory = () => {
       .then((response) => {
         if (response.status) {
           setTotalPnl(response.TotalCalculate);
+          setServiceData({
+            loading: false,
+            data: response.trade_symbols_filter,
+          });
         } else {
         }
       });
@@ -227,10 +231,7 @@ const TradeHistory = () => {
       .then((response) => {
         if (response.status) {
           setTotal(response.pagination.totalItems);
-          setServiceData({
-            loading: false,
-            data: response.trade_symbols_filter,
-          });
+          
 
           let filterData = response.data.filter((item) => {
             if (searchTerm === "") return item;
@@ -636,6 +637,7 @@ const TradeHistory = () => {
                   (get_entry_type === "" && get_exit_type === "SX")
                 ) {
                 } else {
+                  // calcultateRPL(row, null, "");
                 }
               });
 
@@ -848,30 +850,55 @@ const TradeHistory = () => {
         const exitQty = parseInt(row.exit_qty);
         const entryPrice = parseFloat(row.entry_price);
         const exitPrice = parseFloat(row.exit_price);
-        const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
+        if (row.entry_type == "SE") {
+          const rpl = (entryPrice - exitPrice) * Math.min(entryQty, exitQty);
+          $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+          $(".UPL_" + row.token + "_" + get_id_token).html("-");
+          $(".TPL_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
 
-        $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
-        $(".UPL_" + row.token + "_" + get_id_token).html("-");
-        $(".TPL_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+          ShowColor1(
+            ".show_rpl_" + row.token + "_" + get_id_token,
+            rpl.toFixed(2),
+            row.token,
+            get_id_token
+          );
+          ShowColor1(
+            ".UPL_" + row.token + "_" + get_id_token,
+            "-",
+            row.token,
+            get_id_token
+          );
+          ShowColor1(
+            ".TPL_" + row.token + "_" + get_id_token,
+            rpl.toFixed(2),
+            row.token,
+            get_id_token
+          );
+        } else {
+          const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
+          $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+          $(".UPL_" + row.token + "_" + get_id_token).html("-");
+          $(".TPL_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
 
-        ShowColor1(
-          ".show_rpl_" + row.token + "_" + get_id_token,
-          rpl.toFixed(2),
-          row.token,
-          get_id_token
-        );
-        ShowColor1(
-          ".UPL_" + row.token + "_" + get_id_token,
-          "-",
-          row.token,
-          get_id_token
-        );
-        ShowColor1(
-          ".TPL_" + row.token + "_" + get_id_token,
-          rpl.toFixed(2),
-          row.token,
-          get_id_token
-        );
+          ShowColor1(
+            ".show_rpl_" + row.token + "_" + get_id_token,
+            rpl.toFixed(2),
+            row.token,
+            get_id_token
+          );
+          ShowColor1(
+            ".UPL_" + row.token + "_" + get_id_token,
+            "-",
+            row.token,
+            get_id_token
+          );
+          ShowColor1(
+            ".TPL_" + row.token + "_" + get_id_token,
+            rpl.toFixed(2),
+            row.token,
+            get_id_token
+          );
+        }
       }
     } else if (row.entry_type && row.exit_type === "") {
       $(".show_rpl_" + row.token + "_" + row._id).html("-");
@@ -1078,6 +1105,37 @@ const TradeHistory = () => {
           <div className="col-lg-2 px-1">
             <div className="mb-3">
               <label for="select" className="form-label">
+                Index Symbol
+              </label>
+              <select
+                className="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectServiceIndex(e.target.value)}
+                value={SelectServiceIndex}
+              >
+                <option value="null" selected>
+                  All
+                </option>
+                <option value="BANKNIFTY" selected>
+                  BANKNIFTY
+                </option>
+                <option value="NIFTY" selected>
+                  NIFTY
+                </option>
+                <option value="FINNIFTY" selected>
+                  FINNIFTY
+                </option>
+                <option value="SENSEX" selected>
+                SENSEX
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div className="col-lg-2 px-1">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Symbol
               </label>
               <select
@@ -1101,33 +1159,7 @@ const TradeHistory = () => {
               </select>
             </div>
           </div>
-          <div className="col-lg-2 px-1">
-            <div className="mb-3">
-              <label for="select" className="form-label">
-                Index Symbol
-              </label>
-              <select
-                className="default-select wide form-control"
-                aria-label="Default select example"
-                id="select"
-                onChange={(e) => setSelectServiceIndex(e.target.value)}
-                value={SelectServiceIndex}
-              >
-                <option value="null" selected>
-                  All
-                </option>
-                <option value="BANKNIFTY" selected>
-                  BANKNIFTY
-                </option>
-                <option value="NIFTY" selected>
-                  NIFTY
-                </option>
-                <option value="FINNIFTY" selected>
-                  FINNIFTY
-                </option>
-              </select>
-            </div>
-          </div>
+          
           <div className="col-lg-2  px-1">
             <div className="mb-3">
               <label for="select" className="form-label">

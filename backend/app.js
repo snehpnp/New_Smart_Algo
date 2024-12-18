@@ -94,67 +94,6 @@ app.get('/UpdateChannel/:c/:e', async (req, res) => {
 
 
 
-
-
-
-app.post("/update-customer-files", async (req, res) => {
-  const customerId = req.body.customerId;
-  const updatedIdentityProof = req.body.identity_proof;
-
-  if (!updatedIdentityProof || !Array.isArray(updatedIdentityProof)) {
-    return res.status(400).json({ success: false, message: "Invalid identity proof data." });
-  }
-
-  try {
-    const customer = await TttModal.findOne({ customerId: new ObjectId(customerId) });
-
-    if (!customer) {
-      return res.status(404).json({ success: false, message: "Customer not found." });
-    }
-
-    const currentIdentityProof = customer.identity_proof || [];
-    const currentDocIds = new Set(currentIdentityProof.map(proof => proof.doc_id_number));
-    const updatedDocIds = new Set(updatedIdentityProof.map(proof => proof.doc_id_number));
-
-    // 1. Remove identity proofs that are not in the updated list
-    await TttModal.updateOne(
-      { _id: customer._id },
-      { $pull: { identity_proof: { doc_id_number: { $nin: Array.from(updatedDocIds) } } } }
-    );
-
-    // 2. Prepare promises for updating or adding identity proofs
-    const updatePromises = updatedIdentityProof.map(async (updatedProof) => {
-      const docId = updatedProof.doc_id_number;
-      
-      if (currentDocIds.has(docId)) {
-        // If it exists, update the document
-        return TttModal.updateOne(
-          { _id: customer._id, "identity_proof.doc_id_number": docId },
-          { $set: { "identity_proof.$": updatedProof } }
-        );
-      } else {
-        // If it doesn't exist, add (push) the new document
-        return TttModal.updateOne(
-          { _id: customer._id },
-          { $push: { identity_proof: updatedProof } }
-        );
-      }
-    });
-
-    // Wait for all updates to complete
-    await Promise.all(updatePromises);
-
-    res.json({
-      success: true,
-      message: "Identity proofs updated successfully.",
-    });
-  } catch (error) {
-    console.error("Error updating customer files:", error);
-    res.status(500).json({ success: false, message: "An error occurred." });
-  }
-});
-
-
 app.get("/deleteTableAndView",async(req,res)=>{
   await checkAndDrop();
   return res.send({ status: true, msg: 'Table and View Deleted' });

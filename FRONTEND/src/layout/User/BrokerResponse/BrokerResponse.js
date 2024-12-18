@@ -89,7 +89,26 @@ const BrokerResponse = () => {
   }, []);
 
 
+  function createTradeSymbol(input) {
+    const data = input.split('|'); // Split the string into key-value pairs
+    const fields = {}; // Object to store key-value pairs
+    
+    // Populate the fields object
+    data.forEach(item => {
+        const [key, value] = item.split(':');
+        fields[key] = value;
+    });
 
+    // Extract the required values
+    const symbol = fields["Symbol"];
+    const strike = fields["Strike"];
+    const oType = fields["OType"];
+    const expiry = fields["Expiry"];
+
+    // Combine them to form the trade symbol
+    const tradeSymbol = `${symbol}${expiry}${strike}${oType}`;
+    return tradeSymbol;
+}
   const columns = [
     {
       dataField: 'index',
@@ -106,6 +125,12 @@ const BrokerResponse = () => {
     {
       dataField: 'symbol',
       text: 'Symbol'
+    },
+    {
+      dataField: 'receive_signal',
+      text: 'Trade Symbol',
+      formatter: (cell, row, rowIndex) => <div>{cell ?createTradeSymbol(cell && atob(cell))  :"-"}</div>
+
     },
     {
       dataField: 'type',

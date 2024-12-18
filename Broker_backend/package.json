@@ -24,7 +24,7 @@
     "jsonwebtoken": "^9.0.1",
     "moment": "^2.29.4",
     "mongoose": "^7.3.4",
-    "node-cron": "^3.0.2",
+    "node-cron": "^3.0.3",
     "node-datetime": "^2.1.2",
     "nodemailer": "^6.9.4",
     "nodemon": "^3.0.1",

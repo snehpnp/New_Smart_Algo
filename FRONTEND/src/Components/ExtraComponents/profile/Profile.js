@@ -24,7 +24,6 @@ const UserProfile = () => {
   const user_details = JSON.parse(localStorage.getItem("user_details"));
   const user_role = JSON.parse(localStorage.getItem("user_role"));
   const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
-
   const gotodashboard = JSON.parse(localStorage.getItem("user_details_goTo"));
   const isgotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
 
@@ -35,14 +34,22 @@ const UserProfile = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [show, setShow] = useState(false);
   const [pricePermission, setPricePermission] = useState("0");
-
   const [UserLogs, setUserLogs] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showLogsData, setShowLogsData] = useState([]);
 
+  const handleClose = () => setShow(false);
+  const handleShowModal = () => setShow(true);
+
   useEffect(() => {
     data();
   }, []);
+
+  // useEffect(() => {
+  //   if (user_role === "ADMIN") {
+  //     CompanyName();
+  //   }
+  // }, [user_role]);
 
   const data = async () => {
     const userId = isgotodashboard
@@ -86,18 +93,11 @@ const UserProfile = () => {
       });
   };
 
-  useEffect(() => {
-    if (user_role === "ADMIN") {
-      CompanyName();
-    }
-  }, [user_role]);
-
   const CompanyName = async () => {
     await dispatch(GET_COMPANY_INFOS())
       .unwrap()
       .then((response) => {
         if (response.status) {
-     
           setShowLogsData(response.Permission_Logs_data);
           setPricePermission(response.data[0].price_permission);
         }
@@ -217,12 +217,7 @@ const UserProfile = () => {
       });
   };
 
-  const handleClose = () => setShow(false);
-  const handleShowModal = () => setShow(true);
-
   const handleSubmit1 = () => {
-  
-
     let requestData = {
       status: pricePermission,
     };
@@ -289,10 +284,9 @@ const UserProfile = () => {
                           About Me
                         </a>
                       </li>
-                      {user_role === "SUBADMIN" ||
-                      (gotodashboard && gotodashboard.Role === "SUBADMIN") ? (
-                        ""
-                      ) : (
+                      {(user_role === "USER" ||
+                        user_role === "SUBADMIN" ||
+                        (user_role === "ADMIN" && user_role_goTo == null)) && (
                         <li className="nav-item">
                           <a
                             href="#profile-settings"
@@ -304,7 +298,7 @@ const UserProfile = () => {
                         </li>
                       )}
 
-                      {user_role === "ADMIN" && (
+                      {/* {user_role === "ADMIN" && user_role_goTo == null && (
                         <li className="nav-item">
                           <a
                             href="#permission"
@@ -314,7 +308,7 @@ const UserProfile = () => {
                             Change Permission
                           </a>
                         </li>
-                      )}
+                      )} */}
 
                       {user_role === "USER" ? (
                         <li className="nav-item">

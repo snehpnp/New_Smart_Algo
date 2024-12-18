@@ -303,7 +303,7 @@ app.post("/broker-signals", async (req, res) => {
         month: "2-digit",
         day: "2-digit",
       });
-      const parts = formattedDate1.split("/");
+      const parts = formattedDate1?.split("/");
 
       var dt = signals.DTime;
       var input_symbol = signals.Symbol;
@@ -313,8 +313,8 @@ app.post("/broker-signals", async (req, res) => {
       var sq_value = signals.Sq_Value;
       var sl_value = signals.Sl_Value;
       var tsl = signals.TSL;
-      var segment = signals.Segment.toUpperCase();
-      var segment1 = signals.Segment.toUpperCase();
+      var segment = signals.Segment?.toUpperCase();
+      var segment1 = signals.Segment?.toUpperCase();
       var strike = signals.Strike;
       var option_type = signals.OType;
       var expiry = signals.Expiry;

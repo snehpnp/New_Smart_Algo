@@ -65,6 +65,7 @@ import MakeCallPendingPosition from '../layout/Comman/Make/MakeCallPendingPositi
 
 
 import { useDispatch } from "react-redux";
+import Settings from '../layout/Admin/Profile/Settings';
 
 
 const Admin = () => {
@@ -168,6 +169,7 @@ const Admin = () => {
 
 
                 <Route exact path="/tradehistory1" element={<TradeHistory1 />} />
+                <Route exact path="/settings" element={<Settings />} />
    
 
   

@@ -291,8 +291,7 @@ const Header = ({ ChatBox }) => {
       }).then((res) => {
         if (res.data.status) {
           setKotakStatus1(true);
-        } else{
-       
+        } else {
           toast.error(res.data.msg);
         }
       });
@@ -370,15 +369,13 @@ const Header = ({ ChatBox }) => {
   //  BROKER LOGIN
   const LogIn_WIth_Api = (check, brokerid, tradingstatus, UserDetails) => {
     if (check) {
-   
-
       if (
         UserDetails.WebLoginStatus == "0" &&
         UserDetails.AppLoginStatus == "0"
       ) {
-         Swal.fire({
+        Swal.fire({
           title: "Error!",
-          text: "You Are Login is Compleceted Please Re-Login Again", 
+          text: "You Are Login is Compleceted Please Re-Login Again",
           icon: "error",
           confirmButtonText: "OK",
         });
@@ -386,7 +383,7 @@ const Header = ({ ChatBox }) => {
         localStorage.clear();
         window.location.reload();
 
-        return
+        return;
       }
 
       if (brokerid == 27) {
@@ -1006,7 +1003,7 @@ const Header = ({ ChatBox }) => {
 
       {/* KOTAL LOGIN PAGE */}
       {kotakStatus && (
-          <div>
+        <div>
           <Modal
             show={kotakStatus}
             centered
@@ -1015,160 +1012,166 @@ const Header = ({ ChatBox }) => {
             onHide={() => setKotakStatus(false)}
             fullscreen={true}
           >
-            <Modal.Body style={{
-                 display: "flex",
-                 alignItems: "center",
-                  backgroundColor: "#d8ecff",
-                }}>
-             <div className="col-12 col-md-8 mx-auto">
+            <Modal.Body
+              style={{
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "#d8ecff",
+              }}
+            >
+              <div className="col-12 col-md-8 mx-auto">
                 <div className="row">
-                  <div className="col-md-6"> 
-                  <div
-                
-                >
-                  <img
-                    src="./assets/images/kotakneo.png"
-                    alt="Kotak Neo"
-                    style={{ width: "66px" }}
-                  />
-                  
-                  <h1
-                    style={{
-                      color: "#1b3e81",
-                      fontSize: "2rem",
-                      marginBottom: "20px",
-                    }}
-                  >
-                    Welcome to the new <br /> age of investing
-                  </h1>
-                  <ul
-                    style={{
-                      listStyle: "none",
-                      color: "#1b3e81",
-                      marginBottom: "30px",
-                    }}
-                  >
-                    <li style={{ marginBottom: "10px" }}>
-                      Great product experience
-                    </li>
-                    <li style={{ marginBottom: "10px" }}>
-                      Amazing customer support
-                    </li>
-                    <li style={{ marginBottom: "10px" }}>Years of trust</li>
-                  </ul>
-                </div>
-                  </div>
                   <div className="col-md-6">
-                    <div style={{
-                    backgroundColor: "white",
-                    padding: "50px",
-                    borderRadius: "10px",
-                    boxShadow: "0 0 15px rgba(0, 0, 0, 0.1)",
-                   
-                  }}>
-                  {kotakStatus1 ? (
-                    // OTP Section
                     <div>
-                      <h2 style={{ marginBottom: "20px", color: "#333" }}>
-                        Enter OTP
-                      </h2>
-                      <p style={{ marginBottom: "30px", color: "#666" }}>
-                        Please enter the 4-digit OTP sent to your mobile number.
-                      </p>
+                      <img
+                        src="./assets/images/kotakneo.png"
+                        alt="Kotak Neo"
+                        style={{ width: "66px" }}
+                      />
 
-                      <div
+                      <h1
                         style={{
-                          display: "flex",
-                          justifyContent: "center",
+                          color: "#1b3e81",
+                          fontSize: "2rem",
+                          marginBottom: "20px",
+                        }}
+                      >
+                        Welcome to the new <br /> age of investing
+                      </h1>
+                      <ul
+                        style={{
+                          listStyle: "none",
+                          color: "#1b3e81",
                           marginBottom: "30px",
                         }}
                       >
-                        {otp.map((digit, index) => (
-                          <input
-                            key={index}
-                            type="text"
-                            maxLength={1}
-                            value={digit}
-                            onChange={(e) => handleChange(e, index)}
-                            onKeyDown={(e) => handleKeyDown(e, index)}
-                            ref={(el) => (inputRefs.current[index] = el)}
-                            style={{
-                              width: "60px",
-                              padding: "15px",
-                              fontSize: "1.5rem",
-                              textAlign: "center",
-                              border: "2px solid #007bff",
-                              borderRadius: "8px",
-                              margin: "0 5px",
-                              outline: "none",
-                            }}
-                          />
-                        ))}
-                      </div>
-
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          width: "100%",
-                        }}
-                      >
-                        <button
-                          onClick={handleSubmit}
-                          style={{
-                            backgroundColor: "#007bff",
-                            color: "white",
-                            padding: "15px",
-                            border: "none",
-                            borderRadius: "8px",
-                            fontSize: "1rem",
-                            cursor: "pointer",
-                            marginBottom: "15px",
-                            transition: "background-color 0.3s",
-                          }}
-                          onMouseOver={(e) =>
-                            (e.currentTarget.style.backgroundColor = "#0056b3")
-                          }
-                          onMouseOut={(e) =>
-                            (e.currentTarget.style.backgroundColor = "#007bff")
-                          }
-                        >
-                          Submit
-                        </button>
-                        <button
-                          onClick={handleBack}
-                          style={{
-                            backgroundColor: "#d8ecff",
-                            color: "#1b3e81",
-                            padding: "15px",
-                            border: "1px solid #1b3e81",
-                            borderRadius: "8px",
-                            fontSize: "1rem",
-                            cursor: "pointer",
-                            transition: "background-color 0.3s",
-                          }}
-                          onMouseOver={(e) =>
-                            (e.currentTarget.style.backgroundColor = "#a8d6ff")
-                          }
-                          onMouseOut={(e) =>
-                            (e.currentTarget.style.backgroundColor = "#d8ecff")
-                          }
-                        >
-                          Back
-                        </button>
-                      </div>
+                        <li style={{ marginBottom: "10px" }}>
+                          Great product experience
+                        </li>
+                        <li style={{ marginBottom: "10px" }}>
+                          Amazing customer support
+                        </li>
+                        <li style={{ marginBottom: "10px" }}>Years of trust</li>
+                      </ul>
                     </div>
-                  ) : (
-                    // Login Page
+                  </div>
+                  <div className="col-md-6">
                     <div
                       style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
+                        backgroundColor: "white",
+                        padding: "50px",
+                        borderRadius: "10px",
+                        boxShadow: "0 0 15px rgba(0, 0, 0, 0.1)",
                       }}
                     >
-                      {/* <div style={{ display: "flex", marginBottom: "10px" }}> */}
-                        {/* <button
+                      {kotakStatus1 ? (
+                        // OTP Section
+                        <div>
+                          <h2 style={{ marginBottom: "20px", color: "#333" }}>
+                            Enter OTP
+                          </h2>
+                          <p style={{ marginBottom: "30px", color: "#666" }}>
+                            Please enter the 4-digit OTP sent to your mobile
+                            number.
+                          </p>
+
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              marginBottom: "30px",
+                            }}
+                          >
+                            {otp.map((digit, index) => (
+                              <input
+                                key={index}
+                                type="text"
+                                maxLength={1}
+                                value={digit}
+                                onChange={(e) => handleChange(e, index)}
+                                onKeyDown={(e) => handleKeyDown(e, index)}
+                                ref={(el) => (inputRefs.current[index] = el)}
+                                style={{
+                                  width: "60px",
+                                  padding: "15px",
+                                  fontSize: "1.5rem",
+                                  textAlign: "center",
+                                  border: "2px solid #007bff",
+                                  borderRadius: "8px",
+                                  margin: "0 5px",
+                                  outline: "none",
+                                }}
+                              />
+                            ))}
+                          </div>
+
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              width: "100%",
+                            }}
+                          >
+                            <button
+                              onClick={handleSubmit}
+                              style={{
+                                backgroundColor: "#007bff",
+                                color: "white",
+                                padding: "15px",
+                                border: "none",
+                                borderRadius: "8px",
+                                fontSize: "1rem",
+                                cursor: "pointer",
+                                marginBottom: "15px",
+                                transition: "background-color 0.3s",
+                              }}
+                              onMouseOver={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                  "#0056b3")
+                              }
+                              onMouseOut={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                  "#007bff")
+                              }
+                            >
+                              Submit
+                            </button>
+                            <button
+                              onClick={handleBack}
+                              style={{
+                                backgroundColor: "#d8ecff",
+                                color: "#1b3e81",
+                                padding: "15px",
+                                border: "1px solid #1b3e81",
+                                borderRadius: "8px",
+                                fontSize: "1rem",
+                                cursor: "pointer",
+                                transition: "background-color 0.3s",
+                              }}
+                              onMouseOver={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                  "#a8d6ff")
+                              }
+                              onMouseOut={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                  "#d8ecff")
+                              }
+                            >
+                              Back
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        // Login Page
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                          }}
+                        >
+                          {/* <div style={{ display: "flex", marginBottom: "10px" }}> */}
+                          {/* <button
                           style={{
                             backgroundColor:
                               activeTab === "mobile" ? "#d8ecff" : "white",
@@ -1182,104 +1185,103 @@ const Header = ({ ChatBox }) => {
                         >
                           Login with User ID
                         </button> */}
-                   
-                      {/* </div> */}
 
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          width: "100%",
-                        }}
-                      >
-                        <input
-                          type="text"
-                          placeholder={
-                            activeTab === "mobile"
-                              ? "Trading User ID"
-                              : activeTab === "pan"
-                              ? "PAN number"
-                              : "Enter QR code"
-                          }
-                          value={username}
-                          onChange={handleUsernameChange}
-                          style={{
-                            width: "100%",
-                            padding: "15px",
-                            marginBottom: "5px",
-                            border: "1px solid #ccc",
-                            borderRadius: "5px",
-                            fontSize: "1rem",
-                          }}
-                        />
-                        {errors.username && (
-                          <p style={{ color: "red", fontSize: "0.9rem" }}>
-                            {errors.username}
-                          </p>
-                        )}
+                          {/* </div> */}
 
-                        <input
-                          type="password"
-                          placeholder="Demat Password"
-                          value={password}
-                          onChange={handlePasswordChange}
-                          style={{
-                            width: "100%",
-                            padding: "15px",
-                            marginBottom: "5px",
-                            border: "1px solid #ccc",
-                            borderRadius: "5px",
-                            fontSize: "1rem",
-                          }}
-                        />
-                        {errors.password && (
-                          <p style={{ color: "red", fontSize: "0.9rem" }}>
-                            {errors.password}
-                          </p>
-                        )}
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              width: "100%",
+                            }}
+                          >
+                            <input
+                              type="text"
+                              placeholder={
+                                activeTab === "mobile"
+                                  ? "Trading User ID"
+                                  : activeTab === "pan"
+                                  ? "PAN number"
+                                  : "Enter QR code"
+                              }
+                              value={username}
+                              onChange={handleUsernameChange}
+                              style={{
+                                width: "100%",
+                                padding: "15px",
+                                marginBottom: "5px",
+                                border: "1px solid #ccc",
+                                borderRadius: "5px",
+                                fontSize: "1rem",
+                              }}
+                            />
+                            {errors.username && (
+                              <p style={{ color: "red", fontSize: "0.9rem" }}>
+                                {errors.username}
+                              </p>
+                            )}
 
-                        <button
-                          onClick={handleNextClick}
-                          style={{
-                            backgroundColor: "#007bff",
-                            color: "white",
-                            padding: "15px",
-                            border: "none",
-                            borderRadius: "5px",
-                            fontSize: "1rem",
-                            cursor: "pointer",
-                            marginBottom: "10px",
-                          }}
-                        >
-                          Next
-                        </button>
-                        <button
-                          style={{
-                            backgroundColor: "#d8ecff",
-                            color: "#1b3e81",
-                            padding: "10px",
-                            border: "1px solid #1b3e81",
-                            borderRadius: "5px",
-                            fontSize: "1rem",
-                            cursor: "pointer",
-                          }}
-                          onClick={handleBackClick}
-                        >
-                          Back
-                        </button>
-                      </div>
+                            <input
+                              type="password"
+                              placeholder="Demat Password"
+                              value={password}
+                              onChange={handlePasswordChange}
+                              style={{
+                                width: "100%",
+                                padding: "15px",
+                                marginBottom: "5px",
+                                border: "1px solid #ccc",
+                                borderRadius: "5px",
+                                fontSize: "1rem",
+                              }}
+                            />
+                            {errors.password && (
+                              <p style={{ color: "red", fontSize: "0.9rem" }}>
+                                {errors.password}
+                              </p>
+                            )}
+
+                            <button
+                              onClick={handleNextClick}
+                              style={{
+                                backgroundColor: "#007bff",
+                                color: "white",
+                                padding: "15px",
+                                border: "none",
+                                borderRadius: "5px",
+                                fontSize: "1rem",
+                                cursor: "pointer",
+                                marginBottom: "10px",
+                              }}
+                            >
+                              Next
+                            </button>
+                            <button
+                              style={{
+                                backgroundColor: "#d8ecff",
+                                color: "#1b3e81",
+                                padding: "10px",
+                                border: "1px solid #1b3e81",
+                                borderRadius: "5px",
+                                fontSize: "1rem",
+                                cursor: "pointer",
+                              }}
+                              onClick={handleBackClick}
+                            >
+                              Back
+                            </button>
+                          </div>
+                        </div>
+                      )}{" "}
                     </div>
-                  )} </div>  
-                </div>   
-</div>
-           </div>
-              
+                  </div>
+                </div>
+              </div>
             </Modal.Body>
           </Modal>
         </div>
       )}
-        <ToastButton />
-
+      <ToastButton />
     </div>
   );
 };

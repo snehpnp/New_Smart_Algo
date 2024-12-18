@@ -54,6 +54,11 @@ const AllClients = () => {
   const [getAllStrategyNameData, setAllStrategyName] = useState([]);
   const [StrategyClientStatus, setStrategyClientStatus] = useState("all");
 
+  useEffect(() => {
+     Brokerdata();
+  }, []);
+
+
 
   useEffect(() => {
     const filteredData = originalData.filter((item) => {
@@ -90,7 +95,7 @@ const AllClients = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await Brokerdata();
+       
         await data();
       } catch (error) {
         return;
@@ -191,7 +196,6 @@ const AllClients = () => {
   }
 
   const data = async () => {
-   
     var req1 = {
       Find_Role: user_details && user_details.Role,
       user_ID: user_details && user_details.user_id,
@@ -615,7 +619,7 @@ const AllClients = () => {
   ];
 
   const showBrokerName = (value1, licence_type) => {
-    let value = parseInt(value1);
+   
 
     if (licence_type === "1") {
       return "Demo";

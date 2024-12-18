@@ -1,7 +1,7 @@
 #!/bin/bash
 # Source file/folder path
-source_file="/var/www/backend/BACKEND/App/Helper/Alice_Socket.js"
-remort_path_file="/var/www/backend/BACKEND/App/Helper"
+source_file="/var/www/backend/BACKEND/App/Cron/cron.js"
+remort_path_file="/var/www/backend/BACKEND/App/Cron"
 
 source_file1="/var/www/backend/BACKEND/request.js"
 remort_path_file1="/var/www/backend/BACKEND/"
@@ -15,9 +15,7 @@ remort_path="/var/www/backend/"
 # # List of destination servers "root@172.105.43.81"
   servers=(
 
-
-
-  #  "root@185.209.75.10"
+   "root@185.209.75.10"
   # "root@185.209.75.31" 
   # "root@217.145.69.39" 
   # "root@185.209.75.61" 
@@ -27,9 +25,9 @@ remort_path="/var/www/backend/"
   # "root@185.209.75.8" 
   # "root@185.209.75.9"
   # "root@185.209.75.11" 
-  # "root@185.209.75.12" 
-  # "root@185.209.75.21" 
-  # "root@185.209.75.23" 
+  "root@185.209.75.12" 
+  "root@185.209.75.21" 
+  "root@185.209.75.23" 
   # "root@185.209.75.27" 
   # "root@185.209.75.29" 
   # "root@185.209.75.30" 
@@ -49,95 +47,98 @@ remort_path="/var/www/backend/"
   #   "root@185.209.75.185"
   #   "root@185.209.75.186"
   #   "root@185.209.75.187"
-  #   "root@185.209.75.189"
-  #   "root@185.209.75.251"
-  #   "root@185.209.75.252"
-  #   "root@185.209.75.254"
-  #   "root@185.209.75.253" 
-  #   "root@185.209.75.192"
-  #   "root@185.209.75.190"
-  #   'root@185.209.75.193'
-  #   'root@185.209.75.194'
-  #   'root@185.209.75.196'
-  #   'root@185.209.75.197'
-  #   'root@185.209.75.199'
-  #   'root@217.145.69.28'
-  #   'root@217.145.69.27'
-  #   'root@217.145.69.24'
-  #   'root@217.145.69.25'
-  #   'root@217.145.69.31'
-  #   'root@217.145.69.26'
-  #   'root@185.209.75.87'
-  #   'root@185.209.75.88'
-  #   'root@185.209.75.89'
-  #   'root@185.209.75.90'
-  #   'root@185.209.75.183'
-  #   'root@5.178.98.2'
-  #   'root@5.178.98.3'
-  #   'root@5.178.98.5'
-  #   'root@5.178.98.6'
-  #   'root@5.178.98.7'
-  #   'root@5.178.98.8'
-  #   'root@5.178.98.9'
-  #   'root@5.178.98.11'
-  #   'root@5.178.98.12'
-  #   'root@5.178.98.13'
-  #   'root@5.178.98.15'
-  #   'root@5.178.98.19'
-  #   'root@5.178.98.17'
-  #   'root@5.178.98.20'
-  #   'root@185.209.75.71'
-  # 'root@185.209.75.22'
-  # 'root@185.209.75.14'
-  # 'root@185.209.75.15'
-  # 'root@185.209.75.250'
+#     "root@185.209.75.251"
+#     "root@185.209.75.252"
+#     "root@185.209.75.254"
+#     "root@185.209.75.253" 
+#     "root@185.209.75.192"
+#     "root@185.209.75.190"
+#     'root@185.209.75.193'
+#     'root@185.209.75.194'
+#     'root@185.209.75.196'
+#     'root@185.209.75.197'
+#     'root@185.209.75.199'
+#     'root@217.145.69.28'
+#     'root@217.145.69.27'
+#     'root@217.145.69.24'
+#     'root@217.145.69.25'
+#     'root@217.145.69.31'
+#     'root@217.145.69.26'
+#     'root@185.209.75.87'
+#     'root@185.209.75.88'
+#     'root@185.209.75.89'
+#     'root@185.209.75.90'
+#     'root@185.209.75.183'
+#     'root@5.178.98.2'
+#     'root@5.178.98.3'
+#     'root@5.178.98.5'
+#     'root@5.178.98.6'
+#     'root@5.178.98.7'
+#     'root@5.178.98.8'
+#     'root@5.178.98.9'
+#     'root@5.178.98.11'
+#     'root@5.178.98.12'
+#     'root@5.178.98.13'
+#     'root@5.178.98.15'
+#     'root@5.178.98.19'
+#     'root@5.178.98.17'
+#     'root@5.178.98.20'
+#     'root@185.209.75.71'
+  'root@185.209.75.22'
+#   'root@185.209.75.14'
+#   'root@185.209.75.15'
+  'root@185.209.75.250'
   'root@185.209.75.2'
-  # 'root@217.145.69.40'
-  # 'root@185.209.75.195'
+  'root@217.145.69.40'
+#   'root@185.209.75.195'
 # 'root@185.209.75.28'
-
+# 'root@217.145.69.76'
+#  'root@185.209.75.66'
+#  'root@185.209.75.70'
+# 'root@5.178.98.12'
+# 'root@185.209.75.87'
+# 'root@217.145.69.26'
 
   )  
 
 # # Array to store remote paths for each server
   remotepath=(
 
-  #    "software.corebizinfotech.com"
-  #  "trade.codingpandit.com"
-  #  "software.algobullstradingsolutions.com" 
-  #  "software.intelfintech.com" 
-  #  "software.algokuber.com" 
+     "software.corebizinfotech.com"
+#    "trade.codingpandit.com"
+#    "software.algobullstradingsolutions.com" 
+#    "software.intelfintech.com" 
+#    "software.algokuber.com" 
 #    "software.finnshri.com" 
-  #  "software.believetechnology.in" 
-  #  "software.realbottrading.com" 
-  #  "software.growskyinfotech.com"  
-  #  "software.inspirealgo.com" 
-  #  "software.uniquetechnology.in" 
-  #  "software.sumedhainn.com"
-  #  "software.tradeonn.com" 
-  #  "software.vintyaitsolutions.com" 
-  #  "software.metaprogramming.in" 
-  # "software.fincodify.com" 
-  #  "software.invicontechnology.com" 
-  #  "software.axcellencetechnology.com" 
-  #  "software.sstechnologiess.com" 
-  # "software.skwinvestmentadviser.com" 
-  #  "software.satviktech.com" 
-  # "software.thinkaumatictechnology.com" 
-  #  "trade.visionresearchandsolution.com" 
-  #  "software.smartwavetechnology.in" 
-  #  "software.codinghornet.in"
-  #  "software.inteltrade360.com"
-  #  "software.fintechit.in"
-  #  "software.thrivinginfotech.com"
-  #  "software.visioncodesoftware.com"
-  #  "trade.brightextech.com"
-  #  "software.shinesofttrade.in"
-  #  "software.algoruns.com"
-  #  "software.techoceantechnologies.in"
-  #  "software.brillianttechit.com"
-  #  "software.newtimetechnologies.com"
-  #  "software.darixosolution.com"
+#    "software.believetechnology.in" 
+#    "software.realbottrading.com" 
+#    "software.growskyinfotech.com"  
+#    "software.inspirealgo.com" 
+   "software.uniquetechnology.in" 
+   "software.sumedhainn.com"
+   "software.tradeonn.com" 
+#    "software.vintyaitsolutions.com" 
+#    "software.metaprogramming.in" 
+#   "software.fincodify.com" 
+#    "software.invicontechnology.com" 
+#    "software.axcellencetechnology.com" 
+#    "software.sstechnologiess.com" 
+#   "software.skwinvestmentadviser.com" 
+#    "software.satviktech.com" 
+#   "software.thinkaumatictechnology.com" 
+#    "trade.visionresearchandsolution.com" 
+#    "software.smartwavetechnology.in" 
+#    "software.codinghornet.in"
+#    "software.inteltrade360.com"
+#    "software.fintechit.in"
+#    "software.thrivinginfotech.com"
+#    "software.visioncodesoftware.com"
+#    "trade.brightextech.com"
+#    "software.shinesofttrade.in"
+#    "software.algoruns.com"
+#    "software.brillianttechit.com"
+#    "software.newtimetechnologies.com"
+#    "software.darixosolution.com"
 #    "software.magmamultitrade.com"
 #    "software.procodetechnology.com"
 #    "software.unitythesmartalgo.com"
@@ -172,20 +173,26 @@ remort_path="/var/www/backend/"
 # 'software.realcloudtechnology.com'
 # 'software.moneyplatform.co.in'
 # 'software.infraitsolution.com'
-# 'software.fincapex.com'
+'software.fincapex.com'
 # 'software.reliablealgo.com'
 # 'software.researchfactory.in'
-# 'software.visionalgotech.com'
+'software.visionalgotech.com'
 'software.linkupinfotech.com'
-# 'software.microninfotech.com'
+'software.microninfotech.com'
 # 'software.growfuturetechnology.com'
 # 'software.oneplanetitsolution.com'
+# 'software.danoneitsolution.com'
+#  'software.ccconnect.live'
+# '	software.inspirealgoresearch.com'
+# 'software.alcrafttechnology.com'
+# 'pnp.tradestreet.in'
+# 'software.sewintechnology.com'
    )
 
 
 passwords=(
 
-#    'WWmeCDzy37_^4%7*'
+   'WWmeCDzy37_^4%7*'
 #  'xY3GH3#n^yv?_D89'
 #  'PKjV#vs#6T_196q#'
 #  'd@X19uYAF#9m5#a?'
@@ -195,9 +202,9 @@ passwords=(
 #  '99@bggU3W5^WIb^@'
 #  'KRNP&27am^v*&69e'
 #  'TpWz638T$Ah&@_b0'
-#  '$vcKz#2O5U!5Mq&9'
-#  '^h2M%2$8S7HKjgm_'
-#  'lG@Sp53kK1$#6#Mt'
+ '$vcKz#2O5U!5Mq&9'
+ '^h2M%2$8S7HKjgm_'
+ 'lG@Sp53kK1$#6#Mt'
 #  '&cZk0%1XG$3$tMz1'
 #  '5X&H5c1^!^1YzFjo'
 #  '%wG_W&1D6r^37Oav'
@@ -217,7 +224,6 @@ passwords=(
 #  '4!xbiU3SMg$D$6_5'
 #  '55C^oamuW^2T4D*%'
 #  '^uML73&3vw8#JAg%'
-#  '9hVz884$M*o&rFU*'
 #  'J8$PP*d1aC%lp6?8'
 #  'V8*t@k16hJ2qJC^!'
 #  '*oG^cHkU&@J4331c'
@@ -255,14 +261,21 @@ passwords=(
 # 'Ad9f_%WC^oVe132^'
 # '*9Dy0?9Gm2WOwg&*'
 # '_?zD_Ad0DW57@c2t'
-# '6^Di3&9foMAm5?*O'
+'6^Di3&9foMAm5?*O'
 # '0t_h5sUe8WG^_6N%'
 # '&1VR3s2@_tv$GhI2'
-# '9f@J6_^22R?FYcdb'
+'9f@J6_^22R?FYcdb'  
 '&to6M*#?3LexD5U0'
-# '5EslKC&Z7kt4@^*3'
+'5EslKC&Z7kt4@^*3'
 # 'A3!eK%TRcx&457m_'
 # 'WHN6$ixF!n^c^458'
+# 'scR%!487C@yN0@Zn'
+# 'xIOZ0^sP$&$18o2v'
+# 'vX8O2@$axu$S2T2^'
+# '4VsgJ_^1Hps$1H7!'
+# "K?pv?GW&ws612G*9"
+# 'ri!9#x8t36IO'
+
 )
 
    
@@ -305,7 +318,7 @@ for i in "${!servers[@]}"; do
 
     
     # Backend Code
-  sshpass -p "$password" rsync -avz --exclude ".env" --exclude ".gitignore" --exclude "node_modules" --exclude "Logs" "$source_path" "$server:$remort_path"
+ sshpass -p "$password" rsync -avz --exclude ".env" --exclude ".gitignore" --exclude "node_modules" --exclude "Logs" "$source_path" "$server:$remort_path"
    
    # Backend Code Only File
   # sshpass -p "$password" rsync -avz --exclude ".env" --exclude ".gitignore" --exclude "node_modules" --exclude "Logs" "$source_file" "$server:$remort_path_file"
@@ -316,22 +329,22 @@ for i in "${!servers[@]}"; do
   sshpass -p "$password" ssh "$server" "cd /var/www/backend/BACKEND && npm i --force"
 
    # Broker Backend Code
-  sshpass -p "$password" rsync -avz --exclude ".env" --exclude ".gitignore" --exclude "node_modules" --exclude "AllPanelTextFile" --exclude "Logs" "$source_path_bb" "$server:$remort_path"
+   sshpass -p "$password" rsync -avz --exclude ".env" --exclude ".gitignore" --exclude "node_modules" --exclude "AllPanelTextFile" --exclude "Logs" "$source_path_bb" "$server:$remort_path"
     
     # Execute npm i Broker - Backend
-   sshpass -p "$password" ssh "$server" "cd /var/www/backend/brokerbackend && npm i"
-
+  sshpass -p "$password" ssh "$server" "cd /var/www/backend/brokerbackend && npm i"
+# 
    # Build Code
-   sshpass -p "$password" rsync -avz  "$source_path_build" "$server:$remote_path1"
+  sshpass -p "$password" rsync -avz  "$source_path_build" "$server:$remote_path1"
     
 
    # mongodb restart command
   #  sshpass -p "$password" ssh "$server" "systemctl restart mongod"
 
    # Reload broker server
-    sshpass -p "$password" ssh "$server" "pm2 reload broker_server"
+  sshpass -p "$password" ssh "$server" "pm2 reload broker_server"
 
-   # Reload app
+  #  # Reload app
    sshpass -p "$password" ssh "$server" "pm2 reload app"
     
 
