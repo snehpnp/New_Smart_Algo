@@ -63,19 +63,13 @@ require("./Utils/request")(app);
 //   })
 //   .catch((error) => {});
 
-
 app.get("/pp", (req, res) => {
   io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: "okkkk" });
   res.send("DONE");
 });
 
-
 const { Alice_Socket } = require("./App/Helper/Alice_Socket");
 
-// app.get("/restart/socket", (req, res) => {
-//   Alice_Socket();
-//   res.send("DONE");
-// });
 
 
 app.get('/UpdateChannel/:c/:e', async (req, res) => {
@@ -130,14 +124,37 @@ async function checkAndDrop() {
 }
 
 
+app.get("/restart/socket", (req, res) => {
+  Alice_Socket();
+  res.send("DONE");
+});
 
 
+app.get("/all/socket/restart", (req, res) => {
+  let UrlArr = [
+    "https://software.tradeonn.com/backend/restart/socket",
+    "https://software.corebizinfotech.com/backend/restart/socket",
+    "https://newpenal.pandpinfotech.com/backend/restart/socket",
+    "https://software.sumedhainn.com/backend/restart/socket",
+  ];
 
+  UrlArr.forEach((url) => {
+    axios
+      .get(url)
+      .then((response) => {
+        console.log(url, " => ", response.data);
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
+  });
+
+  return res.send("DONE");
+});
 
 // Server start
 server.listen(process.env.PORT, () => {
   console.log(`Server is running on  http://0.0.0.0:${process.env.PORT}`);
   connectToMongoDB();
-  Alice_Socket()
-
+  Alice_Socket();
 });
