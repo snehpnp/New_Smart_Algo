@@ -131,7 +131,7 @@ const Update_Broker_Key = ({ closeModal }) => {
         },
         {
             name: 'client_code',
-            label: formik.values.broker == 21 ? "CLIENT CODE" : formik.values.broker == 20 ? "CLIENT ID" : formik.values.broker === 1 ? 'User' : formik.values.broker === 4 ? "Client Code" : formik.values.broker === 9 ? "Vander Id" : formik.values.broker === 11 ? "Client Code" : formik.values.broker === 11 ? "client_code" : formik.values.broker == 27 ? "Vendor code" :'User Id', type: 'text',
+            label: formik.values.broker == 21 ? "CLIENT CODE" : formik.values.broker == 20 ? "CLIENT ID" : formik.values.broker === 1 ? 'Login Id' : formik.values.broker === 4 ? "Client Code" : formik.values.broker === 9 ? "Vander Id" : formik.values.broker === 11 ? "Client Code" : formik.values.broker === 11 ? "client_code" : formik.values.broker == 27 ? "Vendor code" :'User Id', type: 'text',
             showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' ||  values.broker === '9' || values.broker === '11' || values.broker === '6' || values.broker === '20' || values.broker === '21' || values.broker === '27',
             label_size: 12, col_size: 6, disable: isgotodashboard ? true : false
         },
@@ -143,20 +143,20 @@ const Update_Broker_Key = ({ closeModal }) => {
         },
         {
             name: 'app_id',
-            label: formik.values.broker == 21 ? 'MPIN' : formik.values.broker == 1 ? 'Password Code' : formik.values.broker === 5 ? 'Password' : formik.values.broker === 11 ? 'Password' : formik.values.broker === 13 ? 'App Id' : formik.values.broker === 9 ? 'Password' : formik.values.broker === 14 ? 'User Id ' : 'App Id', type: 'text',
-            showWhen: values => values.broker === '1' || values.broker === "3" || values.broker === '5' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '21',
+            label: formik.values.broker == 21 ? 'MPIN' : formik.values.broker == 1 ? 'Pancard Number' : formik.values.broker === 5 ? 'Password' : formik.values.broker === 11 ? 'Password' : formik.values.broker === 13 ? 'App Id' : formik.values.broker === 9 ? 'Password' : formik.values.broker === 14 ? 'User Id ' : 'App Id', type: 'text',
+            showWhen: values => values.broker == '1' || values.broker === "3" || values.broker === '5' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '21',
             label_size: 12, col_size: 6, disable: isgotodashboard ? true : false
         },
         {
             name: 'app_key',
-            label: formik.values.broker === 5 || 6 ? 'App Key' : "", type: 'text',
-            showWhen: values => values.broker === '5',
+            label: formik.values.broker === 5 ||  formik.values.broker ===  6 ? 'App Key' : formik.values.broker == 1 ? 'Factor Two' : "", type: 'text',
+            showWhen: values => values.broker === '5' || values.broker === '6' || values.broker == '1',
             label_size: 12, col_size: 6, disable: isgotodashboard ? true : false
         },
 
         {
             name: 'api_secret',
-            label: formik.values.broker == 1 ? 'Verification Code' : formik.values.broker === 5 ? 'DOB' : formik.values.broker == 7 ? 'Consumer Secret' : formik.values.broker === 9 ? 'Encryption Secret Key' : formik.values.broker === 10 ? 'Api Secret Key' : formik.values.broker === 11 ? '2FA' : formik.values.broker === 14 ? 'Encryption Key' :  formik.values.broker === 26 ? 'Api Secret' : formik.values.broker === 25 ? 'SECRET KEY' : formik.values.broker === '27' ? 'imei' :'Api Secret', type: 'text',
+            label: formik.values.broker == 1 ? 'Password' : formik.values.broker === 5 ? 'DOB' : formik.values.broker == 7 ? 'Consumer Secret' : formik.values.broker === 9 ? 'Encryption Secret Key' : formik.values.broker === 10 ? 'Api Secret Key' : formik.values.broker === 11 ? '2FA' : formik.values.broker === 14 ? 'Encryption Key' :  formik.values.broker === 26 ? 'Api Secret' : formik.values.broker === 25 ? 'SECRET KEY' : formik.values.broker === '27' ? 'imei' :'Api Secret', type: 'text',
             showWhen: values => values.broker === '1' || values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15' || values.broker === '19' || values.broker === '25' || values.broker === '26' || values.broker === '27',
             label_size: 12, col_size: 6, disable: isgotodashboard ? true : false
         },

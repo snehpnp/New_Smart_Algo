@@ -2133,17 +2133,37 @@ db.createView("markethubView", "users",
     },
     {
       $addFields: {
-
-
-
+        
+       
+         
         postdata:
         {
 
-          // exchange condition here
+          variety:"NORMAL",
+         
+          tradingsymbol: "$service.zebu_token",
+
+          symboltoken: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$category.segment', 'C'] },
+                  ]
+              },
+              then: "$service.instrument_token",
+              else: ""
+
+            }
+          },
+
+          transactiontype: 'BUY',
+
+          
           exchange: {
             $cond: {
               if: { $eq: ['$category.segment', 'C'] }, // Your condition here
-              then: 'NseCm',
+              then: 'NSE',
               else: {
                 $cond: {
                   if: {
@@ -2153,7 +2173,7 @@ db.createView("markethubView", "users",
                       { $eq: ['$category.segment', 'FO'] }
                     ]
                   },
-                  then: 'NseFO',
+                  then: 'NFO',
                   else: {
 
                     $cond: {
@@ -2173,10 +2193,10 @@ db.createView("markethubView", "users",
                               { $eq: ['$category.segment', 'CO'] }
                             ]
                           },
-                          then: 'NseCD',
+                          then: 'CDS',
 
                           // all not exist condition 
-                          else: "NseFO"
+                          else: "NFO"
 
                         }
 
@@ -2193,26 +2213,8 @@ db.createView("markethubView", "users",
 
             }
           },
-
-
-          // Toke token condition here
-          token: {
-            $cond: {
-              if: {
-                $and:
-                  [
-                    { $eq: ['$category.segment', 'C'] },
-                  ]
-              },
-              then: "$service.instrument_token",
-              else: ""
-
-            }
-          },
-
-
-          // ordertype code condition here
-          book_type: {
+          
+          ordertype: {
             $cond: {
               if: {
                 $and:
@@ -2220,7 +2222,7 @@ db.createView("markethubView", "users",
                     { $eq: ['$client_services.order_type', '1'] },
                   ]
               },
-              then: 'RL',
+              then: 'MARKET',
               else: {
                 $cond: {
                   if: {
@@ -2229,7 +2231,7 @@ db.createView("markethubView", "users",
                         { $eq: ['$client_services.order_type', '2'] },
                       ]
                   },
-                  then: 'RL',
+                  then: 'LIMIT',
                   else: {
                     $cond: {
                       if: {
@@ -2238,7 +2240,7 @@ db.createView("markethubView", "users",
                             { $eq: ['$client_services.order_type', '3'] },
                           ]
                       },
-                      then: 'SL',
+                      then: 'STOPLOSS=LIMIT',
                       else: {
                         $cond: {
                           if: {
@@ -2247,10 +2249,9 @@ db.createView("markethubView", "users",
                                 { $eq: ['$client_services.order_type', '4'] },
                               ]
                           },
-                          then: 'SL',
+                        then: 'STOPLOSS-MARKET',
 
-                          //All condition exist
-                          else: "RL"
+                        else: "MARKET"
 
                         }
 
@@ -2266,24 +2267,7 @@ db.createView("markethubView", "users",
             }
 
           },
-
-
-          side: 'Buy',
-
-          quantity: "$client_services.quantity",
-
-          price: '0',
-
-          disclosed_quantity: '0',
-
-          trigger_price: '0',
-
-          market_protection_percent: '2',
-
-          validity: 'Day',
-
-          // product type condition here
-          product: {
+          producttype: {
             $cond: {
               if: {
                 $and:
@@ -2298,7 +2282,7 @@ db.createView("markethubView", "users",
                     },
                   ]
               },
-              then: 'Normal',
+              then: 'CNC',
               else: {
                 $cond: {
                   if: {
@@ -2307,7 +2291,7 @@ db.createView("markethubView", "users",
                         { $eq: ['$client_services.product_type', '2'] },
                       ]
                   },
-                  then: 'Intraday',
+                then: 'MIS',
                   else: {
                     $cond: {
                       if: {
@@ -2343,13 +2327,17 @@ db.createView("markethubView", "users",
 
 
           },
-
-          client_id: "$client_code",
-
-          sender_order_id: "1500",
-
-
-
+          duration: 'DAY',
+          price: '0',
+          quantity: "$client_services.quantity",
+          triggerprice: '0',
+            disclosedquantity: '0',
+          ordersource:null,
+          naicCode:null,
+          remarks:"_",
+          Confirm:false,
+          AlgoId:"0",
+          AlgoType:"0"
         }
       }
     }

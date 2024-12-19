@@ -15,7 +15,6 @@ const { Get_Option_Symbol, Get_Option_Symbol_Expiry, Get_Option_All_Round_Token 
 // USER ADD EDIT
 router.post('/add/employee', verifyToken, AddEmployee);
 router.post('/update/employee', verifyToken, UpdateUser);
-// router.post('/update/employee', verifyToken, UpdateUser);
 
 router.post('/getall/clients', GetAllClients);
 router.post('/getall/expiredclients', GetAllExpiredClients);

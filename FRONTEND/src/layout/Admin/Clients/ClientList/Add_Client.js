@@ -279,7 +279,7 @@ const AddClient = () => {
   useEffect(() => {
     if (formik.values.broker === "1" || formik.values.broker === 1) {
       formik.setFieldValue("api_key", "null");
-      formik.setFieldValue("app_key", "null");
+      // formik.setFieldValue("app_key", "null");
       formik.setFieldValue("api_type", "null");
       formik.setFieldValue("demat_userid", "null");
     }
@@ -624,7 +624,7 @@ const AddClient = () => {
           : formik.values.broker == 20
           ? "CLIENT ID"
           : formik.values.broker == 1
-          ? "User"
+          ? "Login Id"
           : formik.values.broker == 4
           ? "Client Code"
         
@@ -668,7 +668,7 @@ const AddClient = () => {
         formik.values.broker == 21
           ? "MPIN"
           : formik.values.broker == 1
-          ? "Verification Code"
+          ? "Pancard Number"
           : formik.values.broker == 5
           ? "Password"
           // : formik.values.broker == 7
@@ -702,9 +702,9 @@ const AddClient = () => {
     },
     {
       name: "app_key",
-      label: formik.values.broker == 5 || 6 ? "App Key" : "",
+      label: formik.values.broker == 5 || 6 ? "App Key" : formik.values.broker == 1 ? "Factor Two": "",
       type: "text",
-      showWhen: (values) => values.broker === "5",
+      showWhen: (values) => values.broker === "5" || values.broker === "1",
       label_size: 12,
       col_size: 6,
       disable: false,
@@ -713,7 +713,7 @@ const AddClient = () => {
       name: "api_secret",
       label:
         formik.values.broker == 1
-          ? "Password Code"
+          ? "Password"
           : formik.values.broker == 5
           ? "DOB"
           : formik.values.broker == 7
