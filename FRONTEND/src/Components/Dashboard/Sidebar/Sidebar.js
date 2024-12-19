@@ -50,12 +50,10 @@ const Sidebar = () => {
   const [getPermissions, setGetPermissions] = useState([]);
   const [admin_permission, setAdmin_permission] = useState([]);
 
-
   useEffect(() => {
     data2();
     CompanyName();
   }, []);
-
 
   const data2 = async () => {
     if (roles === "SUBADMIN") {
@@ -124,7 +122,6 @@ const Sidebar = () => {
       $("head").append(favicon);
     }
   };
-
 
   return (
     <div className="deznav ">
@@ -237,10 +234,12 @@ const Sidebar = () => {
             ? admin_sidebar &&
               admin_sidebar.map((item) => {
                 if (
-                  (item.id === 9 || item.name === "Make Strategy") &&
-                  admin_permission.data &&
-                  admin_permission.data[0].Create_Strategy === 0 &&
-                  admin_permission.data[0].Plans === 0
+                  (admin_permission.data?.length > 0 &&
+                    admin_permission.data[0]?.Make_call == 0 &&
+                    item.id === 80) ||
+                  (admin_permission.data?.length > 0 &&
+                    admin_permission.data[0]?.Create_Strategy == 0 &&
+                    item.id === 73)
                 ) {
                 } else {
                   return (
@@ -770,6 +769,9 @@ const IconComponent = ({ icon }) => {
         return <LayoutList className="me-3" />;
 
       case "plan":
+        return <WalletCards className="me-3" />;
+
+      case "Make Call":
         return <WalletCards className="me-3" />;
       default:
         return null;

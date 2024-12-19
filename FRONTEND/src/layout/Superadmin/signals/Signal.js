@@ -238,7 +238,6 @@ const AdminHelps = () => {
       }
     } catch (err) {
       toast.error("Error deleting user, please try again.");
-      console.log("Deletion error:", err); // Log error for debugging
     }
   };
 

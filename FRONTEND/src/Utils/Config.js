@@ -2,8 +2,8 @@ export const react_domain = `${window.location.origin}`;
 // export const react_domain = `https://software.reliablealgo.com`;
 
 
-export const smartAlogUrl = `https://newpenal.pandpinfotech.com/backend/`;
-// export const smartAlogUrl = "http://localhost:7700/";
+// export const smartAlogUrl = `https://newpenal.pandpinfotech.com/backend/`;
+export const smartAlogUrl = "http://localhost:7700/";
 
 
 // export const base_url = `${window.location.origin}/backend/`

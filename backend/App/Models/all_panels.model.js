@@ -99,7 +99,12 @@ const panelSchema = new mongoose.Schema(
     month_ago_number: {
       type: Number,
       default: null,
-    }
+    },
+    Make_call: {
+      type: Number,
+      enum: [0, 1],
+      default: 0,
+    },
   
   },
   {

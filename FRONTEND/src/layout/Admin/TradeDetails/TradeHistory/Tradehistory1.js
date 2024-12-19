@@ -1020,7 +1020,6 @@ const TradeHistory = () => {
     </>
   );
 
-  console.log("PnlStatus", PnlStatus);
 
   return (
     <>

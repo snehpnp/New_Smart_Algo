@@ -559,9 +559,7 @@ module.exports = function (app) {
           );
           return;
         } else {
-          console.log(
-            `Successfully downloaded and extracted ${result.filename}`
-          );
+         
         }
       });
     } catch (err) {

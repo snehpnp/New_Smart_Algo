@@ -1,23 +1,14 @@
 "use strict";
 const db = require("../../Models");
 const panel_model = db.panel_model;
-const User = db.user;
-const MongoClient = require("mongodb").MongoClient;
 const ApiCreateInfo = db.api_create_info;
-const count_licenses = db.count_licenses;
 const Superadmin_History = db.Superadmin_History;
 const SuperadminHistoryBackup = db.SuperadminHistoryBackup;
-
 const mongoose = require("mongoose");
-const ObjectId = mongoose.Types.ObjectId;
-
-const { logger, getIPAddress } = require("../../Helper/logger.helper");
-const { formattedDateTime } = require("../../Helper/time.helper");
-
 const axios = require("axios");
 
 class Panel {
-  // Get All APi Infor
+
   async GetPanelDetails(req, res) {
     try {
       const { id } = req.body;
@@ -76,7 +67,6 @@ class Panel {
     }
   }
 
-  // Get All APi Infor
   async GetAllClients(req, res) {
     try {
       const { id, db_name, db_url } = req.body;
@@ -134,7 +124,6 @@ class Panel {
     }
   }
 
-  // GET ALL SUBADMINS
   async GetAllSubadmins(req, res) {
     try {
       const { id } = req.body;
@@ -193,7 +182,6 @@ class Panel {
     }
   }
 
-  // ADD LICENSE
   async AddLicensePanle(req, res) {
     try {
       // const { id, license } = req.body
@@ -360,7 +348,6 @@ class Panel {
     }
   }
 
-  // GET ALL Help Center
   async GetAllAdminHelps(req, res) {
     try {
       // const { id } = req.body
@@ -418,7 +405,6 @@ class Panel {
     }
   }
 
-  // Admin Sidebar Permission
   async GetAll_Broker_details(req, res) {
     try {
       // THEME LIST DATA
@@ -446,7 +432,6 @@ class Panel {
     }
   }
 
-  // ADMIN PERMISSIONS
   async Admin_Permissions(req, res) {
     try {
       const {
@@ -460,7 +445,8 @@ class Panel {
         live_price,
         Two_day_client,
         Refer_Earn,
-        Plans
+        Plans,
+        Make_call
       } = req.body;
 
       var domain1 = "http://localhost:3000";
@@ -486,11 +472,14 @@ class Panel {
           live_price: live_price,
           Two_day_client: Two_day_client,
           Refer_Earn: Refer_Earn,
-          Plans: Plans
+          Plans: Plans,
+          Make_call: Make_call
         },
       };
 
       const update_token = await panel_model.updateOne(filter, update);
+
+      console.log("update", domain1);
 
       return res.send({
         status: true,
@@ -500,23 +489,19 @@ class Panel {
     } catch (error) {}
   }
 
-  // PANEL PERMISSION GET
   async GetPanlePermistion(req, res) {
     try {
       const { domain } = req.body;
 
       var domain1 = "http://localhost:3000";
 
-      // if (domain == "http://localhost:3000" ) {
-      //     domain1 = "https://trade.pandpinfotech.com"
-      // } else {
       domain1 = domain;
-      // }
+    
 
       const Panle_information = await panel_model
         .find({ domain: domain1 })
         .select(
-          "broker_id Create_Strategy Option_chain Strategy_plan is_active Two_day_client live_price Refer_Earn Plans"
+          "broker_id Create_Strategy Option_chain Strategy_plan is_active Two_day_client live_price Refer_Earn Plans Make_call"
         );
 
       // CHECK IF PANEL EXIST OR NOT
@@ -533,7 +518,6 @@ class Panel {
     } catch (error) {}
   }
 
-  // Panel Close
   async CloseThePanel(req, res) {
     try {
       const { domain, status, Name } = req.body;
@@ -707,12 +691,6 @@ class Panel {
       console.log("Error Get all User error-", error);
     }
   }
-
-
-
-
-
-
 
   async DeleteLicense(req, res) {
     try {

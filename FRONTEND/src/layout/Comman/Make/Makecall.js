@@ -614,7 +614,6 @@ const Makecall = () => {
 
     const GetBrokerLiveData = async (userIdSocketRun) => {
         
-        console.log("userIdSocketRun 1 ",userIdSocketRun)
         //alert(userIdSocketRun)
         await dispatch(GetBrokerLiveDatas(
 
@@ -631,16 +630,13 @@ const Makecall = () => {
         ))
             .unwrap()
             .then(async (response) => {
-                 console.log("response.data  GetBrokerLiveData ",response.data)
                 if (response.status) {
                    
                     if (response.data && response.data.user_id !== undefined && response.data && response.data.access_token !== undefined && response.data.trading_status == "on") {
 
-                        console.log("response.data  2  ",response.data)
                         let type = { loginType: "API" };
                         const res = await CreateSocketSession(type, response.data.user_id, response.data.access_token);
 
-                        console.log("res.data  3 ",res.data)
                      
                         if (res.data.stat) {
                             const url = "wss://ws1.aliceblueonline.com/NorenWS/"
@@ -663,7 +659,6 @@ const Makecall = () => {
                                 socket.send(JSON.stringify(initCon))
                                 socket.onmessage = async function (msg) {
                                     var response = JSON.parse(msg.data)
-                                    console.log("response 1 ",response)
                                     if (response.tk) {
                                         if (response.lp != undefined) {
                                             if (response.tk == liveToken.current) {
@@ -745,7 +740,6 @@ const Makecall = () => {
         await dispatch(GetBrokerDatas(data))
             .unwrap()
             .then(async (response) => {
-               // console.log( "console.log(response.data) " ,response.data)
                 if (response.status) {
                     
                     seUserDetails(response.data)

@@ -57,9 +57,7 @@ const SettingsPage = () => {
   };
 
   const GetAllThems = async () => {
-    console.log("Fetching themes...");
 
-    console.log("Fetching from API");
     const res = await dispatch(Get_All_Theme()).unwrap();
 
     if (res?.data) {
@@ -99,7 +97,6 @@ const SettingsPage = () => {
     //   confirmButtonText: "Yes, change it!",
     // }).then(async (result) => {
     //   if (result.isConfirmed) {
-    //     console.log("Theme selected:", themeItem);
     //     localStorage.setItem("theme", JSON.stringify(themeItem));
     //     window.location.reload();
     //   }

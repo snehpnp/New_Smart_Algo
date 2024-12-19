@@ -385,6 +385,7 @@ class Panel {
             month_ago_date: 1,
             month_ago_number: 1,
             Plans: 1,
+            Make_call: 1,
           },
         },
         {

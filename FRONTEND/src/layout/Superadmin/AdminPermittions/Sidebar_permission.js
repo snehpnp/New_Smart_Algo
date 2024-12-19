@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import { Update_Admin_Permissions } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice';
 import toast from 'react-hot-toast';
-import * as Config from "../../../Utils/Config";
 
 const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
     const dispatch = useDispatch();
@@ -19,6 +18,7 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
     const [Two_day_client, setTwo_day_client] = useState(false);
     const [getReferAndEarn, setReferAndEarn] = useState(false);
     const [planPermission, setPlanPermission] = useState(false);
+    const [MakeCallPErmission, setMakeCallPErmission] = useState(false);
 
 
     const formik = useFormik({
@@ -52,7 +52,9 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
                 "key": showPanelName.key,
                 "domain": showPanelName.rowdata.domain,
                 "Refer_Earn": getReferAndEarn ? 1 : 0,
-                "Plans": planPermission ? 1 : 0
+                "Plans": planPermission ? 1 : 0,
+                "Make_call": MakeCallPErmission ? 1 : 0
+                
 
             };
 
@@ -64,7 +66,7 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
                     toast.success(response.msg);
                     clearData();
                     setshowModal(false);
-                    window.location.reload();
+                    // window.location.reload();
                 } else {
                     toast.error(response.msg);
                 }
@@ -86,6 +88,7 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
         setTwo_day_client(!!showPanelName.rowdata?.Two_day_client);
         setReferAndEarn(!!showPanelName.rowdata?.Refer_Earn);
         setPlanPermission(!!showPanelName.rowdata?.Plans);
+        setMakeCallPErmission(!!showPanelName.rowdata?.Make_call);
 
 
     };
@@ -98,6 +101,7 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
         setTwo_day_client(false);
         setReferAndEarn(false);
         setPlanPermission(false);
+        setMakeCallPErmission(false);
 
     };
 
@@ -197,6 +201,19 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
                                         />
                                         <label className="form-check-label" htmlFor='Plans'>
                                            Plans
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div className={`col-lg-6 my-2`}>
+                                    <div className="col-lg-12 ">
+                                        <input type='checkbox' className="form-check-input"
+                                            name="Plans"
+                                            checked={MakeCallPErmission}
+                                            onChange={(e) => setMakeCallPErmission(e.target.checked)}
+                                        />
+                                        <label className="form-check-label" htmlFor='Plans' >
+                                           Make Call
                                         </label>
                                     </div>
                                 </div>

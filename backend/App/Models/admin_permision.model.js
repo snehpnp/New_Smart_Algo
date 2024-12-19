@@ -163,6 +163,11 @@ const Admin_Permission_Schema = new mongoose.Schema(
       enum: ["top", "bottom"],
       default: "top",
     },
+    Make_call: {
+      type: Number,
+      enum: [0, 1],
+      default: 0,
+    },
   },
   {
     _id: true,
