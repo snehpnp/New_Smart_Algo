@@ -11,6 +11,7 @@ module.exports = function (app) {
   const services = db.services;
   const categorie = db.categorie;
   const live_price = db.live_price;
+  const client_services = db.client_services;
   const UserMakeStrategy = db.UserMakeStrategy;
   const Get_Option_Chain_modal = db.option_chain_symbols;
   const company = db.company_information;
@@ -1555,8 +1556,114 @@ module.exports = function (app) {
     });
   };
 
+  app.get("/ssj", async (req, res) => {
+    service_token_update1();
+  });
+
   app.get("/services/update", async (req, res) => {
     service_token_update1();
+  });
+
+  app.get("/UpdateServicesLotSize", async (req, res) => {
+    
+    const pipeline = [
+      {
+        $project: {
+          // Include fields from the original collection
+          segment: 1,
+        },
+      },
+    ];
+    const categoryResult = await categorie.aggregate(pipeline);
+    var axios = require("axios");
+    var config = {
+      method: "get",
+      url: "https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json",
+    };
+
+    axios(config).then(async function (response) {
+      var unique_key = [];
+      let count = 0;
+      await response.data.forEach(async (item) => {
+        if (
+          item.instrumenttype == "OPTSTK" ||
+          item.instrumenttype == "OPTIDX" 
+        ) {
+        
+
+          if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
+            unique_key.push(`${item.name}-${item.instrumenttype}`);
+            
+            if (
+              item.instrumenttype == "OPTSTK" ||
+              item.instrumenttype == "OPTIDX"
+            ) {
+              count++;
+              
+              const matchingElements = categoryResult.filter(
+                (item) => item.segment === "O"
+              );
+              const category_id = matchingElements[0]._id;
+              //console.log("item", item.name);
+             // console.log("lotsize", item.lotsize);
+             // if(item.name == "BANKNIFTY"){
+                 console.log("lotsize", item.lotsize);
+
+                 if (item.name != undefined) {
+                    
+                    await services.updateMany({ name: item.name }
+                      , {
+                        $set: {
+                          lotsize: item.lotsize
+                        },
+                      },
+                      { upsert: true });
+                  }
+
+             // }
+             
+            }
+
+         
+          }
+        }
+      });
+
+      // return res.send("okkkkkk");
+    });
+
+
+    // const pipeline = [
+    //   {
+    //     $lookup: {
+    //       from: "categories",
+    //       localField: "categorie_id",
+    //       foreignField: "_id",
+    //       as: "categoryResult",
+    //     },
+    //   },
+    //   {
+    //     $unwind: "$categoryResult", // Unwind the 'categoryResult' array
+    //   },
+    //   {
+    //     $match: {
+    //       'categoryResult.segment': { $in: ['F', 'O'] }
+    //     }
+    //   },
+    //   {
+    //     $project: {
+    //       "categoryResult.segment": 1,
+    //       "categoryResult.name": 1,
+    //        name: 1,
+    //        lotsize: 1
+    //     },
+    //   },
+      
+    // ];
+    // const servicesResult = await services.aggregate(pipeline);
+    // console.log("servicesResult", servicesResult);
+
+    return res.send({ status: true, message: "Updating lot size"  });
   });
 
   app.get("/UpdateQty", async (req, res) => {
@@ -1574,7 +1681,7 @@ module.exports = function (app) {
         const Sid = new ObjectId(element._id);
         // if(element.name == "TITAN"){
 
-        const clsResult = await client_services.find({ service_id: Sid });
+       const clsResult = await client_services.find({ service_id: Sid });
         if (clsResult.length > 0) {
           clsResult.forEach(async (item) => {
             const filtet = { _id: item._id };
@@ -1591,7 +1698,7 @@ module.exports = function (app) {
           });
         }
 
-        //}
+       // }
       });
     }
 

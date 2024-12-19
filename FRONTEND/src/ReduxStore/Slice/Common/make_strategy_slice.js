@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_TIMEFRAME , GET_INSTRUMENT ,GET_SOURCE ,GET_COMPARATORS ,ADD_MAKE_STRATEGY ,GET_ALL_MAKE_STRATEGY,DELETE_MAKE_STRATEGY,EDIT_MAKE_STRATEGY,UPDATE_MAKE_STRATEGY,DELETE_MAKE_STRATEGY_SELECTED,GET_CANDLE_DATA} from "../../../Service/common.service";
+import { GET_TIMEFRAME , GET_INSTRUMENT ,GET_SOURCE ,GET_COMPARATORS ,ADD_MAKE_STRATEGY ,GET_ALL_MAKE_STRATEGY,DELETE_MAKE_STRATEGY,EDIT_MAKE_STRATEGY,UPDATE_MAKE_STRATEGY,DELETE_MAKE_STRATEGY_SELECTED,GET_CANDLE_DATA ,STATUSCHANGE_MAKE_STRATEGY} from "../../../Service/common.service";
 
 export const get_candle_data = createAsyncThunk("get/candledata", async (data) => {
     try {
@@ -112,6 +112,15 @@ export const Update_Make_Strategy = createAsyncThunk("UpdateMakeStartegy", async
     }
 });
 
+export const statusChange_make_strategy = createAsyncThunk("StatusChangeMakeStartegy", async (data) => {
+    try {
+        const {req,token}=data
+        const res = await STATUSCHANGE_MAKE_STRATEGY(req,token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
 
 
 export const delete_make_strategy_selected = createAsyncThunk("DeleteMakeStartegySelected", async (data) => {

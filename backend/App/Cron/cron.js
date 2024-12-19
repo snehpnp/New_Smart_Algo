@@ -26,6 +26,7 @@ const { DashboardView, deleteDashboard } = require("../../View/DashboardData");
 const { createView } = require("../../View/Open_position");
 const { logger, getIPAddress } = require("../Helper/logger.helper");
 
+
 cron.schedule("10 5 * * *", () => {
   deleteDashboard();
 });

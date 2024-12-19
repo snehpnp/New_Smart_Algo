@@ -28,19 +28,19 @@ class Strategy {
     // GET SUBADMIN PERMISSION
     async get_servicename(req, res) {
 
-
+    console.log("req local ",req.body.searchQuery);
         try {
             const searchQuery = req.body.searchQuery || "";
             const page = 1;
             const pageSize = 10;
-            var pipeline = ""
+            let pipeline = ""
             const currentDate = new Date();
             const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
             const startOfNextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
 
             if (searchQuery == "") {
-
-
+           
+             
                 pipeline = [
                     {
                         $addFields: {
@@ -133,9 +133,9 @@ class Strategy {
 
             }
 
-
-
+            console.log("pipeline", pipeline);
             const get_user = await Alice_token.aggregate(pipeline);
+
 
             if (get_user.length > 0) {
                 return res.send({ status: true, msg: "Get Permission Successfully", data: get_user });
@@ -143,6 +143,7 @@ class Strategy {
                 return res.send({ status: false, msg: "Empty data", data: [] });
             }
         } catch (error) {
+            console.log("error", error);
             res.status(500).send({ status: false, msg: "Internal server error" });
         }
     }

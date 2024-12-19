@@ -58,6 +58,12 @@ import ReferralPage  from '../layout/Admin/Profile/ReferralPage'
 import Plans  from '../layout/Admin/Service/Plans/Plans'
 import Addplans  from '../layout/Admin/Service/Plans/Addplan'
 import TradeHistory1 from "../layout/Admin/TradeDetails/TradeHistory/Tradehistory1"
+import Test from '../layout/Test'
+
+import Makecall from '../layout/Comman/Make/Makecall.js';
+import MakeCallPendingPosition from '../layout/Comman/Make/MakeCallPendingPosition.js';
+
+
 import { useDispatch } from "react-redux";
 import Settings from '../layout/Admin/Profile/Settings';
 
@@ -155,6 +161,12 @@ const Admin = () => {
                 <Route exact path="/refer-earn" element={<ReferralPage />} />
                 <Route exact path="/plans" element={<Plans />} />
                 <Route exact path="/plan/add" element={<Addplans />} />
+
+
+                <Route exact path="/makecall" element={<Makecall />} />
+                <Route exact path="/makecallpendingposition" element={<MakeCallPendingPosition />} />
+
+
 
                 <Route exact path="/tradehistory1" element={<TradeHistory1 />} />
                 <Route exact path="/settings" element={<Settings />} />

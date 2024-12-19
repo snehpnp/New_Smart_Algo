@@ -32,7 +32,7 @@ class AliceBlue {
       var hosts = req.headers.host;
 
       var redirect = hosts.split(":")[0];
-      var redirect_uri = "";
+      let redirect_uri = "";
 
       const Get_User = await User.find({ demat_userid: userId });
 
@@ -113,15 +113,16 @@ class AliceBlue {
                 }
               }
             } else {
-              return res.send(redirect_uri);
+              return res.redirect(redirect_uri);
             }
           })
           .catch(function (error) {
-            return res.send(redirect_uri);
+            return res.redirect(redirect_uri);
           });
       }
     } catch (error) {
       console.log("Error Alice Login error-", error);
+      
     }
   }
 

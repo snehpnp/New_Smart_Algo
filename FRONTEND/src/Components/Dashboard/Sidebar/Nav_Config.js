@@ -170,6 +170,26 @@ export const admin_sidebar = [
             }
         ]
     },
+
+    {
+        id: 80,
+        name: 'Make Call',
+        Icon: 'Boxes',
+        Data: [
+            {
+                id: 801,
+                name: 'Create Make Call',
+                route: '/admin/makecall',
+            },
+             {
+                id: 802,
+                name: 'Pending Make Call Position',
+                route: '/admin/makecallpendingposition',
+            }
+        ]
+    },
+
+
     {
         id: 7,
         name: 'More',

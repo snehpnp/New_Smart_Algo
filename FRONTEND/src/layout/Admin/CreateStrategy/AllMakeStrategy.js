@@ -17,7 +17,7 @@ import { Pencil, Trash2, GanttChartSquare } from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Strategy } from "../../../ReduxStore/Slice/Admin/StrategySlice";
-import { get_time_frame, get_source, get_comparators, Add_Make_Strategy, get_all_make_strategy, delete_make_strategy, delete_make_strategy_selected } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
+import { get_time_frame, get_source, get_comparators, Add_Make_Strategy, get_all_make_strategy, delete_make_strategy, delete_make_strategy_selected , statusChange_make_strategy} from "../../../ReduxStore/Slice/Common/make_strategy_slice";
 import { CandlestickChart } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
@@ -131,6 +131,29 @@ const AllMakeStrategy = () => {
             ),
         },
         {
+            dataField: "actions",
+            text: "Status",
+            formatter: (cell, row) => (
+              <>
+                <label className="toggle mt-3">
+                  <input
+                    className="toggle-checkbox bg-primary"
+                    type="checkbox"
+                    checked={row.statusOnOff === "1" ? true : false}
+                    onChange={(e) => {
+                      StatusChange(e, row);
+                    }}
+                  />
+                  <div
+                    className={`toggle-switch  ${
+                      row.statusOnOff === "1" ? "bg-success" : "bg-danger"
+                    }`}
+                  ></div>
+                </label>
+              </>
+            ),
+          },
+        {
             dataField: 'actions',
             text: 'Actions',
             sort: true,
@@ -152,6 +175,34 @@ const AllMakeStrategy = () => {
     ];
 
 
+    
+
+    // Status Change
+    const StatusChange = async (e, data) => {
+         let  req_status = data.statusOnOff === "1" ? "2" : "1"
+         let  status_msg = data.statusOnOff === "1" ? "Off" : "On"
+        if (window.confirm(`Do You Really Want To strategy ${status_msg} ?`)) {
+            await dispatch(statusChange_make_strategy(
+                {
+                    req: {
+                        status: req_status,
+                        data: data
+                    },
+                    token: AdminToken,
+                }
+            )).unwrap()
+                .then((response) => {
+
+                    if (response.status) {
+                        toast.success(response.msg)
+                        setrefresh(!refresh)
+                        // window.location.reload()
+                    } else {
+                        toast.error(response.msg)
+                    }
+                })
+        }
+      };
 
     // DELETE GROUP
     const DeleteGroup = async (row) => {
@@ -290,7 +341,8 @@ const AllMakeStrategy = () => {
                 await dispatch(delete_make_strategy_selected(
                     {
                         req: {
-                            ids_array: selected
+                            ids_array: selected,
+                            data: selected1
                         },
                         token: AdminToken,
                     }
