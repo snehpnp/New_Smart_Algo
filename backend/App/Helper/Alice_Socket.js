@@ -281,4 +281,4 @@ function checkExchangeSegment(input, exchange) {
   }
 }
 
-module.exports = { Alice_Socket, getSocket };
+module.exports = { Alice_Socket, getSocket,updateChannelAndSend };
