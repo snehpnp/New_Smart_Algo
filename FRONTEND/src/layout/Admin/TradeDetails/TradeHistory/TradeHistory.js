@@ -1417,8 +1417,8 @@ const TradeHistory = () => {
                   <div className="d-flex align-items-end">
                     <PaginationListStandalone {...paginationProps} />
                   </div>
-                  <div className="d-flex align-items-end">
                     {PnlStatus == "Bottom" && (
+                  <div className="d-flex align-items-end">
                       <h3>
                         <b>Total Realised P/L</b> :{" "}
                         <b>
@@ -1431,8 +1431,8 @@ const TradeHistory = () => {
                           </span>
                         </b>
                       </h3>
-                    )}
                   </div>
+                    )}
                 </div>
               </div>
             )}

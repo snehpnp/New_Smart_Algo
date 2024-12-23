@@ -404,7 +404,7 @@ app.post("/broker-signals", async (req, res) => {
           const ex_day_expiry = getKeyByValue(
             dateHash,
             month_expiry
-          ).toUpperCase();
+          )?.toUpperCase();
           const ex_year_expiry = expiry.substr(-2);
 
           var token = "";

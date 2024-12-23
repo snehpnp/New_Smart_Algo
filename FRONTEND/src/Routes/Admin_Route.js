@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react'
 
+import { useDispatch } from "react-redux";
 import { Route, Routes, useLocation } from "react-router-dom";
 import * as Config from "../Utils/Config";
 import Wraper from '../Components/Dashboard/Wraper/Wraper';
@@ -64,9 +65,8 @@ import Makecall from '../layout/Comman/Make/Makecall.js';
 import MakeCallPendingPosition from '../layout/Comman/Make/MakeCallPendingPosition.js';
 
 
-import { useDispatch } from "react-redux";
 import Settings from '../layout/Admin/Profile/Settings';
-
+import Holdings from '../layout/Admin/TradeDetails/TradeHistory/Holdings.js';
 
 const Admin = () => {
 
@@ -172,6 +172,7 @@ const Admin = () => {
                 <Route exact path="/settings" element={<Settings />} />
    
 
+                <Route exact path="/holdingshistory" element={<Holdings />} />
   
 
             </Routes>

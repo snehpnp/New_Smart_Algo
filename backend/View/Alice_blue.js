@@ -138,7 +138,24 @@ async function createViewAlice() {
                                 ]
                               },
                               then: 'CDS',
-                              else: "NFO"
+                              else: {
+                                $cond: {
+                                  if: {
+                                    $or: [
+                                      { $eq: ['$category.segment', 'BF'] },
+                                      { $eq: ['$category.segment', 'BO'] }
+                                    ]
+                                  },
+                                  then: 'BFO',
+                                  else: {
+                                    $cond: {
+                                      if: { $eq: ['$category.segment', 'BC'] },
+                                      then: 'BSE',
+                                      else: 'NFO'
+                                    }
+                                  }
+                                }
+                              }
                             }
                           }
                         }
@@ -147,6 +164,7 @@ async function createViewAlice() {
                   }
                 }
               },
+              
               pCode: {
                 $cond: {
                   if: {

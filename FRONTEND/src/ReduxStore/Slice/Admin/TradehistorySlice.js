@@ -1,7 +1,7 @@
 
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { GET_TRADEHISTORY,GET_TRADEHISTORY_cal,GET_TRADEHISTORY1, GET_SEVAN_TRADEHISTORY, GET_ADMIN_TRADING_STATUS, AdminTradingStatusGet ,GetSignalsAdmin} from "../../../Service/admin.service";
+import { GET_TRADEHISTORY,GET_TRADEHISTORY_cal,GET_TRADEHISTORY1, GET_SEVAN_TRADEHISTORY, GET_ADMIN_TRADING_STATUS, AdminTradingStatusGet ,GetSignalsAdmin,GETHOLDINGS} from "../../../Service/admin.service";
 
 
 export const Get_Tradehisotry = createAsyncThunk("admin/tradhistory", async (apireq) => {
@@ -9,6 +9,18 @@ export const Get_Tradehisotry = createAsyncThunk("admin/tradhistory", async (api
     const { startDate, endDate, service, strategy, type, serviceIndex, lotMultypaly, token ,page,limit,openClose} = apireq
     try {
         const res = await GET_TRADEHISTORY({ startDate: startDate, endDate: endDate, service: service, strategy: strategy, type, serviceIndex: serviceIndex, lotMultypaly: lotMultypaly,page:page,limit:limit ,openClose:openClose}, token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+
+export const GETHOLDINGSAPI = createAsyncThunk("get/holdings/admin", async (apireq) => {
+
+    const { startDate, endDate, service, strategy, type, serviceIndex, lotMultypaly, token ,page,limit,openClose} = apireq
+    try {
+        const res = await GETHOLDINGS({ startDate: startDate, endDate: endDate, service: service, strategy: strategy, type, serviceIndex: serviceIndex, lotMultypaly: lotMultypaly,page:page,limit:limit ,openClose:openClose}, token);
         return await res;
     } catch (err) {
         return err;
@@ -100,7 +112,8 @@ const TradehistorySlice = createSlice({
         gettradingstatus: [],
         tradehisotry1: [],
         getAdminSignals:[],
-        calCulations:[]
+        calCulations:[],
+        holdings:[]
 
 
 
@@ -129,7 +142,11 @@ const TradehistorySlice = createSlice({
             Get_Tradehisotry_Cal.fulfilled]: (state, { payload }) => {
             return { ...state, calCulations: payload, isLoading: false };
 
-            }
+            },
+        [ GETHOLDINGSAPI.fulfilled]: (state, { payload }) => {
+            return { ...state, holdings: payload, isLoading: false };
+        }
+        
 
 
     },

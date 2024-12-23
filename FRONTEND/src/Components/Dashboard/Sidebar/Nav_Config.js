@@ -75,6 +75,11 @@ export const admin_sidebar = [
                 name: 'Order History',
                 route: '/admin/tradehistory1?type=admin',
             },
+            {
+                id: 420,
+                name: 'Holdings History',
+                route: '/admin/holdingshistory',
+            },
            
             {
                 id: 44,
