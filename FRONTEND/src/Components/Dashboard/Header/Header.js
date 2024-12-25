@@ -544,6 +544,7 @@ const Header = ({ ChatBox }) => {
           // $(".logo-abbr1").html(response.data && response.data[0].logo);
           // $(".brand-title").html(response.data && response.data[0].logo);
 
+          localStorage.setItem('Watermark', response.data?.[0]?.watermark);
 
           $(".watermarkId").css({
             "background-image": `url(${response?.data?.[0]?.watermark})`,

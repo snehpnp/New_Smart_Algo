@@ -82,7 +82,7 @@ const TradeHistory = () => {
   const [total1, setTotal] = useState(0);
   const [getTotalPnl, setTotalPnl] = useState(0);
 
-  const WatermarkUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ1PKLBJTUpH7AwrJLSzZKlSMOmJUruL4A6Q&s"
+  const WatermarkUrl = localStorage.getItem("Watermark");
   var a = 2;
   const handleShow = () => setShowModal6(true);
   const handleClose = () => setShowModal6(false);
@@ -1395,7 +1395,7 @@ const TradeHistory = () => {
                       left: 0,
                       width: "100%",
                       height: "100%",
-                      // backgroundImage: `url(${WatermarkUrl})`,
+                      backgroundImage: `url(${WatermarkUrl})`,
                       backgroundRepeat: "no-repeat",
                       backgroundSize: "contain",
                       backgroundPosition: "center",

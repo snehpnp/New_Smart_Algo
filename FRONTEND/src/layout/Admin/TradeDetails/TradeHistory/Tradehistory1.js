@@ -89,6 +89,7 @@ const TradeHistory = () => {
   const handleToDateChange = (e) => {
     setToDate(e.target.value);
   };
+  const WatermarkUrl = localStorage.getItem("Watermark");
 
   useEffect(() => {
     forCSVdata();
@@ -1203,6 +1204,30 @@ const TradeHistory = () => {
           >
             {({ paginationProps, paginationTableProps }) => (
               <div>
+  <div
+                  style={{
+                    position: "relative",
+                    overflow: "hidden", 
+                  }}
+                >
+                  {/* dynamic Watermark */}
+                  <div className ='watermarkId'
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      backgroundImage: `url(${WatermarkUrl})`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "contain",
+                      backgroundPosition: "center",
+                      opacity: 0.1,
+                      pointerEvents: "none",
+                      zIndex: 2,
+                    }}
+                  ></div>
+
                 <BootstrapTable
                   keyField="_id" // Assuming "_id" is the unique key in your data
                   data={tradeHistoryData.data} // Data from API
@@ -1214,7 +1239,7 @@ const TradeHistory = () => {
                   rowClasses={`text-center`}
                   noDataIndication={() => <NoDataIndication />}
                 />
-
+</div>
                 <div className="mb-2 d-flex justify-content-between align-items-start mt-2">
                   <div className="d-flex align-items-center">
                     <label htmlFor="sizePerPageSelect" className="mx-2">
