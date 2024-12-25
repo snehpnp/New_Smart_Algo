@@ -462,7 +462,7 @@ const Header = ({ ChatBox }) => {
           console.warn("Unexpected response:", response);
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   //  GET_USER_DETAILS
@@ -544,8 +544,17 @@ const Header = ({ ChatBox }) => {
           // $(".logo-abbr1").html(response.data && response.data[0].logo);
           // $(".brand-title").html(response.data && response.data[0].logo);
 
+
+          $(".watermarkId").css({
+            "background-image": `url(${response?.data?.[0]?.watermark})`,
+
+          });
+
+
           $(".set_Favicon");
         }
+        // console.log("response is ",response?.data[0]?.watermark);
+
       });
   };
 
@@ -693,9 +702,9 @@ const Header = ({ ChatBox }) => {
                 ) : null}
 
                 {admin_permission.data?.length > 0 &&
-                admin_permission.data[0]?.Plans &&
-                user_role === "USER" &&
-                getPlanName ? (
+                  admin_permission.data[0]?.Plans &&
+                  user_role === "USER" &&
+                  getPlanName ? (
                   <li className="nav-item dropdown header-profile me-2">
                     <button
                       className=" btn btn-primary px-2"
@@ -708,7 +717,7 @@ const Header = ({ ChatBox }) => {
 
                 <>
                   {user_role === "ADMIN" ||
-                  (gotodashboard && user_role_goTo == "USER") ? (
+                    (gotodashboard && user_role_goTo == "USER") ? (
                     <li className="nav-item dropdown header-profile me-2">
                       <button
                         className="btn btn-primary px-2"
@@ -720,8 +729,8 @@ const Header = ({ ChatBox }) => {
                   ) : null}
 
                   {user_role === "USER" &&
-                  (UserDetails.license_type == "2" ||
-                    UserDetails.license_type == "0") ? (
+                    (UserDetails.license_type == "2" ||
+                      UserDetails.license_type == "0") ? (
                     <li className="nav-item dropdown header-profile me-2">
                       <button
                         className="btn btn-primary px-2"
@@ -1126,12 +1135,12 @@ const Header = ({ ChatBox }) => {
                                 transition: "background-color 0.3s",
                               }}
                               onMouseOver={(e) =>
-                                (e.currentTarget.style.backgroundColor =
-                                  "#0056b3")
+                              (e.currentTarget.style.backgroundColor =
+                                "#0056b3")
                               }
                               onMouseOut={(e) =>
-                                (e.currentTarget.style.backgroundColor =
-                                  "#007bff")
+                              (e.currentTarget.style.backgroundColor =
+                                "#007bff")
                               }
                             >
                               Submit
@@ -1149,12 +1158,12 @@ const Header = ({ ChatBox }) => {
                                 transition: "background-color 0.3s",
                               }}
                               onMouseOver={(e) =>
-                                (e.currentTarget.style.backgroundColor =
-                                  "#a8d6ff")
+                              (e.currentTarget.style.backgroundColor =
+                                "#a8d6ff")
                               }
                               onMouseOut={(e) =>
-                                (e.currentTarget.style.backgroundColor =
-                                  "#d8ecff")
+                              (e.currentTarget.style.backgroundColor =
+                                "#d8ecff")
                               }
                             >
                               Back
@@ -1201,8 +1210,8 @@ const Header = ({ ChatBox }) => {
                                 activeTab === "mobile"
                                   ? "Trading User ID"
                                   : activeTab === "pan"
-                                  ? "PAN number"
-                                  : "Enter QR code"
+                                    ? "PAN number"
+                                    : "Enter QR code"
                               }
                               value={username}
                               onChange={handleUsernameChange}

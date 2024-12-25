@@ -35,12 +35,13 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
+import { GET_PNL_POSITION } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 
 const paginationOptions = {
   custom: true,
-  totalSize: 0, 
-  sizePerPage: 10, 
-  page: 1, 
+  totalSize: 0,
+  sizePerPage: 10,
+  page: 1,
 };
 
 const TradeHistory = () => {
@@ -81,6 +82,8 @@ const TradeHistory = () => {
   const [getSizePerPage, setSizePerPage] = useState(10);
   const [total1, setTotal] = useState(0);
   const [getTotalPnl, setTotalPnl] = useState(0);
+  const [PnlStatus, setPnlStatus] = useState("Top");
+
 
   var a = 2;
   const handleShow = () => setShowModal6(true);
@@ -136,13 +139,16 @@ const TradeHistory = () => {
   useEffect(() => {
     setSizePerPage(10);
     setPage(1);
-  }, [StrategyClientStatus,SelectOpenClose,SelectServiceIndex,SelectService]);
+  }, [StrategyClientStatus, SelectOpenClose, SelectServiceIndex, SelectService]);
 
 
   useEffect(() => {
     GetAllStrategyName();
     Admin_Trading_data();
+    GetPnlPosition();
   }, []);
+
+  console.log("PnlStatus", PnlStatus);
 
   useEffect(() => {
     if (selector && selector.permission) {
@@ -163,6 +169,15 @@ const TradeHistory = () => {
       columns = columns.filter((data) => !selectedOptions.includes(data.text));
     }
   }, [selectedOptions]);
+
+  const GetPnlPosition = async () => {
+    const res = await dispatch(GET_PNL_POSITION({ token: token })).unwrap();
+    if (res?.data) {
+      const pnlPosition = res.data[0].pnl_position;
+
+      setPnlStatus(pnlPosition);
+    }
+  };
 
   const Get_Tradehisotry_Calculations = async (e) => {
     let abc = new Date();
@@ -231,7 +246,7 @@ const TradeHistory = () => {
       .then((response) => {
         if (response.status) {
           setTotal(response.pagination.totalItems);
-          
+
 
           let filterData = response.data.filter((item) => {
             if (searchTerm === "") return item;
@@ -422,9 +437,9 @@ const TradeHistory = () => {
 
   var CreatechannelList = "";
   tradeHistoryData.data &&
-  tradeHistoryData.data?.map((item) => {
-    CreatechannelList += `${item.exchange}|${item.token}#`;
-  });
+    tradeHistoryData.data?.map((item) => {
+      CreatechannelList += `${item.exchange}|${item.token}#`;
+    });
 
   const ShowLivePrice = async () => {
     let type = { loginType: "API" };
@@ -458,195 +473,195 @@ const TradeHistory = () => {
           const handleResponse = async (response) => {
             if (response) {
 
-            $(".BP1_Put_Price_" + response.tk).html();
-            $(".SP1_Call_Price_" + response.tk).html();
-            $(".LivePrice_" + response.tk).html(response.lp);
-            $(".ClosePrice_" + response.tk).html(response.c);
+              $(".BP1_Put_Price_" + response.tk).html();
+              $(".SP1_Call_Price_" + response.tk).html();
+              $(".LivePrice_" + response.tk).html(response.lp);
+              $(".ClosePrice_" + response.tk).html(response.c);
 
-            var live_price = response.lp === undefined ? "" : response.lp;
+              var live_price = response.lp === undefined ? "" : response.lp;
 
-            tradeHistoryData.data &&
-              tradeHistoryData.data.forEach((row, i) => {
-                let get_ids = "_id_" + response.tk + "_" + row._id;
-                let get_id_token = $("." + get_ids).html();
+              tradeHistoryData.data &&
+                tradeHistoryData.data.forEach((row, i) => {
+                  let get_ids = "_id_" + response.tk + "_" + row._id;
+                  let get_id_token = $("." + get_ids).html();
 
-                const get_entry_qty = $(
-                  ".entry_qty_" + response.tk + "_" + row._id
-                ).html();
-                const get_exit_qty = $(
-                  ".exit_qty_" + response.tk + "_" + row._id
-                ).html();
-                const get_exit_price = $(
-                  ".exit_price_" + response.tk + "_" + row._id
-                ).html();
-                const get_entry_price = $(
-                  ".entry_price_" + response.tk + "_" + row._id
-                ).html();
-                const get_entry_type = $(
-                  ".entry_type_" + response.tk + "_" + row._id
-                ).html();
-                const get_exit_type = $(
-                  ".exit_type_" + response.tk + "_" + row._id
-                ).html();
-                const get_Strategy = $(
-                  ".strategy_" + response.tk + "_" + row._id
-                ).html();
+                  const get_entry_qty = $(
+                    ".entry_qty_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_exit_qty = $(
+                    ".exit_qty_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_exit_price = $(
+                    ".exit_price_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_entry_price = $(
+                    ".entry_price_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_entry_type = $(
+                    ".entry_type_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_exit_type = $(
+                    ".exit_type_" + response.tk + "_" + row._id
+                  ).html();
+                  const get_Strategy = $(
+                    ".strategy_" + response.tk + "_" + row._id
+                  ).html();
 
-                if (
-                  (get_entry_type === "LE" && get_exit_type === "LX") ||
-                  (get_entry_type === "SE" && get_exit_type === "SX")
-                ) {
-                  if (get_entry_qty !== "" && get_exit_qty !== "") {
-                    if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
-                      let rpl =
-                        (parseFloat(get_exit_price) -
-                          parseFloat(get_entry_price)) *
-                        parseInt(get_exit_qty);
-
-                      if (get_entry_type === "SE") {
-                        rpl =
-                          (parseFloat(get_entry_price) -
-                            parseFloat(get_exit_price)) *
-                          parseInt(get_exit_qty);
-                      }
-
-                      if (
-                        ["FO", "MFO", "CFO", "BFO"].includes(
-                          row.segment.toUpperCase()
-                        ) &&
-                        row.option_type.toUpperCase() == "PUT"
-                      ) {
-                        rpl =
-                          (parseFloat(get_entry_price) -
-                            parseFloat(get_exit_price)) *
+                  if (
+                    (get_entry_type === "LE" && get_exit_type === "LX") ||
+                    (get_entry_type === "SE" && get_exit_type === "SX")
+                  ) {
+                    if (get_entry_qty !== "" && get_exit_qty !== "") {
+                      if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
+                        let rpl =
+                          (parseFloat(get_exit_price) -
+                            parseFloat(get_entry_price)) *
                           parseInt(get_exit_qty);
 
                         if (get_entry_type === "SE") {
                           rpl =
-                            (parseFloat(get_exit_price) -
-                              parseFloat(get_entry_price)) *
+                            (parseFloat(get_entry_price) -
+                              parseFloat(get_exit_price)) *
                             parseInt(get_exit_qty);
                         }
-                      }
 
-                      let upl =
-                        parseInt(get_exit_qty) - parseInt(get_entry_qty);
-                      let finalyupl =
-                        (parseFloat(get_entry_price) - parseFloat(live_price)) *
-                        upl;
+                        if (
+                          ["FO", "MFO", "CFO", "BFO"].includes(
+                            row.segment.toUpperCase()
+                          ) &&
+                          row.option_type.toUpperCase() == "PUT"
+                        ) {
+                          rpl =
+                            (parseFloat(get_entry_price) -
+                              parseFloat(get_exit_price)) *
+                            parseInt(get_exit_qty);
 
-                      if (isNaN(finalyupl) || isNaN(rpl)) {
-                        return "-";
-                      } else {
-                        $(".show_rpl_" + response.tk + "_" + get_id_token).html(
-                          rpl.toFixed(2)
-                        );
-                        $(".UPL_" + response.tk + "_" + get_id_token).html(
-                          finalyupl.toFixed(2)
-                        );
-                        $(".TPL_" + response.tk + "_" + get_id_token).html(
-                          (finalyupl + rpl).toFixed(2)
-                        );
+                          if (get_entry_type === "SE") {
+                            rpl =
+                              (parseFloat(get_exit_price) -
+                                parseFloat(get_entry_price)) *
+                              parseInt(get_exit_qty);
+                          }
+                        }
 
-                        ShowColor1(
-                          ".show_rpl_" + response.tk + "_" + get_id_token,
-                          rpl.toFixed(2),
-                          response.tk,
-                          get_id_token
-                        );
-                        ShowColor1(
-                          ".UPL_" + response.tk + "_" + get_id_token,
-                          finalyupl.toFixed(2),
-                          response.tk,
-                          get_id_token
-                        );
-                        ShowColor1(
-                          ".TPL_" + response.tk + "_" + get_id_token,
-                          (finalyupl + rpl).toFixed(2),
-                          response.tk,
-                          get_id_token
-                        );
+                        let upl =
+                          parseInt(get_exit_qty) - parseInt(get_entry_qty);
+                        let finalyupl =
+                          (parseFloat(get_entry_price) - parseFloat(live_price)) *
+                          upl;
+
+                        if (isNaN(finalyupl) || isNaN(rpl)) {
+                          return "-";
+                        } else {
+                          $(".show_rpl_" + response.tk + "_" + get_id_token).html(
+                            rpl.toFixed(2)
+                          );
+                          $(".UPL_" + response.tk + "_" + get_id_token).html(
+                            finalyupl.toFixed(2)
+                          );
+                          $(".TPL_" + response.tk + "_" + get_id_token).html(
+                            (finalyupl + rpl).toFixed(2)
+                          );
+
+                          ShowColor1(
+                            ".show_rpl_" + response.tk + "_" + get_id_token,
+                            rpl.toFixed(2),
+                            response.tk,
+                            get_id_token
+                          );
+                          ShowColor1(
+                            ".UPL_" + response.tk + "_" + get_id_token,
+                            finalyupl.toFixed(2),
+                            response.tk,
+                            get_id_token
+                          );
+                          ShowColor1(
+                            ".TPL_" + response.tk + "_" + get_id_token,
+                            (finalyupl + rpl).toFixed(2),
+                            response.tk,
+                            get_id_token
+                          );
+                        }
                       }
                     }
-                  }
-                } else if (
-                  (get_entry_type === "LE" && get_exit_type === "") ||
-                  (get_entry_type === "SE" && get_exit_type === "")
-                ) {
-                  let abc = (
-                    (parseFloat(live_price) - parseFloat(get_entry_price)) *
-                    parseInt(get_entry_qty)
-                  ).toFixed();
-
-                  if (get_entry_type === "SE") {
-                    abc = (
-                      (parseFloat(get_entry_price) - parseFloat(live_price)) *
+                  } else if (
+                    (get_entry_type === "LE" && get_exit_type === "") ||
+                    (get_entry_type === "SE" && get_exit_type === "")
+                  ) {
+                    let abc = (
+                      (parseFloat(live_price) - parseFloat(get_entry_price)) *
                       parseInt(get_entry_qty)
                     ).toFixed();
-                  }
-
-                  if (
-                    ["FO", "MFO", "CFO", "BFO"].includes(
-                      row.segment.toUpperCase()
-                    ) &&
-                    row.option_type.toUpperCase() == "PUT"
-                  ) {
-                    abc =
-                      (parseFloat(get_entry_price) - parseFloat(live_price)) *
-                      parseInt(get_exit_qty);
 
                     if (get_entry_type === "SE") {
+                      abc = (
+                        (parseFloat(get_entry_price) - parseFloat(live_price)) *
+                        parseInt(get_entry_qty)
+                      ).toFixed();
+                    }
+
+                    if (
+                      ["FO", "MFO", "CFO", "BFO"].includes(
+                        row.segment.toUpperCase()
+                      ) &&
+                      row.option_type.toUpperCase() == "PUT"
+                    ) {
                       abc =
-                        (parseFloat(live_price) - parseFloat(get_entry_price)) *
+                        (parseFloat(get_entry_price) - parseFloat(live_price)) *
                         parseInt(get_exit_qty);
+
+                      if (get_entry_type === "SE") {
+                        abc =
+                          (parseFloat(live_price) - parseFloat(get_entry_price)) *
+                          parseInt(get_exit_qty);
+                      }
+                    }
+
+                    if (isNaN(abc)) {
+                      return "-";
+                    } else {
+                      $(".show_rpl_" + response.tk + "_" + get_id_token).html(
+                        "-"
+                      );
+                      $(".UPL_" + response.tk + "_" + get_id_token).html(abc);
+                      $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
+                      ShowColor1(
+                        ".show_rpl_" + response.tk + "_" + get_id_token,
+                        "-",
+                        response.tk,
+                        get_id_token
+                      );
+                      ShowColor1(
+                        ".UPL_" + response.tk + "_" + get_id_token,
+                        abc,
+                        response.tk,
+                        get_id_token
+                      );
+                      ShowColor1(
+                        ".TPL_" + response.tk + "_" + get_id_token,
+                        abc,
+                        response.tk,
+                        get_id_token
+                      );
                     }
                   }
 
-                  if (isNaN(abc)) {
-                    return "-";
+                  //  if Only Exist qty Exist
+                  else if (
+                    (get_entry_type === "" && get_exit_type === "LX") ||
+                    (get_entry_type === "" && get_exit_type === "SX")
+                  ) {
                   } else {
-                    $(".show_rpl_" + response.tk + "_" + get_id_token).html(
-                      "-"
-                    );
-                    $(".UPL_" + response.tk + "_" + get_id_token).html(abc);
-                    $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
-                    ShowColor1(
-                      ".show_rpl_" + response.tk + "_" + get_id_token,
-                      "-",
-                      response.tk,
-                      get_id_token
-                    );
-                    ShowColor1(
-                      ".UPL_" + response.tk + "_" + get_id_token,
-                      abc,
-                      response.tk,
-                      get_id_token
-                    );
-                    ShowColor1(
-                      ".TPL_" + response.tk + "_" + get_id_token,
-                      abc,
-                      response.tk,
-                      get_id_token
-                    );
+                    // calcultateRPL(row, null, "");
                   }
-                }
+                });
 
-                //  if Only Exist qty Exist
-                else if (
-                  (get_entry_type === "" && get_exit_type === "LX") ||
-                  (get_entry_type === "" && get_exit_type === "SX")
-                ) {
-                } else {
-                  // calcultateRPL(row, null, "");
-                }
-              });
-
-            }else{
+            } else {
               tradeHistoryData.data &&
-              tradeHistoryData.data.forEach((row, i) => {
-                const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
-                calcultateRPL(row, null, previousRow);
-              });
+                tradeHistoryData.data.forEach((row, i) => {
+                  const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
+                  calcultateRPL(row, null, previousRow);
+                });
             }
           };
           await ConnctSocket(
@@ -654,7 +669,7 @@ const TradeHistory = () => {
             channelList,
             UserDetails.user_id,
             UserDetails.access_token
-          ).then((res) => {});
+          ).then((res) => { });
         } else {
           // $(".UPL_").html("-");
           // $(".show_rpl_").html("-");
@@ -964,7 +979,7 @@ const TradeHistory = () => {
           "Entry Time": item.entry_dt_date,
           "Exit Time": item.exit_dt_date,
           Exchange: item.exchange,
-          Strategy: item.strategy,      
+          Strategy: item.strategy,
           "Total-PL": $(".TPL_" + item.token)
         });
       });
@@ -1127,7 +1142,7 @@ const TradeHistory = () => {
                   FINNIFTY
                 </option>
                 <option value="SENSEX" selected>
-                SENSEX
+                  SENSEX
                 </option>
               </select>
             </div>
@@ -1159,7 +1174,7 @@ const TradeHistory = () => {
               </select>
             </div>
           </div>
-          
+
           <div className="col-lg-2  px-1">
             <div className="mb-3">
               <label for="select" className="form-label">
@@ -1283,14 +1298,25 @@ const TradeHistory = () => {
         </div>
 
         <div className="table-responsive">
-          <h3>
+          {/* <h3>
             <b>Total Realised P/L</b> :{" "}
             <b>
               <span style={{ color: getTotalPnl >= 0 ? "green" : "red" }}>
                 {getTotalPnl ? getTotalPnl.toFixed(2) : "0.00"}
               </span>
             </b>
-          </h3>
+          </h3> */}
+
+          {PnlStatus == "Top" && (
+            <h3>
+              <b>Total Realised P/L</b> :{" "}
+              <b>
+                <span style={{ color: getTotalPnl >= 0 ? "green" : "red" }}>
+                  {getTotalPnl ? getTotalPnl.toFixed(2) : "0.00"}
+                </span>
+              </b>
+            </h3>
+          )}
 
           <PaginationProvider
             pagination={paginationFactory({
@@ -1345,6 +1371,22 @@ const TradeHistory = () => {
                   <div className="d-flex align-items-end">
                     <PaginationListStandalone {...paginationProps} />
                   </div>
+                  {PnlStatus == "Bottom" && (
+                  <div className="d-flex align-items-end">
+                      <h3>
+                        <b>Total Realised P/L</b> :{" "}
+                        <b>
+                          <span
+                            style={{
+                              color: getTotalPnl >= 0 ? "green" : "red",
+                            }}
+                          >
+                            {getTotalPnl ? getTotalPnl.toFixed(2) : "0.00"}
+                          </span>
+                        </b>
+                      </h3>
+                  </div>
+                    )}
                 </div>
               </div>
             )}

@@ -25,7 +25,7 @@ const ApiCreateInfo = () => {
 
 
   const data = async () => {
-
+console.log("Rammm!")
     await dispatch(All_Api_Info_List(token)).unwrap()
       .then((response) => {
         if (response.status) {

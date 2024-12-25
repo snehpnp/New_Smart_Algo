@@ -130,7 +130,7 @@ class Subadmin {
     async EditSubadmin(req, res) {
   
         try {
-            const { id, FullName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role } = req.body;
+            const { id, FullName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role, apicreateinfo } = req.body;
 
             // IF ROLE NOT EXIST TO CHECK
             const roleCheck = await Role_model.findOne({ name: Role.toUpperCase() });
@@ -173,6 +173,7 @@ class Subadmin {
                 Update_Api_Key:Subadmin_permision_data.Update_Api_Key,
                 optionchain: Subadmin_permision_data.optionchain,
                 makestrategy: Subadmin_permision_data.makestrategy,
+                apicreateinfo: Subadmin_permision_data.apicreateinfo,
           }
 
             const filter = { user_id: existingUsername._id };

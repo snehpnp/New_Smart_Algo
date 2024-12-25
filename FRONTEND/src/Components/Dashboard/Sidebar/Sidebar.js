@@ -123,6 +123,8 @@ const Sidebar = () => {
     }
   };
 
+  console.log("admin_permission", getPermissions.apicreateinfo);
+
   return (
     <div className="deznav ">
       <div className="deznav-scroll">
@@ -442,14 +444,17 @@ const Sidebar = () => {
             : roles === "SUBADMIN"
             ? sub_admin_sidebar &&
               sub_admin_sidebar.map((item, index) => {
-                if (item.id === 10 || item.id === 9) {
+                if (item.id === 10 || item.id === 9 || item.id === 4) {
                   if (
                     (item.id == 10 &&
                       getPermissions &&
                       getPermissions.optionchain === 0) ||
                     (item.id == 9 &&
                       getPermissions &&
-                      getPermissions.makestrategy === 0)
+                      getPermissions.makestrategy === 0) || 
+                      (item.id == 4 &&
+                        getPermissions &&
+                        getPermissions.apicreateinfo == 0)
                   ) {
                   } else {
                     return (

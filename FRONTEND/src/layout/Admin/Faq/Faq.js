@@ -12,26 +12,35 @@ const FaqAccordion = () => {
     const [filterOption, setFilterOption] = useState('all'); // Default filter option
     const [brokerOption, setBrokerOption] = useState('');
     const [faqData, SetfaqData] = useState([]);
+    
+
+    const user_role  = JSON.parse(localStorage.getItem('user_role'))
+    console.log("User Role is", user_role)
 
 
     const GetFaqData = async (id) => {
-        await dispatch(GET_ALL_FAQ_DATA({})).unwrap()
-            .then((response) => {
-                if (response.status) {
-                    SetfaqData(response.data)
-                }
-                else {
-                }
-            }).catch((err) => {
-                return;
-            })
-
-
-    }
+        try {
+            const response = await dispatch(GET_ALL_FAQ_DATA({})).unwrap();
+    
+            if (response.status) {
+                const filteredData = response?.data?.filter((faq) => faq.Role == user_role);
+                
+                console.log("Filtered Data is", filteredData);
+    
+                // Update state with the filtered data
+                SetfaqData(filteredData);
+            } else {
+                console.error("Failed to fetch FAQ data");
+            }
+        } catch (err) {
+            console.error("Error fetching FAQ data:", err);
+        }
+    };
+    
     useEffect(() => {
         GetFaqData()
     }, []);
-
+    // console.log("FaqDarta is " ,faqData)
     const toggleAccordion = (index) => {
         setExpandedIndex((prevIndex) =>
             prevIndex === index ? -1 : index

@@ -816,16 +816,18 @@ class Panel {
 
   async AddFaq(req, res) {
     try {
-      const { question, answer, answer1, type, image1, image2 } = req.body;
+      const { question,Role, answer, answer1, type, image1, image2 } = req.body;
 
       const AddPanel = new Faq_Data({
         question,
         answer,
         answer1,
         type,
+        Role,
         img1: image1,
         img2: image2,
       });
+
 
       const savedData = await AddPanel.save();
       res.status(201).json({
@@ -882,7 +884,7 @@ class Panel {
   }
 
   async UpdateFaq(req, res) {
-    const { id, question, answer, answer1, type, image1, image2 } = req.body;
+    const { id, Role, question, answer, answer1, type, image1, image2 } = req.body;
 
     try {
       const existingFaq = await Faq_Data.findById(new ObjectId(id));
@@ -897,6 +899,7 @@ class Panel {
       if (type) existingFaq.type = type;
       if (image1) existingFaq.img1 = image1;
       if (image2) existingFaq.img2 = image2;
+      if(Role) existingFaq.Role = Role;
 
       const updatedFaq = await existingFaq.save();
 

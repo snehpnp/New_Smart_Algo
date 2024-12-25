@@ -2,25 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { CSSTransition } from 'react-transition-group';
 import Content from '../../../Components/Dashboard/Content/Content';
-import { GET_ALL_FAQ_DATA, Delete_faq, ADD_FAQ } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
+import { GET_ALL_FAQ_DATA, Delete_faq } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 
 import AddFaqModal from './Addfaq';
-
-
-import { useDispatch } from "react-redux";
+import { useDispatch } from 'react-redux';
 
 const FaqAccordion = () => {
-
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const [expandedIndex, setExpandedIndex] = useState(-1);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterOption, setFilterOption] = useState('all'); // Default filter option
-    const [brokerOption, setBrokerOption] = useState('');
+    const [roleOption, setRoleOption] = useState('ALL'); // Default role option
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [faqData, setFaqData] = useState([]);
-    const [EditModalOpen, setEditModalOpen] = useState(null);
-    const [editModalData, seTeditModalData] = useState([]);
-
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [editModalData, setEditModalData] = useState({});
 
     // Function to fetch FAQs
     const fetchFaqData = async () => {
@@ -30,60 +26,48 @@ const FaqAccordion = () => {
                 setFaqData(response.data);
             }
         } catch (error) {
-            return;
+            console.error('Failed to fetch FAQ data:', error);
         }
     };
 
-
     const deleteFaq = async (faqId) => {
-
         try {
-            const response = await dispatch(Delete_faq({ faqId: faqId })).unwrap();
+            const response = await dispatch(Delete_faq({ faqId })).unwrap();
             if (response.status) {
                 fetchFaqData(); // Refresh FAQ list
             }
         } catch (error) {
-            return;
+            console.error('Failed to delete FAQ:', error);
         }
     };
-
 
     useEffect(() => {
         fetchFaqData();
     }, []);
 
     const toggleAccordion = (index) => {
-        setExpandedIndex((prevIndex) =>
-            prevIndex === index ? -1 : index
-        );
+        setExpandedIndex((prevIndex) => (prevIndex === index ? -1 : index));
     };
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
 
-    const openEditModal = (faq, editMode) => {
+    const openEditModal = (faq) => {
+        setEditModalData(faq);
         setEditModalOpen(true);
-        seTeditModalData(faq)
     };
-
-
 
     const filteredFaqs = faqData.filter((faq) => {
         const matchesSearch = faq.question.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesFilter = filterOption === 'all' || filterOption === faq.type;
+        const matchesRole = roleOption === 'ALL' || roleOption === faq.Role;
 
-        return matchesSearch && matchesFilter;
+        return matchesSearch && matchesFilter && matchesRole;
     });
 
-
-
     return (
-        <Content
-            Page_title={'Frequently Asked Questions'}
-            Filter_tab={true}
-            button_status={false}
-        >
+        <Content Page_title="Frequently Asked Questions" Filter_tab button_status={false}>
             <div
                 style={{
                     display: 'flex',
@@ -102,10 +86,7 @@ const FaqAccordion = () => {
                         fullWidth
                     />
                 </div>
-                <FormControl
-                    variant="outlined"
-                    style={{ minWidth: 200, marginRight: '1rem' }}
-                >
+                <FormControl variant="outlined" style={{ minWidth: 200, marginRight: '1rem' }}>
                     <InputLabel id="filter-label">Filter By</InputLabel>
                     <Select
                         labelId="filter-label"
@@ -121,23 +102,33 @@ const FaqAccordion = () => {
                         <MenuItem value="trade">Trade Issue FAQs</MenuItem>
                     </Select>
                 </FormControl>
-
+                <FormControl variant="outlined" style={{ minWidth: 200, marginRight: '1rem' }}>
+                    <InputLabel id="role-label">Role</InputLabel>
+                    <Select
+                        labelId="role-label"
+                        id="role-select"
+                        value={roleOption}
+                        onChange={(e) => setRoleOption(e.target.value)}
+                        label="Role"
+                    >
+                        <MenuItem value="ALL">ALL</MenuItem>
+                        <MenuItem value="ADMIN">ADMIN</MenuItem>
+                        <MenuItem value="EMPLOYEE">EMPLOYEE</MenuItem>
+                        <MenuItem value="USER">USER</MenuItem>
+                    </Select>
+                </FormControl>
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => {
-                        setAddModalOpen(true);
-                    }}
+                    onClick={() => setAddModalOpen(true)}
                 >
                     Add FAQ
                 </Button>
             </div>
-
             <div
                 style={{
                     backgroundColor: '#fff',
-                    boxShadow:
-                        '0px 60px 56px -12px rgba(9, 40, 163, 0.05)',
+                    boxShadow: '0px 60px 56px -12px rgba(9, 40, 163, 0.05)',
                     borderRadius: '2.5rem',
                     width: '100%',
                     maxWidth: '75rem',
@@ -147,9 +138,7 @@ const FaqAccordion = () => {
                 }}
             >
                 {filteredFaqs.length === 0 ? (
-                    <Typography variant="body1">
-                        No FAQs found.
-                    </Typography>
+                    <Typography variant="body1">No FAQs found.</Typography>
                 ) : (
                     filteredFaqs.map((faq, index) => (
                         <div
@@ -182,20 +171,14 @@ const FaqAccordion = () => {
                                     {faq.question}
                                 </Typography>
                                 <div>
-                                    {/* Edit Button */}
                                     <Button
                                         variant="outlined"
                                         color="primary"
-                                        onClick={() => {
-
-                                            openEditModal(faq, true);
-
-                                        }}
+                                        onClick={() => openEditModal(faq)}
                                         style={{ marginRight: '1rem' }}
                                     >
                                         Edit
                                     </Button>
-                                    {/* Delete Button */}
                                     <Button
                                         variant="outlined"
                                         color="secondary"
@@ -219,53 +202,14 @@ const FaqAccordion = () => {
                                     className="accordion__content"
                                     style={{
                                         overflow: 'hidden',
-                                        height:
-                                            expandedIndex === index
-                                                ? 'auto'
-                                                : '0',
-                                        transition:
-                                            'height 0.4s ease-in-out',
+                                        height: expandedIndex === index ? 'auto' : '0',
+                                        transition: 'height 0.4s ease-in-out',
                                     }}
                                 >
-                                    <Typography
-                                        style={{
-                                            padding: '2rem 0',
-                                        }}
-                                    >
-                                        {faq.answer}
-                                    </Typography>
-
-
-                                    {faq.answer1 && <Typography
-                                        style={{
-                                            padding: '2rem 0',
-                                        }}
-                                    >
-                                        {faq.answer1}
-                                    </Typography>}
-
+                                    <Typography style={{ padding: '2rem 0' }}>{faq.answer}</Typography>
                                     {faq.img1 && (
                                         <div style={{ marginTop: '1rem' }}>
-                                            <img
-                                                src={faq.img1}
-                                                alt="FAQ Image"
-                                                style={{
-                                                    maxWidth: '100%',
-                                                    height: 'auto',
-                                                }}
-                                            />
-                                        </div>
-                                    )}
-                                    {faq.img2 && (
-                                        <div style={{ marginTop: '1rem' }}>
-                                            <img
-                                                src={faq.img2}
-                                                alt="FAQ Image"
-                                                style={{
-                                                    maxWidth: '100%',
-                                                    height: 'auto',
-                                                }}
-                                            />
+                                            <img src={faq.img1} alt="FAQ" style={{ maxWidth: '100%', height: 'auto' }} />
                                         </div>
                                     )}
                                 </div>
@@ -274,18 +218,9 @@ const FaqAccordion = () => {
                     ))
                 )}
             </div>
-
+            <AddFaqModal open={addModalOpen} onClose={() => setAddModalOpen(false)} mode="add" />
             <AddFaqModal
-                open={addModalOpen}
-                onClose={() => setAddModalOpen(false)}
-                mode="add"
-
-            />
-
-
-
-            <AddFaqModal
-                open={EditModalOpen}
+                open={editModalOpen}
                 onClose={() => setEditModalOpen(false)}
                 mode="edit"
                 initialValues={editModalData}

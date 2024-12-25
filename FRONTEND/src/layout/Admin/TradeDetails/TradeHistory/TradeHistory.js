@@ -82,6 +82,7 @@ const TradeHistory = () => {
   const [total1, setTotal] = useState(0);
   const [getTotalPnl, setTotalPnl] = useState(0);
 
+  const WatermarkUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ1PKLBJTUpH7AwrJLSzZKlSMOmJUruL4A6Q&s"
   var a = 2;
   const handleShow = () => setShowModal6(true);
   const handleClose = () => setShowModal6(false);
@@ -150,8 +151,10 @@ const TradeHistory = () => {
     Admin_Trading_data();
   }, []);
 
+
   const GetPnlPosition = async () => {
     const res = await dispatch(GET_PNL_POSITION({ token: token })).unwrap();
+    console.log("response is ", res);
     if (res?.data) {
       const pnlPosition = res.data[0].pnl_position;
 
@@ -666,7 +669,7 @@ const TradeHistory = () => {
             channelList,
             UserDetails.user_id,
             UserDetails.access_token
-          ).then((res) => {});
+          ).then((res) => { });
         } else {
           // $(".UPL_").html("-");
           // $(".show_rpl_").html("-");
@@ -1378,17 +1381,47 @@ const TradeHistory = () => {
           >
             {({ paginationProps, paginationTableProps }) => (
               <div>
-                <BootstrapTable
-                  keyField="_id"
-                  data={tradeHistoryData.data}
-                  columns={columns}
-                  remote
-                  onTableChange={handleTableChange}
-                  {...paginationTableProps}
-                  headerClasses="bg-primary text-primary text-center header-class"
-                  rowClasses={`text-center`}
-                  noDataIndication={() => <NoDataIndication />}
-                />
+                <div
+                  style={{
+                    position: "relative",
+                    overflow: "hidden", 
+                  }}
+                >
+                  {/* dynamic Watermark */}
+                  <div className ='watermarkId'
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      // backgroundImage: `url(${WatermarkUrl})`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "contain",
+                      backgroundPosition: "center",
+                      opacity: 0.1,
+                      pointerEvents: "none",
+                      zIndex: 2,
+                    }}
+                  ></div>
+
+                  <BootstrapTable
+                    keyField="_id"
+                    data={tradeHistoryData.data}
+                    columns={columns}
+                    remote
+                    onTableChange={handleTableChange}
+                    {...paginationTableProps}
+                    headerClasses="bg-primary text-primary text-center header-class"
+                    rowClasses={`text-center`}
+                    noDataIndication={() => <NoDataIndication />}
+                    style={{
+                      position: "relative",
+                      zIndex: 1,
+                    }}
+                  />
+                </div>
+
 
                 <div className="mb-2 d-flex justify-content-between align-items-start mt-2">
                   <div className="d-flex align-items-center">
@@ -1417,8 +1450,8 @@ const TradeHistory = () => {
                   <div className="d-flex align-items-end">
                     <PaginationListStandalone {...paginationProps} />
                   </div>
-                    {PnlStatus == "Bottom" && (
-                  <div className="d-flex align-items-end">
+                  {PnlStatus == "Bottom" && (
+                    <div className="d-flex align-items-end">
                       <h3>
                         <b>Total Realised P/L</b> :{" "}
                         <b>
@@ -1431,8 +1464,8 @@ const TradeHistory = () => {
                           </span>
                         </b>
                       </h3>
-                  </div>
-                    )}
+                    </div>
+                  )}
                 </div>
               </div>
             )}

@@ -370,7 +370,7 @@ const SettingsPage = () => {
                   {showLogsData.map((data, index) => (
                     <tr key={index}>
                       <td>{index + 1 || "N/A"}</td>
-                      <td>{data.status === 1 ? "On" : "Off"}</td>
+                      <td>{data.status === 1 ? "MT-4" : "Live Price"}</td>
                       <td>{data.msg || "No Message"}</td>
                       <td>{fDateTime(data.createdAt)}</td>
                     </tr>

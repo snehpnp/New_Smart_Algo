@@ -15,6 +15,7 @@ import { FunctionForLivePriceCalculation } from "./tradehistoryCalculation";
 import DatePicker from "react-datepicker";
 import Loader from "../../../Utils/Loader";
 import "react-datepicker/dist/react-datepicker.css";
+import { GET_PNL_POSITION } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 
 const TradeHistory = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,8 @@ const TradeHistory = () => {
   const formattedStartDate = USerStartDate ? new Date(USerStartDate).toISOString().split('T')[0] : "";
   const [SelectService, setSelectService] = useState("null");
   const [ServiceData, setServiceData] = useState([]);
+    const [PnlStatus, setPnlStatus] = useState("Top");
+  
 
 
   const handleFromDateChange = (data) => {
@@ -246,8 +249,23 @@ const TradeHistory = () => {
     setType("Strategy");
   };
 
+
+
+  
+    const GetPnlPosition = async () => {
+      const res = await dispatch(GET_PNL_POSITION({ token: token })).unwrap();
+      if (res?.data) {
+        const pnlPosition = res.data[0].pnl_position;
+  
+        setPnlStatus(pnlPosition);
+      }
+    };
+
+
+
   useEffect(() => {
     data();
+    GetPnlPosition();
   }, []);
 
   useEffect(() => {
@@ -415,11 +433,20 @@ const TradeHistory = () => {
 
 
       <div className="table-responsive">
-        {tradeHistoryData.data && tradeHistoryData.data.length > 0 ?
+
+        
+        { PnlStatus === "Top" && 
+         <h3 ><b>Total Realised P/L </b>:<b> <span style={{ color: "green" }}> {10}</span> </b></h3> 
+          
+        
+        /* {tradeHistoryData.data && tradeHistoryData.data.length > 0 ?
           total >= 0 ?
             <h3 ><b>Total Realised P/L </b>:<b> <span style={{ color: "green" }}> {total.toFixed(2)}</span> </b></h3> :
             <h3 ><b>Total Realised P/L </b>:<b> <span style={{ color: "red" }}> {total.toFixed(2)}</span> </b></h3> : ""
-        }
+        } */}
+         {/* <h3 ><b>Total Realised P/L </b>:<b> <span style={{ color: "green" }}> {10}</span> </b></h3>  */}
+         {/* <h3 ><b>Total Realised P/L </b>:<b> <span style={{ color: "red" }}> {20}</span> </b></h3>  */}
+       
       </div>
 
 
@@ -428,6 +455,25 @@ const TradeHistory = () => {
           TableColumns={columns}
           tableData={tradeHistoryData.data}
         />}
+
+        <div className="table-responsive">
+        { PnlStatus === "Bottom" && 
+         <h3 style={{ display: 'flex', justifyContent: 'flex-end' }}>
+         <b>Total Realised P/L </b>:<b>
+           <span style={{ color: 'green' }}> {10}</span>
+         </b>
+       </h3>
+        
+          
+        
+        /* {tradeHistoryData.data && tradeHistoryData.data.length > 0 ?
+          total >= 0 ?
+            <h3 ><b>Total Realised P/L </b>:<b> <span style={{ color: "green" }}> {total.toFixed(2)}</span> </b></h3> :
+            <h3 ><b>Total Realised P/L </b>:<b> <span style={{ color: "red" }}> {total.toFixed(2)}</span> </b></h3> : ""
+        } */}
+         {/* <h3 ><b>Total Realised P/L </b>:<b> <span style={{ color: "green" }}> {10}</span> </b></h3>  */}
+         {/* <h3 ><b>Total Realised P/L </b>:<b> <span style={{ color: "red" }}> {20}</span> </b></h3>  */}
+              </div>
 
 
 

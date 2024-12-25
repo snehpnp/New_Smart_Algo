@@ -30,6 +30,7 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
             answer: initialValues ? initialValues.answer : '',
             answer1: initialValues ? initialValues.answer1 : '',
             category: initialValues ? initialValues.category : '',
+            Role: initialValues ? initialValues.Role : '',
             image1: null,
             image2: null,
         },
@@ -45,9 +46,11 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
                         answer: values.answer,
                         answer1: values.answer1,
                         type: values.category,
+                        Role: values.Role,
                         image1: image1,
                         image2: image2
                     })).unwrap();
+                    console.log("Add Data is : ", addData);
                     window.location.reload();
 
                 } else if (mode === 'edit' && initialValues) {
@@ -57,6 +60,7 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
                         answer: values.answer,
                         answer1: values.answer1,
                         type: values.category,
+                        Role: values.Role,
                         image1: image1,
                         image2: image2
                     })).unwrap();
@@ -89,12 +93,13 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
                 answer: initialValues.answer,
                 answer1: initialValues.answer1,
                 category: initialValues.type,
+                Role: initialValues.Role,
                 image1: null,
                 image2: null,
             });
         }
     }, [initialValues]);
-    
+
 
     return (
         <Modal
@@ -166,7 +171,26 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
                             <MenuItem value="trade">Trade Issue</MenuItem>
                         </Select>
                     </FormControl>
-              
+
+                    {/* Dropdown for Role  */}
+                    <FormControl variant="outlined" fullWidth style={{ marginBottom: '1rem' }}>
+                        <InputLabel id="Role-label">Role</InputLabel>
+                        <Select
+                            id="Role"
+                            name="Role"
+                            labelId="Role-label"
+                            value={formik.values.Role}
+                            onChange={formik.handleChange}
+                            label="Role"
+                            error={formik.touched.Role && Boolean(formik.errors.Role)}
+                        >
+                            <MenuItem value="ALL">ALL</MenuItem>
+                            <MenuItem value="ADMIN">ADMIN</MenuItem>
+                            <MenuItem value="EMPLOYEE">EMPLOYEE</MenuItem>
+                            <MenuItem value="USER">USER</MenuItem>
+                        </Select>
+                    </FormControl>
+
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                         <input
                             id="image1"
@@ -183,7 +207,9 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
                             style={{ marginBottom: '1rem' }}
                         />
                     </div>
-               
+
+                    
+
                     <Button type="submit" variant="contained" color="primary" style={{ marginRight: '1rem' }}>
                         {mode === 'add' ? 'Add FAQ' : 'Update FAQ'}
                     </Button>

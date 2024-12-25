@@ -80,6 +80,11 @@ const Subadmin_Permission_Schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users'
     },
+    apicreateinfo: {
+        type: Number,
+        enum: [0, 1],
+        default: 0
+    },
 }, {
     _id: true,
     timestamps: true

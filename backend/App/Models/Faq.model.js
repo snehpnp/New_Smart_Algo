@@ -17,6 +17,11 @@ const FaqSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    Role: {
+        type: String,
+        enum: ['ALL', 'USER', "ADMIN", "EMPLOYEE"],
+        default: 'ALL',
+    },
     img1: {
         type: String,
     

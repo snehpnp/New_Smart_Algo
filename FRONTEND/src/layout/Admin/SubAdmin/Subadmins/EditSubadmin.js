@@ -107,6 +107,7 @@ const AllSubadmin = () => {
             strateg_servcice: "",
             makestrategy:false,
             optionchain: false,
+            apicreateinfo: false,
 
         },
         touched: {
@@ -174,6 +175,7 @@ const AllSubadmin = () => {
                     'group_services': values.updateapikeys===true ? [] : selectedGroupIds,
                     "makestrategy": values.makestrategy ? '1' : values.all ? '1' : '0',
                     "optionchain": values.optionchain ? '1' : values.all ? '1' : '0',
+                    "apicreateinfo": values.apicreateinfo ? '1' : values.all ? '1' : '0',
                 }
             }    
 
@@ -218,6 +220,7 @@ const AllSubadmin = () => {
             formik.setFieldValue('groupservice', userStrategyIds.group_services && userStrategyIds.group_services.length !== 0 ? true : false);
             formik.setFieldValue('optionchain', userStrategyIds.optionchain === 1 ? true : false);
             formik.setFieldValue('makestrategy', userStrategyIds.makestrategy === 1 ? true : false);
+            formik.setFieldValue('apicreateinfo', userStrategyIds.apicreateinfo === 1 ? true : false);
 
         }
     }, [UserData.data.data]);
@@ -238,6 +241,7 @@ const AllSubadmin = () => {
             formik.setFieldValue("tradehistory", false);
             formik.setFieldValue("optionchain", false);
             formik.setFieldValue("makestrategy", false);
+            formik.setFieldValue("apicreateinfo", false);
         }
     }, [formik.values.updateapikeys]);
    
@@ -296,6 +300,7 @@ const AllSubadmin = () => {
             formik.setFieldValue('Strategy', true);
             formik.setFieldValue('optionchain', true);
             formik.setFieldValue('makestrategy', true);
+            formik.setFieldValue('apicreateinfo', true);
         }
         else {
             formik.setFieldValue('editclient', false);
@@ -308,6 +313,7 @@ const AllSubadmin = () => {
             formik.setFieldValue('Strategy', false);
             formik.setFieldValue('optionchain', false);
             formik.setFieldValue('makestrategy', false);
+            formik.setFieldValue('apicreateinfo', false);
         }
     }, [formik.values.all]);
 
@@ -362,6 +368,15 @@ const AllSubadmin = () => {
             label_size: 12,
             col_size: 3,
             check_box_true: formik.values.updateapikeys ? true : false,
+        },
+
+        {
+            name: "apicreateinfo",
+            label: "Show API Create Info",
+            type: "checkbox",
+            label_size: 12,
+            col_size: 3,
+            check_box_true: formik.values.apicreateinfo ? true : false,
         },
     ]
 

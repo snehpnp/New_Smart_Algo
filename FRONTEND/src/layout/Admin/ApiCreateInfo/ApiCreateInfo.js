@@ -67,7 +67,7 @@ const ApiCreateInfo = () => {
                     {UserDetails.data && UserDetails.data.map((item) => {
 
                         return <>
-                            <div className="card__bx card__1">
+                            <div className="card__bx card__1 w-25">
                                 <div className="card__data">
                                     <div className="card__icon">
                                         <div className="card__icon-bx">
