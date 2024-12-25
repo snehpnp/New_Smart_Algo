@@ -1021,7 +1021,6 @@ const TradeHistory = () => {
     </>
   );
 
-
   return (
     <>
       <Content
@@ -1204,14 +1203,14 @@ const TradeHistory = () => {
           >
             {({ paginationProps, paginationTableProps }) => (
               <div>
-  <div
+                <div
                   style={{
                     position: "relative",
-                    overflow: "hidden", 
+                    overflow: "hidden",
                   }}
                 >
-                  {/* dynamic Watermark */}
-                  <div className ='watermarkId'
+                  <div
+                    className="watermarkId"
                     style={{
                       position: "absolute",
                       top: 0,
@@ -1228,18 +1227,18 @@ const TradeHistory = () => {
                     }}
                   ></div>
 
-                <BootstrapTable
-                  keyField="_id" // Assuming "_id" is the unique key in your data
-                  data={tradeHistoryData.data} // Data from API
-                  columns={columns} // Table columns
-                  remote // Indicate that pagination and data are remotely controlled
-                  onTableChange={handleTableChange} // Handle pagination changes
-                  {...paginationTableProps} // Attach pagination props
-                  headerClasses="bg-primary text-primary text-center header-class"
-                  rowClasses={`text-center`}
-                  noDataIndication={() => <NoDataIndication />}
-                />
-</div>
+                  <BootstrapTable
+                    keyField="_id" // Assuming "_id" is the unique key in your data
+                    data={tradeHistoryData.data} // Data from API
+                    columns={columns} // Table columns
+                    remote // Indicate that pagination and data are remotely controlled
+                    onTableChange={handleTableChange} // Handle pagination changes
+                    {...paginationTableProps} // Attach pagination props
+                    headerClasses="bg-primary text-primary text-center header-class"
+                    rowClasses={`text-center`}
+                    noDataIndication={() => <NoDataIndication />}
+                  />
+                </div>
                 <div className="mb-2 d-flex justify-content-between align-items-start mt-2">
                   <div className="d-flex align-items-center">
                     <label htmlFor="sizePerPageSelect" className="mx-2">
@@ -1266,8 +1265,8 @@ const TradeHistory = () => {
                   <div className="d-flex align-items-end">
                     <PaginationListStandalone {...paginationProps} />
                   </div>
-                    {PnlStatus == "Bottom" && (
-                  <div className="d-flex align-items-end">
+                  {PnlStatus == "Bottom" && (
+                    <div className="d-flex align-items-end">
                       <>
                         {tradeHistoryData.data.length > 0 ? (
                           tradeHistoryData.TotalCalculate >= 0 ? (
@@ -1305,8 +1304,8 @@ const TradeHistory = () => {
                           ""
                         )}
                       </>
-                  </div>
-                    )}
+                    </div>
+                  )}
                 </div>
               </div>
             )}
