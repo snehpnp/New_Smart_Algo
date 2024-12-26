@@ -133,6 +133,7 @@ const place_order = async (
             );
           }
 
+
           if (type == "LE" || type == "SX") {
             item.postdata.transactiontype = "BUY";
           } else if (type == "SE" || type == "LX") {
@@ -153,15 +154,17 @@ const place_order = async (
           var config = {
             method: "get",
             url:
-              "https://fund.markethubonline.com/middleware/api/v2/GetDayPositions" +
+              "https://fund.markethubonline.com/middleware/api/v2/GetNetPositions" +
               item.client_code,
             headers: {
               token: item.access_token,
               "content-type": "application/json",
             },
           };
+          console.log("->", config);
           axios(config)
             .then(async (response) => {
+              console.log("response", response.data);
               if (response.data.status == "success") {
                 if (response.data.data.length > 0) {
                   fs.appendFile(
@@ -292,6 +295,7 @@ const place_order = async (
               }
             })
             .catch(async (error) => {
+              console.log("error", error.response.data);
               fs.appendFile(
                 filePath,
                 "TIME " +

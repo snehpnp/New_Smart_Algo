@@ -409,7 +409,9 @@ const EditClient = () => {
           ? "Api Key"
           : formik.values.broker == 27
           ? "Api Key"
-          : "'Api Key",
+          : formik.values.broker == 28
+          ? "Vendor Id"
+          : "Api Key",
       type: "text",
       showWhen: (values) =>
         values.broker === "4" ||
@@ -426,7 +428,7 @@ const EditClient = () => {
         values.broker === "20" ||
         values.broker === "26" ||
         values.broker === "27" ||
-        values.broker === "25",
+        values.broker === "25" || values.broker === "28",
       label_size: 12,
       col_size: 6,
       disable: false,
@@ -450,6 +452,8 @@ const EditClient = () => {
           ? "client_code"
           : formik.values.broker == 27
           ? "Vendor Code"
+          : formik.values.broker == 28
+          ? "User Id"
           : "User Id",
       type: "text",
       showWhen: (values) =>
@@ -461,16 +465,16 @@ const EditClient = () => {
         values.broker === "6" ||
         values.broker === "20" ||
         values.broker === "27" ||
-        values.broker === "21",
+        values.broker === "21" || values.broker === "28",
       label_size: 12,
       col_size: 6,
       disable: false,
     },
     {
       name: "demat_userid",
-      label: formik.values.broker === 9 ? "User Id" : "Demat UserId",
+      label: formik.values.broker === 9 ? "User Id" : formik.values.broker === 28 ? "Vendor Key" : "Demat UserId",
       type: "text",
-      showWhen: (values) => values.broker === "9" || values.broker === "2",
+      showWhen: (values) => values.broker === "9" || values.broker === "2" || values.broker === "28",
       label_size: 12,
       col_size: 6,
       disable: false,
@@ -494,6 +498,8 @@ const EditClient = () => {
           ? "Password"
           : formik.values.broker == 14
           ? "User Id "
+          : formik.values.broker == 28
+          ? "Encryption Secret Key"
           : "App Id",
       type: "text",
       showWhen: (values) =>
@@ -504,7 +510,7 @@ const EditClient = () => {
         values.broker === "11" ||
         values.broker === "13" ||
         values.broker === "14" ||
-        values.broker === "21",
+        values.broker === "21" || values.broker === "28",
       label_size: 12,
       col_size: 6,
       disable: false,
@@ -512,9 +518,9 @@ const EditClient = () => {
     {
       name: "app_key",
       label:
-        formik.values.broker == 5 || formik.values.broker == 6 ? "App Key" : formik.values.broker == 1 ? "Factor Two" :"",
+        formik.values.broker == 5 || formik.values.broker == 6 ? "App Key" : formik.values.broker == 1 ? "Factor Two" :formik.values.broker == 28 ? "Encryption IV" :"",
       type: "text",
-      showWhen: (values) => values.broker === "5" || values.broker === "1",
+      showWhen: (values) => values.broker === "5" || values.broker === "1" || values.broker === "6" || values.broker === "28",
       label_size: 12,
       col_size: 6,
       disable: false,
@@ -543,6 +549,8 @@ const EditClient = () => {
           ? "Api Secret"
           : formik.values.broker == 27
           ? "imei"
+          : formik.values.broker == 28
+          ? "Password"
           : "Api Secret",
       type: "text",
       showWhen: (values) =>
@@ -561,7 +569,7 @@ const EditClient = () => {
         values.broker === "19" ||
         values.broker === "26" ||
         values.broker === "27" ||
-        values.broker === "25",
+        values.broker === "25" || values.broker === "28",
       label_size: 12,
       col_size: 6,
       disable: false,
