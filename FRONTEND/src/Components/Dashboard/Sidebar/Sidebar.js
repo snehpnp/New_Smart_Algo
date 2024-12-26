@@ -123,7 +123,7 @@ const Sidebar = () => {
     }
   };
 
-  console.log("admin_permission", getPermissions.apicreateinfo);
+  // console.log("admin_permission", getPermissions.apicreateinfo);
 
   return (
     <div className="deznav ">

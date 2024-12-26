@@ -30,6 +30,8 @@ const ServicesList = () => {
   const [showStrategyName, setShowStrategyName] = useState('');
   const [AllStrategy, setAllStrategy] = useState({ loading: true, data: [] });
   const [getServicesName, setServicesName] = useState({ loading: true, data: [] });
+  const [isLoading, setIsLoading] = useState(true)
+
 
 
   const data = async () => {
@@ -51,6 +53,7 @@ const ServicesList = () => {
           });
         }
         setOriginalData(response.data);
+        setIsLoading(false)
       });
   };
 
@@ -214,6 +217,7 @@ const ServicesList = () => {
       loading: false,
       data: searchInput ? filteredData : originalData,
     });
+    
   }, [searchInput, originalData]);
 
   const ResetDate = (e) => {
@@ -349,10 +353,19 @@ const ServicesList = () => {
               </div>
             </div>
 
-            <FullDataTable
+            {/* <FullDataTable
               TableColumns={columns}
               tableData={AllStrategy.data}
-            />
+            /> */}
+
+              {/* Show loader here when data is being fetched */}
+              {isLoading   ? (
+                <Loader />
+              ) : (
+                // <Loader/>
+                <FullDataTable TableColumns={columns} tableData={AllStrategy.data} />
+              )}
+
 
             <ToastButton />
 
