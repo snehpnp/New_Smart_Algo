@@ -290,7 +290,23 @@ export const loginWithApi = async (broker_id, UserDetails,check) => {
         });
 
     }else if (broker_id === "28" || broker_id === 28) {
-alert("broker-28")
+        axios({
+            url: `${Config.base_url}choice`,
+            method: "post",
+            data: { Email: UserDetails.Email },
+
+        }).then((res) => {
+            if (res.data.status == true) {
+                toast.success(res.data.msg)
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                toast.error(res.data.msg)
+
+            }
+
+        });;
     }
 
     <ToastButton />

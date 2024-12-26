@@ -122,6 +122,10 @@ const {
   SingleOrderFullInformationShoonya,
 } = require("../../Controllers/Brokerassecc_token/Shoonya");
 
+const {
+  GetAccessTokenChoice,
+} = require("../../Controllers/Brokerassecc_token/Choice");
+
 // BROKER REDIRECT
 const GetOrderFullInformationAll_broker = async (req, res) => {
   let user_id = req.body.user_id;
@@ -367,7 +371,6 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
       return res.send({ status: false, msg: "broker not found" });
     }
   } else {
- 
     return res.send({ status: false, msg: "User Not found" });
   }
 };
@@ -433,5 +436,8 @@ router.post("/iiflsecurities", GetAccessTokenIifl);
 router.post("/mandotsecurities", GetAccessTokenmandotsecurities);
 
 router.post("/shoonya", GetAccessTokenShoonya);
+
+router.post("/choice", GetAccessTokenChoice);
+
 
 module.exports = router;

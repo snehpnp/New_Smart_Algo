@@ -724,14 +724,26 @@ class Login {
   async DisclaimerMailSend(req, res) {
     try {
       var disclaimerData = await disclaimer();
-
+  
       var toEmail = "snehpnp@gmail.com";
       var subjectEmail = "disclaimer";
-      CommonEmail(toEmail, subjectEmail, disclaimerData);
+      // CommonEmail(toEmail, subjectEmail, disclaimerData);
+  
+      // Render HTML directly
+      return res.send(disclaimerData);
     } catch (error) {
-      return res.send({ status: false, msg: "Server Side error", data: error });
+      return res.status(500).send(`
+        <html>
+          <body>
+            <h1>Server Error</h1>
+            <p>Something went wrong. Please try again later.</p>
+            <p>Error Details: ${error.message}</p>
+          </body>
+        </html>
+      `);
     }
   }
+  
 
   async reedeemRequest(req, res) {
     try {
