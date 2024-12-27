@@ -42,7 +42,10 @@ module.exports = function (app) {
   } = require("../View/fivepaisa");
   const { createViewFyers, dropViewFyers } = require("../View/fyers");
   const { createViewIifl, dropViewIifl } = require("../View/Iifl");
-  const { createViewKotakNeo, deleteViewKotakNeo } = require("../View/KotakNeo");
+  const {
+    createViewKotakNeo,
+    deleteViewKotakNeo,
+  } = require("../View/KotakNeo");
   const {
     createViewMarketHub,
     dropViewMarketHub,
@@ -953,7 +956,6 @@ module.exports = function (app) {
   });
 
   app.get("/all/brokerview", (req, res) => {
-    
     DashboardView();
     createViewAlice();
     createViewAngel();
@@ -1176,11 +1178,11 @@ module.exports = function (app) {
             //       unique_column: item.name + "#_" + category_id,
             //     })
             //     .then((createdServices) => {
-            //      
+            //
             //     })
             //     .catch((err) => {
             //       try {
-            //       
+            //
             //       } catch (e) {}
             //     });
             // }
@@ -1214,12 +1216,8 @@ module.exports = function (app) {
                 .catch((err) => {
                   try {
                     console.log("Error creating and saving user:", err);
-                  } catch (e) {
-                    ;
-                  }
+                  } catch (e) {}
                 });
-
-           
             }
 
             if (
@@ -1253,8 +1251,6 @@ module.exports = function (app) {
                     console.log("Error creating and saving user:", err);
                   } catch (e) {}
                 });
-
-            
             }
 
             // if (item.instrumenttype == "OPTFUT") {
@@ -1551,7 +1547,6 @@ module.exports = function (app) {
             // }
           }
         }
-
       });
     });
   };
@@ -1565,7 +1560,6 @@ module.exports = function (app) {
   });
 
   app.get("/UpdateServicesLotSize", async (req, res) => {
-    
     const pipeline = [
       {
         $project: {
@@ -1586,52 +1580,36 @@ module.exports = function (app) {
       let count = 0;
       await response.data.forEach(async (item) => {
         if (
-          item.instrumenttype == "OPTSTK" ||
-          item.instrumenttype == "OPTIDX" 
+          item.instrumenttype == "FUTIDX" ||
+          item.instrumenttype == "OPTIDX"
         ) {
-        
-
           if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
             unique_key.push(`${item.name}-${item.instrumenttype}`);
-            
+
             if (
               item.instrumenttype == "OPTSTK" ||
               item.instrumenttype == "OPTIDX"
             ) {
               count++;
-              
-              const matchingElements = categoryResult.filter(
-                (item) => item.segment === "O"
-              );
-              const category_id = matchingElements[0]._id;
-              //console.log("item", item.name);
-             // console.log("lotsize", item.lotsize);
-             // if(item.name == "BANKNIFTY"){
-                 console.log("lotsize", item.lotsize);
 
-                 if (item.name != undefined) {
-                    
-                    await services.updateMany({ name: item.name }
-                      , {
-                        $set: {
-                          lotsize: item.lotsize
-                        },
-                      },
-                      { upsert: true });
-                  }
+              if (item.name != undefined && item.name == "NIFTY") {
+                console.log("NIFTY", item);
 
-             // }
-             
+                await services.updateMany(
+                  { name: item.name },
+                  {
+                    $set: {
+                      lotsize: item.lotsize,
+                    },
+                  },
+                  { upsert: true }
+                );
+              }
             }
-
-         
           }
         }
       });
-
-      // return res.send("okkkkkk");
     });
-
 
     // const pipeline = [
     //   {
@@ -1658,12 +1636,12 @@ module.exports = function (app) {
     //        lotsize: 1
     //     },
     //   },
-      
+
     // ];
     // const servicesResult = await services.aggregate(pipeline);
     // console.log("servicesResult", servicesResult);
 
-    return res.send({ status: true, message: "Updating lot size"  });
+    return res.send({ status: true, message: "Updating lot size" });
   });
 
   app.get("/UpdateQty", async (req, res) => {
@@ -1681,7 +1659,7 @@ module.exports = function (app) {
         const Sid = new ObjectId(element._id);
         // if(element.name == "TITAN"){
 
-       const clsResult = await client_services.find({ service_id: Sid });
+        const clsResult = await client_services.find({ service_id: Sid });
         if (clsResult.length > 0) {
           clsResult.forEach(async (item) => {
             const filtet = { _id: item._id };
@@ -1698,7 +1676,7 @@ module.exports = function (app) {
           });
         }
 
-       // }
+        // }
       });
     }
 
@@ -3169,42 +3147,49 @@ module.exports = function (app) {
   });
   app.post("/pm2/update", async (req, res) => {
     const { host, password } = req.body;
-  
+
     if (!host || !password) {
       return res.status(400).send("Host and Password are required");
     }
-  
+
     const conn = new Client();
-  
+
     conn
       .on("ready", () => {
         console.log(`Connected to ${host}`);
-  
+
         // Step 1: Restart MongoDB
         conn.exec("systemctl restart mongod", (err, stream) => {
           if (err) {
             console.log("Error restarting MongoDB:", err);
             conn.end();
-            return res.status(500).send({ status: false, msg: "MongoDB restart failed" });
+            return res
+              .status(500)
+              .send({ status: false, msg: "MongoDB restart failed" });
           }
-  
+
           stream
             .on("close", (code, signal) => {
               console.log(`MongoDB restarted on ${host}. Exit code: ${code}`);
-              
+
               // Step 2: Update PM2
               conn.exec("pm2 update", (err, stream) => {
                 if (err) {
                   console.log("Error updating PM2:", err);
                   conn.end();
-                  return res.status(500).send({ status: false, msg: "PM2 update failed" });
+                  return res
+                    .status(500)
+                    .send({ status: false, msg: "PM2 update failed" });
                 }
-  
+
                 stream
                   .on("close", (code, signal) => {
                     console.log(`PM2 updated on ${host}. Exit code: ${code}`);
                     conn.end();
-                    return res.send({ status: true, msg: "Commands executed successfully" });
+                    return res.send({
+                      status: true,
+                      msg: "Commands executed successfully",
+                    });
                   })
                   .on("data", (data) => {
                     console.log(`PM2 update output: ${data}`);
@@ -3224,7 +3209,9 @@ module.exports = function (app) {
       })
       .on("error", (err) => {
         console.log(`Connection error: ${err}`);
-        return res.status(500).send({ status: false, msg: "SSH Connection Failed" });
+        return res
+          .status(500)
+          .send({ status: false, msg: "SSH Connection Failed" });
       })
       .connect({
         host: host,
@@ -3233,5 +3220,170 @@ module.exports = function (app) {
         password: password,
       });
   });
-  
+
+  const databaseURIs = [
+    // "mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@217.145.69.45:27017/",
+    // "mongodb://corebizinfotech:c%26eaV8N%267KfT%26bc49A%26@185.209.75.10:27017/",
+    // "mongodb://codingpandit:zsg%26k5sB76%263H%26dk7A%26@185.209.75.31:27017/",
+    // "mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.93:27017/",
+    // "mongodb://intelfintech:ugh%265rK86%26Fv%26yn37A%26@185.209.75.61:27017/",
+    // "mongodb://algokuber:p%26k506%267G%26y%26vnd%26@217.145.69.44:27017/",
+    // "mongodb://believetechnology:%26k%23sA8B%237Gsq%26vg3%237P%26@185.209.75.5:27017/",
+    // "mongodb://growskyinfotech:u%26j8gB85%267GN%26vn37m%26@185.209.75.9:27017/",
+    // "mongodb://inspirealgo:n%26pdF7G%265Png%26vn97A%26@185.209.75.11:27017/",
+    // "mongodb://uniquetechnology:c%26z9yB73%267Fn%26vn98V%26a@185.209.75.12:15497/",
+    // "mongodb://sumedhainnovations:p%26k5H6%267GsRy%26vnd@185.209.75.21:27017/",
+    // "mongodb://tradeonn:pw%26k5H6%267GsRy%26vn@185.209.75.23:27017/",
+    // "mongodb://metaprogramming:zc%26u9tD828Tnbh3u7A%26@185.209.75.29:27017/",
+    // "mongodb://fincodify:u%26v5%26bAn6%265Gv%26cn29A%26@185.209.75.30:27017/",
+    // "mongodb://invicontechnology:k56ck%265eF89%267Phjn9i7B%26@185.209.75.62:27017/",
+    // "mongodb://sstechnologiess:Apw%26k5RH6%267GsRy%26vnM@185.209.75.64:27017/",
+    // "mongodb://skwinvestmentadviser:Tapw%26k5R56%267GsRy%26vnTy@185.209.75.65:27017/",
+    // "mongodb://thinkaumatictechnology:Aapw%26k5R56%267GsRy%26vnT@185.209.75.67:27017/",
+    // "mongodb://visionresearchandsolution:Apw%26k5R56%267GsRy%26vn@185.209.75.68:27017/",
+    // "mongodb://smartwavetechnology:Aapw%26k5R56%267GsRy%26vnTy@185.209.75.69:27017/",
+    // "mongodb://inteltrade:Tapw%26k5R56%267GsRy%26n@185.209.75.180:27017/",
+    // "mongodb://fintechit:Tapw%26k5R56%267GsRy%26nP@185.209.75.181:27017/",
+    // "mongodb://thrivinginfotech:TGw%26k5RT56%267GsRy%26nP@185.209.75.182:27017/",
+    // "mongodb://visioncodesoftware:TGw%26k5RT56%267GsRy%26HR@185.209.75.184:27017/",
+    // "mongodb://brightextech:T5wP%26k5T56%267GsRy%26M@185.209.75.185:27017/",
+    // "mongodb://shinesofttrade:T5wP%26k56T56%267GsRy%26H@185.209.75.186:27017/",
+    // "mongodb://algoruns:Tw%26k5RT56%267GsRy%26HR@185.209.75.187:27017/",
+    // "mongodb://brillianttechit:T5wP&k5T567GsRy&M@185.209.75.251:27017/",
+    // "mongodb://newtimetechnologies:H5wP%26k5T567GsRy%26MT@185.209.75.252:27017/",
+    // "mongodb://darixosolution:M5wP%26k5T567GsRy%26MT@185.209.75.254:27017/",
+    // "mongodb://magmamultitrade:M5P%26k5T567GsRy%26MT@185.209.75.253:27017/",
+    // "mongodb://unitythesmartalgo:M5RP%26k5T567GsRy%26MT@185.209.75.190:27017/",
+    // "mongodb://smartstox:MM5RP%26k5T567GRy%26MT@185.209.75.193:27017/",
+    // "mongodb://visionmatictechnology:MM5P%26k5T567GRy%26MT@185.209.75.194:27017/",
+    // "mongodb://onealgo:MM5P&k5T567Gy&Ma@185.209.75.196:27017/",
+    // "mongodb://unityhubitsolution:MM5P%26k5T567Gy%26MTa@185.209.75.197:27017/",
+    // "mongodb://techelitesolution:MWQ5RP%26k5T567Gy%26Ma@217.145.69.28:27017/",
+    // "mongodb://algosparks:MW5R%26k5FT567Gy%26Ma@217.145.69.27:27017/",
+    // "mongodb://technofin:MWQ5RP%26k5T567Gy%26Ma@217.145.69.31:27017/",
+    // "mongodb://evolgo:AMWQ5RP%26kT567Gy%26Maa@185.209.75.88:27017/",
+    // "mongodb://growonntechnologies:AaMWQ5RP%26kT567Gy%26Maa@185.209.75.89:27017/",
+    // "mongodb://tradejockey:AaMWQ5RP%26kT567Gy%26Ma@185.209.75.90:27017/",
+    // "mongodb://growingtech:Taw%26k5RT56%267GsRy%26nP@185.209.75.183:27017/",
+    // "mongodb://inovateinfotech:Tawk5RT56&7GsRy&n@5.178.98.3:27017/",
+    // "mongodb://algobliss:Tawk5RT6%267GsRy%26n@5.178.98.5:27017/",
+    // "mongodb://idealalgo:Tawk5RT6%26GsRy%26n@5.178.98.6:27017/",
+    // "mongodb://algomoneybooster:AMQ5RP%26kT567Gy%26Maa@5.178.98.8:27017/",
+    // "mongodb://eaglesofttech:AMQ5RP%26kT567Gy%26Maa@5.178.98.9:27017/",
+    // "mongodb://algoweb:Tawk5RT56%26y7GsRy%26n@5.178.98.11:27017/",
+    // "mongodb://celestialai:Twk5RT56%26y7GsRy%26n@5.178.98.13:27017/",
+    // "mongodb://dynamictechsolution:Twk5RT56%26y7GsRy%26n@5.178.98.15:27017/",
+    // "mongodb://nextbrandcom:Twk5RT56%26y7GsRy%26n2@5.178.98.19:27017/",
+    // "mongodb://realcloudtechnology:Twk5RT56%26y7GsRy%26n2@5.178.98.17:27017/",
+    // "mongodb://moneyplatform:Twk5RT56%26y7GsRy%26nT@5.178.98.20:27017/",
+    // "mongodb://infraitsolution:Tk5RT56%26y7GsRy%26nT@185.209.75.71:27017/",
+    // "mongodb://fincapex:p%26k5H6%267GsRy%26vnd@185.209.75.22:27017/",
+    // "mongodb://reliablealgo:sA8k%26n86%267Mv%26fh57B%26@185.209.75.14:27017/",
+    // "mongodb://researchfactory:un%26r4hv93%267Gr%26v%2637P%26@185.209.75.15:27017/",
+    // "mongodb://visionalgotech:T5wP%26k5T56%267GsRy%26H@185.209.75.250:27017/",
+    // "mongodb://linkupinfotech:%26k%23sA8B%267Gmg%26vn3%237A%26@185.209.75.2:27017/",
+    // "mongodb://microninfotech1:p%26k5H6%267GsRy%26vnd%26@217.145.69.40:27017/",
+    // "mongodb://growfuturetechnology:MM5P%26k5T567Gy%26MT@185.209.75.195:27017/",
+    // "mongodb://oneplanetitsolution:z43rk%265eF32%267Pcmn9i7B%26@185.209.75.28:27017/",
+    // "mongodb://danoneitsolution:p%26k5H6%267GsRy%26vnd%26@217.145.69.76:27017/",
+    // "mongodb://ccconnect:Apw%26k5R6%267GsRy%26vnM@185.209.75.66:27017/",
+    // "mongodb://inspirealgoresearch:Tapw%26k5R56%267GsRy%26vn@185.209.75.70:27017/",
+    // "mongodb://alcrafttechnology:Tawk5RT56%26y7GsRy%26n@5.178.98.12:27017/",
+    // "mongodb://tradestreet:MWQ5RP%26kT567Gy%26Maa@185.209.75.87:27017/",
+    // "mongodb://segmentpnp:Taw%26k5RT56%267GsRy%26n@5.178.98.2:27017/",
+    // "mongodb://sewintechnology:M5RP%26k5T567Gy%26Ma@217.145.69.26:27017/",
+    // "mongodb://starvisionitsolution:P5wP&k6T5M&L7GsRy&H@185.209.75.189:27017/",
+    // "mongodb://finbytech:p%26ol5Hd%26tr55ad%26i@193.239.237.92:15497/",
+    // "mongodb://allrobosolution:Tk5RT56%26y7GRy%26nT@217.145.69.57:15497/",
+    // "mongodb://ssfintech:MW5RP%26k5T567Gy%26Ma@217.145.69.24:27017/",
+
+    //     "mongodb://tradeonn:pw%26k5H%267GsRy%26v1n@185.209.75.23:15497/",
+    // "mongodb://invicontechnology:k56ck%265eF89%267Phjn9i7B%26@185.209.75.62:27017/",
+    // "mongodb://eaglesofttech:AMQ5RP%26kT567Gy%26Maa@217.145.69.141:27017/",
+    // "mongodb://nextbrandcom:Twk5RT56%26y7GsRy%26n2@217.145.69.151:27017/",
+    // "mongodb://realcloudtechnology:Twk5RT56%26y7GsRy%26n2@217.145.69.149:27017/",
+    // "mongodb://fincapex:p%26k5H6%267GsRy%26vd@185.209.75.22:15497",
+    // "mongodb://linkupinfotech:%26k%23sA8B%267Gmg%26vn3%237A@185.209.75.2:15497/",
+    // "mongodb://growfuturetechnology:M5P%26k5T567Gy%26MT@185.209.75.195:15497/",
+    // "mongodb://finbytech:p%26ol5Hd%26tr55ad%26i@217.145.69.39:15497/"
+
+    "mongodb://alcrafttechnology:Tawk5RT56%26y7GsRy%26n@217.145.69.144:27017/",
+  ];
+
+  // Function to update services collection in all databases
+  async function updateLotSizeInDatabases() {
+    const failedDatabases = []; // Store URIs of failed connections
+
+    for (const uri of databaseURIs) {
+      let connection;
+
+      try {
+        connection = await mongoose.createConnection(uri).asPromise();
+        console.log(`✅ Connected to ${uri}`);
+
+        const Service = connection.model(
+          "services",
+          new mongoose.Schema({}, { strict: false })
+        );
+        const Client_services = connection.model(
+          "client_services",
+          new mongoose.Schema({}, { strict: false })
+        );
+
+        // Find services with NFO and NIFTY
+        let FindServices = await Service.find({
+          exch_seg: "NFO",
+          name: "NIFTY",
+        }).select("_id");
+
+        // Update client_services for each service
+        if (FindServices && FindServices.length > 0) {
+          for (const item of FindServices) {
+            await client_services.updateMany(
+              { service_id: item._id },
+              { $set: { lot_size: "1", quantity: "75" } }
+            );
+            console.log(
+              `✅ Updated client_services for service_id: ${item._id}`
+            );
+          }
+        } else {
+          console.log(`⚠️ No matching services found in ${uri}`);
+        }
+
+        console.log(`✅ Successfully updated lot size in ${uri}`);
+      } catch (error) {
+        console.error(`❌ Failed to update ${uri}:`, error.message);
+        failedDatabases.push(uri); // Add failed URI to the list
+      } finally {
+        if (connection) {
+          await connection.close();
+          console.log(`🔌 Connection closed for ${uri}`);
+        }
+      }
+    }
+
+    if (failedDatabases.length > 0) {
+      console.warn(
+        `⚠️ Failed to update the following databases:`,
+        failedDatabases
+      );
+    }
+  }
+
+  // API Endpoint to trigger updates
+  app.get("/UpdateServicesLotSize5", async (req, res) => {
+    try {
+      await updateLotSizeInDatabases();
+      return res.send({
+        status: true,
+        message: "Lot size updated across all accessible databases",
+      });
+    } catch (error) {
+      console.error("❌ Update failed:", error.message);
+      return res
+        .status(500)
+        .send({ status: false, message: "Failed to update lot size" });
+    }
+  });
 };
