@@ -430,7 +430,7 @@ const Login = () => {
           }
         })
         .catch((error) => {
-          console.log("Error In Login page", error);
+          return;
         });
     }, 1000);
   };

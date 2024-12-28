@@ -175,7 +175,6 @@ class MakeStartegy {
 
       const result = await UserMakeStrategy.aggregate(pipeline)
       if (result.length > 0) {
-        // console.log("result ", result)
         res.send({ status: true, msg: "Get All make strategy", data: result });
       } else {
         res.send({ status: false, msg: "Empty data", data: [] });
@@ -232,8 +231,7 @@ class MakeStartegy {
   //Delete make strateg Selected
   async DeleteMakeStartegySelected(req, res) {
     try {
-      console.log("req.body.ids_array ", req.body.ids_array)
-      console.log("req.body.data ", req.body.data)
+
 
       if (req.body.data.length > 0) {
         for (const item of req.body.data) {

@@ -11,11 +11,9 @@ export async function USER_PROFILE(data, token) {
 
     const responseData = await res?.data;
 
-    console.log("responseData", responseData);
 
     return responseData;
   } catch (err) {
-    console.log("err", err?.response?.data?.message == "Unauthorized!");
     if (err?.response?.data?.message == "Unauthorized!") {
       localStorage.clear();
       window.location.href = "/#/login";

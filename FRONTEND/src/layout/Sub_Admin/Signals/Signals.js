@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
-import BasicDataTable from '../../../Components/ExtraComponents/Datatable/BasicDataTable'
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import Loader from '../../../Utils/Loader'
-import { fa_time, fDateTimeSuffix } from '../../../Utils/Date_formet'
-import { Pencil, Trash2 } from 'lucide-react';
+import {  fDateTimeSuffix } from '../../../Utils/Date_formet'
 import { Get_All_Signals } from '../../../ReduxStore/Slice/Admin/SignalsSlice'
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 
 
@@ -18,7 +16,6 @@ const Signals = () => {
 
 
     const [DateFilter, setDateFilter] = useState();
-    const [DateArray, setDateArray] = useState([]);
 
 
     const columns = [
@@ -105,7 +102,6 @@ const Signals = () => {
             dateArray.push(formattedDate);
 
         }
-        setDateArray(dateArray)
         setDateFilter(dateArray[0])
     }
     useEffect(() => {
@@ -120,29 +116,7 @@ const Signals = () => {
                 SignalsData.loading ? <Loader /> :
                     <>
                         <Content Page_title="All Services" button_status={false}>
-                            {/* <div className='d-flex'>
-
-                                <div className="col-lg-6">
-                                    <div className="mb-3 row">
-                                        <div className="col-lg-7">
-                                            <select
-                                                className="default-select wide form-control"
-                                                id="validationCustom05"
-                                                onChange={(e) => setDateFilter(e.target.value)}
-                                            >
-                                                <option disabled> Please Select Date </option>
-
-                                                {DateArray && DateArray.map((item) => {
-                                                    return <>
-                                                        <option value={item.toString()}>{item.toString()}</option>
-                                                    </>
-                                                })}
-                                            </select>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div> */}
+                         
 
                             {
                                 SignalsData.data && SignalsData.data.length === 0 ? (

@@ -252,7 +252,11 @@ const AdminsList = () => {
       text: "Panel Name",
       formatter: (cell, row) => (
         <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-          <Link to={`${row.domain}/#/login`} target="_blank" rel="noopener noreferrer">
+          <Link
+            to={`${row.domain}/#/login`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {row.panel_name}
           </Link>
         </span>
@@ -418,7 +422,7 @@ const AdminsList = () => {
         data: req,
       };
 
-      const response = await axios.request(config);
+     await axios.request(config);
 
       Swal.fire({
         icon: "success",
@@ -431,8 +435,7 @@ const AdminsList = () => {
         title: "Information",
         text: "An issue occurred during the server update. The UI will remain unaffected.",
       });
-
-      console.log("Error during server update:", error);
+      return;
     }
   };
 
@@ -456,7 +459,6 @@ const AdminsList = () => {
         return;
       }
 
-
       let config = {
         method: "get",
         maxBodyLength: Infinity,
@@ -471,11 +473,10 @@ const AdminsList = () => {
             toast.success(response.data.msg);
           } else {
             toast.error(response.data.msg);
-        
           }
         })
         .catch((error) => {
-          console.log("Error Drop Position ",error);
+          return;
         });
     } catch (error) {
       toast.error("An error occurred while closing the panel");
@@ -502,7 +503,6 @@ const AdminsList = () => {
         return;
       }
 
-
       let config = {
         method: "get",
         maxBodyLength: Infinity,
@@ -517,11 +517,10 @@ const AdminsList = () => {
             toast.success(response.data.msg);
           } else {
             toast.error(response.data.msg);
-        
           }
         })
         .catch((error) => {
-          console.log("Error Create Potisition ",error);
+          return;
         });
     } catch (error) {
       toast.error("An error occurred while closing the panel");
@@ -670,8 +669,6 @@ const AdminsList = () => {
       toast.error("An error occurred while closing the panel");
     }
   };
-
-
 
   const fields = [
     {

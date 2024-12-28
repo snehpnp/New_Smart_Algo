@@ -15,7 +15,7 @@ const FaqAccordion = () => {
     
 
     const user_role  = JSON.parse(localStorage.getItem('user_role'))
-    console.log("User Role is", user_role)
+
 
 
     const GetFaqData = async (id) => {
@@ -25,7 +25,6 @@ const FaqAccordion = () => {
             if (response.status) {
                 const filteredData = response?.data?.filter((faq) => faq.Role == user_role);
                 
-                console.log("Filtered Data is", filteredData);
     
                 // Update state with the filtered data
                 SetfaqData(filteredData);
@@ -40,7 +39,6 @@ const FaqAccordion = () => {
     useEffect(() => {
         GetFaqData()
     }, []);
-    // console.log("FaqDarta is " ,faqData)
     const toggleAccordion = (index) => {
         setExpandedIndex((prevIndex) =>
             prevIndex === index ? -1 : index

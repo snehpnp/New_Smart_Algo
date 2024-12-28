@@ -97,12 +97,12 @@ app.get("/deleteTableAndView",async(req,res)=>{
 async function checkAndDrop() {
   const collections = await dbTest.listCollections().toArray();
   const collectionNames = collections.map(col => col.name);
-  console.log("Existing collections/views:", collectionNames);
+  
   // let arr =  ['22','3045','2885','6705','10666']
   let arr =  ['426307','429116','437992','437993']
   let arr1 =  ['M_','M3_','M5_','M10_','M15_','M30_','M60_','M1DAY_']
   for (const element of arr) {
-    console.log("Dropping collection:", element);
+   
     if (collectionNames.includes(element)) {
       await dbTest.collection(element).drop();
       for (const element1 of arr1) {
@@ -111,12 +111,8 @@ async function checkAndDrop() {
 
           if (collectionNames.includes(collectionName)) {
                await dbTest.collection(collectionName).drop();
-          } else {
-              console.log("Collection/View not found:", collectionName);
           }
       }
-    } else {
-        console.log("Collection/View not found:", element);
     }
 
    
@@ -142,10 +138,8 @@ app.get("/all/socket/restart", (req, res) => {
     axios
       .get(url)
       .then((response) => {
-        console.log(url, " => ", response.data);
       })
       .catch((error) => {
-        console.log(error.response.data);
       });
   });
 

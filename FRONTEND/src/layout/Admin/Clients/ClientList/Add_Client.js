@@ -472,7 +472,7 @@ const AddClient = () => {
         }
       })
       .catch((error) => {
-        console.log("Error fetching last created user:", error);
+        return;
       });
   };
 

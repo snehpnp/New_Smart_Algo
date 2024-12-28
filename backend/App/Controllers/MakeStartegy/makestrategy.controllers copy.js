@@ -411,11 +411,7 @@ class MakeStartegy {
             }
 
     } else {
-      console.log("else req.body.status ",req.body.status);
-      console.log("else req.body.timeframe ",req.body.timeframe);
-      console.log("else req.body.tokensymbol ",req.body.tokensymbol);
-      console.log("else req.body.name ",req.body.name);
-      console.log("else req.body.condition ",req.body.condition);
+  
         const conditions =await parseConditionString(req.body.condition);
 
         const matchStage =await generateMongoCondition(conditions);

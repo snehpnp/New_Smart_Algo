@@ -559,14 +559,9 @@ const UpdateProfile = async (userId, token) => {
             { new: true }
           );
 
-        } else {
-          console.log(
-            "User not found with the provided demat_userid:",
-            userId
-          );
-        }
+        } 
       } catch (dbError) {
-        console.log("Database error occurred:", dbError.message);
+       
       }
     } else {
       console.log("No valid response data received from API.");

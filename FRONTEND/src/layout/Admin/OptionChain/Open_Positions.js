@@ -517,7 +517,7 @@ const TradeHistory = () => {
                     }
                 })
                 .catch((error) => {
-                    console.log("Error in Open Position ", error);
+                    return;
                 });
         })
 

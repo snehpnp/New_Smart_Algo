@@ -541,8 +541,6 @@ const Header = ({ ChatBox }) => {
         if (response.status) {
           setLogo(response.data[0].logo);
           $(".Company_logo").html(response.data && response.data[0].panel_name);
-          // $(".logo-abbr1").html(response.data && response.data[0].logo);
-          // $(".brand-title").html(response.data && response.data[0].logo);
 
           localStorage.setItem('Watermark', response.data?.[0]?.watermark);
 
@@ -554,7 +552,6 @@ const Header = ({ ChatBox }) => {
 
           $(".set_Favicon");
         }
-        // console.log("response is ",response?.data[0]?.watermark);
 
       });
   };
@@ -636,7 +633,6 @@ const Header = ({ ChatBox }) => {
         }
       })
       .catch((error) => {
-        console.log("Error: ", error);
       });
   };
 

@@ -168,8 +168,8 @@ class OptionChain {
             return res.json({ status: true, msg: 'Data found', data: expiryDatesArray });
 
         } catch (error) {
-            console.log("Error:", error);
-            return res.status(500).json({ status: false, msg: 'Server error', data: [] });
+       
+            return res.json({ status: false, msg: 'Server error', data: [] });
         }
 
     }
@@ -212,8 +212,7 @@ class OptionChain {
             }
 
         } catch (error) {
-            console.log("Error:", error);
-            return res.status(500).json({ status: false, msg: 'Server error', data: [] });
+            return res.json({ status: false, msg: 'Server error', data: [] });
         }
 
     }
@@ -343,7 +342,6 @@ class OptionChain {
             }
 
         } catch (error) {
-            console.log("Error Get_Option_All_Round_Token", error);
             return res.send({ status: false, data: [], channellist: "" , message: "An error occurred while processing data.", error: error.message })
         }
     }

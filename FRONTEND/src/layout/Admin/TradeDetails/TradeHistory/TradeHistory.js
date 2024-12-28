@@ -154,7 +154,7 @@ const TradeHistory = () => {
 
   const GetPnlPosition = async () => {
     const res = await dispatch(GET_PNL_POSITION({ token: token })).unwrap();
-    console.log("response is ", res);
+ 
     if (res?.data) {
       const pnlPosition = res.data[0].pnl_position;
 
