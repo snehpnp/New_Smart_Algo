@@ -536,7 +536,7 @@ const TradeHistory = () => {
 
         let MarketOpenToday = GetMarketOpenDays();
 
-        if (MarketOpenToday) {
+        // if (MarketOpenToday) {
             if (UserDetails && UserDetails.trading_status == "off") {
                 alert("Please Trading On First")
             } else {
@@ -584,10 +584,10 @@ const TradeHistory = () => {
                     alert("Emplty Data")
                 }
             }
-        }
-        else {
-            alert('Market Is Closed Today');
-        }
+        // }
+        // else {
+        //     alert('Market Is Closed Today');
+        // }
     }
 
 
@@ -894,10 +894,7 @@ const TradeHistory = () => {
                             size="xl"
                             title="Request Confirmation"
                             cancel_btn={true}
-                            // hideBtn={false}
-                            btn_name="Confirm"
-                            // disabled_submit={disabled}
-                            // disabled_submit={ButtonDisabled} 
+                            btn_name="Confirm" 
                             Submit_Function={Done_For_Trade}
                             Submit_Cancel_Function={Cancel_Request}
                             handleClose={() => setshowModal(false)}
@@ -960,7 +957,7 @@ const TradeHistory = () => {
 
                                                     defaultValue={inputValue ? inputValue : row.old_qty_persent}
                                                     max={row.old_qty_persent}
-                                                // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
+                                                disabled={true}
 
                                                 />
                                             </div>
