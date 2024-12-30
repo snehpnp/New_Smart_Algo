@@ -92,29 +92,7 @@ const AllClients = () => {
             dataField: 'PhoneNo',
             text: 'Phone Number'
         },
-        // {
-        //     dataField: 'CreateDate',
-        //     text: 'CreateDate',
-        //     formatter: (cell, row) => cell.split('T')[0]
-
-        // },
-        // {
-        //     dataField: 'StartDate',
-        //     text: 'Start Date',
-        //     formatter: (cell, row) => cell.split('T')[0],
-
-
-        // },
-        // {
-        //     dataField: 'EndDate',
-        //     text: 'End Date',
-        //     formatter: (cell, row) => cell.split('T')[0]
-
-        // },
-        // {
-        //     dataField: 'Otp',
-        //     text: 'Password'
-        // },
+     
         {
             dataField: 'ActiveStatus',
             text: 'Status',
@@ -216,7 +194,7 @@ const AllClients = () => {
                                 showModal ?
                                     <>
                                         < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
-                                        //  handleClose={setshowModal(false)}
+                                      
                                         >
                                         </Modal >
                                     </>

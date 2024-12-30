@@ -1090,6 +1090,7 @@ class Employee {
         PanelStatus,
         selectBroker,
         dashboard_filter,
+        searchQuery,
       } = req.body;
 
       // Ensure page and limit are numbers
@@ -1124,7 +1125,6 @@ class Employee {
         AdminMatch = { ...AdminMatch, broker: selectBroker };
       }
 
-      // Handle dashboard filters (e.g., expiration dates, license types, etc.)
       if (dashboard_filter && dashboard_filter !== "null") {
         if (dashboard_filter === "111") {
           AdminMatch = { ...AdminMatch, EndDate: { $gte: currentDate } };
@@ -1177,6 +1177,11 @@ class Employee {
             Is_Active: "1",
           };
         }
+      }
+
+      if(searchQuery && searchQuery !== "null") {
+
+        AdminMatch = { ...AdminMatch, $or: [ { FullName: { $regex: searchQuery, $options: 'i' } }, { UserName: { $regex: searchQuery, $options: 'i' } }, { Email: { $regex: searchQuery, $options: 'i' } }, { PhoneNo: { $regex: searchQuery, $options: 'i' } } ] } 
       }
 
       // Handle 'stgId' logic

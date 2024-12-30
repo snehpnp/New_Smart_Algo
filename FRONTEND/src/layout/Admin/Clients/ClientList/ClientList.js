@@ -67,29 +67,15 @@ const AllClients = () => {
   const [getSizePerPage, setSizePerPage] = useState(10);
   const [total1, setTotal] = useState(0);
   const [getHeaderName, setHeaderName] = useState("All Clients");
+  const [searchQuery, setSearchQuery] = useState("");
 
+  const handleSearch = () => {
+    setSearchQuery(searchInput);
+  };
   useEffect(() => {
     Brokerdata();
   }, []);
 
-  useEffect(() => {
-    const filteredData = originalData.filter((item) => {
-      const searchTermMatch =
-        searchInput === "" ||
-        item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
-        item.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
-        item.PhoneNo.includes(searchInput);
-
-      return searchTermMatch; // Ensure that only items that match the search term are returned
-    });
-
-    const Ddata = searchInput ? filteredData : originalData;
-
-    setAllClients({
-      loading: false,
-      data: Ddata,
-    });
-  }, [searchInput, originalData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -109,6 +95,7 @@ const AllClients = () => {
     ClientStatus,
     PanelStatus,
     selectBroker,
+    searchQuery
   ]);
 
   const GetClientsApi = async () => {
@@ -122,6 +109,7 @@ const AllClients = () => {
       PanelStatus: PanelStatus,
       selectBroker: selectBroker,
       dashboard_filter: dashboard_filter,
+      searchQuery: searchQuery
     };
 
     await dispatch(GET_ALL_CLIENTS(req1))
@@ -660,21 +648,6 @@ const AllClients = () => {
           csv_title="Client-List"
         >
           <div className="row">
-            <div className="col-lg-2">
-              <div className="mb-3">
-                <label for="exampleFormControlInput1" className="form-label">
-                  Search Something Here
-                </label>
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  className="form-control"
-                  id="exampleFormControlInput1"
-                />
-              </div>
-            </div>
             <div className="col-lg-2 ">
               <div className="mb-3">
                 <label for="select" className="form-label">
@@ -739,7 +712,7 @@ const AllClients = () => {
               </div>
             </div>
 
-            <div className="col-lg-2">
+            <div className="col-lg-3">
               <div className="mb-3">
                 <label for="select" className="form-label">
                   Strategies
@@ -762,15 +735,41 @@ const AllClients = () => {
                 </select>
               </div>
             </div>
+          </div>
 
-            {/* <div className="col-lg-2 mt-4">
-              <button
-                className="btn btn-primary mt-1"
-                onClick={(e) => ResetDate(e)}
-              >
-                Reset
-              </button>
-            </div> */}
+          <div className="row">
+            <div className="col-lg-3">
+              <div className="mb-3">
+                <label
+                  htmlFor="exampleFormControlInput1"
+                  className="form-label"
+                >
+                  Search Something Here
+                </label>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)} // Update input on change
+                  className="form-control"
+                  id="exampleFormControlInput1"
+                />
+              </div>
+            </div>
+
+            <div className="col-lg-2">
+              <div className="mb-3 mt-3">
+                {/* <label
+                  htmlFor="exampleFormControlInput1"
+                  className="form-label"
+                >
+                  Search 
+                </label> */}
+                <button onClick={handleSearch} className="btn btn-primary mt-2">
+                  Search
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* <FullDataTable TableColumns={columns} tableData={getAllClients} /> */}
