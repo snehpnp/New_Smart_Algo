@@ -405,7 +405,6 @@ class Employee {
     try {
       var req = req.body.req;
 
-
       var StartDate1 = "";
       var EndDate1 = "";
 
@@ -1078,34 +1077,126 @@ class Employee {
   }
 
   // GET ALL GetAllClients
+
   async GetAllClients(req, res) {
     try {
-      const { Find_Role, user_ID, stgId } = req.body;
-  
+      const {
+        Find_Role,
+        user_ID,
+        stgId,
+        page,
+        limit,
+        ClientStatus,
+        PanelStatus,
+        selectBroker,
+        dashboard_filter,
+      } = req.body;
+
+      // Ensure page and limit are numbers
+      const pageNumber = parseInt(page, 10) || 1;
+      const pageSize = parseInt(limit, 10) || 10;
+      const skip = (pageNumber - 1) * pageSize;
+      const currentDate = new Date();
+
       // Define AdminMatch based on Find_Role
       let AdminMatch = {};
       if (Find_Role === "ADMIN") {
-        AdminMatch = { Role: "USER", Is_Active: "1" };
+        AdminMatch = { Role: "USER" };
       } else if (Find_Role === "SUBADMIN") {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
-  
+
+      // Filter based on ClientStatus
+      if (ClientStatus && ClientStatus !== "null") {
+        AdminMatch = { ...AdminMatch, license_type: ClientStatus };
+      }
+
+      // Filter based on PanelStatus
+      if (PanelStatus && !PanelStatus.includes(2)) {
+        AdminMatch = {
+          ...AdminMatch,
+          TradingStatus: PanelStatus.includes(1) ? "on" : "off",
+        };
+      }
+
+      // Filter based on Broker selection
+      if (selectBroker && selectBroker !== "null") {
+        AdminMatch = { ...AdminMatch, broker: selectBroker };
+      }
+
+      // Handle dashboard filters (e.g., expiration dates, license types, etc.)
+      if (dashboard_filter && dashboard_filter !== "null") {
+        if (dashboard_filter === "111") {
+          AdminMatch = { ...AdminMatch, EndDate: { $gte: currentDate } };
+        } else if (dashboard_filter === "2") {
+          AdminMatch = { ...AdminMatch, license_type: "2", Is_Active: "1" };
+        } else if (dashboard_filter === "21") {
+          AdminMatch = {
+            ...AdminMatch,
+            EndDate: { $gte: currentDate },
+            license_type: "2",
+            Is_Active: "1",
+          };
+        } else if (dashboard_filter === "20") {
+          AdminMatch = {
+            ...AdminMatch,
+            EndDate: { $lte: currentDate },
+            license_type: "2",
+            Is_Active: "1",
+          };
+        } else if (dashboard_filter === "1") {
+          AdminMatch = { ...AdminMatch, license_type: "1", Is_Active: "1" };
+        } else if (dashboard_filter === "11") {
+          AdminMatch = {
+            ...AdminMatch,
+            EndDate: { $gte: currentDate },
+            license_type: "1",
+            Is_Active: "1",
+          };
+        } else if (dashboard_filter === "10") {
+          AdminMatch = {
+            ...AdminMatch,
+            EndDate: { $lte: currentDate },
+            license_type: "1",
+            Is_Active: "1",
+          };
+        } else if (dashboard_filter === "0") {
+          AdminMatch = { ...AdminMatch, license_type: "0", Is_Active: "1" };
+        } else if (dashboard_filter === "01") {
+          AdminMatch = {
+            ...AdminMatch,
+            EndDate: { $gte: currentDate },
+            license_type: "0",
+            Is_Active: "1",
+          };
+        } else if (dashboard_filter === "00") {
+          AdminMatch = {
+            ...AdminMatch,
+            EndDate: { $lte: currentDate },
+            license_type: "0",
+            Is_Active: "1",
+          };
+        }
+      }
+
       // Handle 'stgId' logic
       let strategyId = null;
       let FindUsers = [];
       if (stgId && stgId !== "all") {
         strategyId = new ObjectId(stgId);
-  
-        // Find users related to the given strategy ID
+
+        // Fetch users associated with the selected strategy ID
         const users = await client_services.aggregate([
           { $match: { strategy_id: { $in: [strategyId] } } },
           { $group: { _id: "$user_id" } },
         ]);
-  
         FindUsers = users.map((user) => user._id.toString());
       }
-  
-      // Fetch clients with aggregation
+
+      // Fetch total count for pagination
+      const totalClients = await User_model.countDocuments(AdminMatch);
+
+      // Fetch clients with aggregation and pagination
       const getAllClients = await User_model.aggregate([
         { $match: AdminMatch },
         {
@@ -1144,28 +1235,29 @@ class Employee {
         },
         { $unwind: { path: "$companyData", preserveNullAndEmptyArrays: true } },
         { $sort: { CreateDate: -1 } },
+        { $skip: skip }, // Pagination: Skip to the correct page
+        { $limit: pageSize }, // Pagination: Limit the number of documents
         { $project: { companyData: 0 } },
       ]);
-  
-      // If no clients found, return an empty response
-      if (!getAllClients.length) {
-        return res.status(200).send({
-          status: false,
-          msg: "Empty data",
-          data: [],
-        });
-      }
-  
+
       // Filter clients based on strategy ID, if applicable
-      const finalClients = stgId && stgId !== "all"
-        ? getAllClients.filter((client) => FindUsers.includes(client._id.toString()))
-        : getAllClients;
-  
-      // Send success response
+      const finalClients =
+        stgId && stgId !== "all"
+          ? getAllClients.filter((client) =>
+              FindUsers.includes(client._id.toString())
+            )
+          : getAllClients;
+
+      // Send paginated response
       return res.status(200).send({
         status: true,
         msg: "Get All Clients",
         data: finalClients,
+        pagination: {
+          total: totalClients,
+          page: pageNumber,
+          limit: pageSize,
+        },
       });
     } catch (error) {
       console.error("Error fetching clients:", error);
@@ -1176,7 +1268,6 @@ class Employee {
       });
     }
   }
-  
 
   // GET ALL LOGIN CLIENTS
   async loginClients(req, res) {
