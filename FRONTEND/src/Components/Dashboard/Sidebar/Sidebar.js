@@ -20,7 +20,6 @@ import {
   LayoutDashboard,
   Building2,
   Copyright,
-  CalendarPlus,
   Repeat2,
   ArrowRightLeft,
   ScatterChart,
@@ -123,117 +122,109 @@ const Sidebar = () => {
     }
   };
 
-
   return (
     <div className="deznav ">
       <div className="deznav-scroll">
         <ul className="metismenu" id="menu">
-          {gotodashboard != null
-            ? user_role_goTo === "USER"
-              ? Client &&
-                Client.map((item, index) => {
-                  const isActive = location.pathname.includes(item.route);
-                  if (
-                    admin_permission.data?.length > 0 &&
-                    admin_permission.data[0]?.Plans == 0 &&
-                    item.name === "Plans"
-                  ) {
-                    return null;
-                  }
-                  return (
-                    <React.Fragment key={"USER" + index}>
-                      {item.Data.length > 0 ? (
-                        <li className={isActive ? "mm-active" : ""}>
-                          <a className="has-arrow">
-                            <IconComponent icon={item.Icon} className="mx-2" />
-                            <span className="nav-text">{item.name}</span>
-                          </a>
-                          <ul aria-expanded="false">
-                            {item.Data.map((nested_item) => (
-                              <li
-                                key={nested_item.id}
-                                className={
-                                  location.pathname.includes(nested_item.route)
-                                    ? "mm-active"
-                                    : ""
-                                }
-                              >
-                                <Link to={nested_item.route}>
-                                  {nested_item.name}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </li>
-                      ) : (
-                        <li className={isActive ? "mm-active" : ""}>
-                          <Link to={item.route}>
-                            <IconComponent icon={item.Icon} />
-                            <span className="nav-text mx-2">{item.name}</span>
-                          </Link>
-                        </li>
-                      )}
-                    </React.Fragment>
-                  );
-                })
-              : user_role_goTo === "SUBADMIN"
-              ? sub_admin_sidebar &&
-                sub_admin_sidebar.map((item) => {
-                  return (
-                    <>
-                      {item.route === "/subadmin/tradehistory" &&
-                      getPermissions &&
-                      getPermissions.trade_history_old == 0 ? null : (
-                        <li
-                          key={item.id}
-                          className={`${
-                            location.pathname === item.route ? "mm-active" : ""
-                          }`}
-                        >
-                          {item.Data.length > 0 ? (
-                            <>
-                              <Link className="has-arrow" aria-expanded="false">
-                                <IconComponent key={item.id} icon={item.Icon} />
-                                <span className="nav-text mx-2">
-                                  {item.name}
-                                </span>
-                              </Link>
-                              <ul aria-expanded="false">
-                                {item.Data.map((nested_item) => (
-                                  <li
-                                    key={nested_item.route}
-                                    className={`${
-                                      location.pathname === nested_item.route
-                                        ? "mm-active"
-                                        : ""
-                                    }`}
-                                  >
-                                    <Link to={nested_item.route}>
-                                      {nested_item.name}
-                                    </Link>
-                                  </li>
-                                ))}
-                              </ul>
-                            </>
-                          ) : (
-                            <Link
-                              to={item.route}
-                              className=""
-                              aria-expanded="false"
+          {gotodashboard != null && user_role_goTo === "USER"
+            ? Client?.map((item, index) => {
+                const isActive = location.pathname.includes(item.route);
+                if (
+                  admin_permission.data?.length > 0 &&
+                  admin_permission.data[0]?.Plans == 0 &&
+                  item.name === "Plans"
+                ) {
+                  return null;
+                }
+                return (
+                  <React.Fragment key={"USER" + index}>
+                    {item.Data.length > 0 ? (
+                      <li className={isActive ? "mm-active" : ""}>
+                        <a className="has-arrow">
+                          <IconComponent icon={item.Icon} className="mx-2" />
+                          <span className="nav-text">{item.name}</span>
+                        </a>
+                        <ul aria-expanded="false">
+                          {item.Data.map((nested_item) => (
+                            <li
+                              key={nested_item.id}
+                              className={
+                                location.pathname.includes(nested_item.route)
+                                  ? "mm-active"
+                                  : ""
+                              }
                             >
+                              <Link to={nested_item.route}>
+                                {nested_item.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    ) : (
+                      <li className={isActive ? "mm-active" : ""}>
+                        <Link to={item.route}>
+                          <IconComponent icon={item.Icon} />
+                          <span className="nav-text mx-2">{item.name}</span>
+                        </Link>
+                      </li>
+                    )}
+                  </React.Fragment>
+                );
+              })
+            : user_role_goTo === "SUBADMIN"
+            ? sub_admin_sidebar?.map((item) => {
+                return (
+                  <>
+                    {item.route === "/subadmin/tradehistory" &&
+                    getPermissions &&
+                    getPermissions.trade_history_old == 0 ? null : (
+                      <li
+                        key={item.id}
+                        className={`${
+                          location.pathname === item.route ? "mm-active" : ""
+                        }`}
+                      >
+                        {item.Data.length > 0 ? (
+                          <>
+                            <Link className="has-arrow" aria-expanded="false">
                               <IconComponent key={item.id} icon={item.Icon} />
                               <span className="nav-text mx-2">{item.name}</span>
                             </Link>
-                          )}
-                        </li>
-                      )}
-                    </>
-                  );
-                })
-              : ""
+                            <ul aria-expanded="false">
+                              {item.Data.map((nested_item) => (
+                                <li
+                                  key={nested_item.route}
+                                  className={`${
+                                    location.pathname === nested_item.route
+                                      ? "mm-active"
+                                      : ""
+                                  }`}
+                                >
+                                  <Link to={nested_item.route}>
+                                    {nested_item.name}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        ) : (
+                          <Link
+                            to={item.route}
+                            className=""
+                            aria-expanded="false"
+                          >
+                            <IconComponent key={item.id} icon={item.Icon} />
+                            <span className="nav-text mx-2">{item.name}</span>
+                          </Link>
+                        )}
+                      </li>
+                    )}
+                  </>
+                );
+              })
             : roles === "ADMIN"
-            ? admin_sidebar &&
-              admin_sidebar.map((item) => {
+            ? admin_sidebar?.map((item) => {
                 if (
                   (admin_permission.data?.length > 0 &&
                     admin_permission.data[0]?.Make_call == 0 &&
@@ -267,32 +258,35 @@ const Sidebar = () => {
                         ) : (
                           ""
                         )}
-                        {item.Data.length !== 0 ? (
+                        {item?.Data?.length !== 0 ? (
                           <>
                             <ul aria-expanded="false" className="mm-collapse">
-                              {item.Data.length > 0
-                                ? item.Data.map((nested_item, index) => {
+                              {item?.Data?.length > 0
+                                ? item?.Data?.map((nested_item, index) => {
                                     if (
                                       (nested_item.route ==
                                         "/admin/createstrategy" &&
-                                        admin_permission.data &&
-                                        admin_permission.data[0]
+                                        admin_permission?.data &&
+                                        admin_permission?.data[0]
                                           .Create_Strategy === 0) ||
                                       (nested_item.route ==
                                         "/admin/AllMakeStrategy" &&
-                                        admin_permission.data &&
-                                        admin_permission.data[0]
+                                        admin_permission?.data &&
+                                        admin_permission?.data[0]
                                           .Create_Strategy === 0) ||
-                                      (nested_item.route ==
+                                      (nested_item?.route ==
                                         "/admin/optionchain" &&
-                                        admin_permission.data &&
-                                        admin_permission.data[0]
+                                        admin_permission?.data &&
+                                        admin_permission?.data[0]
                                           .Option_chain === 0) ||
-                                      (nested_item.route == "/admin/plans" &&
-                                        admin_permission.data &&
-                                        admin_permission.data[0].Plans === 0) ||
-                                        (admin_permission.data &&
-                                          admin_permission.data[0].Make_call === 0 && nested_item.route == "/admin/holdingshistory")
+                                      (nested_item?.route == "/admin/plans" &&
+                                        admin_permission?.data &&
+                                        admin_permission?.data[0].Plans === 0) ||
+                                      (admin_permission?.data &&
+                                        admin_permission?.data[0].Make_call ===
+                                          0 &&
+                                        nested_item.route ==
+                                          "/admin/holdingshistory")
                                     ) {
                                     } else {
                                       return (
@@ -359,8 +353,7 @@ const Sidebar = () => {
                 }
               })
             : roles === "SUPERADMIN"
-            ? supper_admin_sidebar &&
-              supper_admin_sidebar.map((item) => {
+            ? supper_admin_sidebar?.map((item) => {
                 return (
                   <>
                     <li
@@ -441,8 +434,7 @@ const Sidebar = () => {
                 );
               })
             : roles === "SUBADMIN"
-            ? sub_admin_sidebar &&
-              sub_admin_sidebar.map((item, index) => {
+            ? sub_admin_sidebar?.map((item, index) => {
                 if (item.id === 10 || item.id === 9 || item.id === 4) {
                   if (
                     (item.id == 10 &&
@@ -450,15 +442,16 @@ const Sidebar = () => {
                       getPermissions.optionchain === 0) ||
                     (item.id == 9 &&
                       getPermissions &&
-                      getPermissions.makestrategy === 0) || 
-                      (item.id == 4 &&
-                        getPermissions &&
-                        getPermissions.apicreateinfo == 0)
+                      getPermissions.makestrategy === 0) ||
+                    (item.id == 4 &&
+                      getPermissions &&
+                      getPermissions.apicreateinfo == 0)
                   ) {
                   } else {
                     return (
                       <>
                         <li
+                        key={item.route}
                           className={`${
                             location.pathname.includes(item.route && item.route)
                               ? "mm-active"
@@ -619,8 +612,7 @@ const Sidebar = () => {
                 }
               })
             : roles === "USER"
-            ? Client &&
-              Client.map((item) => {
+            ? Client?.map((item) => {
                 if (
                   admin_permission.data &&
                   admin_permission.data[0].Plans == 0 &&
