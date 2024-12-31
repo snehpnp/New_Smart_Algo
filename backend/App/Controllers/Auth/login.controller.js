@@ -122,6 +122,7 @@ class Login {
           Subadmin_permision: SubadminPermision,
           broker: EmailCheck.broker,
           UserName: EmailCheck.UserName,
+          FullName: EmailCheck.FullName,
         };
       } else {
         var msg = {
@@ -133,6 +134,7 @@ class Login {
           broker: EmailCheck.broker,
           type: EmailCheck.license_type,
           UserName: EmailCheck.UserName,
+          FullName: EmailCheck.FullName,
         };
       }
 

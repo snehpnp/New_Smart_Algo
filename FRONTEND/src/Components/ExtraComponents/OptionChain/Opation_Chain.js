@@ -722,6 +722,8 @@ const HelpCenter = () => {
 
       if (res.data.stat) {
         const handleResponse = async (response) => {
+   
+
           const old_val_call = $(".Call_Price_" + response.tk).html();
           const old_val_put = $(".Put_Price_" + response.tk).html();
 

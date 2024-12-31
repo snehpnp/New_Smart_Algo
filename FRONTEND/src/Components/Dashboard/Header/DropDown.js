@@ -6,7 +6,7 @@ import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import { useDispatch } from "react-redux";
 import { check_Device } from "../../../Utils/find_device";
 import toast from "react-hot-toast";
-import { User, LogOut, Settings, Award ,Wrench  } from "lucide-react";
+import { User, LogOut, Settings, Award, Wrench } from "lucide-react";
 import { Get_Pmermission } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 import * as Config from "../../../Utils/Config";
 
@@ -47,7 +47,6 @@ const DropDown = () => {
         return;
       });
   };
-
 
   const profile_Route = () => {
     if (gotodashboard == null) {
@@ -119,13 +118,26 @@ const DropDown = () => {
         className="dropdown-menu dropdown-menu-end"
         style={{ margin: 0, padding: "10px", minWidth: "150px" }}
       >
+        <li className="dropdown-header text-center">
+          <span
+            className="text-capitalize"
+            style={{ fontSize: "16px", color: "#000", fontWeight: "bold" }}
+          >
+            <i className="fas fa-user" style={{ marginRight: "8px" }}></i>
+            User:{" "}
+            {JSON.parse(localStorage.getItem("user_details"))?.UserName ||
+              "Guest"}
+          </span>
+          <hr />
+        </li>
+
         {Role === "ADMIN" && gotodashboard == null ? (
           <li>
             <Link
               to="/admin/system"
               className="dropdown-item d-flex align-items-center"
             >
-              <Wrench  className="me-2" size={16} />
+              <Wrench className="me-2" size={16} />
               System
             </Link>
           </li>
@@ -158,7 +170,7 @@ const DropDown = () => {
           ""
         )}
 
-{Role === "ADMIN" && gotodashboard == null && (
+        {Role === "ADMIN" && gotodashboard == null && (
           <li>
             <Link
               to="/admin/settings"
@@ -168,8 +180,7 @@ const DropDown = () => {
               Settings
             </Link>
           </li>
-        ) }
-
+        )}
 
         {gotodashboard == null && (
           <li>

@@ -1298,52 +1298,7 @@ const TradeHistory = () => {
             </div>
           </div>
 
-          {/* <div className="col-lg-2  px-1">
-            <div className="mb-3">
-              <label className="col-lg-12">Search Here</label>
-
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search anything..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div> */}
-
-          {/* <div className="col-lg-2 px-1">
-            <div className="mb-3">
-              <label className="col-lg-12">Select Option</label>
-
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Select Options ..."
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              />
-
-              <div className="dropdown-menu">
-                <div className="row">
-                  {columnTexts.length > 0 &&
-                    columnTexts.map((data, index) => (
-                      <div key={index} className="col-3">
-                        <li className="dropdown-item d-flex align-items-center">
-                          <input
-                            type="checkbox"
-                            className="form-check-input me-2"
-                            value={data}
-                            onChange={(e) => handleCheckboxChange(e, data)}
-                          />
-                          <label className="form-check-label">{data}</label>
-                        </li>
-                      </div>
-                    ))}
-                </div>
-              </div>
-            </div>
-          </div> */}
+      
 
           <div className="col-lg-2  px-1">
             <div className="mb-3">

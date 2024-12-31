@@ -47,6 +47,7 @@ const TradeHistory = () => {
   const [SelectService, setSelectService] = useState("null");
   const [ServiceData, setServiceData] = useState([]);
   const [PnlStatus, setPnlStatus] = useState("Top");
+  const WatermarkUrl = localStorage.getItem("Watermark");
 
   const handleFromDateChange = (data) => {
     setFromDate(data);
@@ -456,24 +457,43 @@ const TradeHistory = () => {
       {tradeHistoryData && tradeHistoryData.loading ? (
         <Loader />
       ) : (
-        <FullDataTable
-          TableColumns={columns}
-          tableData={tradeHistoryData.data}
-        />
+        <>
+          <div
+            className="watermarkId"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundImage: `url(${WatermarkUrl})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+              opacity: 0.1,
+              pointerEvents: "none",
+              zIndex: 2,
+            }}
+          ></div>
+          <FullDataTable
+            TableColumns={columns}
+            tableData={tradeHistoryData.data}
+          />
+        </>
       )}
       {PnlStatus === "Bottom" && (
-       <>
-       {tradeHistoryData.data && tradeHistoryData.data.length > 0 && (
-         <h3 style={{ textAlign: "right" }}>
-           <b>Total Realised P/L </b>:
-           <b>
-             <span style={{ color: total >= 0 ? "green" : "red" }}>
-               {total.toFixed(2)}
-             </span>
-           </b>
-         </h3>
-       )}
-     </>
+        <>
+          {tradeHistoryData.data && tradeHistoryData.data.length > 0 && (
+            <h3 style={{ textAlign: "right" }}>
+              <b>Total Realised P/L </b>:
+              <b>
+                <span style={{ color: total >= 0 ? "green" : "red" }}>
+                  {total.toFixed(2)}
+                </span>
+              </b>
+            </h3>
+          )}
+        </>
       )}
 
       <DetailsView
