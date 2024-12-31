@@ -1182,7 +1182,7 @@ const TradeHistory = () => {
           </div>
           <div className="col-lg-2 px-1">
             <div className="mb-3">
-              <label for="select" className="form-label">
+              <label htmlFor="select" className="form-label">
                 Index Symbol
               </label>
               <select
@@ -1212,7 +1212,7 @@ const TradeHistory = () => {
           </div>
           <div className="col-lg-2 px-1">
             <div className="mb-3">
-              <label for="select" className="form-label">
+              <label htmlFor="select" className="form-label">
                 Symbol
               </label>
               <select
@@ -1239,7 +1239,7 @@ const TradeHistory = () => {
 
           <div className="col-lg-2  px-1">
             <div className="mb-3">
-              <label for="select" className="form-label">
+              <label htmlFor="select" className="form-label">
                 Strategy
               </label>
               <select

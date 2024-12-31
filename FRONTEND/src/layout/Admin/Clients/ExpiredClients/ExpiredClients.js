@@ -563,7 +563,7 @@ const AllClients = () => {
             <div className="row">
               <div className="col-lg-3">
                 <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
+                  <label htmlFor="exampleFormControlInput1" className="form-label">
                     Search Something Here
                   </label>
                   <input
@@ -578,7 +578,7 @@ const AllClients = () => {
               </div>
               <div className="col-lg-2 ">
                 <div className="mb-3">
-                  <label for="select" className="form-label">
+                  <label htmlFor="select" className="form-label">
                     Client Type
                   </label>
 
@@ -598,7 +598,7 @@ const AllClients = () => {
               </div>
               <div className="col-lg-2">
                 <div className="mb-3">
-                  <label for="select" className="form-label">
+                  <label htmlFor="select" className="form-label">
                     Trading Type
                   </label>
 
@@ -615,28 +615,7 @@ const AllClients = () => {
                   </select>
                 </div>
               </div>
-              {/* <div className="col-lg-2 ">
-                <div className="mb-3">
-                  <label for="select" className="form-label">
-                    Strategy Clients
-                  </label>
-                  <select
-                    className="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => StrategyClientStatus(e.target.value)}
-                    value={ClientStatus}
-                  >
-                    <option value="null">All</option>
-                    {getAllStrategyName.data &&
-                      getAllStrategyName.data.map((item) => {
-                        return (
-                          <option value={item._id}>{item.strategy_name}</option>
-                        );
-                      })}
-                  </select>
-                </div>
-              </div> */}
+             
 
               <div className="col-lg-2 mt-4">
                 <button

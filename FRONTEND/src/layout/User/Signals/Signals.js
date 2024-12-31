@@ -85,7 +85,7 @@ const Signals = () => {
 
               <div className="col-lg-2 px-1">
                 <div className="mb-3">
-                  <label for="select" className="form-label">
+                  <label htmlFor="select" className="form-label">
                     Type
                   </label>
                   <select

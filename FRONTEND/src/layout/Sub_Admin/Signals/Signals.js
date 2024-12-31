@@ -62,52 +62,37 @@ const Signals = () => {
 
 
 
-    const getsignals = async () => {
-        await dispatch(Get_All_Signals({ startDate: DateFilter, token: token })).unwrap()
+    useEffect(() => {
+        const fetchData = async () => {
+          await dispatch(Get_All_Signals({ startDate: DateFilter, token: token })).unwrap()
             .then((response) => {
-                if (response.status) {
-                    getSignalsData({
-                        loading: false,
-                        data: response.data
-                    });
-                } else {
-                    getSignalsData({
-                        loading: false,
-                        data: response.data
-                    });
+              getSignalsData({
+                loading: false,
+                data: response.data,
+              });
+            });
+        };
+      
+        fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [DateFilter, token]); // Ignore the warning about 'dispatch'
+      
+      
 
-                }
-            })
-
-
-
-
-
-
-
-    }
-    useEffect(() => {
-        getsignals()
-    }, [DateFilter])
-
-    var dateArray = [];
-    const dateArr = () => {
+      useEffect(() => {
+        const dateArray = [];
         for (let i = 0; i < 3; i++) {
-            const currentDate = new Date();
-            currentDate.setDate(currentDate.getDate() - i);
-            const day = currentDate.getDate();
-            const month = currentDate.getMonth() + 1; // Months are zero-based, so add 1
-            const year = currentDate.getFullYear();
-            const formattedDate = `${year}/${month}/${day}`;
-            dateArray.push(formattedDate);
-
+          const currentDate = new Date();
+          currentDate.setDate(currentDate.getDate() - i);
+          const day = currentDate.getDate();
+          const month = currentDate.getMonth() + 1; // Months are zero-based
+          const year = currentDate.getFullYear();
+          const formattedDate = `${year}/${month}/${day}`;
+          dateArray.push(formattedDate);
         }
-        setDateFilter(dateArray[0])
-    }
-    useEffect(() => {
-        dateArr()
-    }, [])
-
+        setDateFilter(dateArray[0]);
+      }, []); // Empty dependency array since no external variables are being used
+      
 
 
     return (

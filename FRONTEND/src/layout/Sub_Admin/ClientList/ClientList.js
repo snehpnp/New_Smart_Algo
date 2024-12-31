@@ -6,9 +6,8 @@
 import React, { useEffect, useState } from "react";
 import Content from "../../../Components/Dashboard/Content/Content";
 import Loader from "../../../Utils/Loader";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
-import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import {
   GET_ALL_CLIENTS,
   GO_TO_DASHBOARDS,
@@ -17,7 +16,7 @@ import {
 import { All_Api_Info_List } from "../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice";
 import * as Config from "../../../Utils/Config";
 import { DELETE_USER_SERVICES } from "../../../ReduxStore/Slice/Subadmin/userSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fDateTimeSuffix } from "../../../Utils/Date_formet";
 import { maskEmail, maskNumber } from "../../../Utils/HideWIthStart";
 import { Get_Sub_Admin_Permissions } from "../../../ReduxStore/Slice/Subadmin/Subadminslice";
@@ -41,8 +40,6 @@ const paginationOptions = {
 
 const AllClients = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [originalData, setOriginalData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [ClientStatus, setClientStatus] = useState("null");
   const [PanelStatus, setPanelStatus] = useState("2");
@@ -62,6 +59,12 @@ const AllClients = () => {
   const handleSearch = () => {
     setSearchQuery(searchInput);
   };
+
+  useEffect(() => {
+    Brokerdata();
+    GetSubAdminPermisson();
+  }, []);
+
   useEffect(() => {
     GetClientsApi();
   }, [
@@ -72,11 +75,6 @@ const AllClients = () => {
     searchQuery,
     refresh,
   ]);
-
-  useEffect(() => {
-    GetSubAdminPermisson();
-    Brokerdata();
-  }, []);
 
   const Brokerdata = async () => {
     await dispatch(
@@ -137,7 +135,6 @@ const AllClients = () => {
             data: response.data,
           });
         }
-        setOriginalData(response.data);
       });
   };
 
@@ -153,7 +150,7 @@ const AllClients = () => {
 
   // GO TO DASHBOARD
   const goToDashboard = async (asyncid, email, row) => {
-    if (row.AppLoginStatus == "0" && row.WebLoginStatus == "0") {
+    if (row.AppLoginStatus === "0" && row.WebLoginStatus === "0") {
       return;
     }
 
@@ -205,21 +202,16 @@ const AllClients = () => {
   };
 
   const showBrokerName = (value1, licence_type) => {
-    let value = parseInt(value1);
-
     if (licence_type === "1") {
       return "Demo";
-    } else {
-      const foundNumber =
-        BrokerDetails &&
-        BrokerDetails.find((value) => value.broker_id == value1);
-
-      if (foundNumber != undefined) {
-        return foundNumber.title;
-      } else {
-        return "";
-      }
     }
+
+
+    const foundBroker = BrokerDetails?.find(
+      (value) => parseInt(value.broker_id) === parseInt(value1)
+    );
+
+    return foundBroker?.title ?? "-";
   };
 
   const columns = [
@@ -305,18 +297,21 @@ const AllClients = () => {
       dataField: "ActiveStatus",
       text: "Got To Dashboard",
       hidden:
-        getPermissions && getPermissions.go_To_Dashboard == 1 ? false : true,
+        (getPermissions && getPermissions?.go_To_Dashboard === 1) ||
+        getPermissions?.go_To_Dashboard === "1"
+          ? false
+          : true,
       formatter: (cell, row) => (
         <>
           <span
             className=" btn "
             style={
-              row.AppLoginStatus == "0" && row.WebLoginStatus == "0"
+              row.AppLoginStatus === "0" && row.WebLoginStatus === "0"
                 ? { color: "#FF0000" }
                 : { color: "#008000" }
             }
             onClick={() => goToDashboard(row._id, row.Email, row)}
-            disabled={row.AppLoginStatus == "0" && row.WebLoginStatus == "0"}
+            disabled={row.AppLoginStatus === "0" && row.WebLoginStatus === "0"}
           >
             Dashboard
           </span>
@@ -330,7 +325,7 @@ const AllClients = () => {
         <>
           <span
             style={
-              cell == "off" || cell === null
+              cell === "off" || cell === null
                 ? { color: "#FF0000", fontSize: "40px" }
                 : { color: "#008000", fontSize: "40px" }
             }
@@ -360,7 +355,7 @@ const AllClients = () => {
 
       formatter: (cell, row) => (
         <div style={{ width: "120px" }}>
-          {isgotodashboard && isgotodashboard == true ? (
+          {isgotodashboard && isgotodashboard === true ? (
             <div>
               <Link to={`/subadmin/client/edit/${row._id}`} state={row}>
                 <span data-toggle="tooltip" data-placement="top" title="Edit">
@@ -373,7 +368,7 @@ const AllClients = () => {
                 </span>
               </Link>
             </div>
-          ) : row.Is_Active == 1 ? (
+          ) : row.Is_Active === 1 || row.Is_Active === "1" ? (
             <div>
               {(getPermissions && getPermissions.client_edit === 1) ||
               (getPermissions &&
@@ -396,7 +391,7 @@ const AllClients = () => {
                     </span>
                   </Link>
 
-                  {row.license_type == "1" &&
+                  {(row?.license_type === "1" || row?.license_type === 1) &&
                   getPermissions &&
                   getPermissions.Update_Api_Key === 0 ? (
                     <>
@@ -454,13 +449,16 @@ const AllClients = () => {
             button_title="Add Client"
             route="/subadmin/client/add"
             button_status={
-              getPermissions && getPermissions.client_add == 1 ? true : false
+              getPermissions?.client_add === 1 ||
+              getPermissions?.client_add === "1"
+                ? true
+                : false
             }
           >
             <div className="row">
               <div className="col-lg-2 ">
                 <div className="mb-3">
-                  <label for="select" className="form-label">
+                  <label htmlFor="select" className="form-label">
                     Client Type
                   </label>
 
@@ -480,7 +478,7 @@ const AllClients = () => {
               </div>
               <div className="col-lg-2">
                 <div className="mb-3">
-                  <label for="select" className="form-label">
+                  <label htmlFor="select" className="form-label">
                     Trading Type
                   </label>
 

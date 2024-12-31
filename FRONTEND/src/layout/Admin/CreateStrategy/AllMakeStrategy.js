@@ -374,7 +374,7 @@ const AllMakeStrategy = () => {
                             <div className="row">
                                 <div className="col-lg-4">
                                     <div className="mb-3">
-                                        <label for="exampleFormControlInput1" className="form-label">
+                                        <label htmlFor="exampleFormControlInput1" className="form-label">
                                             Search Something Here
                                         </label>
                                         <input

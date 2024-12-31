@@ -995,7 +995,7 @@ const TradeHistory = () => {
         <div className="row d-flex  align-items-center justify-content-start">
           <div className="col-lg-2 px-1">
             <div className="mb-3">
-              <label for="select" className="form-label">
+              <label htmlFor="select" className="form-label">
                 Symbol
               </label>
               <select
@@ -1022,7 +1022,7 @@ const TradeHistory = () => {
 
           <div className="col-lg-2  px-1">
             <div className="mb-3">
-              <label for="select" className="form-label">
+              <label htmlFor="select" className="form-label">
                 Strategy
               </label>
               <select

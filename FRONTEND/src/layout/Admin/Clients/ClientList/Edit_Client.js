@@ -1093,7 +1093,7 @@ const EditClient = () => {
                     <div className="col-lg-12 ">
                       <label
                         className="form-check-label bg-primary text-white py-2 px-4"
-                        for={strategy.ServiceResult.name}
+                        htmlFor={strategy.ServiceResult.name}
                       >{`${strategy.ServiceResult.name}[${strategy.categories.segment}]`}</label>
                     </div>
                   </div>

@@ -194,7 +194,7 @@ const ReusableForm = ({
                                     />
                                     <label
                                       className="form-check-label"
-                                      for={option.label}
+                                      htmlFor={option.label}
                                     >
                                       {option.label}
                                     </label>
@@ -227,7 +227,7 @@ const ReusableForm = ({
                               />
                               <label
                                 className="form-check-label"
-                                for={field.label}
+                                htmlFor={field.label}
                               >
                                 {field.label}
                               </label>
@@ -266,7 +266,7 @@ const ReusableForm = ({
                       />
                       <label
                         className={`col-lg-${field.label_size} col-form-label mx-2`}
-                        for={field.title1}
+                        htmlFor={field.title1}
                       >
                         {field.title1}
                       </label>
@@ -284,7 +284,7 @@ const ReusableForm = ({
                       />
                       <label
                         className={`col-lg-${field.label_size} col-form-label  mx-2`}
-                        for={field.name}
+                        htmlFor={field.name}
                       >
                         {field.title2}
                       </label>
@@ -350,7 +350,7 @@ const ReusableForm = ({
                     <div className="row d-flex">
                       <div className="col-lg-12 ">
                         <div className="form-check custom-checkbox mb-3">
-                          <label className="col-lg-6 " for={field.name}>
+                          <label className="col-lg-6 " htmlFor={field.name}>
                             {field.label}
                           </label>
                           <input
@@ -384,7 +384,7 @@ const ReusableForm = ({
                     <div className="row d-flex">
                       <div className="col-lg-12 ">
                         <div className="form-check custom-checkbox mb-3">
-                          <label className="col-lg-6 " for={field.name}>
+                          <label className="col-lg-6 " htmlFor={field.name}>
                             {field.label}
                           </label>
                           <input
@@ -415,7 +415,7 @@ const ReusableForm = ({
                         <div className="mb-3">
                           <label
                             className={`col-lg-${field.label_size}`}
-                            for={field.name}
+                            htmlFor={field.name}
                           >
                             {field.label}
                           </label>
@@ -450,7 +450,7 @@ const ReusableForm = ({
                             id={field.name}
                             {...formik.getFieldProps(field.name)}
                           />
-                          <label className="form-check-label" for={field.name}>
+                          <label className="form-check-label" htmlFor={field.name}>
                             {field.name}
                           </label>
                         </div>

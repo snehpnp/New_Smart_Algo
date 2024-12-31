@@ -236,7 +236,7 @@ const AllLicence = () => {
 
               <div className="col-lg-3">
                 <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
+                  <label htmlFor="exampleFormControlInput1" className="form-label">
                     Search Something Here
                   </label>
                   <input
@@ -255,7 +255,7 @@ const AllLicence = () => {
               <div className="col-lg-3 mb-4 ">
                 <div className="mb-3 row  d-flex flex-column">
                   <label
-                    for="validationCustom05" className="form-label"
+                    htmlFor="validationCustom05" className="form-label"
                   >
                     Please Select Month
                   </label>

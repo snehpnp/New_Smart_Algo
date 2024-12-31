@@ -2309,7 +2309,7 @@ const Makecall = () => {
                                                 {IntradayDelivery == "1" ?
                                                     EntryPriceBA == "at" ? <>
                                                         <div className="col-lg-4">
-                                                            <label for="exampleFormControlSelect1" > Exit Time  :  &nbsp; </label>
+                                                            <label htmlFor="exampleFormControlSelect1" > Exit Time  :  &nbsp; </label>
                                                             <input type="time" id="appt" className="form-control" name="appt"
                                                                 min="09:15"
                                                                 max="15:15"
@@ -2322,7 +2322,7 @@ const Makecall = () => {
                                                     </> :
                                                         <>
                                                             <div className="col-lg-4">
-                                                                <label for="exampleFormControlSelect1" > Exit Time  :  &nbsp; </label>
+                                                                <label htmlFor="exampleFormControlSelect1" > Exit Time  :  &nbsp; </label>
                                                                 <input type="time" id="appt" className="form-control" name="appt"
                                                                     min="09:15"
                                                                     max="15:15"
@@ -2331,7 +2331,7 @@ const Makecall = () => {
                                                             </div>
 
                                                             <div className="col-lg-4 col-md-4 col-sm-12">
-                                                                <label for="exampleFormControlSelect1" > No Trade Time : &nbsp; </label>
+                                                                <label htmlFor="exampleFormControlSelect1" > No Trade Time : &nbsp; </label>
 
                                                                 <input type="time" id="appt" className="form-control" name="appt"
                                                                     min="09:15"
@@ -2344,7 +2344,7 @@ const Makecall = () => {
 
                                                     : IntradayDelivery == "2" ? <>
                                                         <div className="col-lg-4 col-md-4 col-sm-12">
-                                                            <label for="exampleFormControlSelect1" > No Trade Time : &nbsp; </label>
+                                                            <label htmlFor="exampleFormControlSelect1" > No Trade Time : &nbsp; </label>
                                                             <input type="time" id="appt" className="form-control" name="appt"
                                                                 min="09:15"
                                                                 max="15:15"

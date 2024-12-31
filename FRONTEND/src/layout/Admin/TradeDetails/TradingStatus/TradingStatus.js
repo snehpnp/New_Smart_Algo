@@ -172,7 +172,7 @@ const TradingStatus = () => {
                         >
                             <div className="col-lg-6">
                                 <div className="mb-3 row">
-                                    <label for="validationCustom05" className="form-label">
+                                    <label htmlFor="validationCustom05" className="form-label">
                                         Select Status
                                     </label>
                                     {/* <div className="col-lg-7">

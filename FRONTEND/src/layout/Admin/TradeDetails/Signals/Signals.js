@@ -220,7 +220,7 @@ const Signals = () => {
                 <div className="mb-3 row d-flex">
                   <div className="col-lg-6">
                     <div className="mb-3">
-                      <label for="exampleFormControlInput1" className="form-label">
+                      <label htmlFor="exampleFormControlInput1" className="form-label">
                         Search Something Here
                       </label>
                       <input

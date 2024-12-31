@@ -73,7 +73,6 @@ const TradeHistory = () => {
   const [getTotalPnl, setTotalPnl] = useState(0);
   const [PnlStatus, setPnlStatus] = useState("Top");
 
-  var a = 2;
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -82,13 +81,13 @@ const TradeHistory = () => {
     setToDate(e.target.value);
   };
 
-  useEffect(() => {
-    forCSVdata();
-  }, [tradeHistoryData.data]);
 
   useEffect(() => {
     data();
-  }, [a]);
+    GetAllStrategyName();
+    GetPnlPosition();
+    GetAdminTradingStatus();
+  }, []);
 
   useEffect(() => {
     if (!fromDate && !toDate) {
@@ -99,10 +98,6 @@ const TradeHistory = () => {
       ShowLivePrice1();
     }
   }, [tradeHistoryData.data, SocketState, UserDetails]);
-
-  useEffect(() => {
-    GetAdminTradingStatus();
-  }, []);
 
   useEffect(() => {
     Get_TradHistory();
@@ -130,10 +125,7 @@ const TradeHistory = () => {
     SelectService,
   ]);
 
-  useEffect(() => {
-    GetAllStrategyName();
-    GetPnlPosition();
-  }, []);
+ ;
 
   let columnsData = [
     {
@@ -393,6 +385,8 @@ const TradeHistory = () => {
       .then((response) => {
         if (response.status) {
           setTotal(response.pagination.totalItems);
+
+          forCSVdata(response.data);
 
           setTradeHistoryData({
             loading: false,
@@ -927,18 +921,17 @@ const TradeHistory = () => {
   };
 
   const data = async () => {
-    if (a < 2) {
-    }
+ 
     const response = await GetAccessToken({ broker_name: "aliceblue" });
     if (response.status) {
       setUserDetails(response.data && response.data[0]);
     }
   };
 
-  const forCSVdata = () => {
+  const forCSVdata = (data) => {
     let csvArr = [];
-    if (tradeHistoryData.data.length > 0) {
-      tradeHistoryData.data.map((item) => {
+    if (data.length > 0) {
+      data.map((item) => {
         return csvArr.push({
           symbol: item.trade_symbol,
           EntryType: item.entry_type ? item.entry_type : "-",
@@ -1090,7 +1083,7 @@ const TradeHistory = () => {
           </div>
           <div className="col-lg-2 px-1">
             <div className="mb-3">
-              <label for="select" className="form-label">
+              <label htmlFor="select" className="form-label">
                 Index Symbol
               </label>
               <select
@@ -1121,7 +1114,7 @@ const TradeHistory = () => {
 
           <div className="col-lg-2 px-1">
             <div className="mb-3">
-              <label for="select" className="form-label">
+              <label htmlFor="select" className="form-label">
                 Symbol
               </label>
               <select
@@ -1148,7 +1141,7 @@ const TradeHistory = () => {
 
           <div className="col-lg-2  px-1">
             <div className="mb-3">
-              <label for="select" className="form-label">
+              <label htmlFor="select" className="form-label">
                 Strategy
               </label>
               <select

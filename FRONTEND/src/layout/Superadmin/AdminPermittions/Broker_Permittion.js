@@ -154,7 +154,7 @@ const Broker_Permittion = ({
                             strategy.broker_id
                           )}
                         />
-                        <label className="form-check-label" for={strategy._id}>
+                        <label className="form-check-label" htmlFor={strategy._id}>
                           {strategy.title}
                         </label>
                       </div>

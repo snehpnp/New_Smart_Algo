@@ -551,7 +551,7 @@ const AllSubadmin = () => {
                                 />
                                 <label
                                   className="form-check-label"
-                                  for={strategy.name}
+                                  htmlFor={strategy.name}
                                 >
                                   {strategy.name}
                                 </label>
@@ -592,7 +592,7 @@ const AllSubadmin = () => {
                                 />
                                 <label
                                   className="form-check-label"
-                                  for={strategy.strategy_name}
+                                  htmlFor={strategy.strategy_name}
                                 >
                                   {strategy.strategy_name}
                                 </label>

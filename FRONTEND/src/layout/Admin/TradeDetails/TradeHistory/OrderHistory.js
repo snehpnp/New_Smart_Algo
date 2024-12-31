@@ -1064,35 +1064,10 @@ const TradeHistory = () => {
               />
             </div>
           </div>
-          {/* <div className="col-lg-2 px-1">
-            <div className="mb-3">
-              <label for="select" className="form-label">
-                Symbol
-              </label>
-              <select
-                className="default-select wide form-control"
-                aria-label="Default select example"
-                id="select"
-                onChange={(e) => setSelectService(e.target.value)}
-                value={SelectService}
-              >
-                <option value="null" selected>
-                  All
-                </option>
-                {ServiceData.data &&
-                  ServiceData.data.map((item) => {
-                    return (
-                      <option className="mt-1" value={item}>
-                        {item}
-                      </option>
-                    );
-                  })}
-              </select>
-            </div>
-          </div> */}
+      
           <div className="col-lg-2 px-1">
             <div className="mb-3">
-              <label for="select" className="form-label">
+              <label htmlFor="select" className="form-label">
                 Index Symbol
               </label>
               <select
@@ -1119,7 +1094,7 @@ const TradeHistory = () => {
           </div>
           <div className="col-lg-2  px-1">
             <div className="mb-3">
-              <label for="select" className="form-label">
+              <label htmlFor="select" className="form-label">
                 Strategy
               </label>
               <select

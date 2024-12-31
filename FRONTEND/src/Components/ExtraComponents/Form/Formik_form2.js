@@ -106,7 +106,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                               <div className="form-check custom-checkbox mb-3">
                                 <input type={field.type} className="form-check-input" id={option.label}   {...formik.getFieldProps(option.name)}
                                 />
-                                <label className="form-check-label" for={option.label} >{option.label}</label>
+                                <label className="form-check-label" htmlFor={option.label} >{option.label}</label>
                               </div>
                               {formik.errors[field.name] &&
                                 <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
@@ -126,7 +126,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                               <input type={field.type} className="form-check-input" id={field.label}   {...formik.getFieldProps(field.name)}
                                 checked={field.check_box_true}
                               />
-                              <label className="form-check-label" for={field.label} >{field.label}</label>
+                              <label className="form-check-label" htmlFor={field.label} >{field.label}</label>
                             </div>
                             {formik.errors[field.name] &&
                               <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
@@ -158,7 +158,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                             <input type={field.type} name={field.name} className="form-check-input" id={field.name}
                               {...formik.getFieldProps(field.name)}
                             />
-                            <label className="form-check-label" for={field.name}>{field.name}</label>
+                            <label className="form-check-label" htmlFor={field.name}>{field.name}</label>
                           </div>
                         </div>
                       </div>
@@ -213,7 +213,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                           <div className="row d-flex">
                             <div className="col-lg-12 ">
                               <div className="form-check custom-checkbox mb-3">
-                                <label className="col-lg-6 " for={field.name}>{field.name}</label>
+                                <label className="col-lg-6 " htmlFor={field.name}>{field.name}</label>
                                 <input type={field.type} name={field.name} className="form-control" id={field.name}
                                   {...formik.getFieldProps(field.name)}
 
@@ -233,7 +233,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                               // className={`col-lg-${field.col_size}`}
                               >
                                 <div className="mb-3">
-                                  <label className={`col-lg-${field.label_size}`} for={field.name}>{field.label}</label>
+                                  <label className={`col-lg-${field.label_size}`} htmlFor={field.name}>{field.label}</label>
                                   <textarea className="form-control" rows={field.row_size} id={field.name} name={field.name}
                                     {...formik.getFieldProps(field.name)}
                                     placeholder={field.label}
@@ -256,7 +256,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                                     <input type={field.type} name={field.name} className="form-check-input" id={field.name}
                                       {...formik.getFieldProps(field.name)}
                                     />
-                                    <label className="form-check-label" for={field.name}>{field.name}</label>
+                                    <label className="form-check-label" htmlFor={field.name}>{field.name}</label>
                                   </div>
                                 </div>
                               </div>

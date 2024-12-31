@@ -857,7 +857,7 @@ const TradeHistory = () => {
                 <div className="row d-flex align-items-center text-secondary mt-4">
                     <div className="col-lg-3">
                         <div className="mb-3 ">
-                            <label for="exampleFormControlInput1" className="form-label">
+                            <label htmlFor="exampleFormControlInput1" className="form-label">
                                 Search Something Here
                             </label>
                             <input

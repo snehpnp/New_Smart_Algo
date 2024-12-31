@@ -732,7 +732,7 @@ const Login = () => {
                   setCheckDesclaimer(e.target.checked);
                 }}
               />
-              <label for="term_check" className="mt-2 h6 text-info">
+              <label htmlFor="term_check" className="mt-2 h6 text-info">
                 Agree & I accept Term And Condition
               </label>
             </div>

@@ -1641,7 +1641,7 @@ const CreateStrategy = () => {
                   id="inlineCheckbox1"
                   value="option1"
                 />
-                <label className="form-check-label" for="inlineCheckbox1">
+                <label className="form-check-label" htmlFor="inlineCheckbox1">
                   Buy
                 </label>
               </div>
@@ -2084,7 +2084,7 @@ const CreateStrategy = () => {
                   id="inlineCheckbox2"
                   value="option1"
                 />
-                <label className="form-check-label" for="inlineCheckbox2">
+                <label className="form-check-label" htmlFor="inlineCheckbox2">
                   Sell
                 </label>
               </div>
@@ -2709,7 +2709,7 @@ const CreateStrategy = () => {
 
               <Col md={2}>
                 <div className="radio">
-                  <label for="or">
+                  <label htmlFor="or">
                     <input
                       id="or"
                       value="or"
@@ -2725,7 +2725,7 @@ const CreateStrategy = () => {
                 </div>
 
                 <div className="radio">
-                  <label for="and">
+                  <label htmlFor="and">
                     <input
                       id="and"
                       value="and"

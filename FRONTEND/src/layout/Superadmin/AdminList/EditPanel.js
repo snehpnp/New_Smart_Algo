@@ -395,7 +395,7 @@ const Edit_panel = () => {
                                                         />
                                                         <label
                                                             className="form-check-label"
-                                                            for={broker.name}
+                                                            htmlFor={broker.name}
                                                         >
                                                             {broker.name}
                                                         </label>

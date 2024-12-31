@@ -53,7 +53,6 @@ const AllClients = () => {
   const dispatch = useDispatch();
   const user_details = JSON.parse(localStorage.getItem("user_details"));
   const [refresh, setrefresh] = useState(false);
-  const [originalData, setOriginalData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [PanelStatus, setPanelStatus] = useState("2");
   const [ClientStatus, setClientStatus] = useState("null");
@@ -73,9 +72,44 @@ const AllClients = () => {
     setSearchQuery(searchInput);
   };
   useEffect(() => {
-    Brokerdata();
-  }, []);
+    const Brokerdata = async () => {
+      await dispatch(
+        All_Api_Info_List({
+          token: user_details?.token,
+          url: Config.react_domain,
+          brokerId: -1,
+          key: 1,
+        })
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
+            setBrokerDetails(response.data);
+          }
+        });
+    };
 
+    Brokerdata();
+  }, [dispatch, user_details?.token]);
+
+  useEffect(() => {
+    const GetAllStrategyName = async () => {
+      await dispatch(
+        Get_All_Service_for_Client({
+          req: {},
+          token: user_details?.token,
+        })
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
+            setAllStrategyName(response.data);
+          }
+        });
+    };
+
+    GetAllStrategyName();
+  }, [dispatch, user_details?.token]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,7 +121,6 @@ const AllClients = () => {
     };
 
     fetchData();
-    GetAllStrategyName();
   }, [
     StrategyClientStatus,
     getPage,
@@ -95,7 +128,7 @@ const AllClients = () => {
     ClientStatus,
     PanelStatus,
     selectBroker,
-    searchQuery
+    searchQuery,
   ]);
 
   const GetClientsApi = async () => {
@@ -109,7 +142,7 @@ const AllClients = () => {
       PanelStatus: PanelStatus,
       selectBroker: selectBroker,
       dashboard_filter: dashboard_filter,
-      searchQuery: searchQuery
+      searchQuery: searchQuery,
     };
 
     await dispatch(GET_ALL_CLIENTS(req1))
@@ -182,39 +215,6 @@ const AllClients = () => {
             pagination: response?.pagination,
           });
         }
-
-        setOriginalData(response.data);
-      });
-  };
-
-  const Brokerdata = async () => {
-    await dispatch(
-      All_Api_Info_List({
-        token: user_details && user_details.token,
-        url: Config.react_domain,
-        brokerId: -1,
-        key: 1,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setBrokerDetails(response.data);
-        }
-      });
-  };
-  const GetAllStrategyName = async (e) => {
-    await dispatch(
-      Get_All_Service_for_Client({
-        req: {},
-        token: user_details?.token,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setAllStrategyName(response.data);
-        }
       });
   };
 
@@ -240,7 +240,7 @@ const AllClients = () => {
   };
 
   const goToDashboard = async (row, asyncid, email) => {
-    if (row.AppLoginStatus == "1" || row.WebLoginStatus == "1") {
+    if (row.AppLoginStatus === "1" || row.WebLoginStatus === "1") {
       let req = {
         Email: email,
       };
@@ -381,7 +381,7 @@ const AllClients = () => {
       formatter: (cell, row) => showLicenceName(cell, row.license_type),
     },
     {
-      dataField: "ActiveStatus",
+      dataField: "Active Status",
       text: "Status",
       formatter: (cell, row) => (
         <>
@@ -389,14 +389,14 @@ const AllClients = () => {
             <input
               className="toggle-checkbox bg-primary"
               type="checkbox"
-              checked={row.ActiveStatus === "1" ? true : false}
+              checked={row?.ActiveStatus === "1" ? true : false}
               onChange={(e) => {
                 activeUser(e, row);
               }}
             />
             <div
               className={`toggle-switch  ${
-                row.ActiveStatus === "1" ? "bg-success" : "bg-danger"
+                row?.ActiveStatus === "1" ? "bg-success" : "bg-danger"
               }`}
             ></div>
           </label>
@@ -404,7 +404,7 @@ const AllClients = () => {
       ),
     },
     {
-      dataField: "ActiveStatus",
+      dataField: "Active cd",
       text: "Go To Dashboard",
       formatter: (cell, row) => (
         <>
@@ -416,7 +416,7 @@ const AllClients = () => {
                 : { color: "#56c080" }
             }
             onClick={() => goToDashboard(row, row._id, row.Email)}
-            disabled={row.AppLoginStatus == "0" && row.WebLoginStatus == "0"}
+            disabled={row.AppLoginStatus === "0" && row.WebLoginStatus === "0"}
           >
             Dashboard
           </span>
@@ -431,7 +431,7 @@ const AllClients = () => {
           {row.StartDate == null && row.EndDate == null ? (
             <span
               style={
-                cell == "off" || cell === null
+                cell === "off" || cell === null
                   ? { color: "#FF0000", fontSize: "13px" }
                   : { color: "#008000", fontSize: "13px" }
               }
@@ -441,7 +441,7 @@ const AllClients = () => {
           ) : (
             <span
               style={
-                cell == "off" || cell === null
+                cell === "off" || cell === null
                   ? { color: "#FF0000", fontSize: "40px" }
                   : { color: "#008000", fontSize: "40px" }
               }
@@ -483,7 +483,7 @@ const AllClients = () => {
                 />
               </span>
             </Link>
-            {row.license_type == "1" ? (
+            {(row.license_type === "1" || row.license_type === 1) && (
               <Link>
                 <span data-toggle="tooltip" data-placement="top" title="Delete">
                   <Trash2
@@ -491,12 +491,10 @@ const AllClients = () => {
                     color="#d83131"
                     strokeWidth={2}
                     className="mx-1"
-                    onClick={(e) => Delete_user(row._id)}
+                    onClick={() => Delete_user(row._id)}
                   />
                 </span>
               </Link>
-            ) : (
-              ""
             )}
           </div>
         </div>
@@ -522,7 +520,7 @@ const AllClients = () => {
               />
             </span>
 
-            {row.license_type != "1" && (
+            {(row.license_type !== "1" || row.license_type !== 1) && (
               <span
                 data-toggle="tooltip"
                 data-placement="top"
@@ -551,16 +549,13 @@ const AllClients = () => {
   const showBrokerName = (value1, licence_type) => {
     if (licence_type === "1") {
       return "Demo";
-    } else {
-      const foundNumber =
-        BrokerDetails &&
-        BrokerDetails.find((value) => value.broker_id == value1);
-      if (foundNumber != undefined) {
-        return foundNumber.title;
-      } else {
-        return "";
-      }
     }
+
+    const foundBroker = BrokerDetails?.find(
+      (value) => parseInt(value.broker_id) === parseInt(value1)
+    );
+
+    return foundBroker?.title ?? "";
   };
 
   const forCSVdata = (data) => {
@@ -650,7 +645,7 @@ const AllClients = () => {
           <div className="row">
             <div className="col-lg-2 ">
               <div className="mb-3">
-                <label for="select" className="form-label">
+                <label htmlFor="select" className="form-label">
                   Client Type
                 </label>
 
@@ -670,7 +665,7 @@ const AllClients = () => {
             </div>
             <div className="col-lg-2">
               <div className="mb-3">
-                <label for="select" className="form-label">
+                <label htmlFor="select" className="form-label">
                   Trading Type
                 </label>
 
@@ -690,7 +685,7 @@ const AllClients = () => {
 
             <div className="col-lg-2">
               <div className="mb-3">
-                <label for="select" className="form-label">
+                <label htmlFor="select" className="form-label">
                   Broker Type
                 </label>
                 <select
@@ -714,7 +709,7 @@ const AllClients = () => {
 
             <div className="col-lg-3">
               <div className="mb-3">
-                <label for="select" className="form-label">
+                <label htmlFor="select" className="form-label">
                   Strategies
                 </label>
                 <select
@@ -771,8 +766,6 @@ const AllClients = () => {
               </div>
             </div>
           </div>
-
-          {/* <FullDataTable TableColumns={columns} tableData={getAllClients} /> */}
 
           <PaginationProvider
             pagination={paginationFactory({

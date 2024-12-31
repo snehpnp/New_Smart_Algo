@@ -1866,7 +1866,7 @@ const updateStrategy = async (e) => {
                 <input className="form-check-input" onChange={(e) => setBuyCheck(e.target.checked)} type="checkbox" id="inlineCheckbox1" value="option1" 
                 checked={buyCheck}
                 />
-                <label className="form-check-label" for="inlineCheckbox1">Buy</label>
+                <label className="form-check-label" htmlFor="inlineCheckbox1">Buy</label>
               </div>
 
 
@@ -2106,7 +2106,7 @@ const updateStrategy = async (e) => {
                   <input className="form-check-input" onChange={(e) => setSellCheck(e.target.checked)} type="checkbox" id="inlineCheckbox2" value="option1" 
                   checked={sellCheck}
                   />
-                  <label className="form-check-label" for="inlineCheckbox2">Sell</label>
+                  <label className="form-check-label" htmlFor="inlineCheckbox2">Sell</label>
                 </div>
                 <strong >Sell Entry Condition</strong>
 
@@ -2451,11 +2451,11 @@ const updateStrategy = async (e) => {
           <Col md={2}>
            
            <div className="radio">
-                  <label for="or"><input id="or" value="or" type="radio" checked={selectAndOrOperater === 'or'} name="at_check" onChange={(e) => { setSelectAndOrOperater(e.target.value) }} />OR</label>
+                  <label htmlFor="or"><input id="or" value="or" type="radio" checked={selectAndOrOperater === 'or'} name="at_check" onChange={(e) => { setSelectAndOrOperater(e.target.value) }} />OR</label>
             </div>
 
             <div className="radio">
-                  <label for="and"><input id="and" value="and" type="radio" checked={selectAndOrOperater === 'and'} name="at_check" onChange={(e) => { setSelectAndOrOperater(e.target.value) }} />AND</label>
+                  <label htmlFor="and"><input id="and" value="and" type="radio" checked={selectAndOrOperater === 'and'} name="at_check" onChange={(e) => { setSelectAndOrOperater(e.target.value) }} />AND</label>
             </div>
           
           </Col>
