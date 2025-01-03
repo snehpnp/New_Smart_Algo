@@ -325,6 +325,15 @@ async function createViewZebul() {
   } 
 }
 
+async function dropViewZebul() {
+  try {
+    await dbTest.dropCollection('ZebulView');
+    console.log('Zebul View dropped successfully.');
+  } catch (error) {
+    return
+  } 
+}
 
-module.exports = { createViewZebul }
+
+module.exports = { createViewZebul,dropViewZebul }
 

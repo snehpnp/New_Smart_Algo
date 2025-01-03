@@ -216,7 +216,6 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
   }
 };
 
-
 // ==================================================================================================
 // MT_4 , OPTION_CHAIN , MAKE_STG, SQUARE_OFF
 
@@ -236,6 +235,7 @@ const iiflView = require("./Broker/Iifl");
 const Motilaloswal = require("./Broker/Motilaloswal");
 const Zebull = require("./Broker/Zebull");
 const icicidirect = require("./Broker/icicidirect");
+const choiceBroker =require("./Broker/choice");
 
 const shoonya = require("./Broker/shoonya");
 
@@ -316,7 +316,7 @@ app.post("/broker-signals", async (req, res) => {
       var segment = signals.Segment?.toUpperCase();
       var segment1 = signals.Segment?.toUpperCase();
       var strike = signals.Strike;
-      var option_type = signals.OType;
+      var option_type = signals.OType.toUpperCase();
       var expiry = signals.Expiry;
       var strategy = signals.Strategy;
       var qty_percent = 100;
@@ -331,7 +331,9 @@ app.post("/broker-signals", async (req, res) => {
       let ExitStatus = "-";
       let ft_time = "";
 
-      if (signals.ExitStatus != undefined) {
+      if (signals.ExitStatus == "Tradingview") {
+        ExitStatus = "Tradingview";
+      } else if (signals.ExitStatus != undefined) {
         ExitStatus = signals.ExitStatus;
       }
 
@@ -710,7 +712,10 @@ app.post("/broker-signals", async (req, res) => {
               .toArray();
 
             try {
-              if (signals.TradeType === "MT_4") {
+              if (
+                signals.TradeType === "MT_4" ||
+                signals.TradeType === "Tradingview"
+              ) {
                 if (LivePricePermission.price_permission == 0) {
                   if (signals.Price === 0) {
                     if (price_live_second.length > 0) {
@@ -723,15 +728,24 @@ app.post("/broker-signals", async (req, res) => {
                         PriceType = "Live";
                       } else {
                         price = signals.Price;
-                        PriceType = "Mt4";
+                        PriceType =
+                          signals.TradeType === "Tradingview"
+                            ? "Tradingview"
+                            : "Mt4";
                       }
                     } else {
                       price = signals.Price;
-                      PriceType = "Mt4";
+                      PriceType =
+                        signals.TradeType === "Tradingview"
+                          ? "Tradingview"
+                          : "Mt4";
                     }
                   } else {
                     price = signals.Price;
-                    PriceType = "Mt4";
+                    PriceType =
+                      signals.TradeType === "Tradingview"
+                        ? "Tradingview"
+                        : "Mt4";
                   }
                 } else {
                   if (price_live_second.length > 0) {
@@ -744,11 +758,17 @@ app.post("/broker-signals", async (req, res) => {
                       PriceType = "Live";
                     } else {
                       price = signals.Price;
-                      PriceType = "Mt4";
+                      PriceType =
+                        signals.TradeType === "Tradingview"
+                          ? "Tradingview"
+                          : "Mt4";
                     }
                   } else {
                     price = signals.Price;
-                    PriceType = "Mt4";
+                    PriceType =
+                      signals.TradeType === "Tradingview"
+                        ? "Tradingview"
+                        : "Mt4";
                   }
                 }
               } else {
@@ -756,7 +776,6 @@ app.post("/broker-signals", async (req, res) => {
                 if (price_live_second.length > 0) {
                   ft_time = price_live_second[0].ft;
                   PriceType = "Live";
-
                 }
               }
             } catch (error) {
@@ -765,7 +784,8 @@ app.post("/broker-signals", async (req, res) => {
 
             if (price == null) {
               price = signals.Price;
-              PriceType = "Mt4";
+              PriceType =
+                signals.TradeType === "Tradingview" ? "Tradingview" : "Mt4";
             }
           }
 
@@ -2128,7 +2148,6 @@ app.post("/broker-signals", async (req, res) => {
 
           const Filter_users = await Filter_user.aggregate(pipeline).toArray();
 
-
           const uniqueUserIds = Filter_users.map((user) => user._id);
 
           try {
@@ -2217,8 +2236,6 @@ app.post("/broker-signals", async (req, res) => {
             };
             const Entry_MainSignals = new MainSignals(Entry_MainSignals_req);
             await Entry_MainSignals.save();
-
-       
           } else if (
             type == "LX" ||
             type == "lx" ||
@@ -2227,7 +2244,7 @@ app.post("/broker-signals", async (req, res) => {
           ) {
             const updatedFindSignal = {
               ...findSignal,
-              exit_qty_percent: "", 
+              exit_qty_percent: "",
             };
 
             var ExitMainSignals = await MainSignals.find(updatedFindSignal);

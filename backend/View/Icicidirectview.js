@@ -306,7 +306,14 @@ async function createViewIcicidirect() {
         return;
     } 
 }
+async function dropViewIcicidirect() {
+    try {
+        await dbTest.dropCollection('icicidirectview');
+        console.log('icicidirect View dropped successfully.');
+    } catch (error) {
+        return;
+    }
+}
 
-
-module.exports = { createViewIcicidirect }
+module.exports = { createViewIcicidirect,dropViewIcicidirect }
 

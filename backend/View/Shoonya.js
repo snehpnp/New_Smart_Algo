@@ -305,6 +305,16 @@ async function createViewShoonya() {
   } 
 }
 
+async function dropViewShoonya() {
+  try {
+    await dbTest.collection('shoonyaView').drop();
+    console.log('shoonya View dropped successfully.');
+    return
+  } catch (error) {
+    return;
+  }
+}
 
-module.exports = { createViewShoonya }
+
+module.exports = { createViewShoonya,dropViewShoonya }
 

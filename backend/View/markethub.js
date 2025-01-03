@@ -108,31 +108,11 @@ async function createViewMarketHub() {
             postdata:
             {
   
-              variety:"NORMAL",
-             
-              tradingsymbol: "$service.zebu_token",
-  
-              symboltoken: {
-                $cond: {
-                  if: {
-                    $and:
-                      [
-                        { $eq: ['$category.segment', 'C'] },
-                      ]
-                  },
-                  then: "$service.instrument_token",
-                  else: ""
-  
-                }
-              },
-  
-              transactiontype: 'Buy',
-  
-              
+              // exchange condition here
               exchange: {
                 $cond: {
                   if: { $eq: ['$category.segment', 'C'] }, // Your condition here
-                  then: 'NSE',
+                  then: 'NseCm',
                   else: {
                     $cond: {
                       if: {
@@ -142,7 +122,7 @@ async function createViewMarketHub() {
                           { $eq: ['$category.segment', 'FO'] }
                         ]
                       },
-                      then: 'NFO',
+                      then: 'NseFO',
                       else: {
   
                         $cond: {
@@ -162,10 +142,10 @@ async function createViewMarketHub() {
                                   { $eq: ['$category.segment', 'CO'] }
                                 ]
                               },
-                              then: 'CDS',
+                              then: 'NseCD',
   
                               // all not exist condition 
-                              else: "NFO"
+                              else: "NseFO"
   
                             }
   
@@ -182,8 +162,26 @@ async function createViewMarketHub() {
   
                 }
               },
-              
-              ordertype: {
+  
+  
+              // Toke token condition here
+              token: {
+                $cond: {
+                  if: {
+                    $and:
+                      [
+                        { $eq: ['$category.segment', 'C'] },
+                      ]
+                  },
+                  then: "$service.instrument_token",
+                  else: ""
+  
+                }
+              },
+  
+  
+              // ordertype code condition here
+              book_type: {
                 $cond: {
                   if: {
                     $and:
@@ -191,7 +189,7 @@ async function createViewMarketHub() {
                         { $eq: ['$client_services.order_type', '1'] },
                       ]
                   },
-                  then: 'MARKET',
+                  then: 'RL',
                   else: {
                     $cond: {
                       if: {
@@ -200,7 +198,7 @@ async function createViewMarketHub() {
                             { $eq: ['$client_services.order_type', '2'] },
                           ]
                       },
-                      then: 'LIMIT',
+                      then: 'RL',
                       else: {
                         $cond: {
                           if: {
@@ -209,7 +207,7 @@ async function createViewMarketHub() {
                                 { $eq: ['$client_services.order_type', '3'] },
                               ]
                           },
-                          then: 'STOPLOSS=LIMIT',
+                          then: 'SL',
                           else: {
                             $cond: {
                               if: {
@@ -218,9 +216,10 @@ async function createViewMarketHub() {
                                     { $eq: ['$client_services.order_type', '4'] },
                                   ]
                               },
-                            then: 'STOPLOSS-MARKET',
+                              then: 'SL',
   
-                            else: "MARKET"
+                              //All condition exist
+                              else: "RL"
   
                             }
   
@@ -236,7 +235,24 @@ async function createViewMarketHub() {
                 }
   
               },
-              producttype: {
+  
+              
+              side: 'Buy',
+  
+              quantity: "$client_services.quantity",
+  
+              price: '0',
+            
+              disclosed_quantity: '0',
+            
+              trigger_price: '0',
+            
+              market_protection_percent: '2',
+             
+              validity: 'Day',
+  
+              // product type condition here
+              product: {
                 $cond: {
                   if: {
                     $and:
@@ -251,7 +267,7 @@ async function createViewMarketHub() {
                         },
                       ]
                   },
-                  then: 'CNC',
+                  then: 'Normal',
                   else: {
                     $cond: {
                       if: {
@@ -260,7 +276,7 @@ async function createViewMarketHub() {
                             { $eq: ['$client_services.product_type', '2'] },
                           ]
                       },
-                    then: 'MIS',
+                      then: 'Intraday',
                       else: {
                         $cond: {
                           if: {
@@ -296,17 +312,13 @@ async function createViewMarketHub() {
   
   
               },
-              duration: 'DAY',
-              price: '0',
-              quantity: "$client_services.quantity",
-              triggerprice: '0',
-                disclosedquantity: '0',
-              ordersource:null,
-              naicCode:null,
-              remarks:"_",
-              Confirm:false,
-              AlgoId:"0",
-              AlgoType:"0"
+  
+              client_id : "$client_code",
+             
+              sender_order_id : "1500",
+          
+  
+  
             }
           }
         }
@@ -326,15 +338,14 @@ async function createViewMarketHub() {
   } 
 }
 
-// Delete View
-async function deleteViewMarketHub() {
+async function dropViewMarketHub() {
   try {
-    await dbTest.collection('markethubView').drop();
-    console.log('Market Hub View  deleted successfully.');
+    await dbTest.dropCollection('markethubView');
+    console.log('markethubView View dropped successfully.');
   } catch (error) {
-    return
-  }
+    return;
+  } 
 }
 
-module.exports = { createViewMarketHub ,deleteViewMarketHub}
+module.exports = { createViewMarketHub,dropViewMarketHub }
 

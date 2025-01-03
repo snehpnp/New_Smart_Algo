@@ -323,6 +323,14 @@ async function createViewMotilalOswal() {
   } 
 }
 
+async function dropViewMotilalOswal() {
+  try {
+    await dbTest.dropCollection('MotilalOswalView');
+    console.log('MotilalOswal View dropped successfully.');
+  } catch (error) {
+    return;
+  } 
+}
 
-module.exports = { createViewMotilalOswal }
+module.exports = { createViewMotilalOswal,dropViewMotilalOswal }
 

@@ -68,6 +68,9 @@ module.exports = function (app) {
   } = require("../View/Icicidirectview");
   const { createViewShoonya, dropViewShoonya } = require("../View/Shoonya");
 
+  const {  createViewChoice ,dropViewChoice } = require("../View/Choice");
+
+
   app.get("/tk", (req, res) => {
     TokenSymbolUpdate();
     res.send("ok");
@@ -973,6 +976,7 @@ module.exports = function (app) {
     createViewZerodha();
     createViewIcicidirect();
     createViewShoonya();
+    createViewChoice();
 
     return res.send("DONEE");
   });
@@ -994,6 +998,7 @@ module.exports = function (app) {
     dropViewZerodha();
     dropViewIcicidirect();
     dropViewShoonya();
+    dropViewChoice();
 
     return res.send({ staus: true, msg: "DELETE DONEE", data: "" });
   });

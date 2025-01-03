@@ -277,6 +277,15 @@ async function createViewFivepaisa() {
   } 
 }
 
+async function dropViewFivepaisa() {
+  try {
+    await dbTest.dropCollection('fivepaisaView');
+    console.log('fivepaisaView View dropped successfully.');
+  } catch (error) {
+    return;
+  } 
+}
 
-module.exports = { createViewFivepaisa }
+
+module.exports = { createViewFivepaisa,dropViewFivepaisa }
 

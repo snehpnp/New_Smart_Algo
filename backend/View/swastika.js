@@ -303,6 +303,15 @@ async function createViewSwastika() {
   } 
 }
 
+async function dropViewSwastika() {
+  try {
+    await dbTest.collection('swastikaView').drop();
+    console.log('swastika View dropped successfully.');
+    return
+  } catch (error) {
+    return;
+  }
+}
 
-module.exports = { createViewSwastika }
+module.exports = { createViewSwastika ,dropViewSwastika}
 

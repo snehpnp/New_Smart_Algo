@@ -58,9 +58,6 @@ class Choice {
             Pwd: encryptedData,
           });
 
-          console.log("USERID- ", Get_User[0].client_code);
-          console.log("Pwd- ", encryptedData);
-
           //check fund Api
           var config = {
             method: "post",
@@ -72,7 +69,6 @@ class Choice {
             },
             data: data,
           };
-          console.log("config", config);
 
           await axios
             .request(config)

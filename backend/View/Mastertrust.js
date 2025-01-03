@@ -335,6 +335,14 @@ async function createViewMastertrust() {
   } 
 }
 
+async function dropViewMastertrust() {
+  try {
+    await dbTest.dropCollection('mastertrustView');
+    console.log('mastertrustView View dropped successfully.');
+  } catch (error) {
+    return;
+  } 
+}
 
-module.exports = { createViewMastertrust }
+module.exports = { createViewMastertrust,dropViewMastertrust }
 

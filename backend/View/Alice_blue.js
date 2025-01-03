@@ -138,24 +138,7 @@ async function createViewAlice() {
                                 ]
                               },
                               then: 'CDS',
-                              else: {
-                                $cond: {
-                                  if: {
-                                    $or: [
-                                      { $eq: ['$category.segment', 'BF'] },
-                                      { $eq: ['$category.segment', 'BO'] }
-                                    ]
-                                  },
-                                  then: 'BFO',
-                                  else: {
-                                    $cond: {
-                                      if: { $eq: ['$category.segment', 'BC'] },
-                                      then: 'BSE',
-                                      else: 'NFO'
-                                    }
-                                  }
-                                }
-                              }
+                              else: "NFO"
                             }
                           }
                         }
@@ -164,7 +147,6 @@ async function createViewAlice() {
                   }
                 }
               },
-              
               pCode: {
                 $cond: {
                   if: {
@@ -273,4 +255,13 @@ async function createViewAlice() {
   } 
 }
 
-module.exports = { createViewAlice };
+async function dropViewAlice() {
+  try {
+    await dbTest.dropCollection('aliceblueView');
+    console.log('Alice View dropped successfully.');
+  } catch (error) {
+    return;
+  }
+}
+
+module.exports = { createViewAlice,dropViewAlice };

@@ -112,75 +112,57 @@ async function createViewDhan() {
 
               exchangeSegment: {
                 $cond: {
-                  if: { $eq: ['$category.segment', 'C'] }, // Condition for NSE_EQ
+                  if: { $eq: ['$category.segment', 'C'] }, // Your condition here
                   then: 'NSE_EQ',
                   else: {
                     $cond: {
-                      if: { $eq: ['$category.segment', 'BC'] }, // Condition for BSE_EQ
-                      then: 'BSE_EQ',
+                      if: {
+                        $or: [
+                          { $eq: ['$category.segment', 'F'] },
+                          { $eq: ['$category.segment', 'O'] },
+                          { $eq: ['$category.segment', 'FO'] }
+                        ]
+                      },
+                      then: 'NSE_FNO',
                       else: {
+
                         $cond: {
                           if: {
                             $or: [
-                              { $eq: ['$category.segment', 'F'] },
-                              { $eq: ['$category.segment', 'O'] },
-                              { $eq: ['$category.segment', 'FO'] }
+                              { $eq: ['$category.segment', 'MF'] },
+                              { $eq: ['$category.segment', 'MO'] }
                             ]
-                          }, // Condition for NSE_FNO
-                          then: 'NSE_FNO',
+                          },
+                          then: 'MCX_COMM',
                           else: {
+
                             $cond: {
                               if: {
                                 $or: [
-                                  { $eq: ['$category.segment', 'BF'] },
-                                  { $eq: ['$category.segment', 'BO'] },
-                                  { $eq: ['$category.segment', 'BFO'] }
+                                  { $eq: ['$category.segment', 'CF'] },
+                                  { $eq: ['$category.segment', 'CO'] }
                                 ]
-                              }, // Condition for BSE_FNO
-                              then: 'BSE_FNO',
-                              else: {
-                                $cond: {
-                                  if: {
-                                    $or: [
-                                      { $eq: ['$category.segment', 'MF'] },
-                                      { $eq: ['$category.segment', 'MO'] }
-                                    ]
-                                  }, // Condition for MCX_COMM
-                                  then: 'MCX_COMM',
-                                  else: {
-                                    $cond: {
-                                      if: {
-                                        $or: [
-                                          { $eq: ['$category.segment', 'CF'] },
-                                          { $eq: ['$category.segment', 'CO'] }
-                                        ]
-                                      }, // Condition for NSE_CURRENCY
-                                      then: 'NSE_CURRENCY',
-                                      else: {
-                                        $cond: {
-                                          if: {
-                                            $or: [
-                                              { $eq: ['$category.segment', 'BCF'] },
-                                              { $eq: ['$category.segment', 'BCO'] }
-                                            ]
-                                          }, // Condition for BSE_CURRENCY
-                                          then: 'BSE_CURRENCY',
-                                          else: 'NFO' // Default condition
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
+                              },
+                              then: 'NSE_CURRENCY',
+
+                              // all not exist condition 
+                              else: "NFO"
+
                             }
+
                           }
+
                         }
+
+
                       }
+
                     }
+
                   }
+
                 }
               },
-              
 
 
               productType: {
@@ -339,6 +321,14 @@ async function createViewDhan() {
   } 
 }
 
+async function dropViewDhan() {
+  try {
+    await dbTest.dropCollection('dhanView');
+    return
+  } catch (error) {
+    return;
+  } 
+}
 
-module.exports = { createViewDhan }
+module.exports = { createViewDhan ,dropViewDhan}
 

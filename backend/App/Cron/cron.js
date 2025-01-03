@@ -3,12 +3,10 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 var Promise = require("polyfill-promise");
-var Sheets = require("google-sheets-api").Sheets;
 const Papa = require("papaparse");
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 var dateTime = require("node-datetime");
-var moment = require("moment");
 const db = require("../Models");
 const Alice_token = db.Alice_token;
 const User = db.user;
@@ -24,8 +22,7 @@ const company_information = db.company_information;
 
 const { DashboardView, deleteDashboard } = require("../../View/DashboardData");
 const { createView } = require("../../View/Open_position");
-const { logger, getIPAddress } = require("../Helper/logger.helper");
-
+const { getIPAddress } = require("../Helper/logger.helper");
 
 cron.schedule("10 5 * * *", () => {
   deleteDashboard();
@@ -51,7 +48,6 @@ cron.schedule("10 1 * * *", () => {
 cron.schedule("*/10 9-15 * * *", () => {
   GetStrickPriceFromSheet();
 });
-
 
 cron.schedule("50 23 * * *", () => {
   twodaysclient();
@@ -81,7 +77,6 @@ cron.schedule("20 3 * * *", () => {
 //   console.log("running a task every minute");
 //   TokenSymbolUpdate()
 // })
-
 
 cron.schedule("1 1 * * *", () => {
   UpdateGetMonthlyData();
@@ -972,14 +967,12 @@ function createUserDataArray(data, segment) {
 
 async function insertData(dataArray) {
   try {
-
     const existingTokens = await Alice_token.distinct("instrument_token", {});
 
     const filteredDataArray = dataArray.filter((userData) => {
       return !existingTokens.includes(userData.instrument_token);
     });
 
-   
     const bulkOps = filteredDataArray.map((userData) => ({
       updateOne: {
         filter: { instrument_token: userData.instrument_token },
@@ -991,16 +984,14 @@ async function insertData(dataArray) {
     if (bulkOps.length > 0) {
       await Alice_token.bulkWrite(bulkOps);
     }
-
   } catch (error) {
     console.log("Error in insertData:", error);
   }
 }
 
-
 const TokenSymbolUpdate = async () => {
   try {
-    var filePath = path.join(__dirname + "/checkTest.txt"); 
+    var filePath = path.join(__dirname + "/checkTest.txt");
 
     fs.appendFile(
       filePath,
@@ -1184,7 +1175,6 @@ const TokenSymbolUpdate1 = async () => {
   }
 
   try {
-
     const config = {
       method: "get",
       url: "https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json",
@@ -1503,9 +1493,9 @@ const GetStrickPriceFromSheet = async () => {
             )
             .map((data) => ({
               updateOne: {
-                filter: { symbol: data.SYMBOL }, 
+                filter: { symbol: data.SYMBOL },
                 update: { $set: { price: data.CPrice } },
-                upsert: true, 
+                upsert: true,
               },
             }));
 

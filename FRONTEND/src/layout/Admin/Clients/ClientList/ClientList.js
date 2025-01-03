@@ -303,45 +303,23 @@ const AllClients = () => {
     }
   };
 
-  const StarClientFormatter = ({ cell, row }) => {
-    const [isStarred, setIsStarred] = useState(cell === "1");
+  const handleToggle = async (StarStatus, data) => {
+    console.log("Clicked element:", StarStatus);
 
-    const handleToggle = async (e, data) => {
-      const newStarStatus = !isStarred;
-      let req = {
-        id: data._id,
-        StarStatus: newStarStatus ? "1" : "0",
-      };
-      await dispatch(UpdateStarClientStatus(req))
-        .unwrap()
-        .then((response) => {
-          if (response.status) {
-            setIsStarred(newStarStatus ? "1" : "0");
-            setrefresh(!refresh);
-          }
-        });
+    const req = {
+      id: data._id,
+      StarStatus: StarStatus ? "1" : "0",
     };
 
-    return (
-      <div style={{ width: "100px" }}>
-        <div
-          onClick={(e) => handleToggle(e, row)}
-          style={{ cursor: "pointer" }}
-        >
-          <span
-            data-toggle="tooltip"
-            data-placement="top"
-            title="Trading Status"
-          >
-            {isStarred ? (
-              <i className="bi bi-star-fill"></i>
-            ) : (
-              <i className="bi bi-star"></i>
-            )}
-          </span>
-        </div>
-      </div>
-    );
+    try {
+      const response = await dispatch(UpdateStarClientStatus(req)).unwrap();
+      if (response.status) {
+        setrefresh(!refresh);
+        GetClientsApi();
+      }
+    } catch (error) {
+      console.error("Error updating star status", error);
+    }
   };
 
   const columns = [
@@ -542,7 +520,23 @@ const AllClients = () => {
     {
       dataField: "starClient",
       text: "Favorite",
-      formatter: (cell, row) => <StarClientFormatter cell={cell} row={row} />,
+      formatter: (cell, row) => (
+        <div style={{ cursor: "pointer" }}>
+          <div>
+            {cell === 1 || cell === 1 ? (
+              <i
+                className="bi bi-star-fill"
+                onClick={() => handleToggle(false, row)}
+              ></i>
+            ) : (
+              <i
+                className="bi bi-star"
+                onClick={() => handleToggle(true, row)}
+              ></i>
+            )}
+          </div>
+        </div>
+      ),
     },
   ];
 
