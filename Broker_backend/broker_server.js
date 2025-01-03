@@ -316,7 +316,7 @@ app.post("/broker-signals", async (req, res) => {
       var segment = signals.Segment?.toUpperCase();
       var segment1 = signals.Segment?.toUpperCase();
       var strike = signals.Strike;
-      var option_type = signals.OType.toUpperCase();
+      var option_type = signals.OType?.toUpperCase();
       var expiry = signals.Expiry;
       var strategy = signals.Strategy;
       var qty_percent = 100;
@@ -331,7 +331,8 @@ app.post("/broker-signals", async (req, res) => {
       let ExitStatus = "-";
       let ft_time = "";
 
-      if (signals.ExitStatus == "Tradingview") {
+   
+      if (signals.TradeType == "Tradingview") {
         ExitStatus = "Tradingview";
       } else if (signals.ExitStatus != undefined) {
         ExitStatus = signals.ExitStatus;
@@ -354,7 +355,7 @@ app.post("/broker-signals", async (req, res) => {
 
       var ExitTime = 0;
       if (signals.ExitTime != undefined) {
-        ExitTime = signals.ExitTime.replace(/-/g, ":");
+        ExitTime = signals.ExitTime?.replace(/-/g, ":");
       }
 
       var MakeStartegyName = "";
@@ -365,10 +366,10 @@ app.post("/broker-signals", async (req, res) => {
       var demo = signals.Demo;
 
       if (client_key != undefined) {
-        const FIRST3_KEY = client_key.substring(0, 3);
+        const FIRST3_KEY = client_key?.substring(0, 3);
 
         if (FIRST3_KEY == process.env.PANEL_FIRST_THREE) {
-          var signal_req = Buffer.from(JSON.stringify(req.rawBody)).toString(
+          var signal_req = Buffer.from(JSON.stringify(req.rawBody))?.toString(
             "base64"
           );
 
@@ -383,7 +384,7 @@ app.post("/broker-signals", async (req, res) => {
             Trade_Option_Type = "PE";
           }
 
-          const day_expiry = expiry.substr(0, 2);
+          const day_expiry = expiry?.substr(0, 2);
           var dateHash = {
             Jan: "01",
             Feb: "02",
@@ -398,7 +399,7 @@ app.post("/broker-signals", async (req, res) => {
             Nov: "11",
             Dec: "12",
           }; // 2009-11-10
-          const month_expiry = expiry.substr(2, 2);
+          const month_expiry = expiry?.substr(2, 2);
 
           function getKeyByValue(object, value) {
             return Object.keys(object).find((key) => object[key] == value);
@@ -407,7 +408,7 @@ app.post("/broker-signals", async (req, res) => {
             dateHash,
             month_expiry
           )?.toUpperCase();
-          const ex_year_expiry = expiry.substr(-2);
+          const ex_year_expiry = expiry?.substr(-2);
 
           var token = "";
           var instrument_query = { name: input_symbol };
@@ -674,16 +675,7 @@ app.post("/broker-signals", async (req, res) => {
             find_lot_size = token[0].lotsize;
           }
 
-          var tradesymbol1;
-          if (token.length == 0) {
-            tradesymbol1 = "";
-          } else {
-            if (segment == "C" || segment == "c") {
-              tradesymbol1 = token[0].zebu_token;
-            } else {
-              tradesymbol1 = token[0].tradesymbol;
-            }
-          }
+       
 
           fs.appendFile(
             filePath,
@@ -2085,13 +2077,12 @@ app.post("/broker-signals", async (req, res) => {
             //End Process Tading View Client Shoonya
           }
 
-          option_type = option_type.toUpperCase();
 
-          var is_CE_val_option = "PE";
-          if (option_type == "CALL") {
-            is_CE_val_option = "CE";
-          }
+          
 
+          option_type = option_type?.toUpperCase();
+
+          
           // IF SQ_PRICE
           var sq_value;
           if (sq_value == undefined) {
@@ -2359,13 +2350,14 @@ app.post("/broker-signals", async (req, res) => {
         return res.send({ status: false, msg: "No Signal Key Recevie" });
       }
     } else {
-      // console.log('receive signals -', req.body);
       return res.send({ status: false, msg: "req is not correct" });
     }
   } catch (error) {
-    console.log("error", error);
+    console.log("Broker Error", error);
   }
 });
+
+
 
 // Server start
 app.listen(process.env.PORT, () => {

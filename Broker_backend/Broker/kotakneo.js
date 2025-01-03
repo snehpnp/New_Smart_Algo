@@ -91,13 +91,13 @@ const place_order = async (
               optionType = "PE";
             }
             command = `grep -E ".*(${pattern}).*.*(mcx_fo).*.*(${optionType}).*" ${filePath1}`;
-          } else if (segment && segment.toLowerCase() === "BC") {
+          } else if (segment && segment.toLowerCase() === "bc") {
             filePath_token = "../AllInstrumentToken/KotakNeo/KOTAK_BSE_CM.csv";
 
             const filePath1 = path.join(__dirname, filePath_token);
       
             command = `grep -E ".*(${pattern}).*.*(mcx_fo).*.*(${optionType}).*" ${filePath1}`;
-          } else if (segment && segment.toLowerCase() === "BO") {
+          } else if (segment && segment.toLowerCase() === "bo") {
             filePath_token = "../AllInstrumentToken/KotakNeo/KOTAK_BSE_FO.csv";
 
             const filePath1 = path.join(__dirname, filePath_token);

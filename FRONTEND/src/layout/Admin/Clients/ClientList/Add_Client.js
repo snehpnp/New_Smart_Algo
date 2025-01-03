@@ -721,7 +721,7 @@ const AddClient = () => {
     {
       name: "app_key",
       label:
-        formik.values.broker == 5 || 6
+        formik.values.broker == 5 || formik.values.broker ==  6
           ? "App Key"
           : formik.values.broker == 1
           ? "Factor Two"

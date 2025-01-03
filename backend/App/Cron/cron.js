@@ -73,7 +73,7 @@ cron.schedule("20 3 * * *", () => {
   TokenSymbolUpdate();
 });
 
-// cron.schedule("* * * * *", () => {
+// cron.schedule("51 9 * * *", () => {
 //   console.log("running a task every minute");
 //   TokenSymbolUpdate()
 // })

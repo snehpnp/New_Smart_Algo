@@ -472,7 +472,7 @@ const EditClient = () => {
     },
     {
       name: "demat_userid",
-      label: formik.values.broker === 9 ? "User Id" : formik.values.broker === 28 ? "Vendor Key" : "Demat UserId",
+      label: formik.values.broker === 9 ? "User Id" : formik.values.broker === "28" ? "Vendor Key" : "Demat UserId",
       type: "text",
       showWhen: (values) => values.broker === "9" || values.broker === "2" || values.broker === "28",
       label_size: 12,
