@@ -596,6 +596,42 @@ class Panel {
     }
   }
 
+
+  async getNameAndBrokerId(req, res) {
+    try {
+      const panel_data = await panel_model
+        .find({ domain: req.body.url })
+        .select("broker_id");
+      if (!panel_data || panel_data.length === 0) {
+        return res
+          .status(409)
+          .send({ status: false, msg: "Panel Not exists", data: [] });
+      }
+
+      // THEME LIST DATA - SELECTING ONLY 'title' AND 'broker_id'
+      const getAllpanel = await ApiCreateInfo.find({}).select("title broker_id");
+
+      // IF DATA NOT EXIST
+      if (getAllpanel.length === 0) {
+        return res.send({
+          status: false,
+          msg: "Empty data",
+          data: getAllpanel,
+        });
+      }
+
+      // DATA GET SUCCESSFULLY
+      return res.send({
+        status: true,
+        msg: "Get All Api Info",
+        data: getAllpanel,
+      });
+    } catch (error) {
+      console.log("Error Get all Info error-", error);
+      return res.status(500).send({ status: false, msg: "Internal server error" });
+    }
+  }
+
   // Update APi Info
   async UpdateAPiInfo(req, res) {
     try {

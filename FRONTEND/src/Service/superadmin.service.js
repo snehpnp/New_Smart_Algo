@@ -108,11 +108,25 @@ export async function GET_API_INFORMATION_SUPERADMIN(data, token) {
 
 }
 
+
+
 export async function getAllPanelDataApi(broker_id){
     try {
         const res = await axios.post(`${Config.base_url}getUserCountByPanel`, broker_id)
         return await res?.data;
         
+    } catch (error) {
+        return error
+
+    }
+}
+
+
+export async function getNameAndBrokerIdDataApi(data){
+    try {
+        const res = await axios.post(`${Config.base_url}getNameAndBrokerId`, data)
+        return await res?.data;
+
     } catch (error) {
         return error
 

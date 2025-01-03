@@ -148,7 +148,7 @@
 // export default ApiCreateInfo;
 
 
-
+// _____________________NEW CODE BELOW_____________________
 
 
 
@@ -167,7 +167,7 @@ import { Eye } from 'lucide-react';
 import { Link } from "react-router-dom";
 import * as Config from "../../../Utils/Config";
 import Loader from "../../../Utils/Loader";  // Assuming you have a Loader component
-import { getAllPanelDataApi } from '../../../Service/superadmin.service';
+import { getAllPanelDataApi, getNameAndBrokerIdDataApi } from '../../../Service/superadmin.service';
 
 const ApiCreateInfo = () => {
     const dispatch = useDispatch();
@@ -188,15 +188,15 @@ const ApiCreateInfo = () => {
 
     // Fetch API information list
     const data = async () => {
-        await dispatch(All_Api_Info_List_superadmin({ token: token, url: Config.react_domain })).unwrap()
-            .then((response) => {
-                if (response.status) {
-                    setUserDetails({
-                        loading: false,
-                        data: response.data
-                    });
-                }
-            })
+     
+        const res = await getNameAndBrokerIdDataApi({ token: token, url: Config.react_domain })
+        if (res.status) {
+            setUserDetails({
+                loading: false,
+                data: res.data
+            });
+        }
+        console.log("response from new api is ", res);
     };
 
     useEffect(() => {
@@ -221,13 +221,12 @@ const ApiCreateInfo = () => {
 
         setLoading(false)
 
-        console.log("data.totalLength:", data.totalLength); // Data is consistent with the state
     };
 
 
     return (
         <>
-            <Content Page_title="All Api-Create Info's" button_title='Create Api Info' route='/super/apicreateinfo/add'>
+            <Content Page_title="Broker Panel" >
                 <div className="row">
                     {/* Bootstrap Grid: Ensure there are at least 4 columns on desktop */}
                     <section className="row">
@@ -301,7 +300,7 @@ const ApiCreateInfo = () => {
                         <>
                             <h4 style={{ color: "#0288d1" }}>Total Panels: {brokerData?.length}</h4>
                             <h5 style={{ color: "#01579b" }}>
-                                    Overall Broker count: {totalPanelBrokerCount}
+                                Overall Broker count: {totalPanelBrokerCount}
                             </h5>
 
                             {/* Scrollable List of Panels */}
