@@ -21,6 +21,9 @@ import CreateStrategy from '../layout/Admin/CreateStrategy/CreateStrategy';
 import AllMakeStrategy from '../layout/Admin/CreateStrategy/AllMakeStrategy';
 import EditMakeStrategy from '../layout/Admin/CreateStrategy/EditMakeStrategy';
 
+import Footer from '../Components/Dashboard/Footer/Footer.js'
+
+
 const Admin = () => {
 
     const location = useLocation();
@@ -51,6 +54,7 @@ const Admin = () => {
 
             </Routes>
 
+            {location.pathname !== "/subadmin" && location.pathname !== "/subadmin/*" ? <Footer /> : null}
 
         </>
     )

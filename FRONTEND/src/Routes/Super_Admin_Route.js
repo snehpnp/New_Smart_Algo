@@ -34,6 +34,7 @@ import EditClients from '../layout/Superadmin/AdminPermittions/EditClients';
 import Faqdata from '../layout/Superadmin/Faq/Faq';
 
 
+import Footer from '../Components/Dashboard/Footer/Footer.js'
 
 
 
@@ -75,6 +76,7 @@ const Admin = () => {
                 {/* </> */}
             </Routes>
 
+            {location.pathname !== "/super" && location.pathname !== "/super/*" ? <Footer /> : null}
 
         </>
     )

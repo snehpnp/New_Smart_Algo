@@ -60,82 +60,60 @@ class Tradehistory {
         ...openClose1,
       };
 
-      // Aggregation pipeline for paginated results
-      const filteredSignals = await MainSignals_modal.aggregate([
-        {
-          $match: matchStage, // Initial filtering
-        },
-        {
-          $lookup: {
-            from: "signals",
-            localField: "signals_id",
-            foreignField: "_id",
-            as: "result",
-            pipeline: [{ $project: { _id: 1 } }],
+      // Fetch totalItems and filteredSignals in parallel
+      const [totalItems, filteredSignals] = await Promise.all([
+        MainSignals_modal.countDocuments(matchStage), // Total count
+        MainSignals_modal.aggregate([
+          { $match: matchStage },
+          {
+            $lookup: {
+              from: "signals",
+              localField: "signals_id",
+              foreignField: "_id",
+              as: "result",
+              pipeline: [{ $project: { _id: 1 } }],
+            },
           },
-        },
-        {
-          $lookup: {
-            from: "services",
-            localField: "symbol",
-            foreignField: "name",
-            as: "result1",
-            pipeline: [{ $project: { lotsize: 1, name: 1 } }],
+          {
+            $lookup: {
+              from: "services",
+              localField: "symbol",
+              foreignField: "name",
+              as: "result1",
+              pipeline: [{ $project: { lotsize: 1, name: 1 } }],
+            },
           },
-        },
-        {
-          $match: {
-            $expr: { $gt: [{ $size: "$result" }, 0] },
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $gt: [{ $size: "$result" }, 0] },
+                  { $gt: [{ $size: "$result1" }, 0] },
+                ],
+              },
+            },
           },
-        },
-        {
-          $match: {
-            $expr: { $gt: [{ $size: "$result1" }, 0] },
-          },
-        },
-        {
-          $sort: { _id: -1 },
-        },
-        {
-          $skip: (page1 - 1) * limit1,
-        },
-        {
-          $limit: limit1,
-        },
+          { $sort: { _id: -1 } },
+          { $skip: (page1 - 1) * limit1 },
+          { $limit: limit1 },
+        ]),
       ]);
-
-      const totalItems = await MainSignals_modal.countDocuments(matchStage);
 
       // Calculate TotalProfit/Loss
       let TotalCalculate = 0;
       filteredSignals.forEach((item) => {
-        if (item.entry_price && item.exit_price) {
-          const lotsize = Number(item.result1[0]?.lotsize || 1);
-          const TotalQty = lotsize * lotMultypaly1;
+        const lotsize = Number(item.result1[0]?.lotsize || 1);
+        const TotalQty = lotsize * lotMultypaly1;
 
+        if (item.entry_price && item.exit_price) {
           TotalCalculate +=
             item.entry_type === "LE"
               ? (item.exit_price - item.entry_price) * TotalQty
               : (item.entry_price - item.exit_price) * TotalQty;
-
-          item.entry_qty_percent = Math.ceil(
-            (item.entry_qty_percent / 100) * lotsize
-          );
-          item.exit_qty_percent = Math.ceil(
-            (item.exit_qty_percent / 100) * lotsize
-          );
-          item.entry_qty = TotalQty;
-          item.exit_qty = item.exit_qty_percent > 0 ? TotalQty : 1 || 0;
-        } else {
-          const lotsize = Number(item.result1[0]?.lotsize || 1);
-          const TotalQty = lotsize * lotMultypaly1;
-
-          item.entry_qty_percent = Math.ceil(
-            (item.entry_qty_percent / 100) * lotsize
-          );
-
-          item.entry_qty = TotalQty;
         }
+
+        item.entry_qty = TotalQty;
+        item.exit_qty = item.exit_qty_percent > 0 ? TotalQty : 1 || 0;
       });
 
       // Trade symbols for filtering
@@ -158,7 +136,7 @@ class Tradehistory {
         TotalCalculate,
       });
     } catch (error) {
-      console.log("Error in Trade History:", error);
+      console.error("Error in Trade History:", error);
       return res
         .status(500)
         .send({ status: false, msg: "Internal Server Error" });

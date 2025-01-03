@@ -64,6 +64,8 @@ import MakeCallPendingPosition from '../layout/Comman/Make/MakeCallPendingPositi
 import Settings from '../layout/Admin/Profile/Settings';
 import Holdings from '../layout/Admin/TradeDetails/TradeHistory/Holdings.js';
 
+import Footer from '../Components/Dashboard/Footer/Footer.js'
+
 const Admin = () => {
 
     const location = useLocation();
@@ -172,6 +174,8 @@ const Admin = () => {
   
 
             </Routes>
+            {location.pathname !== "/admin" && location.pathname !== "/admin/*" ? <Footer /> : null}
+
         </>
     )
 }
