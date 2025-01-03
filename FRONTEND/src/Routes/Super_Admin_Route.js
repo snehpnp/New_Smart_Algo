@@ -32,6 +32,7 @@ import BackupSignal from '../layout/Superadmin/signals/BackupSignal'
 import EditClients from '../layout/Superadmin/AdminPermittions/EditClients';
 
 import Faqdata from '../layout/Superadmin/Faq/Faq';
+import Broker from '../layout/Superadmin/Broker/Broker';
 
 
 
@@ -71,6 +72,7 @@ const Admin = () => {
                 <Route exact path="/backupsignal" element={<BackupSignal />} />
                 <Route exact path="/client/edit/:id" element={<EditClients />} />
                 <Route exact path="/update/faq" element={<Faqdata />} />
+                <Route exact path="/broker" element={<Broker />} />
 
                 {/* </> */}
             </Routes>

@@ -108,8 +108,8 @@ class Panel {
               };
               axios
                 .request(config)
-                .then((response) => {})
-                .catch((error) => {});
+                .then((response) => { })
+                .catch((error) => { });
             } catch (error) {
               throw error;
             }
@@ -133,8 +133,8 @@ class Panel {
               };
               axios
                 .request(config)
-                .then((response) => {})
-                .catch((error) => {});
+                .then((response) => { })
+                .catch((error) => { });
             } catch (error) {
               throw error;
             }
@@ -146,10 +146,10 @@ class Panel {
 
 
           const ThemeData = await theme_list.findOne(
-            { _id: theme_id},  // Query condition
+            { _id: theme_id },  // Query condition
             { image: 0 }      // Projection: Exclude 'image' and 'theme_name'
           );
-          
+
 
           UpdateAdminPermission(
             data.backend_rul,
@@ -172,7 +172,7 @@ class Panel {
             });
           }
         });
-    } catch (error) {}
+    } catch (error) { }
   }
 
   // ADD PANEL IN A COLLECTION
@@ -250,7 +250,7 @@ class Panel {
         { _id: panel_data[0].theme_id },  // Query condition
         { image: 0 }      // Projection: Exclude 'image' and 'theme_name'
       );
-      
+
 
       UpdateAdminPermission(
         panel_data[0].backend_rul,
@@ -337,7 +337,7 @@ class Panel {
         msg: "Get Panel Information",
         data: Panle_information,
       });
-    } catch (error) {}
+    } catch (error) { }
   }
 
   // GET All Panel
@@ -558,7 +558,7 @@ class Panel {
           data: getAllpanel,
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   // Get All APi Infor
@@ -648,7 +648,7 @@ class Panel {
         msg: "Get Panel Broker",
         data: Panel_information,
       });
-    } catch (error) {}
+    } catch (error) { }
   }
 
   // GET SUPER ADMIN HISTORY
@@ -743,7 +743,7 @@ class Panel {
         data: Panel_information,
         Error: ErrorArray,
       });
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async createView(req, res) {
@@ -816,7 +816,7 @@ class Panel {
 
   async AddFaq(req, res) {
     try {
-      const { question,Role, answer, answer1, type, image1, image2 } = req.body;
+      const { question, Role, answer, answer1, type, image1, image2 } = req.body;
 
       const AddPanel = new Faq_Data({
         question,
@@ -899,7 +899,7 @@ class Panel {
       if (type) existingFaq.type = type;
       if (image1) existingFaq.img1 = image1;
       if (image2) existingFaq.img2 = image2;
-      if(Role) existingFaq.Role = Role;
+      if (Role) existingFaq.Role = Role;
 
       const updatedFaq = await existingFaq.save();
 
@@ -913,28 +913,229 @@ class Panel {
       res.status(500).json({ status: false, msg: "Server error", error });
     }
   }
+
+  async UpdateAdminPermission(url, tabe, theme) {
+    try {
+      // console.log("url", url);
+      // console.log("tabe", tabe);
+      // console.log("theme", theme);
+
+      // const Url = url + "update/adminpermission";
+      const Url = 'http://localhost:7700/' + "update/adminpermission";
+
+      const data = {
+        panel: tabe,
+        theme: theme,
+      };
+      axios.post(Url, data).then((response) => {
+        console.log("response", response.data);
+      });
+
+    } catch (error) {
+      console.log("Error UpdateAdminPermission error-", error);
+    }
+
+
+
+
+  };
+
+  //------------------- original below  --------------------
+
+
+  // async getUserCountByPanel(req, res) {
+  //   const { broker_id } = req.body;
+
+  //   if (!broker_id) {
+  //     return res.status(400).json({ message: "Broker ID is required" });
+  //   }
+
+  //   try {
+  //     const panels = await panel_model.find({}, { db_url: 1, db_name: 1, panel_name: 1 });
+
+  //     if (!panels || panels.length === 0) {
+  //       return res.status(404).json({ message: "No panels found" });
+  //     }
+
+  //     const failedDatabases = []; // Store URIs of failed connections
+  //     const TotalDatabases = []; // Store data from successful connections
+
+  //     const panelPromises = panels.map(async (Panel) => {
+  //       const { db_url, db_name, panel_name } = Panel;
+  //       let connection;
+
+  //       try {
+  //         connection = await mongoose.createConnection(db_url).asPromise();
+  //         // console.log(`✅ Connected to ${db_url}`);
+
+  //         const usersData = connection.model("users", new mongoose.Schema({}, { strict: false }));
+
+  //         // Find services with NFO and NIFTY
+  //         const FindServices = await usersData.find({ broker: broker_id }).select("_id");
+  //         // console.log(`${panel_name} Total -`, FindServices?.length);
+
+  //         TotalDatabases.push({ panel_name: panel_name, total: FindServices?.length });
+
+  //       } catch (error) {
+  //         // console.error(`❌ Failed to connect to ${db_url}:`, error.message);
+  //         failedDatabases.push(db_url); // Add failed URI to the list
+  //       } finally {
+  //         if (connection) {
+  //           await connection.close();
+  //           // console.log(`🔌 Connection closed for ${db_url}`);
+  //         }
+  //       }
+  //     });
+
+  //     // Wait for all panel connections to complete
+  //     await Promise.all(panelPromises);
+
+  //     if (failedDatabases.length > 0) {
+  //       // console.warn(`⚠️ Failed to update the following databases:`, failedDatabases);
+  //     }
+
+  //     let TotalLength = 0
+  //     if (TotalDatabases.length > 0) {
+  //       TotalLength = await TotalDatabases.reduce((acc, data) => acc + data.total, 0);
+  //       console.log("TotalLength ", TotalLength)
+
+  //     }
+
+  //     res.status(200).json({
+  //       message: "Panel count fetched successfully",
+  //       data: TotalDatabases,
+  //       TotalLength: TotalLength
+  //     });
+
+  //   } catch (error) {
+  //     res.status(500).json({ message: "Internal server error", error: error.message });
+  //   }
+  // }
+
+
+  //------------------- Testing below --------------------
+
+
+  // async getUserCountByPanel(req, res) {
+  //   const { broker_id } = req.body;
+
+  //   if (!broker_id) {
+  //     return res.status(400).json({ message: "Broker ID is required" });
+  //   }
+
+  //   try {
+  //     const panels = await panel_model.find({}, { db_url: 1, db_name: 1, panel_name: 1 });
+
+  //     if (!panels.length) {
+  //       return res.status(404).json({ message: "No panels found" });
+  //     }
+
+  //     const failedDatabases = [];
+  //     const TotalDatabases = [];
+  //     let TotalLength = 0;
+
+  //     const panelPromises = panels.map(async (Panel) => {
+  //       const { db_url, panel_name } = Panel;
+
+  //       try {
+  //         // Use a single connection instance for each panel
+  //         const connection = await mongoose.createConnection(db_url, {
+  //           useNewUrlParser: true,
+  //           useUnifiedTopology: true,
+  //           serverSelectionTimeoutMS: 5000, // Set a timeout for faster failure
+  //         }).asPromise();
+
+  //         const usersData = connection.model("users", new mongoose.Schema({}, { strict: false }));
+
+  //         // Fetch only the count directly instead of fetching all records
+  //         const total = await usersData.countDocuments({ broker: broker_id });
+  //         TotalLength += total;
+
+  //         TotalDatabases.push({ panel_name, total });
+  //         await connection.close();
+  //       } catch (error) {
+  //         failedDatabases.push(db_url);
+  //       }
+  //     });
+
+  //     await Promise.all(panelPromises);
+
+  //     res.status(200).json({
+  //       message: "Panel count fetched successfully",
+  //       data: TotalDatabases,
+  //       TotalLength,
+  //     });
+  //   } catch (error) {
+  //     res.status(500).json({ message: "Internal server error", error: error.message });
+  //   }
+  // }
+
+  async getUserCountByPanel(req, res) {
+    const { broker_id } = req.body;
+
+    if (!broker_id) {
+      return res.status(400).json({ message: "Broker ID is required" });
+    }
+
+    try {
+      const panels = await panel_model.find({}, { db_url: 1, db_name: 1, panel_name: 1 });
+
+      if (!panels.length) {
+        return res.status(404).json({ message: "No panels found" });
+      }
+
+      const failedDatabases = [];
+      const TotalDatabases = [];
+      let TotalLength = 0;
+
+      const panelPromises = panels.map(async (Panel) => {
+        const { db_url, panel_name } = Panel;
+
+        try {
+          const connection = await mongoose.createConnection(db_url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 10000, // Increased timeout for slow connections
+          }).asPromise();
+
+          const usersData = connection.model("users", new mongoose.Schema({}, { strict: false }));
+
+          // Attempt to fetch the total count using countDocuments
+          let total = await usersData.countDocuments({ broker: broker_id });
+
+          // If countDocuments fails, fallback to find
+          if (total === 0) {
+            const documents = await usersData.find({ broker: broker_id }).select("_id");
+            total = documents.length;
+          }
+
+          TotalLength += total;
+          TotalDatabases.push({ panel_name, total });
+          await connection.close();
+        } catch (error) {
+          failedDatabases.push({ db_url, error: error.message });
+        }
+      });
+
+      await Promise.all(panelPromises);
+
+      res.status(200).json({
+        message: "Panel count fetched successfully",
+        data: TotalDatabases,
+        TotalLength,
+        failedConnections: failedDatabases,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+  }
+
+
+
+
 }
 
-const UpdateAdminPermission = async (url, tabe, theme) => {
-  try {
-    // console.log("url", url);
-    // console.log("tabe", tabe);
-    // console.log("theme", theme);
 
-    // const Url = url + "update/adminpermission";
-    const Url = 'http://localhost:7700/' + "update/adminpermission";
 
-    const data = {
-      panel: tabe,
-      theme: theme,
-    };
-    axios.post(Url, data).then((response) => {
-      console.log("response", response.data);
-    });
-
-  } catch (error) {
-    console.log("Error UpdateAdminPermission error-", error);
-  }
-};
 
 module.exports = new Panel();

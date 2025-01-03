@@ -80,7 +80,7 @@ export const admin_sidebar = [
                 name: 'Holdings History',
                 route: '/admin/holdingshistory',
             },
-           
+
             {
                 id: 44,
                 name: 'Trading Status',
@@ -182,7 +182,7 @@ export const admin_sidebar = [
                 name: 'Create Make Call',
                 route: '/admin/makecall',
             },
-             {
+            {
                 id: 802,
                 name: 'Pending Make Call Position',
                 route: '/admin/makecallpendingposition',
@@ -287,6 +287,14 @@ export const supper_admin_sidebar = [
         "name": 'Faq',
         "Icon": "HelpingHand",
         "route": "/super/update/faq",
+        "Data": []
+    },
+
+    {
+        'id': 7,
+        "name": 'Broker',
+        "Icon": 'ArrowRightLeft',
+        "route": "/super/broker",
         "Data": []
     },
 
