@@ -980,7 +980,7 @@ class Employee {
     try {
       const { page = 1, limit = 10, Find_Role, user_ID } = req.body; // LIMIT & PAGE with default values
       const skip = (page - 1) * limit;
-  
+
       // Validate inputs
       if (!Find_Role) {
         return res.status(400).send({
@@ -988,18 +988,18 @@ class Employee {
           msg: "Role (Find_Role) is required.",
         });
       }
-  
+
       let AdminMatch = {};
-      
+
       if (Find_Role === "ADMIN") {
         AdminMatch = {
           Role: "USER",
           EndDate: { $lt: new Date() },
         };
       } else if (Find_Role === "SUBADMIN" && user_ID) {
-        AdminMatch = { 
-          Role: "USER", 
-          parent_id: user_ID 
+        AdminMatch = {
+          Role: "USER",
+          parent_id: user_ID,
         };
       } else if (Find_Role === "SUBADMIN" && !user_ID) {
         return res.status(400).send({
@@ -1007,7 +1007,7 @@ class Employee {
           msg: "user_ID is required for SUBADMIN role.",
         });
       }
-  
+
       const getAllClients = await User_model.aggregate([
         { $match: AdminMatch },
         {
@@ -1019,8 +1019,18 @@ class Employee {
                 $match: {
                   $expr: {
                     $gt: [
-                      { $dateToString: { format: "%Y-%m-%d", date: "$$endDate" } },
-                      { $dateToString: { format: "%Y-%m-%d", date: "$month_ago_date" } },
+                      {
+                        $dateToString: {
+                          format: "%Y-%m-%d",
+                          date: "$$endDate",
+                        },
+                      },
+                      {
+                        $dateToString: {
+                          format: "%Y-%m-%d",
+                          date: "$month_ago_date",
+                        },
+                      },
                     ],
                   },
                 },
@@ -1035,9 +1045,9 @@ class Employee {
         { $limit: Number(limit) },
         { $project: { companyData: 0 } },
       ]);
-  
+
       const totalCount = await User_model.countDocuments(AdminMatch);
-  
+
       if (getAllClients.length === 0) {
         return res.send({
           status: false,
@@ -1046,7 +1056,7 @@ class Employee {
           totalCount,
         });
       }
-  
+
       return res.send({
         status: true,
         msg: "Clients fetched successfully",
@@ -1056,7 +1066,6 @@ class Employee {
         limit: Number(limit),
         totalPages: Math.ceil(totalCount / Number(limit)),
       });
-  
     } catch (error) {
       console.error("Error in GetAllExpiredClients:", error);
       return res.status(500).send({
@@ -1066,7 +1075,6 @@ class Employee {
       });
     }
   }
-  
 
   // GET ALL GetAllClients
   async GetAllClients(req, res) {
@@ -1082,6 +1090,7 @@ class Employee {
         selectBroker,
         dashboard_filter,
         searchQuery,
+        StarUsers,
       } = req.body;
 
       // Ensure page and limit are numbers
@@ -1165,6 +1174,11 @@ class Employee {
           { Email: { $regex: searchQuery, $options: "i" } },
           { PhoneNo: { $regex: searchQuery, $options: "i" } },
         ];
+      }
+
+      // StarUsers user not send by front then not show errroe
+      if (StarUsers && StarUsers === 1) {
+        AdminMatch.starClient = "1";
       }
 
       // Handle strategy ID filtering
@@ -1258,10 +1272,6 @@ class Employee {
   // GET ALL LOGIN CLIENTS
   async loginClients(req, res) {
     try {
-      // const getAllLoginClients = await User_model.find({
-      //   $or: [{ AppLoginStatus: 1 }, { WebLoginStatus: 1 }],
-      // });
-
       const getAllLoginClients = await User_model.aggregate([
         {
           $match: {
@@ -1333,11 +1343,6 @@ class Employee {
   // GET ALL TRADING ON  CLIENTS
   async tradingOnClients(req, res) {
     try {
-      // GET LOGIN CLIENTS
-      // const getAllTradingClients = await User_model.find({
-      //   TradingStatus: "on",
-      // });
-
       const getAllTradingClients = await User_model.aggregate([
         {
           $match: {
@@ -1874,10 +1879,6 @@ class Employee {
       } else if (Find_Role == "SUBADMIN") {
         AdminMatch = { Role: "USER", parent_id: user_ID, starClient: "1" };
       }
-
-      // const getAllClients = await User_model.find(AdminMatch).sort({
-      //   CreateDate: -1,
-      // });
 
       const getAllClients = await User_model.aggregate([
         {

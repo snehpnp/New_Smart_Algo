@@ -30,6 +30,7 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
+import Loader from "../../../../Utils/Loader";
 
 const paginationOptions = {
   custom: true,
@@ -143,13 +144,13 @@ const AllClients = () => {
       selectBroker: selectBroker,
       dashboard_filter: dashboard_filter,
       searchQuery: searchQuery,
+      StarUsers: 0,
     };
 
     await dispatch(GET_ALL_CLIENTS(req1))
       .unwrap()
       .then((response) => {
         if (response.status) {
-
           if (dashboard_filter !== undefined) {
             let abc;
 
@@ -191,7 +192,6 @@ const AllClients = () => {
                 }
               });
 
-
             setAllClients({
               loading: false,
               data: abc,
@@ -208,7 +208,7 @@ const AllClients = () => {
             data: response.data,
             pagination: response?.pagination,
           });
-          
+
           forCSVdata(response.data);
         } else {
           setAllClients({
@@ -524,8 +524,9 @@ const AllClients = () => {
       text: "Favorite",
       formatter: (cell, row) => (
         <div style={{ cursor: "pointer" }}>
+          {console.log(cell)}
           <div>
-            {cell === 1 || cell === 1 ? (
+            {cell === 1 || cell === "1" ? (
               <i
                 className="bi bi-star-fill"
                 onClick={() => handleToggle(false, row)}
@@ -762,87 +763,89 @@ const AllClients = () => {
               </div>
             </div>
           </div>
-
-          <PaginationProvider
-            pagination={paginationFactory({
-              ...paginationOptions,
-              totalSize: total1,
-              page: getPage,
-              sizePerPage: getSizePerPage,
-            })}
-          >
-            {({ paginationProps, paginationTableProps }) => (
-              <div>
-                <div
-                  style={{
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                >
-                  {/* dynamic Watermark */}
+          {getAllClients?.loading ? (
+            <Loader />
+          ) : (
+            <PaginationProvider
+              pagination={paginationFactory({
+                ...paginationOptions,
+                totalSize: total1,
+                page: getPage,
+                sizePerPage: getSizePerPage,
+              })}
+            >
+              {({ paginationProps, paginationTableProps }) => (
+                <div>
                   <div
-                    className="watermarkId"
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      width: "100%",
-                      height: "100%",
-                      opacity: 0.1,
-                      pointerEvents: "none",
-                      zIndex: 2,
-                    }}
-                  ></div>
-
-                  <BootstrapTable
-                    keyField="_id"
-                    data={getAllClients.data}
-                    columns={columns}
-                    remote
-                    onTableChange={handleTableChange}
-                    {...paginationTableProps}
-                    headerClasses="bg-primary text-primary text-center header-class"
-                    rowClasses={`text-center`}
-                    // noDataIndication={() => <NoDataIndication />}
                     style={{
                       position: "relative",
-                      zIndex: 1,
+                      overflow: "hidden",
                     }}
-                  />
-                </div>
+                  >
+                    {/* dynamic Watermark */}
+                    <div
+                      className="watermarkId"
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        opacity: 0.1,
+                        pointerEvents: "none",
+                        zIndex: 2,
+                      }}
+                    ></div>
+                    :{" "}
+                    <BootstrapTable
+                      keyField="_id"
+                      data={getAllClients.data}
+                      columns={columns}
+                      remote
+                      onTableChange={handleTableChange}
+                      {...paginationTableProps}
+                      headerClasses="bg-primary text-primary text-center header-class"
+                      rowClasses={`text-center`}
+                      // noDataIndication={() => <NoDataIndication />}
+                      style={{
+                        position: "relative",
+                        zIndex: 1,
+                      }}
+                    />
+                  </div>
 
-                <div className="mb-2 d-flex justify-content-between align-items-start mt-2">
-                  <div className="d-flex align-items-center">
-                    <label htmlFor="sizePerPageSelect" className="mx-2">
-                      Items per page:
-                    </label>
-                    <select
-                      id="sizePerPageSelect"
-                      value={getSizePerPage}
-                      onChange={handleSizePerPageChange}
-                    >
-                      <option value={10}>10</option>
-                      <option value={25}>25</option>
-                      <option value={50}>50</option>
-                      <option value={100}>100</option>
-                      <option value={200}>200</option>
-                    </select>
-                  </div>
-                  <div className="d-flex align-items-center">
-                    <PaginationTotalStandalone
-                      {...paginationProps}
-                      className="mr-3"
-                    />{" "}
-                    {/* Add margin to the right for spacing */}
-                  </div>
-                  <div className="d-flex align-items-end">
-                    <PaginationListStandalone {...paginationProps} />
+                  <div className="mb-2 d-flex justify-content-between align-items-start mt-2">
+                    <div className="d-flex align-items-center">
+                      <label htmlFor="sizePerPageSelect" className="mx-2">
+                        Items per page:
+                      </label>
+                      <select
+                        id="sizePerPageSelect"
+                        value={getSizePerPage}
+                        onChange={handleSizePerPageChange}
+                      >
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                        <option value={200}>200</option>
+                      </select>
+                    </div>
+                    <div className="d-flex align-items-center">
+                      <PaginationTotalStandalone
+                        {...paginationProps}
+                        className="mr-3"
+                      />{" "}
+                      {/* Add margin to the right for spacing */}
+                    </div>
+                    <div className="d-flex align-items-end">
+                      <PaginationListStandalone {...paginationProps} />
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </PaginationProvider>
-
+              )}
+            </PaginationProvider>
+          )}
           <ToastButton />
         </Content>
       </div>

@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import Content from "../../../Components/Dashboard/Content/Content";
 
 const Dashboard1 = ({ data }) => {
-  var GetThemeId = JSON.parse(localStorage.getItem("theme"));
+  var GetThemeId = JSON.parse(localStorage.getItem("theme")) || 1;
 
   useEffect(() => {
-    if (GetThemeId.themeId == 19) {
+    if (GetThemeId?.themeId == 19) {
     
       // FULL PAGE FONT COLOR CHANGE for BLACK
       const elements = document.getElementsByClassName("income-data");
@@ -20,7 +20,7 @@ const Dashboard1 = ({ data }) => {
 
 
     }
-  }, [GetThemeId.themeId]);
+  }, [GetThemeId?.themeId]);
 
   let arr = [
     {

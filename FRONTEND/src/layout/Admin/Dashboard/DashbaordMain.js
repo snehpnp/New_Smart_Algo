@@ -10,33 +10,16 @@ import Dashboard7 from "./Dashboard7";
 import Dashboard8 from "./Dashboard8";
 import Dashboard9 from "./Dashboard9";
 import Dashboard10 from "./Dashboard10";
-import * as Config from "../../../Utils/Config";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
-import { GET_ALL_CLIENTS } from "../../../ReduxStore/Slice/Admin/AdminSlice";
-import { Get_All_SUBADMIN } from '../../../ReduxStore/Slice/Subadmin/Subadminslice'
 
-
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Get_Dashboard_Count } from "../../../ReduxStore/Slice/Admin/DashboardSlice";
-
-import socketIOClient from "socket.io-client";
-
-import toast, { Toaster } from "react-hot-toast";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const user_token = JSON.parse(localStorage.getItem("user_details")).token;
-
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role;
-  const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id;
+  const user_token = JSON.parse(localStorage.getItem("user_details"))?.token;
 
   const [DashboardData, setDashboardData] = useState("");
-  const [DashboardData1, setDashboardData1] = useState([]);
-
-  const [getAllClients, setAllClients] = useState({
-    loading: true,
-    data: [],
-  });
 
   const getGroupeServics = async () => {
     await dispatch(Get_Dashboard_Count(user_token))
@@ -50,15 +33,10 @@ const Dashboard = () => {
       });
   };
 
-
-
   useEffect(() => {
     getGroupeServics();
   }, []);
 
-
-   
-   
   return (
     <>
       <div>

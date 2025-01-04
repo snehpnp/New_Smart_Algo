@@ -18,8 +18,6 @@ const Content = ({
   ...rest
 }) => {
 
-console.log("csv_data",csv_data)
-console.log("csv_title",csv_title)
 
   return (
     <div className="content-body">
