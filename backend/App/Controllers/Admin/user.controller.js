@@ -978,57 +978,49 @@ class Employee {
   // GET ALL EXPIRED USERS
   async GetAllExpiredClients(req, res) {
     try {
-      const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
+      const { page = 1, limit = 10, Find_Role, user_ID } = req.body; // LIMIT & PAGE with default values
       const skip = (page - 1) * limit;
-
-      // GET ALL CLIENTS
-      var AdminMatch;
-
-      const date = new Date();
-      const formattedDate = date.toISOString().slice(0, 10); // Sirf date part extract karo
-
-      if (Find_Role == "ADMIN") {
+  
+      // Validate inputs
+      if (!Find_Role) {
+        return res.status(400).send({
+          status: false,
+          msg: "Role (Find_Role) is required.",
+        });
+      }
+  
+      let AdminMatch = {};
+      
+      if (Find_Role === "ADMIN") {
         AdminMatch = {
           Role: "USER",
-          Is_Active: "1",
-          EndDate: { $lt: new Date(formattedDate) },
+          EndDate: { $lt: new Date() },
         };
-      } else if (Find_Role == "SUBADMIN") {
-        AdminMatch = { Role: "USER", parent_id: user_ID };
+      } else if (Find_Role === "SUBADMIN" && user_ID) {
+        AdminMatch = { 
+          Role: "USER", 
+          parent_id: user_ID 
+        };
+      } else if (Find_Role === "SUBADMIN" && !user_ID) {
+        return res.status(400).send({
+          status: false,
+          msg: "user_ID is required for SUBADMIN role.",
+        });
       }
-
-      // const getAllClients = await User_model.find(AdminMatch)
-      //   .skip(skip)
-      //   .limit(Number(limit))
-      //   .sort({ createdAt: -1 });
-
+  
       const getAllClients = await User_model.aggregate([
-        {
-          $match: AdminMatch,
-        },
+        { $match: AdminMatch },
         {
           $lookup: {
             from: "companies",
-            let: {
-              endDate: "$EndDate", // User_model ki EndDate ko use karenge
-            },
+            let: { endDate: "$EndDate" },
             pipeline: [
               {
                 $match: {
                   $expr: {
                     $gt: [
-                      {
-                        $dateToString: {
-                          format: "%Y-%m-%d",
-                          date: "$$endDate",
-                        },
-                      }, // User_model ki EndDate
-                      {
-                        $dateToString: {
-                          format: "%Y-%m-%d",
-                          date: "$month_ago_date",
-                        },
-                      }, // companyData ki month_ago_date
+                      { $dateToString: { format: "%Y-%m-%d", date: "$$endDate" } },
+                      { $dateToString: { format: "%Y-%m-%d", date: "$month_ago_date" } },
                     ],
                   },
                 },
@@ -1037,47 +1029,46 @@ class Employee {
             as: "companyData",
           },
         },
-        {
-          $unwind: "$companyData",
-        },
-        {
-          $sort: { CreateDate: -1 },
-        },
-        {
-          $project: {
-            companyData: 0,
-          },
-        },
+        { $unwind: "$companyData" },
+        { $sort: { CreateDate: -1 } },
+        { $skip: skip },
+        { $limit: Number(limit) },
+        { $project: { companyData: 0 } },
       ]);
-
-      const totalCount = getAllClients.length;
-      // IF DATA NOT EXIST
-      if (getAllClients.length == 0) {
+  
+      const totalCount = await User_model.countDocuments(AdminMatch);
+  
+      if (getAllClients.length === 0) {
         return res.send({
           status: false,
-          msg: "Empty data",
+          msg: "No expired clients found",
           data: [],
-          totalCount: totalCount,
+          totalCount,
         });
       }
-
-      // DATA GET SUCCESSFULLY
+  
       return res.send({
         status: true,
-        msg: "Get All Clients",
-        totalCount: totalCount,
+        msg: "Clients fetched successfully",
+        totalCount,
         data: getAllClients,
         page: Number(page),
         limit: Number(limit),
         totalPages: Math.ceil(totalCount / Number(limit)),
       });
+  
     } catch (error) {
-      console.log("Error loginClients Error-", error);
+      console.error("Error in GetAllExpiredClients:", error);
+      return res.status(500).send({
+        status: false,
+        msg: "Internal server error",
+        error: error.message,
+      });
     }
   }
+  
 
   // GET ALL GetAllClients
-
   async GetAllClients(req, res) {
     try {
       const {
@@ -1092,13 +1083,13 @@ class Employee {
         dashboard_filter,
         searchQuery,
       } = req.body;
-  
+
       // Ensure page and limit are numbers
       const pageNumber = parseInt(page, 10) || 1;
       const pageSize = parseInt(limit, 10) || 10;
       const skip = (pageNumber - 1) * pageSize;
       const currentDate = new Date();
-  
+
       // Admin Role Filtering
       let AdminMatch = {};
       if (Find_Role === "ADMIN") {
@@ -1106,52 +1097,76 @@ class Employee {
       } else if (Find_Role === "SUBADMIN") {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
-  
+
       // ClientStatus Filtering
       if (ClientStatus && ClientStatus !== "null") {
         AdminMatch.license_type = ClientStatus;
       }
-  
+
       // PanelStatus Filtering
       if (PanelStatus && !PanelStatus.includes(2)) {
         AdminMatch.TradingStatus = PanelStatus.includes(1) ? "on" : "off";
       }
-  
+
       // Broker Selection Filtering
       if (selectBroker && selectBroker !== "null") {
         AdminMatch.broker = selectBroker;
       }
-  
+
       // Dashboard Filters
       if (dashboard_filter && dashboard_filter !== "null") {
         const licenseFilters = {
-          "111": { EndDate: { $gte: currentDate } },
-          "2": { license_type: "2", Is_Active: "1" },
-          "21": { EndDate: { $gte: currentDate }, license_type: "2", Is_Active: "1" },
-          "20": { EndDate: { $lte: currentDate }, license_type: "2", Is_Active: "1" },
-          "1": { license_type: "1", Is_Active: "1" },
-          "11": { EndDate: { $gte: currentDate }, license_type: "1", Is_Active: "1" },
-          "10": { EndDate: { $lte: currentDate }, license_type: "1", Is_Active: "1" },
-          "0": { license_type: "0", Is_Active: "1" },
-          "01": { EndDate: { $gte: currentDate }, license_type: "0", Is_Active: "1" },
-          "00": { EndDate: { $lte: currentDate }, license_type: "0", Is_Active: "1" },
+          111: { EndDate: { $gte: currentDate }, Is_Active: "1" },
+          2: { license_type: "2", Is_Active: "1" },
+          21: {
+            EndDate: { $gte: currentDate },
+            license_type: "2",
+            Is_Active: "1",
+          },
+          20: {
+            EndDate: { $lte: currentDate },
+            license_type: "2",
+            Is_Active: "1",
+          },
+          1: { license_type: "1", Is_Active: "1" },
+          11: {
+            EndDate: { $gte: currentDate },
+            license_type: "1",
+            Is_Active: "1",
+          },
+          10: {
+            EndDate: { $lte: currentDate },
+            license_type: "1",
+            Is_Active: "1",
+          },
+          0: { license_type: "0", Is_Active: "1" },
+          "01": {
+            EndDate: { $gte: currentDate },
+            license_type: "0",
+            Is_Active: "1",
+          },
+          "00": {
+            EndDate: { $lte: currentDate },
+            license_type: "0",
+            Is_Active: "1",
+          },
         };
-  
+
         if (licenseFilters[dashboard_filter]) {
           AdminMatch = { ...AdminMatch, ...licenseFilters[dashboard_filter] };
         }
       }
-  
+
       // Search Query Filtering
       if (searchQuery && searchQuery !== "null") {
         AdminMatch.$or = [
-          { FullName: { $regex: searchQuery, $options: 'i' } },
-          { UserName: { $regex: searchQuery, $options: 'i' } },
-          { Email: { $regex: searchQuery, $options: 'i' } },
-          { PhoneNo: { $regex: searchQuery, $options: 'i' } }
+          { FullName: { $regex: searchQuery, $options: "i" } },
+          { UserName: { $regex: searchQuery, $options: "i" } },
+          { Email: { $regex: searchQuery, $options: "i" } },
+          { PhoneNo: { $regex: searchQuery, $options: "i" } },
         ];
       }
-  
+
       // Handle strategy ID filtering
       let FindUsers = [];
       if (stgId && stgId !== "all") {
@@ -1162,11 +1177,11 @@ class Employee {
         ]);
         FindUsers = users.map((user) => user._id.toString());
       }
-      console.log("FindUsers", AdminMatch)
+      console.log("FindUsers", AdminMatch);
 
       // Fetch total count for pagination
       const totalClients = await User_model.countDocuments(AdminMatch);
-  
+
       // Fetch clients with aggregation and pagination
       const getAllClients = await User_model.aggregate([
         { $match: AdminMatch },
@@ -1182,14 +1197,24 @@ class Employee {
                       { $eq: ["$$endDate", null] },
                       {
                         $gt: [
-                          { $dateToString: { format: "%Y-%m-%d", date: "$$endDate" } },
-                          { $dateToString: { format: "%Y-%m-%d", date: "$month_ago_date" } }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              }
+                          {
+                            $dateToString: {
+                              format: "%Y-%m-%d",
+                              date: "$$endDate",
+                            },
+                          },
+                          {
+                            $dateToString: {
+                              format: "%Y-%m-%d",
+                              date: "$month_ago_date",
+                            },
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                },
+              },
             ],
             as: "companyData",
           },
@@ -1200,12 +1225,15 @@ class Employee {
         { $limit: pageSize },
         { $project: { companyData: 0 } },
       ]);
-  
+
       // Filter clients based on strategy ID, if applicable
-      const finalClients = (stgId && stgId !== "all")
-        ? getAllClients.filter((client) => FindUsers.includes(client._id.toString()))
-        : getAllClients;
-  
+      const finalClients =
+        stgId && stgId !== "all"
+          ? getAllClients.filter((client) =>
+              FindUsers.includes(client._id.toString())
+            )
+          : getAllClients;
+
       // Send paginated response
       return res.status(200).send({
         status: true,
@@ -1226,7 +1254,6 @@ class Employee {
       });
     }
   }
-  
 
   // GET ALL LOGIN CLIENTS
   async loginClients(req, res) {
