@@ -18,7 +18,7 @@ import Userreferal from '../layout/User/Profile/ReferralPage';
 import Faq from '../layout/Admin/Faq/Faq';
 import Userplan from '../layout/User/HelpCenter/Userplan';
 import Kotakneo from '../Components/Dashboard/Header/Brokerpage/Kotakneo';
-
+import Footer from '../Components/Dashboard/Footer/Footer';
 
 // strategydesc
 const Admin = () => {
@@ -49,7 +49,7 @@ const Admin = () => {
 
             </Routes>
 
-            {/* {location.pathname !== "/client" && location.pathname !== "/client/*" ? <Footer /> : null} */}
+            {location.pathname !== "/client" && location.pathname !== "/client/*" ? <Footer /> : null}
 
         </>
     )

@@ -132,6 +132,18 @@ const AllClients = () => {
     searchQuery,
   ]);
 
+  useEffect(() => {
+    setPage(1);
+    setSizePerPage(10);
+  }, [
+    StrategyClientStatus,
+
+    ClientStatus,
+    PanelStatus,
+    selectBroker,
+    searchQuery,
+  ]);
+
   const GetClientsApi = async () => {
     var req1 = {
       Find_Role: user_details && user_details.Role,
@@ -524,7 +536,6 @@ const AllClients = () => {
       text: "Favorite",
       formatter: (cell, row) => (
         <div style={{ cursor: "pointer" }}>
-       
           <div>
             {cell === 1 || cell === "1" ? (
               <i
@@ -795,8 +806,7 @@ const AllClients = () => {
                         pointerEvents: "none",
                         zIndex: 2,
                       }}
-                    ></div>
-                    :{" "}
+                    ></div>{" "}
                     <BootstrapTable
                       keyField="_id"
                       data={getAllClients.data}

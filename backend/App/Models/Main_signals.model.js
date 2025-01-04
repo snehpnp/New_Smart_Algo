@@ -150,6 +150,16 @@ const MainSignalsSchema = Schema({
     timestamps: true
 });
 
+MainSignalsSchema.index({
+    strategy: 1,
+    trade_symbol: 1,
+    symbol: 1,
+    client_persnal_key: 1,
+    createdAt: 1,
+    segment: 1,
+    Entry_users_id: 1
+});
+
 const MainSignal = model('MainSignal', MainSignalsSchema);
 module.exports = MainSignal;
 

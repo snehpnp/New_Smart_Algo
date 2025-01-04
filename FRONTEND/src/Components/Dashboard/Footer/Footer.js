@@ -2,14 +2,16 @@ import React from "react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const previousYear = currentYear - 1;
+
   const domainName = localStorage.getItem("panel_name");
 
-  const companyName = domainName; // Your company name
+  const companyName = domainName;
   const footerStyle = {
     color: "black",
     padding: "15px 0",
     fontSize: "14px",
-    backgroundColor: "#f1f1f1", // Optional background color for the footer
+    backgroundColor: "#f1f1f1",
   };
 
   const footerTextStyle = {
@@ -18,32 +20,28 @@ const Footer = () => {
   };
 
   const footerLinkStyle = {
-    color: "rgb(65, 117, 5)",
-    // fontWeight: "bold",
+    color: "red",
     textDecoration: "none",
   };
 
   const footerLinkHoverStyle = {
     textDecoration: "underline",
-    color: "red", // Light red on hover
+    color: "red",
   };
 
   return (
     <footer style={footerStyle} className="row">
-      {/* Left corner section */}
       <div
         className="col-md-6"
         style={{
           display: "flex",
-          justifyContent: "flex-start", // Align to the left
+          justifyContent: "flex-start",
           alignItems: "center",
         }}
       >
         <p style={footerTextStyle}>
-          Copyright © {currentYear}{" "}
+          Copyright © {previousYear + "-" + currentYear}{" "}
           <a
-            href="#"
-            target="_blank"
             rel="noopener noreferrer"
             style={footerLinkStyle}
             onMouseOver={(e) =>
@@ -57,12 +55,11 @@ const Footer = () => {
         </p>
       </div>
 
-      {/* Right corner section */}
       <div
         className="col-md-6"
         style={{
           display: "flex",
-          justifyContent: "flex-end", // Align to the right
+          justifyContent: "flex-end",
           alignItems: "center",
         }}
       >
