@@ -24,33 +24,29 @@ class Tradehistory {
         limit,
         openClose,
       } = req.body;
-
+  
       const page1 = Number(page || 1);
       const limit1 = Number(limit || 1000);
-
-      const client_persnal_key1 =
-        type?.toUpperCase() === "ADMIN" ? "" : { $ne: "" };
+  
+      const client_persnal_key1 = type?.toUpperCase() === "ADMIN" ? "" : { $ne: "" };
       const lotMultypaly1 = Number(lotMultypaly || 1);
-
+  
       const startDateObj = new Date(startDate || new Date());
       const endDateObj = new Date(endDate || new Date());
       endDateObj.setDate(endDateObj.getDate() + 1);
-
+  
       const strategyWord = strategy?.trim();
-      const serIndex =
-        serviceIndex === "null" || typeof serviceIndex === "object"
-          ? { $exists: true }
-          : serviceIndex;
+      const serIndex = serviceIndex === "null" || typeof serviceIndex === "object" ? { $exists: true } : serviceIndex;
       const stg1 = strategyWord === "null" ? { $exists: true } : strategyWord;
       const ser1 = service === "null" ? { $exists: true } : service;
-
+  
       const openClose1 =
         openClose === "Open"
           ? { exit_qty_percent: "" }
           : openClose === "Close"
           ? { exit_qty_percent: { $ne: "" } }
           : {};
-
+  
       const matchStage = {
         createdAt: { $gte: startDateObj, $lte: endDateObj },
         strategy: stg1,
@@ -59,7 +55,7 @@ class Tradehistory {
         client_persnal_key: client_persnal_key1,
         ...openClose1,
       };
-
+  
       // Fetch totalItems and filteredSignals in parallel
       const [totalItems, filteredSignals] = await Promise.all([
         MainSignals_modal.countDocuments(matchStage), // Total count
@@ -85,12 +81,7 @@ class Tradehistory {
           },
           {
             $match: {
-              $expr: {
-                $and: [
-                  { $gt: [{ $size: "$result" }, 0] },
-                  { $gt: [{ $size: "$result1" }, 0] },
-                ],
-              },
+              $expr: { $and: [{ $gt: [{ $size: "$result" }, 0] }, { $gt: [{ $size: "$result1" }, 0] }] },
             },
           },
           { $sort: { _id: -1 } },
@@ -98,29 +89,27 @@ class Tradehistory {
           { $limit: limit1 },
         ]),
       ]);
-
+  
       // Calculate TotalProfit/Loss
       let TotalCalculate = 0;
       filteredSignals.forEach((item) => {
         const lotsize = Number(item.result1[0]?.lotsize || 1);
         const TotalQty = lotsize * lotMultypaly1;
-
+  
         if (item.entry_price && item.exit_price) {
           TotalCalculate +=
             item.entry_type === "LE"
               ? (item.exit_price - item.entry_price) * TotalQty
               : (item.entry_price - item.exit_price) * TotalQty;
         }
-
+  
         item.entry_qty = TotalQty;
         item.exit_qty = item.exit_qty_percent > 0 ? TotalQty : 1 || 0;
       });
-
+  
       // Trade symbols for filtering
-      const trade_symbols_filter = Array.from(
-        new Set(filteredSignals.map((item) => item.trade_symbol))
-      );
-
+      const trade_symbols_filter = Array.from(new Set(filteredSignals.map((item) => item.trade_symbol)));
+  
       // Response
       return res.send({
         status: true,
@@ -137,11 +126,10 @@ class Tradehistory {
       });
     } catch (error) {
       console.error("Error in Trade History:", error);
-      return res
-        .status(500)
-        .send({ status: false, msg: "Internal Server Error" });
+      return res.status(500).send({ status: false, msg: "Internal Server Error" });
     }
   }
+  
 
   async GetAdminTradeHistoryCal(req, res) {
     try {
@@ -153,46 +141,37 @@ class Tradehistory {
         type,
         serviceIndex,
         lotMultypaly,
-        page,
-        limit,
+        page = 1,
+        limit = 1000,
         openClose,
       } = req.body;
-
-      const page1 = Number(page || 1);
-      const limit1 = Number(limit || 1000);
-
-      const client_persnal_key1 =
-        type?.toUpperCase() === "ADMIN" ? "" : { $ne: "" };
+  
+      // Input Parsing & Validation
+      const page1 = Number(page);
+      const limit1 = Number(limit);
       const lotMultypaly1 = Number(lotMultypaly || 1);
-
-      const startDateObj = new Date(startDate || new Date());
-      const endDateObj = new Date(endDate || new Date());
+  
+      const startDateObj = startDate ? new Date(startDate) : new Date();
+      const endDateObj = endDate ? new Date(endDate) : new Date();
       endDateObj.setDate(endDateObj.getDate() + 1);
-
-      const strategyWord = strategy?.trim();
-      const serIndex =
-        serviceIndex === "null" || typeof serviceIndex === "object"
-          ? { $exists: true }
-          : serviceIndex;
-      const stg1 = strategyWord === "null" ? { $exists: true } : strategyWord;
-      const ser1 = service === "null" ? { $exists: true } : service;
-
-      const openClose1 = { exit_qty_percent: { $ne: "" } };
-
+  
+      if (isNaN(page1) || isNaN(limit1) || isNaN(lotMultypaly1)) {
+        return res.status(400).send({ status: false, msg: "Invalid pagination or multiplier values" });
+      }
+  
+      // Dynamic Filters
       const matchStage = {
+        exit_qty_percent: { $ne: "" },
         createdAt: { $gte: startDateObj, $lte: endDateObj },
-        strategy: stg1,
-        trade_symbol: ser1,
-        symbol: serIndex,
-        client_persnal_key: client_persnal_key1,
-        ...openClose1,
+        strategy: strategy === "null" ? { $exists: true } : strategy?.trim(),
+        trade_symbol: service === "null" ? { $exists: true } : service,
+        symbol: serviceIndex === "null" || typeof serviceIndex === "object" ? { $exists: true } : serviceIndex,
+        ...(type?.toUpperCase() === "ADMIN" ? {} : { client_persnal_key: { $ne: "" } }),
+        ...(openClose ? { exit_qty_percent: { $ne: "" } } : {}),
       };
-
-      // Aggregation pipeline for paginated results
+  
       const filteredSignals = await MainSignals_modal.aggregate([
-        {
-          $match: matchStage, // Initial filtering
-        },
+        { $match: matchStage },
         {
           $lookup: {
             from: "signals",
@@ -213,121 +192,121 @@ class Tradehistory {
         },
         {
           $match: {
-            $expr: { $gt: [{ $size: "$result" }, 0] },
+            $and: [
+              { $expr: { $gt: [{ $size: "$result" }, 0] } },
+              { $expr: { $gt: [{ $size: "$result1" }, 0] } },
+            ],
           },
         },
         {
-          $match: {
-            $expr: { $gt: [{ $size: "$result1" }, 0] },
+          $addFields: {
+            TotalQty: {
+              $multiply: [
+                {
+                  $toDouble: {
+                    $ifNull: [{ $arrayElemAt: ["$result1.lotsize", 0] }, 1]
+                  }
+                },
+                { $toDouble: lotMultypaly1 }
+              ]
+            },
+            
+            TotalCalculate: {
+              $cond: [
+                { $eq: ["$entry_type", "LE"] },
+                {
+                  $multiply: [
+                    { 
+                      $subtract: [
+                        { $toDouble: "$exit_price" }, 
+                        { $toDouble: "$entry_price" }
+                      ] 
+                    },
+                    {
+                      $multiply: [
+                        { 
+                          $toDouble: { $ifNull: [{ $arrayElemAt: ["$result1.lotsize", 0] }, 1] }
+                        },
+                        { $toDouble: lotMultypaly1 }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  $multiply: [
+                    { 
+                      $subtract: [
+                        { $toDouble: "$entry_price" }, 
+                        { $toDouble: "$exit_price" }
+                      ] 
+                    },
+                    {
+                      $multiply: [
+                        { 
+                          $toDouble: { $ifNull: [{ $arrayElemAt: ["$result1.lotsize", 0] }, 1] }
+                        },
+                        { $toDouble: lotMultypaly1 }
+                      ]
+                    }
+                  ]
+                }
+              ],
+            }
+            
+          },
+        },
+        {
+          $facet: {
+            data: [
+             
+              {
+                $project: {
+                  createdAt: 1,
+                  strategy: 1,
+                  trade_symbol: 1,
+                  TotalQty: 1,
+                  TotalCalculate: 1,
+                },
+              },
+            ],
+            trade_symbols_filter: [
+              {
+                $group: {
+                  _id: null,
+                  trade_symbols: { $addToSet: "$trade_symbol" },
+                },
+              },
+            ],
+            totalItems: [{ $count: "count" }],
           },
         },
       ]);
-
-      const totalItems = await MainSignals_modal.countDocuments(matchStage);
-
-      // Calculate TotalProfit/Loss
-      let TotalCalculate = 0;
-
-      filteredSignals.forEach((item) => {
-        const entryPrice = Number(item.entry_price);
-        const exitPrice = Number(item.exit_price);
-
-        if (Number.isFinite(entryPrice) && Number.isFinite(exitPrice)) {
-          const lotsize = Number(item.result1?.[0]?.lotsize || 1);
-          const TotalQty = lotsize * (lotMultypaly1 || 1);
-
-          TotalCalculate +=
-            item.entry_type === "LE"
-              ? (item.exit_price - item.entry_price) * TotalQty
-              : (item.entry_price - item.exit_price) * TotalQty;
-
-          item.entry_qty_percent = Math.ceil(
-            (Number(item.entry_qty_percent || 0) / 100) * lotsize
-          );
-          item.exit_qty_percent = Math.ceil(
-            (Number(item.exit_qty_percent || 0) / 100) * lotsize
-          );
-          item.entry_qty = TotalQty;
-          item.exit_qty = item.exit_qty_percent > 0 ? TotalQty : 1 || 0;
-        } else {
-          const lotsize = Number(item.result1?.[0]?.lotsize || 1);
-          const TotalQty = lotsize * (lotMultypaly1 || 1); // Ensure lotMultypaly1 has a valid value
-
-          item.entry_qty_percent = Math.ceil(
-            (Number(item.entry_qty_percent || 0) / 100) * lotsize
-          );
-
-          item.entry_qty = TotalQty;
-        }
-      });
-
-      // ========================================CHANGE TO CODE=======================================
-      const matchStage1 = {
-        createdAt: { $gte: startDateObj, $lte: endDateObj },
-        strategy: stg1,
-        symbol: serIndex,
-      };
-
-      const filteredSignals1 = await MainSignals_modal.aggregate([
-        {
-          $match: matchStage1, // Initial filtering
-        },
-        {
-          $lookup: {
-            from: "signals",
-            localField: "signals_id",
-            foreignField: "_id",
-            as: "result",
-            pipeline: [{ $project: { _id: 1 } }],
-          },
-        },
-        {
-          $lookup: {
-            from: "services",
-            localField: "symbol",
-            foreignField: "name",
-            as: "result1",
-            pipeline: [{ $project: { lotsize: 1, name: 1 } }],
-          },
-        },
-        {
-          $match: {
-            $expr: { $gt: [{ $size: "$result" }, 0] },
-          },
-        },
-        {
-          $match: {
-            $expr: { $gt: [{ $size: "$result1" }, 0] },
-          },
-        },
-      ]);
-
-      // Trade symbols for filtering
-      const trade_symbols_filter = Array.from(
-        new Set(filteredSignals1.map((item) => item.trade_symbol))
-      );
-
-      // Response
+      
+  
+      const totalItems = filteredSignals[0].totalItems?.[0]?.count || 0;
+      const trade_symbols_filter = filteredSignals[0].trade_symbols_filter?.[0]?.trade_symbols || [];
+      const data = filteredSignals[0].data;
+  
       return res.send({
         status: true,
         msg: "Filtered Trade history",
-        data: [],
-        trade_symbols_filter: trade_symbols_filter,
+        data,
+        trade_symbols_filter,
         pagination: {
           page: page1,
           limit: limit1,
           totalItems,
           totalPages: Math.ceil(totalItems / limit1),
         },
-        TotalCalculate,
+        TotalCalculate: data.reduce((sum, item) => sum + (item.TotalCalculate || 0), 0),
       });
     } catch (error) {
-      console.log("Error in Trade History:", error);
-      return res
-        .status(500)
-        .send({ status: false, msg: "Internal Server Error" });
+      console.error("Error in Trade History API:", error);
+      return res.status(500).send({ status: false, msg: "Internal Server Error", error: error.message });
     }
   }
+  
+  
 
   // GET ADMIN SIGNALS
   async GetAdminsevenTradeHistory(req, res) {

@@ -75,8 +75,6 @@ const TradeHistory = () => {
   const [lotMultypaly, SetlotMultypaly] = useState(1);
   const selector = useSelector((state) => state.DashboardSlice);
   const [showModal6, setShowModal6] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [getPage, setPage] = useState(1);
   const [getSizePerPage, setSizePerPage] = useState(10);
   const [total1, setTotal] = useState(0);
@@ -114,13 +112,15 @@ const TradeHistory = () => {
 
   useEffect(() => {
     GetAdminTradingStatus();
+    GetPnlPosition();
+    GetAllStrategyName();
+    Admin_Trading_data();
   }, []);
 
   useEffect(() => {
     Get_TradHistory();
     Get_Tradehisotry_Calculations();
   }, [
-    searchTerm,
     refresh,
     SocketState,
     fromDate,
@@ -145,16 +145,9 @@ const TradeHistory = () => {
     SelectService,
   ]);
 
-  useEffect(() => {
-    GetPnlPosition();
-    GetAllStrategyName();
-    Admin_Trading_data();
-  }, []);
-
-
   const GetPnlPosition = async () => {
     const res = await dispatch(GET_PNL_POSITION({ token: token })).unwrap();
- 
+
     if (res?.data) {
       const pnlPosition = res.data[0].pnl_position;
 
@@ -230,22 +223,9 @@ const TradeHistory = () => {
         if (response.status) {
           setTotal(response.pagination.totalItems);
 
-          let filterData = response.data.filter((item) => {
-            if (searchTerm === "") return item;
-
-            return (
-              item.trade_symbol
-                .toLowerCase()
-                .includes(searchTerm.toLowerCase()) ||
-              item.strategy.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              item.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              item.entry_price.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-          });
-
           setTradeHistoryData({
             loading: false,
-            data: filterData,
+            data: response.data,
             pagination: response.pagination,
             TotalCalculate: response.TotalCalculate,
           });
@@ -437,6 +417,7 @@ const TradeHistory = () => {
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
     });
+
   const ShowLivePrice = async () => {
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
@@ -669,7 +650,7 @@ const TradeHistory = () => {
             channelList,
             UserDetails.user_id,
             UserDetails.access_token
-          ).then((res) => { });
+          ).then((res) => {});
         } else {
           // $(".UPL_").html("-");
           // $(".show_rpl_").html("-");
@@ -1033,16 +1014,6 @@ const TradeHistory = () => {
     }
   };
 
-  const handleCheckboxChange = (event, option) => {
-    let updatedOptions = [...selectedOptions];
-    if (event.target.checked) {
-      updatedOptions.push(option);
-    } else {
-      updatedOptions = updatedOptions.filter((item) => item !== option);
-    }
-    setSelectedOptions(updatedOptions);
-  };
-
   const handleTableChange = (type, { page, sizePerPage }) => {
     setPage(page);
     setSizePerPage(sizePerPage);
@@ -1064,30 +1035,6 @@ const TradeHistory = () => {
     </>
   );
 
-  const columnTexts = [
-    "S.No.",
-    "Signals Entry time",
-    "Signals Exit time",
-    "Symbol",
-    "Strategy",
-    "Entry Type",
-    // "Entry Qty",
-    "Exit Qty",
-    // "Live Price",
-    "Entry Price",
-    "Exit Price",
-    "Total",
-    "Entry Status",
-    "Exit Status",
-    "Details View",
-  ];
-
-  useEffect(() => {
-    if (selectedOptions && selectedOptions.length > 0) {
-      columns = columns.filter((data) => !selectedOptions.includes(data.text));
-    }
-  }, [selectedOptions]);
-
   useEffect(() => {
     if (selector && selector.permission) {
       if (
@@ -1101,7 +1048,6 @@ const TradeHistory = () => {
       }
     }
   }, [selector]);
-
 
   return (
     <>
@@ -1298,8 +1244,6 @@ const TradeHistory = () => {
             </div>
           </div>
 
-      
-
           <div className="col-lg-2  px-1">
             <div className="mb-3">
               <label className="col-lg-12">Reset</label>
@@ -1339,11 +1283,12 @@ const TradeHistory = () => {
                 <div
                   style={{
                     position: "relative",
-                    overflow: "hidden", 
+                    overflow: "hidden",
                   }}
                 >
                   {/* dynamic Watermark */}
-                  <div className ='watermarkId'
+                  <div
+                    className="watermarkId"
                     style={{
                       position: "absolute",
                       top: 0,
@@ -1376,7 +1321,6 @@ const TradeHistory = () => {
                     }}
                   />
                 </div>
-
 
                 <div className="mb-2 d-flex justify-content-between align-items-start mt-2">
                   <div className="d-flex align-items-center">

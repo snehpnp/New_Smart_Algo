@@ -46712,3 +46712,14 @@ body {
   width: 100%;
   display: block !important;
 }
+.content-body {
+    margin-top: 90px;
+    margin-bottom:90px;
+}
+footer {
+  background: #fff;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  box-shadow: 0rem 0.9375rem 1.875rem 0rem rgba(0, 0, 0, 0.02);
+}

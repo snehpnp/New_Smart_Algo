@@ -326,9 +326,9 @@ const ReferralPage = () => {
 
             <div className="container-fluid">
                 <div className="row page-titles">
-                    <div className="row mb-3">
+                    {/* <div className="row mb-3">
                         <div className="col-lg-6"></div>
-                    </div>
+                    </div> */}
                     <ol className="breadcrumb">
                         <div className="col-lg-6">
                             <li className="breadcrumb-item">
