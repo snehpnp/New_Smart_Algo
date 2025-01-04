@@ -1,8 +1,7 @@
 import React from 'react'
-import { Route, Routes, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import Wraper from '../Components/Dashboard/Wraper/Wraper';
-
 import Dashboard from '../layout/User/Dashboard/Dashboard';
 import Signals from '../layout/User/Signals/Signals';
 import TradingStatus from '../layout/User/Trading status/Tradingstatus';
@@ -15,23 +14,16 @@ import StrategyDesc from '../layout/User/StrategyDesc/StrategyDesc';
 
 // OPTION CHAIN
 import Opation_Chain from '../layout/User/OptionChain/Opation_Chain';
-import Open_Positions from '../layout/User/OptionChain/Open_Positions';
-
 import Userreferal from '../layout/User/Profile/ReferralPage';
 import Faq from '../layout/Admin/Faq/Faq';
 import Userplan from '../layout/User/HelpCenter/Userplan';
-
-import Kotakneo from '../Components/Dashboard/Header/Brokerpage/Kotakneo'
-import Footer from '../Components/Dashboard/Footer/Footer.js'
+import Kotakneo from '../Components/Dashboard/Header/Brokerpage/Kotakneo';
 
 
 // strategydesc
-
 const Admin = () => {
 
     const location = useLocation();
-    const navigate = useNavigate()
-    const role_id = localStorage.getItem("Role")
 
 
     return (
@@ -57,7 +49,7 @@ const Admin = () => {
 
             </Routes>
 
-            {location.pathname !== "/client" && location.pathname !== "/client/*" ? <Footer /> : null}
+            {/* {location.pathname !== "/client" && location.pathname !== "/client/*" ? <Footer /> : null} */}
 
         </>
     )

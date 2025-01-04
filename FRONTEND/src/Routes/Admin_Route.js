@@ -16,21 +16,21 @@ import SignupClientDetails from '../layout/Admin/SignupClients/SignupClient_Deta
 import ExpiredClients from '../layout/Admin/Clients/ExpiredClients/ExpiredClients'
 import AllSubadmin from '../layout/Admin/SubAdmin/Subadmins/AllSubadmin';
 import EditSubadmin from '../layout/Admin/SubAdmin/Subadmins/EditSubadmin';
-import SubadminClient from "../layout/Admin/SubAdmin/Subadmin_Clients/Subadmin_Client"
-import EditSubadminClient from "../layout/Admin/SubAdmin/Subadmin_Clients/EditSubadminClients"
-import AddSubadmin from "../layout/Admin/SubAdmin/Subadmins/AddSubadmin"
-import Signals from "../layout/Admin/TradeDetails/Signals/Signals"
-import SevenDaysEntry from "../layout/Admin/TradeDetails/7DaysEntryOnly/SevenDaysEntryOnly"
-import Edit7days from "../layout/Admin/TradeDetails/7DaysEntryOnly/Edit7days"
-import TradeExecutionReport from "../layout/Admin/TradeDetails/TradeExecutionReport/TradeExecutionReport"
-import TradingStatus from "../layout/Admin/TradeDetails/TradingStatus/TradingStatus"
-import TradeHistory from "../layout/Admin/TradeDetails/TradeHistory/TradeHistory"
+import SubadminClient from "../layout/Admin/SubAdmin/Subadmin_Clients/Subadmin_Client";
+import EditSubadminClient from "../layout/Admin/SubAdmin/Subadmin_Clients/EditSubadminClients";
+import AddSubadmin from "../layout/Admin/SubAdmin/Subadmins/AddSubadmin";
+import Signals from "../layout/Admin/TradeDetails/Signals/Signals";
+import SevenDaysEntry from "../layout/Admin/TradeDetails/7DaysEntryOnly/SevenDaysEntryOnly";
+import Edit7days from "../layout/Admin/TradeDetails/7DaysEntryOnly/Edit7days";
+import TradeExecutionReport from "../layout/Admin/TradeDetails/TradeExecutionReport/TradeExecutionReport";
+import TradingStatus from "../layout/Admin/TradeDetails/TradingStatus/TradingStatus";
+import TradeHistory from "../layout/Admin/TradeDetails/TradeHistory/TradeHistory";
 import AllLicence from '../layout/Admin/Licence/AllLicence/AllLicence';
-import ExpiredLicence from "../layout/Admin/Licence/ExpiredLicence/ExpiredLicence"
-import HelpCenter from "../layout/Admin/Support/HelpCenter/HelpCenter"
-import MsgBroadCast from "../layout/Admin/Support/MsgBroadCast/MsgBroadCast"
-import Service from "../layout/Admin/Service/AllService/AllService"
-import GroupService from "../layout/Admin/Service/GroupService/GroupService"
+import ExpiredLicence from "../layout/Admin/Licence/ExpiredLicence/ExpiredLicence";
+import HelpCenter from "../layout/Admin/Support/HelpCenter/HelpCenter";
+import MsgBroadCast from "../layout/Admin/Support/MsgBroadCast/MsgBroadCast";
+import Service from "../layout/Admin/Service/AllService/AllService";
+import GroupService from "../layout/Admin/Service/GroupService/GroupService";
 import AddGroup from '../layout/Admin/Service/GroupService/Add_Group';
 import EditGroup from '../layout/Admin/Service/GroupService/Edit_Group';
 import Report from '../layout/Admin/Report/Report';
@@ -54,16 +54,15 @@ import BrokerInfor from '../layout/Admin/BrokersInformation/Broker_info';
 import ChartDetail from '../layout/Admin/ChartInformation/Chart_info';
 import { Get_Pmermission } from "../ReduxStore/Slice/Users/DashboardSlice";
 import Faq from '../layout/Admin/Faq/Faq';
-import Starclients from '../layout/Admin/Clients/Starclients/Starclients'
-import ReferralPage  from '../layout/Admin/Profile/ReferralPage'
-import Plans  from '../layout/Admin/Service/Plans/Plans'
-import Addplans  from '../layout/Admin/Service/Plans/Addplan'
+import Starclients from '../layout/Admin/Clients/Starclients/Starclients';
+import ReferralPage  from '../layout/Admin/Profile/ReferralPage';
+import Plans  from '../layout/Admin/Service/Plans/Plans';
+import Addplans  from '../layout/Admin/Service/Plans/Addplan';
 import TradeHistory1 from "../layout/Admin/TradeDetails/TradeHistory/OrderHistory.js";
 import Makecall from '../layout/Comman/Make/Makecall.js';
 import MakeCallPendingPosition from '../layout/Comman/Make/MakeCallPendingPosition.js';
 import Settings from '../layout/Admin/Profile/Settings';
 import Holdings from '../layout/Admin/TradeDetails/TradeHistory/Holdings.js';
-
 import Footer from '../Components/Dashboard/Footer/Footer.js'
 
 const Admin = () => {
@@ -159,19 +158,11 @@ const Admin = () => {
                 <Route exact path="/refer-earn" element={<ReferralPage />} />
                 <Route exact path="/plans" element={<Plans />} />
                 <Route exact path="/plan/add" element={<Addplans />} />
-
-
                 <Route exact path="/makecall" element={<Makecall />} />
                 <Route exact path="/makecallpendingposition" element={<MakeCallPendingPosition />} />
-
-
-
                 <Route exact path="/tradehistory1" element={<TradeHistory1 />} />
                 <Route exact path="/settings" element={<Settings />} />
-   
-
                 <Route exact path="/holdingshistory" element={<Holdings />} />
-  
 
             </Routes>
             {location.pathname !== "/admin" && location.pathname !== "/admin/*" ? <Footer /> : null}

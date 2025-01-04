@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route, Routes, NavLink, useLocation, useNavigate } from "react-router-dom";
+import {  Route, Routes, useLocation } from "react-router-dom";
 import Wraper from '../Components/Dashboard/Wraper/Wraper';
 import Dashboard from '../layout/Sub_Admin/Dashboard/Dashboard';
 import Profile from '../layout/Sub_Admin/Profile/Profile';
@@ -27,8 +27,7 @@ import Footer from '../Components/Dashboard/Footer/Footer.js'
 const Admin = () => {
 
     const location = useLocation();
-    const navigate = useNavigate()
-    const role_id = localStorage.getItem("Role")
+
 
     return (
         <>
