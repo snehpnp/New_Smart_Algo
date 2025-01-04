@@ -17,13 +17,15 @@ const Content = ({
   OpenModal,
   ...rest
 }) => {
+
+console.log("csv_data",csv_data)
+console.log("csv_title",csv_title)
+
   return (
     <div className="content-body">
       <div className="container-fluid">
         <div className="row page-titles">
-          {/* <div className="row mb-3">
-            <div className="col-lg-6"></div>
-          </div> */}
+       
           <ol className="breadcrumb">
             <div className="col-lg-6">
               <li className="breadcrumb-item">
@@ -49,11 +51,6 @@ const Content = ({
               </div>
             )}
 
-            {/* <div className="col-lg-6 ">
-              <button className="btn btn-primary float-lg-end " onClick={()=>OpenModal()}>
-                <i className="fa-solid fa-view"></i> Fund Managment
-              </button>
-            </div> */}
           </ol>
         </div>
 
@@ -86,15 +83,13 @@ const Content = ({
                   )}
 
                   <div className="card-body">
-                    {show_csv_button ? (
+                    {show_csv_button && (
                       <ExportToExcel
                         className="btn btn-primary export-btn "
                         apiData={csv_data}
                         fileName={csv_title}
                       />
-                    ) : (
-                      ""
-                    )}
+                    ) }
 
                     <div className="form-validation">{rest.children}</div>
                   </div>

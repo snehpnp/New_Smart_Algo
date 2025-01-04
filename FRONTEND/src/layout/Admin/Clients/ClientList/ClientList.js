@@ -149,6 +149,7 @@ const AllClients = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
+
           if (dashboard_filter !== undefined) {
             let abc;
 
@@ -190,7 +191,6 @@ const AllClients = () => {
                 }
               });
 
-            forCSVdata(response.data);
 
             setAllClients({
               loading: false,
@@ -208,6 +208,8 @@ const AllClients = () => {
             data: response.data,
             pagination: response?.pagination,
           });
+          
+          forCSVdata(response.data);
         } else {
           setAllClients({
             loading: false,
