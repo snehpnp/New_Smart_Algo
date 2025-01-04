@@ -255,6 +255,10 @@ export async function GET_PERMISSION(data, token) {
             headers: header(token),
             data: { data },
         })
+        if(res?.data?.status){
+            localStorage.setItem("panel_name", res?.data?.data[0]?.panel_name)
+
+        }
         return await res?.data;
     }
     catch (err) {

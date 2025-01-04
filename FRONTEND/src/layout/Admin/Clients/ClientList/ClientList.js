@@ -524,7 +524,7 @@ const AllClients = () => {
       text: "Favorite",
       formatter: (cell, row) => (
         <div style={{ cursor: "pointer" }}>
-          {console.log(cell)}
+       
           <div>
             {cell === 1 || cell === "1" ? (
               <i

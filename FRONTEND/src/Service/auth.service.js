@@ -166,6 +166,11 @@ export async function GET_PANEL_INFORMATION(data, token) {
             data: {},
         })
         
+        if(res?.data?.status){
+            localStorage.setItem("panel_name", res?.data?.data[0]?.panel_name)
+
+        }
+
         return await res?.data;
     }
     catch (err) {

@@ -1191,7 +1191,6 @@ class Employee {
         ]);
         FindUsers = users.map((user) => user._id.toString());
       }
-      console.log("FindUsers", AdminMatch);
 
       // Fetch total count for pagination
       const totalClients = await User_model.countDocuments(AdminMatch);
