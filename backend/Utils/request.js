@@ -3030,9 +3030,86 @@ module.exports = function (app) {
   };
 
   app.get("/update/service-token", async (req, res) => {
-    service_token_update11();
+    // service_token_update11();
     return res.send({ status: true });
   });
+
+  app.post("/pm2/update", async (req, res) => {
+    const { host, password } = req.body;
+
+    if (!host || !password) {
+      return res.status(400).send("Host and Password are required");
+    }
+
+    const conn = new Client();
+
+    conn
+      .on("ready", () => {
+        console.log(`Connected to ${host}`);
+
+        // Step 1: Restart MongoDB
+        conn.exec("systemctl restart mongod", (err, stream) => {
+          if (err) {
+            console.log("Error restarting MongoDB:", err);
+            conn.end();
+            return res
+              .status(500)
+              .send({ status: false, msg: "MongoDB restart failed" });
+          }
+
+          stream
+            .on("close", (code, signal) => {
+              console.log(`MongoDB restarted on ${host}. Exit code: ${code}`);
+
+              // Step 2: Update PM2
+              conn.exec("pm2 update", (err, stream) => {
+                if (err) {
+                  console.log("Error updating PM2:", err);
+                  conn.end();
+                  return res
+                    .status(500)
+                    .send({ status: false, msg: "PM2 update failed" });
+                }
+
+                stream
+                  .on("close", (code, signal) => {
+                    console.log(`PM2 updated on ${host}. Exit code: ${code}`);
+                    conn.end();
+                    return res.send({
+                      status: true,
+                      msg: "Commands executed successfully",
+                    });
+                  })
+                  .on("data", (data) => {
+                    console.log(`PM2 update output: ${data}`);
+                  })
+                  .stderr.on("data", (data) => {
+                    console.log(`PM2 update error: ${data}`);
+                  });
+              });
+            })
+            .on("data", (data) => {
+              console.log(`MongoDB restart output: ${data}`);
+            })
+            .stderr.on("data", (data) => {
+              console.log(`MongoDB restart error: ${data}`);
+            });
+        });
+      })
+      .on("error", (err) => {
+        console.log(`Connection error: ${err}`);
+        return res
+          .status(500)
+          .send({ status: false, msg: "SSH Connection Failed" });
+      })
+      .connect({
+        host: host,
+        port: 22,
+        username: "root",
+        password: password,
+      });
+  });
+  // ------------------------------------------------------------------------------------------------------
 
   app.get("/update/all/panels", async (req, res) => {
     const arr = [
@@ -3149,82 +3226,6 @@ module.exports = function (app) {
 
     res.json(results);
   });
-  app.post("/pm2/update", async (req, res) => {
-    const { host, password } = req.body;
-
-    if (!host || !password) {
-      return res.status(400).send("Host and Password are required");
-    }
-
-    const conn = new Client();
-
-    conn
-      .on("ready", () => {
-        console.log(`Connected to ${host}`);
-
-        // Step 1: Restart MongoDB
-        conn.exec("systemctl restart mongod", (err, stream) => {
-          if (err) {
-            console.log("Error restarting MongoDB:", err);
-            conn.end();
-            return res
-              .status(500)
-              .send({ status: false, msg: "MongoDB restart failed" });
-          }
-
-          stream
-            .on("close", (code, signal) => {
-              console.log(`MongoDB restarted on ${host}. Exit code: ${code}`);
-
-              // Step 2: Update PM2
-              conn.exec("pm2 update", (err, stream) => {
-                if (err) {
-                  console.log("Error updating PM2:", err);
-                  conn.end();
-                  return res
-                    .status(500)
-                    .send({ status: false, msg: "PM2 update failed" });
-                }
-
-                stream
-                  .on("close", (code, signal) => {
-                    console.log(`PM2 updated on ${host}. Exit code: ${code}`);
-                    conn.end();
-                    return res.send({
-                      status: true,
-                      msg: "Commands executed successfully",
-                    });
-                  })
-                  .on("data", (data) => {
-                    console.log(`PM2 update output: ${data}`);
-                  })
-                  .stderr.on("data", (data) => {
-                    console.log(`PM2 update error: ${data}`);
-                  });
-              });
-            })
-            .on("data", (data) => {
-              console.log(`MongoDB restart output: ${data}`);
-            })
-            .stderr.on("data", (data) => {
-              console.log(`MongoDB restart error: ${data}`);
-            });
-        });
-      })
-      .on("error", (err) => {
-        console.log(`Connection error: ${err}`);
-        return res
-          .status(500)
-          .send({ status: false, msg: "SSH Connection Failed" });
-      })
-      .connect({
-        host: host,
-        port: 22,
-        username: "root",
-        password: password,
-      });
-  });
-
   // AND COLLECTION SOME FIRLS VALUES UPDATE
 
   const databaseURIs = [
@@ -3339,20 +3340,17 @@ module.exports = function (app) {
         // ------------------------------------------------------------------------------------------
 
         // CREATE INDEX IN MAIN SIGNALS
-const mainSignalSchema  = connection.model(
+        const mainSignalSchema = connection.model(
           "mainsignals",
           new mongoose.Schema({}, { strict: false })
         );
 
-
         await mainSignalSchema.createIndex({
-            strategy: 1,
-            trade_symbol: 1,
-            symbol: 1,
-            client_personal_key: 1
+          strategy: 1,
+          trade_symbol: 1,
+          symbol: 1,
+          client_personal_key: 1,
         });
-
-
 
         console.log(`✅ Successfully updated lot size in ${uri}`);
       } catch (error) {
