@@ -18,7 +18,6 @@ const ExpiredLicence = () => {
   const [originalData, setOriginalData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
 
-
   const [getAllClients, setAllClients] = useState({
     loading: true,
     data: [],
@@ -82,10 +81,7 @@ const ExpiredLicence = () => {
     },
   ];
 
-
-
-
-//  MANAGE MULTIFILTER
+  //  MANAGE MULTIFILTER
   useEffect(() => {
     const filteredData = originalData.filter((item) => {
       return (
@@ -104,36 +100,33 @@ const ExpiredLicence = () => {
 
   return (
     <>
-      {getAllClients.loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Content Page_title="Expired Soon Licence" button_status={false}>
-            <div className="row">
-              <div className="col-lg-4">
-                <div className="mb-3">
-                  <label htmlFor="exampleFormControlInput1" className="form-label">
-                    Search Something Here
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                  />
-                </div>
-              </div>
+      <Content Page_title="Expired Soon Licence" button_status={false}>
+        <div className="row">
+          <div className="col-lg-4">
+            <div className="mb-3">
+              <label htmlFor="exampleFormControlInput1" className="form-label">
+                Search Something Here
+              </label>
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="form-control"
+                id="exampleFormControlInput1"
+              />
             </div>
-
-            <FullDataTable
-              TableColumns={columns}
-              tableData={getAllClients.data}
-            />
-          </Content>
-        </>
-      )}
+          </div>
+        </div>
+        {getAllClients?.loading ? (
+          <Loader />
+        ) : (
+          <FullDataTable
+            TableColumns={columns}
+            tableData={getAllClients.data}
+          />
+        )}
+      </Content>
     </>
   );
 };

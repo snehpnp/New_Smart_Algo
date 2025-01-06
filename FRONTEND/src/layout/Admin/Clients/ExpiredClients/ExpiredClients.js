@@ -501,94 +501,88 @@ const AllClients = () => {
 
   return (
     <>
-      {getAllClients.loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Content
-            Page_title="Expired Clients"
-            button_status={false}
-            show_csv_button={true}
-            csv_data={ForGetCSV}
-            csv_title="Expired Client-List"
-          >
-            <div className="row">
-              <div className="col-lg-3">
-                <div className="mb-3">
-                  <label
-                    htmlFor="exampleFormControlInput1"
-                    className="form-label"
-                  >
-                    Search Something Here
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                  />
-                </div>
-              </div>
-              <div className="col-lg-2 ">
-                <div className="mb-3">
-                  <label htmlFor="select" className="form-label">
-                    Client Type
-                  </label>
-
-                  <select
-                    className="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => setClientStatus(e.target.value)}
-                    value={ClientStatus}
-                  >
-                    <option value="null">All</option>
-                    <option value="2">Live</option>
-                    <option value="1">Paper Trading</option>
-                    <option value="0">Live 2 Days Only</option>
-                  </select>
-                </div>
-              </div>
-              <div className="col-lg-2">
-                <div className="mb-3">
-                  <label htmlFor="select" className="form-label">
-                    Trading Type
-                  </label>
-
-                  <select
-                    className="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => setPanelStatus(e.target.value)}
-                    value={PanelStatus}
-                  >
-                    <option value="2">All</option>
-                    <option value="1">On</option>
-                    <option value="0">OFf</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="col-lg-2 mt-4">
-                <button
-                  className="btn btn-primary mt-1"
-                  onClick={(e) => ResetDate(e)}
-                >
-                  Reset
-                </button>
-              </div>
+      <Content
+        Page_title="Expired Clients"
+        button_status={false}
+        show_csv_button={true}
+        csv_data={ForGetCSV}
+        csv_title="Expired Client-List"
+      >
+        <div className="row">
+          <div className="col-lg-3">
+            <div className="mb-3">
+              <label htmlFor="exampleFormControlInput1" className="form-label">
+                Search Something Here
+              </label>
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="form-control"
+                id="exampleFormControlInput1"
+              />
             </div>
+          </div>
+          <div className="col-lg-2 ">
+            <div className="mb-3">
+              <label htmlFor="select" className="form-label">
+                Client Type
+              </label>
 
-            <FullDataTable
-              TableColumns={columns}
-              tableData={getAllClients.data}
-            />
-            <ToastButton />
-          </Content>
-        </>
-      )}
+              <select
+                className="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setClientStatus(e.target.value)}
+                value={ClientStatus}
+              >
+                <option value="null">All</option>
+                <option value="2">Live</option>
+                <option value="1">Paper Trading</option>
+                <option value="0">Live 2 Days Only</option>
+              </select>
+            </div>
+          </div>
+          <div className="col-lg-2">
+            <div className="mb-3">
+              <label htmlFor="select" className="form-label">
+                Trading Type
+              </label>
+
+              <select
+                className="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setPanelStatus(e.target.value)}
+                value={PanelStatus}
+              >
+                <option value="2">All</option>
+                <option value="1">On</option>
+                <option value="0">OFf</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="col-lg-2 mt-4">
+            <button
+              className="btn btn-primary mt-1"
+              onClick={(e) => ResetDate(e)}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+        {getAllClients?.loading ? (
+          <Loader />
+        ) : (
+          <FullDataTable
+            TableColumns={columns}
+            tableData={getAllClients.data}
+          />
+        )}
+        <ToastButton />
+      </Content>
     </>
   );
 };
