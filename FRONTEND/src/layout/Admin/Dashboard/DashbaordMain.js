@@ -11,6 +11,7 @@ import Dashboard8 from "./Dashboard8";
 import Dashboard9 from "./Dashboard9";
 import Dashboard10 from "./Dashboard10";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+import Loader from "../../../Utils/Loader";
 
 import { useDispatch } from "react-redux";
 import { Get_Dashboard_Count } from "../../../ReduxStore/Slice/Admin/DashboardSlice";
@@ -19,7 +20,10 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const user_token = JSON.parse(localStorage.getItem("user_details"))?.token;
 
-  const [DashboardData, setDashboardData] = useState("");
+  const [DashboardData, setDashboardData] = useState({
+    loading: true,
+    data: [],
+  });
 
   const getGroupeServics = async () => {
     await dispatch(Get_Dashboard_Count(user_token))
@@ -27,7 +31,15 @@ const Dashboard = () => {
       .then((response) => {
         if (response.status) {
           if (response.totalCount) {
-            setDashboardData(response.totalCount);
+            setDashboardData({
+              loading: false,
+              data: response.totalCount,
+            });
+          } else {
+            setDashboardData({
+              loading: false,
+              data: response.totalCount,
+            });
           }
         }
       });
@@ -42,16 +54,17 @@ const Dashboard = () => {
       <div>
         <div className="content-body">
           <div className="container-fluid">
-            <Dashboard1 data={DashboardData} />
-            <Dashboard2 data={DashboardData} />
-            <Dashboard3 data={DashboardData} />
-            <Dashboard4 data={DashboardData} />
-            <Dashboard5 data={DashboardData} />
-            <Dashboard6 data={DashboardData} />
-            <Dashboard7 data={DashboardData} />
-            <Dashboard8 data={DashboardData} />
-            <Dashboard9 data={DashboardData} />
-            <Dashboard10 data={DashboardData} />
+            {DashboardData.loading && <Loader />}
+            <Dashboard1 data={DashboardData?.data} />
+            <Dashboard2 data={DashboardData?.data} />
+            <Dashboard3 data={DashboardData?.data} />
+            <Dashboard4 data={DashboardData?.data} />
+            <Dashboard5 data={DashboardData?.data} />
+            <Dashboard6 data={DashboardData?.data} />
+            <Dashboard7 data={DashboardData?.data} />
+            <Dashboard8 data={DashboardData?.data} />
+            <Dashboard9 data={DashboardData?.data} />
+            <Dashboard10 data={DashboardData?.data} />
           </div>
         </div>
         <ToastButton />

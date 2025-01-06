@@ -29,7 +29,6 @@ import { Get_Panel_History } from "../../../ReduxStore/Slice/Superadmin/SuperAdm
 
 const AllPermitions = () => {
   const dispatch = useDispatch();
-  const [filteredData, setFilteredData] = useState([]);
   const [filteredData1, setFilteredData1] = useState([]);
   const [showModal, setshowModal] = useState(false);
   const [PanelDetailsModal, setPanelDetailsModal] = useState(false);
@@ -44,15 +43,12 @@ const AllPermitions = () => {
   const [searchInput, setSearchInput] = useState("");
   const [panelData, setPanelData] = useState({ loading: true, data: [] });
   const [panelData1, setPanelData1] = useState({ loading: true, data: [] });
-  const [panelInfo, setpanelInfo] = useState({ loading: true, data: [] });
 
   const data = async () => {
     await dispatch(All_Panel_List())
       .unwrap()
       .then((response) => {
         if (response.status) {
-         
-
           setPanelData1({
             loading: false,
             data: response.data,
@@ -121,7 +117,11 @@ const AllPermitions = () => {
       text: "Panel Name",
       formatter: (cell, row) => (
         <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-          <Link to={`${row.domain}/#/login`} target="_blank" rel="noopener noreferrer">
+          <Link
+            to={`${row.domain}/#/login`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {row.panel_name}
           </Link>
         </span>
@@ -398,91 +398,80 @@ const AllPermitions = () => {
 
   return (
     <>
-      {panelData.loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Content Page_title="Admin Permission" button_status={false}>
-            <div className="mb-4">
-              <h6>Search here something</h6>
-              <input
-                type="text"
-                style={{ height: "2rem" }}
-                placeholder="search..."
-                className="p-2 rounded"
-                onChange={(e) => {
-                  setSearchInput(e.target.value);
-                }}
-                value={searchInput}
+      <Content Page_title="Admin Permission" button_status={false}>
+        <div className="mb-4">
+          <h6>Search here something</h6>
+          <input
+            type="text"
+            style={{ height: "2rem" }}
+            placeholder="search..."
+            className="p-2 rounded"
+            onChange={(e) => {
+              setSearchInput(e.target.value);
+            }}
+            value={searchInput}
+          />
+        </div>
+
+        {panelData?.loading ? (
+          <Loader />
+        ) : (
+          <FullDataTable
+            TableColumns={columns}
+            tableData={panelData.data}
+            pagination1={false}
+          />
+        )}
+
+        {HistoryStatus && (
+          <div>
+            <Modal
+              isOpen={true}
+              size="xl"
+              title="History"
+              hideBtn={true}
+              handleClose={() => SetHistoryStatus(false)}
+            >
+              <FullDataTable
+                TableColumns={columns1}
+                tableData={filteredData1}
               />
-            </div>
-            {panelData.data && panelData.data.length === 0 ? (
-              "No data found"
-            ) : (
-              <>
-                <SidebarPermission
-                  showPanelName={showPanelName}
-                  showModal={showModal}
-                  setshowModal={() => setshowModal(false)}
-                />
-                <BrokerPermittion
-                  List={showBrokerDetails}
-                  showModal={showBrokerModal}
-                  setshowModal={() => setshowBrokerModal(false)}
-                />
-                <PanelDetails
-                  showModal={PanelDetailsModal}
-                  data={panelInfo && panelInfo}
-                  setshowModal={() => setPanelDetailsModal(false)}
-                />
-                <AddLicence
-                  showPanelName={showPanelName}
-                  showModal={showAddLicenceModal}
-                  setshowModal={() => setshowAddLicenceModal(false)}
-                />
+            </Modal>
+          </div>
+        )}
 
-                <Adjust_Month
-                  showPanelName={showPanelName}
-                  showModal={showAdjustMonthModal}
-                  setshowModal={() => setshowAdjustMonthModal(false)}
-                />
+        <SidebarPermission
+          showPanelName={showPanelName}
+          showModal={showModal}
+          setshowModal={() => setshowModal(false)}
+        />
+        <BrokerPermittion
+          List={showBrokerDetails}
+          showModal={showBrokerModal}
+          setshowModal={() => setshowBrokerModal(false)}
+        />
 
-                {showLicenceModal && (
-                  <LicenceDetails
-                    id={showLicenceDetails}
-                    showModal={showLicenceModal}
-                    setshowModal={() => setshowLicenceModal(false)}
-                  />
-                )}
+        <AddLicence
+          showPanelName={showPanelName}
+          showModal={showAddLicenceModal}
+          setshowModal={() => setshowAddLicenceModal(false)}
+        />
 
-                <FullDataTable
-                  TableColumns={columns}
-                  tableData={panelData.data}
-                  pagination1={false}
-                />
-                <ToastButton />
-              </>
-            )}
+        <Adjust_Month
+          showPanelName={showPanelName}
+          showModal={showAdjustMonthModal}
+          setshowModal={() => setshowAdjustMonthModal(false)}
+        />
 
-            {HistoryStatus && (
-              <div>
-                <Modal
-                  isOpen={true}
-                  size="xl"
-                  title="History"
-                  hideBtn={true}
-                  handleClose={() => SetHistoryStatus(false)}
-                >
-                  <FullDataTable
-                    TableColumns={columns1}
-                    tableData={filteredData1}
-                  />
-                </Modal>
-              </div>
-            )}
-          </Content>
-        </>
-      )}
+        {showLicenceModal && (
+          <LicenceDetails
+            id={showLicenceDetails}
+            showModal={showLicenceModal}
+            setshowModal={() => setshowLicenceModal(false)}
+          />
+        )}
+        <ToastButton />
+      </Content>
     </>
   );
 };

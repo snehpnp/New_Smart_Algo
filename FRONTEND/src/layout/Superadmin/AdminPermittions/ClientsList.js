@@ -287,9 +287,7 @@ const SubAdminList = () => {
 
   return (
     <>
-      {!allClients.length ? (
-        <Loader />
-      ) : (
+     
         <Content
           Page_title="Client List"
           button_status={true}
@@ -307,9 +305,13 @@ const SubAdminList = () => {
               value={searchInput}
             />
           </div>
+          {!allClients.length ? (
+        <Loader />
+      ) : (
           <FullDataTable TableColumns={columns} tableData={filteredClients} />
-        </Content>
       )}
+        </Content>
+ 
       {showModal && (
         <Modal
           isOpen={showModal}

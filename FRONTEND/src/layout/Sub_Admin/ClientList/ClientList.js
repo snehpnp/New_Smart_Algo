@@ -439,11 +439,7 @@ const AllClients = () => {
   };
 
   return (
-    <>
-      {getAllClients.loading ? (
-        <Loader />
-      ) : (
-        <>
+   
           <Content
             Page_title="All Clients"
             button_title="Add Client"
@@ -526,6 +522,9 @@ const AllClients = () => {
               </div>
             </div>
 
+            {getAllClients.loading ? (
+        <Loader />
+      ) : (
             <PaginationProvider
               pagination={paginationFactory({
                 ...paginationOptions,
@@ -605,11 +604,10 @@ const AllClients = () => {
                 </div>
               )}
             </PaginationProvider>
-          </Content>
-          <ToastButton />
-        </>
       )}
-    </>
+          <ToastButton />
+          </Content>
+     
   );
 };
 
