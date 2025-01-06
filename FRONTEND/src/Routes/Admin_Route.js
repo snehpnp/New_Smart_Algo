@@ -1,74 +1,69 @@
 
-import React, { useEffect, useState ,lazy, Suspense} from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useDispatch } from "react-redux";
 import { Route, Routes, useLocation } from "react-router-dom";
 import * as Config from "../Utils/Config";
 import Wraper from '../Components/Dashboard/Wraper/Wraper';
-import Footer from '../Components/Dashboard/Footer/Footer.js'
-import Loading from '../Utils/Loader.js'
-
+import Dashboard from '../layout/Admin/Dashboard/DashbaordMain';
+import Profile from '../layout/Admin/Profile/Profile'
+import ClientList from '../layout/Admin/Clients/ClientList/ClientList'
+import AddClient from '../layout/Admin/Clients/ClientList/Add_Client'
+import EditClient from '../layout/Admin/Clients/ClientList/Edit_Client'
+import SignUpClients from '../layout/Admin/Clients/Sign_Up_Clients/Sign_Up_Clients';
+import EditSignupClient from '../layout/Admin/Clients/Sign_Up_Clients/EditSignupClients';
+import SignupClientDetails from '../layout/Admin/SignupClients/SignupClient_Details'
+import ExpiredClients from '../layout/Admin/Clients/ExpiredClients/ExpiredClients'
+import AllSubadmin from '../layout/Admin/SubAdmin/Subadmins/AllSubadmin';
+import EditSubadmin from '../layout/Admin/SubAdmin/Subadmins/EditSubadmin';
+import SubadminClient from "../layout/Admin/SubAdmin/Subadmin_Clients/Subadmin_Client";
+import EditSubadminClient from "../layout/Admin/SubAdmin/Subadmin_Clients/EditSubadminClients";
+import AddSubadmin from "../layout/Admin/SubAdmin/Subadmins/AddSubadmin";
+import Signals from "../layout/Admin/TradeDetails/Signals/Signals";
+import SevenDaysEntry from "../layout/Admin/TradeDetails/7DaysEntryOnly/SevenDaysEntryOnly";
+import Edit7days from "../layout/Admin/TradeDetails/7DaysEntryOnly/Edit7days";
+import TradeExecutionReport from "../layout/Admin/TradeDetails/TradeExecutionReport/TradeExecutionReport";
+import TradingStatus from "../layout/Admin/TradeDetails/TradingStatus/TradingStatus";
+import TradeHistory from "../layout/Admin/TradeDetails/TradeHistory/TradeHistory";
+import AllLicence from '../layout/Admin/Licence/AllLicence/AllLicence';
+import ExpiredLicence from "../layout/Admin/Licence/ExpiredLicence/ExpiredLicence";
+import HelpCenter from "../layout/Admin/Support/HelpCenter/HelpCenter";
+import MsgBroadCast from "../layout/Admin/Support/MsgBroadCast/MsgBroadCast";
+import Service from "../layout/Admin/Service/AllService/AllService";
+import GroupService from "../layout/Admin/Service/GroupService/GroupService";
+import AddGroup from '../layout/Admin/Service/GroupService/Add_Group';
+import EditGroup from '../layout/Admin/Service/GroupService/Edit_Group';
+import Report from '../layout/Admin/Report/Report';
+import ApiCreateInfo from '../layout/Admin/ApiCreateInfo/ApiCreateInfo';
+import AddApiCreateInfo from '../layout/Admin/ApiCreateInfo/AddApiCreateInfo';
+import EditApiCreateInfo from '../layout/Admin/ApiCreateInfo/EditApiCreateInfo';
+import ReleaseUpdate from '../layout/Admin/ReleaseUpdate/ReleaseUpdate';
+import System from '../layout/Admin/System/System';
+import AllStrategy from '../layout/Admin/Service/AllStrategy/AllStrategy';
+import AddStrategy from '../layout/Admin/Service/AllStrategy/AddStrategy';
+import AddStraegyNormal from '../layout/Admin/Service/AllStrategy/AddStraegyNormal';
+import EditStrategy from '../layout/Admin/Service/AllStrategy/EditStrategy';
+import EditStrategyNormal from '../layout/Admin/Service/AllStrategy/EditStrategyNormal';
+import OpationChain from '../layout/Admin/OptionChain/Opation_Chain';
+import OpenPositions from '../layout/Admin/OptionChain/Open_Positions';
+import CreateStrategy from '../layout/Admin/CreateStrategy/CreateStrategy';
+import AllMakeStrategy from '../layout/Admin/CreateStrategy/AllMakeStrategy';
+import EditMakeStrategy from '../layout/Admin/CreateStrategy/EditMakeStrategy';
+import AddStrategyToClients from '../layout/Admin/Service/AllStrategy/AddStrategyToClients';
+import BrokerInfor from '../layout/Admin/BrokersInformation/Broker_info';
+import ChartDetail from '../layout/Admin/ChartInformation/Chart_info';
 import { Get_Pmermission } from "../ReduxStore/Slice/Users/DashboardSlice";
-
-
-const Dashboard = lazy(() => import('../layout/Admin/Dashboard/DashbaordMain'));
-const Profile = lazy(() => import('../layout/Admin/Profile/Profile'));
-const ClientList = lazy(() => import('../layout/Admin/Clients/ClientList/ClientList'));
-const AddClient = lazy(() => import('../layout/Admin/Clients/ClientList/Add_Client'));
-const EditClient = lazy(() => import('../layout/Admin/Clients/ClientList/Edit_Client'));
-const SignUpClients = lazy(() => import('../layout/Admin/Clients/Sign_Up_Clients/Sign_Up_Clients'));
-const EditSignupClient = lazy(() => import('../layout/Admin/Clients/Sign_Up_Clients/EditSignupClients'));
-const SignupClientDetails = lazy(() => import('../layout/Admin/SignupClients/SignupClient_Details'));
-const ExpiredClients = lazy(() => import('../layout/Admin/Clients/ExpiredClients/ExpiredClients'));
-const AllSubadmin = lazy(() => import('../layout/Admin/SubAdmin/Subadmins/AllSubadmin'));
-const EditSubadmin = lazy(() => import('../layout/Admin/SubAdmin/Subadmins/EditSubadmin'));
-const SubadminClient = lazy(() => import("../layout/Admin/SubAdmin/Subadmin_Clients/Subadmin_Client"));
-const EditSubadminClient = lazy(() => import("../layout/Admin/SubAdmin/Subadmin_Clients/EditSubadminClients"));
-const AddSubadmin = lazy(() => import("../layout/Admin/SubAdmin/Subadmins/AddSubadmin"));
-const Signals = lazy(() => import("../layout/Admin/TradeDetails/Signals/Signals"));
-const SevenDaysEntry = lazy(() => import("../layout/Admin/TradeDetails/7DaysEntryOnly/SevenDaysEntryOnly"));
-const Edit7days = lazy(() => import("../layout/Admin/TradeDetails/7DaysEntryOnly/Edit7days"));
-const TradeExecutionReport = lazy(() => import("../layout/Admin/TradeDetails/TradeExecutionReport/TradeExecutionReport"));
-const TradingStatus = lazy(() => import("../layout/Admin/TradeDetails/TradingStatus/TradingStatus"));
-const TradeHistory = lazy(() => import("../layout/Admin/TradeDetails/TradeHistory/TradeHistory"));
-const AllLicence = lazy(() => import('../layout/Admin/Licence/AllLicence/AllLicence'));
-const ExpiredLicence = lazy(() => import("../layout/Admin/Licence/ExpiredLicence/ExpiredLicence"));
-const HelpCenter = lazy(() => import("../layout/Admin/Support/HelpCenter/HelpCenter"));
-const MsgBroadCast = lazy(() => import("../layout/Admin/Support/MsgBroadCast/MsgBroadCast"));
-const Service = lazy(() => import("../layout/Admin/Service/AllService/AllService"));
-const GroupService = lazy(() => import("../layout/Admin/Service/GroupService/GroupService"));
-const AddGroup = lazy(() => import('../layout/Admin/Service/GroupService/Add_Group'));
-const EditGroup = lazy(() => import('../layout/Admin/Service/GroupService/Edit_Group'));
-const Report = lazy(() => import('../layout/Admin/Report/Report'));
-const ApiCreateInfo = lazy(() => import('../layout/Admin/ApiCreateInfo/ApiCreateInfo'));
-const AddApiCreateInfo = lazy(() => import('../layout/Admin/ApiCreateInfo/AddApiCreateInfo'));
-const EditApiCreateInfo = lazy(() => import('../layout/Admin/ApiCreateInfo/EditApiCreateInfo'));
-const ReleaseUpdate = lazy(() => import('../layout/Admin/ReleaseUpdate/ReleaseUpdate'));
-const System = lazy(() => import('../layout/Admin/System/System'));
-const AllStrategy = lazy(() => import('../layout/Admin/Service/AllStrategy/AllStrategy'));
-const AddStrategy = lazy(() => import('../layout/Admin/Service/AllStrategy/AddStrategy'));
-const AddStraegyNormal = lazy(() => import('../layout/Admin/Service/AllStrategy/AddStraegyNormal'));
-const EditStrategy = lazy(() => import('../layout/Admin/Service/AllStrategy/EditStrategy'));
-const EditStrategyNormal = lazy(() => import('../layout/Admin/Service/AllStrategy/EditStrategyNormal'));
-const OpationChain = lazy(() => import('../layout/Admin/OptionChain/Opation_Chain'));
-const OpenPositions = lazy(() => import('../layout/Admin/OptionChain/Open_Positions'));
-const CreateStrategy = lazy(() => import('../layout/Admin/CreateStrategy/CreateStrategy'));
-const AllMakeStrategy = lazy(() => import('../layout/Admin/CreateStrategy/AllMakeStrategy'));
-const EditMakeStrategy = lazy(() => import('../layout/Admin/CreateStrategy/EditMakeStrategy'));
-const AddStrategyToClients = lazy(() => import('../layout/Admin/Service/AllStrategy/AddStrategyToClients'));
-const BrokerInfor = lazy(() => import('../layout/Admin/BrokersInformation/Broker_info'));
-const ChartDetail = lazy(() => import('../layout/Admin/ChartInformation/Chart_info'));
-const Faq = lazy(() => import('../layout/Admin/Faq/Faq'));
-const Starclients = lazy(() => import('../layout/Admin/Clients/Starclients/Starclients'));
-const ReferralPage = lazy(() => import('../layout/Admin/Profile/ReferralPage'));
-const Plans = lazy(() => import('../layout/Admin/Service/Plans/Plans'));
-const Addplans = lazy(() => import('../layout/Admin/Service/Plans/Addplan'));
-const TradeHistory1 = lazy(() => import("../layout/Admin/TradeDetails/TradeHistory/OrderHistory.js"));
-const Makecall = lazy(() => import('../layout/Comman/Make/Makecall.js'));
-const MakeCallPendingPosition = lazy(() => import('../layout/Comman/Make/MakeCallPendingPosition.js'));
-const Settings = lazy(() => import('../layout/Admin/Profile/Settings'));
-const Holdings = lazy(() => import('../layout/Admin/TradeDetails/TradeHistory/Holdings.js'));
-
+import Faq from '../layout/Admin/Faq/Faq';
+import Starclients from '../layout/Admin/Clients/Starclients/Starclients';
+import ReferralPage  from '../layout/Admin/Profile/ReferralPage';
+import Plans  from '../layout/Admin/Service/Plans/Plans';
+import Addplans  from '../layout/Admin/Service/Plans/Addplan';
+import TradeHistory1 from "../layout/Admin/TradeDetails/TradeHistory/OrderHistory.js";
+import Makecall from '../layout/Comman/Make/Makecall.js';
+import MakeCallPendingPosition from '../layout/Comman/Make/MakeCallPendingPosition.js';
+import Settings from '../layout/Admin/Profile/Settings';
+import Holdings from '../layout/Admin/TradeDetails/TradeHistory/Holdings.js';
+import Footer from '../Components/Dashboard/Footer/Footer.js'
 
 const Admin = () => {
 
@@ -112,7 +107,6 @@ const Admin = () => {
     return (
         <>
             {location.pathname !== "/admin" && location.pathname !== "/admin/*" ? <Wraper /> : null}
-            <Suspense fallback={<Loading/>}>
             <Routes>
                 <Route exact path="/dashboard" element={<Dashboard />} />
                 <Route exact path="/profile" element={<Profile />} />
@@ -171,7 +165,6 @@ const Admin = () => {
                 <Route exact path="/holdingshistory" element={<Holdings />} />
 
             </Routes>
-            </Suspense>
             {location.pathname !== "/admin" && location.pathname !== "/admin/*" ? <Footer /> : null}
 
         </>
