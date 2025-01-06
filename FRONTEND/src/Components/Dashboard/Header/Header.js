@@ -79,12 +79,13 @@ const Header = ({ ChatBox }) => {
   const UserNamego_localstg = JSON.parse(
     localStorage.getItem("user_details_goTo")
   );
-
   const AdminToken = JSON.parse(localStorage.getItem("user_details"))?.token;
+
 
   useEffect(() => {
     CompanyName();
   }, []);
+
   useEffect(() => {
     GET_IP().then((response) => {
       setIp(response.data.ip);
@@ -216,22 +217,6 @@ const Header = ({ ChatBox }) => {
       }
     });
   }
-
-  const handleTabChange = (tab) => {
-    if (tab === "mobile") {
-      setActiveTab(tab);
-      setUsername("");
-      setPassword("");
-      setErrors({ username: "", password: "" });
-    } else {
-      Swal.fire({
-        title: "Coming Soon!",
-        text: "This feature is under development.",
-        icon: "info",
-        confirmButtonText: "OK",
-      });
-    }
-  };
 
   const handleBackClick = () => {
     setUsername("");
@@ -462,7 +447,7 @@ const Header = ({ ChatBox }) => {
           console.warn("Unexpected response:", response);
         }
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   //  GET_USER_DETAILS
@@ -542,17 +527,14 @@ const Header = ({ ChatBox }) => {
           setLogo(response.data[0].logo);
           $(".Company_logo").html(response.data && response.data[0].panel_name);
 
-          localStorage.setItem('Watermark', response.data?.[0]?.watermark);
+          localStorage.setItem("Watermark", response.data?.[0]?.watermark);
 
           $(".watermarkId").css({
             "background-image": `url(${response?.data?.[0]?.watermark})`,
-
           });
-
 
           $(".set_Favicon");
         }
-
       });
   };
 
@@ -632,8 +614,7 @@ const Header = ({ ChatBox }) => {
           loginWithApi(27, UserDetails, true);
         }
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   };
 
   return (
@@ -699,9 +680,9 @@ const Header = ({ ChatBox }) => {
                 ) : null}
 
                 {admin_permission.data?.length > 0 &&
-                  admin_permission.data[0]?.Plans &&
-                  user_role === "USER" &&
-                  getPlanName ? (
+                admin_permission.data[0]?.Plans &&
+                user_role === "USER" &&
+                getPlanName ? (
                   <li className="nav-item dropdown header-profile me-2">
                     <button
                       className=" btn btn-primary px-2"
@@ -714,7 +695,7 @@ const Header = ({ ChatBox }) => {
 
                 <>
                   {user_role === "ADMIN" ||
-                    (gotodashboard && user_role_goTo == "USER") ? (
+                  (gotodashboard && user_role_goTo == "USER") ? (
                     <li className="nav-item dropdown header-profile me-2">
                       <button
                         className="btn btn-primary px-2"
@@ -726,8 +707,8 @@ const Header = ({ ChatBox }) => {
                   ) : null}
 
                   {user_role === "USER" &&
-                    (UserDetails.license_type == "2" ||
-                      UserDetails.license_type == "0") ? (
+                  (UserDetails.license_type == "2" ||
+                    UserDetails.license_type == "0") ? (
                     <li className="nav-item dropdown header-profile me-2">
                       <button
                         className="btn btn-primary px-2"
@@ -739,16 +720,11 @@ const Header = ({ ChatBox }) => {
                   ) : null}
 
                   <li className="nav-item dropdown header-profile user-name me-2">
-                    {UserNamego_localstg != null ? (
-
-                      <button className=" btn btn-primary px-2">
-                        {UserNamego_localstg?.FullName}
-                      </button>
-                    ) : (
-                      <button className=" btn btn-primary px-2">
-                        {user_details?.FullName}
-                      </button>
-                    )}
+                    <button className="btn btn-primary px-2">
+                      {gotodashboard
+                        ? UserNamego_localstg?.FullName
+                        : user_details?.FullName}
+                    </button>
                   </li>
                 </>
 
@@ -1130,12 +1106,12 @@ const Header = ({ ChatBox }) => {
                                 transition: "background-color 0.3s",
                               }}
                               onMouseOver={(e) =>
-                              (e.currentTarget.style.backgroundColor =
-                                "#0056b3")
+                                (e.currentTarget.style.backgroundColor =
+                                  "#0056b3")
                               }
                               onMouseOut={(e) =>
-                              (e.currentTarget.style.backgroundColor =
-                                "#007bff")
+                                (e.currentTarget.style.backgroundColor =
+                                  "#007bff")
                               }
                             >
                               Submit
@@ -1153,12 +1129,12 @@ const Header = ({ ChatBox }) => {
                                 transition: "background-color 0.3s",
                               }}
                               onMouseOver={(e) =>
-                              (e.currentTarget.style.backgroundColor =
-                                "#a8d6ff")
+                                (e.currentTarget.style.backgroundColor =
+                                  "#a8d6ff")
                               }
                               onMouseOut={(e) =>
-                              (e.currentTarget.style.backgroundColor =
-                                "#d8ecff")
+                                (e.currentTarget.style.backgroundColor =
+                                  "#d8ecff")
                               }
                             >
                               Back
@@ -1174,24 +1150,6 @@ const Header = ({ ChatBox }) => {
                             alignItems: "center",
                           }}
                         >
-                          {/* <div style={{ display: "flex", marginBottom: "10px" }}> */}
-                          {/* <button
-                          style={{
-                            backgroundColor:
-                              activeTab === "mobile" ? "#d8ecff" : "white",
-                            border: "1px solid #ccc",
-                            padding: "10px 20px",
-                            borderRadius: "5px",
-                            cursor: "pointer",
-                            marginRight: "10px",
-                          }}
-                          onClick={() => handleTabChange("mobile")}
-                        >
-                          Login with User ID
-                        </button> */}
-
-                          {/* </div> */}
-
                           <div
                             style={{
                               display: "flex",
@@ -1205,8 +1163,8 @@ const Header = ({ ChatBox }) => {
                                 activeTab === "mobile"
                                   ? "Trading User ID"
                                   : activeTab === "pan"
-                                    ? "PAN number"
-                                    : "Enter QR code"
+                                  ? "PAN number"
+                                  : "Enter QR code"
                               }
                               value={username}
                               onChange={handleUsernameChange}

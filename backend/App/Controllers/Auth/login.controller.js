@@ -581,6 +581,7 @@ class Login {
         mobile: EmailCheck.PhoneNo,
         Role: EmailCheck.Role,
         UserName: EmailCheck.UserName,
+        FullName: EmailCheck.FullName,
       };
 
       try {

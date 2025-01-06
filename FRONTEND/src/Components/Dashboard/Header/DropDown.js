@@ -13,11 +13,14 @@ import * as Config from "../../../Utils/Config";
 const DropDown = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role;
+  const user_details = JSON.parse(localStorage.getItem("user_details"));
+  const Role = JSON.parse(localStorage.getItem("user_details"))?.Role;
   const [CheckUser, setCheckUser] = useState(check_Device());
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
+  const user_details_goTo = JSON.parse(
+    localStorage.getItem("user_details_goTo")
+  );
 
   const [admin_permission, setAdmin_permission] = useState(0);
   const token = JSON.parse(localStorage.getItem("user_details")).token;
@@ -27,7 +30,7 @@ const DropDown = () => {
 
   const LogoutUser = async () => {
     const request = {
-      userId: user_id,
+      userId: user_details?.user_id,
       Device: CheckUser,
     };
 
@@ -125,8 +128,9 @@ const DropDown = () => {
           >
             <i className="fas fa-user" style={{ marginRight: "8px" }}></i>
             User:{" "}
-            {JSON.parse(localStorage.getItem("user_details"))?.UserName ||
-              "Guest"}
+            {gotodashboard
+              ? user_details_goTo?.UserName
+              : user_details?.UserName || "Guest"}
           </span>
           <hr />
         </li>

@@ -244,7 +244,7 @@ const Sidebar = () => {
                             : ""
                         }`}
                       >
-                        {item.Data.length > 0 ? (
+                        {item.Data?.length > 0 && (
                           <>
                             <a className="has-arrow">
                               <IconComponent
@@ -255,10 +255,8 @@ const Sidebar = () => {
                               <span className="nav-text">{item.name}</span>
                             </a>
                           </>
-                        ) : (
-                          ""
-                        )}
-                        {item?.Data?.length !== 0 ? (
+                        ) }
+                        {item?.Data?.length !== 0 && (
                           <>
                             <ul aria-expanded="false" className="mm-collapse">
                               {item?.Data?.length > 0
@@ -311,10 +309,10 @@ const Sidebar = () => {
                                 : ""}
                             </ul>
                           </>
-                        ) : null}
+                        )}
                       </li>
 
-                      {item.Data.length === 0 ? (
+                      {item.Data?.length === 0 && (
                         <>
                           {(item.route === "/admin/createstrategy" &&
                             admin_permission.data &&
@@ -345,8 +343,6 @@ const Sidebar = () => {
                             </li>
                           )}
                         </>
-                      ) : (
-                        ""
                       )}
                     </>
                   );
@@ -718,62 +714,36 @@ const Sidebar = () => {
   );
 };
 
-const IconComponent = ({ icon }) => {
+const IconComponent = ({ icon, className }) => {
   const renderIcon = () => {
-    switch (icon) {
-      case "Signal":
-        return <Signal className="me-3" />;
-      case "Users":
-        return <Users className="me-3" />;
-      case "Wrench":
-        return <Wrench className="me-3" />;
-      case "Frame":
-        return <Frame className="me-3" />;
-      case "CandlestickChart":
-        return <CandlestickChart className="me-3" />;
-      case "Activity":
-        return <Activity className="me-3" />;
-      case "WalletCards":
-        return <WalletCards className="me-3" />;
-      case "HelpingHand":
-        return <HelpingHand className="me-3" />;
-      case "FolderClock":
-        return <FolderClock className="me-3" />;
-      case "LayoutDashboard":
-        return <LayoutDashboard className="me-3" />;
-      case "Building2":
-        return <Building2 className="me-3" />;
-      case "Copyright":
-        return <Copyright className="me-3" />;
-      case "Repeat2":
-        return <Repeat2 className="me-3" />;
-      case "Rocket":
-        return <Rocket className="me-3" />;
-      case "ArrowRightLeft":
-        return <ArrowRightLeft className="me-3" />;
-      case "ScatterChart":
-        return <ScatterChart className="me-3" />;
-      case "Paintbrush":
-        return <Paintbrush className="me-3" />;
-      case "Vote":
-        return <Vote className="me-3" />;
-      case "Boxes":
-        return <Boxes className="me-3" />;
-      case "Info":
-        return <Info className="me-3" />;
-      case "Link2":
-        return <Link2 className="me-3" />;
-      case "MoreHorizontal":
-        return <LayoutList className="me-3" />;
+    const Icon = {
+      Signal,
+      Users,
+      Wrench,
+      Frame,
+      CandlestickChart,
+      Activity,
+      WalletCards,
+      HelpingHand,
+      FolderClock,
+      LayoutDashboard,
+      Building2,
+      Copyright,
+      Repeat2,
+      Rocket,
+      ArrowRightLeft,
+      ScatterChart,
+      Paintbrush,
+      Vote,
+      Boxes,
+      Info,
+      Link2,
+      MoreHorizontal: LayoutList,
+      plan: WalletCards,
+      "Make Call": WalletCards
+    }[icon];
 
-      case "plan":
-        return <WalletCards className="me-3" />;
-
-      case "Make Call":
-        return <WalletCards className="me-3" />;
-      default:
-        return null;
-    }
+    return Icon ? <Icon className={`me-3 ${className || ""}`} /> : null;
   };
 
   return <>{renderIcon()}</>;
