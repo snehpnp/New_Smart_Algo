@@ -252,6 +252,7 @@ const ReusableForm = ({
                         } `}
                         style={{ position: "relative" }}
                       >
+                         <input type="password" name="fake_password" style={{ display: 'none' }} />
                         <input
                           id={field.name}
                           type={
