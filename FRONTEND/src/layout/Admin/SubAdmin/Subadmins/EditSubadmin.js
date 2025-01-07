@@ -108,6 +108,7 @@ const AllSubadmin = () => {
             makestrategy:false,
             optionchain: false,
             apicreateinfo: false,
+            Strategy_Permission: false,
 
         },
         touched: {
@@ -176,6 +177,7 @@ const AllSubadmin = () => {
                     "makestrategy": values.makestrategy ? '1' : values.all ? '1' : '0',
                     "optionchain": values.optionchain ? '1' : values.all ? '1' : '0',
                     "apicreateinfo": values.apicreateinfo ? '1' : values.all ? '1' : '0',
+                    "Strategy_Permission": values.Strategy_Permission ? '1' : values.all ? '1' : '0',
                 }
             }    
 
@@ -221,6 +223,7 @@ const AllSubadmin = () => {
             formik.setFieldValue('optionchain', userStrategyIds.optionchain === 1 ? true : false);
             formik.setFieldValue('makestrategy', userStrategyIds.makestrategy === 1 ? true : false);
             formik.setFieldValue('apicreateinfo', userStrategyIds.apicreateinfo === 1 ? true : false);
+            formik.setFieldValue('Strategy_Permission', userStrategyIds.Strategy_Permission === 1 ? true : false);
 
         }
     }, [UserData.data.data]);
@@ -242,16 +245,18 @@ const AllSubadmin = () => {
             formik.setFieldValue("optionchain", false);
             formik.setFieldValue("makestrategy", false);
             formik.setFieldValue("apicreateinfo", false);
+            formik.setFieldValue("Strategy_Permission", false);
+
+
         }
     }, [formik.values.updateapikeys]);
    
 
     useEffect(() => {
 
-        if ((formik.values.addclient) || (formik.values.editclient) || (formik.values.Strategy) || (formik.values.groupservice) || (formik.values.detailsinfo) || (formik.values.tradehistory) || (formik.values.gotodashboard) || (formik.values.optionchain) || (formik.values.makestrategy)) {
+        if ((formik.values.addclient) || (formik.values.editclient) || (formik.values.Strategy) || (formik.values.groupservice) || (formik.values.detailsinfo) || (formik.values.tradehistory) || (formik.values.gotodashboard) || (formik.values.optionchain) || (formik.values.makestrategy) || (formik.values.Strategy_Permission)) {
             formik.setFieldValue("updateapikeys", false);
-            setstate([])
-            setstate1([])
+
             return
         }
 
@@ -285,7 +290,7 @@ const AllSubadmin = () => {
             setstate1([])
             return
         }
-    }, [formik.values.editclient, formik.values.addclient, formik.values.detailsinfo, formik.values.tradehistory, formik.values.gotodashboard, formik.values.Strategy, formik.values.groupservice,  formik.values.optionchain , formik.values.makestrategy]);
+    }, [formik.values.editclient, formik.values.addclient, formik.values.detailsinfo, formik.values.tradehistory, formik.values.gotodashboard, formik.values.Strategy, formik.values.groupservice,  formik.values.optionchain , formik.values.makestrategy, formik.values.Strategy_Permission]);
 
 
     useEffect(() => {
@@ -301,6 +306,7 @@ const AllSubadmin = () => {
             formik.setFieldValue('optionchain', true);
             formik.setFieldValue('makestrategy', true);
             formik.setFieldValue('apicreateinfo', true);
+            formik.setFieldValue('Strategy_Permission', true);
         }
         else {
             formik.setFieldValue('editclient', false);
@@ -314,6 +320,7 @@ const AllSubadmin = () => {
             formik.setFieldValue('optionchain', false);
             formik.setFieldValue('makestrategy', false);
             formik.setFieldValue('apicreateinfo', false);
+            formik.setFieldValue('Strategy_Permission', false);
         }
     }, [formik.values.all]);
 
@@ -356,10 +363,10 @@ const AllSubadmin = () => {
             check_box_true: formik.values.all || formik.values.groupservice ? true : false,
             label_size: 12, col_size: 3,
         },
-        {
-            name: 'Strategy', label: 'Strategy Permission', type: 'checkbox', label_size: 12, col_size: 3,
-            check_box_true: formik.values.all || formik.values.Strategy ? true : false,
-        },
+        // {
+        //     name: 'Strategy', label: 'Strategy Permission', type: 'checkbox', label_size: 12, col_size: 3,
+        //     check_box_true: formik.values.all || formik.values.Strategy ? true : false,
+        // },
      
         {
             name: "updateapikeys",
@@ -377,6 +384,10 @@ const AllSubadmin = () => {
             label_size: 12,
             col_size: 3,
             check_box_true: formik.values.apicreateinfo ? true : false,
+        },
+        {
+            name: 'Strategy_Permission', label: 'Strategy Permission', type: 'checkbox', label_size: 12, col_size: 3,
+            check_box_true: formik.values.all || formik.values.Strategy_Permission ? true : false,
         },
     ]
 
@@ -493,7 +504,7 @@ const AllSubadmin = () => {
     };
 
 
-
+console.log(formik.values)
 
     return (
         <>

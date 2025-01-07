@@ -81,77 +81,69 @@ require("./Helper/cron")(app);
 const server = http.createServer(app);
 const io = socketIo(server);
 
-let socketObject = null;
-let response111 = null;
-
 const ConnectSocket = async (EXCHANGE, instrument_token) => {
-  console.log("Hit Boker Server socket");
+  console.log("Hit Broker Server socket");
 
-  var channel_List = `${EXCHANGE}|${instrument_token}`;
+  const channel_List = `${EXCHANGE}|${instrument_token}`;
 
-  var broker_infor = await live_price.findOne({
+  const broker_infor = await live_price.findOne({
     broker_name: "ALICE_BLUE",
     trading_status: "on",
   });
 
   if (broker_infor) {
-    var aliceBaseUrl =
+    const aliceBaseUrl =
       "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/";
-    var userid = broker_infor.user_id;
-    var userSession1 = broker_infor.access_token;
-    var type = { loginType: "API" };
+    const userid = broker_infor.user_id;
+    const userSession1 = broker_infor.access_token;
+    const type = { loginType: "API" };
     const url = "wss://ws1.aliceblueonline.com/NorenWS/";
-    var socket = null;
-    var channelList = "";
 
-    if (channel_List) {
-      channelList = channel_List;
-    }
-
-    const token_chain_list = db1.collection("token_chain");
-    const updateToken = await token_chain_list.updateOne(
-      { _id: instrument_token },
-      {
-        $set: {
-          _id: instrument_token,
-          exch: EXCHANGE,
+    try {
+      const token_chain_list = db1.collection("token_chain");
+      await token_chain_list.updateOne(
+        { _id: instrument_token },
+        {
+          $set: {
+            _id: instrument_token,
+            exch: EXCHANGE,
+          },
         },
-      },
-      { upsert: true }
-    );
+        { upsert: true }
+      );
 
-    await axios
-      .post(`${aliceBaseUrl}ws/createSocketSess`, type, {
+      const res = await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
         headers: {
           Authorization: `Bearer ${userid} ${userSession1}`,
           "Content-Type": "application/json",
         },
-      })
-      .then((res) => {
-        if (res.data.stat == "Ok") {
-          try {
-            socket = new WebSocket(url);
+      });
 
-            socket.onopen = function () {
-              var encrcptToken = CryptoJS.SHA256(
-                CryptoJS.SHA256(userSession1).toString()
-              ).toString();
-              var initCon = {
-                susertoken: encrcptToken,
-                t: "c",
-                actid: userid + "_" + "API",
-                uid: userid + "_" + "API",
-                source: "API",
-              };
-              socket.send(JSON.stringify(initCon));
+      if (res.data.stat === "Ok") {
+        return new Promise((resolve, reject) => {
+          const socket = new WebSocket(url);
+
+          socket.onopen = function () {
+            const encrcptToken = CryptoJS.SHA256(
+              CryptoJS.SHA256(userSession1).toString()
+            ).toString();
+
+            const initCon = {
+              susertoken: encrcptToken,
+              t: "c",
+              actid: userid + "_" + "API",
+              uid: userid + "_" + "API",
+              source: "API",
             };
 
-            socket.onmessage = async function (msg) {
-              var response = JSON.parse(msg.data);
+            socket.send(JSON.stringify(initCon));
+          };
+
+          socket.onmessage = async function (msg) {
+            try {
+              const response = JSON.parse(msg.data);
 
               if (response.tk) {
-                // token_chain
-
                 const currentDate = new Date();
                 const hours = currentDate
                   .getHours()
@@ -163,19 +155,11 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
                   .padStart(2, "0");
 
                 const stock_live_price = db1.collection("stock_live_price");
+                const filter = { _id: response.tk };
 
-                const filter = { _id: response.tk }; // Define the filter based on the token
-                if (response.lp != undefined) {
-                  let bp1 = response.lp;
-                  let sp1 = response.lp;
-
-                  if (response.bp1 != undefined) {
-                    bp1 = response.bp1;
-                  }
-
-                  if (response.sp1 != undefined) {
-                    sp1 = response.sp1;
-                  }
+                if (response.lp !== undefined) {
+                  let bp1 = response.bp1 || response.lp;
+                  let sp1 = response.sp1 || response.lp;
 
                   const update = {
                     $set: {
@@ -186,35 +170,60 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
                       curtime: `${hours}${minutes}`,
                     },
                   };
-                  const result = await stock_live_price.updateOne(
-                    filter,
-                    update,
-                    { upsert: true }
-                  );
+
+                  await stock_live_price.updateOne(filter, update, {
+                    upsert: true,
+                  });
                 }
-              } else {
+
+                socket.close();
+                resolve(response); // Send the price data back to the function caller
               }
 
               if (response.s === "OK") {
-                let json = {
-                  k: channelList,
+                const json = {
+                  k: channel_List,
                   t: "t",
                 };
-                await socket.send(JSON.stringify(json));
-
-                socketObject = socket;
+                socket.send(JSON.stringify(json));
               }
-            };
-          } catch (error) {}
-        }
-      })
-      .catch((error) => {
-        return error.response.data;
-      });
+            } catch (error) {
+              console.error("Error in onmessage:", error);
+              reject(error);
+            }
+          };
+
+          socket.onerror = (error) => {
+            console.error("WebSocket Error:", error);
+            reject(error);
+          };
+
+          socket.onclose = () => {
+            console.log("Socket closed");
+          };
+        });
+      }
+    } catch (error) {
+      console.error("Error in Socket Session:", error);
+      throw error;
+    }
   } else {
-    console.log("Admin Trading off ");
+    console.log("Admin Trading off");
+    throw new Error("Trading is turned off by admin.");
   }
 };
+
+// API Route Example
+app.get("/connect-socket", async (req, res) => {
+  try {
+    const CurrentPrice = await ConnectSocket("NFO", 133887);
+
+    res.json({ success: true, data: CurrentPrice });
+  } catch (error) {
+    console.error("Failed to fetch price:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 // ==================================================================================================
 // MT_4 , OPTION_CHAIN , MAKE_STG, SQUARE_OFF
@@ -235,7 +244,7 @@ const iiflView = require("./Broker/Iifl");
 const Motilaloswal = require("./Broker/Motilaloswal");
 const Zebull = require("./Broker/Zebull");
 const icicidirect = require("./Broker/icicidirect");
-const choiceBroker =require("./Broker/choice");
+const choiceBroker = require("./Broker/choice");
 
 const shoonya = require("./Broker/shoonya");
 
@@ -331,7 +340,6 @@ app.post("/broker-signals", async (req, res) => {
       let ExitStatus = "-";
       let ft_time = "";
 
-   
       if (signals.TradeType == "Tradingview") {
         ExitStatus = "Tradingview";
       } else if (signals.ExitStatus != undefined) {
@@ -675,8 +683,6 @@ app.post("/broker-signals", async (req, res) => {
             find_lot_size = token[0].lotsize;
           }
 
-       
-
           fs.appendFile(
             filePath,
             "TIME " +
@@ -781,6 +787,26 @@ app.post("/broker-signals", async (req, res) => {
             }
           }
 
+          if (
+            signals.TradeType === "MT_4" ||
+            signals.TradeType === "Tradingview"
+          ) {
+            if (segment === "O" || segment === "o") {
+              try {
+                const CurrentPrice = await ConnectSocket("NFO", instrument_token);
+                if (CurrentPrice?.lp) {
+                  price = CurrentPrice.lp; // CurrentPrice se lp value set
+                  console.log("Current Price:", price);
+                } else {
+                  console.log("CurrentPrice.lp is undefined or invalid");
+                }
+              } catch (error) {
+                console.log("Failed to fetch CurrentPrice:", error.message);
+              }
+            }
+          }
+          
+
           let ExistExitSignal = "";
           if (type.toUpperCase() == "LX" || type.toUpperCase() == "SX") {
             const updatedFindSignal = {
@@ -791,7 +817,6 @@ app.post("/broker-signals", async (req, res) => {
           }
 
           if (process.env.PANEL_KEY == client_key) {
-      
             // Process Alice Blue admin client
             try {
               const AliceBlueCollection = db1.collection("aliceblueView");
@@ -2079,12 +2104,8 @@ app.post("/broker-signals", async (req, res) => {
             //End Process Tading View Client Shoonya
           }
 
-
-          
-
           option_type = option_type?.toUpperCase();
 
-          
           // IF SQ_PRICE
           var sq_value;
           if (sq_value == undefined) {
@@ -2358,8 +2379,6 @@ app.post("/broker-signals", async (req, res) => {
     console.log("Broker Error", error);
   }
 });
-
-
 
 // Server start
 app.listen(process.env.PORT, () => {

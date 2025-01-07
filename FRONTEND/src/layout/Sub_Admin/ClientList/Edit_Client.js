@@ -1036,37 +1036,37 @@ const AddClient = () => {
                 />
               </label>
 
-              {getPermissions?.Update_Api_Key === 1 ||
-                (getPermissions?.Update_Api_Key === "1" && (
-                  <>
-                    <h5> All Strategy </h5>
-                    {selectedStrategies.map((strategy) => (
-                      <div className={`col-lg-2 mt-2`} key={strategy.id}>
-                        <div className="row ">
-                          <div className="col-lg-12 ">
-                            <div className="form-check custom-checkbox mb-3">
-                              <input
-                                type="checkbox"
-                                className="form-check-input"
-                                name={strategy.id}
-                                value={strategy.id}
-                                onChange={(e) => handleStrategyChange(e)}
-                                checked={strategy.checked}
-                                disabled={!strategy.status}
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor={strategy.name}
-                              >
-                                {strategy.name}
-                              </label>
-                            </div>
+              {(getPermissions?.Strategy_Permission === 1 ||
+                getPermissions?.Strategy_Permission === "1") && (
+                <>
+                  <h5> All Strategy </h5>
+                  {selectedStrategies.map((strategy) => (
+                    <div className={`col-lg-2 mt-2`} key={strategy.id}>
+                      <div className="row ">
+                        <div className="col-lg-12 ">
+                          <div className="form-check custom-checkbox mb-3">
+                            <input
+                              type="checkbox"
+                              className="form-check-input"
+                              name={strategy.id}
+                              value={strategy.id}
+                              onChange={(e) => handleStrategyChange(e)}
+                              checked={strategy.checked}
+                              disabled={!strategy.status}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor={strategy.name}
+                            >
+                              {strategy.name}
+                            </label>
                           </div>
                         </div>
                       </div>
-                    ))}
-                  </>
-                ))}
+                    </div>
+                  ))}
+                </>
+              )}
             </>
           }
         />

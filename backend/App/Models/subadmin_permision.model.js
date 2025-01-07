@@ -85,6 +85,11 @@ const Subadmin_Permission_Schema = new mongoose.Schema({
         enum: [0, 1],
         default: 0
     },
+    Strategy_Permission: {
+        type: Number,
+        enum: [0, 1],
+        default: 0
+    },
 }, {
     _id: true,
     timestamps: true
