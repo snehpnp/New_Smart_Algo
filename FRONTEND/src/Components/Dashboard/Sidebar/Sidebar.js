@@ -122,6 +122,8 @@ const Sidebar = () => {
     }
   };
 
+  console.log("getPermissions", getPermissions?.apicreateinfo);
+
   return (
     <div className="deznav ">
       <div className="deznav-scroll">
@@ -255,7 +257,7 @@ const Sidebar = () => {
                               <span className="nav-text">{item.name}</span>
                             </a>
                           </>
-                        ) }
+                        )}
                         {item?.Data?.length !== 0 && (
                           <>
                             <ul aria-expanded="false" className="mm-collapse">
@@ -279,7 +281,8 @@ const Sidebar = () => {
                                           .Option_chain === 0) ||
                                       (nested_item?.route == "/admin/plans" &&
                                         admin_permission?.data &&
-                                        admin_permission?.data[0].Plans === 0) ||
+                                        admin_permission?.data[0].Plans ===
+                                          0) ||
                                       (admin_permission?.data &&
                                         admin_permission?.data[0].Make_call ===
                                           0 &&
@@ -431,77 +434,15 @@ const Sidebar = () => {
               })
             : roles === "SUBADMIN"
             ? sub_admin_sidebar?.map((item, index) => {
-                if (item.id === 10 || item.id === 9 || item.id === 4) {
-                  if (
-                    (item.id == 10 &&
-                      getPermissions &&
-                      getPermissions.optionchain === 0) ||
-                    (item.id == 9 &&
-                      getPermissions &&
-                      getPermissions.makestrategy === 0) ||
-                    (item.id == 4 &&
-                      getPermissions &&
-                      getPermissions.apicreateinfo == 0)
-                  ) {
-                  } else {
-                    return (
-                      <>
-                        <li
-                        key={item.route}
-                          className={`${
-                            location.pathname.includes(item.route && item.route)
-                              ? "mm-active"
-                              : ""
-                          }`}
-                        >
-                          {item.Data.length > 0 ? (
-                            <>
-                              <a className="has-arrow">
-                                <IconComponent
-                                  key={item.id}
-                                  icon={item.Icon}
-                                  className="mx-2"
-                                />
-                                <span className="nav-text">{item.name}</span>
-                              </a>
-                            </>
-                          ) : (
-                            ""
-                          )}
-                          {item.Data.length !== 0 ? (
-                            <>
-                              <ul aria-expanded="false">
-                                {item.Data.length > 0
-                                  ? item.Data.map((nested_item, index) => {
-                                      return (
-                                        <>
-                                          <li
-                                            key={index}
-                                            className={`${
-                                              location.pathname.includes(
-                                                item.route && item.route
-                                              )
-                                                ? "mm-active"
-                                                : ""
-                                            }`}
-                                          >
-                                            <Link to={nested_item.route}>
-                                              {nested_item.name}
-                                            </Link>
-                                          </li>
-                                        </>
-                                      );
-                                    })
-                                  : ""}
-                              </ul>
-                            </>
-                          ) : (
-                            ""
-                          )}
-                        </li>
-                      </>
-                    );
-                  }
+                if (
+                  (item.id == 10 &&
+                    getPermissions &&
+                    getPermissions.optionchain === 0) ||
+                  (item.id == 9 &&
+                    getPermissions &&
+                    getPermissions.makestrategy === 0) ||
+                  (item.id == 4 && getPermissions?.apicreateinfo === 0)
+                ) {
                 } else {
                   return (
                     <>
@@ -740,7 +681,7 @@ const IconComponent = ({ icon, className }) => {
       Link2,
       MoreHorizontal: LayoutList,
       plan: WalletCards,
-      "Make Call": WalletCards
+      "Make Call": WalletCards,
     }[icon];
 
     return Icon ? <Icon className={`me-3 ${className || ""}`} /> : null;

@@ -719,6 +719,7 @@ const AddClient = () => {
       label_size: 12,
       col_size: 6,
       disable: false,
+      showWhen: (values) => getPermissions?.groupservice_Permission === 1,
     },
     // {
     //   name: 'multiple_strategy_select', label: 'Mutiple Selection Strategy', type: 'checkbox', label_size: 12, col_size: 6, disable: false, check_box_true: formik.values.multiple_strategy_select ? true : false,
@@ -1015,26 +1016,30 @@ const AddClient = () => {
           hidebtn={isgotodashboard && isgotodashboard}
           additional_field={
             <>
-              <h5 className="mt-5"> All Group Services </h5>
-
-              {GetServices &&
-                GetServices.data.map((strategy) => (
-                  <div className={`col-lg-2 `} key={strategy._id}>
-                    <div className="col-lg-12 ">
-                      <label
-                        className="form-check-label bg-primary text-white py-2 px-4"
-                        htmlFor={strategy.ServiceResult.name}
-                      >{`${strategy.ServiceResult.name}[${strategy.categories.segment}]`}</label>
-                    </div>
-                  </div>
-                ))}
-              <label className="toggle mt-3">
-                <input
-                  className="toggle-checkbox bg-primary"
-                  type="checkbox"
-                  onChange={(e) => {}}
-                />
-              </label>
+              {(getPermissions?.groupservice_Permission === 1 ||
+                getPermissions?.groupservice_Permission === "1") && (
+                <>
+                  <h5 className="mt-5"> All Group Services </h5>
+                  {GetServices &&
+                    GetServices.data.map((strategy) => (
+                      <div className={`col-lg-2 `} key={strategy._id}>
+                        <div className="col-lg-12 ">
+                          <label
+                            className="form-check-label bg-primary text-white py-2 px-4"
+                            htmlFor={strategy.ServiceResult.name}
+                          >{`${strategy.ServiceResult.name}[${strategy.categories.segment}]`}</label>
+                        </div>
+                      </div>
+                    ))}
+                  <label className="toggle mt-3">
+                    <input
+                      className="toggle-checkbox bg-primary"
+                      type="checkbox"
+                      onChange={(e) => {}}
+                    />
+                  </label>
+                </>
+              )}
 
               {(getPermissions?.Strategy_Permission === 1 ||
                 getPermissions?.Strategy_Permission === "1") && (

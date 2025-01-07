@@ -93,6 +93,7 @@ class Subadmin {
                         optionchain: Subadmin_permision_data.optionchain,
                         makestrategy: Subadmin_permision_data.makestrategy,
                         Strategy_Permission: Subadmin_permision_data?.Strategy_Permission || 1,
+                        groupservice_Permission: Subadmin_permision_data?.groupservice_Permission || 1,
 
                         user_id: data._id
                     })
@@ -176,6 +177,7 @@ class Subadmin {
                 makestrategy: Subadmin_permision_data.makestrategy,
                 apicreateinfo: Subadmin_permision_data.apicreateinfo,
                 Strategy_Permission: Subadmin_permision_data.Strategy_Permission,
+                groupservice_Permission: Subadmin_permision_data.groupservice_Permission,
           }
 
             const filter = { user_id: existingUsername._id };

@@ -109,6 +109,7 @@ const AllSubadmin = () => {
             optionchain: false,
             apicreateinfo: false,
             Strategy_Permission: false,
+            groupservice_Permission: false,
 
         },
         touched: {
@@ -178,6 +179,7 @@ const AllSubadmin = () => {
                     "optionchain": values.optionchain ? '1' : values.all ? '1' : '0',
                     "apicreateinfo": values.apicreateinfo ? '1' : values.all ? '1' : '0',
                     "Strategy_Permission": values.Strategy_Permission ? '1' : values.all ? '1' : '0',
+                    "groupservice_Permission": values.groupservice_Permission ? '1' : values.all ? '1' : '0',
                 }
             }    
 
@@ -224,6 +226,7 @@ const AllSubadmin = () => {
             formik.setFieldValue('makestrategy', userStrategyIds.makestrategy === 1 ? true : false);
             formik.setFieldValue('apicreateinfo', userStrategyIds.apicreateinfo === 1 ? true : false);
             formik.setFieldValue('Strategy_Permission', userStrategyIds.Strategy_Permission === 1 ? true : false);
+            formik.setFieldValue('groupservice_Permission', userStrategyIds.groupservice_Permission === 1 ? true : false);
 
         }
     }, [UserData.data.data]);
@@ -246,6 +249,7 @@ const AllSubadmin = () => {
             formik.setFieldValue("makestrategy", false);
             formik.setFieldValue("apicreateinfo", false);
             formik.setFieldValue("Strategy_Permission", false);
+            formik.setFieldValue("groupservice_Permission", false);
 
 
         }
@@ -254,7 +258,7 @@ const AllSubadmin = () => {
 
     useEffect(() => {
 
-        if ((formik.values.addclient) || (formik.values.editclient) || (formik.values.Strategy) || (formik.values.groupservice) || (formik.values.detailsinfo) || (formik.values.tradehistory) || (formik.values.gotodashboard) || (formik.values.optionchain) || (formik.values.makestrategy) || (formik.values.Strategy_Permission)) {
+        if ((formik.values.addclient) || (formik.values.editclient) || (formik.values.Strategy) || (formik.values.groupservice) || (formik.values.detailsinfo) || (formik.values.tradehistory) || (formik.values.gotodashboard) || (formik.values.optionchain) || (formik.values.makestrategy) || (formik.values.Strategy_Permission) || (formik.values.groupservice_Permission) || (formik.values.apicreateinfo)) {
             formik.setFieldValue("updateapikeys", false);
 
             return
@@ -307,6 +311,7 @@ const AllSubadmin = () => {
             formik.setFieldValue('makestrategy', true);
             formik.setFieldValue('apicreateinfo', true);
             formik.setFieldValue('Strategy_Permission', true);
+            formik.setFieldValue('groupservice_Permission', true);
         }
         else {
             formik.setFieldValue('editclient', false);
@@ -321,6 +326,7 @@ const AllSubadmin = () => {
             formik.setFieldValue('makestrategy', false);
             formik.setFieldValue('apicreateinfo', false);
             formik.setFieldValue('Strategy_Permission', false);
+            formik.setFieldValue('groupservice_Permission', false);
         }
     }, [formik.values.all]);
 
@@ -359,16 +365,6 @@ const AllSubadmin = () => {
             check_box_true: formik.values.all || formik.values.detailsinfo ? true : false,
         },
         {
-            name: 'groupservice', label: 'Group Service Permission', type: 'checkbox',
-            check_box_true: formik.values.all || formik.values.groupservice ? true : false,
-            label_size: 12, col_size: 3,
-        },
-        // {
-        //     name: 'Strategy', label: 'Strategy Permission', type: 'checkbox', label_size: 12, col_size: 3,
-        //     check_box_true: formik.values.all || formik.values.Strategy ? true : false,
-        // },
-     
-        {
             name: "updateapikeys",
             label: "Update Client API Key",
             type: "checkbox",
@@ -388,6 +384,10 @@ const AllSubadmin = () => {
         {
             name: 'Strategy_Permission', label: 'Strategy Permission', type: 'checkbox', label_size: 12, col_size: 3,
             check_box_true: formik.values.all || formik.values.Strategy_Permission ? true : false,
+        },
+        {
+            name: 'groupservice_Permission', label: 'Group Service Permission', type: 'checkbox', label_size: 12, col_size: 3,
+            check_box_true: formik.values.all || formik.values.groupservice_Permission ? true : false,
         },
     ]
 
@@ -515,7 +515,7 @@ console.log(formik.values)
                             <Formikform fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Update"
                                 additional_field={
                                     <>
-                                        {formik.values.groupservice ? <>
+                                        {formik.values.groupservice_Permission ? <>
                                             <h6 className='fw-bold mt-3 text-decoration-underline'>All Group Service</h6>
                                             {checkedGroupServices.map((strategy) => (
                                                 <div className={`col-lg-2 mt-2 `} key={strategy.id}>
@@ -546,7 +546,7 @@ console.log(formik.values)
                                         </> : ""
                                         }
                                         {
-                                            formik.values.Strategy ? <>
+                                            formik.values.Strategy_Permission ? <>
                                                 <h6 className='fw-bold mt-3 text-decoration-underline'>All Strategy</h6>
                                                 {checkedStrategies.map((strategy) => (
                                                     <div className={`col-lg-2 mt-2`} key={strategy.id}>
