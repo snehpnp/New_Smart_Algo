@@ -1,104 +1,109 @@
-import React from 'react'
-import Modal from '../../../Components/ExtraComponents/Modal';
-import { useFormik } from 'formik';
-import * as  valid_err from "../../../Utils/Common_Messages"
-import Formikform1 from "../../../Components/ExtraComponents/Form/Formik_form1"
+import React from "react";
+import Modal from "../../../Components/ExtraComponents/Modal";
+import { useFormik } from "formik";
+import * as valid_err from "../../../Utils/Common_Messages";
 
-import { useNavigate } from "react-router-dom";
-import { Email_regex, Mobile_regex } from "../../../Utils/Common_regex"
-import { useDispatch, useSelector } from "react-redux";
+const PendingOrder = ({ showModal, setshowModal }) => {
+  const formik = useFormik({
+    initialValues: {
+      licence: "",
+    },
+    validate: (values) => {
+      const errors = {};
+      if (!values.licence) {
+        errors.licence = valid_err.USERNAME_ERROR;
+      }
+      return errors;
+    },
+    onSubmit: async (values) => {
+      const req = {
+        licence: values.licence,
+      };
+      console.log("Form Submitted:", req);
+    },
+  });
 
-const PendingOrder = ({ showModal, setshowModal, showPanelName }) => {
+  return (
+    <Modal
+      isOpen={showModal}
+      size="lg"
+      hideClose={true}
+      title={
+        <div className="row">
+          <div className="col-12">
+            <h5>RPOWER</h5>
+          </div>
 
-    const formik = useFormik({
-        initialValues: {
-            licence: null,
+          <div className="col-6">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                id="flexRadioDefault1"
+              />
+              <label
+                className="form-check-label"
+                htmlFor="flexRadioDefault1"
+              >
+                Default radio
+              </label>
+            </div>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                id="flexRadioDefault2"
+              />
+              <label
+                className="form-check-label"
+                htmlFor="flexRadioDefault2"
+              >
+                Default radio
+              </label>
+            </div>
+          </div>
+          <div className="col-6"></div>
+        </div>
+      }
+      hideBtn={true}
+      handleClose={() => setshowModal(false)}
+    >
+      <form onSubmit={formik.handleSubmit}>
+        <div className="row">
+          <div className="col-12">
+            <label htmlFor="licence" className="form-label">
+              Licence
+            </label>
+            <input
+              type="text"
+              id="licence"
+              name="licence"
+              className={`form-control ${
+                formik.errors.licence ? "is-invalid" : ""
+              }`}
+              onChange={formik.handleChange}
+              value={formik.values.licence}
+              disabled
+            />
+            {formik.errors.licence && (
+              <div className="invalid-feedback">{formik.errors.licence}</div>
+            )}
+          </div>
+        </div>
+        <div className="d-flex justify-content-end mt-3">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={!formik.isValid}
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </Modal>
+  );
+};
 
-
-        },
-        validate: (values) => {
-
-            const errors = {};
-            if (!values.licence) {
-                errors.licence = valid_err.USERNAME_ERROR;
-            }
-            return errors;
-        },
-        onSubmit: async (values) => {
-            const req = {
-                "licence": values.licence,
-            }
-
-            // return
-
-            //   await dispatch(Add_User({ req: req, token: user_token })).unwrap().then((response) => {
-
-            //     if (response.status === 409) {
-            //       toast.error(response.data.msg);
-            //     }
-            //     else if (response.status) {
-            //       toast.success(response.msg);
-            //       setTimeout(() => {
-            //         navigate("/admin/allclients")
-            //       }, 1000);
-            //     }
-            //     else if (!response.status) {
-            //       toast.error(response.msg);
-            //     }
-
-            //   })
-        }
-    });
-
-
-
-
-
-
-    const fields = [
-        { name: 'licence', label: 'Licence', type: 'text', label_size: 12, col_size: 12, disable: true },
-
-    ];
-
-    return (
-        <div>   <Modal isOpen={showModal} size="lg" hideClose={true} title={
-            <>
-
-                <div className="row">
-                    <div className="col-12">
-                        <h5>RPOWER</h5>
-                    </div>
-
-                    <div className="col-6">
-                        <div className="form-check">
-                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
-                            <label className="form-check-label" htmlFor="flexRadioDefault1">
-                                Default radio
-                            </label>
-                        </div>
-                        <div className="form-check">
-                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
-                            <label className="form-check-label" htmlFor="flexRadioDefault2">
-                                Default  radio
-                            </label>
-                        </div>
-                    </div>
-                    <div className="col-6">
-
-                    </div>
-                </div>
-            </>
-
-
-
-
-        } hideBtn={true}
-            handleClose={() => setshowModal(false)}
-        >
-
-
-        </Modal ></div>
-    )
-}
-
-export default PendingOrder
+export default PendingOrder;

@@ -11,18 +11,16 @@ import {
   Mobile_regex,
   Name_regex,
 } from "../../../Utils/Common_regex";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Content from "../../../Components/Dashboard/Content/Content";
 import { GET_ALL_GROUP_SERVICES } from "../../../ReduxStore/Slice/Admin/AdminSlice";
-import { Get_All_SUBADMIN } from "../../../ReduxStore/Slice/Subadmin/Subadminslice";
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
 import { Get_Service_By_Group_Id } from "../../../ReduxStore/Slice/Admin/GroupServiceSlice";
 import { Get_Sub_Admin_Permissions } from "../../../ReduxStore/Slice/Subadmin/Subadminslice";
 import { All_Api_Info_List } from "../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice";
 import * as Config from "../../../Utils/Config";
-import Form from "react-bootstrap/Form";
 import { Add_User } from "../../../ReduxStore/Slice/Subadmin/userSlice";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import "../../../App.css";
 
@@ -30,11 +28,11 @@ const AddClient = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const user_token = JSON.parse(localStorage.getItem("user_details")).token;
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role;
-  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
+  const user_token = JSON.parse(localStorage.getItem("user_details"))?.token;
+
+  const user_id = JSON.parse(localStorage.getItem("user_details"))?.user_id;
   const [selectedStrategies, setSelectedStrategies] = useState([]);
-  const [ShowAllStratagy, setShowAllStratagy] = useState(false);
+
   const [getPermissions, setGetPermissions] = useState([]);
   const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
   const [first, setfirst] = useState([]);

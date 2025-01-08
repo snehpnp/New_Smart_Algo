@@ -462,224 +462,178 @@ const AddClient = () => {
     },
     {
       name: "api_key",
-      label:
-        formik.values.broker == 20
-          ? "ACCESS TOKEN "
-          : formik.values.broker == 19
-          ? "Api Key"
-          : formik.values.broker == 4
-          ? "App Key"
-          : formik.values.broker == 7
-          ? "Consumer Key"
-          : formik.values.broker == 9
-          ? "Vendor Key"
-          : formik.values.broker == 8
-          ? "App Key"
-          : formik.values.broker == 10
-          ? "App Key"
-          : formik.values.broker == 26
-          ? "App Key"
-          : formik.values.broker == 25
-          ? "Api Key"
-          : formik.values.broker == 27
-          ? "Api Key"
-          : formik.values.broker == 28
-          ? "Vendor Id"
-          : "Api Key",
+      label: (() => {
+        const brokerLabels = {
+          20: "ACCESS TOKEN",
+          19: "Api Key",
+          4: "App Key",
+          7: "Consumer Key",
+          9: "Vendor Key",
+          8: "App Key",
+          10: "App Key",
+          26: "App Key",
+          25: "Api Key",
+          27: "Api Key",
+          28: "Vendor Id",
+        };
+    
+        return brokerLabels[formik.values.broker] || "Api Key";
+      })(),
       type: "text",
-      showWhen: (values) =>
-        values.broker === "4" ||
-        values.broker === "7" ||
-        values.broker === "8" ||
-        values.broker === "9" ||
-        values.broker === "10" ||
-        values.broker === "11" ||
-        values.broker === "12" ||
-        values.broker === "14" ||
-        values.broker === "15" ||
-        values.broker === "6" ||
-        values.broker === "19" ||
-        values.broker === "20" ||
-        values.broker === "26" ||
-        values.broker === "27" ||
-        values.broker === "25" ||
-        values.broker === "28",
+      showWhen: (values) => {
+        const allowedBrokers = [
+          "4", "7", "8", "9", "10", "11", "12", "14", "15", "6", 
+          "19", "20", "26", "27", "25", "28"
+        ];
+        return allowedBrokers.includes(values.broker);
+      },
       label_size: 12,
       col_size: 6,
       disable: false,
     },
+    
     {
       name: "client_code",
-      label:
-        formik.values.broker == 21
-          ? "CLIENT CODE"
-          : formik.values.broker == 20
-          ? "CLIENT ID"
-          : formik.values.broker == 1
-          ? "User"
-          : formik.values.broker == 4
-          ? "Client Code"
-          : formik.values.broker == 9
-          ? "Vander Id"
-          : formik.values.broker == 11
-          ? "Client Code"
-          : formik.values.broker == 11
-          ? "client_code"
-          : formik.values.broker == 27
-          ? "Vendor Code"
-          : formik.values.broker == 28
-          ? "User Id"
-          : "User Id",
+      label: (() => {
+        const brokerLabels = {
+          21: "CLIENT CODE",
+          20: "CLIENT ID",
+          1: "User",
+          4: "Client Code",
+          9: "Vander Id",
+          11: "Client Code",
+          27: "Vendor Code",
+          28: "User Id",
+        };
+    
+        return brokerLabels[formik.values.broker] || "User Id";
+      })(),
       type: "text",
-      showWhen: (values) =>
-        values.broker === "1" ||
-        values.broker === "5" ||
-        values.broker === "4" ||
-        values.broker === "9" ||
-        values.broker === "11" ||
-        values.broker === "6" ||
-        values.broker === "20" ||
-        values.broker === "27" ||
-        values.broker === "21" ||
-        values.broker === "28",
+      showWhen: (values) => {
+        const allowedBrokers = [
+          "1", "5", "4", "9", "11", "6", "20", "27", "21", "28"
+        ];
+        return allowedBrokers.includes(values.broker);
+      },
       label_size: 12,
       col_size: 6,
       disable: false,
     },
+    
     {
       name: "demat_userid",
-      label:
-        formik.values.broker === 9
-          ? "User Id"
-          : formik.values.broker === "28"
-          ? "Vendor Key"
-          : "Demat UserId",
+      label: (() => {
+        const brokerLabels = {
+          9: "User Id",
+          28: "Vendor Key",
+        };
+    
+        return brokerLabels[formik.values.broker] || "Demat UserId";
+      })(),
       type: "text",
-      showWhen: (values) =>
-        values.broker === "9" ||
-        values.broker === "2" ||
-        values.broker === "28",
+      showWhen: (values) => {
+        const allowedBrokers = ["9", "2", "28"];
+        return allowedBrokers.includes(values.broker);
+      },
       label_size: 12,
       col_size: 6,
       disable: false,
     },
+    
     {
       name: "app_id",
-      label:
-        formik.values.broker == 21
-          ? "MPIN"
-          : formik.values.broker == 1
-          ? "Verification Code"
-          : formik.values.broker == 5
-          ? "Password"
-          : formik.values.broker == 11
-          ? "Password"
-          : formik.values.broker == 2
-          ? "Demat UserId"
-          : formik.values.broker == 13
-          ? "App Id"
-          : formik.values.broker == 9
-          ? "Password"
-          : formik.values.broker == 14
-          ? "User Id "
-          : formik.values.broker == 28
-          ? "Encryption Secret Key"
-          : "App Id",
+      label: (() => {
+        const brokerLabels = {
+          21: "MPIN",
+          1: "Verification Code",
+          5: "Password",
+          11: "Password",
+          2: "Demat UserId",
+          13: "App Id",
+          9: "Password",
+          14: "User Id",
+          28: "Encryption Secret Key",
+        };
+    
+        return brokerLabels[formik.values.broker] || "App Id";
+      })(),
       type: "text",
-      showWhen: (values) =>
-        values.broker === "1" ||
-        values.broker === "3" ||
-        values.broker === "5" ||
-        values.broker === "9" ||
-        values.broker === "11" ||
-        values.broker === "13" ||
-        values.broker === "14" ||
-        values.broker === "21" ||
-        values.broker === "28",
+      showWhen: (values) => {
+        const allowedBrokers = [
+          "1", "3", "5", "9", "11", "13", "14", "21", "28"
+        ];
+        return allowedBrokers.includes(values.broker);
+      },
       label_size: 12,
       col_size: 6,
       disable: false,
     },
+    
     {
       name: "app_key",
-      label:
-        formik.values.broker == 5 || formik.values.broker == 6
-          ? "App Key"
-          : formik.values.broker == 28
-          ? "Encryption IV"
-          : "",
+      label: (() => {
+        const brokerLabels = {
+          5: "App Key",
+          6: "App Key",
+          28: "Encryption IV",
+        };
+    
+        return brokerLabels[formik.values.broker] || "";
+      })(),
       type: "text",
-      showWhen: (values) =>
-        values.broker === "5" ||
-        values.broker === "6" ||
-        values.broker === "28",
+      showWhen: (values) => ["5", "6", "28"].includes(values.broker),
       label_size: 12,
       col_size: 6,
       disable: false,
     },
+    
     {
       name: "api_secret",
-      label:
-        formik.values.broker == 1
-          ? "Password Code"
-          : formik.values.broker == 5
-          ? "DOB"
-          : formik.values.broker == 7
-          ? "Consumer Secret"
-          : formik.values.broker == 9
-          ? "Encryption Secret Key"
-          : formik.values.broker == 10
-          ? "Api Secret Key"
-          : formik.values.broker == 11
-          ? "2FA"
-          : formik.values.broker == 14
-          ? "Encryption Key"
-          : formik.values.broker == 26
-          ? "Api Secret"
-          : formik.values.broker == 25
-          ? "Api Secret"
-          : formik.values.broker == 27
-          ? "imei"
-          : formik.values.broker == 28
-          ? "Password"
-          : "Api Secret",
+      label: (() => {
+        const brokerLabels = {
+          1: "Password Code",
+          5: "DOB",
+          7: "Consumer Secret",
+          9: "Encryption Secret Key",
+          10: "Api Secret Key",
+          11: "2FA",
+          14: "Encryption Key",
+          26: "Api Secret",
+          25: "Api Secret",
+          27: "imei",
+          28: "Password",
+        };
+    
+        return brokerLabels[formik.values.broker] || "Api Secret";
+      })(),
       type: "text",
       showWhen: (values) =>
-        values.broker === "1" ||
-        values.broker === "3" ||
-        values.broker == "5" ||
-        values.broker === "6" ||
-        values.broker === "7" ||
-        values.broker === "8" ||
-        values.broker === "9" ||
-        values.broker === "10" ||
-        values.broker === "11" ||
-        values.broker === "13" ||
-        values.broker === "14" ||
-        values.broker === "15" ||
-        values.broker === "19" ||
-        values.broker === "26" ||
-        values.broker === "27" ||
-        values.broker === "25" ||
-        values.broker === "28",
+        [
+          "1", "3", "5", "6", "7", "8", "9", "10", "11", 
+          "13", "14", "15", "19", "26", "27", "25", "28"
+        ].includes(values.broker),
       label_size: 12,
       col_size: 6,
       disable: false,
     },
+    
     {
       name: "api_type",
-      label:
-        formik.values.broker == 5
-          ? "DOB"
-          : formik.values.broker == 9
-          ? "Encryption IV"
-          : "Api Secret",
+      label: (() => {
+        const brokerLabels = {
+          5: "DOB",
+          9: "Encryption IV",
+        };
+    
+        return brokerLabels[formik.values.broker] || "Api Secret";
+      })(),
       type: "text",
       showWhen: (values) => values.broker === "9",
       label_size: 12,
       col_size: 6,
       disable: false,
     },
+    
     {
       name: "service_given_month",
       label: "Service Given To Month",
@@ -912,7 +866,7 @@ const AddClient = () => {
               response.data &&
               response.data.filter(
                 (item) =>
-                  getPermissions.group_services != undefined &&
+                  getPermissions.group_services !== undefined &&
                   getPermissions.group_services.includes(item._id)
               );
             if (abc.length > 0) {

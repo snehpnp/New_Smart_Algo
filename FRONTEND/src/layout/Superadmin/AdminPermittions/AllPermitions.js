@@ -6,24 +6,19 @@ import {
   FolderLock,
   Plus,
   FileClock,
-  HelpingHand,
   Users2,
-  Link2,
-  ScrollText,
-  RadioTower,
-  Eye,
+  RadioTower
 } from "lucide-react";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { All_Panel_List } from "../../../ReduxStore/Slice/Superadmin/SuperAdminSlice";
 import { useDispatch } from "react-redux";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import SidebarPermission from "./Sidebar_permission";
-import PanelDetails from "./PanelDetails";
 import AddLicence from "./Add_Licence";
 import Adjust_Month from "./Adjust_Month";
 import LicenceDetails from "./LicenceDetails";
 import BrokerPermittion from "./Broker_Permittion";
-import { fDateTimeSuffix, dateFormate } from "../../../Utils/Date_formet";
+import { fDateTimeSuffix } from "../../../Utils/Date_formet";
 import Modal from "../../../Components/ExtraComponents/Modal";
 import { Get_Panel_History } from "../../../ReduxStore/Slice/Superadmin/SuperAdminSlice";
 
@@ -31,7 +26,6 @@ const AllPermitions = () => {
   const dispatch = useDispatch();
   const [filteredData1, setFilteredData1] = useState([]);
   const [showModal, setshowModal] = useState(false);
-  const [PanelDetailsModal, setPanelDetailsModal] = useState(false);
   const [showAddLicenceModal, setshowAddLicenceModal] = useState(false);
   const [showAdjustMonthModal, setshowAdjustMonthModal] = useState(false);
   const [showPanelName, setshowPanelName] = useState(false);
@@ -87,7 +81,7 @@ const AllPermitions = () => {
     const response = await dispatch(Get_Panel_History()).unwrap();
     if (response.status) {
       var FilterData = response.data.filter(
-        (data) => data.panal_name == row.panel_name
+        (data) => data.panal_name === row.panel_name
       );
       setFilteredData1(FilterData);
       SetHistoryStatus(true);
@@ -301,7 +295,7 @@ const AllPermitions = () => {
       text: "Month Date",
       formatter: (cell, row) => (
         <span data-toggle="tooltip" data-placement="top" title="Month">
-          {row.month_ago_number != undefined && row.month_ago_number != null
+          {row.month_ago_number !== undefined && row.month_ago_number != null
             ? ` ${row.month_ago_number} Month  ${
                 row.month_ago_date.includes("T")
                   ? row.month_ago_date.split("T")[0]
@@ -373,7 +367,7 @@ const AllPermitions = () => {
         panelData1.data &&
         panelData1.data.filter((item) => {
           const matchSearch =
-            searchInput == "" ||
+            searchInput === "" ||
             item.panel_name.toLowerCase().includes(searchInput.toLowerCase());
 
           return matchSearch;

@@ -2,16 +2,14 @@ import React, { useEffect, useState } from "react";
 import Content from "../../../Components/Dashboard/Content/Content";
 import Loader from "../../../Utils/Loader";
 import { Pencil, Trash2, Eye } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Modal from "../../../Components/ExtraComponents/Modal";
-import { fa_time, fDateTimeSuffix, today } from "../../../Utils/Date_formet";
-import { useLocation } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { fDateTimeSuffix } from "../../../Utils/Date_formet";
+import toast from "react-hot-toast";
 
 import {
-  Get_Admin_Helps,
   Get_All_Admin_Client,
   DELETE_USER_SERVICES,
   Find_User,
@@ -20,7 +18,6 @@ import {
 
 const SubAdminList = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
 
   const [allClients, setAllClients] = useState([]);
   const [filteredClients, setFilteredClients] = useState([]);
@@ -60,17 +57,12 @@ const SubAdminList = () => {
   const filterClients = () => {
     const filterData = allClients.filter(
       (item) =>
-
         searchInput === "" ||
         item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
-        item.Email.toLowerCase().includes(searchInput.toLowerCase()) || 
-        item.PhoneNo.includes(searchInput) 
-        // item.broker.toLowerCase().includes(searchInput.toLowerCase()) || 
-        // item.license_type.toLowerCase().includes(searchInput.toLowerCase()) 
-
-        
-
-
+        item.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
+        item.PhoneNo.includes(searchInput)
+      // item.broker.toLowerCase().includes(searchInput.toLowerCase()) ||
+      // item.license_type.toLowerCase().includes(searchInput.toLowerCase())
     );
     setFilteredClients(filterData);
   };
@@ -154,7 +146,7 @@ const SubAdminList = () => {
   };
 
   const showLicenceName = (value1, licence_type) => {
-    let value = parseInt(value1);
+    
     if (licence_type === "0") return "2 Days Only";
     if (licence_type === "1") return "Demo";
     return "Live";
@@ -184,7 +176,7 @@ const SubAdminList = () => {
       text: "Actions",
       formatter: (cell, row) => (
         <div style={{ width: "120px" }}>
-          {row.license_type == 2 ? (
+          {(row?.license_type === 2 || row?.license_type === "2") ? (
             <Link>
               <span data-toggle="tooltip" data-placement="top" title="View">
                 <Eye
@@ -200,7 +192,7 @@ const SubAdminList = () => {
             </Link>
           ) : null}
 
-          <Link to={`/super/client/edit/${row._id}`} state={row}>
+          <Link to={`/super/client/edit/${row?._id}`} state={row}>
             <span data-toggle="tooltip" data-placement="top" title="Edit">
               <Pencil
                 size={20}
@@ -284,34 +276,32 @@ const SubAdminList = () => {
     }
   };
 
-
   return (
     <>
-     
-        <Content
-          Page_title="Client List"
-          button_status={true}
-          button_title="Back"
-          route="/super/permitions"
-        >
-          <div className="mb-4">
-            <h6>Search here something</h6>
-            <input
-              type="text"
-              style={{ height: "2rem" }}
-              placeholder="search..."
-              className="p-2 rounded"
-              onChange={(e) => setSearchInput(e.target.value)}
-              value={searchInput}
-            />
-          </div>
-          {!allClients.length ? (
-        <Loader />
-      ) : (
+      <Content
+        Page_title="Client List"
+        button_status={true}
+        button_title="Back"
+        route="/super/permitions"
+      >
+        <div className="mb-4">
+          <h6>Search here something</h6>
+          <input
+            type="text"
+            style={{ height: "2rem" }}
+            placeholder="search..."
+            className="p-2 rounded"
+            onChange={(e) => setSearchInput(e.target.value)}
+            value={searchInput}
+          />
+        </div>
+        {!allClients.length ? (
+          <Loader />
+        ) : (
           <FullDataTable TableColumns={columns} tableData={filteredClients} />
-      )}
-        </Content>
- 
+        )}
+      </Content>
+
       {showModal && (
         <Modal
           isOpen={showModal}

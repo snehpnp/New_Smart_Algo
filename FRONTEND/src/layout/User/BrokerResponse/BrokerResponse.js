@@ -2,20 +2,17 @@
 /* eslint-disable react/jsx-no-undef */
 import React, { useState, useEffect } from "react";
 import Content from "../../../Components/Dashboard/Content/Content";
-import Accordion from "react-bootstrap/Accordion";
+
 import {
   Get_Broker_Response,
-  UpdateBrokerResponse,
   GET_ALL_BROKER_RESPONSES,
 } from "../../../ReduxStore/Slice/Users/BrokerResponseSlice";
 import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
-import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Modal from "../../../Components/ExtraComponents/Modal";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
-import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
-import { GanttChartSquare, Eye, Pencil, Trash2 } from "lucide-react";
-import OrderPending from "./OrderPending";
+import { fDateTimeSuffix } from "../../../Utils/Date_formet";
+import { Eye } from "lucide-react";
 import Swal from "sweetalert2";
 import Loader from "../../../Utils/Loader";
 
@@ -31,7 +28,6 @@ const BrokerResponse = () => {
     loading: true,
     data: [],
   });
-  const [showAddLicenceModal, setshowAddLicenceModal] = useState(false);
 
   const gotodashboard = JSON.parse(localStorage.getItem("user_details_goTo"));
   const isgotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
@@ -171,7 +167,6 @@ const BrokerResponse = () => {
 
   // Conditionally add the new column
 
-
   const Singlerefresh = async (e, row) => {
     await dispatch(
       GET_ALL_BROKER_RESPONSES({
@@ -227,31 +222,26 @@ const BrokerResponse = () => {
 
   // USE EFFECT
   if (shouldAddNewColumn) {
-    // if(isgotodashboard == null){
     columns.push({
-      dataField: "",
+      dataField: "refresh",
       text: "Refresh",
-      formatter: (cell, row, rowIndex) => (
+      formatter: (cell, row) => (
         <>
-          {row.order_id !== "" &&
-          row.order_id !== undefined &&
-          row.order_view_status == "0" ? (
+          {row.order_id && row.order_view_status === "0" && (
             <button
               className="btn btn-primary d-flex ms-auto mb-3"
-              type="reset"
+              type="button"
               style={{ height: "40px" }}
               onClick={(e) => Singlerefresh(e, row)}
             >
               Refresh
             </button>
-          ) : (
-            ""
           )}
         </>
       ),
     });
-    // }
   }
+
   return (
     <Content Page_title="Broker Response" button_status={false}>
       {DashboardData?.loading ? (
@@ -259,11 +249,6 @@ const BrokerResponse = () => {
       ) : (
         <FullDataTable TableColumns={columns} tableData={DashboardData.data} />
       )}
-
-      <OrderPending
-        showModal={showAddLicenceModal}
-        setshowModal={() => setshowAddLicenceModal(false)}
-      />
 
       {showModal && (
         <Modal
@@ -310,17 +295,15 @@ const BrokerResponse = () => {
               <tr>
                 <td className="bg-table"> Receive Signal</td>
                 <td className="order-date-cell">
-                  {BrokerResponseId.receive_signal != undefined
-                    ? atob(BrokerResponseId?.receive_signal)
-                    : ""}
+                  {BrokerResponseId.receive_signal !== undefined &&
+                    atob(BrokerResponseId?.receive_signal)}
                 </td>
               </tr>
               <tr>
                 <td className="bg-table"> Signal</td>
                 <td className="order-date-cell">
-                  {BrokerResponseId.send_request != undefined
-                    ? atob(BrokerResponseId?.send_request)
-                    : ""}
+                  {BrokerResponseId.send_request !== undefined &&
+                    atob(BrokerResponseId?.send_request)}
                 </td>
               </tr>
               <tr>

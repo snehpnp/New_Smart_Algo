@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Content from "../../../Components/Dashboard/Content/Content";
 
 import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content";
 import Loader from "../../../Utils/Loader";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
-import { Pencil, Trash2 } from "lucide-react";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { GET_HELPS } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
-import { useDispatch, useSelector } from "react-redux";
-import Modal from "../../../Components/ExtraComponents/Modal";
-
-import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
+import { useDispatch } from "react-redux";
 
 const HelpCenter = () => {
   const dispatch = useDispatch();
@@ -76,7 +70,6 @@ const HelpCenter = () => {
             {cell.split("T")[0] + "   " + cell.split("T")[1].split(".")[0]}
           </div>{" "}
         </>
-        // <><div>{cell.split('.')[0]}</div> </>
       ),
     },
   ];
