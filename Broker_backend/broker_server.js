@@ -82,8 +82,6 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 const ConnectSocket = async (EXCHANGE, instrument_token) => {
-  console.log("Hit Broker Server socket");
-
   const channel_List = `${EXCHANGE}|${instrument_token}`;
 
   const broker_infor = await live_price.findOne({
@@ -208,7 +206,6 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
       throw error;
     }
   } else {
-    console.log("Admin Trading off");
     throw new Error("Trading is turned off by admin.");
   }
 };
@@ -792,19 +789,17 @@ app.post("/broker-signals", async (req, res) => {
           ) {
             if (segment === "O" || segment === "o") {
               try {
-                const CurrentPrice = await ConnectSocket("NFO", instrument_token);
+                const CurrentPrice = await ConnectSocket(
+                  "NFO",
+                  instrument_token
+                );
                 if (CurrentPrice?.lp) {
-                  price = CurrentPrice.lp; // CurrentPrice se lp value set
-                  console.log("Current Price:", price);
+                  price = CurrentPrice.lp;
                 } else {
-                  console.log("CurrentPrice.lp is undefined or invalid");
                 }
-              } catch (error) {
-                console.log("Failed to fetch CurrentPrice:", error.message);
-              }
+              } catch (error) {}
             }
           }
-          
 
           let ExistExitSignal = "";
           if (type.toUpperCase() == "LX" || type.toUpperCase() == "SX") {
@@ -1454,49 +1449,45 @@ app.post("/broker-signals", async (req, res) => {
             }
             //End Process shoonya admin client
 
+            //Process Choice admin client
+            try {
+              const choiceViewCollection = db1.collection("choiceView");
+              const choiceViewdocuments = await choiceViewCollection
+                .find({
+                  "strategys.strategy_name": strategy,
+                  "service.name": input_symbol,
+                  "category.segment": segment,
+                  web_url: "1",
+                })
+                .toArray();
 
-  //Process Choice admin client
-  try {
-    const choiceViewCollection = db1.collection("choiceView");
-    const choiceViewdocuments = await choiceViewCollection
-      .find({
-        "strategys.strategy_name": strategy,
-        "service.name": input_symbol,
-        "category.segment": segment,
-        web_url: "1",
-      })
-      .toArray();
+              fs.appendFile(
+                filePath,
+                "TIME " +
+                  new Date() +
+                  "Choice View ALL CLIENT LENGTH " +
+                  choiceViewdocuments.length +
+                  "\n",
+                function (err) {
+                  if (err) {
+                    return console.log(err);
+                  }
+                }
+              );
 
-    fs.appendFile(
-      filePath,
-      "TIME " +
-        new Date() +
-        "Choice View ALL CLIENT LENGTH " +
-        choiceViewdocuments.length +
-        "\n",
-      function (err) {
-        if (err) {
-          return console.log(err);
-        }
-      }
-    );
-
-    if (choiceViewdocuments.length > 0) {
-      choiceBroker.place_order(
-        choiceViewdocuments,
-        signals,
-        token,
-        filePath,
-        signal_req
-      );
-    }
-  } catch (error) {
-    console.log("Error Get choice Client In view", error);
-  }
-  //End Process Choice admin client
-
-
-
+              if (choiceViewdocuments.length > 0) {
+                choiceBroker.place_order(
+                  choiceViewdocuments,
+                  signals,
+                  token,
+                  filePath,
+                  signal_req
+                );
+              }
+            } catch (error) {
+              console.log("Error Get choice Client In view", error);
+            }
+            //End Process Choice admin client
           } else {
             //Process Tading View Client Alice Blue
             try {

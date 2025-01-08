@@ -124,8 +124,6 @@ const place_order = async (
                     (item1) => item1.Token == token[0].instrument_token
                   );
 
-               
-
                 if (Exist_entry_order != undefined) {
                   const possition_qty =
                     Exist_entry_order.BuyQty - Exist_entry_order.SellQty;
@@ -385,7 +383,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
           }
         }
       );
-
+      console.log("response.data", response.data);
       if (response.data.Status == "Success") {
         BrokerResponse.create({
           user_id: item._id,
@@ -398,6 +396,28 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
           trading_symbol: "",
           broker_name: "Choice",
           send_request: send_rr,
+        })
+          .then((BrokerResponseCreate) => {})
+          .catch((err) => {
+            try {
+              console.log("Error creating and saving user:", err);
+            } catch (e) {}
+          });
+      }
+      if (response.data.Status == "Fail") {
+        const message = JSON.stringify(response.data).replace(/["',]/g, "");
+        BrokerResponse.create({
+          user_id: item._id,
+          receive_signal: signal_req,
+          strategy: strategy,
+          type: type,
+          symbol: input_symbol,
+          order_status:response.data.Status,
+          order_id: "",
+          trading_symbol: "",
+          broker_name: "Choice",
+          send_request: send_rr,
+          reject_reason: message,
         })
           .then((BrokerResponseCreate) => {})
           .catch((err) => {

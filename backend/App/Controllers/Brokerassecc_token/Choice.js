@@ -51,7 +51,6 @@ class Choice {
 
           let encryptedData = cipher.update(password, "utf-8", "base64");
           encryptedData += cipher.final("base64");
-          console.log("encryptedData Password -", encryptedData);
 
           var data = JSON.stringify({
             UserId: Get_User[0].client_code,
@@ -104,7 +103,6 @@ class Choice {
             })
             .catch((error) => {
               if (error) {
-                console.log("error", error.response.data);
                 if (error.response.data) {
                   return res.send({
                     status: false,
