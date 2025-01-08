@@ -245,7 +245,6 @@ const Motilaloswal = require("./Broker/Motilaloswal");
 const Zebull = require("./Broker/Zebull");
 const icicidirect = require("./Broker/icicidirect");
 const choiceBroker = require("./Broker/choice");
-
 const shoonya = require("./Broker/shoonya");
 
 // BROKER SIGNAL
@@ -872,7 +871,7 @@ app.post("/broker-signals", async (req, res) => {
                 filePath,
                 "TIME " +
                   new Date() +
-                  " ALICE BLUE ALL CLIENT LENGTH " +
+                  " Angel ALL CLIENT LENGTH " +
                   angelBluedocuments.length +
                   "\n",
                 function (err) {
@@ -913,7 +912,7 @@ app.post("/broker-signals", async (req, res) => {
                 filePath,
                 "TIME " +
                   new Date() +
-                  " ALICE BLUE ALL CLIENT LENGTH " +
+                  " fivepaisa ALL CLIENT LENGTH " +
                   fivepaisaBluedocuments.length +
                   "\n",
                 function (err) {
@@ -953,7 +952,7 @@ app.post("/broker-signals", async (req, res) => {
                 filePath,
                 "TIME " +
                   new Date() +
-                  " ALICE BLUE ALL CLIENT LENGTH " +
+                  "Zerodha ALL CLIENT LENGTH " +
                   zerodhaBluedocuments.length +
                   "\n",
                 function (err) {
@@ -1431,7 +1430,7 @@ app.post("/broker-signals", async (req, res) => {
                 filePath,
                 "TIME " +
                   new Date() +
-                  " ICICI DIRECT View ALL CLIENT LENGTH " +
+                  "shoonya View ALL CLIENT LENGTH " +
                   shoonyaViewdocuments.length +
                   "\n",
                 function (err) {
@@ -1454,6 +1453,50 @@ app.post("/broker-signals", async (req, res) => {
               console.log("Error Get shoonya Client In view", error);
             }
             //End Process shoonya admin client
+
+
+  //Process Choice admin client
+  try {
+    const choiceViewCollection = db1.collection("choiceView");
+    const choiceViewdocuments = await choiceViewCollection
+      .find({
+        "strategys.strategy_name": strategy,
+        "service.name": input_symbol,
+        "category.segment": segment,
+        web_url: "1",
+      })
+      .toArray();
+
+    fs.appendFile(
+      filePath,
+      "TIME " +
+        new Date() +
+        "Choice View ALL CLIENT LENGTH " +
+        choiceViewdocuments.length +
+        "\n",
+      function (err) {
+        if (err) {
+          return console.log(err);
+        }
+      }
+    );
+
+    if (choiceViewdocuments.length > 0) {
+      choiceBroker.place_order(
+        choiceViewdocuments,
+        signals,
+        token,
+        filePath,
+        signal_req
+      );
+    }
+  } catch (error) {
+    console.log("Error Get choice Client In view", error);
+  }
+  //End Process Choice admin client
+
+
+
           } else {
             //Process Tading View Client Alice Blue
             try {
