@@ -90,14 +90,14 @@ const place_order = async (
           let config = {
             method: "get",
             maxBodyLength: Infinity,
-            url: 'https://finx.choiceindia.com/api/OpenAPI/NetPosition',
-          
-            headers: { 
-                'VendorId': item.api_key, 
-                'VendorKey': item.demat_userid, 
-                'Authorization':'Bearer '+item.access_token,
-                'Content-Type': 'application/json'
-              }
+            url: "https://finx.choiceindia.com/api/OpenAPI/NetPosition",
+
+            headers: {
+              VendorId: item.api_key,
+              VendorKey: item.demat_userid,
+              Authorization: "Bearer " + item.access_token,
+              "Content-Type": "application/json",
+            },
           };
           axios(config)
             .then(async (response) => {
@@ -109,7 +109,9 @@ const place_order = async (
                     " Choice POSITION DATA - " +
                     item.UserName +
                     " LENGTH = " +
-                    JSON.stringify(response.data?.Response?.NetPositions.length) +
+                    JSON.stringify(
+                      response.data?.Response?.NetPositions.length
+                    ) +
                     "\n",
                   function (err) {
                     if (err) {
@@ -117,19 +119,16 @@ const place_order = async (
                   }
                 );
 
-
-
                 const Exist_entry_order =
-                response.data?.Response?.NetPositions.find(
-                    (item1) =>
-                      item1.Token == token[0].instrument_token
+                  response.data?.Response?.NetPositions.find(
+                    (item1) => item1.Token == token[0].instrument_token
                   );
 
-              console.log("Exist_entry_order", response.data?.Response?.NetPositions);
-
+               
 
                 if (Exist_entry_order != undefined) {
-                  const possition_qty = Exist_entry_order.BuyQty - Exist_entry_order.SellQty;
+                  const possition_qty =
+                    Exist_entry_order.BuyQty - Exist_entry_order.SellQty;
 
                   if (possition_qty == 0) {
                     BrokerResponse.create({
@@ -359,14 +358,14 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
   let config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: 'https://finx.choiceindia.com/api/OpenAPI/NewOrder',
-  
-    headers: { 
-        'VendorId': item.api_key, 
-        'VendorKey': item.demat_userid, 
-        'Authorization':'Bearer '+item.access_token,
-        'Content-Type': 'application/json'
-      },
+    url: "https://finx.choiceindia.com/api/OpenAPI/NewOrder",
+
+    headers: {
+      VendorId: item.api_key,
+      VendorKey: item.demat_userid,
+      Authorization: "Bearer " + item.access_token,
+      "Content-Type": "application/json",
+    },
     data: JSON.stringify(item.postdata),
   };
   axios(config)
@@ -387,7 +386,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
         }
       );
 
-      if(response.data.Status == "Success"){  
+      if (response.data.Status == "Success") {
         BrokerResponse.create({
           user_id: item._id,
           receive_signal: signal_req,
@@ -547,14 +546,14 @@ const ExitPlaceOrder = async (
   let config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: 'https://finx.choiceindia.com/api/OpenAPI/NewOrder',
-  
-    headers: { 
-        'VendorId': item.api_key, 
-        'VendorKey': item.demat_userid, 
-        'Authorization':'Bearer '+item.access_token,
-        'Content-Type': 'application/json'
-      },
+    url: "https://finx.choiceindia.com/api/OpenAPI/NewOrder",
+
+    headers: {
+      VendorId: item.api_key,
+      VendorKey: item.demat_userid,
+      Authorization: "Bearer " + item.access_token,
+      "Content-Type": "application/json",
+    },
     data: JSON.stringify(item.postdata),
   };
 
@@ -576,7 +575,7 @@ const ExitPlaceOrder = async (
         }
       );
 
-      if(response.data.Status == "Success"){  
+      if (response.data.Status == "Success") {
         BrokerResponse.create({
           user_id: item._id,
           receive_signal: signal_req,
