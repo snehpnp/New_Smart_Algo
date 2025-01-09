@@ -6,9 +6,9 @@ import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import Loader from "../../../../Utils/Loader";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Expired_Soon_User } from "../../../../ReduxStore/Slice/Admin/LicenceSlice";
-import { fDate, fDateTimeSuffix } from "../../../../Utils/Date_formet";
+import { fDateTimeSuffix } from "../../../../Utils/Date_formet";
 
 const ExpiredLicence = () => {
   const dispatch = useDispatch();

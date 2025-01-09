@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
-import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content";
 import Loader from "../../../../Utils/Loader";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import {  useLocation } from "react-router-dom";
 
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
-import { useDispatch, useSelector } from "react-redux";
-import Modal from "../../../../Components/ExtraComponents/Modal";
+import { useDispatch } from "react-redux";
 import { Transcation_Licence } from "../../../../ReduxStore/Slice/Admin/LicenceSlice";
 import {
-  fDate,
   get_year_and_month_only,
   fDateTimeSuffix,
 } from "../../../../Utils/Date_formet";
@@ -20,8 +17,6 @@ const AllLicence = () => {
   const location = useLocation();
   var dashboard_filter = location.search.split("=")[1];
 
-  const [first, setfirst] = useState("all");
-  const [showModal, setshowModal] = useState(false);
   const token = JSON.parse(localStorage.getItem("user_details")).token;
   const [getAllClients, setAllClients] = useState({ loading: true, data: [] });
   const [getAllClients1, setAllClients1] = useState({
@@ -172,7 +167,7 @@ const AllLicence = () => {
       if (val) {
         filteredData = filteredData.filter((item) => {
           const getMonthAndYear = get_year_and_month_only(item.createdAt);
-          return getMonthAndYear == val;
+          return getMonthAndYear === val;
         });
       } else {
         filteredData = getAllClients1.data;
@@ -303,17 +298,7 @@ const AllLicence = () => {
           />
         )}
 
-        {showModal && (
-          <>
-            <Modal
-              isOpen={showModal}
-              backdrop="static"
-              size="sm"
-              title="Verify OTP"
-              btn_name="Verify"
-            ></Modal>
-          </>
-        )}
+       
       </Content>
     </>
   );

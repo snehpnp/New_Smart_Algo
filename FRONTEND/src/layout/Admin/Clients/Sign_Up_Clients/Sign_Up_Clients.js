@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
-import Content from "../../../../Components/Dashboard/Content/Content";
 import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content";
 import Loader from "../../../../Utils/Loader";
 import { Link } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { GET_ALL_CLIENTS } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Modal from "../../../../Components/ExtraComponents/Modal";
 
 const Sign_Up_Clients = () => {
   const dispatch = useDispatch();
-
-  const [first, setfirst] = useState("all");
   const [showModal, setShowModal] = useState(false);
 
   const [getAllClients, setAllClients] = useState({

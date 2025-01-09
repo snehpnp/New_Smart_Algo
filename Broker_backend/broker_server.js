@@ -787,10 +787,10 @@ app.post("/broker-signals", async (req, res) => {
             signals.TradeType === "MT_4" ||
             signals.TradeType === "Tradingview"
           ) {
-            if (segment === "O" || segment === "o") {
+            if (segment === "O" || segment === "o" || segment === "c" || segment === "C") {
               try {
                 const CurrentPrice = await ConnectSocket(
-                  "NFO",
+                  segment == "C" ? "NSE" : "NFO",
                   instrument_token
                 );
                 if (CurrentPrice?.lp) {

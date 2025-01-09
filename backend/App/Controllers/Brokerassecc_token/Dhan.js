@@ -109,7 +109,12 @@ class Dhan {
                             if (error) {
                                 if (error.response.data.errorCode == "UNAUTHORIZED") {
                                     return res.send({ status: false, msg: "Please Update correct ACCESS TOKEN in Broker key..." });
+                                } else if(error.response.data.errorCode == "BAD_REQUEST_ERROR") {
+                                    return res.send({ status: false, msg: error.response.data.internalErrorMessage });
+                                } else {
+                                    return res.send({ status: false, msg: "Please Update correct ACCESS TOKEN in Broker key..." });
                                 }
+
                             }
                         });
 

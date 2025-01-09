@@ -2,8 +2,7 @@
 // import React from 'react'
 
 import React, { useEffect, useState } from "react";
-import Loader from "../../../../Utils/Loader";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form1";
 import * as valid_err from "../../../../Utils/Common_Messages";
@@ -14,30 +13,19 @@ import {
 } from "../../../../Utils/Common_regex";
 
 import { useFormik } from "formik";
-import { Get_All_SUBADMIN } from "../../../../ReduxStore/Slice/Subadmin/Subadminslice";
 import { Add_Subadmin } from "../../../../ReduxStore/Slice/Admin/CreateSubadminSlice";
 import { useDispatch } from "react-redux";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import { GET_ALL_GROUP_SERVICES } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
 const AllSubadmin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user_token = JSON.parse(localStorage.getItem("user_details")).token;
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role;
-  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
-  const [first, setfirst] = useState("all");
-  const [showModal, setshowModal] = useState(false);
-  const [ShowAllStratagy, setShowAllStratagy] = useState(false);
-  const [selectedStrategies, setSelectedStrategies] = useState([]);
-  const [SelectedGroupServices, setSelectedGroupServices] = useState([]);
-
-  const [Addsubadmin, setAddsubadmin] = useState({
-    loading: false,
-    data: [],
-  });
+  const user_token = JSON.parse(localStorage.getItem("user_details"))?.token;
+  const Role = JSON.parse(localStorage.getItem("user_details"))?.Role;
+  const user_id = JSON.parse(localStorage.getItem("user_details"))?.user_id;
 
   const [AllGroupServices, setAllGroupServices] = useState({
     loading: true,
@@ -320,25 +308,6 @@ const AllSubadmin = () => {
       check_box_true:
         formik.values.all || formik.values.detailsinfo ? true : false,
     },
-    // {
-    //   name: "optionchain",
-    //   label: "Option Chain",
-    //   type: "checkbox",
-    //   label_size: 12,
-    //   col_size: 3,
-    //   check_box_true:
-    //     formik.values.all || formik.values.optionchain ? true : false,
-    // },
-    // {
-    //   name: "makestrategy",
-    //   label: "Make Strategy",
-    //   type: "checkbox",
-    //   label_size: 12,
-    //   col_size: 3,
-    //   check_box_true:
-    //     formik.values.all || formik.values.makestrategy ? true : false,
-    // },
-
     {
       name: "groupservice",
       label: "Group Service Permission",
@@ -348,16 +317,6 @@ const AllSubadmin = () => {
       label_size: 12,
       col_size: 3,
     },
-
-    // {
-    //   name: "Strategy",
-    //   label: "Strategy Permission",
-    //   type: "checkbox",
-    //   label_size: 12,
-    //   col_size: 3,
-    //   check_box_true:
-    //     formik.values.all || formik.values.Strategy ? true : false,
-    // },
     {
       name: "updateapikeys",
       label: "Update Client API Key",
@@ -534,9 +493,7 @@ const AllSubadmin = () => {
 
   const handleGroupChange = (event) => {
     const strategyId = event.target.value;
-
-    const strategyName = event.target.name; 
-
+ 
     if (event.target.checked) {
       setstate([...state, strategyId]);
     } else {
@@ -554,11 +511,7 @@ const AllSubadmin = () => {
   }, [state, state1]);
 
   return (
-    <>
-      {Addsubadmin.loading ? (
-        <Loader />
-      ) : (
-        <>
+   
           <Content
             Page_title="Add Sub-Admin"
             button_title="Back"
@@ -652,9 +605,7 @@ const AllSubadmin = () => {
 
             <ToastButton />
           </Content>
-        </>
-      )}
-    </>
+       
   );
 };
 

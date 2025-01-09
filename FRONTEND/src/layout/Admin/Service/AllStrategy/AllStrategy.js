@@ -3,7 +3,7 @@ import Content from "../../../../Components/Dashboard/Content/Content";
 import Loader from "../../../../Utils/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import BasicDataTable from "../../../../Components/ExtraComponents/Datatable/BasicDataTable";
-import { Pencil, Trash2, UserPlus, PlusSquare, LayoutList } from "lucide-react";
+import { Pencil, Trash2, UserPlus, PlusSquare } from "lucide-react";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { useDispatch } from "react-redux";
 import Modal from "../../../../Components/ExtraComponents/Modal";
@@ -16,7 +16,7 @@ import {
 } from "../../../../ReduxStore/Slice/Admin/StrategySlice";
 import { GO_TO_DASHBOARDS } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
 const ServicesList = () => {
@@ -159,7 +159,7 @@ const ServicesList = () => {
           response.StrategyClient.forEach((element) => {
             sclientid.push(element.users._id);
             response.duplicateids.forEach((element1) => {
-              if (element1.count == 1 && element.users._id == element1._id) {
+              if (element1.count === 1 && element.users._id === element1._id) {
                 OneStategyClientArr.push(element1._id);
               }
             });
@@ -388,21 +388,21 @@ const ServicesList = () => {
                   </>
                 ),
               },
-              // {
-              //   dataField: 'users.TradingStatus',
-              //   text: 'Go To Dashboard',
-              //   formatter: (cell, row, rowIndex) =>
-              //     <>
+              {
+                dataField: 'users.TradingStatus',
+                text: 'Go To Dashboard',
+                formatter: (cell, row, rowIndex) =>
+                  <>
 
-              //       <button
-              //         className={`btn  ${row.users.AppLoginStatus == '1' || row.users.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
+                    <button
+                      className={`btn  ${row.users?.AppLoginStatus === '1' ||  row?.users?.WebLoginStatus === '1' ? "btn-success" : "btn-danger"} btn-new-block`}
 
-              //         onClick={() => goToDashboard(row)}
-              //         disabled={row.users.AppLoginStatus === '0' && row.users.WebLoginStatus === '0'}
+                      onClick={() => goToDashboard(row)}
+                      disabled={row.users.AppLoginStatus === '0' && row.users.WebLoginStatus === '0'}
 
-              //       > click</button>
-              //     </>
-              // },
+                    > click</button>
+                  </>
+              },
             ]}
             tableData={getServicesName && getServicesName.data}
           />

@@ -66,7 +66,6 @@ const AllClients = () => {
   const [getPage, setPage] = useState(1);
   const [getSizePerPage, setSizePerPage] = useState(10);
   const [total1, setTotal] = useState(0);
-  const [getHeaderName, setHeaderName] = useState("All Clients");
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = () => {
@@ -154,24 +153,7 @@ const AllClients = () => {
           if (dashboard_filter !== undefined) {
             let abc;
 
-            const filterHeaderNames = {
-              "000": "",
-              111: "Total Active Clients",
-              21: "Active Live Client",
-              2: "Total Live Client",
-              20: "Expired Live Client",
-              1: "Total Demo Client",
-              11: "Active Demo Client",
-              10: "Expired Demo Client",
-              0: "Total 2 Days Client",
-              "01": "Active 2 Days Client",
-              "00": "Expired 2 Days Client",
-              ADMIN: "Admin Clients",
-              SUBADMIN: "Sub Admin Clients",
-            };
-
-            setHeaderName(filterHeaderNames[dashboard_filter] || "");
-
+      
             abc =
               response.data &&
               response.data.filter((item) => {

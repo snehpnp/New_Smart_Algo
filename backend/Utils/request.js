@@ -3228,11 +3228,10 @@ module.exports = function (app) {
   });
   // AND COLLECTION SOME FIRLS VALUES UPDATE
 
-  const databaseURIs = [
+  const databaseURIss = [
     "mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@217.145.69.45:27017/",
     "mongodb://corebizinfotech:c%26eaV8N%267KfT%26bc49A%26@185.209.75.10:27017/",
     "mongodb://codingpandit:zsg%26k5sB76%263H%26dk7A%26@185.209.75.31:27017/",
-    "mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.93:27017/",
     "mongodb://algokuber:p%26k506%267G%26y%26vnd%26@217.145.69.44:27017/",
     "mongodb://growskyinfotech:u%26j8gB85%267GN%26vn37m%26@185.209.75.9:27017/",
     "mongodb://inspirealgo:n%26pdF7G%265Png%26vn97A%26@185.209.75.11:27017/",
@@ -3264,7 +3263,6 @@ module.exports = function (app) {
     "mongodb://algobliss:Tawk5RT6%267GsRy%26n@217.145.69.137:27017/",
     "mongodb://idealalgo:Tawk5RT6%26GsRy%26n@217.145.69.138:27017/",
     "mongodb://eaglesofttech:AMQ5RP%26kT567Gy%26Maa@217.145.69.141:27017/",
-    "mongodb://celestialai:Twk5RT56%26y7GsRy%26n@217.145.69.145:27017/",
     "mongodb://dynamictechsolution:Twk5RT56%26y7GsRy%26n@217.145.69.147:27017/",
     "mongodb://nextbrandcom:Twk5RT56%26y7GsRy%26n2@217.145.69.151:27017/",
     "mongodb://realcloudtechnology:Twk5RT56%26y7GsRy%26n2@217.145.69.149:27017/",
@@ -3280,21 +3278,18 @@ module.exports = function (app) {
     "mongodb://inspirealgoresearch:Tapw%26k5R56%267GsRy%26vn@185.209.75.70:27017/",
     "mongodb://alcrafttechnology:Tawk5RT56%26y7GsRy%26n@217.145.69.144:27017/",
     "mongodb://tradestreet:MWQ5RP%26kT567Gy%26Maa@185.209.75.87:27017/",
-    "mongodb://segmentpnp:Taw%26k5RT56%267GsRy%26n@5.178.98.2:27017/",
     "mongodb://sewintechnology:M5RP%26k5T567Gy%26Ma@217.145.69.26:27017/",
     "mongodb://starvisionitsolution:P5wP&k6T5M&L7GsRy&H@185.209.75.189:27017/",
     "mongodb://allrobosolution:Tk5RT56%26y7GRy%26nT@217.145.69.57:15497/",
     "mongodb://ssfintech:MW5RP%26k5T567Gy%26Ma@217.145.69.24:27017/",
     "mongodb://techspiresolution:M5P%26k5T567Gy%26Maa@185.209.75.199:15497/",
     "mongodb://sarathiresearch:AaMQ5RP%26kT567Gy%26Ma@185.209.75.90:15497/",
-    "mongodb://levelxtechnologies:M5P%26k5T567GRy%26MT@185.209.75.253:27017/",
     "mongodb://itevolve:ugh%265rK86%26Fv%26yn37A@185.209.75.61:15497/",
-    "mongodb://finbytech:p%26ol5Hd%26tr55ad%26i@193.239.237.92:15497/",
-    "mongodb://growfuturetechnology:MM5P%26k5T567Gy%26MT@185.209.75.195:27017/",
+    "mongodb://finbytech:p%26ol5Hd%26tr55ad%26i@217.145.69.39:15497/",
   ];
 
   // Function to update services collection in all databases
-  async function updateLotSizeInDatabases() {
+  async function updateLotSizeInDatabases(databaseURIs) {
     const failedDatabases = []; // Store URIs of failed connections
 
     for (const uri of databaseURIs) {
@@ -3307,50 +3302,53 @@ module.exports = function (app) {
         // ------------------------------------------------------------------------------------------
         // UPDATE LOT
 
-        // const Service = connection.model(
-        //   "services",
-        //   new mongoose.Schema({}, { strict: false })
-        // );
-        // const Client_services = connection.model(
-        //   "client_services",
-        //   new mongoose.Schema({}, { strict: false })
-        // );
+        const Service = connection.model(
+          "services",
+          new mongoose.Schema({}, { strict: false })
+        );
+        const Client_services = connection.model(
+          "client_services",
+          new mongoose.Schema({}, { strict: false })
+        );
 
-        // Find services with NFO and NIFTY
-        // let FindServices = await Service.find({
-        //   exch_seg: "NFO",
-        //   name: "NIFTY",
-        // }).select("_id");
+        let FindServices = await Service.find({
+          exch_seg: "BFO",
+          name: "SENSEX",
+        }).select("_id");
 
-        // Update client_services for each service
-        // if (FindServices && FindServices.length > 0) {
-        //   for (const item of FindServices) {
-        //     await client_services.updateMany(
-        //       { service_id: item._id },
-        //       { $set: { lot_size: "1", quantity: "75" } }
-        //     );
-        //     console.log(
-        //       `✅ Updated client_services for service_id: ${item._id}`
-        //     );
-        //   }
-        // } else {
-        //   console.log(`⚠️ No matching services found in ${uri}`);
-        // }
+
+        if (FindServices && FindServices.length > 0) {
+          for (const item of FindServices) {
+            await Service.updateMany(
+              { _id: item._id },
+              { $set: { lotsize: "20" } }
+            );
+            await Client_services.updateMany(
+              { service_id: item._id },
+              { $set: { lot_size: "1", quantity: "20" } }
+            );
+            console.log(
+              `✅ Updated client_services for service_id: ${item._id}`
+            );
+          }
+        } else {
+          console.log(`⚠️ No matching services found in ${uri}`);
+        }
 
         // ------------------------------------------------------------------------------------------
 
         // CREATE INDEX IN MAIN SIGNALS
-        const mainSignalSchema = connection.model(
-          "mainsignals",
-          new mongoose.Schema({}, { strict: false })
-        );
+        // const mainSignalSchema = connection.model(
+        //   "mainsignals",
+        //   new mongoose.Schema({}, { strict: false })
+        // );
 
-        await mainSignalSchema.createIndex({
-          strategy: 1,
-          trade_symbol: 1,
-          symbol: 1,
-          client_personal_key: 1,
-        });
+        // await mainSignalSchema.createIndex({
+        //   strategy: 1,
+        //   trade_symbol: 1,
+        //   symbol: 1,
+        //   client_personal_key: 1,
+        // });
 
         console.log(`✅ Successfully updated lot size in ${uri}`);
       } catch (error) {
@@ -3375,7 +3373,7 @@ module.exports = function (app) {
   // API Endpoint to trigger updates
   app.get("/UpdateServicesLotSize5", async (req, res) => {
     try {
-      await updateLotSizeInDatabases();
+      await updateLotSizeInDatabases(databaseURIss);
       return res.send({
         status: true,
         message: "Lot size updated across all accessible databases",
