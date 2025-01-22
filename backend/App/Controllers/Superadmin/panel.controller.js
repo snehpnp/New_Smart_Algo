@@ -937,6 +937,7 @@ class Panel {
       if (image2) existingFaq.img2 = image2;
       if (Role) existingFaq.Role = Role;
 
+
       const updatedFaq = await existingFaq.save();
 
       res.status(200).json({

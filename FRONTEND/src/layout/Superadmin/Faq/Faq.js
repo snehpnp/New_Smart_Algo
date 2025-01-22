@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Typography, TextField, Button, FormGroup, FormControlLabel } from '@mui/material';
 import { CSSTransition } from 'react-transition-group';
 import Content from '../../../Components/Dashboard/Content/Content';
 import { GET_ALL_FAQ_DATA, Delete_faq } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
+import { Select, MenuItem, FormControl, InputLabel, Checkbox, ListItemText } from '@mui/material';
+
 
 import AddFaqModal from './Addfaq';
 import { useDispatch } from 'react-redux';
@@ -12,7 +14,7 @@ const FaqAccordion = () => {
     const [expandedIndex, setExpandedIndex] = useState(-1);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterOption, setFilterOption] = useState('all'); // Default filter option
-    const [roleOption, setRoleOption] = useState('ALL'); // Default role option
+    const [roleOption, setRoleOption] = useState([]); // Store selected roles in an array
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [faqData, setFaqData] = useState([]);
     const [editModalOpen, setEditModalOpen] = useState(false);
@@ -58,10 +60,26 @@ const FaqAccordion = () => {
         setEditModalOpen(true);
     };
 
+    // Handle checkbox change for roles
+    const handleRoleChange = (event) => {
+        // const value = event.target.value;
+        // setRoleOption((prevRoles) =>
+        //     prevRoles.includes(value)
+        //         ? prevRoles.filter((role) => role !== value)
+        //         : [...prevRoles, value]
+        // );
+
+        const value = event.target.value;
+        setRoleOption(value);
+    };
+    // Filter FAQs based on search, filter options, and selected roles
     const filteredFaqs = faqData.filter((faq) => {
+        console.log("faq is", faq)
         const matchesSearch = faq.question.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesFilter = filterOption === 'all' || filterOption === faq.type;
-        const matchesRole = roleOption === 'ALL' || roleOption === faq.Role;
+        // Check if roleOption is an empty array (i.e., no roles selected), or if any selected role matches faq.Role
+        const matchesRole = roleOption.length === 0 || roleOption.some(role => Array.isArray(faq.Role) ? faq.Role.includes(role) : faq.Role === role);
+        console.log("matchesRole", matchesRole)
 
         return matchesSearch && matchesFilter && matchesRole;
     });
@@ -102,21 +120,39 @@ const FaqAccordion = () => {
                         <MenuItem value="trade">Trade Issue FAQs</MenuItem>
                     </Select>
                 </FormControl>
+
+                {/* Role filter as checkboxes */}
                 <FormControl variant="outlined" style={{ minWidth: 200, marginRight: '1rem' }}>
                     <InputLabel id="role-label">Role</InputLabel>
                     <Select
                         labelId="role-label"
                         id="role-select"
+                        multiple
                         value={roleOption}
-                        onChange={(e) => setRoleOption(e.target.value)}
+                        onChange={handleRoleChange}
+                        renderValue={(selected) => selected.join(', ')}
                         label="Role"
                     >
-                        <MenuItem value="ALL">ALL</MenuItem>
-                        <MenuItem value="ADMIN">ADMIN</MenuItem>
-                        <MenuItem value="EMPLOYEE">EMPLOYEE</MenuItem>
-                        <MenuItem value="USER">USER</MenuItem>
+                        {/* <MenuItem value="ALL">
+                            <Checkbox checked={roleOption.includes('ALL')} />
+                            <ListItemText primary="ALL" />
+                        </MenuItem> */}
+
+                        <MenuItem value="ADMIN">
+                            <Checkbox checked={roleOption.includes('ADMIN')} />
+                            <ListItemText primary="ADMIN" />
+                        </MenuItem>
+                        <MenuItem value="SUBADMIN">
+                            <Checkbox checked={roleOption.includes('SUBADMIN')} />
+                            <ListItemText primary="SUBADMIN" />
+                        </MenuItem>
+                        <MenuItem value="USER">
+                            <Checkbox checked={roleOption.includes('USER')} />
+                            <ListItemText primary="USER" />
+                        </MenuItem>
                     </Select>
                 </FormControl>
+
                 <Button
                     variant="contained"
                     color="primary"
