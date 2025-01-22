@@ -1308,12 +1308,11 @@ db.createView("zerodhaView", "users", [
 
         // exchange condition here
         exchange: {
-          $cond: {
-            if: { $eq: ["$category.segment", "C"] }, // Your condition here
-            then: "NSE",
-            else: {
-              $cond: {
-                if: {
+          $switch: {
+            branches: [
+              { case: { $eq: ["$category.segment", "C"] }, then: "NSE" },
+              {
+                case: {
                   $or: [
                     { $eq: ["$category.segment", "F"] },
                     { $eq: ["$category.segment", "O"] },
@@ -1321,35 +1320,40 @@ db.createView("zerodhaView", "users", [
                   ],
                 },
                 then: "NFO",
-                else: {
-                  $cond: {
-                    if: {
-                      $or: [
-                        { $eq: ["$category.segment", "MF"] },
-                        { $eq: ["$category.segment", "MO"] },
-                      ],
-                    },
-                    then: "MCX",
-                    else: {
-                      $cond: {
-                        if: {
-                          $or: [
-                            { $eq: ["$category.segment", "CF"] },
-                            { $eq: ["$category.segment", "CO"] },
-                          ],
-                        },
-                        then: "CDS",
-
-                        // all not exist condition
-                        else: "NFO",
-                      },
-                    },
-                  },
-                },
               },
-            },
+              {
+                case: {
+                  $or: [
+                    { $eq: ["$category.segment", "MF"] },
+                    { $eq: ["$category.segment", "MO"] },
+                  ],
+                },
+                then: "MCX",
+              },
+              {
+                case: {
+                  $or: [
+                    { $eq: ["$category.segment", "CF"] },
+                    { $eq: ["$category.segment", "CO"] },
+                  ],
+                },
+                then: "CDS",
+              },
+              {
+                case: {
+                  $or: [
+                    { $eq: ["$category.segment", "BF"] },
+                    { $eq: ["$category.segment", "BO"] },
+                  ],
+                },
+                then: "BFO",
+              },
+              { case: { $eq: ["$category.segment", "BC"] }, then: "BSE" },
+            ],
+            default: "NFO", // Default value if no conditions are met
           },
         },
+        
 
         // transaction Type
         transaction_type: "BUY",
