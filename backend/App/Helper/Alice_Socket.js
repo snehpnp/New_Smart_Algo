@@ -18,7 +18,7 @@ const Alice_Socket = async () => {
     .padStart(2, "0")}`;
 
   if (curtime1 > 1531) {
-    console.log("Market Close " + new Date());
+  
     return null;
   }
 
@@ -28,7 +28,7 @@ const Alice_Socket = async () => {
     .sort({ _id: -1 });
 
   if (!broker_infor) {
-    console.log("Broker Trading Off");
+   
     return null;
   }
 

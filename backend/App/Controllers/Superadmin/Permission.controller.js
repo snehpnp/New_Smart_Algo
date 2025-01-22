@@ -479,7 +479,6 @@ class Panel {
 
       const update_token = await panel_model.updateOne(filter, update);
 
-      console.log("update", domain1);
 
       return res.send({
         status: true,

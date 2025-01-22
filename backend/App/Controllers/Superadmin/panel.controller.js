@@ -63,7 +63,7 @@ class Panel {
       });
       AddPanel.save()
         .then(async (data) => {
-          console.log("data", data);
+   
           const filter = { panal_name: "111" };
           const update = {
             $set: {
@@ -952,9 +952,7 @@ class Panel {
 
   async UpdateAdminPermission(url, tabe, theme) {
     try {
-      // console.log("url", url);
-      // console.log("tabe", tabe);
-      // console.log("theme", theme);
+ 
 
       // const Url = url + "update/adminpermission";
       const Url = 'http://localhost:7700/' + "update/adminpermission";

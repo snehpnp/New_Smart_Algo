@@ -73,10 +73,6 @@ cron.schedule("20 3 * * *", () => {
   TokenSymbolUpdate();
 });
 
-// cron.schedule("51 9 * * *", () => {
-//   console.log("running a task every minute");
-//   TokenSymbolUpdate()
-// })
 
 cron.schedule("1 1 * * *", () => {
   UpdateGetMonthlyData();
@@ -86,9 +82,7 @@ cron.schedule("5 1 * * *", () => {
   UpdateCurrentTime();
 });
 
-// unning a task every 10 minutes
 cron.schedule("*/10 9-15 * * *", () => {
-  // console.log("Running a task every 10 minutes from 9 AM to 3:30 PM");
   UpdatePrice();
 });
 
@@ -100,10 +94,10 @@ let UpdatePrice = async () => {
     axios
       .get(UrlCreate)
       .then((response) => {
-        //   console.log(UrlCreate, " => ", response.data);
+ 
       })
       .catch((error) => {
-        console.log(error.response);
+   
       });
   }
 };
@@ -128,7 +122,7 @@ const UpdateCurrentTime = async () => {
     // Use an empty filter to target all documents
     const updateResult = await company_information.updateMany({}, update);
 
-    //  console.log(`Updated ${updateResult.modifiedCount} documents.`);
+
   } catch (error) {
     console.log("Error updating documents:", error);
   }
@@ -1504,7 +1498,7 @@ const GetStrickPriceFromSheet = async () => {
               const result = await Get_Option_Chain_modal.bulkWrite(
                 bulkOperations
               );
-              // console.log("Bulk write successful:", result);
+         
             } catch (error) {
               console.log("Error during bulk write:", error);
             }

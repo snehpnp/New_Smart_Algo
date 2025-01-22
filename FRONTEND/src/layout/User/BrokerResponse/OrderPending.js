@@ -19,7 +19,7 @@ const PendingOrder = ({ showModal, setshowModal }) => {
       const req = {
         licence: values.licence,
       };
-      console.log("Form Submitted:", req);
+  
     },
   });
 

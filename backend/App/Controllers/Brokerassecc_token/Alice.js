@@ -527,7 +527,7 @@ const GetAllBrokerResponse = async (user_id, res) => {
 
 const UpdateProfile = async (userId, token) => {
   if (!userId || !token) {
-    console.log("Invalid userId or token provided");
+    console.log("Error Invalid userId or token provided");
     return;
   }
 
@@ -564,7 +564,7 @@ const UpdateProfile = async (userId, token) => {
        
       }
     } else {
-      console.log("No valid response data received from API.");
+
     }
   } catch (apiError) {
     console.log("Error making API request:", apiError.message);

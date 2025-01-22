@@ -40,7 +40,7 @@ class AdminPermission {
         body_font: theme.body_font,
         dashboard: theme.dashboard,
       };
-      // console.log(req1);
+  
       const FindAdminPermission = await Admin_Permission.find({});
 
       if (FindAdminPermission.length == 0) {

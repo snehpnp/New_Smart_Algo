@@ -45,7 +45,7 @@ const ApiCreateInfo = () => {
         data: res.data,
       });
     }
-    console.log("response from new api is ", res);
+
   };
 
   useEffect(() => {

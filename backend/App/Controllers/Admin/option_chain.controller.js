@@ -232,8 +232,7 @@ class OptionChain {
             let price = 19000
 
             const get_symbol_price = await Get_Option_Chain_modal.findOne({ symbol: symbol })
-
-            console.log("get_symbol_price", get_symbol_price)   
+ 
 
             if (get_symbol_price != undefined) {
                 price = parseInt(get_symbol_price.price);

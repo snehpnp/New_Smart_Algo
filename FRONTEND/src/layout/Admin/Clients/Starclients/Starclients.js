@@ -288,7 +288,7 @@ const AllClients = () => {
   };
 
   const handleToggle = async (StarStatus, data) => {
-    console.log("Clicked element:", StarStatus);
+ 
 
     const req = {
       id: data._id,
