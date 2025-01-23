@@ -20,6 +20,7 @@ import Open_Positions from '../layout/Admin/OptionChain/Open_Positions';
 import CreateStrategy from '../layout/Admin/CreateStrategy/CreateStrategy';
 import AllMakeStrategy from '../layout/Admin/CreateStrategy/AllMakeStrategy';
 import EditMakeStrategy from '../layout/Admin/CreateStrategy/EditMakeStrategy';
+import Faq from '../layout/Admin/Faq/Faq.js'
 
 import Footer from '../Components/Dashboard/Footer/Footer.js'
 
@@ -50,6 +51,10 @@ const Admin = () => {
                 <Route exact path="/createstrategy" element={<CreateStrategy />} />
                 <Route exact path="/AllMakeStrategy" element={<AllMakeStrategy />} />
                 <Route exact path="/MakeStrategy/edit/:id" element={<EditMakeStrategy />} />
+                <Route exact path="/AllMakeStrategy" element={<AllMakeStrategy />} />
+                <Route exact path="/faq" element={<Faq />} />
+
+
 
             </Routes>
 

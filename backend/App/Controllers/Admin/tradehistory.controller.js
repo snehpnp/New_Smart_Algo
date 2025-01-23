@@ -499,6 +499,7 @@ class Tradehistory {
       });
     }
   }
+// ____________________Backup code _______________
 
   async GetAdminTradeHistory1(req, res) {
     try {
@@ -642,6 +643,188 @@ class Tradehistory {
         .send({ status: false, msg: "Internal Server Error" });
     }
   }
+
+
+  // // ___________________Updated Code___________________
+
+
+  // async GetAdminTradeHistory1(req, res) {
+  //   try {
+  //     const {
+  //       startDate,
+  //       endDate,
+  //       strategy,
+  //       service,
+  //       type,
+  //       serviceIndex,
+  //       lotMultypaly,
+  //       page,
+  //       limit,
+  //     } = req.body;
+
+  //     const page1 = page || 1;
+  //     const limit1 = limit || 1000;
+
+  //     const client_persnal_key1 =
+  //       type && type.toUpperCase() !== "ADMIN" ? { $ne: "" } : "";
+
+  //     const lotMultypaly1 = lotMultypaly ? Number(lotMultypaly) : 1;
+
+  //     const startDateObj = new Date(startDate || new Date());
+  //     const endDateObj = new Date(endDate || new Date());
+  //     endDateObj.setDate(endDateObj.getDate() + 1);
+
+  //     const strategyWord = strategy?.trim();
+  //     const serIndex =
+  //       typeof serviceIndex === "object" || serviceIndex === "null"
+  //         ? { $exists: true }
+  //         : serviceIndex;
+  //     const stg1 = strategyWord === "null" ? { $exists: true } : strategyWord;
+  //     const ser1 = service === "null" ? { $exists: true } : service;
+
+  //     const matchStage = {
+  //       createdAt: { $gte: startDateObj, $lte: endDateObj },
+  //       strategy: stg1,
+  //       trade_symbol: ser1,
+  //       symbol: serIndex,
+  //       client_persnal_key: client_persnal_key1,
+  //     };
+
+  //     const pipeline = [
+  //       { $match: matchStage },
+  //       {
+  //         $lookup: {
+  //           from: "signals",
+  //           localField: "signals_id",
+  //           foreignField: "_id",
+  //           as: "result",
+  //         },
+  //       },
+  //       {
+  //         $lookup: {
+  //           from: "services",
+  //           localField: "symbol",
+  //           foreignField: "name",
+  //           as: "result1",
+  //         },
+  //       },
+  //       { $match: { $expr: { $gt: [{ $size: "$result" }, 0] } } },
+  //       { $match: { $expr: { $gt: [{ $size: "$result1" }, 0] } } },
+
+  //       // Unwind the result array to allow sorting by result.time
+  //       { $unwind: "$result" },
+
+  //       // Project for debugging (optional)
+  //       {
+  //         $project: {
+  //           result_time: "$result.time",  // Project the time field for debugging
+  //           result: 1,  // Keep the rest of the result
+  //         }
+  //       },
+
+  //       // Sort by result.time (ascending)
+  //       {
+  //         $sort: {
+  //           "result.time": 1 // Ensure it's a Date type to sort correctly
+  //         }
+  //       },
+
+  //       // Skip and limit for pagination
+  //       { $skip: (page1 - 1) * limit1 },
+  //       { $limit: limit1 },
+
+  //       // Project back for clarity
+  //       {
+  //         $project: {
+  //           result: 1,
+  //           trade_symbol: 1,
+  //           symbol: 1,
+  //           createdAt: 1,
+  //         }
+  //       },
+  //     ];
+
+  //     // Execute the pipeline
+  //     const [filteredSignals, totalItems] = await Promise.all([
+  //       MainSignals_modal.aggregate(pipeline),
+  //       MainSignals_modal.countDocuments(matchStage),
+  //     ]);
+
+  //     const tradeSymbolsFilter = [
+  //       ...new Set(filteredSignals.map((item) => item.trade_symbol)),
+  //     ];
+
+  //     let totalCalculate = 0;
+  //     let totalTrade = filteredSignals.map((signal) => {
+  //       if (signal.result && signal.result.length > 0) {
+  //         if (signal.result.length > 1) {
+  //           const firstResult = signal.result.find(
+  //             (item) => item.type === "LE" || item.type === "SE"
+  //           );
+  //           const secondResult = signal.result.find(
+  //             (item) => item.type === "LX" || item.type === "SX"
+  //           );
+
+  //           const firstPrice = parseFloat(firstResult.price) || 0;
+  //           const secondPrice = parseFloat(secondResult.price) || 0;
+
+  //           let firstLotSize;
+
+  //           if (firstResult.lot_size == 0) {
+  //             if (firstResult.symbol == "NIFTY") {
+  //               firstLotSize = 25;
+  //             } else if (firstResult.symbol == "BANKNIFTY") {
+  //               firstLotSize = 15;
+  //             } else {
+  //               firstLotSize = parseFloat(firstResult.lot_size) || 1;
+  //             }
+  //           } else {
+  //             firstLotSize = parseFloat(firstResult.lot_size) || 1;
+  //           }
+
+  //           firstResult.lot_size = firstLotSize * lotMultypaly1;
+  //           secondResult.lot_size = firstLotSize * lotMultypaly1;
+
+  //           const cal =
+  //             secondResult.type === "LX" || secondResult.type === "SX"
+  //               ? (secondPrice - firstPrice) *
+  //               (firstLotSize === 0 ? 1 : firstLotSize * lotMultypaly1)
+  //               : "-";
+  //           totalCalculate += cal;
+
+  //           return [firstResult, { ...secondResult, cal }];
+  //         } else {
+  //           return [signal.result[0]];
+  //         }
+  //       }
+  //       return [];
+  //     });
+
+  //     return res.send({
+  //       status: true,
+  //       msg: "Filtered Trade history",
+  //       data: totalTrade.flat(),
+  //       trade_symbols_filter: tradeSymbolsFilter,
+  //       pagination: {
+  //         page: Number(page1),
+  //         limit: Number(limit1),
+  //         totalItems,
+  //         totalPages: Math.ceil(totalItems / limit1),
+  //       },
+  //       TotalCalculate: totalCalculate,
+  //     });
+  //   } catch (error) {
+  //     console.log("Error Trade History Error-", error);
+  //     return res
+  //       .status(500)
+  //       .send({ status: false, msg: "Internal Server Error" });
+  //   }
+  // }
+
+
+  // _____________________________________________________
+
+
 
   async GetSignalsAdmin(req, res) {
     try {

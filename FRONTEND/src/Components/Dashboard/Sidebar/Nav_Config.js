@@ -233,7 +233,14 @@ export const admin_sidebar = [
 
 
         ]
-    }
+    },
+    {
+        id: 1,
+        name: 'Faq',
+        Icon: 'LayoutDashboard',
+        route: '/super/dashboard',
+        Data: []
+    },
 
 ];
 
@@ -336,7 +343,14 @@ export const sub_admin_sidebar = [
         Icon: 'HelpingHand',
         route: '/subadmin/helpcenter',
         Data: []
-    }
+    },
+    {
+        id: 715,
+        name: 'Faq',
+        Icon: 'Info',
+        route: '/subadmin/faq',
+        Data: []
+    },
 ];
 
 export const Client = [

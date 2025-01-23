@@ -23,9 +23,8 @@ const FaqAccordion = () => {
             const response = await dispatch(GET_ALL_FAQ_DATA({})).unwrap();
     
             if (response.status) {
-                const filteredData = response?.data?.filter((faq) => faq.Role == user_role);
+                const filteredData = response?.data?.filter((faq) => faq.Role.includes(user_role));
                 
-    
                 // Update state with the filtered data
                 SetfaqData(filteredData);
             } else {
