@@ -883,7 +883,7 @@ db.createView("fivepaisaView", "users", [
           key: "$api_key",
         },
         body: {
-          ClientCode: "$client_code",
+          // ClientCode: "$client_code",
 
           Exchange: {
             $cond: {

@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./BACKEND
+      dockerfile: Dockerfile
+    ports:
+      - "7700:7700" # Updated to match your Node.js backend port
+    volumes:
+      - ./BACKEND:/app
+    depends_on:
+      - frontend
+
+  frontend:
+    build:
+      context: ./FRONTEND
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    volumes:
+      - ./FRONTEND:/app
