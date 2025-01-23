@@ -207,6 +207,8 @@ const AllClients = () => {
     }
 
 
+    
+
     const foundBroker = BrokerDetails?.find(
       (value) => parseInt(value.broker_id) === parseInt(value1)
     );

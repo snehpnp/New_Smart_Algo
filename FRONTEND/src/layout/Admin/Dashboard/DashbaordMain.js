@@ -52,7 +52,7 @@ const Dashboard = () => {
   return (
     <>
       <div>
-            {DashboardData.loading && <Loader  fullPage={true}/>}
+            {/* {DashboardData.loading && <Loader  fullPage={true}/>} */}
         <div className="content-body">
           <div className="container-fluid">
             <Dashboard1 data={DashboardData?.data} />

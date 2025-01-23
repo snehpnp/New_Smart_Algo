@@ -481,6 +481,9 @@ const TradeHistory = () => {
           />
         </>
       )}
+
+
+
       {PnlStatus === "Bottom" && (
         <>
           {tradeHistoryData.data && tradeHistoryData.data.length > 0 && (
