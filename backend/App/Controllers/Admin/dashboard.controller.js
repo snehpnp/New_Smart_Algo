@@ -42,8 +42,8 @@ class Dashboard {
         });
       } else {
         return res.send({
-          status: false,
-          msg: "Dashboard Data Not found",
+          status: true,
+          msg: "Get Dashboard Data",
           totalCount: {
             total_client: 0,
             total_active_client: 0,
