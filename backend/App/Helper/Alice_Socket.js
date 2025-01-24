@@ -66,7 +66,7 @@ const Alice_Socket = async () => {
         })
         .then((res) => {
           if (res.data.stat == "Ok") {
-            console.log("Alice Socket Connected ", new Date());
+            // console.log("Alice Socket Connected ", new Date());
 
             try {
               const ws = new WebSocket(url);
@@ -131,15 +131,15 @@ const Alice_Socket = async () => {
               };
 
               ws.onerror = function (error) {
-                console.log(`WebSocket error: ${error}`);
+                // console.log(`WebSocket error: ${error}`);
                 socketRestart();
               };
 
               ws.onclose = async function () {
-                console.log(
-                  "WebSocket is closed. Reconnect will be attempted in 1 second.",
-                  new Date()
-                );
+                // console.log(
+                //   "WebSocket is closed. Reconnect will be attempted in 1 second.",
+                //   new Date()
+                // );
 
                 const isTimeInRange = (
                   hourStart,
@@ -184,7 +184,7 @@ const Alice_Socket = async () => {
                 }
               };
             } catch (error) {
-              console.log("Error Shocket", new Date() + error);
+              // console.log("Error Shocket", new Date() + error);
               socketRestart();
             }
           }
@@ -194,7 +194,7 @@ const Alice_Socket = async () => {
           return "error";
         });
     } catch (error) {
-      console.log("Error createSocketSess", error);
+      // console.log("Error createSocketSess", error);
     }
   }
 };

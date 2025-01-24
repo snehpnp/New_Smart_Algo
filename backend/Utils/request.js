@@ -367,44 +367,7 @@ module.exports = function (app) {
               arraySource.push(condition[element].source);
             }
 
-            // await dbTest.collection(viewName).drop();
-
-            // let viewName = condition[element].source + '_M' + timeframe + '_' + tokensymbol;
-            // let collectionViewName = 'M' + timeframe + '_' + tokensymbol;
-            // let expMovingAvg = { input: "$" + condition[element].indicator_field, N: parseInt(condition[element].period) }; // Convert period to integer
-
-            // const pipelineIndicatorView = [
-            //   { $sort: { _id: -1 } }, // Sorting to get the latest prices first
-            //   // { $limit: 2 },         // Limiting to the period (adjust this based on your period)
-            //   {
-            //     $setWindowFields: {   // Window function to calculate EMA
-            //       sortBy: { _id: 1 },
-            //       output: {
-            //         ema: {
-            //           $expMovingAvg: { input: expMovingAvg.input, N: expMovingAvg.N }  // Adjust N based on your period
-            //         }
-            //       }
-            //     }
-            //   },
-            //   { $project: { ema: 1, _id: 1 } } // Projecting only the ema field, excluding _id
-            // ];
-
-            // try {
-            //   const collections = await dbTest.listCollections().toArray();
-            //   const collectionExists = collections.some(coll => coll.name === viewName);
-
-            //   if (!collectionExists) {
-            //     await dbTest.createCollection(viewName, {
-            //       viewOn: collectionViewName,
-            //       pipeline: pipelineIndicatorView
-            //     });
-            //     console.log(`View ${viewName} created successfully`);
-            //   }else{
-            //     console.log(`View ${viewName} already exists`);
-            //   }
-            // } catch (error) {
-            //   console.log(`Error creating view ${viewName}:`, error);
-            // }
+         
           }
         });
       });
@@ -3286,6 +3249,11 @@ module.exports = function (app) {
     "mongodb://sarathiresearch:AaMQ5RP%26kT567Gy%26Ma@185.209.75.90:15497/",
     "mongodb://itevolve:ugh%265rK86%26Fv%26yn37A@185.209.75.61:15497/",
     "mongodb://finbytech:p%26ol5Hd%26tr55ad%26i@217.145.69.39:15497/",
+    "mongodb://growfuturetechnology:M5P%26k5T567Gy%26MT@185.209.75.195:15497/",
+    "mongodb://mgautosoftware:MWQ5RP%26k5T67Gy%26Ma@217.145.69.25:27017/",
+    "mongodb://allianceaiinfotech:ks8B%267Gmg%26vn37A@217.145.69.72:15497/",
+    "mongodb://techntown:MWQ5RP%26k5T67Gy%26Ma@217.145.69.37:15497/",
+    "mongodb://infovatetechnoconsultancy:ks8B7Gmg%26vn37Aa@217.145.69.77:15497/"
   ];
 
   // Function to update services collection in all databases
@@ -3300,39 +3268,39 @@ module.exports = function (app) {
         console.log(`✅ Connected to ${uri}`);
 
         // ------------------------------------------------------------------------------------------
-        // UPDATE LOT
+        ////// UPDATE LOT
 
-        // const Service = connection.model(
-        //   "services",
-        //   new mongoose.Schema({}, { strict: false })
-        // );
-        // const Client_services = connection.model(
-        //   "client_services",
-        //   new mongoose.Schema({}, { strict: false })
-        // );
+        const Service = connection.model(
+          "services",
+          new mongoose.Schema({}, { strict: false })
+        );
+        const Client_services = connection.model(
+          "client_services",
+          new mongoose.Schema({}, { strict: false })
+        );
 
-        // let FindServices = await Service.find({
-        //   exch_seg: "NFO",
-        //   name: "NIFTY",
-        // }).select("_id");
+        let FindServices = await Service.find({
+          exch_seg: "NFO",
+          name: "NIFTY",
+        }).select("_id");
 
-        // if (FindServices && FindServices.length > 0) {
-        //   for (const item of FindServices) {
-        //     await Service.updateMany(
-        //       { _id: item._id },
-        //       { $set: { lotsize: "75" } }
-        //     );
-        //     await Client_services.updateMany(
-        //       { service_id: item._id },
-        //       { $set: { lot_size: "1", quantity: "75" } }
-        //     );
-        //     console.log(
-        //       `✅ Updated client_services for service_id: ${item._id}`
-        //     );
-        //   }
-        // } else {
-        //   console.log(`⚠️ No matching services found in ${uri}`);
-        // }
+        if (FindServices && FindServices.length > 0) {
+          for (const item of FindServices) {
+            await Service.updateMany(
+              { _id: item._id },
+              { $set: { lotsize: "25" } }
+            );
+            await Client_services.updateMany(
+              { service_id: item._id },
+              { $set: { lot_size: "1", quantity: "25" } }
+            );
+            console.log(
+              `✅ Updated client_services for service_id: ${item._id}`
+            );
+          }
+        } else {
+          console.log(`⚠️ No matching services found in ${uri}`);
+        }
 
         // ------------------------------------------------------------------------------------------
 
@@ -3349,19 +3317,19 @@ module.exports = function (app) {
         //   client_personal_key: 1,
         // });
 
-        const companyModal = connection.model(
-          "company",
-          new mongoose.Schema({}, { strict: false })
-        );
+        // const companyModal = connection.model(
+        //   "company",
+        //   new mongoose.Schema({}, { strict: false })
+        // );
 
-        const admin_permissionModal = connection.model(
-          "admin_permission",
-          new mongoose.Schema({}, { strict: false })
-        );
+        // const admin_permissionModal = connection.model(
+        //   "admin_permission",
+        //   new mongoose.Schema({}, { strict: false })
+        // );
 
 
-        const companyModaData = await companyModal.find({});
-        console.log(companyModaData);
+        // const companyModaData = await companyModal.find({});
+        // console.log(companyModaData);
 
         console.log(`✅ Successfully updated lot size in ${uri}`);
       } catch (error) {

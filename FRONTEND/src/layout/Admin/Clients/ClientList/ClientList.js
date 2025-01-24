@@ -563,7 +563,7 @@ const AllClients = () => {
       (value) => parseInt(value.broker_id) === parseInt(value1)
     );
 
-    return foundBroker?.title ?? "";
+    return foundBroker?.title ?? "-";
   };
 
   const forCSVdata = (data) => {

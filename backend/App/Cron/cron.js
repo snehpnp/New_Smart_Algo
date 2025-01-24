@@ -33,9 +33,7 @@ cron.schedule("15 5 * * *", () => {
   createView();
 });
 
-cron.schedule("5 4 * * *", () => {
-  LogoutAllUsers();
-});
+
 
 cron.schedule("5 5 * * *", () => {
   LogoutAllUsers();

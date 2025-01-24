@@ -97,11 +97,7 @@ const Sign_Up_Clients = () => {
 
   return (
     <Theme_Content Page_title="All Signup Clients" button_status={false}>
-      {getAllClients.error ? (
-        <div className="alert alert-danger">{getAllClients.error}</div>
-      ) : getAllClients.data.length === 0 ? (
-        "No data found"
-      ) : (
+     
         <>
           {getAllClients.loading ? (
             <Loader />
@@ -112,7 +108,7 @@ const Sign_Up_Clients = () => {
             />
           )}
         </>
-      )}
+     
 
       {showModal && (
         <Modal
