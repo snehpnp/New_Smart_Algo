@@ -3194,7 +3194,6 @@ module.exports = function (app) {
   const databaseURIss = [
     "mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@217.145.69.45:27017/",
     "mongodb://corebizinfotech:c%26eaV8N%267KfT%26bc49A%26@185.209.75.10:27017/",
-    "mongodb://codingpandit:zsg%26k5sB76%263H%26dk7A%26@185.209.75.31:27017/",
     "mongodb://algokuber:p%26k506%267G%26y%26vnd%26@217.145.69.44:27017/",
     "mongodb://growskyinfotech:u%26j8gB85%267GN%26vn37m%26@185.209.75.9:27017/",
     "mongodb://inspirealgo:n%26pdF7G%265Png%26vn97A%26@185.209.75.11:27017/",
@@ -3259,6 +3258,7 @@ module.exports = function (app) {
   // Function to update services collection in all databases
   async function updateLotSizeInDatabases(databaseURIs) {
     const failedDatabases = []; // Store URIs of failed connections
+    const results = []; // Store results of successful connections
 
     for (const uri of databaseURIs) {
       let connection;
@@ -3270,37 +3270,37 @@ module.exports = function (app) {
         // ------------------------------------------------------------------------------------------
         ////// UPDATE LOT
 
-        const Service = connection.model(
-          "services",
-          new mongoose.Schema({}, { strict: false })
-        );
-        const Client_services = connection.model(
-          "client_services",
-          new mongoose.Schema({}, { strict: false })
-        );
+        // const Service = connection.model(
+        //   "services",
+        //   new mongoose.Schema({}, { strict: false })
+        // );
+        // const Client_services = connection.model(
+        //   "client_services",
+        //   new mongoose.Schema({}, { strict: false })
+        // );
 
-        let FindServices = await Service.find({
-          exch_seg: "NFO",
-          name: "NIFTY",
-        }).select("_id");
+        // let FindServices = await Service.find({
+        //   exch_seg: "NFO",
+        //   name: "NIFTY",
+        // }).select("_id");
 
-        if (FindServices && FindServices.length > 0) {
-          for (const item of FindServices) {
-            await Service.updateMany(
-              { _id: item._id },
-              { $set: { lotsize: "25" } }
-            );
-            await Client_services.updateMany(
-              { service_id: item._id },
-              { $set: { lot_size: "1", quantity: "25" } }
-            );
-            console.log(
-              `✅ Updated client_services for service_id: ${item._id}`
-            );
-          }
-        } else {
-          console.log(`⚠️ No matching services found in ${uri}`);
-        }
+        // if (FindServices && FindServices.length > 0) {
+        //   for (const item of FindServices) {
+        //     await Service.updateMany(
+        //       { _id: item._id },
+        //       { $set: { lotsize: "25" } }
+        //     );
+        //     await Client_services.updateMany(
+        //       { service_id: item._id },
+        //       { $set: { lot_size: "1", quantity: "25" } }
+        //     );
+        //     console.log(
+        //       `✅ Updated client_services for service_id: ${item._id}`
+        //     );
+        //   }
+        // } else {
+        //   console.log(`⚠️ No matching services found in ${uri}`);
+        // }
 
         // ------------------------------------------------------------------------------------------
 
@@ -3317,10 +3317,10 @@ module.exports = function (app) {
         //   client_personal_key: 1,
         // });
 
-        // const companyModal = connection.model(
-        //   "company",
-        //   new mongoose.Schema({}, { strict: false })
-        // );
+        const companyModal = connection.model(
+          "company",
+          new mongoose.Schema({}, { strict: false })
+        );
 
         // const admin_permissionModal = connection.model(
         //   "admin_permission",
@@ -3328,9 +3328,9 @@ module.exports = function (app) {
         // );
 
 
-        // const companyModaData = await companyModal.find({});
-        // console.log(companyModaData);
-
+        const companyModaData = await companyModal.findOne({}).select('email cc_mail panel_name')
+     
+        results.push({Name:companyModaData.panel_name, Email:companyModaData.email, CC:companyModaData.cc_mail});
         console.log(`✅ Successfully updated lot size in ${uri}`);
       } catch (error) {
         console.error(`❌ Failed to update ${uri}:`, error.message);
@@ -3344,10 +3344,14 @@ module.exports = function (app) {
     }
 
     if (failedDatabases.length > 0) {
+
       console.warn(
         `⚠️ Failed to update the following databases:`,
         failedDatabases
       );
+    }
+    if(results.length > 0) {
+     console.log(results);
     }
   }
 

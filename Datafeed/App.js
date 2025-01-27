@@ -173,7 +173,7 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
           };
 
           socket.onclose = () => {
-            console.log("Socket closed");
+            // console.log("Socket closed");
           };
         });
       }

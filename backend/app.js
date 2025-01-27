@@ -38,30 +38,6 @@ require("./App/Cron/cron");
 require("./App/Routes")(app);
 require("./Utils/request")(app);
 
-// const io = socketIo(server, {
-//   cors: {
-//     origin: "*",
-//     credentials: true,
-//   },
-// });
-
-// io.on("connection", (socket) => {
-//   socket.on("help_from_client", (data) => {
-//     socket.broadcast.emit("test_msg_Response", data);
-//   });
-
-//   socket.on("logout_user_from_other_device_req", (data111) => {
-//     socket.broadcast.emit("logout_user_from_other_device_res", data111);
-//   });
-// });
-
-// setIO(io)
-//   .then(() => {
-//     getIO()
-//       .then((ioObject) => {})
-//       .catch((error) => {});
-//   })
-//   .catch((error) => {});
 
 app.get("/pp", (req, res) => {
   io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: "okkkk" });
@@ -75,14 +51,10 @@ const { Alice_Socket } = require("./App/Helper/Alice_Socket");
 app.get('/UpdateChannel/:c/:e', async (req, res) => {
   const {  TruncateTableTokenChainAdd_fiveMinute } = require('./App/Cron/cron_ss')
   const { c ,e} = req.params;
-
   
   TruncateTableTokenChainAdd_fiveMinute()
   return res.send({ status: true, msg: 'Channel Update' });
 
-  // const { updateChannelAndSend } = require('./App/Helper/Alice_Socket')
-  
-   //updateChannelAndSend(c)
 });
 
 
