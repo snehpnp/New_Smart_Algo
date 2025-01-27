@@ -77,6 +77,7 @@ const isTimeInRange = (startHour, startMinute, endHour, endMinute) => {
 // WebSocket Initialization
 const Alice_Socket = async () => {
   try {
+    console.log("Initializing WebSocket...");
     const now = new Date();
     const curtime = parseInt(`${now.getHours()}${now.getMinutes()}`);
     if (curtime > 1531) return;

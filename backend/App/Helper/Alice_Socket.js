@@ -11,6 +11,7 @@ let socketObject = null;
 let reconnectAttempt = 0;
 
 const Alice_Socket = async () => {
+  console.log("Alice Socket Called", new Date()); 
   const now1 = new Date();
   const curtime1 = `${now1.getHours().toString().padStart(2, "0")}${now1
     .getMinutes()

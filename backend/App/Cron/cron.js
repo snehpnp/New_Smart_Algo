@@ -80,25 +80,7 @@ cron.schedule("5 1 * * *", () => {
   UpdateCurrentTime();
 });
 
-cron.schedule("*/10 9-15 * * *", () => {
-  // UpdatePrice();
-});
 
-let UpdatePrice = async () => {
-  let UrlFind = await company_information.find({}).select("domain_url");
-  let UrlCreate = `https://${UrlFind[0].domain_url}/backend/restart/socket`;
-
-  if (UrlCreate) {
-    axios
-      .get(UrlCreate)
-      .then((response) => {
- 
-      })
-      .catch((error) => {
-   
-      });
-  }
-};
 
 const UpdateCurrentTime = async () => {
   try {
