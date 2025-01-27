@@ -1,5 +1,6 @@
 "use strict";
 require("dotenv").config();
+const MongoClient = require('mongodb').MongoClient;
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -20,6 +21,10 @@ app.use(cors({ origin: "*", methods: ["GET", "POST"] }));
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+
+const client = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+const db_GET_VIEW = client.db("test");
+const stock_live_price = db_GET_VIEW.collection('stock_live_price');
 
 // MongoDB Connection
 const connectToMongoDB = async () => {
@@ -49,12 +54,12 @@ const connectToMongoDB = async () => {
 };
 
 // Mongoose Models
-const token_chain = mongoose.model("token_chain", new mongoose.Schema({}));
-const stock_live_price = mongoose.model(
-  "stock_live_price",
+const token_chain = mongoose.model(
+  "token_chain",
   new mongoose.Schema({}),
-  "stock_live_price"
+  "token_chain"
 );
+
 const live_price = mongoose.model("live_price", new mongoose.Schema({}));
 
 // Utility Functions
@@ -84,12 +89,14 @@ const Alice_Socket = async () => {
     if (!brokerInfo) return;
 
     const tokens = await token_chain.find().lean();
+
     const channelList = tokens
       .filter((t) => t.exch && t._id)
       .map((t) => `${t.exch}|${t._id}`)
       .join("#");
 
-    const aliceBaseUrl = process.env.ALICE_API_BASE_URL;
+    const aliceBaseUrl =
+      "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/";
     const { user_id: userId, access_token: userSession } = brokerInfo;
 
     const loginPayload = { loginType: "API" };
@@ -130,7 +137,7 @@ const Alice_Socket = async () => {
         if (curTime < 1530) {
           await stock_live_price.updateOne(
             { _id: data.tk },
-            { $set: { lp: data.lp, exc: data.e, curTime, ft: data.ft } },
+            { $set: { _id: data.tk, lp: data.lp, exc: data.e, curTime, ft: data.ft } },
             { upsert: true }
           );
         }
