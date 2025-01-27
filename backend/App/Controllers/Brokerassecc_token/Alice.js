@@ -10,12 +10,12 @@ const user_logs = db.user_logs;
 const BrokerResponse = db.BrokerResponse;
 const Broker_information = db.Broker_information;
 const live_price = db.live_price;
+const company_information = db.company_information;
 
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
 const { getIPAddress } = require("../../Helper/logger.helper");
-const { Alice_Socket } = require("../../Helper/Alice_Socket");
 
 class AliceBlue {
   // Get GetAccessToken ALICE BLUE
@@ -122,7 +122,6 @@ class AliceBlue {
       }
     } catch (error) {
       console.log("Error Alice Login error-", error);
-      
     }
   }
 
@@ -384,7 +383,6 @@ class AliceBlue {
   }
 
   async backendRunSocket(req, res) {
-    // Alice_Socket();
     return res.send({ status: true, msg: "backend run socket" });
   }
 
@@ -544,11 +542,7 @@ const UpdateProfile = async (userId, token) => {
     // Make the API request
     const response = await axios(config);
 
-
-
     if (response.data && response.data.length > 0) {
-    
-
       try {
         let data1 = await User.findOne({ demat_userid: userId });
 
@@ -558,16 +552,26 @@ const UpdateProfile = async (userId, token) => {
             { Profile_fund: response.data[0].net },
             { new: true }
           );
-
-        } 
-      } catch (dbError) {
-       
-      }
+        }
+      } catch (dbError) {}
     } else {
-
     }
   } catch (apiError) {
     console.log("Error making API request:", apiError.message);
+  }
+};
+
+let Alice_Socket = async () => {
+  let UrlFind = await company_information.find({}).select("domain_url");
+  let UrlCreate = `https://${UrlFind[0].domain_url}/socket/restart/socket`;
+
+  if (UrlCreate) {
+    axios
+      .get(UrlCreate)
+      .then((response) => {})
+      .catch((error) => {
+        console.log("Error in update price", error);
+      });
   }
 };
 

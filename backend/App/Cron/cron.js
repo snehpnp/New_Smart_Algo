@@ -81,7 +81,7 @@ cron.schedule("5 1 * * *", () => {
 });
 
 cron.schedule("*/10 9-15 * * *", () => {
-  UpdatePrice();
+  // UpdatePrice();
 });
 
 let UpdatePrice = async () => {

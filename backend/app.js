@@ -92,10 +92,10 @@ async function checkAndDrop() {
 }
 
 
-app.get("/restart/socket", (req, res) => {
-  Alice_Socket();
-  res.send("DONE");
-});
+// app.get("/restart/socket", (req, res) => {
+//   Alice_Socket();
+//   res.send("DONE");
+// });
 
 
 app.get("/all/socket/restart", (req, res) => {
@@ -122,5 +122,5 @@ app.get("/all/socket/restart", (req, res) => {
 server.listen(process.env.PORT, () => {
   console.log(`Server is running on  http://0.0.0.0:${process.env.PORT}`);
   connectToMongoDB();
-  Alice_Socket();
+  // Alice_Socket();
 });
