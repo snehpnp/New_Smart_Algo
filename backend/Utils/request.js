@@ -3357,6 +3357,7 @@ module.exports = function (app) {
 
   // API Endpoint to trigger updates
   app.get("/UpdateServicesLotSize5", async (req, res) => {
+    
     try {
       await updateLotSizeInDatabases(databaseURIss);
       return res.send({
@@ -3370,5 +3371,5 @@ module.exports = function (app) {
         .send({ status: false, message: "Failed to update lot size" });
     }
   });
-  
+
 };
