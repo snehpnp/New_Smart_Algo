@@ -6,9 +6,9 @@ import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import Loader from "../../../../Utils/Loader";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Expired_Soon_User } from "../../../../ReduxStore/Slice/Admin/LicenceSlice";
-import { fDate, fDateTimeSuffix } from "../../../../Utils/Date_formet";
+import { fDateTimeSuffix } from "../../../../Utils/Date_formet";
 
 const ExpiredLicence = () => {
   const dispatch = useDispatch();
@@ -17,7 +17,6 @@ const ExpiredLicence = () => {
 
   const [originalData, setOriginalData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-
 
   const [getAllClients, setAllClients] = useState({
     loading: true,
@@ -82,10 +81,7 @@ const ExpiredLicence = () => {
     },
   ];
 
-
-
-
-//  MANAGE MULTIFILTER
+  //  MANAGE MULTIFILTER
   useEffect(() => {
     const filteredData = originalData.filter((item) => {
       return (
@@ -104,36 +100,33 @@ const ExpiredLicence = () => {
 
   return (
     <>
-      {getAllClients.loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Content Page_title="Expired Soon Licence" button_status={false}>
-            <div className="row">
-              <div className="col-lg-4">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Search Something Here
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                  />
-                </div>
-              </div>
+      <Content Page_title="Expired Soon Licence" button_status={false}>
+        <div className="row">
+          <div className="col-lg-4">
+            <div className="mb-3">
+              <label htmlFor="exampleFormControlInput1" className="form-label">
+                Search Something Here
+              </label>
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="form-control"
+                id="exampleFormControlInput1"
+              />
             </div>
-
-            <FullDataTable
-              TableColumns={columns}
-              tableData={getAllClients.data}
-            />
-          </Content>
-        </>
-      )}
+          </div>
+        </div>
+        {getAllClients?.loading ? (
+          <Loader />
+        ) : (
+          <FullDataTable
+            TableColumns={columns}
+            tableData={getAllClients.data}
+          />
+        )}
+      </Content>
     </>
   );
 };

@@ -5,7 +5,7 @@ const express = require("express");
 const app = express();
 
 const axios = require("axios");
-// HELLO SNEH JAISWAL
+
 const http = require("http");
 const https = require("https");
 const socketIo = require("socket.io");
@@ -38,123 +38,10 @@ require("./App/Cron/cron");
 require("./App/Routes")(app);
 require("./Utils/request")(app);
 
-// const io = socketIo(server, {
-//   cors: {
-//     origin: "*",
-//     credentials: true,
-//   },
-// });
-
-// io.on("connection", (socket) => {
-//   socket.on("help_from_client", (data) => {
-//     socket.broadcast.emit("test_msg_Response", data);
-//   });
-
-//   socket.on("logout_user_from_other_device_req", (data111) => {
-//     socket.broadcast.emit("logout_user_from_other_device_res", data111);
-//   });
-// });
-
-// setIO(io)
-//   .then(() => {
-//     getIO()
-//       .then((ioObject) => {})
-//       .catch((error) => {});
-//   })
-//   .catch((error) => {});
-
-app.get("/pp", (req, res) => {
-  io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: "okkkk" });
-  res.send("DONE");
-});
-
-const { Alice_Socket } = require("./App/Helper/Alice_Socket");
-
-
-
-app.get('/UpdateChannel/:c/:e', async (req, res) => {
-  const {  TruncateTableTokenChainAdd_fiveMinute } = require('./App/Cron/cron_ss')
-  const { c ,e} = req.params;
-
-  
-  TruncateTableTokenChainAdd_fiveMinute()
-  return res.send({ status: true, msg: 'Channel Update' });
-
-  // const { updateChannelAndSend } = require('./App/Helper/Alice_Socket')
-  
-   //updateChannelAndSend(c)
-});
-
-
-
-
-app.get("/deleteTableAndView",async(req,res)=>{
-  await checkAndDrop();
-  return res.send({ status: true, msg: 'Table and View Deleted' });
-})
-
-
-async function checkAndDrop() {
-  const collections = await dbTest.listCollections().toArray();
-  const collectionNames = collections.map(col => col.name);
-  console.log("Existing collections/views:", collectionNames);
-  // let arr =  ['22','3045','2885','6705','10666']
-  let arr =  ['426307','429116','437992','437993']
-  let arr1 =  ['M_','M3_','M5_','M10_','M15_','M30_','M60_','M1DAY_']
-  for (const element of arr) {
-    console.log("Dropping collection:", element);
-    if (collectionNames.includes(element)) {
-      await dbTest.collection(element).drop();
-      for (const element1 of arr1) {
-
-          const collectionName = element1 + element;
-
-          if (collectionNames.includes(collectionName)) {
-               await dbTest.collection(collectionName).drop();
-          } else {
-              console.log("Collection/View not found:", collectionName);
-          }
-      }
-    } else {
-        console.log("Collection/View not found:", element);
-    }
-
-   
-  }
-}
-
-
-app.get("/restart/socket", (req, res) => {
-  Alice_Socket();
-  res.send("DONE");
-});
-
-
-app.get("/all/socket/restart", (req, res) => {
-  let UrlArr = [
-    "https://software.tradeonn.com/backend/restart/socket",
-    "https://software.corebizinfotech.com/backend/restart/socket",
-    "https://newpenal.pandpinfotech.com/backend/restart/socket",
-    "https://software.sumedhainn.com/backend/restart/socket",
-  ];
-
-  UrlArr.forEach((url) => {
-    axios
-      .get(url)
-      .then((response) => {
-        console.log(url, " => ", response.data);
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-      });
-  });
-
-  return res.send("DONE");
-});
 
 // Server start
 server.listen(process.env.PORT, () => {
   console.log(`Server is running on  http://0.0.0.0:${process.env.PORT}`);
   connectToMongoDB();
-  Alice_Socket();
+  
 });

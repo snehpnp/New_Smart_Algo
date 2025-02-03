@@ -233,7 +233,7 @@ class KotakNeo {
 
                 return res.send({ status: false, msg: message });
               } else {
-                const message = JSON.stringify(error.response.data).replace(
+                const message = JSON.stringify(error?.response?.data).replace(
                   /["',]/g,
                   ""
                 );

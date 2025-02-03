@@ -527,6 +527,24 @@ export async function GET_TRADEHISTORY(data, token) {
 
 }
 
+// GET Holdigs
+export async function GETHOLDINGS(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/holdings/admin`, data, {
+            headers: header(token),
+            data: { data },
+        })
+        return await res?.data;
+    }
+    catch (err) {
+
+        return err
+        // custom error
+    }
+
+}
+
+
 export async function GET_TRADEHISTORY_cal(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}get/tradhistory/cal`, data, {

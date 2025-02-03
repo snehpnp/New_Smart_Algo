@@ -76,6 +76,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                         tradingsymbol = parts[8];
 
+                    }  else if (segment && (segment.toLowerCase() === 'bf' || segment.toLowerCase() === 'bo')) {
+
+                        tradingsymbol = parts[2];
+
                     } else {
                         console.log('Invalid segment value');
                         return;

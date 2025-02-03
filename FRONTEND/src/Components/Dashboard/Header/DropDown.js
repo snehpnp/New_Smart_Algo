@@ -6,28 +6,28 @@ import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import { useDispatch } from "react-redux";
 import { check_Device } from "../../../Utils/find_device";
 import toast from "react-hot-toast";
-import { User, LogOut, Settings, Award ,Wrench  } from "lucide-react";
+import { User, LogOut, Settings, Award, Wrench } from "lucide-react";
 import { Get_Pmermission } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 import * as Config from "../../../Utils/Config";
 
 const DropDown = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role;
   const [CheckUser, setCheckUser] = useState(check_Device());
+  const [admin_permission, setAdmin_permission] = useState(0);
+
+  const user_details = JSON.parse(localStorage.getItem("user_details"));
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
+  const user_details1 = JSON.parse(localStorage.getItem("user_details_goTo"));
 
-  const [admin_permission, setAdmin_permission] = useState(0);
-  const token = JSON.parse(localStorage.getItem("user_details")).token;
   useEffect(() => {
     Permmision();
   }, []);
 
   const LogoutUser = async () => {
     const request = {
-      userId: user_id,
+      userId: user_details?.user_id,
       Device: CheckUser,
     };
 
@@ -48,40 +48,23 @@ const DropDown = () => {
       });
   };
 
+  const profile_Routes = {
+    USER: "/client/profile",
+    ADMIN: "/admin/profile",
+    SUBADMIN: "/subadmin/profile",
+    SUPERADMIN: "/super/profile",
+  };
 
   const profile_Route = () => {
-    if (gotodashboard == null) {
-      if (Role === "USER") {
-        return "/client/profile";
-      } else if (Role === "ADMIN") {
-        return "/admin/profile";
-      } else if (Role === "SUBADMIN") {
-        return "/subadmin/profile";
-      } else if (Role === "SUPERADMIN") {
-        return "/super/profile";
-      } else {
-        return "/client/profile";
-      }
-    } else {
-      if (user_role_goTo === "USER") {
-        return "/client/profile";
-      } else if (user_role_goTo === "ADMIN") {
-        return "/admin/profile";
-      } else if (user_role_goTo === "SUBADMIN") {
-        return "/subadmin/profile";
-      } else if (user_role_goTo === "SUPERADMIN") {
-        return "/super/profile";
-      } else {
-        return "/client/profile";
-      }
-    }
+    const roleKey = gotodashboard == null ? user_details?.Role : user_role_goTo;
+    return profile_Routes[roleKey] || "/client/profile";
   };
 
   const Permmision = async () => {
     await dispatch(
       Get_Pmermission({
         domain: Config.react_domain,
-        token: token,
+        token: user_details?.token,
       })
     )
       .unwrap()
@@ -115,21 +98,37 @@ const DropDown = () => {
         />
         <i className="fa fa-angle-down ms-1" />
       </button>
+
       <ul
         className="dropdown-menu dropdown-menu-end"
         style={{ margin: 0, padding: "10px", minWidth: "150px" }}
       >
-        {Role === "ADMIN" && gotodashboard == null ? (
+        <li className="dropdown-header text-center">
+          <span
+            className="text-capitalize"
+            style={{ fontSize: "16px", color: "#000", fontWeight: "bold" }}
+          >
+            <i className="fas fa-user" style={{ marginRight: "8px" }}></i>
+            User:{" "}
+            {gotodashboard
+              ? user_details1?.UserName
+              : user_details?.UserName || "Guest"}
+          </span>
+          <hr />
+        </li>
+
+        {user_details?.Role === "ADMIN" && gotodashboard == null && (
           <li>
             <Link
               to="/admin/system"
               className="dropdown-item d-flex align-items-center"
             >
-              <Wrench  className="me-2" size={16} />
+              <Wrench className="me-2" size={16} />
               System
             </Link>
           </li>
-        ) : null}
+        )}
+
         <li>
           <Link
             to={profile_Route()}
@@ -140,12 +139,12 @@ const DropDown = () => {
           </Link>
         </li>
 
-        {admin_permission && admin_permission == 1 ? (
-          Role === "USER" || Role === "ADMIN" ? (
+        {(admin_permission === "1" || admin_permission === 1) &&
+          (user_details?.Role === "USER" || user_details?.Role === "ADMIN") && (
             <li>
               <Link
                 to={
-                  Role === "USER" ? "/client/refer-earn" : "/admin/refer-earn"
+                  user_details?.Role === "USER" ? "/client/refer-earn" : "/admin/refer-earn"
                 }
                 className="dropdown-item d-flex align-items-center my-2"
               >
@@ -153,12 +152,9 @@ const DropDown = () => {
                 Refer And Earn
               </Link>
             </li>
-          ) : null
-        ) : (
-          ""
-        )}
+          )}
 
-{Role === "ADMIN" && gotodashboard == null && (
+        {user_details?.Role === "ADMIN" && gotodashboard == null && (
           <li>
             <Link
               to="/admin/settings"
@@ -168,8 +164,7 @@ const DropDown = () => {
               Settings
             </Link>
           </li>
-        ) }
-
+        )}
 
         {gotodashboard == null && (
           <li>

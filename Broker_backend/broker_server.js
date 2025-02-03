@@ -23,7 +23,7 @@ const logger = winston.createLogger({
   transports: [new winston.transports.File({ filename: "app.log" })],
 });
 
-// HELLO SNEH
+
 const http = require("http");
 const https = require("https");
 const socketIo = require("socket.io");
@@ -81,77 +81,67 @@ require("./Helper/cron")(app);
 const server = http.createServer(app);
 const io = socketIo(server);
 
-let socketObject = null;
-let response111 = null;
-
 const ConnectSocket = async (EXCHANGE, instrument_token) => {
-  console.log("Hit Boker Server socket");
+  const channel_List = `${EXCHANGE}|${instrument_token}`;
 
-  var channel_List = `${EXCHANGE}|${instrument_token}`;
-
-  var broker_infor = await live_price.findOne({
+  const broker_infor = await live_price.findOne({
     broker_name: "ALICE_BLUE",
     trading_status: "on",
   });
 
   if (broker_infor) {
-    var aliceBaseUrl =
+    const aliceBaseUrl =
       "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/";
-    var userid = broker_infor.user_id;
-    var userSession1 = broker_infor.access_token;
-    var type = { loginType: "API" };
+    const userid = broker_infor.user_id;
+    const userSession1 = broker_infor.access_token;
+    const type = { loginType: "API" };
     const url = "wss://ws1.aliceblueonline.com/NorenWS/";
-    var socket = null;
-    var channelList = "";
 
-    if (channel_List) {
-      channelList = channel_List;
-    }
-
-    const token_chain_list = db1.collection("token_chain");
-    const updateToken = await token_chain_list.updateOne(
-      { _id: instrument_token },
-      {
-        $set: {
-          _id: instrument_token,
-          exch: EXCHANGE,
+    try {
+      const token_chain_list = db1.collection("token_chain");
+      await token_chain_list.updateOne(
+        { _id: instrument_token },
+        {
+          $set: {
+            _id: instrument_token,
+            exch: EXCHANGE,
+          },
         },
-      },
-      { upsert: true }
-    );
+        { upsert: true }
+      );
 
-    await axios
-      .post(`${aliceBaseUrl}ws/createSocketSess`, type, {
+      const res = await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
         headers: {
           Authorization: `Bearer ${userid} ${userSession1}`,
           "Content-Type": "application/json",
         },
-      })
-      .then((res) => {
-        if (res.data.stat == "Ok") {
-          try {
-            socket = new WebSocket(url);
+      });
 
-            socket.onopen = function () {
-              var encrcptToken = CryptoJS.SHA256(
-                CryptoJS.SHA256(userSession1).toString()
-              ).toString();
-              var initCon = {
-                susertoken: encrcptToken,
-                t: "c",
-                actid: userid + "_" + "API",
-                uid: userid + "_" + "API",
-                source: "API",
-              };
-              socket.send(JSON.stringify(initCon));
+      if (res.data.stat === "Ok") {
+        return new Promise((resolve, reject) => {
+          const socket = new WebSocket(url);
+
+          socket.onopen = function () {
+            const encrcptToken = CryptoJS.SHA256(
+              CryptoJS.SHA256(userSession1).toString()
+            ).toString();
+
+            const initCon = {
+              susertoken: encrcptToken,
+              t: "c",
+              actid: userid + "_" + "API",
+              uid: userid + "_" + "API",
+              source: "API",
             };
 
-            socket.onmessage = async function (msg) {
-              var response = JSON.parse(msg.data);
+            socket.send(JSON.stringify(initCon));
+          };
+
+          socket.onmessage = async function (msg) {
+            try {
+              const response = JSON.parse(msg.data);
 
               if (response.tk) {
-                // token_chain
-
                 const currentDate = new Date();
                 const hours = currentDate
                   .getHours()
@@ -163,19 +153,11 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
                   .padStart(2, "0");
 
                 const stock_live_price = db1.collection("stock_live_price");
+                const filter = { _id: response.tk };
 
-                const filter = { _id: response.tk }; // Define the filter based on the token
-                if (response.lp != undefined) {
-                  let bp1 = response.lp;
-                  let sp1 = response.lp;
-
-                  if (response.bp1 != undefined) {
-                    bp1 = response.bp1;
-                  }
-
-                  if (response.sp1 != undefined) {
-                    sp1 = response.sp1;
-                  }
+                if (response.lp !== undefined) {
+                  let bp1 = response.bp1 || response.lp;
+                  let sp1 = response.sp1 || response.lp;
 
                   const update = {
                     $set: {
@@ -186,36 +168,59 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
                       curtime: `${hours}${minutes}`,
                     },
                   };
-                  const result = await stock_live_price.updateOne(
-                    filter,
-                    update,
-                    { upsert: true }
-                  );
+
+                  await stock_live_price.updateOne(filter, update, {
+                    upsert: true,
+                  });
                 }
-              } else {
+
+                socket.close();
+                resolve(response); // Send the price data back to the function caller
               }
 
               if (response.s === "OK") {
-                let json = {
-                  k: channelList,
+                const json = {
+                  k: channel_List,
                   t: "t",
                 };
-                await socket.send(JSON.stringify(json));
-
-                socketObject = socket;
+                socket.send(JSON.stringify(json));
               }
-            };
-          } catch (error) {}
-        }
-      })
-      .catch((error) => {
-        return error.response.data;
-      });
+            } catch (error) {
+              console.error("Error in onmessage:", error);
+              reject(error);
+            }
+          };
+
+          socket.onerror = (error) => {
+            console.error("WebSocket Error:", error);
+            reject(error);
+          };
+
+          socket.onclose = () => {
+            // console.log("Socket closed");
+          };
+        });
+      }
+    } catch (error) {
+      console.error("Error in Socket Session:", error);
+      throw error;
+    }
   } else {
-    console.log("Admin Trading off ");
+    throw new Error("Trading is turned off by admin.");
   }
 };
 
+// API Route Example
+app.get("/connect-socket", async (req, res) => {
+  try {
+    const CurrentPrice = await ConnectSocket("NFO", 133887);
+
+    res.json({ success: true, data: CurrentPrice });
+  } catch (error) {
+    console.error("Failed to fetch price:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 // ==================================================================================================
 // MT_4 , OPTION_CHAIN , MAKE_STG, SQUARE_OFF
@@ -236,7 +241,7 @@ const iiflView = require("./Broker/Iifl");
 const Motilaloswal = require("./Broker/Motilaloswal");
 const Zebull = require("./Broker/Zebull");
 const icicidirect = require("./Broker/icicidirect");
-
+const choiceBroker = require("./Broker/choice");
 const shoonya = require("./Broker/shoonya");
 
 // BROKER SIGNAL
@@ -316,7 +321,7 @@ app.post("/broker-signals", async (req, res) => {
       var segment = signals.Segment?.toUpperCase();
       var segment1 = signals.Segment?.toUpperCase();
       var strike = signals.Strike;
-      var option_type = signals.OType;
+      var option_type = signals.OType?.toUpperCase();
       var expiry = signals.Expiry;
       var strategy = signals.Strategy;
       var qty_percent = 100;
@@ -331,7 +336,9 @@ app.post("/broker-signals", async (req, res) => {
       let ExitStatus = "-";
       let ft_time = "";
 
-      if (signals.ExitStatus != undefined) {
+      if (signals.TradeType == "Tradingview") {
+        ExitStatus = "Tradingview";
+      } else if (signals.ExitStatus != undefined) {
         ExitStatus = signals.ExitStatus;
       }
 
@@ -352,7 +359,7 @@ app.post("/broker-signals", async (req, res) => {
 
       var ExitTime = 0;
       if (signals.ExitTime != undefined) {
-        ExitTime = signals.ExitTime.replace(/-/g, ":");
+        ExitTime = signals.ExitTime?.replace(/-/g, ":");
       }
 
       var MakeStartegyName = "";
@@ -363,10 +370,10 @@ app.post("/broker-signals", async (req, res) => {
       var demo = signals.Demo;
 
       if (client_key != undefined) {
-        const FIRST3_KEY = client_key.substring(0, 3);
+        const FIRST3_KEY = client_key?.substring(0, 3);
 
         if (FIRST3_KEY == process.env.PANEL_FIRST_THREE) {
-          var signal_req = Buffer.from(JSON.stringify(req.rawBody)).toString(
+          var signal_req = Buffer.from(JSON.stringify(req.rawBody))?.toString(
             "base64"
           );
 
@@ -381,7 +388,7 @@ app.post("/broker-signals", async (req, res) => {
             Trade_Option_Type = "PE";
           }
 
-          const day_expiry = expiry.substr(0, 2);
+          const day_expiry = expiry?.substr(0, 2);
           var dateHash = {
             Jan: "01",
             Feb: "02",
@@ -396,7 +403,7 @@ app.post("/broker-signals", async (req, res) => {
             Nov: "11",
             Dec: "12",
           }; // 2009-11-10
-          const month_expiry = expiry.substr(2, 2);
+          const month_expiry = expiry?.substr(2, 2);
 
           function getKeyByValue(object, value) {
             return Object.keys(object).find((key) => object[key] == value);
@@ -404,8 +411,8 @@ app.post("/broker-signals", async (req, res) => {
           const ex_day_expiry = getKeyByValue(
             dateHash,
             month_expiry
-          ).toUpperCase();
-          const ex_year_expiry = expiry.substr(-2);
+          )?.toUpperCase();
+          const ex_year_expiry = expiry?.substr(-2);
 
           var token = "";
           var instrument_query = { name: input_symbol };
@@ -672,17 +679,6 @@ app.post("/broker-signals", async (req, res) => {
             find_lot_size = token[0].lotsize;
           }
 
-          var tradesymbol1;
-          if (token.length == 0) {
-            tradesymbol1 = "";
-          } else {
-            if (segment == "C" || segment == "c") {
-              tradesymbol1 = token[0].zebu_token;
-            } else {
-              tradesymbol1 = token[0].tradesymbol;
-            }
-          }
-
           fs.appendFile(
             filePath,
             "TIME " +
@@ -710,7 +706,10 @@ app.post("/broker-signals", async (req, res) => {
               .toArray();
 
             try {
-              if (signals.TradeType === "MT_4") {
+              if (
+                signals.TradeType === "MT_4" ||
+                signals.TradeType === "Tradingview"
+              ) {
                 if (LivePricePermission.price_permission == 0) {
                   if (signals.Price === 0) {
                     if (price_live_second.length > 0) {
@@ -723,15 +722,24 @@ app.post("/broker-signals", async (req, res) => {
                         PriceType = "Live";
                       } else {
                         price = signals.Price;
-                        PriceType = "Mt4";
+                        PriceType =
+                          signals.TradeType === "Tradingview"
+                            ? "Tradingview"
+                            : "Mt4";
                       }
                     } else {
                       price = signals.Price;
-                      PriceType = "Mt4";
+                      PriceType =
+                        signals.TradeType === "Tradingview"
+                          ? "Tradingview"
+                          : "Mt4";
                     }
                   } else {
                     price = signals.Price;
-                    PriceType = "Mt4";
+                    PriceType =
+                      signals.TradeType === "Tradingview"
+                        ? "Tradingview"
+                        : "Mt4";
                   }
                 } else {
                   if (price_live_second.length > 0) {
@@ -744,11 +752,17 @@ app.post("/broker-signals", async (req, res) => {
                       PriceType = "Live";
                     } else {
                       price = signals.Price;
-                      PriceType = "Mt4";
+                      PriceType =
+                        signals.TradeType === "Tradingview"
+                          ? "Tradingview"
+                          : "Mt4";
                     }
                   } else {
                     price = signals.Price;
-                    PriceType = "Mt4";
+                    PriceType =
+                      signals.TradeType === "Tradingview"
+                        ? "Tradingview"
+                        : "Mt4";
                   }
                 }
               } else {
@@ -756,7 +770,6 @@ app.post("/broker-signals", async (req, res) => {
                 if (price_live_second.length > 0) {
                   ft_time = price_live_second[0].ft;
                   PriceType = "Live";
-
                 }
               }
             } catch (error) {
@@ -765,7 +778,26 @@ app.post("/broker-signals", async (req, res) => {
 
             if (price == null) {
               price = signals.Price;
-              PriceType = "Mt4";
+              PriceType =
+                signals.TradeType === "Tradingview" ? "Tradingview" : "Mt4";
+            }
+          }
+
+          if (
+            signals.TradeType === "MT_4" ||
+            signals.TradeType === "Tradingview"
+          ) {
+            if (segment === "O" || segment === "o" || segment === "c" || segment === "C") {
+              try {
+                const CurrentPrice = await ConnectSocket(
+                  segment == "C" ? "NSE" : "NFO",
+                  instrument_token
+                );
+                if (CurrentPrice?.lp) {
+                  price = CurrentPrice.lp;
+                } else {
+                }
+              } catch (error) {}
             }
           }
 
@@ -779,6 +811,7 @@ app.post("/broker-signals", async (req, res) => {
           }
 
           if (process.env.PANEL_KEY == client_key) {
+            // Process Alice Blue admin client
             try {
               const AliceBlueCollection = db1.collection("aliceblueView");
               const AliceBluedocuments = await AliceBlueCollection.find({
@@ -833,7 +866,7 @@ app.post("/broker-signals", async (req, res) => {
                 filePath,
                 "TIME " +
                   new Date() +
-                  " ALICE BLUE ALL CLIENT LENGTH " +
+                  " Angel ALL CLIENT LENGTH " +
                   angelBluedocuments.length +
                   "\n",
                 function (err) {
@@ -874,7 +907,7 @@ app.post("/broker-signals", async (req, res) => {
                 filePath,
                 "TIME " +
                   new Date() +
-                  " ALICE BLUE ALL CLIENT LENGTH " +
+                  " fivepaisa ALL CLIENT LENGTH " +
                   fivepaisaBluedocuments.length +
                   "\n",
                 function (err) {
@@ -914,7 +947,7 @@ app.post("/broker-signals", async (req, res) => {
                 filePath,
                 "TIME " +
                   new Date() +
-                  " ALICE BLUE ALL CLIENT LENGTH " +
+                  "Zerodha ALL CLIENT LENGTH " +
                   zerodhaBluedocuments.length +
                   "\n",
                 function (err) {
@@ -1392,7 +1425,7 @@ app.post("/broker-signals", async (req, res) => {
                 filePath,
                 "TIME " +
                   new Date() +
-                  " ICICI DIRECT View ALL CLIENT LENGTH " +
+                  "shoonya View ALL CLIENT LENGTH " +
                   shoonyaViewdocuments.length +
                   "\n",
                 function (err) {
@@ -1415,6 +1448,46 @@ app.post("/broker-signals", async (req, res) => {
               console.log("Error Get shoonya Client In view", error);
             }
             //End Process shoonya admin client
+
+            //Process Choice admin client
+            try {
+              const choiceViewCollection = db1.collection("choiceView");
+              const choiceViewdocuments = await choiceViewCollection
+                .find({
+                  "strategys.strategy_name": strategy,
+                  "service.name": input_symbol,
+                  "category.segment": segment,
+                  web_url: "1",
+                })
+                .toArray();
+
+              fs.appendFile(
+                filePath,
+                "TIME " +
+                  new Date() +
+                  "Choice View ALL CLIENT LENGTH " +
+                  choiceViewdocuments.length +
+                  "\n",
+                function (err) {
+                  if (err) {
+                    return console.log(err);
+                  }
+                }
+              );
+
+              if (choiceViewdocuments.length > 0) {
+                choiceBroker.place_order(
+                  choiceViewdocuments,
+                  signals,
+                  token,
+                  filePath,
+                  signal_req
+                );
+              }
+            } catch (error) {
+              console.log("Error Get choice Client In view", error);
+            }
+            //End Process Choice admin client
           } else {
             //Process Tading View Client Alice Blue
             try {
@@ -2065,12 +2138,7 @@ app.post("/broker-signals", async (req, res) => {
             //End Process Tading View Client Shoonya
           }
 
-          option_type = option_type.toUpperCase();
-
-          var is_CE_val_option = "PE";
-          if (option_type == "CALL") {
-            is_CE_val_option = "CE";
-          }
+          option_type = option_type?.toUpperCase();
 
           // IF SQ_PRICE
           var sq_value;
@@ -2127,7 +2195,6 @@ app.post("/broker-signals", async (req, res) => {
           ];
 
           const Filter_users = await Filter_user.aggregate(pipeline).toArray();
-
 
           const uniqueUserIds = Filter_users.map((user) => user._id);
 
@@ -2217,8 +2284,6 @@ app.post("/broker-signals", async (req, res) => {
             };
             const Entry_MainSignals = new MainSignals(Entry_MainSignals_req);
             await Entry_MainSignals.save();
-
-       
           } else if (
             type == "LX" ||
             type == "lx" ||
@@ -2227,7 +2292,7 @@ app.post("/broker-signals", async (req, res) => {
           ) {
             const updatedFindSignal = {
               ...findSignal,
-              exit_qty_percent: "", 
+              exit_qty_percent: "",
             };
 
             var ExitMainSignals = await MainSignals.find(updatedFindSignal);
@@ -2342,11 +2407,10 @@ app.post("/broker-signals", async (req, res) => {
         return res.send({ status: false, msg: "No Signal Key Recevie" });
       }
     } else {
-      // console.log('receive signals -', req.body);
       return res.send({ status: false, msg: "req is not correct" });
     }
   } catch (error) {
-    console.log("error", error);
+    console.log("Broker Error", error);
   }
 });
 

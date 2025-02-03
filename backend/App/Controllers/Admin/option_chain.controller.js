@@ -19,7 +19,7 @@ class OptionChain {
     async Get_Option_Symbol(req, res) {
         try {
 
-            const validSymbols = ["NIFTY_50","NIFTY_BANK","NIFTY_FIN_SERVICE","SENSEX","FINNIFTY","BANKNIFTY","NIFTY",
+            const validSymbols = ["NIFTY_50","NIFTY_BANK","NIFTY_FIN_SERVICE","SENSEX","FINNIFTY","BANKNIFTY","NIFTY", "GOLD",
                 "INFY", "LT", "PEL", "CIPLA", "LUPIN", "LALPATHLAB", "IEX", "HINDALCO", 
                 "INDIACEM", "INDIAMART", "TATASTEEL", "BALRAMCHIN", "MARUTI", "UPL", 
                 "ZYDUSLIFE", "ULTRACEMCO", "ASTRAL", "SBICARD", "HEROMOTOCO", "TCS", 
@@ -105,6 +105,9 @@ class OptionChain {
             if(symbol == "SENSEX"){
                 match = { symbol: symbol, segment: "BO"} 
             }
+            if(symbol == "GOLD"){
+                match = { symbol: symbol, segment: "MO"} 
+            }
 
 
             const pipeline = [
@@ -168,8 +171,8 @@ class OptionChain {
             return res.json({ status: true, msg: 'Data found', data: expiryDatesArray });
 
         } catch (error) {
-            console.log("Error:", error);
-            return res.status(500).json({ status: false, msg: 'Server error', data: [] });
+       
+            return res.json({ status: false, msg: 'Server error', data: [] });
         }
 
     }
@@ -212,8 +215,7 @@ class OptionChain {
             }
 
         } catch (error) {
-            console.log("Error:", error);
-            return res.status(500).json({ status: false, msg: 'Server error', data: [] });
+            return res.json({ status: false, msg: 'Server error', data: [] });
         }
 
     }
@@ -230,22 +232,25 @@ class OptionChain {
             let price = 19000
 
             const get_symbol_price = await Get_Option_Chain_modal.findOne({ symbol: symbol })
-
+ 
 
             if (get_symbol_price != undefined) {
                 price = parseInt(get_symbol_price.price);
             }
 
 
+
             const pipeline2 = [
                 {
                     $match: {
                         symbol: symbol,
-                        // segment: 'O',
                         expiry: expiry,
                         $or: [
                             { segment: 'O' },
-                            { segment: 'BO' }
+                            { segment: 'BO' },
+                            { segment: 'MO' }
+
+
                         ]
                     }
                 }
@@ -259,7 +264,8 @@ class OptionChain {
                         expiry: expiry,
                         $or: [
                             { segment: 'O' },
-                            { segment: 'BO' }
+                            { segment: 'BO' },
+                            { segment: 'MO' }
                         ]
                     }
                 },
@@ -343,7 +349,6 @@ class OptionChain {
             }
 
         } catch (error) {
-            console.log("Error Get_Option_All_Round_Token", error);
             return res.send({ status: false, data: [], channellist: "" , message: "An error occurred while processing data.", error: error.message })
         }
     }

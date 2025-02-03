@@ -8,7 +8,7 @@ import {
   DeleteSignal,
 } from "../../../ReduxStore/Slice/Superadmin/SuperAdminSlice";
 import { useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
@@ -17,9 +17,8 @@ import { fDateTime } from "../../../Utils/Date_formet";
 const AdminHelps = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  let location = useLocation();
   const UserName = JSON.parse(localStorage.getItem("user_details")).UserName;
-  const token = JSON.parse(localStorage.getItem("user_details")).token;
+
   const backend_rul = localStorage.getItem("backend_rul");
   const panel_name = localStorage.getItem("panel_name");
   const [showModal, setShowmodal] = useState(false);
@@ -37,7 +36,7 @@ const AdminHelps = () => {
 
   useEffect(() => {
     data();
-  }, [refresh, inputSearch,toDate,fromDate]);
+  }, [refresh, inputSearch, toDate, fromDate]);
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -65,7 +64,7 @@ const AdminHelps = () => {
         setSignalId("");
       }
     } catch (err) {
-      console.log("Error Update Price",err);
+      return;
     }
   };
 
@@ -95,13 +94,19 @@ const AdminHelps = () => {
   };
 
   const data = async () => {
-    await dispatch(GetAllSignal({ backend_rul: backend_rul,toDate:toDate,fromDate:fromDate }))
+    await dispatch(
+      GetAllSignal({
+        backend_rul: backend_rul,
+        toDate: toDate,
+        fromDate: fromDate,
+      })
+    )
       .unwrap()
       .then((response) => {
         if (response.status) {
           const filterData = response.data.filter((item) => {
             const inputSearchMetch =
-              inputSearch == "" ||
+              inputSearch === "" ||
               item.symbol.toLowerCase().includes(inputSearch.toLowerCase()) ||
               item.entry_type
                 .toLowerCase()
@@ -238,7 +243,6 @@ const AdminHelps = () => {
       }
     } catch (err) {
       toast.error("Error deleting user, please try again.");
-      console.log("Deletion error:", err); // Log error for debugging
     }
   };
 
@@ -254,78 +258,73 @@ const AdminHelps = () => {
             button_title="Back"
             route="/super/permitions"
           >
-       <div className="row d-flex align-items-center justify-content-start">
+            <div className="row d-flex align-items-center justify-content-start">
+              <div className="col-lg-2 px-1">
+                <div className="form-group mb-3">
+                  <label htmlFor="searchInput" className="col-lg-12">
+                    Search
+                  </label>
+                  <input
+                    type="text"
+                    name="searchInput"
+                    id="searchInput"
+                    className="form-control p-2 rounded border"
+                    placeholder="Search here..."
+                    value={inputSearch}
+                    onChange={(e) => setInputSearch(e.target.value)}
+                    aria-label="Search Input"
+                  />
+                </div>
+              </div>
 
-       <div className="col-lg-2 px-1">
-    <div className="form-group mb-3">
-      <label htmlFor="searchInput" className="col-lg-12">
-        Search
-      </label>
-      <input
-        type="text"
-        name="searchInput"
-        id="searchInput"
-        className="form-control p-2 rounded border"
-        placeholder="Search here..."
-        value={inputSearch}
-        onChange={(e) => setInputSearch(e.target.value)}
-        aria-label="Search Input"
-      />
-    </div>
-  </div>
+              <div className="col-lg-2 px-1">
+                <div className="form-group mb-3">
+                  <label htmlFor="fromdate" className="col-lg-12">
+                    From Date
+                  </label>
+                  <input
+                    type="date"
+                    name="fromdate"
+                    className="form-control"
+                    id="fromdate"
+                    value={fromDate}
+                    onChange={handleFromDateChange}
+                    aria-label="Select From Date"
+                  />
+                </div>
+              </div>
 
-  <div className="col-lg-2 px-1">
-    <div className="form-group mb-3">
-      <label htmlFor="fromdate" className="col-lg-12">
-        From Date
-      </label>
-      <input
-        type="date"
-        name="fromdate"
-        className="form-control"
-        id="fromdate"
-        value={fromDate}
-        onChange={handleFromDateChange}
-        aria-label="Select From Date"
-      />
-    </div>
-  </div>
-  
-  <div className="col-lg-2 px-1">
-    <div className="form-group mb-3">
-      <label htmlFor="endDate" className="col-lg-12">
-        To Date
-      </label>
-      <input
-        type="date"
-        name="endDate"
-        className="form-control"
-        id="endDate"
-        value={toDate}
-        onChange={handleToDateChange}
-        min={fromDate}
-        aria-label="Select To Date"
-      />
-    </div>
-  </div>
+              <div className="col-lg-2 px-1">
+                <div className="form-group mb-3">
+                  <label htmlFor="endDate" className="col-lg-12">
+                    To Date
+                  </label>
+                  <input
+                    type="date"
+                    name="endDate"
+                    className="form-control"
+                    id="endDate"
+                    value={toDate}
+                    onChange={handleToDateChange}
+                    min={fromDate}
+                    aria-label="Select To Date"
+                  />
+                </div>
+              </div>
 
-
-
-  <div className="col-lg-2 px-1">
-    <div className="form-group mb-3">
-      <label className="col-lg-12">
-        Backup Signal
-      </label>
-      <button
-        className="btn btn-primary w-100"
-        onClick={handleBackupBtn}
-        aria-label="Backup Signal Button"
-      >
-        Backup Signal
-      </button>
-    </div>
-  </div>
-</div>
+              <div className="col-lg-2 px-1">
+                <div className="form-group mb-3">
+                  <label className="col-lg-12">Backup Signal</label>
+                  <button
+                    className="btn btn-primary w-100"
+                    onClick={handleBackupBtn}
+                    aria-label="Backup Signal Button"
+                  >
+                    Backup Signal
+                  </button>
+                </div>
+              </div>
+            </div>
 
             <FullDataTable
               TableColumns={columns}

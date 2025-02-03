@@ -98,7 +98,7 @@ useEffect(() => {
                                     onChange={(e) => handleRadioChange(e)}
                                     disabled={isgotodashboard}
                                 />
-                                <label className="form-check-label" for="admin">
+                                <label className="form-check-label" htmlFor="admin">
                                     Admin
                                 </label>
                             </div>
@@ -116,55 +116,14 @@ useEffect(() => {
                                     checked={selectedOptions && selectedOptions.web_url === "2"}
                                     onChange={(e) => handleRadioChange(e)}
                                 />
-                                <label className="form-check-label" for="individual">
+                                <label className="form-check-label" htmlFor="individual">
                                     Individual
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
-                {/* <div className="my-2">
-                    <h4>Qty Type</h4>
-                    <div className="d-flex">
-                        <div className="col-6">
-                            <div className="form-check">
-                                <input
-                                    className="form-check-input"
-                                    type="radio"
-                                    name="qty_type"
-                                    id="adminQty"
-                                    value='1'
-                                    checked={selectedOptions && selectedOptions.qty_type === "1"}
-
-                                    onChange={(e) => handleRadioChange(e)}
-
-                                />
-                                <label className="form-check-label" for="adminQty">
-                                    Admin
-                                </label>
-                            </div>
-                        </div>
-                        <div className="col-6">
-                            <div className="form-check">
-                                <input
-                                    className="form-check-input"
-                                    type="radio"
-                                    name="qty_type"
-                                    id="individualQty"
-                                    value='2'
-                                    checked={selectedOptions && selectedOptions.qty_type === "2"}
-
-
-                                    onChange={(e) => handleRadioChange(e)}
-
-                                />
-                                <label className="form-check-label" for="individualQty">
-                                    Individual
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
+               
                 <div className="my-2">
                     <h4>Signals Execution Type</h4>
                     <div className="d-flex mt-2">
@@ -183,7 +142,7 @@ useEffect(() => {
                                     onChange={(e) => handleRadioChange(e)}
 
                                 />
-                                <label className="form-check-label" for="webExecution">
+                                <label className="form-check-label" htmlFor="webExecution">
                                     Web
                                 </label>
                             </div>
@@ -202,7 +161,7 @@ useEffect(() => {
 
                                     onChange={(e) => handleRadioChange(e)}
                                 />
-                                <label className="form-check-label" for="appExecution">
+                                <label className="form-check-label" htmlFor="appExecution">
                                     App
                                 </label>
                             </div>

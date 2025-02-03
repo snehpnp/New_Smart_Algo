@@ -1,15 +1,14 @@
 /* eslint-disable react/jsx-pascal-case */
-import React from 'react'
-import Admin_Profile from '../../../Components/ExtraComponents/profile/Profile'
-import Content from "../../../Components/Dashboard/Content/Content"
+import React from "react";
+import Admin_Profile from "../../../Components/ExtraComponents/profile/Profile";
+
 
 const Profile = () => {
   return (
     <div>
-        <Admin_Profile route=""/>
-        </div>
-  )
-}
+      <Admin_Profile route="" />
+    </div>
+  );
+};
 
-export default Profile
-
+export default Profile;

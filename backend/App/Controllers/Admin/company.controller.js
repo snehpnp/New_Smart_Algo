@@ -67,26 +67,46 @@ class Company {
 
     async GetCompanyInfo(req, res) {
         try {
-
-            var compantInfo = await company_information.find()
-            var Permission_Logs_data = await Permission_Logs.find()
-
-
+            
+            var compantInfo = await company_information.find();
+    
+            const twoDaysAgo = new Date();
+            twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    
+            var Permission_Logs_data = await Permission_Logs.find({
+                createdAt: { $gte: twoDaysAgo },
+            });
+            Permission_Logs_data = Permission_Logs_data.reverse();
+    
+            // Check if company information exists
             if (!compantInfo) {
-                return res.send({ status: false, msg: 'Server issue Not find Company information.', data: [] });
+                return res.send({
+                    status: false,
+                    msg: 'Server issue: Not find Company information.',
+                    data: [],
+                });
             }
-            return res.send({ status: true, msg: 'Done', data: compantInfo,Permission_Logs_data:Permission_Logs_data });
+    
+            // Send the response with filtered data
+            return res.send({
+                status: true,
+                msg: 'Done',
+                data: compantInfo,
+                Permission_Logs_data: Permission_Logs_data,
+            });
         } catch (error) {
-            console.log("Error Company Information Get -", error);
-           
-            return
+            console.error("Error Company Information Get -", error);
+            return res.status(500).send({
+                status: false,
+                msg: "Server Error",
+            });
         }
     }
 
     async GetCompany_logo(req, res) {
         try {
 
-            var compantInfo = await company_information.find().select('logo favicon panel_name loginimage')
+            var compantInfo = await company_information.find().select('logo favicon panel_name loginimage watermark')
             if (!compantInfo) {
                 return res.send({ status: false, msg: 'Server issue Not find Company information.', data: [] });
             }

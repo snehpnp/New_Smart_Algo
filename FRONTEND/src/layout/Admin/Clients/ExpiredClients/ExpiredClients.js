@@ -18,23 +18,17 @@ import {
 } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { useDispatch } from "react-redux";
 import { fa_time } from "../../../../Utils/Date_formet";
-
-
-
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
-
 
 const AllClients = () => {
   const navigate = useNavigate();
   const location = useLocation();
   var dashboard_filter = location.search.split("=")[1];
 
-
   const dispatch = useDispatch();
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role;
-  const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id;
-  const token = JSON.parse(localStorage.getItem("user_details")).token;
+  const Role = JSON.parse(localStorage.getItem("user_details"))?.Role;
+  const user_ID = JSON.parse(localStorage.getItem("user_details"))?.user_id;
 
   // For Filter
 
@@ -42,23 +36,13 @@ const AllClients = () => {
   const [searchInput, setSearchInput] = useState("");
   const [PanelStatus, setPanelStatus] = useState("2");
   const [ClientStatus, setClientStatus] = useState("null");
-  const [SwitchButton, setSwitchButton] = useState(true);
-  const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
-
   const [refresh, setrefresh] = useState(false);
-
   const [getAllClients, setAllClients] = useState({
     loading: true,
     data: [],
   });
 
-  const [ForGetCSV, setForGetCSV] = useState([])
-
-
-  const [getAllStrategyName, setAllStrategyName] = useState({
-    loading: true,
-    data: [],
-  });
+  const [ForGetCSV, setForGetCSV] = useState([]);
 
   // DELETE USET FUNCTION TO DELETE ALL SERVICES
   const Delete_user = async (id) => {
@@ -75,11 +59,10 @@ const AllClients = () => {
             setrefresh(!refresh);
           } else {
             toast.error(response.msg);
-
           }
         });
     } else {
-      return
+      return;
     }
   };
 
@@ -97,11 +80,18 @@ const AllClients = () => {
               response.data &&
               response.data.filter((item) => {
                 if (dashboard_filter === "000") {
-                  return (item.Role === "USER" && item.Is_Active === '1' && new Date(item.EndDate) <= new Date())
+                  return (
+                    item.Role === "USER" &&
+                    item.Is_Active === "1" &&
+                    new Date(item.EndDate) <= new Date()
+                  );
                 }
                 if (dashboard_filter === "111") {
-                  return (item.Role === "USER" && item.Is_Active === '1' && new Date(item.EndDate) >= new Date())
-
+                  return (
+                    item.Role === "USER" &&
+                    item.Is_Active === "1" &&
+                    new Date(item.EndDate) >= new Date()
+                  );
                 }
 
                 if (dashboard_filter === "2" || dashboard_filter === 2) {
@@ -196,7 +186,6 @@ const AllClients = () => {
         Email: email,
       };
 
-
       await dispatch(GO_TO_DASHBOARDS(req))
         .unwrap()
         .then((response) => {
@@ -214,13 +203,13 @@ const AllClients = () => {
           }
         });
     }
-
   };
 
   // ACTIVE USER TO API
   const activeUser = async (e, data) => {
-
-    if (window.confirm("Do you want To Change Status For This User ?") === true) {
+    if (
+      window.confirm("Do you want To Change Status For This User ?") === true
+    ) {
       let req = {
         id: data._id,
         user_active_status: e.target.checked === true ? "1" : "0",
@@ -228,25 +217,21 @@ const AllClients = () => {
       await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
         .unwrap()
         .then((response) => {
-          setrefresh(!refresh)
+          setrefresh(!refresh);
           window.location.reload();
 
           if (response.status) {
-
-            setrefresh(!refresh)
+            setrefresh(!refresh);
             toast.success(response.msg);
 
-            window.location.reload()
-            setTimeout(() => {
-            }, 500);
+            window.location.reload();
+            setTimeout(() => {}, 500);
           } else {
             toast.error(response.msg);
           }
         });
-    }
-    else {
-      return setrefresh(!refresh)
-
+    } else {
+      return setrefresh(!refresh);
     }
 
     // await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
@@ -432,9 +417,8 @@ const AllClients = () => {
                 />
               </span>
             </Link>
-            {/* {
-            row.license_type == "1" ? */}
-              {/* <Link>
+            {row.license_type == "1" ? (
+              <Link>
                 <span data-toggle="tooltip" data-placement="top" title="Delete">
                   <Trash2
                     size={20}
@@ -444,38 +428,15 @@ const AllClients = () => {
                     onClick={(e) => Delete_user(row._id)}
                   />
                 </span>
-              </Link> */}
-              {/* : ""} */}
-
+              </Link>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       ),
     },
   ];
-
-  //  GET ALL SERVICE NAME
-
-  const GetAllStrategyName = async (e) => {
-    await dispatch(
-      Get_All_Service_for_Client({
-        req: {},
-        token: token,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setAllStrategyName({
-            loading: false,
-            data: response.data,
-          });
-        }
-      });
-  };
-
-  useEffect(() => {
-    GetAllStrategyName();
-  }, []);
 
   //  MANAGE MULTIFILTER
   useEffect(() => {
@@ -490,7 +451,6 @@ const AllClients = () => {
           item.PhoneNo.includes(searchInput))
       );
     });
-
 
     setAllClients({
       loading: false,
@@ -513,150 +473,116 @@ const AllClients = () => {
     });
   };
 
-
   //  For CSV
   const forCSVdata = () => {
-    let csvArr = []
+    let csvArr = [];
     if (getAllClients.data.length > 0) {
       getAllClients.data.map((item) => {
         return csvArr.push({
-          "FullName": item.FullName,
-          "UserName": item.UserName,
-          "Email": item.Email,
-          "PhoneNo": item.PhoneNo,
-          "StartDate": fa_time(item.StartDate),
-          "EndDate": fa_time(item.EndDate),
+          FullName: item.FullName,
+          UserName: item.UserName,
+          Email: item.Email,
+          PhoneNo: item.PhoneNo,
+          StartDate: fa_time(item.StartDate),
+          EndDate: fa_time(item.EndDate),
           "license type": showLicenceName(item.licence, item.license_type),
-          "broker": showBrokerName(item.broker, item.license_type),
-          "TradingStatus": item.TradingStatus,
-        })
-      })
+          broker: showBrokerName(item.broker, item.license_type),
+          TradingStatus: item.TradingStatus,
+        });
+      });
 
-      setForGetCSV(csvArr)
+      setForGetCSV(csvArr);
     }
-
-  }
+  };
 
   useEffect(() => {
-    forCSVdata()
-  }, [getAllClients.data])
-
-
-
-
-
-
+    forCSVdata();
+  }, [getAllClients.data]);
 
   return (
     <>
-      {getAllClients.loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Content
-            Page_title="Expired Clients"
-       
-            button_status={false}
-            show_csv_button={true} csv_data={ForGetCSV} csv_title="Expired Client-List"
-          >
-
-            <div className="row">
-              <div className="col-lg-3">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Search Something Here
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                  />
-                </div>
-              </div>
-              <div className="col-lg-2 ">
-                <div className="mb-3">
-                  <label for="select" className="form-label">
-                    Client Type
-                  </label>
-
-                  <select
-                    className="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => setClientStatus(e.target.value)}
-                    value={ClientStatus}
-                  >
-                    <option value="null">All</option>
-                    <option value="2">Live</option>
-                    <option value="1">Paper Trading</option>
-                    <option value="0">Live 2 Days Only</option>
-                  </select>
-                </div>
-              </div>
-              <div className="col-lg-2">
-                <div className="mb-3">
-                  <label for="select" className="form-label">
-                    Trading Type
-                  </label>
-
-                  <select
-                    className="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => setPanelStatus(e.target.value)}
-                    value={PanelStatus}
-                  >
-                    <option value="2">All</option>
-                    <option value="1">On</option>
-                    <option value="0">OFf</option>
-                  </select>
-                </div>
-              </div>
-              {/* <div className="col-lg-2 ">
-                <div className="mb-3">
-                  <label for="select" className="form-label">
-                    Strategy Clients
-                  </label>
-                  <select
-                    className="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => StrategyClientStatus(e.target.value)}
-                    value={ClientStatus}
-                  >
-                    <option value="null">All</option>
-                    {getAllStrategyName.data &&
-                      getAllStrategyName.data.map((item) => {
-                        return (
-                          <option value={item._id}>{item.strategy_name}</option>
-                        );
-                      })}
-                  </select>
-                </div>
-              </div> */}
-
-              <div className="col-lg-2 mt-4">
-                <button
-                  className="btn btn-primary mt-1"
-                  onClick={(e) => ResetDate(e)}
-                >
-                  Reset
-                </button>
-              </div>
+      <Content
+        Page_title="Expired Clients"
+        button_status={false}
+        show_csv_button={true}
+        csv_data={ForGetCSV}
+        csv_title="Expired Client-List"
+      >
+        <div className="row">
+          <div className="col-lg-3">
+            <div className="mb-3">
+              <label htmlFor="exampleFormControlInput1" className="form-label">
+                Search Something Here
+              </label>
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="form-control"
+                id="exampleFormControlInput1"
+              />
             </div>
+          </div>
+          <div className="col-lg-2 ">
+            <div className="mb-3">
+              <label htmlFor="select" className="form-label">
+                Client Type
+              </label>
 
-            <FullDataTable
-              TableColumns={columns}
-              tableData={getAllClients.data}
-            />
-            <ToastButton />
+              <select
+                className="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setClientStatus(e.target.value)}
+                value={ClientStatus}
+              >
+                <option value="null">All</option>
+                <option value="2">Live</option>
+                <option value="1">Paper Trading</option>
+                <option value="0">Live 2 Days Only</option>
+              </select>
+            </div>
+          </div>
+          <div className="col-lg-2">
+            <div className="mb-3">
+              <label htmlFor="select" className="form-label">
+                Trading Type
+              </label>
 
-          </Content>
-        </>
-      )}
+              <select
+                className="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setPanelStatus(e.target.value)}
+                value={PanelStatus}
+              >
+                <option value="2">All</option>
+                <option value="1">On</option>
+                <option value="0">OFf</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="col-lg-2 mt-4">
+            <button
+              className="btn btn-primary mt-1"
+              onClick={(e) => ResetDate(e)}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+        {getAllClients?.loading ? (
+          <Loader />
+        ) : (
+          <FullDataTable
+            TableColumns={columns}
+            tableData={getAllClients.data}
+          />
+        )}
+        <ToastButton />
+      </Content>
     </>
   );
 };

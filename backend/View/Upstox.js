@@ -260,6 +260,15 @@ async function createViewUpstox() {
   } 
 }
 
+async function dropViewUpstox() {
+  try {
+    await dbTest.dropCollection('upstoxView');
+    console.log('upstox View dropped successfully.');
+    return
+  } catch (error) {
+    return;
+  }
+}
 
-module.exports = { createViewUpstox }
+module.exports = { createViewUpstox ,dropViewUpstox}
 

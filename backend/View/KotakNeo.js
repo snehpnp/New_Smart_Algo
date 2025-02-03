@@ -104,217 +104,164 @@ async function createViewKotakNeo() {
         },
         {
           $addFields: {
-            postdata:
-            {
-
-
-
+            postdata: {
               am: "NO",
               dq: "0",
-
+      
               es: {
                 $cond: {
-                  if: { $eq: ['$category.segment', 'C'] }, // Your condition here
-                  then: 'nse_cm',
+                  if: { $eq: ["$category.segment", "C"] },
+                  then: "nse_cm",
                   else: {
                     $cond: {
                       if: {
                         $or: [
-                          { $eq: ['$category.segment', 'F'] },
-                          { $eq: ['$category.segment', 'O'] },
-                          { $eq: ['$category.segment', 'FO'] }
-                        ]
+                          { $eq: ["$category.segment", "F"] },
+                          { $eq: ["$category.segment", "O"] },
+                          { $eq: ["$category.segment", "FO"] },
+                        ],
                       },
-                      then: 'nse_fo',
+                      then: "nse_fo",
                       else: {
-
                         $cond: {
                           if: {
                             $or: [
-                              { $eq: ['$category.segment', 'MF'] },
-                              { $eq: ['$category.segment', 'MO'] }
-                            ]
+                              { $eq: ["$category.segment", "MF"] },
+                              { $eq: ["$category.segment", "MO"] },
+                            ],
                           },
-                          then: 'mcx_fo',
+                          then: "mcx_fo",
                           else: {
-
                             $cond: {
                               if: {
                                 $or: [
-                                  { $eq: ['$category.segment', 'CF'] },
-                                  { $eq: ['$category.segment', 'CO'] }
-                                ]
+                                  { $eq: ["$category.segment", "CF"] },
+                                  { $eq: ["$category.segment", "CO"] },
+                                ],
                               },
-                              then: 'cde_fo',
-
-                              // all not exist condition 
-                              else: "nse_fo"
-
-                            }
-
-                          }
-
-                        }
-
-
-                      }
-
-                    }
-
-                  }
-
-                }
+                              then: "cde_fo",
+                              else: {
+                                $cond: {
+                                  if: {
+                                    $or: [
+                                      { $eq: ["$category.segment", "BF"] },
+                                      { $eq: ["$category.segment", "BC"] },
+                                      { $eq: ["$category.segment", "BO"] },
+                                      { $eq: ["$category.segment", "BFO"] }
+      
+                                    ],
+                                  },
+                                  then: {
+                                    $cond: {
+                                      if: { $eq: ["$category.segment", "BF"] },
+                                      then: "bse_fo",
+                                      else: {
+                                        $cond: {
+                                          if: { $eq: ["$category.segment", "BC"] },
+                                          then: "bse_cm",
+                                          else: "bse_fo",
+                                        },
+                                      },
+                                    },
+                                  },
+                                  else: "nse_fo",
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
               },
-
+      
               mp: "0",
-
-              // product code condition here
+      
               pc: {
                 $cond: {
                   if: {
-                    $and:
-                      [
-                        { $eq: ['$client_services.product_type', '1'] },
-                        {
-                          $or: [
-                            { $eq: ['$category.segment', 'F'] },
-                            { $eq: ['$category.segment', 'O'] },
-                            { $eq: ['$category.segment', 'FO'] }
-                          ]
-                        },
-                      ]
+                    $and: [
+                      { $eq: ["$client_services.product_type", "1"] },
+                      {
+                        $or: [
+                          { $eq: ["$category.segment", "F"] },
+                          { $eq: ["$category.segment", "O"] },
+                          { $eq: ["$category.segment", "FO"] },
+                          { $eq: ["$category.segment", "BO"] },
+                          { $eq: ["$category.segment", "BF"] },
+                        ],
+                      },
+                    ],
                   },
-                  then: 'NRML',
+                  then: "NRML",
                   else: {
                     $cond: {
-                      if: {
-                        $and:
-                          [
-                            { $eq: ['$client_services.product_type', '2'] },
-                          ]
-                      },
-                      then: 'MIS',
+                      if: { $eq: ["$client_services.product_type", "2"] },
+                      then: "MIS",
                       else: {
                         $cond: {
-                          if: {
-                            $and:
-                              [
-                                { $eq: ['$client_services.product_type', '3'] },
-                              ]
-                          },
-                          then: 'BO',
+                          if: { $eq: ["$client_services.product_type", "3"] },
+                          then: "BO",
                           else: {
                             $cond: {
-                              if: {
-                                $and:
-                                  [
-                                    { $eq: ['$client_services.product_type', '4'] },
-                                  ]
-                              },
-                              then: 'CO',
-                              else: "CNC"
-
-                            }
-
-                          }
-
-                        }
-
-                      }
-
-                    }
-                  }
-
-                }
-
-
+                              if: { $eq: ["$client_services.product_type", "4"] },
+                              then: "CO",
+                              else: "CNC",
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
               },
-
+      
               pf: "N",
-
               pr: "0",
-
-
+      
               pt: {
                 $cond: {
-                  if: {
-                    $and:
-                      [
-                        { $eq: ['$client_services.order_type', '1'] },
-                      ]
-                  },
-                  then: 'MKT',
+                  if: { $eq: ["$client_services.order_type", "1"] },
+                  then: "MKT",
                   else: {
                     $cond: {
-                      if: {
-                        $and:
-                          [
-                            { $eq: ['$client_services.order_type', '2'] },
-                          ]
-                      },
-                      then: 'L',
+                      if: { $eq: ["$client_services.order_type", "2"] },
+                      then: "L",
                       else: {
                         $cond: {
-                          if: {
-                            $and:
-                              [
-                                { $eq: ['$client_services.order_type', '3'] },
-                              ]
-                          },
-                          then: 'SL',
+                          if: { $eq: ["$client_services.order_type", "3"] },
+                          then: "SL",
                           else: {
                             $cond: {
-                              if: {
-                                $and:
-                                  [
-                                    { $eq: ['$client_services.order_type', '4'] },
-                                  ]
-                              },
-                              then: ' SL-M',
-
-                              //All condition exist
-                              else: "MKT"
-
-                            }
-
-                          }
-
-                        }
-
-                      }
-
-                    }
-                  }
-
-                }
-
+                              if: { $eq: ["$client_services.order_type", "4"] },
+                              then: "SL-M",
+                              else: "MKT",
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
               },
-
+      
               qt: "$client_services.quantity",
-
               rt: "DAY",
-
               tp: "0",
-
+      
               ts: {
                 $cond: {
-                  if: {
-                    $and:
-                      [
-                        { $eq: ['$category.segment', 'C'] },
-                      ]
-                  },
+                  if: { $eq: ["$category.segment", "C"] },
                   then: "$service.zebu_token",
-                  else: ""
-
-                }
+                  else: "",
+                },
               },
-
+      
               tt: "B",
-
-            }
-          }
-        }
+            },
+          },
+        },
       ];
 
       await dbTest.createCollection('kotakneoView', { viewOn: 'users', pipeline });

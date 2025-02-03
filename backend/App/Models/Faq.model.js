@@ -11,19 +11,27 @@ const FaqSchema = new mongoose.Schema({
     },
     answer1: {
         type: String,
-     
+
     },
     type: {
         type: String,
         required: true,
     },
+    Role: {
+        type: [String],
+        enum: ['ALL', 'USER', "ADMIN", "SUBADMIN"],
+        default: 'ALL',
+    },
+
+
+
     img1: {
         type: String,
-    
+
     },
     img2: {
         type: String,
-       
+
     },
 }, {
     timestamps: true // Automatically adds createdAt and updatedAt fields

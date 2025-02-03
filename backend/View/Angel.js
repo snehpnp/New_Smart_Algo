@@ -346,6 +346,14 @@ async function createViewAngel() {
   } 
 }
 
+async function dropViewAngel() {
+  try {
+    await dbTest.dropCollection('angelView');
+    console.log('Angel View dropped successfully.');
+  } catch (error) {
+    return;
+  }
+}
 
-module.exports = { createViewAngel }
+module.exports = { createViewAngel,dropViewAngel }
 

@@ -333,6 +333,14 @@ async function createViewIifl() {
   } 
 }
 
+async function dropViewIifl() {
+  try {
+    await dbTest.dropCollection('iiflView');
+    console.log('iifl View dropped successfully.');
+  } catch (error) {
+    return;
+  }
+}
 
-module.exports = { createViewIifl }
+module.exports = { createViewIifl ,dropViewIifl}
 

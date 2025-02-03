@@ -193,7 +193,7 @@ class GroupService {
           });
         }
       } catch (error) {
-        console.log("Error Delete Group Service In -", error);
+        return;
       }
 
       // ADD SERVICE
@@ -806,20 +806,19 @@ class GroupService {
   }
   async GetAllPlans(req, res) {
     try {
-
       const result = await Plansmodel.aggregate([
         {
           $lookup: {
-            from: 'users',
-            let: { planId: { $toString: '$_id' } }, 
+            from: "users",
+            let: { planId: { $toString: "$_id" } },
             pipeline: [
               {
                 $match: {
-                  $expr: { $eq: ['$plan_id', '$$planId'] },
+                  $expr: { $eq: ["$plan_id", "$$planId"] },
                 },
               },
             ],
-            as: 'users',
+            as: "users",
           },
         },
         {
@@ -832,19 +831,14 @@ class GroupService {
             prices: 1,
             users: {
               $map: {
-                input: '$users',
-                as: 'user',
-                in: '$$user.UserName',
+                input: "$users",
+                as: "user",
+                in: "$$user.UserName",
               },
             },
           },
         },
       ]).exec();
-      
-
-
-
-
 
       if (result.length > 0) {
         return res.send({
@@ -881,7 +875,6 @@ class GroupService {
   async EditPlans(req, res) {
     try {
       const { _id, name, title, description, image, prices } = req.body;
- 
 
       const objectId = new ObjectId(_id);
       const result = await Plansmodel.findByIdAndUpdate(objectId, {
@@ -909,7 +902,6 @@ class GroupService {
     try {
       const { id } = req.body;
       const objectId = new ObjectId(id);
-
 
       const User_plan = await user_modal.find({ plan_id: objectId });
 

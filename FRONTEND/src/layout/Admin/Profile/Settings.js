@@ -30,13 +30,13 @@ const SettingsPage = () => {
       selected: "Top",
     },
     //{ id: 2, name: "View All Themes", type: "theme", selected: "Yes" },
-    {
-      id: 3,
-      name: "Trade Permission",
-      type: "select1",
-      options: ["MT 4", "Live Price"],
-      selected: "MT 4",
-    },
+    // {
+    //   id: 3,
+    //   name: "Trade Permission",
+    //   type: "select1",
+    //   options: ["MT 4", "Live Price"],
+    //   selected: "MT 4",
+    // },
   ]);
 
   useEffect(() => {
@@ -57,9 +57,7 @@ const SettingsPage = () => {
   };
 
   const GetAllThems = async () => {
-    console.log("Fetching themes...");
 
-    console.log("Fetching from API");
     const res = await dispatch(Get_All_Theme()).unwrap();
 
     if (res?.data) {
@@ -99,7 +97,6 @@ const SettingsPage = () => {
     //   confirmButtonText: "Yes, change it!",
     // }).then(async (result) => {
     //   if (result.isConfirmed) {
-    //     console.log("Theme selected:", themeItem);
     //     localStorage.setItem("theme", JSON.stringify(themeItem));
     //     window.location.reload();
     //   }
@@ -193,7 +190,7 @@ const SettingsPage = () => {
               alignItems: "center",
             }}
           >
-            <h4 style={{ marginBottom: "8px" }}>
+            {/* <h4 style={{ marginBottom: "8px" }}>
               {perm.name}{" "}
               {perm.name == "Trade Permission" && (
                 <i
@@ -202,7 +199,7 @@ const SettingsPage = () => {
                   onClick={(e) => setShowModal(true)}
                 ></i>
               )}
-            </h4>
+            </h4> */}
 
             <div className="d-flex align-items-center">
               <div className="d-flex align-items-center">
@@ -373,7 +370,7 @@ const SettingsPage = () => {
                   {showLogsData.map((data, index) => (
                     <tr key={index}>
                       <td>{index + 1 || "N/A"}</td>
-                      <td>{data.status === 1 ? "On" : "Off"}</td>
+                      <td>{data.status === 1 ? "MT-4" : "Live Price"}</td>
                       <td>{data.msg || "No Message"}</td>
                       <td>{fDateTime(data.createdAt)}</td>
                     </tr>

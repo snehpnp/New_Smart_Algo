@@ -10,12 +10,12 @@ const user_logs = db.user_logs;
 const BrokerResponse = db.BrokerResponse;
 const Broker_information = db.Broker_information;
 const live_price = db.live_price;
+const company_information = db.company_information;
 
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
 const { getIPAddress } = require("../../Helper/logger.helper");
-const { Alice_Socket } = require("../../Helper/Alice_Socket");
 
 class AliceBlue {
   // Get GetAccessToken ALICE BLUE
@@ -122,7 +122,6 @@ class AliceBlue {
       }
     } catch (error) {
       console.log("Error Alice Login error-", error);
-      
     }
   }
 
@@ -384,7 +383,6 @@ class AliceBlue {
   }
 
   async backendRunSocket(req, res) {
-    // Alice_Socket();
     return res.send({ status: true, msg: "backend run socket" });
   }
 
@@ -527,7 +525,7 @@ const GetAllBrokerResponse = async (user_id, res) => {
 
 const UpdateProfile = async (userId, token) => {
   if (!userId || !token) {
-    console.log("Invalid userId or token provided");
+    console.log("Error Invalid userId or token provided");
     return;
   }
 
@@ -544,11 +542,7 @@ const UpdateProfile = async (userId, token) => {
     // Make the API request
     const response = await axios(config);
 
-
-
     if (response.data && response.data.length > 0) {
-    
-
       try {
         let data1 = await User.findOne({ demat_userid: userId });
 
@@ -558,21 +552,26 @@ const UpdateProfile = async (userId, token) => {
             { Profile_fund: response.data[0].net },
             { new: true }
           );
-
-        } else {
-          console.log(
-            "User not found with the provided demat_userid:",
-            userId
-          );
         }
-      } catch (dbError) {
-        console.log("Database error occurred:", dbError.message);
-      }
+      } catch (dbError) {}
     } else {
-      console.log("No valid response data received from API.");
     }
   } catch (apiError) {
     console.log("Error making API request:", apiError.message);
+  }
+};
+
+let Alice_Socket = async () => {
+  let UrlFind = await company_information.find({}).select("domain_url");
+  let UrlCreate = `https://${UrlFind[0].domain_url}/socket/restart/socket`;
+
+  if (UrlCreate) {
+    axios
+      .get(UrlCreate)
+      .then((response) => {})
+      .catch((error) => {
+        console.log("Error in update price", error);
+      });
   }
 };
 

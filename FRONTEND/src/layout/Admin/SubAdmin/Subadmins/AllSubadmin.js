@@ -343,7 +343,7 @@ const AllSubadmin = () => {
             <div className="row">
               <div className="col-lg-4">
                 <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
+                  <label htmlFor="exampleFormControlInput1" className="form-label">
                     Search Something Here
                   </label>
                   <input
@@ -356,33 +356,7 @@ const AllSubadmin = () => {
                   />
                 </div>
               </div>
-              {/* <div className="col-lg-4 ">
-                <div className="mb-3">
-                  <label for="select" className="form-label">
-                    Panel Status
-                  </label>
-
-                  <select
-                    className="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => setPanelStatus(e.target.value)}
-                    value={PanelStatus}
-                  >
-                    <option value="2">All</option>
-                    <option value="1">On</option>
-                    <option value="0">OFf</option>
-                  </select>
-                </div>
-              </div>
-              <div className="col-lg-2 ">
-                <button
-                  className="btn btn-primary mt-2"
-                  onClick={(e) => ResetDate(e)}
-                >
-                  Reset
-                </button>
-              </div> */}
+              
             </div>
 
             <FullDataTable

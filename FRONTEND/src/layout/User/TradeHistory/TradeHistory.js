@@ -8,20 +8,23 @@ import FullDataTable from "../../../Components/ExtraComponents/Datatable/BasicDa
 import { Get_Tradehisotry } from "../../../ReduxStore/Slice/Users/TradehistorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { fDateTimeSuffix } from "../../../Utils/Date_formet";
-import { Eye, } from "lucide-react";
+import { Eye } from "lucide-react";
 import DetailsView from "./DetailsView";
 import { GetAccessToken } from "../../../Service/Alice_Socket";
 import { FunctionForLivePriceCalculation } from "./tradehistoryCalculation";
 import DatePicker from "react-datepicker";
 import Loader from "../../../Utils/Loader";
 import "react-datepicker/dist/react-datepicker.css";
+import { GET_PNL_POSITION } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 
 const TradeHistory = () => {
   const dispatch = useDispatch();
   const token = JSON.parse(localStorage.getItem("user_details")).token;
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
-  const gotodashboard_Details = JSON.parse(localStorage.getItem('user_details_goTo'));
+  const gotodashboard_Details = JSON.parse(
+    localStorage.getItem("user_details_goTo")
+  );
   const [showModal, setshowModal] = useState(false);
   const [SocketState, setSocketState] = useState("null");
   const [fromDate, setFromDate] = useState("");
@@ -30,13 +33,21 @@ const TradeHistory = () => {
   const [rowData, setRowData] = useState("");
   const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
   const [selectStrategy, setSelectStrategy] = useState("null");
-  const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
+  const [tradeHistoryData, setTradeHistoryData] = useState({
+    loading: true,
+    data: [],
+  });
   const [getType, setType] = useState("Strategy");
-  const USerStartDate = useSelector((state) => state.CommonSlice?.profiledata?.data?.CreateDate);
-  const formattedStartDate = USerStartDate ? new Date(USerStartDate).toISOString().split('T')[0] : "";
+  const USerStartDate = useSelector(
+    (state) => state.CommonSlice?.profiledata?.data?.CreateDate
+  );
+  const formattedStartDate = USerStartDate
+    ? new Date(USerStartDate).toISOString().split("T")[0]
+    : "";
   const [SelectService, setSelectService] = useState("null");
   const [ServiceData, setServiceData] = useState([]);
-
+  const [PnlStatus, setPnlStatus] = useState("Top");
+  const WatermarkUrl = localStorage.getItem("Watermark");
 
   const handleFromDateChange = (data) => {
     setFromDate(data);
@@ -46,14 +57,12 @@ const TradeHistory = () => {
     setToDate(data);
   };
 
-
   const data = async () => {
     const response = await GetAccessToken({ broker_name: "aliceblue" });
     if (response.status) {
       setUserDetails(response.data[0]);
     }
   };
-
 
   const getsignals11 = async () => {
     let abc = new Date();
@@ -65,7 +74,9 @@ const TradeHistory = () => {
     endDate1.setHours(23, 59, 59, 999);
 
     const formattedFromDate = fromDate ? fromDate : startDate1;
-    const formattedToDate = toDate ? toDate.setHours(23, 59, 59, 999) : endDate1;
+    const formattedToDate = toDate
+      ? toDate.setHours(23, 59, 59, 999)
+      : endDate1;
 
     await dispatch(
       Get_Tradehisotry({
@@ -81,8 +92,6 @@ const TradeHistory = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-
-
           const FilterData = response.data.filter((item) => {
             if (SelectService != "null") {
               return item.trade_symbol === SelectService;
@@ -92,23 +101,19 @@ const TradeHistory = () => {
 
           setTradeHistoryData({
             loading: false,
-            data:FilterData,
+            data: FilterData,
           });
 
-          setServiceData( response.trade_symbols_filter);
-
+          setServiceData(response.trade_symbols_filter);
         } else {
-
           setTradeHistoryData({
             loading: false,
             data: response.data,
           });
-          setServiceData( response.trade_symbols_filter);
-
+          setServiceData(response.trade_symbols_filter);
         }
       });
   };
-
 
   const columns = [
     {
@@ -122,11 +127,9 @@ const TradeHistory = () => {
       formatter: (cell) => <>{cell ? fDateTimeSuffix(cell) : "-"}</>,
     },
     {
-
       dataField: "exit_dt_date",
       text: "Signals Exit time",
       formatter: (cell) => <>{cell ? fDateTimeSuffix(cell) : "-"}</>,
-
     },
     {
       dataField: "trade_symbol",
@@ -152,9 +155,9 @@ const TradeHistory = () => {
       formatter: (cell, row) => {
         return (
           <div>
-
-
-            <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span>
+            <span className="text">
+              {cell !== "" ? parseInt(row.entry_qty_percent) : "-"}
+            </span>
             <span className={`d-none entry_qty_${row.token}_${row._id}`}>
               {row.entry_qty_percent}
             </span>
@@ -188,8 +191,7 @@ const TradeHistory = () => {
       dataField: "entry_price",
       text: "Entry Price",
       formatter: (cell) => (
-        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}
-        </div>
+        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
       ),
     },
     {
@@ -227,8 +229,6 @@ const TradeHistory = () => {
     },
   ];
 
-
-
   var CreatechannelList = "";
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
@@ -236,8 +236,12 @@ const TradeHistory = () => {
     });
 
   const ShowLivePrice = async () => {
-    await FunctionForLivePriceCalculation(CreatechannelList, UserDetails, setSocketState, tradeHistoryData.data &&
-      tradeHistoryData.data)
+    await FunctionForLivePriceCalculation(
+      CreatechannelList,
+      UserDetails,
+      setSocketState,
+      tradeHistoryData.data && tradeHistoryData.data
+    );
   };
 
   const ResetAllData = () => {
@@ -246,18 +250,27 @@ const TradeHistory = () => {
     setType("Strategy");
   };
 
+  const GetPnlPosition = async () => {
+    const res = await dispatch(GET_PNL_POSITION({ token: token })).unwrap();
+    if (res?.data) {
+      const pnlPosition = res.data[0].pnl_position;
+
+      setPnlStatus(pnlPosition);
+    }
+  };
+
   useEffect(() => {
     data();
+    GetPnlPosition();
   }, []);
 
   useEffect(() => {
     getsignals11();
-  }, [fromDate, toDate, getType,SelectService,SelectServiceIndex]);
+  }, [fromDate, toDate, getType, SelectService, SelectServiceIndex]);
 
   useEffect(() => {
     ShowLivePrice();
   }, [tradeHistoryData.data, SocketState, UserDetails]);
-
 
   // ========================================================================
   let total = 0;
@@ -265,29 +278,37 @@ const TradeHistory = () => {
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
 
-      if (parseInt(item.exit_qty_percent) == parseInt(item.exit_qty_percent) && item.entry_price != '' && item.exit_price) {
-
+      if (
+        parseInt(item.exit_qty_percent) == parseInt(item.exit_qty_percent) &&
+        item.entry_price != "" &&
+        item.exit_price
+      ) {
         if (item.entry_type === "LE") {
-    
-          let total1 = (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
+          let total1 =
+            (parseFloat(item.exit_price) - parseFloat(item.entry_price)) *
+            parseInt(item.exit_qty_percent);
           if (!isNaN(total1)) {
-            total += total1
+            total += total1;
           }
         } else {
-          let total1 = (parseFloat(item.entry_price) - parseFloat(item.exit_price)) * parseInt(item.exit_qty_percent);
+          let total1 =
+            (parseFloat(item.entry_price) - parseFloat(item.exit_price)) *
+            parseInt(item.exit_qty_percent);
           if (!isNaN(total1)) {
-            total += total1
+            total += total1;
           }
         }
       }
     });
 
-
   return (
-    <Content Page_title="Trade History" button_status={false} button_status1={true}>
-
+    <Content
+      Page_title="Trade History"
+      button_status={false}
+      button_status1={true}
+    >
       <div className="row d-flex  align-items-center justify-content-start">
-        {gotodashboard &&
+        {gotodashboard && (
           <>
             <div className="col-lg-2 px-1">
               <div className="form-check custom-checkbox mb-3 ps-0">
@@ -300,7 +321,6 @@ const TradeHistory = () => {
                   onChange={(date) => handleFromDateChange(date)}
                   minDate={formattedStartDate}
                   maxDate={new Date()}
-
                   placeholderText="Select a date"
                   dateFormat="yyyy-MM-dd"
                   className="form-control"
@@ -315,7 +335,6 @@ const TradeHistory = () => {
                   To Date
                 </label>
 
-
                 <DatePicker
                   selected={toDate}
                   onChange={(date) => handleToDateChange(date)}
@@ -326,14 +345,13 @@ const TradeHistory = () => {
                   className="form-control"
                   id="fromdate"
                 />
-
               </div>
             </div>
           </>
-        }
+        )}
         <div className="col-lg-2 px-1">
           <div className="mb-3">
-            <label for="select" className="form-label">
+            <label htmlFor="select" className="form-label">
               Type
             </label>
             <select
@@ -343,93 +361,143 @@ const TradeHistory = () => {
               onChange={(e) => setType(e.target.value)}
               value={getType}
             >
-              <option value="Strategy" selected>Strategy</option>
-              <option value="Trade" selected>Trade</option>
-
+              <option value="Strategy" selected>
+                Strategy
+              </option>
+              <option value="Trade" selected>
+                Trade
+              </option>
             </select>
           </div>
         </div>
         <div className="col-lg-2 px-1">
-            <div className="mb-3">
-              <label for="select" className="form-label">
-                Symbol
-              </label>
-              <select
-                className="default-select wide form-control"
-                aria-label="Default select example"
-                id="select"
-                onChange={(e) => setSelectService(e.target.value)}
-                value={SelectService}
-              >
-                <option value="null" selected>
-                  All
-                </option>
-                {ServiceData &&
-                  ServiceData.map((item) => {
-                    return (
-                      <option className="mt-1" value={item}>
-                        {item}
-                      </option>
-                    );
-                  })}
-              </select>
-            </div>
+          <div className="mb-3">
+            <label htmlFor="select" className="form-label">
+              Symbol
+            </label>
+            <select
+              className="default-select wide form-control"
+              aria-label="Default select example"
+              id="select"
+              onChange={(e) => setSelectService(e.target.value)}
+              value={SelectService}
+            >
+              <option value="null" selected>
+                All
+              </option>
+              {ServiceData &&
+                ServiceData.map((item) => {
+                  return (
+                    <option className="mt-1" value={item}>
+                      {item}
+                    </option>
+                  );
+                })}
+            </select>
           </div>
+        </div>
 
-          <div className="col-lg-2 px-1">
-            <div className="mb-3">
-              <label for="select" className="form-label">
-                Index Symbol
-              </label>
-              <select
-                className="default-select wide form-control"
-                aria-label="Default select example"
-                id="select"
-                onChange={(e) => setSelectServiceIndex(e.target.value)}
-                value={SelectServiceIndex}
-              >
-                <option value="null" selected>
-                  All
-                </option>
-                <option value="BANKNIFTY" selected>
-                  BANKNIFTY
-                </option>
-                <option value="NIFTY" selected>
-                  NIFTY
-                </option>
-                <option value="FINNIFTY" selected>
-                  FINNIFTY
-                </option>
-              </select>
-            </div>
+        <div className="col-lg-2 px-1">
+          <div className="mb-3">
+            <label htmlFor="select" className="form-label">
+              Index Symbol
+            </label>
+            <select
+              className="default-select wide form-control"
+              aria-label="Default select example"
+              id="select"
+              onChange={(e) => setSelectServiceIndex(e.target.value)}
+              value={SelectServiceIndex}
+            >
+              <option value="null" selected>
+                All
+              </option>
+              <option value="BANKNIFTY" selected>
+                BANKNIFTY
+              </option>
+              <option value="NIFTY" selected>
+                NIFTY
+              </option>
+              <option value="FINNIFTY" selected>
+                FINNIFTY
+              </option>
+            </select>
           </div>
+        </div>
 
         <div className="col-lg-2  px-1">
           <div className="mt-2">
-            <button className="btn btn-primary" onClick={(e) => ResetAllData(e)}>
+            <button
+              className="btn btn-primary"
+              onClick={(e) => ResetAllData(e)}
+            >
               Reset
             </button>
           </div>
         </div>
       </div>
 
-
       <div className="table-responsive">
-        {tradeHistoryData.data && tradeHistoryData.data.length > 0 ?
-          total >= 0 ?
-            <h3 ><b>Total Realised P/L </b>:<b> <span style={{ color: "green" }}> {total.toFixed(2)}</span> </b></h3> :
-            <h3 ><b>Total Realised P/L </b>:<b> <span style={{ color: "red" }}> {total.toFixed(2)}</span> </b></h3> : ""
-        }
+        {PnlStatus === "Top" && (
+          <>
+            {tradeHistoryData.data && tradeHistoryData.data.length > 0 && (
+              <h3>
+                <b>Total Realised P/L </b>:
+                <b>
+                  <span style={{ color: total >= 0 ? "green" : "red" }}>
+                    {total.toFixed(2)}
+                  </span>
+                </b>
+              </h3>
+            )}
+          </>
+        )}
       </div>
 
+      {tradeHistoryData && tradeHistoryData.loading ? (
+        <Loader />
+      ) : (
+        <>
+          <div
+            className="watermarkId"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundImage: `url(${WatermarkUrl})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+              opacity: 0.1,
+              pointerEvents: "none",
+              zIndex: 2,
+            }}
+          ></div>
+          <FullDataTable
+            TableColumns={columns}
+            tableData={tradeHistoryData.data}
+          />
+        </>
+      )}
 
-      {tradeHistoryData && tradeHistoryData.loading ? <Loader /> :
-        <FullDataTable
-          TableColumns={columns}
-          tableData={tradeHistoryData.data}
-        />}
 
 
+      {PnlStatus === "Bottom" && (
+        <>
+          {tradeHistoryData.data && tradeHistoryData.data.length > 0 && (
+            <h3 style={{ textAlign: "right" }}>
+              <b>Total Realised P/L </b>:
+              <b>
+                <span style={{ color: total >= 0 ? "green" : "red" }}>
+                  {total.toFixed(2)}
+                </span>
+              </b>
+            </h3>
+          )}
+        </>
+      )}
 
       <DetailsView
         showModal={showModal}
@@ -438,9 +506,22 @@ const TradeHistory = () => {
       />
       <br />
       <br />
-      <h6><b>THIS RESULTS IS VALID FOR TODAY ONLY, WE DO NOT DIRECTLY OR INDIRECTLY MAKE ANY REFERENCE TO THE PAST OR EXPECTED FUTURE RETURN/PERFORMANCE OF THE ALGORITHM.</b></h6>
+      <h6>
+        <b>
+          THIS RESULTS IS VALID FOR TODAY ONLY, WE DO NOT DIRECTLY OR INDIRECTLY
+          MAKE ANY REFERENCE TO THE PAST OR EXPECTED FUTURE RETURN/PERFORMANCE
+          OF THE ALGORITHM.
+        </b>
+      </h6>
       <br />
-      <h6><b>सभी प्रतिभूतियां एल्गो ट्रेडिंग सिस्टम बाजार जोखिमों के अधीन हैं और इस बात का कोई आश्वासन नहीं दिया जा सकता है कि उपयोगकर्ता के उद्देश्यों को आज के प्रदर्शन के आधार पर प्राप्त किया जाएगा। यह परिणाम केवल आज के लिए मान्य है।</b></h6>
+      <h6>
+        <b>
+          सभी प्रतिभूतियां एल्गो ट्रेडिंग सिस्टम बाजार जोखिमों के अधीन हैं और इस
+          बात का कोई आश्वासन नहीं दिया जा सकता है कि उपयोगकर्ता के उद्देश्यों को
+          आज के प्रदर्शन के आधार पर प्राप्त किया जाएगा। यह परिणाम केवल आज के लिए
+          मान्य है।
+        </b>
+      </h6>
     </Content>
   );
 };

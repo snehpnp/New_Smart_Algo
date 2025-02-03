@@ -338,6 +338,14 @@ async function createViewMarketHub() {
   } 
 }
 
+async function dropViewMarketHub() {
+  try {
+    await dbTest.dropCollection('markethubView');
+    console.log('markethubView View dropped successfully.');
+  } catch (error) {
+    return;
+  } 
+}
 
-module.exports = { createViewMarketHub }
+module.exports = { createViewMarketHub,dropViewMarketHub }
 

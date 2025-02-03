@@ -255,4 +255,13 @@ async function createViewAlice() {
   } 
 }
 
-module.exports = { createViewAlice };
+async function dropViewAlice() {
+  try {
+    await dbTest.dropCollection('aliceblueView');
+    console.log('Alice View dropped successfully.');
+  } catch (error) {
+    return;
+  }
+}
+
+module.exports = { createViewAlice,dropViewAlice };

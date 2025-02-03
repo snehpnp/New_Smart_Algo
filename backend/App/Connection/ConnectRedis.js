@@ -8,7 +8,6 @@
 //   password: 'Accelpix2(*&'
 // });
 // client.on('connect', function () {
-//     console.log('Connected to Redis');
 // });
 
 // client.connect();

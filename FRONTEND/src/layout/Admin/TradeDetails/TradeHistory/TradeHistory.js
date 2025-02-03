@@ -75,13 +75,12 @@ const TradeHistory = () => {
   const [lotMultypaly, SetlotMultypaly] = useState(1);
   const selector = useSelector((state) => state.DashboardSlice);
   const [showModal6, setShowModal6] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [getPage, setPage] = useState(1);
   const [getSizePerPage, setSizePerPage] = useState(10);
   const [total1, setTotal] = useState(0);
   const [getTotalPnl, setTotalPnl] = useState(0);
 
+  const WatermarkUrl = localStorage.getItem("Watermark");
   var a = 2;
   const handleShow = () => setShowModal6(true);
   const handleClose = () => setShowModal6(false);
@@ -113,13 +112,15 @@ const TradeHistory = () => {
 
   useEffect(() => {
     GetAdminTradingStatus();
+    GetPnlPosition();
+    GetAllStrategyName();
+    Admin_Trading_data();
   }, []);
 
   useEffect(() => {
     Get_TradHistory();
     Get_Tradehisotry_Calculations();
   }, [
-    searchTerm,
     refresh,
     SocketState,
     fromDate,
@@ -144,14 +145,9 @@ const TradeHistory = () => {
     SelectService,
   ]);
 
-  useEffect(() => {
-    GetPnlPosition();
-    GetAllStrategyName();
-    Admin_Trading_data();
-  }, []);
-
   const GetPnlPosition = async () => {
     const res = await dispatch(GET_PNL_POSITION({ token: token })).unwrap();
+
     if (res?.data) {
       const pnlPosition = res.data[0].pnl_position;
 
@@ -227,22 +223,9 @@ const TradeHistory = () => {
         if (response.status) {
           setTotal(response.pagination.totalItems);
 
-          let filterData = response.data.filter((item) => {
-            if (searchTerm === "") return item;
-
-            return (
-              item.trade_symbol
-                .toLowerCase()
-                .includes(searchTerm.toLowerCase()) ||
-              item.strategy.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              item.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              item.entry_price.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-          });
-
           setTradeHistoryData({
             loading: false,
-            data: filterData,
+            data: response.data,
             pagination: response.pagination,
             TotalCalculate: response.TotalCalculate,
           });
@@ -357,15 +340,15 @@ const TradeHistory = () => {
         </span>
       ),
     },
-    {
-      dataField: "live",
-      text: "Live Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`LivePrice_${row.token}`}></span>
-        </div>
-      ),
-    },
+    // {
+    //   dataField: "live",
+    //   text: "Live Price",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <div>
+    //       <span className={`LivePrice_${row.token}`}></span>
+    //     </div>
+    //   ),
+    // },
     {
       dataField: "entry_price",
       text: "Entry Price",
@@ -434,6 +417,7 @@ const TradeHistory = () => {
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
     });
+
   const ShowLivePrice = async () => {
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
@@ -1030,16 +1014,6 @@ const TradeHistory = () => {
     }
   };
 
-  const handleCheckboxChange = (event, option) => {
-    let updatedOptions = [...selectedOptions];
-    if (event.target.checked) {
-      updatedOptions.push(option);
-    } else {
-      updatedOptions = updatedOptions.filter((item) => item !== option);
-    }
-    setSelectedOptions(updatedOptions);
-  };
-
   const handleTableChange = (type, { page, sizePerPage }) => {
     setPage(page);
     setSizePerPage(sizePerPage);
@@ -1061,30 +1035,6 @@ const TradeHistory = () => {
     </>
   );
 
-  const columnTexts = [
-    "S.No.",
-    "Signals Entry time",
-    "Signals Exit time",
-    "Symbol",
-    "Strategy",
-    "Entry Type",
-    // "Entry Qty",
-    "Exit Qty",
-    // "Live Price",
-    "Entry Price",
-    "Exit Price",
-    "Total",
-    "Entry Status",
-    "Exit Status",
-    "Details View",
-  ];
-
-  useEffect(() => {
-    if (selectedOptions && selectedOptions.length > 0) {
-      columns = columns.filter((data) => !selectedOptions.includes(data.text));
-    }
-  }, [selectedOptions]);
-
   useEffect(() => {
     if (selector && selector.permission) {
       if (
@@ -1099,8 +1049,6 @@ const TradeHistory = () => {
     }
   }, [selector]);
 
-  console.log("PnlStatus", PnlStatus);
-
   return (
     <>
       <Content
@@ -1113,7 +1061,7 @@ const TradeHistory = () => {
         csv_title="TradeHistory"
       >
         <div className="row d-flex  align-items-center justify-content-start">
-          {dashboard_filter === "client" ? (
+          {/* {dashboard_filter === "client" ? (
             ""
           ) : (
             <div className="col-lg-12 flex-column">
@@ -1145,7 +1093,7 @@ const TradeHistory = () => {
                 </label>
               </div>
             </div>
-          )}
+          )} */}
 
           <div className="col-lg-2 px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
@@ -1180,7 +1128,7 @@ const TradeHistory = () => {
           </div>
           <div className="col-lg-2 px-1">
             <div className="mb-3">
-              <label for="select" className="form-label">
+              <label htmlFor="select" className="form-label">
                 Index Symbol
               </label>
               <select
@@ -1210,7 +1158,7 @@ const TradeHistory = () => {
           </div>
           <div className="col-lg-2 px-1">
             <div className="mb-3">
-              <label for="select" className="form-label">
+              <label htmlFor="select" className="form-label">
                 Symbol
               </label>
               <select
@@ -1237,7 +1185,7 @@ const TradeHistory = () => {
 
           <div className="col-lg-2  px-1">
             <div className="mb-3">
-              <label for="select" className="form-label">
+              <label htmlFor="select" className="form-label">
                 Strategy
               </label>
               <select
@@ -1296,53 +1244,6 @@ const TradeHistory = () => {
             </div>
           </div>
 
-          {/* <div className="col-lg-2  px-1">
-            <div className="mb-3">
-              <label className="col-lg-12">Search Here</label>
-
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search anything..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div> */}
-
-          {/* <div className="col-lg-2 px-1">
-            <div className="mb-3">
-              <label className="col-lg-12">Select Option</label>
-
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Select Options ..."
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              />
-
-              <div className="dropdown-menu">
-                <div className="row">
-                  {columnTexts.length > 0 &&
-                    columnTexts.map((data, index) => (
-                      <div key={index} className="col-3">
-                        <li className="dropdown-item d-flex align-items-center">
-                          <input
-                            type="checkbox"
-                            className="form-check-input me-2"
-                            value={data}
-                            onChange={(e) => handleCheckboxChange(e, data)}
-                          />
-                          <label className="form-check-label">{data}</label>
-                        </li>
-                      </div>
-                    ))}
-                </div>
-              </div>
-            </div>
-          </div> */}
-
           <div className="col-lg-2  px-1">
             <div className="mb-3">
               <label className="col-lg-12">Reset</label>
@@ -1379,17 +1280,47 @@ const TradeHistory = () => {
           >
             {({ paginationProps, paginationTableProps }) => (
               <div>
-                <BootstrapTable
-                  keyField="_id"
-                  data={tradeHistoryData.data}
-                  columns={columns}
-                  remote
-                  onTableChange={handleTableChange}
-                  {...paginationTableProps}
-                  headerClasses="bg-primary text-primary text-center header-class"
-                  rowClasses={`text-center`}
-                  noDataIndication={() => <NoDataIndication />}
-                />
+                <div
+                  style={{
+                    position: "relative",
+                    overflow: "hidden",
+                  }}
+                >
+                  {/* dynamic Watermark */}
+                  <div
+                    className="watermarkId"
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      backgroundImage: `url(${WatermarkUrl})`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "contain",
+                      backgroundPosition: "center",
+                      opacity: 0.1,
+                      pointerEvents: "none",
+                      zIndex: 2,
+                    }}
+                  ></div>
+
+                  <BootstrapTable
+                    keyField="_id"
+                    data={tradeHistoryData.data}
+                    columns={columns}
+                    remote
+                    onTableChange={handleTableChange}
+                    {...paginationTableProps}
+                    headerClasses="bg-primary text-primary text-center header-class"
+                    rowClasses={`text-center`}
+                    noDataIndication={() => <NoDataIndication />}
+                    style={{
+                      position: "relative",
+                      zIndex: 1,
+                    }}
+                  />
+                </div>
 
                 <div className="mb-2 d-flex justify-content-between align-items-start mt-2">
                   <div className="d-flex align-items-center">
@@ -1418,8 +1349,8 @@ const TradeHistory = () => {
                   <div className="d-flex align-items-end">
                     <PaginationListStandalone {...paginationProps} />
                   </div>
-                  <div className="d-flex align-items-end">
-                    {PnlStatus == "Bottom" && (
+                  {PnlStatus == "Bottom" && (
+                    <div className="d-flex align-items-end">
                       <h3>
                         <b>Total Realised P/L</b> :{" "}
                         <b>
@@ -1432,8 +1363,8 @@ const TradeHistory = () => {
                           </span>
                         </b>
                       </h3>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

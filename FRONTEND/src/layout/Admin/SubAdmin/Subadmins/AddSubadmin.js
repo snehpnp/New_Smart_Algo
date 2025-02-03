@@ -2,8 +2,7 @@
 // import React from 'react'
 
 import React, { useEffect, useState } from "react";
-import Loader from "../../../../Utils/Loader";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form1";
 import * as valid_err from "../../../../Utils/Common_Messages";
@@ -14,31 +13,19 @@ import {
 } from "../../../../Utils/Common_regex";
 
 import { useFormik } from "formik";
-import { Get_All_SUBADMIN } from "../../../../ReduxStore/Slice/Subadmin/Subadminslice";
 import { Add_Subadmin } from "../../../../ReduxStore/Slice/Admin/CreateSubadminSlice";
 import { useDispatch } from "react-redux";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import { GET_ALL_GROUP_SERVICES } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
 const AllSubadmin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user_token = JSON.parse(localStorage.getItem("user_details")).token;
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role;
-  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
-  const [first, setfirst] = useState("all");
-  const [showModal, setshowModal] = useState(false);
-  const [ShowAllStratagy, setShowAllStratagy] = useState(false);
-  const [selectedStrategies, setSelectedStrategies] = useState([]);
-  const [SelectedGroupServices, setSelectedGroupServices] = useState([]);
-
-
-  const [Addsubadmin, setAddsubadmin] = useState({
-    loading: false,
-    data: [],
-  });
+  const user_token = JSON.parse(localStorage.getItem("user_details"))?.token;
+  const Role = JSON.parse(localStorage.getItem("user_details"))?.Role;
+  const user_id = JSON.parse(localStorage.getItem("user_details"))?.user_id;
 
   const [AllGroupServices, setAllGroupServices] = useState({
     loading: true,
@@ -50,12 +37,8 @@ const AllSubadmin = () => {
     data: [],
   });
 
-
-
   const [state, setstate] = useState([]);
   const [state1, setstate1] = useState([]);
-
-
 
   const isValidEmail = (email) => {
     return Email_regex(email);
@@ -83,7 +66,7 @@ const AllSubadmin = () => {
       all: false,
       editclient: false,
       addclient: false,
-      makestrategy:false,
+      makestrategy: false,
       optionchain: false,
       tradehistory: false,
       updateapikeys: false,
@@ -91,7 +74,8 @@ const AllSubadmin = () => {
       select_group_services: [],
       group: false,
       grouper_servcice: "",
-      strateg_servcice: ""
+      strateg_servcice: "",
+      Strategy_Permission: false,
     },
 
     validate: (values) => {
@@ -119,17 +103,25 @@ const AllSubadmin = () => {
       } else if (!isValidEmail(values.email)) {
         errors.email = valid_err.INVALID_EMAIL_ERROR;
       }
-      if ((values.addclient || values.editclient) && values.groupservice && state.length === 0) {
-        errors.grouper_servcice = "You must select a Group Service from the list";
+      if (
+        (values.addclient || values.editclient) &&
+        values.groupservice &&
+        state.length === 0
+      ) {
+        errors.grouper_servcice =
+          "You must select a Group Service from the list";
       }
-      if ((values.addclient || values.editclient) && values.Strategy && state1.length === 0) {
+      if (
+        (values.addclient || values.editclient) &&
+        values.Strategy &&
+        state1.length === 0
+      ) {
         errors.strateg_servcice = "You must select a Strategy from the list";
       }
 
       return errors;
     },
     onSubmit: async (values) => {
-    
       const req = {
         FullName: values.FullName,
         Email: values.email,
@@ -139,31 +131,83 @@ const AllSubadmin = () => {
         parent_role: Role,
         parent_id: user_id,
         Subadmin_permision_data: {
-          client_add: values.addclient ? "1" : values.all ? "1" : values.updateapikeys ? "0" : "0",
+          client_add: values.addclient
+            ? "1"
+            : values.all
+            ? "1"
+            : values.updateapikeys
+            ? "0"
+            : "0",
           Update_Api_Key: values.updateapikeys ? "1" : "0",
-          client_edit: values.editclient ? "1" : values.all ? "1" : values.updateapikeys ? "0" : "0",
-          license_permision: values.licence ? "1" : values.all ? "1" : values.updateapikeys ? "0" : "0",
-          go_To_Dashboard: values.gotodashboard ? "1" : values.all ? "1" : values.updateapikeys ? "0" : "0",
-          trade_history_old: values.tradehistory ? "1" : values.all ? "1" : values.updateapikeys ? "0" : "0",
-          detailsinfo: values.detailsinfo ? "1" : values.all ? "1" : values.updateapikeys ? "0" : "0",
-          makestrategy: values.makestrategy ? "1" : values.all ? "1" : values.updateapikeys ? "0" : "0",
-          optionchain: values.optionchain ? "1" : values.all ? "1" : values.updateapikeys ? "0" : "0",
+          client_edit: values.editclient
+            ? "1"
+            : values.all
+            ? "1"
+            : values.updateapikeys
+            ? "0"
+            : "0",
+          license_permision: values.licence
+            ? "1"
+            : values.all
+            ? "1"
+            : values.updateapikeys
+            ? "0"
+            : "0",
+          go_To_Dashboard: values.gotodashboard
+            ? "1"
+            : values.all
+            ? "1"
+            : values.updateapikeys
+            ? "0"
+            : "0",
+          trade_history_old: values.tradehistory
+            ? "1"
+            : values.all
+            ? "1"
+            : values.updateapikeys
+            ? "0"
+            : "0",
+          detailsinfo: values.detailsinfo
+            ? "1"
+            : values.all
+            ? "1"
+            : values.updateapikeys
+            ? "0"
+            : "0",
+          makestrategy: values.makestrategy
+            ? "1"
+            : values.all
+            ? "1"
+            : values.updateapikeys
+            ? "0"
+            : "0",
+          optionchain: values.optionchain
+            ? "1"
+            : values.all
+            ? "1"
+            : values.updateapikeys
+            ? "0"
+            : "0",
           strategy: state1,
           group_services: state,
+          Strategy_Permission: values.Strategy_Permission
+            ? "1"
+            : values.all
+            ? "1"
+            : values.updateapikeys
+            ? "0"
+            : "0",
         },
       };
-
-   
 
       await dispatch(Add_Subadmin({ req: req, token: user_token }))
         .unwrap()
         .then((response) => {
           if (response.status === 409) {
-
             toast.error(response.data.msg);
           } else if (response.status) {
             toast.success(response.msg);
-         
+
             setTimeout(() => {
               navigate("/admin/allsubadmins");
             }, 1000);
@@ -173,10 +217,6 @@ const AllSubadmin = () => {
         });
     },
   });
-
-
-
-
 
   const fields = [
     // { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: true },
@@ -268,25 +308,6 @@ const AllSubadmin = () => {
       check_box_true:
         formik.values.all || formik.values.detailsinfo ? true : false,
     },
-    // {
-    //   name: "optionchain",
-    //   label: "Option Chain",
-    //   type: "checkbox",
-    //   label_size: 12,
-    //   col_size: 3,
-    //   check_box_true:
-    //     formik.values.all || formik.values.optionchain ? true : false,
-    // },
-    // {
-    //   name: "makestrategy",
-    //   label: "Make Strategy",
-    //   type: "checkbox",
-    //   label_size: 12,
-    //   col_size: 3,
-    //   check_box_true:
-    //     formik.values.all || formik.values.makestrategy ? true : false,
-    // },
-
     {
       name: "groupservice",
       label: "Group Service Permission",
@@ -296,16 +317,6 @@ const AllSubadmin = () => {
       label_size: 12,
       col_size: 3,
     },
-
-    {
-      name: "Strategy",
-      label: "Strategy Permission",
-      type: "checkbox",
-      label_size: 12,
-      col_size: 3,
-      check_box_true:
-        formik.values.all || formik.values.Strategy ? true : false,
-    },
     {
       name: "updateapikeys",
       label: "Update Client API Key",
@@ -313,6 +324,15 @@ const AllSubadmin = () => {
       label_size: 12,
       col_size: 3,
       check_box_true: formik.values.updateapikeys ? true : false,
+    },
+    {
+      name: "Strategy_Permission",
+      label: "Strategy Permission",
+      type: "checkbox",
+      label_size: 12,
+      col_size: 3,
+      check_box_true:
+        formik.values.all || formik.values.Strategy_Permission ? true : false,
     },
   ];
 
@@ -362,7 +382,7 @@ const AllSubadmin = () => {
       formik.setFieldValue("makestrategy", true);
       formik.setFieldValue("optionchain", true);
       formik.setFieldValue("tradehistory", true);
-
+      formik.setFieldValue("Strategy_Permission", true);
     } else {
       formik.setFieldValue("addclient", false);
       formik.setFieldValue("editclient", false);
@@ -376,12 +396,11 @@ const AllSubadmin = () => {
       formik.setFieldValue("optionchain", false);
       formik.setFieldValue("tradehistory", false);
       formik.setFieldValue("all", false);
+      formik.setFieldValue("Strategy_Permission", false);
     }
-
   }, [formik.values.all]);
 
   useEffect(() => {
-
     if (formik.values.updateapikeys) {
       formik.setFieldValue("all", false);
       formik.setFieldValue("addclient", false);
@@ -395,56 +414,72 @@ const AllSubadmin = () => {
       formik.setFieldValue("groupservice", false);
       formik.setFieldValue("Strategy", false);
       formik.setFieldValue("tradehistory", false);
+      formik.setFieldValue("Strategy_Permission", false);
     }
   }, [formik.values.updateapikeys, formik.values.all]);
-
-
-
 
   useEffect(() => {
     //  for uncheck update key
 
-    if ((formik.values.addclient) || (formik.values.editclient) || (formik.values.Strategy) || (formik.values.groupservice)  ||  (formik.values.makestrategy) ||  (formik.values.optionchain) || (formik.values.detailsinfo) || (formik.values.tradehistory) || (formik.values.gotodashboard)) {
+    if (
+      formik.values.addclient ||
+      formik.values.editclient ||
+      formik.values.Strategy ||
+      formik.values.groupservice ||
+      formik.values.makestrategy ||
+      formik.values.optionchain ||
+      formik.values.detailsinfo ||
+      formik.values.tradehistory ||
+      formik.values.gotodashboard ||
+      formik.values.Strategy_Permission
+    ) {
       formik.setFieldValue("updateapikeys", false);
-      setstate([])
-      setstate1([])
-      return
+      setstate([]);
+      setstate1([]);
+      return;
     }
-
 
     if (formik.values.Strategy) {
       formik.setFieldValue("Strategy", true);
-      return
+      return;
     }
     if (formik.values.groupservice) {
       formik.setFieldValue("groupservice", true);
-      return
+      return;
     }
 
-    if ((formik.values.addclient) || (formik.values.editclient)) {
+    if (formik.values.addclient || formik.values.editclient) {
       formik.setFieldValue("groupservice", true);
       formik.setFieldValue("Strategy", true);
-      setstate([])
-      setstate1([])
-      return
+      setstate([]);
+      setstate1([]);
+      return;
     } else if (!formik.values.addclient) {
       formik.setFieldValue("groupservice", false);
       formik.setFieldValue("Strategy", false);
-      formik.setFieldValue("strateg_servcice", '');
-      formik.setFieldValue("grouper_servcice", '');
-      setstate([])
-      setstate1([])
-    }
-    else {
+      formik.setFieldValue("strateg_servcice", "");
+      formik.setFieldValue("grouper_servcice", "");
+      setstate([]);
+      setstate1([]);
+    } else {
       formik.setFieldValue("groupservice", false);
       formik.setFieldValue("Strategy", false);
-      setstate([])
-      setstate1([])
-      return
-
+      setstate([]);
+      setstate1([]);
+      return;
     }
-  }, [formik.values.editclient, formik.values.addclient, formik.values.detailsinfo, formik.values.makestrategy, formik.values.optionchain, formik.values.tradehistory, formik.values.gotodashboard, formik.values.Strategy, formik.values.groupservice]);
-
+  }, [
+    formik.values.editclient,
+    formik.values.addclient,
+    formik.values.detailsinfo,
+    formik.values.makestrategy,
+    formik.values.optionchain,
+    formik.values.tradehistory,
+    formik.values.gotodashboard,
+    formik.values.Strategy,
+    formik.values.groupservice,
+    formik.values.Strategy_Permission,
+  ]);
 
   const handleStrategyChange = (event) => {
     const strategyId = event.target.value;
@@ -452,60 +487,19 @@ const AllSubadmin = () => {
     if (event.target.checked) {
       setstate1([...state1, strategyId]);
     } else {
-      // Remove the strategyId from the state array
       setstate1(state1.filter((id) => id !== strategyId));
     }
-
-
-
-
-    // if (event.target.checked) {
-    //   // Add the selected strategy to the array
-    //   setSelectedStrategies([...selectedStrategies, strategyId]);
-    // } else {
-    //   // Remove the deselected strategy from the array
-    //   setSelectedStrategies(
-    //     selectedStrategies.filter((strategy) => strategy.id !== strategyId)
-    //   );
-    // }
   };
 
   const handleGroupChange = (event) => {
     const strategyId = event.target.value;
-
-    const strategyName = event.target.name; // Assuming the label contains the strategy name
-
-
+ 
     if (event.target.checked) {
       setstate([...state, strategyId]);
     } else {
-      // Remove the strategyId from the state array
       setstate(state.filter((id) => id !== strategyId));
     }
-
-
-
-
-    // if (event.target.checked) {
-    //   // Add the selected strategy to the array
-    //   setSelectedGroupServices([...SelectedGroupServices, strategyId]);
-    // } else {
-    //   // Remove the deselected strategy from the array
-    //   setSelectedGroupServices(
-    //     SelectedGroupServices.filter((strategy) => strategy.id !== strategyId)
-    //   );
-    // }
-
-    // setSelectedGroupServices([...new Set(SelectedGroupServices)]);
-
-
-
-
-
-
-
   };
-
 
   useEffect(() => {
     if (state.length > 1) {
@@ -516,13 +510,8 @@ const AllSubadmin = () => {
     }
   }, [state, state1]);
 
-
   return (
-    <>
-      {Addsubadmin.loading ? (
-        <Loader />
-      ) : (
-        <>
+   
           <Content
             Page_title="Add Sub-Admin"
             button_title="Back"
@@ -551,12 +540,11 @@ const AllSubadmin = () => {
                                 />
                                 <label
                                   className="form-check-label"
-                                  for={strategy.name}
+                                  htmlFor={strategy.name}
                                 >
                                   {strategy.name}
                                 </label>
                               </div>
-
                             </div>
                           </div>
                         </div>
@@ -571,9 +559,10 @@ const AllSubadmin = () => {
                     ""
                   )}
 
-           
-
-                  {formik.values.Strategy || formik.values.all || formik.values.addclient || formik.values.editclient ? (
+                  {formik.values.Strategy ||
+                  formik.values.all ||
+                  formik.values.addclient ||
+                  formik.values.editclient ? (
                     <>
                       <h6>All Strategy</h6>
 
@@ -588,11 +577,10 @@ const AllSubadmin = () => {
                                   name={strategy.strategy_name}
                                   value={strategy._id}
                                   onChange={(e) => handleStrategyChange(e)}
-
                                 />
                                 <label
                                   className="form-check-label"
-                                  for={strategy.strategy_name}
+                                  htmlFor={strategy.strategy_name}
                                 >
                                   {strategy.strategy_name}
                                 </label>
@@ -607,7 +595,6 @@ const AllSubadmin = () => {
                           {formik.errors.strateg_servcice}
                         </div>
                       )}
-
                     </>
                   ) : (
                     ""
@@ -618,9 +605,7 @@ const AllSubadmin = () => {
 
             <ToastButton />
           </Content>
-        </>
-      )}
-    </>
+       
   );
 };
 

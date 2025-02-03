@@ -108,6 +108,31 @@ export async function GET_API_INFORMATION_SUPERADMIN(data, token) {
 
 }
 
+
+
+export async function getAllPanelDataApi(broker_id){
+    try {
+        const res = await axios.post(`${Config.base_url}getUserCountByPanel`, broker_id)
+        return await res?.data;
+        
+    } catch (error) {
+        return error
+
+    }
+}
+
+
+export async function getNameAndBrokerIdDataApi(data){
+    try {
+        const res = await axios.post(`${Config.base_url}getNameAndBrokerId`, data)
+        return await res?.data;
+
+    } catch (error) {
+        return error
+
+    }
+}
+
 // GET PANEL INFORMATION TO DOMAIN FIND
 export async function GET_PANEL_INFORMATION(id, token) {
     try {
@@ -215,7 +240,6 @@ export async function GET_ADMIN_HELPS(id, token) {
 
 export async function UPDATE_ADMIN_PERMISSION(id, token) {
     try {
-
         const res = await axios.post(`${Config.smartAlogUrl}update/permission`, id, {
             headers: header(token),
             data: {},

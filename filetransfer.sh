@@ -15,7 +15,7 @@ remort_path="/var/www/backend/"
 # # List of destination servers "root@172.105.43.81"
   servers=(
 
-   "root@185.209.75.10"
+  #  "root@185.209.75.10"
   # "root@185.209.75.31" 
   # "root@217.145.69.39" 
   # "root@185.209.75.61" 
@@ -25,9 +25,9 @@ remort_path="/var/www/backend/"
   # "root@185.209.75.8" 
   # "root@185.209.75.9"
   # "root@185.209.75.11" 
-  "root@185.209.75.12" 
-  "root@185.209.75.21" 
-  "root@185.209.75.23" 
+  # "root@185.209.75.12" 
+  # "root@185.209.75.21" 
+  # "root@185.209.75.23" 
   # "root@185.209.75.27" 
   # "root@185.209.75.29" 
   # "root@185.209.75.30" 
@@ -38,7 +38,7 @@ remort_path="/var/www/backend/"
   #   "root@185.209.75.66" 
   #   "root@185.209.75.67" 
   #   "root@185.209.75.68" 
-  #   "root@185.209.75.69" 
+    # "root@185.209.75.69" 
   #   "root@185.209.75.70"
   #   "root@185.209.75.180"
   #   "root@185.209.75.181"
@@ -60,7 +60,6 @@ remort_path="/var/www/backend/"
 #     'root@185.209.75.199'
 #     'root@217.145.69.28'
 #     'root@217.145.69.27'
-#     'root@217.145.69.24'
 #     'root@217.145.69.25'
 #     'root@217.145.69.31'
 #     'root@217.145.69.26'
@@ -79,17 +78,17 @@ remort_path="/var/www/backend/"
 #     'root@5.178.98.11'
 #     'root@5.178.98.12'
 #     'root@5.178.98.13'
-#     'root@5.178.98.15'
+    # 'root@5.178.98.15'
 #     'root@5.178.98.19'
 #     'root@5.178.98.17'
 #     'root@5.178.98.20'
 #     'root@185.209.75.71'
-  'root@185.209.75.22'
+  # 'root@185.209.75.22'
 #   'root@185.209.75.14'
 #   'root@185.209.75.15'
-  'root@185.209.75.250'
-  'root@185.209.75.2'
-  'root@217.145.69.40'
+  # 'root@185.209.75.250'
+  # 'root@185.209.75.2'
+  # 'root@217.145.69.40'
 #   'root@185.209.75.195'
 # 'root@185.209.75.28'
 # 'root@217.145.69.76'
@@ -98,13 +97,17 @@ remort_path="/var/www/backend/"
 # 'root@5.178.98.12'
 # 'root@185.209.75.87'
 # 'root@217.145.69.26'
-
+# 'root@185.209.75.189'
+# 'root@217.145.69.39'
+# 'root@217.145.69.57'
+# 'root@217.145.69.24'
+'root@185.209.75.199'
   )  
 
 # # Array to store remote paths for each server
   remotepath=(
 
-     "software.corebizinfotech.com"
+    #  "software.corebizinfotech.com"
 #    "trade.codingpandit.com"
 #    "software.algobullstradingsolutions.com" 
 #    "software.intelfintech.com" 
@@ -114,9 +117,9 @@ remort_path="/var/www/backend/"
 #    "software.realbottrading.com" 
 #    "software.growskyinfotech.com"  
 #    "software.inspirealgo.com" 
-   "software.uniquetechnology.in" 
-   "software.sumedhainn.com"
-   "software.tradeonn.com" 
+  #  "software.uniquetechnology.in" 
+  #  "software.sumedhainn.com"
+  #  "software.tradeonn.com" 
 #    "software.vintyaitsolutions.com" 
 #    "software.metaprogramming.in" 
 #   "software.fincodify.com" 
@@ -127,7 +130,7 @@ remort_path="/var/www/backend/"
 #    "software.satviktech.com" 
 #   "software.thinkaumatictechnology.com" 
 #    "trade.visionresearchandsolution.com" 
-#    "software.smartwavetechnology.in" 
+  #  "software.smartwavetechnology.in" 
 #    "software.codinghornet.in"
 #    "software.inteltrade360.com"
 #    "software.fintechit.in"
@@ -149,7 +152,6 @@ remort_path="/var/www/backend/"
 #   'software.wealthcrafttechnology.com'
 #   'software.techelitesolution.in'
 #   'software.algosparks.in'
-#   'software.ssfintech.com'
 #   'software.rainfotech.com'
 #   'software.technofin.tech'
 #   'software.vittsurge.com'
@@ -173,12 +175,12 @@ remort_path="/var/www/backend/"
 # 'software.realcloudtechnology.com'
 # 'software.moneyplatform.co.in'
 # 'software.infraitsolution.com'
-'software.fincapex.com'
+# 'software.fincapex.com'
 # 'software.reliablealgo.com'
 # 'software.researchfactory.in'
-'software.visionalgotech.com'
-'software.linkupinfotech.com'
-'software.microninfotech.com'
+# 'software.visionalgotech.com'
+# 'software.linkupinfotech.com'
+# 'software.microninfotech.com'
 # 'software.growfuturetechnology.com'
 # 'software.oneplanetitsolution.com'
 # 'software.danoneitsolution.com'
@@ -187,12 +189,17 @@ remort_path="/var/www/backend/"
 # 'software.alcrafttechnology.com'
 # 'pnp.tradestreet.in'
 # 'software.sewintechnology.com'
+# 'software.starvisionitsolution.com'
+# 'auto.finbytech.com'
+# 'software.allrobosolution.com'
+# 'software.ssfintech.com'
+'software.techspiresolution.com'
    )
 
 
 passwords=(
 
-   'WWmeCDzy37_^4%7*'
+  #  'WWmeCDzy37_^4%7*'
 #  'xY3GH3#n^yv?_D89'
 #  'PKjV#vs#6T_196q#'
 #  'd@X19uYAF#9m5#a?'
@@ -202,9 +209,9 @@ passwords=(
 #  '99@bggU3W5^WIb^@'
 #  'KRNP&27am^v*&69e'
 #  'TpWz638T$Ah&@_b0'
- '$vcKz#2O5U!5Mq&9'
- '^h2M%2$8S7HKjgm_'
- 'lG@Sp53kK1$#6#Mt'
+#  '$vcKz#2O5U!5Mq&9'
+#  '^h2M%2$8S7HKjgm_'
+#  'lG@Sp53kK1$#6#Mt'
 #  '&cZk0%1XG$3$tMz1'
 #  '5X&H5c1^!^1YzFjo'
 #  '%wG_W&1D6r^37Oav'
@@ -237,7 +244,6 @@ passwords=(
 #  'Oir?DV3#y$D23#u0'
 #  'Rbc2!RQv4&s7J1%$'
 #  '@c$Ks!4N0TUp53_w'
-#  '4Ij87*Lvl^@9?ZsS'
 #  'rF8%$d94%RdR0$fU'
 #  '*TqD1&dm99B*J!g5'
 #  'VD&u*6oGn5U!j75_'
@@ -261,12 +267,12 @@ passwords=(
 # 'Ad9f_%WC^oVe132^'
 # '*9Dy0?9Gm2WOwg&*'
 # '_?zD_Ad0DW57@c2t'
-'6^Di3&9foMAm5?*O'
+# '6^Di3&9foMAm5?*O'
 # '0t_h5sUe8WG^_6N%'
 # '&1VR3s2@_tv$GhI2'
-'9f@J6_^22R?FYcdb'  
-'&to6M*#?3LexD5U0'
-'5EslKC&Z7kt4@^*3'
+# '9f@J6_^22R?FYcdb'  
+# '&to6M*#?3LexD5U0'
+# '5EslKC&Z7kt4@^*3'
 # 'A3!eK%TRcx&457m_'
 # 'WHN6$ixF!n^c^458'
 # 'scR%!487C@yN0@Zn'
@@ -275,7 +281,11 @@ passwords=(
 # '4VsgJ_^1Hps$1H7!'
 # "K?pv?GW&ws612G*9"
 # 'ri!9#x8t36IO'
-
+# '9hVz884$M*o&rFU*'
+# 'PKjV#vs#6T_196q#'
+# 'cu9ojl6omotopimox2pr'
+# '4Ij87*Lvl^@9?ZsS'
+'Oir?DV3#y$D23#u0'
 )
 
    
@@ -333,7 +343,7 @@ for i in "${!servers[@]}"; do
     
     # Execute npm i Broker - Backend
   sshpass -p "$password" ssh "$server" "cd /var/www/backend/brokerbackend && npm i"
-# 
+
    # Build Code
   sshpass -p "$password" rsync -avz  "$source_path_build" "$server:$remote_path1"
     
@@ -341,7 +351,7 @@ for i in "${!servers[@]}"; do
    # mongodb restart command
   #  sshpass -p "$password" ssh "$server" "systemctl restart mongod"
 
-   # Reload broker server
+  #  Reload broker server
   sshpass -p "$password" ssh "$server" "pm2 reload broker_server"
 
   #  # Reload app

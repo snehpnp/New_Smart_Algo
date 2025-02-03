@@ -11,18 +11,16 @@ import {
   Mobile_regex,
   Name_regex,
 } from "../../../Utils/Common_regex";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Content from "../../../Components/Dashboard/Content/Content";
 import { GET_ALL_GROUP_SERVICES } from "../../../ReduxStore/Slice/Admin/AdminSlice";
-import { Get_All_SUBADMIN } from "../../../ReduxStore/Slice/Subadmin/Subadminslice";
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
 import { Get_Service_By_Group_Id } from "../../../ReduxStore/Slice/Admin/GroupServiceSlice";
 import { Get_Sub_Admin_Permissions } from "../../../ReduxStore/Slice/Subadmin/Subadminslice";
 import { All_Api_Info_List } from "../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice";
 import * as Config from "../../../Utils/Config";
-import Form from "react-bootstrap/Form";
 import { Add_User } from "../../../ReduxStore/Slice/Subadmin/userSlice";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import "../../../App.css";
 
@@ -30,11 +28,11 @@ const AddClient = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const user_token = JSON.parse(localStorage.getItem("user_details")).token;
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role;
-  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
+  const user_token = JSON.parse(localStorage.getItem("user_details"))?.token;
+
+  const user_id = JSON.parse(localStorage.getItem("user_details"))?.user_id;
   const [selectedStrategies, setSelectedStrategies] = useState([]);
-  const [ShowAllStratagy, setShowAllStratagy] = useState(false);
+
   const [getPermissions, setGetPermissions] = useState([]);
   const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
   const [first, setfirst] = useState([]);
@@ -374,10 +372,12 @@ const AddClient = () => {
           ? "App Key"
           : formik.values.broker == 26
           ? "App Key"
-            : formik.values.broker == 27
+          : formik.values.broker == 27
           ? "ApI Key"
           : formik.values.broker == 25
           ? "Api Key"
+          : formik.values.broker == 28
+          ? "Vendor Id"
           : "Api Key",
       type: "text",
       showWhen: (values) =>
@@ -395,7 +395,8 @@ const AddClient = () => {
         values.broker == "20" ||
         values.broker == "26" ||
         values.broker == "27" ||
-        values.broker == "25",
+        values.broker == "25" ||
+        values.broker == "28",
       label_size: 12,
       col_size: 6,
       disable: false,
@@ -417,8 +418,10 @@ const AddClient = () => {
           ? "Client Code"
           : formik.values.broker == 11
           ? "client_code"
-             : formik.values.broker == 27
+          : formik.values.broker == 27
           ? "Vendor Code"
+          : formik.values.broker == 28
+          ? "User Id"
           : "User Id",
       type: "text",
       showWhen: (values) =>
@@ -430,16 +433,22 @@ const AddClient = () => {
         values.broker == "6" ||
         values.broker == "20" ||
         values.broker == "27" ||
-        values.broker == "21",
+        values.broker == "21" ||
+        values.broker == "28",
       label_size: 12,
       col_size: 6,
       disable: false,
     },
     {
       name: "demat_userid",
-      label: formik.values.broker == 9 ? "User Id" : "",
+      label:
+        formik.values.broker == 9
+          ? "User Id"
+          : formik.values.broker == 28
+          ? "Vendor Key"
+          : "",
       type: "text",
-      showWhen: (values) => values.broker == "9",
+      showWhen: (values) => values.broker == "9" || values.broker == "28",
       label_size: 12,
       col_size: 6,
       disable: false,
@@ -463,6 +472,8 @@ const AddClient = () => {
           ? "Password"
           : formik.values.broker == 14
           ? "User Id "
+          : formik.values.broker == 28
+          ? "Encryption Secret Key"
           : "App Id",
       type: "text",
       showWhen: (values) =>
@@ -474,16 +485,23 @@ const AddClient = () => {
         values.broker == "11" ||
         values.broker == "13" ||
         values.broker == "14" ||
-        values.broker == "21",
+        values.broker == "21" ||
+        values.broker == "28",
       label_size: 12,
       col_size: 6,
       disable: false,
     },
     {
       name: "app_key",
-      label: formik.values.broker == 5 || 6 ? "App Key" : "",
+      label:
+        formik.values.broker == 5 || formik.values.broker == 6
+          ? "App Key"
+          : formik.values.broker == 28
+          ? "Encryption IV"
+          : "",
       type: "text",
-      showWhen: (values) => values.broker == "5",
+      showWhen: (values) =>
+        values.broker == "5" || values.broker == "6" || values.broker == "28",
       label_size: 12,
       col_size: 6,
       disable: false,
@@ -511,6 +529,8 @@ const AddClient = () => {
           ? "Api Secret"
           : formik.values.broker == 27
           ? "imei"
+          : formik.values.broker == 28
+          ? "Password"
           : "Api Secret",
       type: "text",
       showWhen: (values) =>
@@ -529,7 +549,8 @@ const AddClient = () => {
         values.broker == "19" ||
         values.broker == "26" ||
         values.broker == "27" ||
-        values.broker == "25",
+        values.broker == "25" ||
+        values.broker == "28",
       label_size: 12,
       col_size: 6,
       disable: false,
@@ -539,13 +560,11 @@ const AddClient = () => {
       label:
         formik.values.broker == 5
           ? "DOB"
-        
           : formik.values.broker == 9
           ? "Encryption IV"
-        
           : "Api Secret",
       type: "text",
-      showWhen: (values) =>  values.broker == "9",
+      showWhen: (values) => values.broker == "9",
       label_size: 12,
       col_size: 6,
       disable: false,
@@ -726,6 +745,12 @@ const AddClient = () => {
       // formik.setFieldValue("api_secret", "null");
       // formik.setFieldValue("api_type", "null");
     }
+    if (formik.values.broker === "28" || formik.values.broker === 28) {
+      // formik.setFieldValue("api_key", "null");
+      // formik.setFieldValue("client_code", "null");
+      // formik.setFieldValue("api_secret", "null");
+      // formik.setFieldValue("api_type", "null");
+    }
 
     if (formik.values.licence == "2" || formik.values.licence == 2) {
       formik.setFieldValue("fromDate", null);
@@ -740,7 +765,6 @@ const AddClient = () => {
       formik.setFieldValue("todate", null);
     }
   }, [formik.values.broker, formik.values.licence]);
-
 
   const getGroupeServics = async () => {
     if (formik.values.groupservice) {
@@ -828,6 +852,7 @@ const AddClient = () => {
     data();
   }, [getPermissions]);
 
+
   return (
     <>
       <Content
@@ -847,17 +872,16 @@ const AddClient = () => {
             <>
               {/*  For Show All Services */}
               {GetServices &&
-                GetServices.data.map((strategy) => (
+                GetServices?.data?.map((strategy) => (
                   <div className={`col-lg-2 `} key={strategy._id}>
                     <div className="col-lg-12 ">
                       <label
                         className="form-check-label bg-primary text-white py-2 px-4"
-                        for={strategy.ServiceResult.name}
-                      >{`${strategy.ServiceResult.name}[${strategy.categories.segment}]`}</label>
+                        htmlFor={strategy?.ServiceResult?.name}
+                      >{`${strategy?.ServiceResult?.name}[${strategy?.categories?.segment}]`}</label>
                     </div>
                   </div>
                 ))}
-            
 
               {formik.errors.Strategy && (
                 <div style={{ color: "red" }} className="my-3">
@@ -865,32 +889,35 @@ const AddClient = () => {
                 </div>
               )}
 
-              <>
-              <h5> All Strategy </h5>
-                {AllStrategy.data.map((strategy) => (
-                  <div className={`col-lg-2 mt-2`} key={strategy._id}>
-                    <div className="row ">
-                      <div className="col-lg-12 ">
-                        <div className="form-check custom-checkbox mb-3">
-                          <input
-                            type="checkbox"
-                            className="form-check-input"
-                            name={strategy.strategy_name}
-                            value={strategy._id}
-                            onChange={(e) => handleStrategyChange(e)}
-                          />
-                          <label
-                            className="form-check-label"
-                            for={strategy.strategy_name}
-                          >
-                            {strategy.strategy_name}
-                          </label>
+              {getPermissions &&
+                getPermissions?.Strategy_Permission === 1 && (
+                  <>
+                    <h5> All Strategy </h5>
+                    {AllStrategy.data.map((strategy) => (
+                      <div className={`col-lg-2 mt-2`} key={strategy._id}>
+                        <div className="row ">
+                          <div className="col-lg-12 ">
+                            <div className="form-check custom-checkbox mb-3">
+                              <input
+                                type="checkbox"
+                                className="form-check-input"
+                                name={strategy.strategy_name}
+                                value={strategy._id}
+                                onChange={(e) => handleStrategyChange(e)}
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor={strategy.strategy_name}
+                              >
+                                {strategy.strategy_name}
+                              </label>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                ))}
-              </>
+                    ))}
+                  </>
+                )}
             </>
           }
         />

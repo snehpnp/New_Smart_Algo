@@ -51,7 +51,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
             filePath_token = '/Aliceblue/ALICE_CDS.csv';
         } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
             filePath_token = '/Aliceblue/ALICE_MCX.csv';
-        } else {
+        } else if (segment && (segment.toUpperCase() === 'BF' || segment.toUpperCase() === 'BO')) {
+            filePath_token = '/Aliceblue/ALICE_BFO.csv';
+        }
+        else {
 
 
             console.log('Invalid segment value');
@@ -81,7 +84,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                 trading_symbol = parts[8];
             } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
                 trading_symbol = parts[8];
-            } else {
+            } 
+            else if (segment && (segment.toUpperCase() === 'BF' || segment.toUpperCase() === 'BO')) {
+                trading_symbol = parts[8];
+            }else {
                
                 
                 const requestPromises = AllClientData.map(async (item) => {

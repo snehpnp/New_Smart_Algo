@@ -444,7 +444,6 @@ class Makecall {
   //get Strategy Data
   async GetgetStrategyData(req, res) {
 
-   console.log("req.body",req.body)
     try {
       // const { user_id } = req.body;
       // const findUser = await User.find({ _id: user_id }).select('prifix_key Role')
@@ -660,7 +659,6 @@ class Makecall {
         WiseTypeDropdown
       } = req.body;
 
-      console.log("Segment",Segment)
       
       let Expiry = req.body.Expiry
     
@@ -733,8 +731,6 @@ class Makecall {
           await token_chain.updateOne(filter, update, { upsert: true });
 
       
-          console.log("token",token)
-          console.log("exch",exch)
           
           let channelList = exch + '|' + token;
           updateChannelAndSend(channelList);
@@ -752,7 +748,7 @@ class Makecall {
 
 
     } catch (error) {
-      console.log(error);
+
       return res.send({ status: false, msg: "Server Error" });
     }
 
@@ -823,7 +819,6 @@ class Makecall {
   //Update data above beleow range
   async UpdateDataMakeCall(req, res) {
 
-    console.log("req.body",req.body)
 
     try {
 
@@ -864,7 +859,6 @@ class Makecall {
       for (let id in req.body.row) {
         const updates = req.body.row[id];
 
-       // console.log("req.body.row",req.body.row)
         const filter = { _id: new ObjectId(id) };
         const update = { $set: updates };
 
@@ -950,7 +944,7 @@ async function run() {
   try {
 
     const makecallabrView_excute_run = async () => {
-      // console.log("makecallabrView_excute_run")
+    
       try {
 
         let rr = true
@@ -1065,7 +1059,6 @@ async function run() {
              await axios.request(config)
                 .then(async (response) => {
                    
-                    // console.log("response makecall abr ", response.data)
                 //  const io = await getIO();
                 //  io.emit("TRADE_NOTIFICATION", { data: item ,type : "MAKECALL" , type_makecall : "TRADE"});
 

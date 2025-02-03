@@ -568,22 +568,27 @@ const HelpCenter = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-
-        // SORT NIFTY BANKNIFTY FINNIFTY ON THE TOP
+          // SORT NIFTY BANKNIFTY FINNIFTY ON THE TOP
           let SortIndexWise = response.data.sort((a, b) => {
-            return a.symbol === "NIFTY" ? -1 : a.symbol === "BANKNIFTY" ? -1 : a.symbol === "FINNIFTY" ? -1 : a.symbol === "SENSEX" ? -1 : 1;
-
+            return a.symbol === "NIFTY"
+              ? -1
+              : a.symbol === "BANKNIFTY"
+              ? -1
+              : a.symbol === "FINNIFTY"
+              ? -1
+              : a.symbol === "SENSEX"
+              ? -1
+              : 1;
           });
 
-     
           set_All_Symbols({
             loading: false,
             data: SortIndexWise,
           });
 
-          const filteredSelectedData = SortIndexWise
-            .filter((item) => item.token === "1")
-            .map((item) => item.symbol);
+          const filteredSelectedData = SortIndexWise.filter(
+            (item) => item.token === "1"
+          ).map((item) => item.symbol);
 
           setSelectedServices(filteredSelectedData);
           setTags(filteredSelectedData);
@@ -717,6 +722,8 @@ const HelpCenter = () => {
 
       if (res.data.stat) {
         const handleResponse = async (response) => {
+   
+
           const old_val_call = $(".Call_Price_" + response.tk).html();
           const old_val_put = $(".Put_Price_" + response.tk).html();
 
@@ -860,7 +867,6 @@ const HelpCenter = () => {
             toast.error(response.msg);
             setSerachService("");
             setRefresh(!refresh);
-            // setshowModalSelectOptionStock(false)
           }
         });
     }
@@ -868,8 +874,7 @@ const HelpCenter = () => {
 
   const DoneOptionStock = () => {
     DoneSelectOptionTrade();
-    return;
-    setshowModalSelectOptionStock(false);
+
   };
 
   const handleSymbolClickDelete = (e, symbol) => {
@@ -916,7 +921,6 @@ const HelpCenter = () => {
                   <option value="">Select Stock Name</option>
                   {All_Symbols.data &&
                     All_Symbols.data.map((item) => {
-
                       return (
                         <option value={item.symbol} name={item.price}>
                           {item.symbol}
@@ -981,24 +985,21 @@ const HelpCenter = () => {
                 </select>
               </div>
               <div className="col-md-2 text-secondary">
-  <label
-    className="text-secondary"
-    style={{ fontWeight: "bold", color: "black" }}
-  >
-    Option Stock
-  </label>
-  <input
-    type="text"
-    readOnly
-    className="new-input-control form-control"
-    placeholder="Click to select"
-    onClick={SelectOptionStock}
-    style={{ cursor: "pointer", backgroundColor: "#f9f9f9" }}
-  />
-</div>
-
-
-
+                <label
+                  className="text-secondary"
+                  style={{ fontWeight: "bold", color: "black" }}
+                >
+                  Option Stock
+                </label>
+                <input
+                  type="text"
+                  readOnly
+                  className="new-input-control form-control"
+                  placeholder="Click to select"
+                  onClick={SelectOptionStock}
+                  style={{ cursor: "pointer", backgroundColor: "#f9f9f9" }}
+                />
+              </div>
 
               <div className="col-md-4 d-flex justify-content-end align-items-center text-secondary mt-4">
                 <button
@@ -1026,8 +1027,6 @@ const HelpCenter = () => {
                   size="xl"
                   title="Request Confirmation"
                   cancel_btn={true}
-                  // hideBtn={false}
-                  // disabled_submit={disabled}
                   hideCloseButton={true}
                   btn_name="Confirm"
                   Submit_Function={Done_For_Trade}
@@ -1243,16 +1242,4 @@ const HelpCenter = () => {
 
 export default HelpCenter;
 
-export const sneh = (OptionChainData) => {
-  OptionChainData &&
-    OptionChainData.filter((item) => {
-      const element1 = $(".button_call_sell_" + item.call_token);
-      element1.removeClass("active");
-      const element2 = $(".button_call_buy_" + item.call_token);
-      element2.removeClass("active");
-      const element4 = $(".button_put_sell_" + item.put_token);
-      element4.removeClass("active");
-      const element3 = $(".button_put_buy_" + item.put_token);
-      element3.removeClass("active");
-    });
-};
+

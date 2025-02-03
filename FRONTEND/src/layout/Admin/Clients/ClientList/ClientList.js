@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
-import Loader from "../../../../Utils/Loader";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
-import FullDataTable from "../../../../Components/ExtraComponents/Datatable/ClientDataTable";
 import {
   GET_ALL_CLIENTS,
   GO_TO_DASHBOARDS,
@@ -24,18 +22,32 @@ import * as XLSX from "xlsx";
 import { GET_IP } from "../../../../Service/common.service";
 import Swal from "sweetalert2";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory, {
+  PaginationProvider,
+  PaginationTotalStandalone,
+  PaginationListStandalone,
+} from "react-bootstrap-table2-paginator";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
+import Loader from "../../../../Utils/Loader";
+import { Get_Pmermission } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
 
+const paginationOptions = {
+  custom: true,
+  totalSize: 0, 
+  sizePerPage: 10, 
+  page: 1, 
+};
 
 const AllClients = () => {
   const [ip, setIp] = useState("");
 
   useEffect(() => {
     GET_IP().then((response) => {
-      setIp(response.data.ip);
+      setIp(response.data?.ip);
     });
   }, []);
-
-  var headerName = "All Clients";
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -43,7 +55,6 @@ const AllClients = () => {
   const dispatch = useDispatch();
   const user_details = JSON.parse(localStorage.getItem("user_details"));
   const [refresh, setrefresh] = useState(false);
-  const [originalData, setOriginalData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [PanelStatus, setPanelStatus] = useState("2");
   const [ClientStatus, setClientStatus] = useState("null");
@@ -53,96 +64,197 @@ const AllClients = () => {
   const [getAllClients, setAllClients] = useState({ loading: true, data: [] });
   const [getAllStrategyNameData, setAllStrategyName] = useState([]);
   const [StrategyClientStatus, setStrategyClientStatus] = useState("all");
+  const [getPage, setPage] = useState(1);
+  const [getSizePerPage, setSizePerPage] = useState(10);
+  const [total1, setTotal] = useState(0);
+  const [getHeaderName, setHeaderName] = useState("All Clients");
+  const [searchQuery, setSearchQuery] = useState("");
+const [admin_permission, setAdmin_permission] = useState(0);
 
-  useEffect(() => {
-     Brokerdata();
-  }, []);
-
-
-
-  useEffect(() => {
-    const filteredData = originalData.filter((item) => {
-      const filter1Match =
-        ClientStatus == "null" || item.license_type.includes(ClientStatus);
-      const filter3Match =
-        selectBroker === "null" || item.broker === selectBroker;
-      const filter2Match =
-        PanelStatus == 2 ||
-        item.TradingStatus.includes(PanelStatus == 1 ? "on" : "off");
-      const searchTermMatch =
-        searchInput === "" ||
-        item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
-        item.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
-        item.PhoneNo.includes(searchInput);
-
-      return filter1Match && filter3Match && filter2Match && searchTermMatch;
-    });
-    var Ddata =
-      searchInput ||
-      PanelStatus !== "2" ||
-      ClientStatus !== "null" ||
-      selectBroker !== "null"
-        ? filteredData
-        : originalData;
-
-    setAllClients({
-      loading:false,
-      data: Ddata,
-    });
-  }, [searchInput, originalData, PanelStatus, ClientStatus, selectBroker]);
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-       
-        await data();
-      } catch (error) {
-        return;
-      }
-    };
-
-    fetchData();
-    GetAllStrategyName();
-  }, [refresh]);
-
-  useEffect(() => {
-    forCSVdata();
-  }, [getAllClients.data]);
-
-
-  useEffect(() => {
-    data();
-  }, [StrategyClientStatus]);
-
-
-  const Brokerdata = async () => {
-    await dispatch(
-      All_Api_Info_List({
-        token: user_details && user_details.token,
-        url: Config.react_domain,
-        brokerId: -1,
-        key: 1,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setBrokerDetails(response.data);
-        }
-      });
+  const handleSearch = () => {
+    setSearchQuery(searchInput);
   };
-  const GetAllStrategyName = async (e) => {
+
+console.log("admin_permission",admin_permission)
+
+  const Permmision = async () => {
     await dispatch(
-      Get_All_Service_for_Client({
-        req: {},
+      Get_Pmermission({
+        domain: Config.react_domain,
         token: user_details?.token,
       })
     )
       .unwrap()
       .then((response) => {
         if (response.status) {
-          setAllStrategyName( response.data);
+          console.log("response", response.data);
+          if (response.data.length === 0) {
+            setAdmin_permission(0);
+          } else {
+            setAdmin_permission(response.data[0].Addclient);
+          }
+        } else {
+          setAdmin_permission(0);
+        }
+      });
+  };
+
+  useEffect(() => {
+    const Brokerdata = async () => {
+      await dispatch(
+        All_Api_Info_List({
+          token: user_details?.token,
+          url: Config.react_domain,
+          brokerId: -1,
+          key: 1,
+        })
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
+            setBrokerDetails(response.data);
+          }
+        });
+    };
+
+    Brokerdata();
+  }, [dispatch, user_details?.token]);
+
+  useEffect(() => {
+    const GetAllStrategyName = async () => {
+      await dispatch(
+        Get_All_Service_for_Client({
+          req: {},
+          token: user_details?.token,
+        })
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
+            setAllStrategyName(response.data);
+          }
+        });
+    };
+
+    GetAllStrategyName();
+  }, [dispatch, user_details?.token]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await GetClientsApi();
+      } catch (error) {
+        return;
+      }
+    };
+
+    fetchData();
+  }, [
+    StrategyClientStatus,
+    getPage,
+    getSizePerPage,
+    ClientStatus,
+    PanelStatus,
+    selectBroker,
+    searchQuery,
+  ]);
+
+  useEffect(() => {
+    setPage(1);
+    setSizePerPage(10);
+  }, [
+    StrategyClientStatus,
+
+    ClientStatus,
+    PanelStatus,
+    selectBroker,
+    searchQuery,
+  ]);
+
+  const GetClientsApi = async () => {
+    var req1 = {
+      Find_Role: user_details && user_details.Role,
+      user_ID: user_details && user_details.user_id,
+      stgId: StrategyClientStatus,
+      page: getPage,
+      limit: getSizePerPage,
+      ClientStatus: ClientStatus,
+      PanelStatus: PanelStatus,
+      selectBroker: selectBroker,
+      dashboard_filter: dashboard_filter,
+      searchQuery: searchQuery,
+      StarUsers: 0,
+    };
+
+    await dispatch(GET_ALL_CLIENTS(req1))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          if (dashboard_filter !== undefined) {
+            let abc;
+
+            const filterHeaderNames = {
+              "000": "",
+              111: "Total Active Clients",
+              21: "Active Live Client",
+              2: "Total Live Client",
+              20: "Expired Live Client",
+              1: "Total Demo Client",
+              11: "Active Demo Client",
+              10: "Expired Demo Client",
+              0: "Total 2 Days Client",
+              "01": "Active 2 Days Client",
+              "00": "Expired 2 Days Client",
+              ADMIN: "Admin Clients",
+              SUBADMIN: "Sub Admin Clients",
+            };
+
+            setHeaderName(filterHeaderNames[dashboard_filter] || "");
+
+            abc =
+              response.data &&
+              response.data.filter((item) => {
+                const currentDate = new Date();
+
+                switch (dashboard_filter) {
+                  case "000":
+                    return (
+                      item.Role === "USER" &&
+                      new Date(item.EndDate) <= currentDate
+                    );
+
+                  case "ADMIN":
+                  case "SUBADMIN":
+                    return item.parent_role === dashboard_filter;
+                  default:
+                    return true;
+                }
+              });
+
+            setAllClients({
+              loading: false,
+              data: abc,
+              pagination: response?.pagination,
+            });
+            setTotal(response?.pagination?.total);
+
+            return;
+          }
+
+          setTotal(response?.pagination?.total);
+          setAllClients({
+            loading: false,
+            data: response.data,
+            pagination: response?.pagination,
+          });
+
+          forCSVdata(response.data);
+        } else {
+          setAllClients({
+            loading: false,
+            data: response.data,
+            pagination: response?.pagination,
+          });
         }
       });
   };
@@ -168,147 +280,8 @@ const AllClients = () => {
     }
   };
 
-
-  if (dashboard_filter !== undefined) {
-    if (dashboard_filter === "000") {
-      headerName = "";
-    } else if (dashboard_filter === "111") {
-      headerName = "Total Active Clients";
-    } else if (dashboard_filter == "21") {
-      headerName = "Active Live Client";
-    } else if (dashboard_filter == "2") {
-      headerName = "Total Live Client";
-    } else if (dashboard_filter == "20") {
-      headerName = "Expired Live Client";
-    } else if (dashboard_filter == "1") {
-      headerName = "Total Demo Client";
-    } else if (dashboard_filter == "11") {
-      headerName = "Active Demo Client";
-    } else if (dashboard_filter == "10") {
-      headerName = "Expired Demo Client";
-    } else if (dashboard_filter == "0") {
-      headerName = "Total 2 Days Client";
-    } else if (dashboard_filter == "01") {
-      headerName = "Active 2 Days Client";
-    } else if (dashboard_filter == "00") {
-      headerName = "Expired 2 Days Client";
-    }
-  }
-
-  const data = async () => {
-    var req1 = {
-      Find_Role: user_details && user_details.Role,
-      user_ID: user_details && user_details.user_id,
-      stgId: StrategyClientStatus,
-    };
-    await dispatch(GET_ALL_CLIENTS(req1))
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          if (dashboard_filter !== undefined) {
-            let abc =
-              response.data &&
-              response.data.filter((item) => {
-                if (dashboard_filter === "000") {
-                  headerName = "";
-                  return (
-                    item.Role === "USER" && new Date(item.EndDate) <= new Date()
-                  );
-                }
-                if (dashboard_filter === "111") {
-                  headerName = "Total Active Clients";
-
-                  return (
-                    item.Role === "USER" && new Date(item.EndDate) >= new Date()
-                  );
-                }
-
-                if (dashboard_filter === "2" || dashboard_filter === 2) {
-                  return (
-                    item.license_type == dashboard_filter &&
-                    item.Is_Active == "1"
-                  );
-                }
-                if (dashboard_filter === "21" || dashboard_filter === 21) {
-                  return (
-                    new Date(item.EndDate) >= new Date() &&
-                    (item.license_type === "2" || item.license_type === 2)
-                  );
-                }
-                if (dashboard_filter === "20" || dashboard_filter === 20) {
-                  return (
-                    new Date(item.EndDate) < new Date() &&
-                    (item.license_type === "2" || item.license_type === 2)
-                  );
-                }
-                if (dashboard_filter === "1" || dashboard_filter === 1) {
-                  return (
-                    item.license_type === dashboard_filter ||
-                    item.license_type === dashboard_filter
-                  );
-                }
-                if (dashboard_filter === "11" || dashboard_filter === 11) {
-                  return (
-                    new Date(item.EndDate) > new Date() &&
-                    (item.license_type === "1" || item.license_type === 1)
-                  );
-                }
-                if (dashboard_filter === "10" || dashboard_filter === 10) {
-                  return (
-                    new Date(item.EndDate) < new Date() &&
-                    (item.license_type === "1" || item.license_type === 1)
-                  );
-                }
-                if (dashboard_filter === "0" || dashboard_filter === 0) {
-                  return (
-                    item.license_type === dashboard_filter ||
-                    item.license_type === dashboard_filter
-                  );
-                }
-                if (dashboard_filter === "01") {
-                  return (
-                    new Date(item.EndDate) > new Date() &&
-                    (item.license_type === "0" || item.license_type === 0)
-                  );
-                }
-                if (dashboard_filter === "00") {
-                  return (
-                    new Date(item.EndDate) <= new Date() &&
-                    (item.license_type === "0" || item.license_type === 0)
-                  );
-                }
-                if (
-                  dashboard_filter === "ADMIN" ||
-                  dashboard_filter === "SUBADMIN"
-                ) {
-                  return item.parent_role === dashboard_filter;
-                }
-              });
-            setAllClients({
-              loading: false ,
-              data: abc,
-            });
-            return;
-          }
-          setAllClients({
-            loading:  false ,
-            data: response.data,
-          });
-        } else {
-          setAllClients({
-            loading: false,
-            data: response.data,
-          });
-        }
-
-        setOriginalData(response.data);
-      });
-  };
-
-
-
   const goToDashboard = async (row, asyncid, email) => {
-    if (row.AppLoginStatus == "1" || row.WebLoginStatus == "1") {
+    if (row.AppLoginStatus === "1" || row.WebLoginStatus === "1") {
       let req = {
         Email: email,
       };
@@ -371,45 +344,23 @@ const AllClients = () => {
     }
   };
 
-  const StarClientFormatter = ({ cell, row }) => {
-    const [isStarred, setIsStarred] = useState(cell === "1");
+  const handleToggle = async (StarStatus, data) => {
+   
 
-    const handleToggle = async (e, data) => {
-      const newStarStatus = !isStarred;
-      let req = {
-        id: data._id,
-        StarStatus: newStarStatus ? "1" : "0",
-      };
-      await dispatch(UpdateStarClientStatus(req))
-        .unwrap()
-        .then((response) => {
-          if (response.status) {
-            setIsStarred(newStarStatus ? "1" : "0");
-            setrefresh(!refresh);  
-          } 
-        });
+    const req = {
+      id: data._id,
+      StarStatus: StarStatus ? "1" : "0",
     };
 
-    return (
-      <div style={{ width: "100px" }}>
-        <div
-          onClick={(e) => handleToggle(e, row)}
-          style={{ cursor: "pointer" }}
-        >
-          <span
-            data-toggle="tooltip"
-            data-placement="top"
-            title="Trading Status"
-          >
-            {isStarred ? (
-              <i className="bi bi-star-fill"></i>
-            ) : (
-              <i className="bi bi-star"></i>
-            )}
-          </span>
-        </div>
-      </div>
-    );
+    try {
+      const response = await dispatch(UpdateStarClientStatus(req)).unwrap();
+      if (response.status) {
+        setrefresh(!refresh);
+        GetClientsApi();
+      }
+    } catch (error) {
+      console.error("Error updating star status", error);
+    }
   };
 
   const columns = [
@@ -449,7 +400,7 @@ const AllClients = () => {
       formatter: (cell, row) => showLicenceName(cell, row.license_type),
     },
     {
-      dataField: "ActiveStatus",
+      dataField: "Active Status",
       text: "Status",
       formatter: (cell, row) => (
         <>
@@ -457,24 +408,22 @@ const AllClients = () => {
             <input
               className="toggle-checkbox bg-primary"
               type="checkbox"
-              checked={row.ActiveStatus === "1" ? true : false}
+              checked={row?.ActiveStatus === "1" ? true : false}
               onChange={(e) => {
                 activeUser(e, row);
               }}
             />
             <div
               className={`toggle-switch  ${
-                row.ActiveStatus === "1" ? "bg-success" : "bg-danger"
+                row?.ActiveStatus === "1" ? "bg-success" : "bg-danger"
               }`}
             ></div>
           </label>
-
-        
         </>
       ),
     },
     {
-      dataField: "ActiveStatus",
+      dataField: "Active cd",
       text: "Go To Dashboard",
       formatter: (cell, row) => (
         <>
@@ -486,7 +435,7 @@ const AllClients = () => {
                 : { color: "#56c080" }
             }
             onClick={() => goToDashboard(row, row._id, row.Email)}
-            disabled={row.AppLoginStatus == "0" && row.WebLoginStatus == "0"}
+            disabled={row.AppLoginStatus === "0" && row.WebLoginStatus === "0"}
           >
             Dashboard
           </span>
@@ -501,7 +450,7 @@ const AllClients = () => {
           {row.StartDate == null && row.EndDate == null ? (
             <span
               style={
-                cell == "off" || cell === null
+                cell === "off" || cell === null
                   ? { color: "#FF0000", fontSize: "13px" }
                   : { color: "#008000", fontSize: "13px" }
               }
@@ -511,7 +460,7 @@ const AllClients = () => {
           ) : (
             <span
               style={
-                cell == "off" || cell === null
+                cell === "off" || cell === null
                   ? { color: "#FF0000", fontSize: "40px" }
                   : { color: "#008000", fontSize: "40px" }
               }
@@ -553,7 +502,7 @@ const AllClients = () => {
                 />
               </span>
             </Link>
-            {row.license_type == "1" ? (
+            {(row.license_type === "1" || row.license_type === 1) && (
               <Link>
                 <span data-toggle="tooltip" data-placement="top" title="Delete">
                   <Trash2
@@ -561,12 +510,10 @@ const AllClients = () => {
                     color="#d83131"
                     strokeWidth={2}
                     className="mx-1"
-                    onClick={(e) => Delete_user(row._id)}
+                    onClick={() => Delete_user(row._id)}
                   />
                 </span>
               </Link>
-            ) : (
-              ""
             )}
           </div>
         </div>
@@ -592,7 +539,7 @@ const AllClients = () => {
               />
             </span>
 
-            {row.license_type != "1" && (
+            {(row.license_type !== "1" || row.license_type !== 1) && (
               <span
                 data-toggle="tooltip"
                 data-placement="top"
@@ -614,43 +561,42 @@ const AllClients = () => {
     {
       dataField: "starClient",
       text: "Favorite",
-      formatter: (cell, row) => <StarClientFormatter cell={cell} row={row} />,
+      formatter: (cell, row) => (
+        <div style={{ cursor: "pointer" }}>
+          <div>
+            {cell === 1 || cell === "1" ? (
+              <i
+                className="bi bi-star-fill"
+                onClick={() => handleToggle(false, row)}
+              ></i>
+            ) : (
+              <i
+                className="bi bi-star"
+                onClick={() => handleToggle(true, row)}
+              ></i>
+            )}
+          </div>
+        </div>
+      ),
     },
   ];
 
   const showBrokerName = (value1, licence_type) => {
-   
-
     if (licence_type === "1") {
       return "Demo";
-    } else {
-      const foundNumber =
-        BrokerDetails &&
-        BrokerDetails.find((value) => value.broker_id == value1);
-      if (foundNumber != undefined) {
-        return foundNumber.title;
-      } else {
-        return "";
-      }
     }
+
+    const foundBroker = BrokerDetails?.find(
+      (value) => parseInt(value.broker_id) === parseInt(value1)
+    );
+
+    return foundBroker?.title ?? "-";
   };
 
-  const ResetDate = (e) => {
-    e.preventDefault();
-    setSearchInput("");
-    setClientStatus("null");
-    setSelectBroker("null");
-    setPanelStatus("2");
-    setAllClients({
-      loading:  false ,
-      data: originalData,
-    });
-  };
-
-  const forCSVdata = () => {
+  const forCSVdata = (data) => {
     let csvArr = [];
-    if (getAllClients.data.length > 0) {
-      getAllClients.data.map((item) => {
+    if (data.length > 0) {
+      data.map((item) => {
         return csvArr.push({
           FullName: item.FullName,
           UserName: item.UserName,
@@ -710,36 +656,36 @@ const AllClients = () => {
       });
   };
 
+  const handleTableChange = (type, { page, sizePerPage }) => {
+    setPage(page);
+    setSizePerPage(sizePerPage);
+  };
+  const handleSizePerPageChange = (e) => {
+    const value = parseInt(e.target.value);
+    setSizePerPage(value);
+    setPage(1);
+  };
+
+  useEffect(() => {
+    Permmision();
+  }, []);
+
   return (
     <>
       <div className="export">
         <Content
-          Page_title={headerName}
+          Page_title={getHeaderName}
           button_title="Add Client"
           route="/admin/client/add"
           show_csv_button={true}
           csv_data={ForGetCSV}
           csv_title="Client-List"
+          button_status={admin_permission == 1 ? true : false}
         >
           <div className="row">
-            <div className="col-lg-2">
-              <div className="mb-3">
-                <label for="exampleFormControlInput1" className="form-label">
-                  Search Something Here
-                </label>
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  className="form-control"
-                  id="exampleFormControlInput1"
-                />
-              </div>
-            </div>
             <div className="col-lg-2 ">
               <div className="mb-3">
-                <label for="select" className="form-label">
+                <label htmlFor="select" className="form-label">
                   Client Type
                 </label>
 
@@ -759,7 +705,7 @@ const AllClients = () => {
             </div>
             <div className="col-lg-2">
               <div className="mb-3">
-                <label for="select" className="form-label">
+                <label htmlFor="select" className="form-label">
                   Trading Type
                 </label>
 
@@ -779,7 +725,7 @@ const AllClients = () => {
 
             <div className="col-lg-2">
               <div className="mb-3">
-                <label for="select" className="form-label">
+                <label htmlFor="select" className="form-label">
                   Broker Type
                 </label>
                 <select
@@ -801,10 +747,10 @@ const AllClients = () => {
               </div>
             </div>
 
-            <div className="col-lg-2">
+            <div className="col-lg-3">
               <div className="mb-3">
-                <label for="select" className="form-label">
-                Strategies
+                <label htmlFor="select" className="form-label">
+                  Strategies
                 </label>
                 <select
                   className="default-select wide form-control"
@@ -816,7 +762,7 @@ const AllClients = () => {
                   <option value="all">All</option>
 
                   {getAllStrategyNameData &&
-                    getAllStrategyNameData.map((item,index) => (
+                    getAllStrategyNameData.map((item, index) => (
                       <option key={index} value={item._id}>
                         {item.strategy_name}
                       </option>
@@ -824,19 +770,124 @@ const AllClients = () => {
                 </select>
               </div>
             </div>
-
-            {/* <div className="col-lg-2 mt-4">
-              <button
-                className="btn btn-primary mt-1"
-                onClick={(e) => ResetDate(e)}
-              >
-                Reset
-              </button>
-            </div> */}
           </div>
 
-          <FullDataTable TableColumns={columns} tableData={getAllClients} />
+          <div className="row">
+            <div className="col-lg-3">
+              <div className="mb-3">
+                <label
+                  htmlFor="exampleFormControlInput1"
+                  className="form-label"
+                >
+                  Search Something Here
+                </label>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)} // Update input on change
+                  className="form-control"
+                  id="exampleFormControlInput1"
+                />
+              </div>
+            </div>
 
+            <div className="col-lg-2">
+              <div className="mb-3 mt-3">
+                {/* <label
+                  htmlFor="exampleFormControlInput1"
+                  className="form-label"
+                >
+                  Search 
+                </label> */}
+                <button onClick={handleSearch} className="btn btn-primary mt-2">
+                  Search
+                </button>
+              </div>
+            </div>
+          </div>
+          {getAllClients?.loading ? (
+            <Loader />
+          ) : (
+            <PaginationProvider
+              pagination={paginationFactory({
+                ...paginationOptions,
+                totalSize: total1,
+                page: getPage,
+                sizePerPage: getSizePerPage,
+              })}
+            >
+              {({ paginationProps, paginationTableProps }) => (
+                <div>
+                  <div
+                    style={{
+                      position: "relative",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {/* dynamic Watermark */}
+                    <div
+                      className="watermarkId"
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        opacity: 0.1,
+                        pointerEvents: "none",
+                        zIndex: 2,
+                      }}
+                    ></div>{" "}
+                    <BootstrapTable
+                      keyField="_id"
+                      data={getAllClients.data}
+                      columns={columns}
+                      remote
+                      onTableChange={handleTableChange}
+                      {...paginationTableProps}
+                      headerClasses="bg-primary text-primary text-center header-class"
+                      rowClasses={`text-center`}
+                      // noDataIndication={() => <NoDataIndication />}
+                      style={{
+                        position: "relative",
+                        zIndex: 1,
+                      }}
+                    />
+                  </div>
+
+                  <div className="mb-2 d-flex justify-content-between align-items-start mt-2">
+                    <div className="d-flex align-items-center">
+                      <label htmlFor="sizePerPageSelect" className="mx-2">
+                        Items per page:
+                      </label>
+                      <select
+                        id="sizePerPageSelect"
+                        value={getSizePerPage}
+                        onChange={handleSizePerPageChange}
+                      >
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                        <option value={200}>200</option>
+                      </select>
+                    </div>
+                    <div className="d-flex align-items-center">
+                      <PaginationTotalStandalone
+                        {...paginationProps}
+                        className="mr-3"
+                      />{" "}
+                      {/* Add margin to the right for spacing */}
+                    </div>
+                    <div className="d-flex align-items-end">
+                      <PaginationListStandalone {...paginationProps} />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </PaginationProvider>
+          )}
           <ToastButton />
         </Content>
       </div>

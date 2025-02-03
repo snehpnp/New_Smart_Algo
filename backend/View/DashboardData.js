@@ -20,7 +20,6 @@ async function DashboardView() {
 
     // If the view exists, exit the function
     if (views.length > 0) {
-
       return;
     }
 
@@ -93,8 +92,10 @@ async function DashboardView() {
                 {
                   $and: [
                     { $eq: ["$Role", "USER"] },
-                    // { $eq: ["$license_type", "2"] },
-                    { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                    { $ne: ["$EndDate", null] },
+                    { $ne: ["$EndDate", ""] },
+                    { $eq: [{ $type: "$EndDate" }, "date"] },
+                    { $gt: ["$EndDate", new Date()] },
                     { $eq: ["$Is_Active", "1"] },
                   ],
                 },
@@ -103,21 +104,26 @@ async function DashboardView() {
               ],
             },
           },
-          total_expired_client: {
-            $sum: {
-              $cond: [
-                {
-                  $and: [
-                    { $eq: ["$Role", "USER"] },
-                    { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
-                    { $eq: ["$Is_Active", "1"] },
-                  ],
-                },
-                1,
-                0,
-              ],
+
+            total_expired_client: {
+              $sum: {
+                $cond: [
+                  {
+                    $and: [
+                      { $eq: ["$Role", "USER"] }, 
+                      { $ne: ["$EndDate", null] }, 
+                      { $ne: ["$EndDate", ""] }, 
+                      { $eq: [{ $type: "$EndDate" }, "date"] }, 
+                      { $lte: ["$EndDate", new Date()] }, 
+                      { $eq: ["$Is_Active", "1"] } 
+                    ],
+                  },
+                  1,
+                  0,
+                ],
+              },
             },
-          },
+          
           total_live_client: {
             $sum: {
               $cond: [
@@ -140,22 +146,10 @@ async function DashboardView() {
                   $and: [
                     { $eq: ["$Role", "USER"] },
                     { $eq: ["$license_type", "2"] },
-                    {
-                      $gte: [
-                        {
-                          $dateToString: {
-                            format: "%Y-%m-%d",
-                            date: "$EndDate",
-                          },
-                        },
-                        {
-                          $dateToString: {
-                            format: "%Y-%m-%d",
-                            date: new Date(),
-                          },
-                        },
-                      ],
-                    },
+                    { $ne: ["$EndDate", null] },
+                    { $ne: ["$EndDate", ""] },
+                    { $eq: [{ $type: "$EndDate" }, "date"] },
+                    { $gt: ["$EndDate", new Date()] },
                     { $eq: ["$Is_Active", "1"] },
                   ],
                 },
@@ -171,7 +165,10 @@ async function DashboardView() {
                   $and: [
                     { $eq: ["$Role", "USER"] },
                     { $eq: ["$license_type", "2"] },
-                    { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                    { $ne: ["$EndDate", null] }, // Ensure EndDate is not null
+                    {
+                      $lt: [{ $subtract: ["$EndDate", new Date()] }, 0],
+                    },
                     { $eq: ["$Is_Active", "1"] },
                   ],
                 },
@@ -443,14 +440,12 @@ async function DashboardView() {
       viewOn: "users",
       pipeline,
     });
-    
+
     return;
   } catch (error) {
     console.log("Error dashboard_data Create:", error);
   }
 }
-
-
 
 async function Cilents_service_View() {
   try {
@@ -462,34 +457,32 @@ async function Cilents_service_View() {
 
     // If the view exists, exit the function
     if (views.length > 0) {
-
       return;
     }
 
-    const pipeline =   [
+    const pipeline = [
       {
         $match: {
           $and: [
-            { Role: "USER", Is_Active: "1" ,EndDate  : { $gte: new Date() } }
-          ]
-        }  
-  
+            { Role: "USER", Is_Active: "1", EndDate: { $gte: new Date() } },
+          ],
+        },
       },
       {
         $lookup: {
-          from: 'client_services',
-          localField: '_id', 
-          foreignField: 'user_id', 
-          as: 'client_services'
-        }
+          from: "client_services",
+          localField: "_id",
+          foreignField: "user_id",
+          as: "client_services",
+        },
       },
       {
-        $unwind: '$client_services',
+        $unwind: "$client_services",
       },
       {
         $match: {
-          'client_services.active_status': '1'
-        }
+          "client_services.active_status": "1",
+        },
       },
       {
         $lookup: {
@@ -500,11 +493,9 @@ async function Cilents_service_View() {
         },
       },
       {
-        $unwind: '$service',
+        $unwind: "$service",
       },
-     
-      
-      
+
       {
         $lookup: {
           from: "categories",
@@ -514,7 +505,7 @@ async function Cilents_service_View() {
         },
       },
       {
-        $unwind: '$category',
+        $unwind: "$category",
       },
       {
         $lookup: {
@@ -525,48 +516,38 @@ async function Cilents_service_View() {
         },
       },
       {
-        $unwind: '$strategys',
+        $unwind: "$strategys",
       },
       {
         $project: {
-       
-          id:1,
-          "user_id":"$_id",
-          "service_name": "$service.name",
-          "service_instrument_token": "$service.instrument_token",
-          "service_exch_seg": "$service.exch_seg",
-          "strategy_name": "$strategys.strategy_name",
-        
-       
-          
-        }
-      }      
-     
+          id: 1,
+          user_id: "$_id",
+          service_name: "$service.name",
+          service_instrument_token: "$service.instrument_token",
+          service_exch_seg: "$service.exch_seg",
+          strategy_name: "$strategys.strategy_name",
+        },
+      },
     ];
 
     await dbTest.createCollection("Cilents_service_stg", {
       viewOn: "users",
       pipeline,
     });
-    
+
     return;
   } catch (error) {
     console.log("Error Cilents_service_stg Create:", error);
   }
 }
 
-
-
-
-
 async function deleteDashboard() {
   try {
     // Drop the view if it exists
     await dashboard_data.drop();
- 
   } catch (error) {
     console.log("Error dashboard_data Delete:", error);
   }
 }
 
-module.exports = {Cilents_service_View, DashboardView, deleteDashboard };
+module.exports = { Cilents_service_View, DashboardView, deleteDashboard };

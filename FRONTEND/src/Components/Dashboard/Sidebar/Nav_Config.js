@@ -11,11 +11,11 @@ export const admin_sidebar = [
         name: 'Clients',
         Icon: 'Users',
         Data: [
-            {
-                id: 21,
-                name: 'Add Client',
-                route: '/admin/client/add',
-            },
+            // {
+            //     id: 21,
+            //     name: 'Add Client',
+            //     route: '/admin/client/add',
+            // },
             {
                 id: 22,
                 name: 'Clients',
@@ -75,11 +75,12 @@ export const admin_sidebar = [
                 name: 'Order History',
                 route: '/admin/tradehistory1?type=admin',
             },
-            // {
-            //     id: 43,
-            //     name: 'Client Trade',
-            //     route: '/admin/tradehistory?type=client',
-            // },
+            {
+                id: 420,
+                name: 'Holdings History',
+                route: '/admin/holdingshistory',
+            },
+
             {
                 id: 44,
                 name: 'Trading Status',
@@ -119,23 +120,23 @@ export const admin_sidebar = [
             }
         ]
     },
-    {
-        id: 6,
-        name: 'Open position',
-        Icon: 'Link2',
-        Data: [
-            {
-                id: 61,
-                name: 'Option Chain',
-                route: '/admin/optionchain',
-            },
-            {
-                id: 62,
-                name: 'Open Position',
-                route: '/admin/openposition',
-            }
-        ]
-    },
+    // {
+    //     id: 6,
+    //     name: 'Open position',
+    //     Icon: 'Link2',
+    //     Data: [
+    //         {
+    //             id: 61,
+    //             name: 'Option Chain',
+    //             route: '/admin/optionchain',
+    //         },
+    //         {
+    //             id: 62,
+    //             name: 'Open Position',
+    //             route: '/admin/openposition',
+    //         }
+    //     ]
+    // },
     {
         id: 8,
         name: 'License',
@@ -181,7 +182,7 @@ export const admin_sidebar = [
                 name: 'Create Make Call',
                 route: '/admin/makecall',
             },
-             {
+            {
                 id: 802,
                 name: 'Pending Make Call Position',
                 route: '/admin/makecallpendingposition',
@@ -232,7 +233,8 @@ export const admin_sidebar = [
 
 
         ]
-    }
+    },
+
 
 ];
 
@@ -289,6 +291,14 @@ export const supper_admin_sidebar = [
         "Data": []
     },
 
+    {
+        'id': 7,
+        "name": 'Broker',
+        "Icon": 'ArrowRightLeft',
+        "route": "/super/broker",
+        "Data": []
+    },
+
 ]
 
 
@@ -327,7 +337,14 @@ export const sub_admin_sidebar = [
         Icon: 'HelpingHand',
         route: '/subadmin/helpcenter',
         Data: []
-    }
+    },
+    {
+        id: 715,
+        name: 'Faq',
+        Icon: 'Info',
+        route: '/subadmin/faq',
+        Data: []
+    },
 ];
 
 export const Client = [

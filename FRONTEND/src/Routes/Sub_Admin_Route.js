@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route, Routes, NavLink, useLocation, useNavigate } from "react-router-dom";
+import {  Route, Routes, useLocation } from "react-router-dom";
 import Wraper from '../Components/Dashboard/Wraper/Wraper';
 import Dashboard from '../layout/Sub_Admin/Dashboard/Dashboard';
 import Profile from '../layout/Sub_Admin/Profile/Profile';
@@ -20,12 +20,15 @@ import Open_Positions from '../layout/Admin/OptionChain/Open_Positions';
 import CreateStrategy from '../layout/Admin/CreateStrategy/CreateStrategy';
 import AllMakeStrategy from '../layout/Admin/CreateStrategy/AllMakeStrategy';
 import EditMakeStrategy from '../layout/Admin/CreateStrategy/EditMakeStrategy';
+import Faq from '../layout/Admin/Faq/Faq.js'
+
+import Footer from '../Components/Dashboard/Footer/Footer.js'
+
 
 const Admin = () => {
 
     const location = useLocation();
-    const navigate = useNavigate()
-    const role_id = localStorage.getItem("Role")
+
 
     return (
         <>
@@ -48,9 +51,14 @@ const Admin = () => {
                 <Route exact path="/createstrategy" element={<CreateStrategy />} />
                 <Route exact path="/AllMakeStrategy" element={<AllMakeStrategy />} />
                 <Route exact path="/MakeStrategy/edit/:id" element={<EditMakeStrategy />} />
+                <Route exact path="/AllMakeStrategy" element={<AllMakeStrategy />} />
+                <Route exact path="/faq" element={<Faq />} />
+
+
 
             </Routes>
 
+            {location.pathname !== "/subadmin" && location.pathname !== "/subadmin/*" ? <Footer /> : null}
 
         </>
     )

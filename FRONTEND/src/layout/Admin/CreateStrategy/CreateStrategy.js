@@ -106,8 +106,6 @@ const CreateStrategy = () => {
     { entry: { time: "" }, exit: { time: "" }, notrade: { time: "" } },
   ]);
 
-
-
   const selectTimeFrame = (item) => {
     setTimeFrameVal(item.value);
   };
@@ -144,17 +142,22 @@ const CreateStrategy = () => {
     setOffSetValue(e.target.value);
   };
 
-
   const closeModalindicators = () => {
     setShowModalindicators(false);
   };
-  const openModalindicators = (e, condition_item, element_first_second, index, buy_sell) => {
+  const openModalindicators = (
+    e,
+    condition_item,
+    element_first_second,
+    index,
+    buy_sell
+  ) => {
     setModalPropsindicators({
       e,
       condition_item,
       element_first_second,
       index,
-      buy_sell
+      buy_sell,
     });
     setShowModalindicators(true);
   };
@@ -390,76 +393,102 @@ const CreateStrategy = () => {
   };
 
   const selectSourceIndicators = (e, propsindicators, field) => {
-
-
-      if (propsindicators.buy_sell == "buy") {
-        const foundObject = coditionRequestArr.find((item, i) => i === propsindicators.index);
-        if (foundObject) {
-          // Update the source field of the found object
-          if (propsindicators.element_first_second == "first") {
-            if(field == "source"){
-              foundObject.first_element.indicator_field = e.target.value;
-              foundObject.first_element.source = propsindicators.e.target.value+e.target.value+foundObject.first_element.period;
-            }else if(field == "period"){
-              foundObject.first_element.period = e.target.value;
-              foundObject.first_element.source = propsindicators.e.target.value+foundObject.first_element.indicator_field+e.target.value;
-            }
-           
-          } else if (propsindicators.element_first_second == "second") {
-            if(field == "source"){
-              foundObject.second_element.indicator_field = e.target.value;
-              foundObject.second_element.source = propsindicators.e.target.value+e.target.value+foundObject.second_element.period;
-            }else if(field == "period"){
-              foundObject.second_element.period = e.target.value;
-              foundObject.second_element.source = propsindicators.e.target.value+foundObject.second_element.indicator_field+e.target.value;
-            }
-          }
-          // Create a new array to trigger a state update
-          setCoditionRequestArr([...coditionRequestArr]);
-        }
-      } else if (propsindicators.buy_sell == "sell") {
-        const foundObject = coditionRequestArrSell.find(
-          (item, i) => i === propsindicators.index
-        );
-        if (foundObject) {
-         // Update the source field of the found object
-         if (propsindicators.element_first_second == "first") {
-          if(field == "source"){
+    if (propsindicators.buy_sell == "buy") {
+      const foundObject = coditionRequestArr.find(
+        (item, i) => i === propsindicators.index
+      );
+      if (foundObject) {
+        // Update the source field of the found object
+        if (propsindicators.element_first_second == "first") {
+          if (field == "source") {
             foundObject.first_element.indicator_field = e.target.value;
-            foundObject.first_element.source = propsindicators.e.target.value+e.target.value+foundObject.first_element.period;
-          }else if(field == "period"){
+            foundObject.first_element.source =
+              propsindicators.e.target.value +
+              e.target.value +
+              foundObject.first_element.period;
+          } else if (field == "period") {
             foundObject.first_element.period = e.target.value;
-            foundObject.first_element.source = propsindicators.e.target.value+foundObject.first_element.indicator_field+e.target.value;
+            foundObject.first_element.source =
+              propsindicators.e.target.value +
+              foundObject.first_element.indicator_field +
+              e.target.value;
           }
-         
         } else if (propsindicators.element_first_second == "second") {
-          if(field == "source"){
+          if (field == "source") {
             foundObject.second_element.indicator_field = e.target.value;
-            foundObject.second_element.source = propsindicators.e.target.value+e.target.value+foundObject.second_element.period;
-          }else if(field == "period"){
+            foundObject.second_element.source =
+              propsindicators.e.target.value +
+              e.target.value +
+              foundObject.second_element.period;
+          } else if (field == "period") {
             foundObject.second_element.period = e.target.value;
-            foundObject.second_element.source = propsindicators.e.target.value+foundObject.second_element.indicator_field+e.target.value;
+            foundObject.second_element.source =
+              propsindicators.e.target.value +
+              foundObject.second_element.indicator_field +
+              e.target.value;
           }
         }
-          // Create a new array to trigger a state update
-          setCoditionRequestArrSell([...coditionRequestArrSell]);
-        }
+        // Create a new array to trigger a state update
+        setCoditionRequestArr([...coditionRequestArr]);
       }
-
-
-
-
-    
-  }
-
-  const selectSource = (e, condition_item, element_first_second, index, buy_sell) => {
-
-
-    let value = e.target.value;
-    if (value == 'ema') {
-      openModalindicators(e, condition_item, element_first_second, index, buy_sell)
+    } else if (propsindicators.buy_sell == "sell") {
+      const foundObject = coditionRequestArrSell.find(
+        (item, i) => i === propsindicators.index
+      );
+      if (foundObject) {
+        // Update the source field of the found object
+        if (propsindicators.element_first_second == "first") {
+          if (field == "source") {
+            foundObject.first_element.indicator_field = e.target.value;
+            foundObject.first_element.source =
+              propsindicators.e.target.value +
+              e.target.value +
+              foundObject.first_element.period;
+          } else if (field == "period") {
+            foundObject.first_element.period = e.target.value;
+            foundObject.first_element.source =
+              propsindicators.e.target.value +
+              foundObject.first_element.indicator_field +
+              e.target.value;
+          }
+        } else if (propsindicators.element_first_second == "second") {
+          if (field == "source") {
+            foundObject.second_element.indicator_field = e.target.value;
+            foundObject.second_element.source =
+              propsindicators.e.target.value +
+              e.target.value +
+              foundObject.second_element.period;
+          } else if (field == "period") {
+            foundObject.second_element.period = e.target.value;
+            foundObject.second_element.source =
+              propsindicators.e.target.value +
+              foundObject.second_element.indicator_field +
+              e.target.value;
+          }
+        }
+        // Create a new array to trigger a state update
+        setCoditionRequestArrSell([...coditionRequestArrSell]);
+      }
     }
+  };
 
+  const selectSource = (
+    e,
+    condition_item,
+    element_first_second,
+    index,
+    buy_sell
+  ) => {
+    let value = e.target.value;
+    if (value == "ema") {
+      openModalindicators(
+        e,
+        condition_item,
+        element_first_second,
+        index,
+        buy_sell
+      );
+    }
 
     //if (value != "") {
     if (buy_sell == "buy") {
@@ -467,31 +496,41 @@ const CreateStrategy = () => {
       if (foundObject) {
         // Update the source field of the found object
         if (element_first_second == "first") {
-          foundObject.first_element.source = value=="ema"?
-          value+foundObject.first_element.indicator_field+foundObject.first_element.period
-          :value;
+          foundObject.first_element.source =
+            value == "ema"
+              ? value +
+                foundObject.first_element.indicator_field +
+                foundObject.first_element.period
+              : value;
         } else if (element_first_second == "second") {
-          foundObject.second_element.source = value=="ema"?
-          value+foundObject.second_element.indicator_field+foundObject.second_element.period
-          :value;
+          foundObject.second_element.source =
+            value == "ema"
+              ? value +
+                foundObject.second_element.indicator_field +
+                foundObject.second_element.period
+              : value;
         }
         // Create a new array to trigger a state update
         setCoditionRequestArr([...coditionRequestArr]);
       }
     } else if (buy_sell == "sell") {
-      const foundObject = coditionRequestArrSell.find(
-        (item, i) => i === index
-      );
+      const foundObject = coditionRequestArrSell.find((item, i) => i === index);
       if (foundObject) {
         // Update the source field of the found object
         if (element_first_second == "first") {
-          foundObject.first_element.source = value=="ema"?
-          value+foundObject.first_element.indicator_field+foundObject.first_element.period
-          :value;
+          foundObject.first_element.source =
+            value == "ema"
+              ? value +
+                foundObject.first_element.indicator_field +
+                foundObject.first_element.period
+              : value;
         } else if (element_first_second == "second") {
-          foundObject.second_element.source = value=="ema"?
-          value+foundObject.second_element.indicator_field+foundObject.second_element.period
-          :value;
+          foundObject.second_element.source =
+            value == "ema"
+              ? value +
+                foundObject.second_element.indicator_field +
+                foundObject.second_element.period
+              : value;
         }
         // Create a new array to trigger a state update
         setCoditionRequestArrSell([...coditionRequestArrSell]);
@@ -593,26 +632,31 @@ const CreateStrategy = () => {
         setCoditionRequestArr((oldArray) => [...oldArray, pre_tag]);
       } else {
         let foundObject = null;
-        let elementSource = '';
+        let elementSource = "";
 
         coditionRequestArr.forEach((item) => {
-          if (item.first_element.source === "" || item.second_element.source === "") {
+          if (
+            item.first_element.source === "" ||
+            item.second_element.source === ""
+          ) {
             foundObject = item;
-            elementSource = item.first_element.source === "" && item.second_element.source === ""
-              ? 'first and second'
-              : item.first_element.source === ""
-                ? 'first'
-                : 'second';
+            elementSource =
+              item.first_element.source === "" &&
+              item.second_element.source === ""
+                ? "first and second"
+                : item.first_element.source === ""
+                ? "first"
+                : "second";
           }
         });
 
         if (foundObject) {
-          alert(`Please select ${elementSource} element`);
+
+          toast.error(`Please select ${elementSource} element`);
         } else {
           setCheckBuySellAndOr("buy");
           openModalAndOrOperator();
         }
-
       }
     } else if (buy_sell == "sell") {
       if (coditionRequestArrSell.length == 0) {
@@ -639,29 +683,32 @@ const CreateStrategy = () => {
 
         setCoditionRequestArrSell((oldArray) => [...oldArray, pre_tag]);
       } else {
-
         let foundObject = null;
-        let elementSource = '';
+        let elementSource = "";
 
         coditionRequestArrSell.forEach((item) => {
-          if (item.first_element.source === "" || item.second_element.source === "") {
+          if (
+            item.first_element.source === "" ||
+            item.second_element.source === ""
+          ) {
             foundObject = item;
-            elementSource = item.first_element.source === "" && item.second_element.source === ""
-              ? 'first and second'
-              : item.first_element.source === ""
-                ? 'first'
-                : 'second';
+            elementSource =
+              item.first_element.source === "" &&
+              item.second_element.source === ""
+                ? "first and second"
+                : item.first_element.source === ""
+                ? "first"
+                : "second";
           }
         });
 
         if (foundObject) {
-          alert(`Please select ${elementSource} element`);
+          
+          toast.error(`Please select ${elementSource} element`);
         } else {
           setCheckBuySellAndOr("sell");
           openModalAndOrOperator();
         }
-
-
       }
     }
   };
@@ -1078,7 +1125,7 @@ const CreateStrategy = () => {
   };
 
   const selectTime = (e, type) => {
-    //  alert(e.target.value)
+  
     if (e.target.value != "") {
       if (type == "entry") {
         const foundObjectTime = timeTradeConddition.find((item, i) => i === 0);
@@ -1117,34 +1164,33 @@ const CreateStrategy = () => {
   }
 
   const saveStrategy = async (e) => {
-   
     if (strategyName == "") {
-      //alert("Please select a strategy name");
-      toast.error('Please select a strategy name');
+    
+      toast.error("Please select a strategy name");
       return;
     }
 
     if (selectStrategy == "") {
-      //alert("Please select a strategy tag");
-      toast.error('Please select a strategy tag');
+      
+      toast.error("Please select a strategy tag");
       return;
     }
 
     if (selectedItems.length == 0) {
-     // alert("Please select a Instruments");
-      toast.error('Please select a Instruments');
+   
+      toast.error("Please select a Instruments");
       return;
     }
 
     if (!buyCheck && !sellCheck) {
-      //alert("Please select a Buy or Sell");
-      toast.error('Please select a Buy or Sell');
+     
+      toast.error("Please select a Buy or Sell");
       return;
     }
 
     if (condition_string == "" && condition_string_sell == "") {
-     // alert("Please select a add condition");
-     toast.error('Please select a add condition');
+
+      toast.error("Please select a add condition");
       return;
     }
 
@@ -1152,8 +1198,8 @@ const CreateStrategy = () => {
     if (condition_string != "") {
       buy_cond = areParenthesesBalanced(condition_string);
       if (!buy_cond) {
-        // alert("Please correct Buy condition");
-        toast.error('Please correct Buy condition');
+       
+        toast.error("Please correct Buy condition");
         return;
       }
     }
@@ -1162,24 +1208,24 @@ const CreateStrategy = () => {
     if (condition_string_sell != "") {
       sell_cond = areParenthesesBalanced(condition_string_sell);
       if (!sell_cond) {
-        // alert("Please correct Sell condition");
-        toast.error('Please correct Sell condition');
+   
+        toast.error("Please correct Sell condition");
         return;
       }
     }
 
     if (sellCheck) {
       if (!sell_cond) {
-       // alert("Please add Sell condition");
-        toast.error('Please add Sell condition');
+     
+        toast.error("Please add Sell condition");
         return;
       }
     }
 
     if (buyCheck) {
       if (!buy_cond) {
-        //alert("Please add Buy condition");
-        toast.error('Please add Buy condition');
+       
+        toast.error("Please add Buy condition");
         return;
       }
     }
@@ -1193,25 +1239,17 @@ const CreateStrategy = () => {
       if (val.first_element.source !== "" && val.second_element.source !== "") {
         if (val.first_element.source != "number") {
           if (
-            !condition_string_source.includes(
-              `${val.first_element.source}`
-            )
+            !condition_string_source.includes(`${val.first_element.source}`)
           ) {
-            condition_string_source.push(
-              `${val.first_element.source}`
-            );
+            condition_string_source.push(`${val.first_element.source}`);
           }
         }
 
         if (val.second_element.source != "number") {
           if (
-            !condition_string_source.includes(
-              `${val.second_element.source}`
-            )
+            !condition_string_source.includes(`${val.second_element.source}`)
           ) {
-            condition_string_source.push(
-              `${val.second_element.source}`
-            );
+            condition_string_source.push(`${val.second_element.source}`);
           }
         }
       } else {
@@ -1229,9 +1267,7 @@ const CreateStrategy = () => {
               `${val.first_element.source}`
             )
           ) {
-            condition_string_sell_source.push(
-              `${val.first_element.source}`
-            );
+            condition_string_sell_source.push(`${val.first_element.source}`);
           }
         }
 
@@ -1241,9 +1277,7 @@ const CreateStrategy = () => {
               `${val.second_element.source}`
             )
           ) {
-            condition_string_sell_source.push(
-              `${val.second_element.source}`
-            );
+            condition_string_sell_source.push(`${val.second_element.source}`);
           }
         }
       } else {
@@ -1253,7 +1287,7 @@ const CreateStrategy = () => {
 
     // Send Request Buy ------
     if (buyCheck && buy_cond) {
-      // alert("buy")
+     
 
       let data = {
         scriptArray: selectedItems,
@@ -1262,7 +1296,7 @@ const CreateStrategy = () => {
 
         strategy_name: selectStrategy,
 
-        timeframe: timeFrameVal=="1"?"":timeFrameVal,
+        timeframe: timeFrameVal == "1" ? "" : timeFrameVal,
         type: "BUY",
         indicator: "MA",
         price_source: "open",
@@ -1309,7 +1343,7 @@ const CreateStrategy = () => {
 
     // Send Request Sell ------
     if (sellCheck && sell_cond) {
-      //  alert("sell")
+      
       let data = {
         scriptArray: selectedItems,
         name: strategyName,
@@ -1317,7 +1351,7 @@ const CreateStrategy = () => {
 
         strategy_name: selectStrategy,
 
-        timeframe: timeFrameVal=="1"?"":timeFrameVal,
+        timeframe: timeFrameVal == "1" ? "" : timeFrameVal,
         type: "SELL",
         indicator: "MA",
         price_source: "open",
@@ -1370,311 +1404,312 @@ const CreateStrategy = () => {
             user_role === "ADMIN"
               ? "/admin/AllMakeStrategy"
               : user_role === "SUBADMIN"
-                ? "/subadmin/AllMakeStrategy"
-                : ""
+              ? "/subadmin/AllMakeStrategy"
+              : ""
           }
         >
-          <div>
-            <div className="col-md-2 ">
-              <label
-                className=" ps-5"
-                style={{ fontWeight: "bold", color: "black", fontSize: "15px" }}
-              >
-                Strategy Name
-              </label>
-              <input
-                type="text"
-                onChange={(e) => {
-                  onChange(e);
-                }}
-                name="strategy_name"
-                className="form-control stratergy-box"
-              ></input>
-            </div>
-
-            <div className="col-md-2 ">
-              <label
-                className=" ps-5"
-                style={{ fontWeight: "bold", color: "black", fontSize: "15px" }}
-              >
-                Strategy Tag
-              </label>
-              <select
-                className="form-select stratergy-box"
-                onChange={(e) => setSelectStrategy(e.target.value)}
-                name="strategyname"
-              >
-                <option value="">-- Select Strategy Tag--</option>
-                {strategyDataAllAdmin.data &&
-                  strategyDataAllAdmin.data.map((sm, i) => (
-                    <option value={sm.strategy_name}>{sm.strategy_name}</option>
-                  ))}
-              </select>
-            </div>
-
-            <div className="col-md-2 ">
-              <label
-                className=" ps-5"
-                style={{ fontWeight: "bold", color: "black", fontSize: "15px" }}
-              >
-                Number of Trade
-              </label>
-              <input
-                min={1}
-                type="text"
-                onChange={(e) => {
-                  onChange(e);
-                }}
-                name="no_of_trade"
-                className="form-control stratergy-box"
-                value={numberOfTrade}
-              ></input>
-            </div>
-
-            <Modal show={show} onHide={handleClose} className="right">
-              <Modal.Header>
+          <div className="row align-items-center">
+            {/* Strategy Name */}
+            <div className="col-md-6">
+              <div className="mb-3">
+                <label
+                  className="form-label"
+                  style={{
+                    fontWeight: "bold",
+                    color: "black",
+                    fontSize: "15px",
+                  }}
+                >
+                  Strategy Name
+                </label>
                 <input
-                  type="search"
-                  className="form-control"
-                  placeholder="Search Stocks eg, SBIN"
-                  value={filterServices}
-                  onChange={(e) => setFilterServices(e.target.value)}
+                  type="text"
+                  onChange={(e) => {
+                    onChange(e);
+                  }}
+                  name="strategy_name1"
+                  className="form-control "
                 />
-              </Modal.Header>
-              <Modal.Body>
-                <ul className="ps-0">
-                  {storeServiceData && Array.isArray(storeServiceData) ? (
-                    storeServiceData.map((x) => (
-                      <li className="my-2" key={x.id}>
-                        <div className="row">
-                          <div className="col-md-2">
-                            <img
-                              className="w-100 p-2"
-                              src="https://upload.wikimedia.org/wikipedia/en/6/60/ACFTU_logo.png"
-                              alt="Logo"
-                            />
-                          </div>
-                          <div className="col-md-7 ps-0">
-                            <h3 className="mb-0">{x.tradesymbol}</h3>
-                            <p className="text-muted my-0">{x.exch_seg}</p>
-                          </div>
-                          <div className="col-md-3 d-flex list-btn">
-                            <button className="btn border-0">
-                              <i
-                                className="fa-regular fa-square-plus"
-                                onClick={() => handleAddItem(x)}
-                              ></i>
-                            </button>
-                          </div>
-                        </div>
-                      </li>
-                    ))
-                  ) : (
-                    <li>No data available</li>
-                  )}
-                </ul>
-              </Modal.Body>
-              <Modal.Footer></Modal.Footer>
-            </Modal>
+              </div>
+            </div>
 
-            <ul className="StepProgress">
-              <li className="StepProgress-item is-done">
-                <strong>Instruments</strong>
-                <div className="row">
-                  <div className="col-md-2">
-                    <button
-                      className="btn btn-strategy"
-                      variant="primary"
-                      onClick={handleShow}
-                    >
-                      <i className="fa-solid fa-plus"></i>
-                      <h5 className="mb-0">Add</h5>
-                      <p className="mb-0">Stocks eg, SBIN</p>
-                    </button>
-                  </div>
-
-                  {selectedItems &&
-                    selectedItems.map((x) => (
-                      <div className="col-md-2">
-                        <div className="card card-strategy">
-                          <div className="card-body">
-                            <h4>
-                              <span>
-                                <img src="https://seeklogo.com/images/I/indraprastha-gas-logo-8CD9114819-seeklogo.com.png"></img>
-                              </span>
-                              {x.tradesymbol}
-                            </h4>
-                            <p className="text-muted my-0">{x.exch_seg}</p>
-                            <div className="d-flex justify-content-between my-1">
-                              {/* <i className="fa-solid fa-pen-to-square"></i> */}
-                              <i
-                                className="fa-solid fa-trash-can"
-                                onClick={() => handleRemoveItem(x)}
-                              ></i>
-                            </div>
-                            {/* <h3 className="text-success my-0 ">45.5</h3>
-                          <p className="text-success my-0">%45.5</p> */}
-                          </div>
-                        </div>
-                      </div>
+            {/* Strategy Tag */}
+            <div className="col-md-6">
+              <div className="mb-3">
+                <label
+                  className="form-label"
+                  style={{
+                    fontWeight: "bold",
+                    color: "black",
+                    fontSize: "15px",
+                  }}
+                >
+                  Strategy Tag
+                </label>
+                <select
+                  className="form-select "
+                  onChange={(e) => setSelectStrategy(e.target.value)}
+                  name="strategyname"
+                >
+                  <option value="">-- Select Strategy Tag--</option>
+                  {strategyDataAllAdmin.data &&
+                    strategyDataAllAdmin.data.map((sm, i) => (
+                      <option key={i} value={sm.strategy_name}>
+                        {sm.strategy_name}
+                      </option>
                     ))}
+                </select>
+              </div>
+            </div>
+
+
+
+            {/* Number of Trade */}
+            <div className="col-md-6">
+              <div className="mb-3">
+                <label
+                  className="form-label"
+                  style={{
+                    fontWeight: "bold",
+                    color: "black",
+                    fontSize: "15px",
+                  }}
+                >
+                  Number of Trade
+                </label>
+                <input
+                  min={1}
+                  type="text"
+                  onChange={(e) => {
+                    onChange(e);
+                  }}
+                  name="no_of_trade"
+                  className="form-control "
+                  value={numberOfTrade}
+                />
+              </div>
+            </div>
+          </div>
+
+          <ul className="StepProgress">
+            <li className="StepProgress-item is-done">
+              <strong>Instruments</strong>
+              <div className="row">
+                <div className="col-md-2">
+                  <button
+                    className="btn btn-strategy"
+                    variant="primary"
+                    onClick={handleShow}
+                  >
+                    <i className="fa-solid fa-plus"></i>
+                    <h5 className="mb-0">Add</h5>
+                    <p className="mb-0">Stocks eg, SBIN</p>
+                  </button>
                 </div>
-              </li>
-              <li className="StepProgress-item is-done">
-                <div className="row">
-                  <div className="col-xl-6">
-                    <div className="card">
-                      <div className="">
-                        <label>Candle Interval</label>
+
+                {selectedItems &&
+                  selectedItems.map((x) => (
+                    <div className="col-md-2">
+                      <div className="card card-strategy">
+                        <div className="card-body">
+                          <h4>
+                            <span>
+                              <img src="https://seeklogo.com/images/I/indraprastha-gas-logo-8CD9114819-seeklogo.com.png"></img>
+                            </span>
+                            {x.tradesymbol}
+                          </h4>
+                          <p className="text-muted my-0">{x.exch_seg}</p>
+                          <div className="d-flex justify-content-between my-1">
+                            <i
+                              className="fa-solid fa-trash-can"
+                              onClick={() => handleRemoveItem(x)}
+                            ></i>
+                          </div>
+                       
+                        </div>
                       </div>
-                      <div className="card-body px-0 pt-0">
-                        <ul className="nav nav-pills justify-content-between mb-4">
-                          {timeFrameData.data &&
-                            timeFrameData.data.map((item, index) => (
-                              <li className=" nav-item">
-                                <a
-                                  href="#navpills2-1"
-                                  className={`nav-link ${timeFrameVal === item.value ? "active" : ""
-                                    }`}
-                                  data-bs-toggle="tab"
-                                  aria-expanded="false"
-                                  onClick={() => selectTimeFrame(item)}
-                                >
-                                  {item.name}
-                                </a>
-                              </li>
-                            ))}
-                        </ul>
-                      </div>
+                    </div>
+                  ))}
+              </div>
+            </li>
+            <li className="StepProgress-item is-done">
+              <div className="row">
+                <div className="col-xl-6">
+                  <div className="card">
+                    <div className="">
+                      <label>Candle Interval</label>
+                    </div>
+                    <div className="card-body px-0 pt-0">
+                      <ul className="nav nav-pills justify-content-between mb-4">
+                        {timeFrameData.data &&
+                          timeFrameData.data.map((item, index) => (
+                            <li className=" nav-item">
+                              <a
+                                href="#navpills2-1"
+                                className={`nav-link ${
+                                  timeFrameVal === item.value ? "active" : ""
+                                }`}
+                                data-bs-toggle="tab"
+                                aria-expanded="false"
+                                onClick={() => selectTimeFrame(item)}
+                              >
+                                {item.name}
+                              </a>
+                            </li>
+                          ))}
+                      </ul>
                     </div>
                   </div>
                 </div>
-              </li>
+              </div>
+            </li>
 
-              <Row className="mt-4">
-                <Col md={2}>
-                  <h5
-                    style={{
-                      fontWeight: "bold",
-                      color: "black",
-                      fontSize: "15px",
-                    }}
-                  >
-                    Entry Time
-                  </h5>
-                </Col>
-                <Col md={2}>
-                  {/* <label>Time</label> */}
-                  <Form.Control
-                    style={{ height: "auto" }}
-                    type="time"
-                    id="text3"
-                    value={timeTradeConddition[0].entry.time}
-                    onChange={(e) => {
-                      selectTime(e, "entry");
-                    }}
-                  />
-                </Col>
-              </Row>
+            <Row className="mt-4">
+              <Col md={3}>
+                <h5
+                  style={{
+                    fontWeight: "bold",
+                    color: "black",
+                    fontSize: "15px",
+                  }}
+                >
+                  Entry Time
+                </h5>
+                <Form.Control
+                  style={{ height: "auto" }}
+                  type="time"
+                  id="text3"
+                  value={timeTradeConddition[0].entry.time}
+                  onChange={(e) => {
+                    selectTime(e, "entry");
+                  }}
+                />
+              </Col>
+              <Col md={3}>
+              <h5
+                  style={{
+                    fontWeight: "bold",
+                    color: "black",
+                    fontSize: "15px",
+                  }}
+                >
+                  Exit Time
+                </h5>
+                <Form.Control
+                  style={{ height: "auto" }}
+                  type="time"
+                  id="text3"
+                  value={timeTradeConddition[0].exit.time}
+                  onChange={(e) => {
+                    selectTime(e, "exit");
+                  }}
+                />
+              </Col>
+              <Col md={3}>
+                <h5
+                  style={{
+                    fontWeight: "bold",
+                    color: "black",
+                    fontSize: "15px",
+                  }}
+                >
+                  No Trade Time
+                </h5>
+                <Form.Control
+                  style={{ height: "auto" }}
+                  type="time"
+                  id="text3"
+                  value={timeTradeConddition[0].notrade.time}
+                  onChange={(e) => {
+                    selectTime(e, "notrade");
+                  }}
+                />
+              </Col>
+            </Row>
 
-              <Row className="mt-4">
-                <Col md={2}>
-                  <h5
-                    style={{
-                      fontWeight: "bold",
-                      color: "black",
-                      fontSize: "15px",
-                    }}
-                  >
-                    Exit Time
-                  </h5>
-                </Col>
+         
 
-                <Col md={2}>
-                  {/* <label>Time</label> */}
-                  <Form.Control
-                    style={{ height: "auto" }}
-                    type="time"
-                    id="text3"
-                    value={timeTradeConddition[0].exit.time}
-                    onChange={(e) => {
-                      selectTime(e, "exit");
-                    }}
-                  />
-                </Col>
-              </Row>
+            <li
+              className="StepProgress-item current is-done"
+              style={{ marginTop: "50px" }}
+            >
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  onChange={(e) => setBuyCheck(e.target.checked)}
+                  type="checkbox"
+                  id="inlineCheckbox1"
+                  value="option1"
+                />
+                <label className="form-check-label" htmlFor="inlineCheckbox1">
+                  Buy
+                </label>
+              </div>
 
-              <Row className="mt-4">
-                <Col md={2}>
-                  <h5
-                    style={{
-                      fontWeight: "bold",
-                      color: "black",
-                      fontSize: "15px",
-                    }}
-                  >
-                    No Trade Time
-                  </h5>
-                </Col>
+              <strong>Buy Entry Condition</strong>
 
-                <Col md={2}>
-                  {/* <label>Time</label> */}
-                  <Form.Control
-                    style={{ height: "auto" }}
-                    type="time"
-                    id="text3"
-                    value={timeTradeConddition[0].notrade.time}
-                    onChange={(e) => {
-                      selectTime(e, "notrade");
-                    }}
-                  />
-                </Col>
-              </Row>
-
-              <li
-                className="StepProgress-item current is-done"
-                style={{ marginTop: "50px" }}
-              >
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    onChange={(e) => setBuyCheck(e.target.checked)}
-                    type="checkbox"
-                    id="inlineCheckbox1"
-                    value="option1"
-                  />
-                  <label className="form-check-label" for="inlineCheckbox1">
-                    Buy
-                  </label>
-                </div>
-
-                <strong>Buy Entry Condition</strong>
-
-                {buyCheck == true ? (
-                  <>
-                    <h4>{condition_string}</h4>
-                    <div className="table-responsive w-100">
-                      <table className="table">
-                        <thead className="bg-transparent">
-                          <tr>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Bracket</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>First</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Comparators</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Second</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Bracket</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}></th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Remove</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-
-                          {coditionRequestArr && coditionRequestArr.map((condition_item, index) => {
+              {buyCheck == true ? (
+                <>
+                  <h4>{condition_string}</h4>
+                  <div className="table-responsive w-100">
+                    <table className="table">
+                      <thead className="bg-transparent">
+                        <tr>
+                          <th
+                            className="text-dark text-center"
+                            style={{ fontSize: "15px" }}
+                          >
+                            Bracket
+                          </th>
+                          <th
+                            className="text-dark text-center"
+                            style={{ fontSize: "15px" }}
+                          >
+                            First
+                          </th>
+                          <th
+                            className="text-dark text-center"
+                            style={{ fontSize: "15px" }}
+                          >
+                            Comparators
+                          </th>
+                          <th
+                            className="text-dark text-center"
+                            style={{ fontSize: "15px" }}
+                          >
+                            Second
+                          </th>
+                          <th
+                            className="text-dark text-center"
+                            style={{ fontSize: "15px" }}
+                          >
+                            Bracket
+                          </th>
+                          <th
+                            className="text-dark text-center"
+                            style={{ fontSize: "15px" }}
+                          ></th>
+                          <th
+                            className="text-dark text-center"
+                            style={{ fontSize: "15px" }}
+                          >
+                            Remove
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {coditionRequestArr &&
+                          coditionRequestArr.map((condition_item, index) => {
                             return (
                               <>
                                 <tr key={index}>
-                                  <td >
+                                  <td>
                                     <button
-                                      className="btn btn-success" style={{ fontSize: '15px', padding: '2px 5px' }}
+                                      className="btn btn-success"
+                                      style={{
+                                        fontSize: "15px",
+                                        padding: "2px 5px",
+                                      }}
                                       onClick={() =>
                                         AddBracket(index, "start", "buy")
                                       }
@@ -1683,15 +1718,19 @@ const CreateStrategy = () => {
                                       <i className="fa-solid fa-circle-plus"></i>
                                     </button>
 
-
                                     {condition_item.start_bracket.length > 0 ? (
                                       <button
-                                        className="btn btn-danger mx-1" style={{ fontSize: '10px', padding: '2px 3px' }}
+                                        className="btn btn-danger mx-1"
+                                        style={{
+                                          fontSize: "10px",
+                                          padding: "2px 3px",
+                                        }}
                                         onClick={() =>
                                           RemoveBracket(
                                             index,
                                             "start",
-                                            condition_item.start_bracket.length - 1,
+                                            condition_item.start_bracket
+                                              .length - 1,
                                             "buy"
                                           )
                                         }
@@ -1713,20 +1752,27 @@ const CreateStrategy = () => {
                                     </p>
                                   </td>
 
-
                                   <td>
                                     <div className="d-flex">
-                                      <select className="form-select" name="first_source"
+                                      <select
+                                        className="form-select"
+                                        name="first_source"
                                         onChange={(e) => {
-                                          selectSource(e, condition_item, "first", index, "buy");
+                                          selectSource(
+                                            e,
+                                            condition_item,
+                                            "first",
+                                            index,
+                                            "buy"
+                                          );
                                         }}
                                       >
                                         <option value="">---</option>
                                         {getSources.data.map((sm, i) => (
                                           <option
                                             selected={
-                                              condition_item.first_element.source ==
-                                              sm.value
+                                              condition_item.first_element
+                                                .source == sm.value
                                             }
                                             value={sm.value}
                                           >
@@ -1741,7 +1787,13 @@ const CreateStrategy = () => {
                                           condition_item.first_element.offset
                                         }
                                         onChange={(e) => {
-                                          ChangeOffsetval(e, condition_item, "first", index, "buy");
+                                          ChangeOffsetval(
+                                            e,
+                                            condition_item,
+                                            "first",
+                                            index,
+                                            "buy"
+                                          );
                                         }}
                                         min="0"
                                         className="form-control w-50 ms-2"
@@ -1750,18 +1802,24 @@ const CreateStrategy = () => {
                                   </td>
 
                                   <td>
-
                                     <select
-                                      className="form-select" name="comparators"
+                                      className="form-select"
+                                      name="comparators"
                                       onChange={(e) => {
-                                        selectComparators(e, condition_item, index, "buy");
+                                        selectComparators(
+                                          e,
+                                          condition_item,
+                                          index,
+                                          "buy"
+                                        );
                                       }}
                                     >
                                       {/* <option value="">---</option> */}
                                       {getComparators.data.map((sm, i) => (
                                         <option
                                           selected={
-                                            condition_item.comparators == sm.value
+                                            condition_item.comparators ==
+                                            sm.value
                                           }
                                           value={sm.value}
                                         >
@@ -1771,24 +1829,27 @@ const CreateStrategy = () => {
                                     </select>
                                   </td>
 
-
-
                                   <td>
                                     <div className="d-flex">
-
-                                      <select className="form-select" name="second_source"
+                                      <select
+                                        className="form-select"
+                                        name="second_source"
                                         onChange={(e) => {
-                                          selectSource(e, condition_item, "second", index,
-                                            "buy");
+                                          selectSource(
+                                            e,
+                                            condition_item,
+                                            "second",
+                                            index,
+                                            "buy"
+                                          );
                                         }}
                                       >
-
                                         <option value="">---</option>
                                         {getSources.data.map((sm, i) => (
                                           <option
                                             selected={
-                                              condition_item.second_element.source ==
-                                              sm.value
+                                              condition_item.second_element
+                                                .source == sm.value
                                             }
                                             value={sm.value}
                                           >
@@ -1802,8 +1863,13 @@ const CreateStrategy = () => {
                                           condition_item.second_element.offset
                                         }
                                         onChange={(e) => {
-                                          ChangeOffsetval(e, condition_item, "second", index,
-                                            "buy");
+                                          ChangeOffsetval(
+                                            e,
+                                            condition_item,
+                                            "second",
+                                            index,
+                                            "buy"
+                                          );
                                         }}
                                         min="0"
                                         className="form-control w-50 ms-2"
@@ -1812,15 +1878,19 @@ const CreateStrategy = () => {
                                   </td>
 
                                   <td>
-
                                     {condition_item.end_bracket.length > 0 ? (
                                       <button
-                                        className="btn btn-danger" style={{ fontSize: '10px', padding: '2px 3px' }}
+                                        className="btn btn-danger"
+                                        style={{
+                                          fontSize: "10px",
+                                          padding: "2px 3px",
+                                        }}
                                         onClick={() =>
                                           RemoveBracket(
                                             index,
                                             "end",
-                                            condition_item.end_bracket.length - 1,
+                                            condition_item.end_bracket.length -
+                                              1,
                                             "buy"
                                           )
                                         }
@@ -1832,7 +1902,11 @@ const CreateStrategy = () => {
                                     )}
 
                                     <button
-                                      className="btn btn-success mx-1" style={{ fontSize: '15px', padding: '2px 4px' }}
+                                      className="btn btn-success mx-1"
+                                      style={{
+                                        fontSize: "15px",
+                                        padding: "2px 4px",
+                                      }}
                                       onClick={() =>
                                         AddBracket(index, "end", "buy")
                                       }
@@ -1850,8 +1924,6 @@ const CreateStrategy = () => {
                                     >
                                       {condition_item.end_bracket.join("")}
                                     </p>
-
-
                                   </td>
 
                                   <td>
@@ -1883,7 +1955,8 @@ const CreateStrategy = () => {
                                           </option>
                                           <option
                                             selected={
-                                              condition_item.and_or_operator == "or"
+                                              condition_item.and_or_operator ==
+                                              "or"
                                             }
                                             value="or"
                                           >
@@ -1894,11 +1967,9 @@ const CreateStrategy = () => {
                                     ) : (
                                       ""
                                     )}
-
                                   </td>
 
                                   <td>
-
                                     {index == 0 ? (
                                       coditionRequestArr.length == 1 ? (
                                         <button
@@ -1931,240 +2002,267 @@ const CreateStrategy = () => {
                                       </button>
                                     )}
                                   </td>
-
-
                                 </tr>
                               </>
-                            )
-                          })
-                          }
+                            );
+                          })}
+                      </tbody>
+                    </table>
+                  </div>
+                  <button
+                    style={{ border: "1px dashed orange" }}
+                    className="btn p-2"
+                    onClick={() => conditionAdd(coditionRequestArr, "buy")}
+                  >
+                    + Add
+                  </button>
+                </>
+              ) : (
+                ""
+              )}
 
-                        </tbody>
-                      </table>
-                    </div>
-                    <button
-                      style={{ border: "1px dashed orange" }}
-                      className="btn p-2"
-                      onClick={() => conditionAdd(coditionRequestArr, "buy")}
-                    >
-                      + Add
-                    </button>
-                  </>
-
-                ) : (
-                  ""
-                )}
-
-                {condition_string != "" ? (
-                  <li className="StepProgress-item">
-                    <strong>Buy Exit Condition</strong>
-                    <div className="row mt-3">
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="text-danger">
-                            Stop loss (point)
-                          </label>
-                          <input
-                            type="number"
-                            onChange={(e) => {
-                              StoplossChange(e, "buy");
-                            }}
-                            className="form-control"
-                          ></input>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="text-success">
-                            Target Profit (point)
-                          </label>
-                          <input
-                            type="number"
-                            onChange={(e) => {
-                              TargetChange(e, "buy");
-                            }}
-                            className="form-control"
-                          ></input>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="">
-                            Trailing SL (point) (optional)
-                          </label>
-                          <input
-                            type="number"
-                            onChange={(e) => {
-                              TSLChange(e, "buy");
-                            }}
-                            className="form-control"
-                          ></input>
-                        </div>
+              {condition_string != "" ? (
+                <li className="StepProgress-item">
+                  <strong>Buy Exit Condition</strong>
+                  <div className="row mt-3">
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="text-danger">Stop loss (point)</label>
+                        <input
+                          type="number"
+                          onChange={(e) => {
+                            StoplossChange(e, "buy");
+                          }}
+                          className="form-control"
+                        ></input>
                       </div>
                     </div>
-                  </li>
-                ) : (
-                  ""
-                )}
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="text-success">
+                          Target Profit (point)
+                        </label>
+                        <input
+                          type="number"
+                          onChange={(e) => {
+                            TargetChange(e, "buy");
+                          }}
+                          className="form-control"
+                        ></input>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="">
+                          Trailing SL (point) (optional)
+                        </label>
+                        <input
+                          type="number"
+                          onChange={(e) => {
+                            TSLChange(e, "buy");
+                          }}
+                          className="form-control"
+                        ></input>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ) : (
+                ""
+              )}
+            </li>
 
-              </li>
+            <li
+              className="StepProgress-item current is-done"
+              style={{ marginTop: "50px" }}
+            >
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  onChange={(e) => setSellCheck(e.target.checked)}
+                  type="checkbox"
+                  id="inlineCheckbox2"
+                  value="option1"
+                />
+                <label className="form-check-label" htmlFor="inlineCheckbox2">
+                  Sell
+                </label>
+              </div>
+              <strong>Sell Entry Condition</strong>
 
-              <li
-                className="StepProgress-item current is-done"
-                style={{ marginTop: "50px" }}
-              >
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    onChange={(e) => setSellCheck(e.target.checked)}
-                    type="checkbox"
-                    id="inlineCheckbox2"
-                    value="option1"
-                  />
-                  <label className="form-check-label" for="inlineCheckbox2">
-                    Sell
-                  </label>
-                </div>
-                <strong>Sell Entry Condition</strong>
-
-                {sellCheck == true ? (
-                  <>
-                    <h4>{condition_string_sell}</h4>
-                    <div className="table-responsive w-100">
-                      <table className="table">
-                        <thead className="bg-transparent">
-                          <tr>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Bracket</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>First</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Comparators</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Second</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Bracket</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}></th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Remove</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-
-                          {coditionRequestArrSell && coditionRequestArrSell.map((condition_item, index) => {
-                            return (
-                              <>
-                                <tr key={index}>
-                                  <td >
-                                    <button
-                                      className="btn btn-success" style={{ fontSize: '15px', padding: '2px 5px' }}
-                                      onClick={() =>
-                                        AddBracket(index, "start", "sell")
-                                      }
-                                    >
-                                      {/* + Bracket */}
-                                      <i className="fa-solid fa-circle-plus"></i>
-                                    </button>
-
-
-                                    {condition_item.start_bracket.length > 0 ? (
+              {sellCheck == true ? (
+                <>
+                  <h4>{condition_string_sell}</h4>
+                  <div className="table-responsive w-100">
+                    <table className="table">
+                      <thead className="bg-transparent">
+                        <tr>
+                          <th
+                            className="text-dark text-center"
+                            style={{ fontSize: "15px" }}
+                          >
+                            Bracket
+                          </th>
+                          <th
+                            className="text-dark text-center"
+                            style={{ fontSize: "15px" }}
+                          >
+                            First
+                          </th>
+                          <th
+                            className="text-dark text-center"
+                            style={{ fontSize: "15px" }}
+                          >
+                            Comparators
+                          </th>
+                          <th
+                            className="text-dark text-center"
+                            style={{ fontSize: "15px" }}
+                          >
+                            Second
+                          </th>
+                          <th
+                            className="text-dark text-center"
+                            style={{ fontSize: "15px" }}
+                          >
+                            Bracket
+                          </th>
+                          <th
+                            className="text-dark text-center"
+                            style={{ fontSize: "15px" }}
+                          ></th>
+                          <th
+                            className="text-dark text-center"
+                            style={{ fontSize: "15px" }}
+                          >
+                            Remove
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {coditionRequestArrSell &&
+                          coditionRequestArrSell.map(
+                            (condition_item, index) => {
+                              return (
+                                <>
+                                  <tr key={index}>
+                                    <td>
                                       <button
-                                        className="btn btn-danger mx-1" style={{ fontSize: '10px', padding: '2px 3px' }}
+                                        className="btn btn-success"
+                                        style={{
+                                          fontSize: "15px",
+                                          padding: "2px 5px",
+                                        }}
                                         onClick={() =>
-                                          RemoveBracket(
-                                            index,
-                                            "start",
-                                            condition_item.start_bracket.length - 1,
-                                            "sell"
-                                          )
+                                          AddBracket(index, "start", "sell")
                                         }
                                       >
-                                        <i className="fa-solid fa-xmark"></i>
+                                        {/* + Bracket */}
+                                        <i className="fa-solid fa-circle-plus"></i>
                                       </button>
-                                    ) : (
-                                      ""
-                                    )}
 
-                                    <p
-                                      style={{
-                                        marginRight: "10px",
-                                        fontSize: "larger",
-                                        fontWeight: "bold",
-                                      }}
-                                    >
-                                      {condition_item.start_bracket.join("")}
-                                    </p>
-                                  </td>
-
-
-                                  <td>
-                                    <div className="d-flex">
-                                      <select className="form-select" name="first_source"
-                                        onChange={(e) => {
-                                          selectSource(e, condition_item, "first", index, "sell");
-                                        }}
-                                      >
-                                        <option value="">---</option>
-                                        {getSources.data.map((sm, i) => (
-                                          <option
-                                            selected={
-                                              condition_item.first_element.source ==
-                                              sm.value
-                                            }
-                                            value={sm.value}
-                                          >
-                                            {sm.name}
-                                          </option>
-                                        ))}
-                                      </select>
-
-                                      <input
-                                        type="number"
-                                        defaultValue={
-                                          condition_item.first_element.offset
-                                        }
-                                        onChange={(e) => {
-                                          ChangeOffsetval(e, condition_item, "first", index, "sell");
-                                        }}
-                                        min="0"
-                                        className="form-control w-50 ms-2"
-                                      />
-                                    </div>
-                                  </td>
-
-                                  <td>
-
-                                    <select
-                                      className="form-select" name="comparators"
-                                      onChange={(e) => {
-                                        selectComparators(e, condition_item, index, "sell");
-                                      }}
-                                    >
-                                      {/* <option value="">---</option> */}
-                                      {getComparators.data.map((sm, i) => (
-                                        <option
-                                          selected={
-                                            condition_item.comparators == sm.value
+                                      {condition_item.start_bracket.length >
+                                      0 ? (
+                                        <button
+                                          className="btn btn-danger mx-1"
+                                          style={{
+                                            fontSize: "10px",
+                                            padding: "2px 3px",
+                                          }}
+                                          onClick={() =>
+                                            RemoveBracket(
+                                              index,
+                                              "start",
+                                              condition_item.start_bracket
+                                                .length - 1,
+                                              "sell"
+                                            )
                                           }
-                                          value={sm.value}
                                         >
-                                          {sm.name}
-                                        </option>
-                                      ))}
-                                    </select>
-                                  </td>
+                                          <i className="fa-solid fa-xmark"></i>
+                                        </button>
+                                      ) : (
+                                        ""
+                                      )}
 
-
-
-                                  <td>
-                                    <div className="d-flex">
-
-                                      <select className="form-select" name="second_source"
-                                        onChange={(e) => {
-                                          selectSource(e, condition_item, "second", index,
-                                            "sell");
+                                      <p
+                                        style={{
+                                          marginRight: "10px",
+                                          fontSize: "larger",
+                                          fontWeight: "bold",
                                         }}
                                       >
+                                        {condition_item.start_bracket.join("")}
+                                      </p>
+                                    </td>
 
-                                        <option value="">---</option>
-                                        {getSources.data.map((sm, i) => (
+                                    <td>
+                                      <div className="d-flex">
+                                        <select
+                                          className="form-select"
+                                          name="first_source"
+                                          onChange={(e) => {
+                                            selectSource(
+                                              e,
+                                              condition_item,
+                                              "first",
+                                              index,
+                                              "sell"
+                                            );
+                                          }}
+                                        >
+                                          <option value="">---</option>
+                                          {getSources.data.map((sm, i) => (
+                                            <option
+                                              selected={
+                                                condition_item.first_element
+                                                  .source == sm.value
+                                              }
+                                              value={sm.value}
+                                            >
+                                              {sm.name}
+                                            </option>
+                                          ))}
+                                        </select>
+
+                                        <input
+                                          type="number"
+                                          defaultValue={
+                                            condition_item.first_element.offset
+                                          }
+                                          onChange={(e) => {
+                                            ChangeOffsetval(
+                                              e,
+                                              condition_item,
+                                              "first",
+                                              index,
+                                              "sell"
+                                            );
+                                          }}
+                                          min="0"
+                                          className="form-control w-50 ms-2"
+                                        />
+                                      </div>
+                                    </td>
+
+                                    <td>
+                                      <select
+                                        className="form-select"
+                                        name="comparators"
+                                        onChange={(e) => {
+                                          selectComparators(
+                                            e,
+                                            condition_item,
+                                            index,
+                                            "sell"
+                                          );
+                                        }}
+                                      >
+                                        {/* <option value="">---</option> */}
+                                        {getComparators.data.map((sm, i) => (
                                           <option
                                             selected={
-                                              condition_item.second_element.source ==
+                                              condition_item.comparators ==
                                               sm.value
                                             }
                                             value={sm.value}
@@ -2173,292 +2271,253 @@ const CreateStrategy = () => {
                                           </option>
                                         ))}
                                       </select>
-                                      <input
-                                        type="number"
-                                        defaultValue={
-                                          condition_item.second_element.offset
-                                        }
-                                        onChange={(e) => {
-                                          ChangeOffsetval(e, condition_item, "second", index,
-                                            "sell");
-                                        }}
-                                        min="0"
-                                        className="form-control w-50 ms-2"
-                                      />
-                                    </div>
-                                  </td>
+                                    </td>
 
-                                  <td>
+                                    <td>
+                                      <div className="d-flex">
+                                        <select
+                                          className="form-select"
+                                          name="second_source"
+                                          onChange={(e) => {
+                                            selectSource(
+                                              e,
+                                              condition_item,
+                                              "second",
+                                              index,
+                                              "sell"
+                                            );
+                                          }}
+                                        >
+                                          <option value="">---</option>
+                                          {getSources.data.map((sm, i) => (
+                                            <option
+                                              selected={
+                                                condition_item.second_element
+                                                  .source == sm.value
+                                              }
+                                              value={sm.value}
+                                            >
+                                              {sm.name}
+                                            </option>
+                                          ))}
+                                        </select>
+                                        <input
+                                          type="number"
+                                          defaultValue={
+                                            condition_item.second_element.offset
+                                          }
+                                          onChange={(e) => {
+                                            ChangeOffsetval(
+                                              e,
+                                              condition_item,
+                                              "second",
+                                              index,
+                                              "sell"
+                                            );
+                                          }}
+                                          min="0"
+                                          className="form-control w-50 ms-2"
+                                        />
+                                      </div>
+                                    </td>
 
-                                    {condition_item.end_bracket.length > 0 ? (
+                                    <td>
+                                      {condition_item.end_bracket.length > 0 ? (
+                                        <button
+                                          className="btn btn-danger"
+                                          style={{
+                                            fontSize: "10px",
+                                            padding: "2px 3px",
+                                          }}
+                                          onClick={() =>
+                                            RemoveBracket(
+                                              index,
+                                              "end",
+                                              condition_item.end_bracket
+                                                .length - 1,
+                                              "sell"
+                                            )
+                                          }
+                                        >
+                                          <i className="fa-solid fa-xmark"></i>
+                                        </button>
+                                      ) : (
+                                        ""
+                                      )}
+
                                       <button
-                                        className="btn btn-danger" style={{ fontSize: '10px', padding: '2px 3px' }}
+                                        className="btn btn-success mx-1"
+                                        style={{
+                                          fontSize: "15px",
+                                          padding: "2px 4px",
+                                        }}
                                         onClick={() =>
-                                          RemoveBracket(
-                                            index,
-                                            "end",
-                                            condition_item.end_bracket.length - 1,
-                                            "sell"
-                                          )
+                                          AddBracket(index, "end", "sell")
                                         }
                                       >
-                                        <i className="fa-solid fa-xmark"></i>
+                                        {/* + Bracket */}
+                                        <i className="fa-solid fa-circle-plus"></i>
                                       </button>
-                                    ) : (
-                                      ""
-                                    )}
 
-                                    <button
-                                      className="btn btn-success mx-1" style={{ fontSize: '15px', padding: '2px 4px' }}
-                                      onClick={() =>
-                                        AddBracket(index, "end", "sell")
-                                      }
-                                    >
-                                      {/* + Bracket */}
-                                      <i className="fa-solid fa-circle-plus"></i>
-                                    </button>
+                                      <p
+                                        style={{
+                                          marginRight: "10px",
+                                          fontSize: "larger",
+                                          fontWeight: "bold",
+                                        }}
+                                      >
+                                        {condition_item.end_bracket.join("")}
+                                      </p>
+                                    </td>
 
-                                    <p
-                                      style={{
-                                        marginRight: "10px",
-                                        fontSize: "larger",
-                                        fontWeight: "bold",
-                                      }}
-                                    >
-                                      {condition_item.end_bracket.join("")}
-                                    </p>
-
-
-                                  </td>
-
-                                  <td>
-                                    {coditionRequestArrSell.length >= 2 ? (
-                                      condition_item.and_or_operator == "" ? (
-                                        ""
+                                    <td>
+                                      {coditionRequestArrSell.length >= 2 ? (
+                                        condition_item.and_or_operator == "" ? (
+                                          ""
+                                        ) : (
+                                          <div className="d-flex">
+                                            <select
+                                              className="form-select"
+                                              name="and_or"
+                                              onChange={(e) => {
+                                                selectAndOrOperaterChange(
+                                                  e,
+                                                  condition_item,
+                                                  index,
+                                                  "sell"
+                                                );
+                                              }}
+                                            >
+                                              <option
+                                                selected={
+                                                  condition_item.and_or_operator ==
+                                                  "and"
+                                                }
+                                                value="and"
+                                              >
+                                                AND
+                                              </option>
+                                              <option
+                                                selected={
+                                                  condition_item.and_or_operator ==
+                                                  "or"
+                                                }
+                                                value="or"
+                                              >
+                                                OR
+                                              </option>
+                                            </select>
+                                          </div>
+                                        )
                                       ) : (
-                                        <div className="d-flex">
-                                          <select
-                                            className="form-select"
-                                            name="and_or"
-                                            onChange={(e) => {
-                                              selectAndOrOperaterChange(
-                                                e,
-                                                condition_item,
-                                                index,
-                                                "sell"
-                                              );
+                                        ""
+                                      )}
+                                    </td>
+
+                                    <td>
+                                      {index == 0 ? (
+                                        coditionRequestArrSell.length == 1 ? (
+                                          <button
+                                            className="btn btn-danger "
+                                            onClick={() =>
+                                              conditionRemove(index, "sell")
+                                            }
+                                            style={{
+                                              fontSize: "10px",
+                                              padding: "5px 10px",
                                             }}
                                           >
-
-                                            <option
-                                              selected={
-                                                condition_item.and_or_operator ==
-                                                "and"
-                                              }
-                                              value="and"
-                                            >
-                                              AND
-                                            </option>
-                                            <option
-                                              selected={
-                                                condition_item.and_or_operator == "or"
-                                              }
-                                              value="or"
-                                            >
-                                              OR
-                                            </option>
-                                          </select>
-                                        </div>
-                                      )
-                                    ) : (
-                                      ""
-                                    )}
-
-                                  </td>
-
-                                  <td>
-
-                                    {index == 0 ? (
-                                      coditionRequestArrSell.length == 1 ? (
+                                            Remove
+                                          </button>
+                                        ) : (
+                                          ""
+                                        )
+                                      ) : (
                                         <button
-                                          className="btn btn-danger "
-                                          onClick={() =>
-                                            conditionRemove(index, "sell")
-                                          }
+                                          className="btn btn-danger  "
                                           style={{
                                             fontSize: "10px",
                                             padding: "5px 10px",
                                           }}
+                                          onClick={() =>
+                                            conditionRemove(index, "sell")
+                                          }
                                         >
                                           Remove
                                         </button>
-                                      ) : (
-                                        ""
-                                      )
-                                    ) : (
-                                      <button
-                                        className="btn btn-danger  "
-                                        style={{
-                                          fontSize: "10px",
-                                          padding: "5px 10px",
-                                        }}
-                                        onClick={() =>
-                                          conditionRemove(index, "sell")
-                                        }
-                                      >
-                                        Remove
-                                      </button>
-                                    )}
-                                  </td>
-
-
-                                </tr>
-                              </>
-                            )
-                          })
-                          }
-
-                        </tbody>
-                      </table>
-                    </div>
-                    <button
-                      style={{ border: "1px dashed orange" }}
-                      className="btn p-2"
-                      onClick={() => conditionAdd(coditionRequestArrSell, "sell")}
-                    >
-                      + Add
-                    </button>
-                  </>
-                ) : (
-                  ""
-                )}
-
-
-                {condition_string_sell != "" ? (
-                  <li className="StepProgress-item">
-                    <strong>Sell Exit Condition</strong>
-                    <div className="row mt-3">
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="text-danger">
-                            Stop loss (point)
-                          </label>
-                          <input
-                            type="number"
-                            onChange={(e) => {
-                              StoplossChange(e, "sell");
-                            }}
-                            className="form-control"
-                          ></input>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="text-success">
-                            Target Profit (point)
-                          </label>
-                          <input
-                            type="number"
-                            onChange={(e) => {
-                              TargetChange(e, "sell");
-                            }}
-                            className="form-control"
-                          ></input>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="">
-                            Trailing SL (point) (optional)
-                          </label>
-                          <input
-                            type="number"
-                            onChange={(e) => {
-                              TSLChange(e, "sell");
-                            }}
-                            className="form-control"
-                          ></input>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ) : (
-                  ""
-                )}
-
-              </li>
-            </ul>
-
-            <>
-              <Modal show={showEnterPrice} onHide={handleCloseEnterPrice}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Inputs</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <div>
-                    <label>Length</label>
-                    <br />
-                    <input type="number" min={0} defaultValue={0} />
-                    <br />
-
-                    <label>Source</label>
-                    <br />
-                    <select name="sources">
-                      {/* {getSources && getSources.map((item, index) => (
-                        <option key={index} value={item.name}>
-                          {item.name}
-                        </option>
-                      ))} */}
-                    </select>
-                    <br />
-
-                    <label>Offset</label>
-                    <br />
-                    <input type="number" min={0} defaultValue={0} />
-                    <br />
-
-                    <br />
-                    <label>SMOOTHING</label>
-                    <br />
-
-                    <label>Method</label>
-                    <br />
-                    {indicatorModalRowData &&
-                      Array.isArray(indicatorModalRowData.data) && (
-                        <select name="method">
-                          {indicatorModalRowData.data.map((item, index) => (
-                            <option
-                              key={index}
-                              value={item[Object.keys(item)[0]]}
-                            >
-                              {
-                                indicatorModalRowData.data[index][
-                                Object.keys(item)[0]
-                                ]
-                              }
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                    <br />
-
-                    <label>EMA Length</label>
-                    <br />
-                    <input type="number" min={0} defaultValue={0} />
-                    <br />
+                                      )}
+                                    </td>
+                                  </tr>
+                                </>
+                              );
+                            }
+                          )}
+                      </tbody>
+                    </table>
                   </div>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={handleCloseEnterPrice}>
-                    Close
-                  </Button>
-                  <Button variant="primary" onClick={handleCloseEnterPrice}>
-                    Save Changes
-                  </Button>
-                </Modal.Footer>
-              </Modal>
-            </>
-          </div>
+                  <button
+                    style={{ border: "1px dashed orange" }}
+                    className="btn p-2"
+                    onClick={() => conditionAdd(coditionRequestArrSell, "sell")}
+                  >
+                    + Add
+                  </button>
+                </>
+              ) : (
+                ""
+              )}
+
+              {condition_string_sell != "" ? (
+                <li className="StepProgress-item">
+                  <strong>Sell Exit Condition</strong>
+                  <div className="row mt-3">
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="text-danger">Stop loss (point)</label>
+                        <input
+                          type="number"
+                          onChange={(e) => {
+                            StoplossChange(e, "sell");
+                          }}
+                          className="form-control"
+                        ></input>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="text-success">
+                          Target Profit (point)
+                        </label>
+                        <input
+                          type="number"
+                          onChange={(e) => {
+                            TargetChange(e, "sell");
+                          }}
+                          className="form-control"
+                        ></input>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="">
+                          Trailing SL (point) (optional)
+                        </label>
+                        <input
+                          type="number"
+                          onChange={(e) => {
+                            TSLChange(e, "sell");
+                          }}
+                          className="form-control"
+                        ></input>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ) : (
+                ""
+              )}
+            </li>
+          </ul>
 
           <div className="mt-5">
             <button
@@ -2471,215 +2530,341 @@ const CreateStrategy = () => {
           </div>
         </Content>
 
-        <Modal show={showModalOffset} onHide={closeModalOffset}>
-          <Modal.Body>
-            <p>
-              <b>{selectedSource}</b>
-            </p>
-            {selectedSource == "number" ? "" : <label>Offset</label>}
-            <Col md={2}>
-              {selectedElementFirsSecond == "first" ? (
-                <>
-                  <input
-                    type="number"
-                    defaultValue={selectConditionItem.first_element.offset}
-                    onChange={(e) => {
-                      ChangeOffset(e);
-                    }}
-                    min="0"
-                    className="form-control"
-                  />
-                </>
-              ) : selectedElementFirsSecond == "second" ? (
-                <>
-                  <input
-                    type="number"
-                    defaultValue={selectConditionItem.second_element.offset}
-                    onChange={(e) => {
-                      ChangeOffset(e);
-                    }}
-                    min="0"
-                    className="form-control"
-                  />{" "}
-                </>
-              ) : (
-                ""
-              )}
-            </Col>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={closeModalOffset}>
-              Close
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() =>
-                ModalConfirmOffset(
-                  selectConditionItem,
-                  selectedElementFirsSecond,
-                  selectedIndexConditionArr,
-                  selectedSource
-                )
-              }
-            >
-              Confirm
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <>
+          {/* MODAL DATA */}
+          <Modal show={showEnterPrice} onHide={handleCloseEnterPrice}>
+            <Modal.Header closeButton>
+              <Modal.Title>Inputs</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div>
+                <label>Length</label>
+                <br />
+                <input type="number" min={0} defaultValue={0} />
+                <br />
 
-        <Modal show={showModalAndOrOperator} onHide={closeModalAndOrOperator}>
-          <Modal.Body>
-            <p>
-              <b>{selectedSource}</b>
-            </p>
+                <label>Source</label>
+                <br />
+                <select name="sources">
+                  {/* {getSources && getSources.map((item, index) => (
+                        <option key={index} value={item.name}>
+                          {item.name}
+                        </option>
+                      ))} */}
+                </select>
+                <br />
 
-            <label>Offset</label>
+                <label>Offset</label>
+                <br />
+                <input type="number" min={0} defaultValue={0} />
+                <br />
 
-            <Col md={2}>
-              <div className="radio">
-                <label for="or">
-                  <input
-                    id="or"
-                    value="or"
-                    type="radio"
-                    checked={selectAndOrOperater === "or"}
-                    name="at_check"
-                    onChange={(e) => {
-                      setSelectAndOrOperater(e.target.value);
-                    }}
-                  />
-                  OR
-                </label>
+                <br />
+                <label>SMOOTHING</label>
+                <br />
+
+                <label>Method</label>
+                <br />
+                {indicatorModalRowData &&
+                  Array.isArray(indicatorModalRowData.data) && (
+                    <select name="method">
+                      {indicatorModalRowData.data.map((item, index) => (
+                        <option key={index} value={item[Object.keys(item)[0]]}>
+                          {
+                            indicatorModalRowData.data[index][
+                              Object.keys(item)[0]
+                            ]
+                          }
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                <br />
+
+                <label>EMA Length</label>
+                <br />
+                <input type="number" min={0} defaultValue={0} />
+                <br />
               </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseEnterPrice}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleCloseEnterPrice}>
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal>
 
-              <div className="radio">
-                <label for="and">
-                  <input
-                    id="and"
-                    value="and"
-                    type="radio"
-                    checked={selectAndOrOperater === "and"}
-                    name="at_check"
-                    onChange={(e) => {
-                      setSelectAndOrOperater(e.target.value);
-                    }}
-                  />
-                  AND
-                </label>
-              </div>
-            </Col>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={closeModalAndOrOperator}>
-              Close
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => ModalConfirmAndOrOperator(checkBuySellAndOr)}
-            >
-              Confirm
-            </Button>
-          </Modal.Footer>
-        </Modal>
+          <Modal show={show} onHide={handleClose} className="right">
+            <Modal.Header>
+              <input
+                type="search"
+                className="form-control"
+                placeholder="Search Stocks eg, SBIN"
+                value={filterServices}
+                onChange={(e) => setFilterServices(e.target.value)}
+              />
+            </Modal.Header>
+            <Modal.Body>
+              <ul className="ps-0">
+                {storeServiceData && Array.isArray(storeServiceData) ? (
+                  storeServiceData.map((x) => (
+                    <li className="my-2" key={x.id}>
+                      <div className="row">
+                        <div className="col-md-2">
+                          <img
+                            className="w-100 p-2"
+                            src="https://upload.wikimedia.org/wikipedia/en/6/60/ACFTU_logo.png"
+                            alt="Logo"
+                          />
+                        </div>
+                        <div className="col-md-7 ps-0">
+                          <h3 className="mb-0">{x.tradesymbol}</h3>
+                          <p className="text-muted my-0">{x.exch_seg}</p>
+                        </div>
+                        <div className="col-md-3 d-flex list-btn">
+                          <button className="btn border-0">
+                            <i
+                              className="fa-regular fa-square-plus"
+                              onClick={() => handleAddItem(x)}
+                            ></i>
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                  ))
+                ) : (
+                  <li>No data available</li>
+                )}
+              </ul>
+            </Modal.Body>
+            <Modal.Footer></Modal.Footer>
+          </Modal>
 
+          <Modal show={showModalOffset} onHide={closeModalOffset}>
+            <Modal.Body>
+              <p>
+                <b>{selectedSource}</b>
+              </p>
+              {selectedSource == "number" ? "" : <label>Offset</label>}
+              <Col md={2}>
+                {selectedElementFirsSecond == "first" ? (
+                  <>
+                    <input
+                      type="number"
+                      defaultValue={selectConditionItem.first_element.offset}
+                      onChange={(e) => {
+                        ChangeOffset(e);
+                      }}
+                      min="0"
+                      className="form-control"
+                    />
+                  </>
+                ) : selectedElementFirsSecond == "second" ? (
+                  <>
+                    <input
+                      type="number"
+                      defaultValue={selectConditionItem.second_element.offset}
+                      onChange={(e) => {
+                        ChangeOffset(e);
+                      }}
+                      min="0"
+                      className="form-control"
+                    />{" "}
+                  </>
+                ) : (
+                  ""
+                )}
+              </Col>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={closeModalOffset}>
+                Close
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() =>
+                  ModalConfirmOffset(
+                    selectConditionItem,
+                    selectedElementFirsSecond,
+                    selectedIndexConditionArr,
+                    selectedSource
+                  )
+                }
+              >
+                Confirm
+              </Button>
+            </Modal.Footer>
+          </Modal>
 
-        <Modal show={showModalindicators} onHide={closeModalindicators} centered>
-          <Modal.Header closeButton>
-            <Modal.Title>EMA Indicator</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {
-          
+          <Modal show={showModalAndOrOperator} onHide={closeModalAndOrOperator}>
+            <Modal.Body>
+              <p>
+                <b>{selectedSource}</b>
+              </p>
 
-            }
+              <label>Offset</label>
 
-            {
-              modalPropsindicators.index != null ?
+              <Col md={2}>
+                <div className="radio">
+                  <label htmlFor="or">
+                    <input
+                      id="or"
+                      value="or"
+                      type="radio"
+                      checked={selectAndOrOperater === "or"}
+                      name="at_check"
+                      onChange={(e) => {
+                        setSelectAndOrOperater(e.target.value);
+                      }}
+                    />
+                    OR
+                  </label>
+                </div>
+
+                <div className="radio">
+                  <label htmlFor="and">
+                    <input
+                      id="and"
+                      value="and"
+                      type="radio"
+                      checked={selectAndOrOperater === "and"}
+                      name="at_check"
+                      onChange={(e) => {
+                        setSelectAndOrOperater(e.target.value);
+                      }}
+                    />
+                    AND
+                  </label>
+                </div>
+              </Col>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={closeModalAndOrOperator}>
+                Close
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => ModalConfirmAndOrOperator(checkBuySellAndOr)}
+              >
+                Confirm
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          <Modal
+            show={showModalindicators}
+            onHide={closeModalindicators}
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>EMA Indicator</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {}
+
+              {modalPropsindicators.index != null ? (
                 <div className="row">
                   <div className="col-md-6">
                     <label>Field</label>
-                    <select className="form-control formcontol-1" aria-label="Default select example"
+                    <select
+                      className="form-control formcontol-1"
+                      aria-label="Default select example"
                       onChange={(e) => {
-                        selectSourceIndicators(e, modalPropsindicators, "source");
+                        selectSourceIndicators(
+                          e,
+                          modalPropsindicators,
+                          "source"
+                        );
                       }}
                     >
                       {/* <option value="">---</option> */}
-                      {getSources.data.map((sm, i) => (
-                        ['close', 'open', 'high', 'low'].includes(sm.value) ?
+                      {getSources.data.map((sm, i) =>
+                        ["close", "open", "high", "low"].includes(sm.value) ? (
                           <>
                             <option
                               selected={
-
-                                modalPropsindicators.buy_sell == "buy" ?
-                                  modalPropsindicators.element_first_second == "first" ?
-                                    coditionRequestArr[modalPropsindicators.index].first_element.indicator_field == sm.value
-                                    :
-                                    coditionRequestArr[modalPropsindicators.index].second_element.indicator_field ==
-                                    sm.value
-                                  :
-
-                                  modalPropsindicators.element_first_second == "first" ?
-                                    coditionRequestArrSell[modalPropsindicators.index].first_element.indicator_field == sm.value
-                                    :
-                                    coditionRequestArrSell[modalPropsindicators.index].second_element.indicator_field ==
-                                    sm.value
-
+                                modalPropsindicators.buy_sell == "buy"
+                                  ? modalPropsindicators.element_first_second ==
+                                    "first"
+                                    ? coditionRequestArr[
+                                        modalPropsindicators.index
+                                      ].first_element.indicator_field ==
+                                      sm.value
+                                    : coditionRequestArr[
+                                        modalPropsindicators.index
+                                      ].second_element.indicator_field ==
+                                      sm.value
+                                  : modalPropsindicators.element_first_second ==
+                                    "first"
+                                  ? coditionRequestArrSell[
+                                      modalPropsindicators.index
+                                    ].first_element.indicator_field == sm.value
+                                  : coditionRequestArrSell[
+                                      modalPropsindicators.index
+                                    ].second_element.indicator_field == sm.value
                               }
                               value={sm.value}
                             >
                               {sm.name}
                             </option>
                           </>
-                          : ""
-                      ))}
+                        ) : (
+                          ""
+                        )
+                      )}
                     </select>
                   </div>
                   <div className="col-md-6">
                     <label>Period</label>
-                  
+
                     <input
-                    type="number"
+                      type="number"
                       className="form-control formcontol-1"
                       min="0"
                       defaultValue={
-
-                        modalPropsindicators.buy_sell == "buy" ?
-                          modalPropsindicators.element_first_second == "first" ?
-                            coditionRequestArr[modalPropsindicators.index].first_element.period
-                            :
-                            coditionRequestArr[modalPropsindicators.index].second_element.period
-                          :
-
-                          modalPropsindicators.element_first_second == "first" ?
-                            coditionRequestArrSell[modalPropsindicators.index].first_element.period
-                            :
-                            coditionRequestArrSell[modalPropsindicators.index].second_element.period
-
+                        modalPropsindicators.buy_sell == "buy"
+                          ? modalPropsindicators.element_first_second == "first"
+                            ? coditionRequestArr[modalPropsindicators.index]
+                                .first_element.period
+                            : coditionRequestArr[modalPropsindicators.index]
+                                .second_element.period
+                          : modalPropsindicators.element_first_second == "first"
+                          ? coditionRequestArrSell[modalPropsindicators.index]
+                              .first_element.period
+                          : coditionRequestArrSell[modalPropsindicators.index]
+                              .second_element.period
                       }
-                    onChange={(e) => selectSourceIndicators(e, modalPropsindicators, "period")}
-                   
+                      onChange={(e) =>
+                        selectSourceIndicators(
+                          e,
+                          modalPropsindicators,
+                          "period"
+                        )
+                      }
                     />
                   </div>
                 </div>
-
-                : ""
-            }
-
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={closeModalindicators}>
-              Close
-            </Button>
-            <Button
-              variant="primary"
-               //onClick={() => ModalConfirmindicators(checkBuySellAndOr)}
-               onClick={closeModalindicators}
-            >
-              Done
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
+              ) : (
+                ""
+              )}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={closeModalindicators}>
+                Close
+              </Button>
+              <Button
+                variant="primary"
+                //onClick={() => ModalConfirmindicators(checkBuySellAndOr)}
+                onClick={closeModalindicators}
+              >
+                Done
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </>
 
         <ToastButton />
       </>

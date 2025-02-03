@@ -41,6 +41,7 @@ module.exports = function (app) {
   cron.schedule("15 18 * * *", () => {
     downloadKotakNeotoken();
   });
+  
 
   cron.schedule("30 5 * * *", () => {
     RemoveAllTextFiles();
@@ -399,6 +400,14 @@ module.exports = function (app) {
           url: `https://lapi.kotaksecurities.com/wso2-scripmaster/v1/prod/${formattedDate}/transformed/cde_fo.csv`,
           key: "KOTAK_CDS",
         },
+        {
+          url: `https://lapi.kotaksecurities.com/wso2-scripmaster/v1/prod/${formattedDate}/transformed/bse_cm.csv`,
+          key: "KOTAK_BSE_CM",
+        },
+        {
+          url: `https://lapi.kotaksecurities.com/wso2-scripmaster/v1/prod/${formattedDate}/transformed/bse_fo.csv`,
+          key: "KOTAK_BSE_FO",
+        }
       ];
 
       TokenUrl.forEach((data) => {
@@ -559,9 +568,7 @@ module.exports = function (app) {
           );
           return;
         } else {
-          console.log(
-            `Successfully downloaded and extracted ${result.filename}`
-          );
+         
         }
       });
     } catch (err) {

@@ -328,6 +328,15 @@ async function createViewZerodha() {
   } 
 }
 
+async function dropViewZerodha() {
+  try {
+    await dbTest.dropCollection('zerodhaView');
+    console.log('zerodha View dropped successfully.');
+    return
+  } catch (error) {
+    return
+  }
+}
 
-module.exports = { createViewZerodha }
+module.exports = { createViewZerodha,dropViewZerodha }
 

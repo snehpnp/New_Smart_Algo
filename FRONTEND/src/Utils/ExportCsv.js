@@ -1,6 +1,7 @@
 import React from "react";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
+import Swal from "sweetalert2";
 
 export default function ExportToExcel({ apiData = [], fileName, headers = [] }) {
   const fileType =
@@ -9,7 +10,7 @@ export default function ExportToExcel({ apiData = [], fileName, headers = [] }) 
 
   const exportToExcel = (apiData, fileName, headers) => {
     if (!Array.isArray(headers) || headers.length === 0) {
-      console.log("Headers must be a non-empty array.");
+
       return;
     }
 

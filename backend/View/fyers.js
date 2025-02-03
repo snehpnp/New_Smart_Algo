@@ -263,6 +263,15 @@ async function createViewFyers() {
   } 
 }
 
+async function dropViewFyers() {
+  try {
+    await dbTest.dropCollection('fyersView');
+    console.log('fyersView View dropped successfully.');
+  } catch (error) {
+    return;
+  } 
+}
 
-module.exports = { createViewFyers }
+
+module.exports = { createViewFyers,dropViewFyers }
 

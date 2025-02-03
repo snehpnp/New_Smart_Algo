@@ -10,30 +10,17 @@ import Dashboard7 from "./Dashboard7";
 import Dashboard8 from "./Dashboard8";
 import Dashboard9 from "./Dashboard9";
 import Dashboard10 from "./Dashboard10";
-import * as Config from "../../../Utils/Config";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
-import { GET_ALL_CLIENTS } from "../../../ReduxStore/Slice/Admin/AdminSlice";
-import { Get_All_SUBADMIN } from '../../../ReduxStore/Slice/Subadmin/Subadminslice'
+import Loader from "../../../Utils/Loader";
 
-
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Get_Dashboard_Count } from "../../../ReduxStore/Slice/Admin/DashboardSlice";
-
-import socketIOClient from "socket.io-client";
-
-import toast, { Toaster } from "react-hot-toast";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const user_token = JSON.parse(localStorage.getItem("user_details")).token;
+  const user_token = JSON.parse(localStorage.getItem("user_details"))?.token;
 
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role;
-  const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id;
-
-  const [DashboardData, setDashboardData] = useState("");
-  const [DashboardData1, setDashboardData1] = useState([]);
-
-  const [getAllClients, setAllClients] = useState({
+  const [DashboardData, setDashboardData] = useState({
     loading: true,
     data: [],
   });
@@ -44,36 +31,40 @@ const Dashboard = () => {
       .then((response) => {
         if (response.status) {
           if (response.totalCount) {
-            setDashboardData(response.totalCount);
+            setDashboardData({
+              loading: false,
+              data: response.totalCount,
+            });
+          } else {
+            setDashboardData({
+              loading: false,
+              data: response.totalCount,
+            });
           }
         }
       });
   };
 
-
-
   useEffect(() => {
     getGroupeServics();
   }, []);
 
-
-   
-   
   return (
     <>
       <div>
+            {/* {DashboardData.loading && <Loader  fullPage={true}/>} */}
         <div className="content-body">
           <div className="container-fluid">
-            <Dashboard1 data={DashboardData} />
-            <Dashboard2 data={DashboardData} />
-            <Dashboard3 data={DashboardData} />
-            <Dashboard4 data={DashboardData} />
-            <Dashboard5 data={DashboardData} />
-            <Dashboard6 data={DashboardData} />
-            <Dashboard7 data={DashboardData} />
-            <Dashboard8 data={DashboardData} />
-            <Dashboard9 data={DashboardData} />
-            <Dashboard10 data={DashboardData} />
+            <Dashboard1 data={DashboardData?.data} />
+            <Dashboard2 data={DashboardData?.data} />
+            <Dashboard3 data={DashboardData?.data} />
+            <Dashboard4 data={DashboardData?.data} />
+            <Dashboard5 data={DashboardData?.data} />
+            <Dashboard6 data={DashboardData?.data} />
+            <Dashboard7 data={DashboardData?.data} />
+            <Dashboard8 data={DashboardData?.data} />
+            <Dashboard9 data={DashboardData?.data} />
+            <Dashboard10 data={DashboardData?.data} />
           </div>
         </div>
         <ToastButton />
