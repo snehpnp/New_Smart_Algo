@@ -340,15 +340,15 @@ const TradeHistory = () => {
         </span>
       ),
     },
-    {
-      dataField: "live",
-      text: "Live Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`LivePrice_${row.token}`}></span>
-        </div>
-      ),
-    },
+    // {
+    //   dataField: "live",
+    //   text: "Live Price",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <div>
+    //       <span className={`LivePrice_${row.token}`}></span>
+    //     </div>
+    //   ),
+    // },
     {
       dataField: "entry_price",
       text: "Entry Price",
@@ -1061,7 +1061,7 @@ const TradeHistory = () => {
         csv_title="TradeHistory"
       >
         <div className="row d-flex  align-items-center justify-content-start">
-          {dashboard_filter === "client" ? (
+          {/* {dashboard_filter === "client" ? (
             ""
           ) : (
             <div className="col-lg-12 flex-column">
@@ -1093,7 +1093,7 @@ const TradeHistory = () => {
                 </label>
               </div>
             </div>
-          )}
+          )} */}
 
           <div className="col-lg-2 px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">

@@ -43,7 +43,7 @@ class Panel {
           .send({ status: false, msg: "Panel Name already exists", data: [] });
       }
 
-      // THEME CREATE SNEH
+     
       const AddPanel = new panel_model({
         panel_name: panel_name,
         domain: domain,
@@ -386,6 +386,7 @@ class Panel {
             month_ago_number: 1,
             Plans: 1,
             Make_call: 1,
+            Addclient: 1,
           },
         },
         {

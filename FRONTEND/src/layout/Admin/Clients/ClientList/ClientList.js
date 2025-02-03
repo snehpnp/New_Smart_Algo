@@ -31,12 +31,13 @@ import paginationFactory, {
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 import Loader from "../../../../Utils/Loader";
+import { Get_Pmermission } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
 
 const paginationOptions = {
   custom: true,
-  totalSize: 0, // This will be updated dynamically
-  sizePerPage: 10, // Default number of items per page
-  page: 1, // Starting page
+  totalSize: 0, 
+  sizePerPage: 10, 
+  page: 1, 
 };
 
 const AllClients = () => {
@@ -44,7 +45,7 @@ const AllClients = () => {
 
   useEffect(() => {
     GET_IP().then((response) => {
-      setIp(response.data.ip);
+      setIp(response.data?.ip);
     });
   }, []);
 
@@ -68,10 +69,36 @@ const AllClients = () => {
   const [total1, setTotal] = useState(0);
   const [getHeaderName, setHeaderName] = useState("All Clients");
   const [searchQuery, setSearchQuery] = useState("");
+const [admin_permission, setAdmin_permission] = useState(0);
 
   const handleSearch = () => {
     setSearchQuery(searchInput);
   };
+
+console.log("admin_permission",admin_permission)
+
+  const Permmision = async () => {
+    await dispatch(
+      Get_Pmermission({
+        domain: Config.react_domain,
+        token: user_details?.token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          console.log("response", response.data);
+          if (response.data.length === 0) {
+            setAdmin_permission(0);
+          } else {
+            setAdmin_permission(response.data[0].Addclient);
+          }
+        } else {
+          setAdmin_permission(0);
+        }
+      });
+  };
+
   useEffect(() => {
     const Brokerdata = async () => {
       await dispatch(
@@ -639,6 +666,10 @@ const AllClients = () => {
     setPage(1);
   };
 
+  useEffect(() => {
+    Permmision();
+  }, []);
+
   return (
     <>
       <div className="export">
@@ -649,6 +680,7 @@ const AllClients = () => {
           show_csv_button={true}
           csv_data={ForGetCSV}
           csv_title="Client-List"
+          button_status={admin_permission == 1 ? true : false}
         >
           <div className="row">
             <div className="col-lg-2 ">

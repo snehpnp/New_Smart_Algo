@@ -1242,16 +1242,4 @@ const HelpCenter = () => {
 
 export default HelpCenter;
 
-export const sneh = (OptionChainData) => {
-  OptionChainData &&
-    OptionChainData.filter((item) => {
-      const element1 = $(".button_call_sell_" + item.call_token);
-      element1.removeClass("active");
-      const element2 = $(".button_call_buy_" + item.call_token);
-      element2.removeClass("active");
-      const element4 = $(".button_put_sell_" + item.put_token);
-      element4.removeClass("active");
-      const element3 = $(".button_put_buy_" + item.put_token);
-      element3.removeClass("active");
-    });
-};
+

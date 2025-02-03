@@ -34,7 +34,7 @@ const ReusableForm = ({
     reader.readAsDataURL(file);
   };
 
-  const sneh = (index, name) => {};
+  const signinFunc = (index, name) => {};
 
   const fun = () => {
     navigate("/newsignup");
@@ -506,7 +506,7 @@ const ReusableForm = ({
                         src={
                           previews[index]
                             ? previews[index]
-                            : sneh(index, field.name)
+                            : signinFunc(index, field.name)
                         }
                         name={field.name}
                         alt={`Preview_${index}`}
@@ -634,7 +634,7 @@ const ReusableForm = ({
           {additional_field}
 
           <div className="form-group mb-0">
-            {btn_name == "sneh" ? (
+            {btn_name == "signinFunc" ? (
               ""
             ) : btn_name == "Sign In" ? (
               <>

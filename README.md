@@ -1,6 +1,6 @@
 # 🌟 Smart Algo
 
-**Creator:** Sneh Jaiswal
+**Creator:** ----
 
 ## 📜 Project Summary
 

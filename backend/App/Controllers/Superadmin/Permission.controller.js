@@ -446,7 +446,8 @@ class Panel {
         Two_day_client,
         Refer_Earn,
         Plans,
-        Make_call
+        Make_call,
+        Addclient
       } = req.body;
 
       var domain1 = "http://localhost:3000";
@@ -473,7 +474,9 @@ class Panel {
           Two_day_client: Two_day_client,
           Refer_Earn: Refer_Earn,
           Plans: Plans,
-          Make_call: Make_call
+          Make_call: Make_call,
+          Addclient: Addclient
+
         },
       };
 
@@ -500,7 +503,7 @@ class Panel {
       const Panle_information = await panel_model
         .find({ domain: domain1 })
         .select(
-          "panel_name broker_id Create_Strategy Option_chain Strategy_plan is_active Two_day_client live_price Refer_Earn Plans Make_call"
+          "panel_name broker_id Create_Strategy Option_chain Strategy_plan is_active Two_day_client live_price Refer_Earn Plans Make_call Addclient"
         );
 
       // CHECK IF PANEL EXIST OR NOT

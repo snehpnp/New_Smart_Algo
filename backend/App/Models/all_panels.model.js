@@ -105,7 +105,11 @@ const panelSchema = new mongoose.Schema(
       enum: [0, 1],
       default: 0,
     },
-  
+    Addclient: {
+      type: Number,
+      enum: [0, 1],
+      default: 0,
+    },
   },
   {
     timestamps: true,

@@ -205,15 +205,15 @@ const TradeHistory = () => {
         </span>
       ),
     },
-    {
-      dataField: "live",
-      text: "Live Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`LivePrice_${row.token}`}></span>
-        </div>
-      ),
-    },
+    // {
+    //   dataField: "live",
+    //   text: "Live Price",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <div>
+    //       <span className={`LivePrice_${row.token}`}></span>
+    //     </div>
+    //   ),
+    // },
     {
       dataField: "entry_price",
       text: "Entry Price",
@@ -1013,9 +1013,7 @@ const TradeHistory = () => {
     "Symbol",
     "Strategy",
     "Entry Type",
-    // "Entry Qty",
     "Exit Qty",
-    // "Live Price",
     "Entry Price",
     "Exit Price",
     "Total",

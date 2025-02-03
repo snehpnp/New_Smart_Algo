@@ -267,7 +267,7 @@ const ReferralPage = () => {
     await dispatch(
       GettAllUSerReferal({
         Find_Role: gotodashboard ? "USER" : "ADMIN",
-        username: gotodashboard ? GoToDahboard_id.UserName : "sneh",
+        username: gotodashboard ? GoToDahboard_id.UserName : "tt",
       })
     )
       .unwrap()
@@ -297,7 +297,7 @@ const ReferralPage = () => {
     await dispatch(
       REEDEEM_USER_DATA({
         Role: gotodashboard ? "USER" : "ADMIN",
-        user_id: gotodashboard ? GoToDahboard_id.user_id : "sneh",
+        user_id: gotodashboard ? GoToDahboard_id.user_id : "ttt",
       })
     )
       .unwrap()

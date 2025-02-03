@@ -61,7 +61,7 @@ class AdminPermission {
         data: [],
       });
     } catch (error) {
-      console.log("Error Sneh", error.response);
+      console.log("Error ", error.response);
       res.send({ status: false, msg: "Internal Server Error", data: [] });
     }
   }
@@ -78,7 +78,7 @@ class AdminPermission {
 
       return res.send({ msg: "Panel Updated", status: true, data: [] });
     } catch (error) {
-      console.log("Error Sneh", error.response);
+      console.log("Error ", error.response);
       res.send({ msg: "Internal Server Error", status: false, data: [] });
     }
   }
@@ -92,7 +92,7 @@ class AdminPermission {
         data: GetPnlPosition,
       });
     } catch (error) {
-      console.log("Error Sneh", error.response);
+      console.log("Error ", error.response);
       res.send({ msg: "Internal Server Error", status: false, data: [] });
     }
   }

@@ -30,13 +30,13 @@ const SettingsPage = () => {
       selected: "Top",
     },
     //{ id: 2, name: "View All Themes", type: "theme", selected: "Yes" },
-    {
-      id: 3,
-      name: "Trade Permission",
-      type: "select1",
-      options: ["MT 4", "Live Price"],
-      selected: "MT 4",
-    },
+    // {
+    //   id: 3,
+    //   name: "Trade Permission",
+    //   type: "select1",
+    //   options: ["MT 4", "Live Price"],
+    //   selected: "MT 4",
+    // },
   ]);
 
   useEffect(() => {
@@ -190,7 +190,7 @@ const SettingsPage = () => {
               alignItems: "center",
             }}
           >
-            <h4 style={{ marginBottom: "8px" }}>
+            {/* <h4 style={{ marginBottom: "8px" }}>
               {perm.name}{" "}
               {perm.name == "Trade Permission" && (
                 <i
@@ -199,7 +199,7 @@ const SettingsPage = () => {
                   onClick={(e) => setShowModal(true)}
                 ></i>
               )}
-            </h4>
+            </h4> */}
 
             <div className="d-flex align-items-center">
               <div className="d-flex align-items-center">

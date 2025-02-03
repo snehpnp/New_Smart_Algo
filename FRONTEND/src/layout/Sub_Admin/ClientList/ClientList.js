@@ -30,6 +30,7 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
+import { Get_Pmermission } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 
 const paginationOptions = {
   custom: true,
@@ -55,6 +56,7 @@ const AllClients = () => {
   const [getSizePerPage, setSizePerPage] = useState(10);
   const [total1, setTotal] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+const [admin_permission, setAdmin_permission] = useState(0);
 
   const handleSearch = () => {
     setSearchQuery(searchInput);
@@ -440,18 +442,46 @@ const AllClients = () => {
     setPage(1);
   };
 
+const Permmision = async () => {
+    await dispatch(
+      Get_Pmermission({
+        domain: Config.react_domain,
+        token: user_details?.token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          console.log("response", response.data);
+          if (response.data.length === 0) {
+            setAdmin_permission(0);
+          } else {
+            setAdmin_permission(response.data[0].Addclient);
+          }
+        } else {
+          setAdmin_permission(0);
+        }
+      });
+  };
+
+    useEffect(() => {
+      Permmision();
+    }, []);
+
   return (
    
           <Content
             Page_title="All Clients"
             button_title="Add Client"
             route="/subadmin/client/add"
-            button_status={
-              getPermissions?.client_add === 1 ||
-              getPermissions?.client_add === "1"
-                ? true
-                : false
-            }
+            // button_status={
+            //   getPermissions?.client_add === 1 ||
+            //   getPermissions?.client_add === "1"
+            //     ? true
+            //     : false
+            // }
+            button_status={admin_permission == 1 ? true : false}
+
           >
             <div className="row">
               <div className="col-lg-2 ">

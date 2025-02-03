@@ -23,7 +23,7 @@ const logger = winston.createLogger({
   transports: [new winston.transports.File({ filename: "app.log" })],
 });
 
-// HELLO SNEH
+
 const http = require("http");
 const https = require("https");
 const socketIo = require("socket.io");

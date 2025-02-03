@@ -11,11 +11,11 @@ export const admin_sidebar = [
         name: 'Clients',
         Icon: 'Users',
         Data: [
-            {
-                id: 21,
-                name: 'Add Client',
-                route: '/admin/client/add',
-            },
+            // {
+            //     id: 21,
+            //     name: 'Add Client',
+            //     route: '/admin/client/add',
+            // },
             {
                 id: 22,
                 name: 'Clients',
@@ -120,23 +120,23 @@ export const admin_sidebar = [
             }
         ]
     },
-    {
-        id: 6,
-        name: 'Open position',
-        Icon: 'Link2',
-        Data: [
-            {
-                id: 61,
-                name: 'Option Chain',
-                route: '/admin/optionchain',
-            },
-            {
-                id: 62,
-                name: 'Open Position',
-                route: '/admin/openposition',
-            }
-        ]
-    },
+    // {
+    //     id: 6,
+    //     name: 'Open position',
+    //     Icon: 'Link2',
+    //     Data: [
+    //         {
+    //             id: 61,
+    //             name: 'Option Chain',
+    //             route: '/admin/optionchain',
+    //         },
+    //         {
+    //             id: 62,
+    //             name: 'Open Position',
+    //             route: '/admin/openposition',
+    //         }
+    //     ]
+    // },
     {
         id: 8,
         name: 'License',
@@ -234,13 +234,7 @@ export const admin_sidebar = [
 
         ]
     },
-    {
-        id: 1,
-        name: 'Faq',
-        Icon: 'LayoutDashboard',
-        route: '/super/dashboard',
-        Data: []
-    },
+
 
 ];
 

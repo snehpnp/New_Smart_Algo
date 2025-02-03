@@ -5,7 +5,7 @@ const express = require("express");
 const app = express();
 
 const axios = require("axios");
-// HELLO SNEH JAISWAL
+
 const http = require("http");
 const https = require("https");
 const socketIo = require("socket.io");

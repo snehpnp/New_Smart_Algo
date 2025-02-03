@@ -619,7 +619,7 @@ const AllClients = () => {
           show_csv_button={true}
           csv_data={ForGetCSV}
           csv_title="Client-List"
-          button_status={true}
+          button_status={false}
         >
           <div className="row">
             <div className="col-lg-2 ">
