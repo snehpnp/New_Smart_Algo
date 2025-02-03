@@ -3167,6 +3167,7 @@ module.exports = function (app) {
 
     res.json(results);
   });
+  
   app.post("/pm2/update", async (req, res) => {
     const { host, password } = req.body;
   
