@@ -1,0 +1,540 @@
+Total Active	Temporary Close	De Active Panels																					
+																									
+137	0	2																					
+                                                                                            
+id	STATUS	Name	IP ADDRESS	PASSWORD	DB PASS	KEY	MONGO URL	DOMAIN																	
+1	Active	pnp-tradestreet-newalgo	185.209.75.87	@9@1vyk9B5He		PNT19112024	mongodb://tradestreet:MWQ5RP%26kT567Gy%26Maa@185.209.75.87:27017/																		
+2	Active	offline-test-server	185.209.75.198	O^c&6f6L1q4p	MWQ5RP&k5T567Gy&Maa		mongodb://testing:MWQ5RP%26k5T567Gy%26Maa@185.209.75.198:27017/																		
+3	Active	segment-pnp	5.178.98.2	$v%3Dka0L23g	Taw&k5RT56&7GsRy&n	SEG20112021	mongodb://segmentpnp:Taw%26k5RT56%267GsRy%26n@5.178.98.2:27017/																		
+4	Active	Trade PNP 1	180.149.241.128			SNE132023																			
+5	Active	Trustalgo local	217.145.69.48	mF#^Wt9572rc		TST26012024																			
+6	Active	NEW_PNPTRADE	217.145.69.45	hK@400k!0boV	p&k56&7GsRy&vnd&  	SNE132023																			
+7	Active	codingpandit_newalgo	185.209.75.31	7!Rf&q52q2oM	zsg&k5sB76&3H&dk7A&	COD132023	mongodb://codingpandit:zsg%26k5sB76%263H%26dk7A%26@185.209.75.31:27017/																		
+8	Active	microninfotech-algo	217.145.69.40	e81^rI2#Agb8	p&k5H6&7GsRy&vnd&	MIC03092024	mongodb://microninfotech1:p%26k5H6%267GsRy%26vnd%26@217.145.69.40:27017/																		
+9	Active	finbytech-algo	217.145.69.39	ji43O4%1z&Rs	p&ol5Hd&tr55ad&i	FIY13122024	mongodb://finbytech:p%26ol5Hd%26tr55ad%26i@217.145.69.39:15497/																		
+10	Active	danoneitsolution-newalgo	217.145.69.76	#S3dp4@dd65C		DAN18102024	mongodb://danoneitsolution:p%26k5H6%267GsRy%26vnd%26@217.145.69.76:27017/																		
+11	Active	itevolve	185.209.75.61	3!6Y1fI$znd4	ugh&5rK86&Fv&yn37A&	ITE02012025	mongodb://itevolve:ugh%265rK86%26Fv%26yn37A@185.209.75.61:15497/																		
+12	Active	algokuber-penal	217.145.69.44	o$Al4qw7&28W	p&k506&7G&y&vnd&	KUB23012024	mongodb://algokuber:p%26k506%267G%26y%26vnd%26@217.145.69.44:27017/																		
+13	Active	finnshri	217.145.69.46	E4qf6hl95&J$	p0&k506&7s9Ry&vn8d1	TEZ16012025	mongodb://techhzap:p0%26k506%267s9Ry%26vn8d1@217.145.69.46:15497/																		
+14	Active	Trustalgo	217.145.69.48	@36zgCT@6wm4		TST26012024																			
+15	Active	linkupinfotech-newalgo	185.209.75.2	jod0E44bR^5%	&k#sA8B&7Gmg&vn3#7A	LIN30082024	mongodb://linkupinfotech:%26k%23sA8B%267Gmg%26vn3%237A@185.209.75.2:15497/																		
+16	Active	Connect Box	185.209.75.6	3IdZ!0z3wh@2		CNB07032024	mongodb://connectbox:p%26k5%26sR86%267Bv%26vn4%237A%26@185.209.75.6:27017																		
+17	Active	believetechnology-newalgo	185.209.75.5	G3D%8vc6gv&3		BLT09032024	mongodb://believetechnology:%26k%23sA8B%237Gsq%26vg3%237P%26@185.209.75.5:27017/																		
+18	Active	growskyinfotech-newpenal	185.209.75.9	06h&baF$49Nl	u&j8gB85&7GN&vn37m&	GRS14032024	mongodb://growskyinfotech:u%26j8gB85%267GN%26vn37m%26@185.209.75.9:27017/																		
+19	Active	corebizinfotech-newpenal	185.209.75.10	2x0hM5!H#z2j	c&eaV8N&7KfT&bc49A&	COR14032024	mongodb://corebizinfotech:c%26eaV8N%267KfT%26bc49A%26@185.209.75.10:27017/																		
+20	Active	inspirealgo-newalgo	185.209.75.11	3bu7uP8$5L%l	n&pdF7G&5Png&vn97A&	INS15032024	mongodb://inspirealgo:n%26pdF7G%265Png%26vn97A%26@185.209.75.11:27017/																		
+21	Active	uniquetechnology-newalgo	185.209.75.12	t57El8a3%t#Y	c&z9yB73&7Fn&vn98V&	UNT15032024	mongodb://uniquetechnology:c%26z9yB73%267Fn%26vn98V%26a@185.209.75.12:15497/																		
+22	Active	reliablealgo-newpanel	185.209.75.14	81t8o7^$LfkM	sA8k&n86&7Mv&fh57B&	REL26092024	mongodb://reliablealgo:sA8k%26n86%267Mv%26fh57B%26@185.209.75.14:27017/																		
+23	Active	researchfactory-newpanel	185.209.75.15	58&&Y78rdJoq	un&r4hv93&7Gr&v&37P&	RES26092024	mongodb://researchfactory:un%26r4hv93%267Gr%26v%2637P%26@185.209.75.15:27017/																		
+24	Active	sumedha-newalgo	185.209.75.21	DO@@baj80p27	p&k5H6&7GsRy&vnd	SUM08042024	mongodb://sumedhainnovations:p%26k5H6%267GsRy%26vnd@185.209.75.21:27017/																		
+25	Active	fincapex-newalgo	185.209.75.22	4c3$^t9b8tSO	p&k5H6&7GsRy&vd	CAP26092024	mongodb://fincapex:p%26k5H6%267GsRy%26vd@185.209.75.22:15497/																		
+26	Active	tradeonn-newalgo	185.209.75.23	u#9daOa344S#	pw&k5H&7GsRy&v1n	TRD09042024	mongodb://tradeonn:pw%26k5H%267GsRy%26v1n@185.209.75.23:15497/																		
+27	Active	linkupinfotech-newalgo	185.209.75.28	$1pl7^1iFk9I	z43rk&5eF32&7Pcmn9i7B&	ONE06012024	mongodb://linkupinfotech:z43rk%265eF32%267Pcmn9i7B%26@185.209.75.28:15497/																		
+28	Active	metaprogramming-newalgo	185.209.75.29	KWg#h0t1b^39	zc&u9tD828Tnbh3u7A&	MET01052024	mongodb://metaprogramming:zc%26u9tD828Tnbh3u7A%26@185.209.75.29:27017/																		
+29	Active	fincodify-newalgo	185.209.75.30	z#t#3g39G2Rq	u&v5&bAn6&5Gv&cn29A&	FIC01052024	mongodb://fincodify:u%26v5%26bAn6%265Gv%26cn29A%26@185.209.75.30:27017/																		
+30	Active	invicon-newalgo	185.209.75.62	hxy72$D1Uz#8	k56ck&5eF89&7Phjn9i7B&	INV06052024	mongodb://invicontechnology:k56ck%265eF89%267Phjn9i7B%26@185.209.75.62:27017/																		
+31	Active	sstechnologiess-newalgo	185.209.75.64	8^ecGG7s9&t7	Apw&k5RH6&7GsRy&vnM	SST14052024	mongodb://sstechnologiess:Apw%26k5RH6%267GsRy%26vnM@185.209.75.64:27017/																		
+32	Active	ccconnect-newalgo	185.209.75.66	Tl7Eny8%9c#5	Apw&k5R6&7GsRy&vnM	CCC28102024	mongodb://ccconnect:Apw%26k5R6%267GsRy%26vnM@185.209.75.66:27017/																		
+33	Active	thinkaumatictechnology-newalgo	185.209.75.67	t67&PwY6&2wp	Aapw&k5R56&7GsRy&vnT	THI23052024	mongodb://thinkaumatictechnology:Aapw%26k5R56%267GsRy%26vnT@185.209.75.67:27017/																		
+34	Active	visionresearchandsolution-newalgo	185.209.75.68	v3Rd6B3@b4!g	Apw&k5R56&7GsRy&vn	VSR22052024	mongodb://visionresearchandsolution:Apw%26k5R56%267GsRy%26vn@185.209.75.68:27017/																		
+35	Active	smartwave-newalgo	185.209.75.69	7X1hbyJq@@20	Aapw&k5R56&7GsRy&vnTy	SMT23052024	mongodb://smartwavetechnology:Aapw%26k5R56%267GsRy%26vnTy@185.209.75.69:27017/																		
+36	Active	skwinvestmentadviser-newalgo	185.209.75.65	NBw4n3%9h@5j	Tapw&k5R56&7GsRy&vnTy	SKW25052024	mongodb://skwinvestmentadviser:Tapw%26k5R56%267GsRy%26vnTy@185.209.75.65:27017/																		
+37	Active	inspirealgoresearch-newalgo	185.209.75.70	Vu0&i38nzC3&	Tapw&k5R56&7GsRy&vn	INA11112024	mongodb://inspirealgoresearch:Tapw%26k5R56%267GsRy%26vn@185.209.75.31:27017/																		
+38	Active	inteltrade360-newalgo	185.209.75.180	gfZ#O5b4r6^0	Tapw&k5R56&7GsRy&n	INT31052024	mongodb://inteltrade:Tapw%26k5R56%267GsRy%26n@185.209.75.180:27017/																		
+39	Active	fintechit-newalgo	185.209.75.181	436ehhA^a$J7	Tapw&k5R56&7GsRy&nP	FIN03062024	mongodb://fintechit:Tapw%26k5R56%267GsRy%26nP@185.209.75.181:27017/																		
+40	Active	thrivinginfotech-newalgo	185.209.75.182	i8&k&S21d8Ad	TGw&k5RT56&7GsRy&nP	THR05062024	mongodb://thrivinginfotech:TGw%26k5RT56%267GsRy%26nP@185.209.75.182:27017/																		
+41	Active	growingtech-newalgo	185.209.75.183	K0&j5Dgv&p70	Taw&k5RT56&7GsRy&nP	GRI12082024	mongodb://growingtech:Taw%26k5RT56%267GsRy%26nP@185.209.75.183:27017/																		
+42	Active	Visioncode-newalgo	185.209.75.184	w0Km33!gB#6s	TGw&k5RT56&7GsRy&HR	VIC05062024	mongodb://visioncodesoftware:TGw%26k5RT56%267GsRy%26HR@185.209.75.184:27017/																		
+43	Active	brightextech-newalgo	185.209.75.185	L&1j%va8b53K	T5wP&k5T56&7GsRy&M	BRG13062024	mongodb://brightextech:T5wP%26k5T56%267GsRy%26M@185.209.75.185:27017/																		
+44	Active	shinesofttrade-newalgo	185.209.75.186	vDc9a&N7f09$	T5wP&k56T56&7GsRy&H	SHI10062024	mongodb://shinesofttrade:T5wP%26k56T56%267GsRy%26H@185.209.75.186:27017/																		
+45	Active	algorun-newalgo	185.209.75.187	X^s1n$r0A0b0	Tw&k5RT56&7GsRy&HR	ARN07062024	mongodb://algoruns:Tw%26k5RT56%267GsRy%26HR@185.209.75.187:27017/																		
+46	Active	thealgo-services-connect	185.209.75.188	&&337dv5sIvI	T5wP&k5RT56&7GsRy&HR	CTH07062024	mongodb://connectthealgo:T5wP%26k5RT56%267GsRy%26HR@185.209.75.188:27017/																		
+47	Active	starvisionitsolution-newalgo	185.209.75.189	61Nqth30aE&#	P5wP&k6T5M&L7GsRy&H	STA28112024	mongodb://starvisionitsolution:P5wP%26k6T5M%26L7GsRy%26H@185.209.75.189:27017/																		
+48	Active	visionalgotech-newalgo	185.209.75.250	G11&d#86dwfH	T5wP&k5T56&7GsRy&H	VIO26092024	mongodb://visionalgotech:T5wP%26k5T56%267GsRy%26H@185.209.75.250:27017/																		
+49	Active	brillianttechit-newalgo	185.209.75.251	ZLs6wi0l&8!8	T5wP&k5T567GsRy&M	BRL17062024	mongodb://brillianttechit:T5wP&k5T567GsRy&M@185.209.75.251:27017/																		
+50	Active	newtimetechnologies-newalgo	185.209.75.252	#Kh57mxe2&2K	H5wP&k5T567GsRy&MT	NEW21062024	mongodb://newtimetechnologies:H5wP%26k5T567GsRy%26MT@185.209.75.252:27017/																		
+51	Active	levelxtechnologies-newalgo	185.209.75.253	j!LeZ38a3x0^	M5P&k5T567GRy&MT	LEV31122024	mongodb://levelxtechnologies:M5P%26k5T567GRy%26MT@185.209.75.253:15497/																		
+52	Active	darixosolution-newalgo	185.209.75.254	gv8Y64@nJ0l@	M5wP&k5T567GsRy&MT	DAR25062024	mongodb://darixosolution:M5wP%26k5T567GsRy%26MT@185.209.75.254:27017/"																		
+53	Active	unitythesmartalgo-newalgo	185.209.75.190	#48Glzya5S8!		UNI26052024	mongodb://unitythesmartalgo:M5RP%26k5T567GsRy%26MT@185.209.75.190:27017/																		
+54	Active	tools-easytrades	185.209.75.191	&v91gzq^62BU	M5RP&k5T567GsRy&MT	INR26052024	mongodb://easytradestools:M5RP%26k5T567GsRy%26MT@185.209.75.191:27017/																		
+55	Active	connect.easytrades-penal	185.209.75.192	d27%2nRp%T9q	M5RP&k5T567GRy&MT	EAY03102024	mongodb://connect:M5RP%26k5T567GRy%26MT@185.209.75.192:27017/																		
+56	Active	visionmatictechnology-newalgo	185.209.75.194	4r4#4&R4Hcly		VIS05072024	mongodb://visionmatictechnology:MM5P%26k5T567GRy%26MT@185.209.75.194:27017/																		
+57	Active	smartstox-newalgo	185.209.75.193	250KPoa3yu@!	MM5RP&k5T567GRy&MT	SMA05072024	mongodb://smartstox:MM5RP%26k5T567GRy%26MT@185.209.75.193:27017/																		
+58	Active	growfuturetechnology-newalgo	185.209.75.195	&Gm4fC&v62h3	MM5P&k5T567Gy&MT	GRF07102024	mongodb://growfuturetechnology:MM5P%26k5T567Gy%26MT@185.209.75.195:27017/																		
+59	Active	one-algo-newalgo	185.209.75.196	z2J6e5#e%4aM	MM5P&k5T567Gy&Ma	OAL17072024	mongodb://onealgo:MM5P&k5T567Gy&Ma@185.209.75.196:27017/																		
+60	Active																								
+61	Active	techspiresolution-newalgo	185.209.75.199	i#P8F7u59iw^	M5P&k5T567Gy&Maa	TES26122024	mongodb://techspiresolution:M5P%26k5T567Gy%26Maa@185.209.75.199:15497/																		
+62	Active	sewintechnology-newlago	217.145.69.26	ri!9#x8t36IO	M5RP&k5T567Gy&Ma	SEW22112024	mongodb://sewintechnology:M5RP%26k5T567Gy%26Ma@217.145.69.26:27017/																		
+63	Active	vintyaitsolutions-newalgo	217.145.69.24	#49pOz!6Dn4s	MW5RP&k5T567Gy&Ma	VIN16042024	mongodb://ssfintech:MW5RP%26k5T567Gy%26Ma@217.145.69.24:27017/																		
+64	Active	algospark-newalgo	217.145.69.27	a@Df588Oq3@n	MW5R&k5FT567Gy&Ma	ALS26072024	mongodb://algosparks:MW5R%26k5FT567Gy%26Ma@217.145.69.27:27017/																		
+65	Active	techelitesolution1-newalgo	217.145.69.28	Rbc2!RQv4&s7J1%$	MW5R&k5T567Gy&Ma	TEL26072024	mongodb://techelitesolution:MWQ5RP%26k5T567Gy%26Ma@193.239.237.31:27017/																		
+66	Active	technofin-newalgo	217.145.69.31	04^1q%ebsHV2		TEF31072024	mongodb://technofin:MWQ5RP%26k5T567Gy%26Ma@217.145.69.31:27017/																		
+67	Active	mgautosoftware-newalgo	217.145.69.25	9d4b5i^h@A6O	MWQ5RP&k5T67Gy&Ma	MAU20012025	mongodb://mgautosoftware:MWQ5RP%26k5T67Gy%26Ma@217.145.69.25:27017/																		
+68	Active	evolgo-newalgo	185.209.75.88	R$M0ez6zn56%	AMWQ5RP&kT567Gy&Maa	EVO16082024	mongodb://evolgo:AMWQ5RP%26kT567Gy%26Maa@185.209.75.88:27017/																		
+69	Active	growonntechnologies	185.209.75.89	FmTb!y4001f^		GRT06082024	mongodb://growonntechnologies:AaMWQ5RP%26kT567Gy%26Maa@185.209.75.89:27017/																		
+70	Active	sarathiresearch-newalgo	185.209.75.90	t5m#$Nx1r99C	AaMQ5RP&kT567Gy&Ma	SAR281282024	mongodb://sarathiresearch:AaMQ5RP%26kT567Gy%26Ma@185.209.75.90:15497/																		
+71	Active	inovateinfotech-newalgo	217.145.69.135	8Ls@j4l&7z0H		INO13082024	mongodb://inovateinfotech:Tawk5RT56&7GsRy&n@217.145.69.135:27017/																		
+72	Active	algomoneybooster-newalgo	217.145.69.136	9h2#1g9x%UgU		ALM13082024	mongodb://algomoneybooster:Tawk5RT56%267GsRy%26n@217.145.69.136:27017/																		
+73	Active	algobliss-newalgo	217.145.69.137	^4ZPnem#s937		ALB14082024	mongodb://algobliss:Tawk5RT6%267GsRy%26n@217.145.69.137:27017/																		
+74	Active	eaglesofttech-newalgo	217.145.69.141	evu5r8QZ7@^5	AMQ5RP&kT567Gy&Maa	EAG17082024	mongodb://eaglesofttech:AMQ5RP%26kT567Gy%26Maa@217.145.69.141:27017/																		
+75	Active	idealalgo-newalgo	217.145.69.138	Z@3&rz437kpP		IDE16082024	mongodb://idealalgo:Tawk5RT6%26GsRy%26n@5.178.98.6:27017/																		
+76	Active	algomoneybooster-newalgo	217.145.69.140	Pu44kU1%&5uu	AMQ5RP&kT567Gy&Maa	AGM17082024	mongodb://algomoneybooster:AMQ5RP%26kT567Gy%26Maa@5.178.98.8:27017/																		
+77	Active	algoweb-newalgo	217.145.69.143	jTz51&q5W0j&		ALW21082024	mongodb://algoweb:Tawk5RT56%26y7GsRy%26n@217.145.69.143:27017/																		
+78	Active	alcrafttechnology-newalgo	217.145.69.144	^pk4#lB9r5I5	Tawk5RT56&y7GsRy&n	ALC14112024	mongodb://alcrafttechnology:Tawk5RT56%26y7GsRy%26n@217.145.69.144:27017/																		
+79	Active	celestialai-newalgo	217.145.69.145	0843z%Rv^Lhs		CEL30082024	mongodb://celestialai:Twk5RT56%26y7GsRy%26n@217.145.69.145:27017/																		
+80	Active	dynamictechsolution-newalgo	217.145.69.147	L!Ocp6jv^315		DYN02092024	mongodb://dynamictechsolution:Twk5RT56%26y7GsRy%26n@217.145.69.147:27017/																		
+81	Active	nextbrand-newalgo	217.145.69.151	1$j2&eWw7w3O		NEX10092024	mongodb://nextbrandcom:Twk5RT56%26y7GsRy%26n2@217.145.69.151:27017/																		
+82	Active	realcloudtechnology-newalgo	217.145.69.149	%aPYy5s^0q51	Twk5RT56&y7GsRy&n2	REA16092024	mongodb://realcloudtechnology:Twk5RT56%26y7GsRy%26n2@217.145.69.149:27017/																		
+83	Active	Moneyplatform-newalgo	217.145.69.152	qq@4V$5s6r4A		MON16092024	mongodb://moneyplatform:Twk5RT56%26y7GsRy%26nT@217.145.69.152:27017/																		
+84	Active	infraitsolution	185.209.75.71	Y7w92Cnxl9&!	Tk5RT56&y7GsRy&nT	INF24092024	mongodb://infraitsolution:Tk5RT56%26y7GsRy%26nT@185.209.75.71:27017/																		
+85	Active	software.allrobosolution.com	217.145.69.57	98%pI0Q2ip&l	Tk5RT56&y7GRy&nT	ROS04122024	mongodb://allrobosolution:Tk5RT56%26y7GRy%26nT@217.145.69.57:15497/																		
+86	Active	allianceaiinfotech-newalgo	217.145.69.72	4KV@8c2d!g6b	ks8B&7Gmg&vn37A	ALA21012025	mongodb://allianceaiinfotech:ks8B%267Gmg%26vn37A@217.145.69.72:15497/																		
+87	Active	techntown-newalgo	217.145.69.37	7f01tE&&bUx0	MWQ5RP&k5T67Gy&Ma	TTO23012025	mongodb://techntown:MWQ5RP%26k5T67Gy%26Ma@217.145.69.37:15497/																		
+88	Active	infovatetechnocunsaltancy-newalgo	217.145.69.77	9mW^B@v4y3z1	ks8B7Gmg&vn37Aa	INS23012025	mongodb://infovatetechnoconsultancy:ks8B7Gmg%26vn37Aa@217.145.69.77:15497/																		
+89	Active	xionpro-newalgo	217.145.69.43	D9l9^b5Lf3%i	tgh%#ahlhoc^%5np																				
+90	Active	signal	217.145.69.30	78&42ocCodY#																					
+91	Active	nikita	217.145.69.32	Ci&27g0Yk&s6																					
+92	Active	test-ankit	5.178.98.3	ggI15u5$&kK4																					
+                                                                                            
+                                                                                            
+                                                                                            
+autolabels 	217.145.69.46 	E4qf6hl95&J$	p0&k506&7s9Ry&vn8d1	TEA05022025	mongodb://techhzap:p0%26k506%267s9Ry%26vn8d1@217.145.69.46:15497/																		
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+Moneyplatform-newalgo	5.178.98.20	217.145.69.152	*9Dy0?9Gm2WOwg&*	MON16092024	mongodb://moneyplatform:Twk5RT56%26y7GsRy%26nT@5.178.98.20:27017/																		
+algomoneybooster-newalgo	5.178.98.4	217.145.69.136	3_R*U$HRt@ey722f	ALM13082024	mongodb://algomoneybooster:Tawk5RT56%267GsRy%26n@5.178.98.4:27017/																		
+algobliss-newalgo	5.178.98.5	217.145.69.137	*i#Nt5#183FXuUn!	ALB14082024	mongodb://algobliss:Tawk5RT6%267GsRy%26n@5.178.98.5:27017/																		
+idealalgo-newalgo	5.178.98.6	217.145.69.138	o%%629A!!SE0Faib	IDE16082024	mongodb://idealalgo:Tawk5RT6%26GsRy%26n@5.178.98.6:27017/																		
+algomoneybooster-newalgo	5.178.98.8	217.145.69.140	7lJ@X*75L1Fe@px%	AGM17082024	mongodb://algomoneybooster:AMQ5RP%26kT567Gy%26Maa@5.178.98.8:27017/																		
+algoweb-newalgo	5.178.98.11	217.145.69.143	eVUch7R8^i^^1!C9	ALW21082024	mongodb://algoweb:Tawk5RT56%26y7GsRy%26n@5.178.98.11:27017/																		
+celestialai-newalgo	5.178.98.13	217.145.69.145	8dQ?XV1bK8d^@8o&	CEL30082024	mongodb://celestialai:Twk5RT56%26y7GsRy%26n@5.178.98.13:27017/																		
+dynamictechsolution-newalgo	5.178.98.15	217.145.69.147	YFa1#@8fC_?i04Lb	DYN02092024	mongodb://dynamictechsolution:Twk5RT56%26y7GsRy%26n@5.178.98.15:27017/																		
+                    mongodb://segmentpnp:Taw%26k5RT56%267GsRy%26n@5.178.98.2:27017/																		
+                                                                                            
+                                                                                            
+                                                                                            
+Total Active	Temporary Close	De Active Panels																					
+                                                                                            
+45	0	2																					
+                                                                                            
+id	STATUS	Name	IP ADDRESS	PASSWORD	DB PASS	KEY	MONGO URL	DOMAIN																	
+1	Active	stockbox-pnp	217.145.69.150	6JgV2m7uw&^9																					
+2	Active	raadmin-pnp	185.209.75.27	Ap399e6dV&w%	byk&5fD328Pvjn3u7A&	RAA20112024	mongodb://raadmin:byk%265fD328Pvjn3u7A%26@185.209.75.27:27017/																		
+3	Active	stockbox	217.145.69.74	2@1st1!ss3QK	ks8B&7Gmg&vn37Aa		mongodb://stoxbox:ks8B%267Gmg%26vn37Aa@217.145.69.74:15497/																		
+4	Active	inspirealgoresearch-box	185.209.75.63	i&cs2#631YKm	pw&k5H6&7GsRy&vnn	INP11112024	mongodb://app.inspirealgoresearch:pw%26k5H6%267GsRy%26vnn@185.209.75.63:27017/																		
+5	Active	app-smartstox-box	185.209.75.8	l^Hh95z&1Tv7	u&r5nC86&7Gr&vn37M&	SMB19112024	mongodb://smartstoxbox:u%26r5nC86%267Gr%26vn37M%26@185.209.75.8:27017/																		
+6	Active	equimate-box	217.145.69.139	ca$FxL22^25l	AMQ5RP&kT567Gy&Maa	EQM09112024	mongodb://equimate:AMQ5RP&kT567Gy&Maa@5.178.98.7:27017/																		
+7	Active	rmpro-box	185.209.75.2	7dcUyj&N75&6	ksA8B&7Gmg&vn37A	RMP08012025	mongodb://rmpro:ksA8B%267Gmg%26vn37A@185.209.75.2:15497/																		
+8	Active	researchfactory-RA	217.145.69.68	jqOi10J1&7&r	MWQ5R&Pk5T67Gy&Ma	REF24012025	mongodb://researchfactory:MWQ5R%26Pk5T67Gy%26Ma@217.145.69.68:15497/																		
+9	Active	BTC	217.145.69.134	6ucE!3c31q^G																					
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+Total Active	Temporary Close	De Active Panels																					
+                                                                                            
+36	0	2																					
+                                                                                            
+id	STATUS	Name	IP ADDRESS	PASSWORD	DB PASS	KEY	DOMAIN																		
+1	Active	sharpalgo_panel	194.195.119.223	W8dRowl7ufRoTh5xufojL	mlfR3cUBu6iwabrATr9Th																				
+2	Active	algobuzz1-panel	217.145.69.62	yy#uZ41X8j&3	qutahlhocrebrid5nup0																				
+3	Active	codingpandit-panel	217.145.69.63	r4xi45l5TW@%	qutahlhocrebrid5nup0																				
+4	Active	startalgo	217.145.69.51	o89sLb9$e&R1																					
+5	Active	mavenalgo-algo-panel	217.145.69.69	fOor28K&j29&	qutahlhocrebrid5nup0																				
+6	Active	simpletrade-algo-panel	217.145.69.70	!yFp77^8g8Jg	qutahlhocrebrid5nup0																				
+7	Active	 thinknextitsolution-algo-panel	217.145.69.71	y&1N4!q28Ieo	qutahlhocrebrid5nup0																				
+8	Active	o2softech-algo-penal	217.145.69.75	w6mGT508aq^^	qutahlhocrebrid5nup0																				
+9	Active	goproinfotech_algopenal	217.145.69.64	e#4^mX5h5uQ8	qutahlhocrebrid5nup0																				
+10	Active	a1advanceinfotech-algopenal	217.145.69.61	8ammU00%7h!Y	qutahlhocrebrid5nup0																				
+11	Active	fintechmechanics	217.145.69.36	Yf567Yrh9$#x	S/W7PWH)7$MK9~A																				
+12	Active	adamassolution-algopenal	217.145.69.35	wd9^1U45Cp&c	2O5^?3]5C:x.																				
+13	Active	skyiqinfotech-algo	217.145.69.43	g2$p66yW^Y0a	tgh%#ahlhoc^%5np																				
+14	Active	firstalgo-algo	217.145.69.47	Oli7sh61#!1J	qutahlhocrebrid5nup0																				
+15	Active	robotechpro-algo delete this	217.145.69.49	09wM&L52sqs%	qutahlhocrebrid5nup0																				
+16	Active	bizxsolution1-algo	217.145.69.65	%ej$Sa54v1E3	qutahlhocrebrid5nup0																				
+17	De Active	superalgo_penal	172.105.34.252	A,d8__tR;jtPrJI!b,}dHw	mlfR3cUBu6iwabrATr9Th																				
+18	Active	infiniteintelligence	217.145.69.68	8L92k^Ehv!p1	Agha@d888ahlh@55soc																				
+19	De Active	fintechmechanics_penal	172.105.47.136	kfog*t^7-_z0I=5G4pa)1!+-A	mlfR3cUBu6iwabrATr9Th																				
+20	Active	skyiqinfotech-algopanel  delete this	185.209.75.17	vU2xm96J#0$o	gh%#ah1s&c^%5n%kk																				
+21	Active	robotechpro-algo	185.209.75.18	iM@B45$vvh42	qutahlhocrebrid5nup9p																				
+22	Active	skyiqinfotech-algop	185.209.75.19	0g0c%ebF#85E	qutahlhocrebrid5nup0																				
+23	Active	fortunetechnos-algop	185.209.75.20	$3f6Q^6mhkG6	qutahlhocrebrid5nup																				
+24	Active	beefortune-algopanel	185.209.75.25	b5P2lbpE2%0!	Attahlh5Ertd5nup9																				
+25	Active	amcomprotech-algopanel	185.209.75.24	!7j38q3mrW%Y	rtyta89hlh55brid5nup9p																				
+26	Active	infinitetechsolution-algopanel	185.209.75.26	kt$4t35ZM3t#	Yttahl2h5Ertd5nupM																				
+27	Active	adonomist old algo 	217.145.69.38	99qkK1&Om3&w	wrl2r8GothlwIf																				
+                                                                                            
+                                                                                            
+                                                                                            
+Total Active	Temporary Close	De Active Panels																					
+                                                                                            
+11	0	0																					
+                                                                                            
+id	STATUS	Name	IP ADDRESS	PASSWORD	DB PASS	KEY	NEW PASS																		
+1	Active	visionresearch_tools_panel	217.145.69.58	95$w&2GnU5yd	p&k5#sA86&7Gv&vn3#7A&		Z%xn9X1ri91$																		
+2	Active	nextbrand_tools_panel	217.145.69.59	n6yW0&vc4&7K			41y!94&uoYmD																		
+3	Active	tools.thealgo.	217.145.69.142	5df@mV3d6S5&	ugh&5rK86&Fv&yn3A		f#$X2Wb632ep																		
+4	Active	Inalgoeai_tools_panel	217.145.69.53	l&Jm&3P6e86s			eW5b7V77pl$$																		
+5	Active	soptools_tools_panel  (PNP)	217.145.69.50	79oqUx&7@K9y	Miy1geik6jaeph		0I9db#awD60%																		
+6	Active	Aliceblue	217.145.69.153	m@6b23Aie&H1																					
+7	Active	tools-scalping	217.145.69.42	phS5Gg@64b0$	qutahlhocrebrid5nup0 // p5H6&7GsRy&vnd&		!8$6c3uNNi9z																		
+8	Active	myriadtechnology-scalping	217.145.69.67	2Cl87sh&4%sO	qutahlhocrebrid5nup0  //  p&k5A86&7GsRy&vn7dA&		M&nwn2Hu$779																		
+9	Active	tools-easytrades	185.209.75.191	rootzkmT4^&8lJ72		INR26052024		mongodb://easytradestools:M5RP%26k5T567GsRy%26MT@185.209.75.191:27017/																	
+10	Active	unityhubitsolution-newalgo	185.209.75.197	4Bse9p@81$Tw	MM5P&k5T567Gy&MTa	UNH16072024		mongodb://unityhubitsolution:MM5P%26k5T567Gy%26MTa@185.209.75.197:27017/																	
+11	Active	price-tool	217.145.69.73	S6i2$6hj7sU&	qutahlhocrebrid5nup0																				
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+185.209.75.87	@9@1vyk9B5He																						
+185.209.75.198	O^c&6f6L1q4p																						
+5.178.98.2	$v%3Dka0L23g																						
+180.149.241.128																							
+217.145.69.48	mF#^Wt9572rc																						
+217.145.69.45	hK@400k!0boV																						
+185.209.75.31	7!Rf&q52q2oM																						
+217.145.69.40	lLE30r#@hd46																						
+217.145.69.39	ji43O4%1z&Rs																						
+217.145.69.76	#S3dp4@dd65C																						
+185.209.75.61	3!6Y1fI$znd4																						
+217.145.69.44	o$Al4qw7&28W																						
+217.145.69.46	E4qf6hl95&J$																						
+217.145.69.48	@36zgCT@6wm4																						
+185.209.75.2	jod0E44bR^5%																						
+185.209.75.6	3IdZ!0z3wh@2																						
+185.209.75.5	G3D%8vc6gv&3																						
+185.209.75.9	06h&baF$49Nl																						
+185.209.75.10	2x0hM5!H#z2j																						
+185.209.75.11	3bu7uP8$5L%l																						
+185.209.75.12	t57El8a3%t#Y																						
+185.209.75.14	81t8o7^$LfkM																						
+185.209.75.15	58&&Y78rdJoq																						
+185.209.75.21	DO@@baj80p27																						
+185.209.75.22	4c3$^t9b8tSO																						
+185.209.75.23	u#9daOa344S#																						
+185.209.75.28	$1pl7^1iFk9I																						
+185.209.75.29	KWg#h0t1b^39																						
+185.209.75.30	z#t#3g39G2Rq																						
+185.209.75.62	hxy72$D1Uz#8																						
+185.209.75.64	8^ecGG7s9&t7																						
+185.209.75.66	Tl7Eny8%9c#5																						
+185.209.75.67	t67&PwY6&2wp																						
+185.209.75.68	v3Rd6B3@b4!g																						
+185.209.75.69	7X1hbyJq@@20																						
+185.209.75.65	NBw4n3%9h@5j																						
+185.209.75.70	Vu0&i38nzC3&																						
+185.209.75.180	gfZ#O5b4r6^0																						
+185.209.75.181	436ehhA^a$J7																						
+185.209.75.182	i8&k&S21d8Ad																						
+185.209.75.183	K0&j5Dgv&p70																						
+185.209.75.184	w0Km33!gB#6s																						
+185.209.75.185	L&1j%va8b53K																						
+185.209.75.186	vDc9a&N7f09$																						
+185.209.75.187	X^s1n$r0A0b0																						
+185.209.75.188	&&337dv5sIvI																						
+185.209.75.189	61Nqth30aE&#																						
+185.209.75.250	G11&d#86dwfH																						
+185.209.75.251	ZLs6wi0l&8!8																						
+185.209.75.252	#Kh57mxe2&2K																						
+185.209.75.253	j!LeZ38a3x0^																						
+185.209.75.254	gv8Y64@nJ0l@																						
+185.209.75.190	#48Glzya5S8!																						
+185.209.75.191	&v91gzq^62BU																						
+185.209.75.192	d27%2nRp%T9q																						
+185.209.75.194	4r4#4&R4Hcly																						
+185.209.75.193	250KPoa3yu@!																						
+185.209.75.195	&Gm4fC&v62h3																						
+185.209.75.196	z2J6e5#e%4aM																						
+                                                                                            
+185.209.75.199	i#P8F7u59iw^																						
+217.145.69.26	ri!9#x8t36IO																						
+217.145.69.24	#49pOz!6Dn4s																						
+217.145.69.27	a@Df588Oq3@n																						
+217.145.69.28	Rbc2!RQv4&s7J1%$																						
+217.145.69.31	04^1q%ebsHV2																						
+217.145.69.25	9d4b5i^h@A6O																						
+185.209.75.88	R$M0ez6zn56%																						
+185.209.75.89	FmTb!y4001f^																						
+185.209.75.90	t5m#$Nx1r99C																						
+217.145.69.135	8Ls@j4l&7z0H																						
+217.145.69.136	9h2#1g9x%UgU																						
+217.145.69.137	^4ZPnem#s937																						
+217.145.69.141	evu5r8QZ7@^5																						
+217.145.69.138	Z@3&rz437kpP																						
+217.145.69.140	Pu44kU1%&5uu																						
+217.145.69.143	jTz51&q5W0j&																						
+217.145.69.144	^pk4#lB9r5I5																						
+217.145.69.145	0843z%Rv^Lhs																						
+217.145.69.147	L!Ocp6jv^315																						
+217.145.69.151	1$j2&eWw7w3O																						
+217.145.69.149	%aPYy5s^0q51																						
+217.145.69.152	qq@4V$5s6r4A																						
+185.209.75.71	Y7w92Cnxl9&!																						
+217.145.69.57	98%pI0Q2ip&l																						
+217.145.69.72	4KV@8c2d!g6b																						
+217.145.69.37	7f01tE&&bUx0																						
+217.145.69.77	9mW^B@v4y3z1																						
+217.145.69.43	D9l9^b5Lf3%i																						
+217.145.69.30	78&42ocCodY#																						
+217.145.69.32	!!3fgrl06IJ1																						
+5.178.98.3	ggI15u5$&kK4																						
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                            Total Active	De Active Panels	Temporary Close							
+                                    
+62	42	3					27/12/2024	27/12/2024	
+                                    
+id	STATUS	Name	DOMAIN	IP ADDRESS	PASSWORD	KEY	MONGO URL	CREATE			
+1	Active	NEW PANEL PNP	newpenal.pandpinfotech.com	217.145.69.45	1!xU%#j33NNiW#o9	SNE132023	mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@217.145.69.45:27017/		11/7/2024	11/7/2024	root
+2	Active	COREBIZ INFOTECH	software.corebizinfotech.com	185.209.75.10	WWmeCDzy37_^4%7*	COR14032024	mongodb://corebizinfotech:c%26eaV8N%267KfT%26bc49A%26@185.209.75.10:27017/		10/5/2024	11/27/2024	root
+4	Active	One Planet	software.oneplanetitsolution.com	217.145.69.40	5EslKC&Z7kt4@^*3	ONE06012024	mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.93:27017/		10/5/2024	1/4/2025	root
+8	Active	Algo Kuber	software.algokuber.com	217.145.69.44	8DX_L&x6Qm#i93j*	KUB23012024	mongodb://algokuber:p%26k506%267G%26y%26vnd%26@217.145.69.44:27017/		10/26/2024	1/4/2025	root
+13	Active	GROW SKY INFOTECH	software.growskyinfotech.com	185.209.75.9	KRNP&27am^v*&69e	GRS14032024	mongodb://growskyinfotech:u%26j8gB85%267GN%26vn37m%26@185.209.75.9:27017/		10/5/2024	10/9/2024	root
+14	Active	INSPIRE ALGO	software.inspirealgo.com	185.209.75.11	TpWz638T$Ah&@_b0	INS15032024	mongodb://inspirealgo:n%26pdF7G%265Png%26vn97A%26@185.209.75.11:27017/		10/5/2024	10/5/2024	root
+15	Active	UNIQUE TECNOLOGY	software.uniquetechnology.in	185.209.75.12	$vcKz#2O5U!5Mq&9	UNT15032024	mongodb://uniquetechnology:c%26z9yB73%267Fn%26vn98V%26a@185.209.75.12:15497/		10/5/2024	12/10/2024	root
+18	Active	sumedhainnovations	software.sumedhainn.com	185.209.75.21	^h2M%2$8S7HKjgm_	SUM08042024	mongodb://sumedhainnovations:p%26k5H6%267GsRy%26vnd@185.209.75.21:27017/		12/5/2024	12/5/2024	root
+19	Active	TRADE ONN	software.tradeonn.com	185.209.75.23	lG@Sp53kK1$#6#Mt	TRD09042024	mongodb://tradeonn:pw%26k5H%267GsRy%26v1n@185.209.75.23:15497/		11/11/2024	1/3/2025	root
+24	Active	METAPROGRAMMING	software.metaprogramming.in	185.209.75.29	5X&H5c1^!^1YzFjo	MET01052024	mongodb://metaprogramming:zc%26u9tD828Tnbh3u7A%26@185.209.75.29:27017/		1/4/2025	1/4/2025	root
+25	Active	FINCODIFY	software.fincodify.com	185.209.75.30	%wG_W&1D6r^37Oav	FIC01052024	mongodb://fincodify:u%26v5%26bAn6%265Gv%26cn29A%26@185.209.75.30:27017/		10/17/2024	10/17/2024	root
+26	Active	INVICONTECHNOLOGY	software.invicontechnology.com	185.209.75.62	YIF#9G3^6$b0vg&g	INV06052024	mongodb://invicontechnology:k56ck%265eF89%267Phjn9i7B%26@185.209.75.62:27017/				root
+28	Active	SS TECHNOLOGY	software.sstechnologiess.com	185.209.75.64	XN4KD0_!ex%l84%f	SST14052024	mongodb://sstechnologiess:Apw%26k5RH6%267GsRy%26vnM@185.209.75.64:27017/				root
+31	Active	thinkaumatictechnology	software.thinkaumatictechnology.com	185.209.75.67	SbEO&*07ecU%1*r9	THI23052024	mongodb://thinkaumatictechnology:Aapw%26k5R56%267GsRy%26vnT@185.209.75.67:27017/				root
+32	Temporary Close	visionresearchandsolution	trade.visionresearchandsolution.com	185.209.75.68	X1giX&%W4!6hkT9%	VSR22052024	mongodb://visionresearchandsolution:Apw%26k5R56%267GsRy%26vn@185.209.75.68:27017/	sneh	12/27/2024	12/27/2024	root
+33	Active	smartwavetechnology	software.smartwavetechnology.in	185.209.75.69	qm41E2*v&1g&RM%F	SMT23052024	mongodb://smartwavetechnology:Aapw%26k5R56%267GsRy%26vnTy@185.209.75.69:27017/	sneh	12/27/2024	12/27/2024	root
+36	Active	fintechit	software.fintechit.in	185.209.75.181	zm6*nB04USH1b?$@	FIN03062024	mongodb://fintechit:Tapw%26k5R56%267GsRy%26nP@185.209.75.181:27017/	sneh			root
+37	Temporary Close	thrivinginfotech	software.thrivinginfotech.com	185.209.75.182	6For57fj2#_Q?ZW@	THR05062024	mongodb://thrivinginfotech:TGw%26k5RT56%267GsRy%26nP@185.209.75.182:27017/	sneh	12/27/2024	1/4/2025	root
+39	Active	visioncodesoftware	software.visioncodesoftware.com	185.209.75.184	$Jpi4U%y!vQL90&3	VIC05062024	mongodb://visioncodesoftware:TGw%26k5RT56%267GsRy%26HR@185.209.75.184:27017/	sneh			root
+40	Active	brightextech	trade.brightextech.com	185.209.75.185	4!xbiU3SMg$D$6_5	BRG13062024	mongodb://brightextech:T5wP%26k5T56%267GsRy%26M@185.209.75.185:27017/	sneh			root
+41	Active	shinesofttrade	software.shinesofttrade.in	185.209.75.186	55C^oamuW^2T4D*%	SHI10062024	mongodb://shinesofttrade:T5wP%26k56T56%267GsRy%26H@185.209.75.186:27017/	sneh	11/9/2024	11/9/2024	root
+44	Active	brillianttechit	software.brillianttechit.com	185.209.75.251	J8$PP*d1aC%lp6?8	BRL17062024	mongodb://brillianttechit:T5wP&k5T567GsRy&M@185.209.75.251:27017/	sneh			root
+46	Active	darixosolution	software.darixosolution.com	185.209.75.254	*oG^cHkU&@J4331c	DAR25062024	mongodb://darixosolution:M5wP%26k5T567GsRy%26MT@185.209.75.254:27017/	sneh	11/29/2024	11/29/2024	root
+52	Active	visionmatictechnology	software.visionmatictechnology.com	185.209.75.194	^5r&Q!49eM*v1vFB	VIS05072024	mongodb://visionmatictechnology:MM5P%26k5T567GRy%26MT@185.209.75.194:27017/	sneh			root
+54	Active	one-algo-newalgo	software.one-algo.com	185.209.75.196	zWHVLjdq5@2_9?2%	OAL17072024	mongodb://onealgo:MM5P&k5T567Gy&Ma@185.209.75.196:27017/	sneh	10/9/2024	10/19/2024	root
+57	Active	techelitesolution-newalgo	software.techelitesolution.in	217.145.69.28	Rbc2!RQv4&s7J1%$	TEL26072024	mongodb://techelitesolution:MWQ5RP%26k5T567Gy%26Ma@217.145.69.28:27017/	sneh	11/21/2024	11/21/2024	root
+58	Active	algospark-newalgo	software.algosparks.in	217.145.69.27	@c$Ks!4N0TUp53_w	ALS26072024	mongodb://algosparks:MW5R%26k5FT567Gy%26Ma@217.145.69.27:27017/	sneh	10/17/2024	10/25/2024	root
+61	Active	technofin-newalgo	software.technofin.tech	217.145.69.31	*TqD1&dm99B*J!g5	TEF31072024	mongodb://technofin:MWQ5RP%26k5T567Gy%26Ma@217.145.69.31:27017/	sneh			root
+65	Active	growonntechnologies	software.growonntechnologies.com	185.209.75.89	LtYl?l28O^D?u36?	GRT06082024	mongodb://growonntechnologies:AaMWQ5RP%26kT567Gy%26Maa@185.209.75.89:27017/	sneh			root
+67	Active	growingtech	software.growingtech.in	185.209.75.183	_W#r32Udic#E9%Z8	GRI12082024	mongodb://growingtech:Taw%26k5RT56%267GsRy%26nP@185.209.75.183:27017/	sneh			root
+69	Active	inovateinfotech -newalgo	software.inovateinfotech.com	217.145.69.135	!^UM63_i8m$iAMe9	INO13082024	mongodb://inovateinfotech:Tawk5RT56&7GsRy&n@217.145.69.135:27017/	sneh	10/17/2024	12/27/2024	root
+70	Active	algobliss-newalgo	software.algobliss.com	217.145.69.137	*i#Nt5#183FXuUn!	ALB14082024	mongodb://algobliss:Tawk5RT6%267GsRy%26n@217.145.69.137:27017/	sneh			root
+71	Active	idealalgo-newalgo	software.idealalgo.com	217.145.69.138	o%%629A!!SE0Faib	IDE16082024	mongodb://idealalgo:Tawk5RT6%26GsRy%26n@217.145.69.138:27017/	sneh	1/3/2025	1/3/2025	root
+74	Active	eaglesofttech-newalgo	software.eaglesofttech.com	217.145.69.141	k&$sRTy8?L2&I10g	EAG17082024	mongodb://eaglesofttech:AMQ5RP%26kT567Gy%26Maa@217.145.69.141:27017/	sneh	12/26/2024	12/27/2024	root
+77	Temporary Close	celestialai-newalgo	software.celestialai.in	217.145.69.145	8dQ?XV1bK8d^@8o&	CEL30082024	mongodb://celestialai:Twk5RT56%26y7GsRy%26n@217.145.69.145:27017/	sneh	1/3/2025	1/3/2025	root
+78	Active	dynamictechsolution-newalgo        	software.dynamictechsolution.com	217.145.69.147	YFa1#@8fC_?i04Lb	DYN02092024	mongodb://dynamictechsolution:Twk5RT56%26y7GsRy%26n@217.145.69.147:27017/	sneh	11/21/2024	1/3/2025	root
+79	Active	nextbrand-newalgo	app.nextbrand.tech	217.145.69.151	&TZ04&7zF%Uoo*k2	NEX10092024	mongodb://nextbrandcom:Twk5RT56%26y7GsRy%26n2@217.145.69.151:27017/	sneh	12/27/2024	12/27/2024	root
+80	Active	realcloudtechnology-newalgo        	software.realcloudtechnology.com	217.145.69.149	Ad9f_%WC^oVe132^	REA16092024	mongodb://realcloudtechnology:Twk5RT56%26y7GsRy%26n2@217.145.69.149:27017/	sneh	12/26/2024	12/27/2024	root
+81	Active	Moneyplatform-newalgo	software.moneyplatform.co.in	217.145.69.152	*9Dy0?9Gm2WOwg&*	MON16092024	mongodb://moneyplatform:Twk5RT56%26y7GsRy%26nT@217.145.69.152:27017/	sneh	10/17/2024	1/3/2025	root
+82	Active	infraitsolution	software.infraitsolution.com	185.209.75.71	_?zD_Ad0DW57@c2t	INF24092024	mongodb://infraitsolution:Tk5RT56%26y7GsRy%26nT@185.209.75.71:27017/	sneh			root
+83	Active	fincapex-newalgo	software.fincapex.com	185.209.75.22	6^Di3&9foMAm5?*O	CAP26092024	mongodb://fincapex:p%26k5H6%267GsRy%26vd@185.209.75.22:15497/	sneh	11/7/2024	1/3/2025	root
+84	Active	reliablealgo-newpanel	software.reliablealgo.com	185.209.75.14	0t_h5sUe8WG^_6N%	REL26092024	mongodb://reliablealgo:sA8k%26n86%267Mv%26fh57B%26@185.209.75.14:27017/	sneh	10/19/2024	12/27/2024	root
+85	Active	researchfactory-newpanel	software.researchfactory.in	185.209.75.15	&1VR3s2@_tv$GhI2	RES26092024	mongodb://researchfactory:un%26r4hv93%267Gr%26v%2637P%26@185.209.75.15:27017/	sneh	11/7/2024	11/7/2024	root
+86	Active	visionalgotech-newalgo	software.visionalgotech.com	185.209.75.250	9f@J6_^22R?FYcdb	VIO26092024	mongodb://visionalgotech:T5wP%26k5T56%267GsRy%26H@185.209.75.250:27017/	sneh	10/19/2024	1/2/2025	root
+87	Active	linkupinfotech-newalgo	software.linkupinfotech.com	185.209.75.28	WHN6$ixF!n^c^458	LIN30082024	mongodb://linkupinfotech:z43rk%265eF32%267Pcmn9i7B%26@185.209.75.28:15497/	sneh	10/1/2024	1/2/2025	root
+88	Active	microninfotech-algo	software.microninfotech.com	217.145.69.40	5EslKC&Z7kt4@^*3	MIC03092024	mongodb://microninfotech1:p%26k5H6%267GsRy%26vnd%26@217.145.69.40:27017/	sneh	10/5/2024	12/26/2024	root
+92	Active	danoneitsolution-newalgo	software.danoneitsolution.com	217.145.69.76	scR%!487C@yN0@Zn	DAN18102024	mongodb://danoneitsolution:p%26k5H6%267GsRy%26vnd%26@217.145.69.76:27017/	sneh	10/19/2024	10/19/2024	root
+94	Active	inspirealgoresearch-newalgo	software.inspirealgoresearch.com	185.209.75.70	vX8O2@$axu$S2T2^	INA11112024	mongodb://inspirealgoresearch:Tapw%26k5R56%267GsRy%26vn@185.209.75.70:27017/	sneh	11/12/2024	11/15/2024	root
+95	Active	alcrafttechnology-newalgo	software.alcrafttechnology.com	217.145.69.144	4VsgJ_^1Hps$1H7!	ALC14112024	mongodb://alcrafttechnology:Tawk5RT56%26y7GsRy%26n@217.145.69.144:27017/	sneh	11/15/2024	12/27/2024	root
+96	Active	pnp-tradestreet-newalgo	pnp.tradestreet.in	185.209.75.87	K?pv?GW&ws612G*9	PNT19112024	mongodb://tradestreet:MWQ5RP%26kT567Gy%26Maa@185.209.75.87:27017/	sneh	11/15/2024	1/4/2025	root
+97	Active	segment-pnp	segment.pnpuniverse.com	5.178.98.2	J5S!Q8x7##Of%3hi	SEG20112021	mongodb://segmentpnp:Taw%26k5RT56%267GsRy%26n@5.178.98.2:27017/	sneh	11/15/2024	11/21/2024	root
+98	Active	sewintechnology-newlago	software.sewintechnology.com	217.145.69.26	ri!9#x8t36IO	SEW22112024	mongodb://sewintechnology:M5RP%26k5T567Gy%26Ma@217.145.69.26:27017/	sneh	11/9/2024	11/23/2024	root
+99	Active	starvisionitsolution-newalgo	software.starvisionitsolution.com	185.209.75.189	9hVz884$M*o&rFU*	STA28112024	mongodb://starvisionitsolution:P5wP&k6T5M&L7GsRy&H@185.209.75.189:27017/	sneh	11/9/2024	1/4/2025	root
+101	Active	allrobosolution-algo	software.allrobosolution.com	217.145.69.57	cu9ojl6omotopimox2pr	ROS04122024	mongodb://allrobosolution:Tk5RT56%26y7GRy%26nT@217.145.69.57:15497/	sneh	12/16/2024	1/1/2025	root
+102	Active	vintyaitsolutions-newalgo	software.vintyaitsolutions.com	217.145.69.24	4Ij87*Lvl^@9?ZsS	VIN16042024	mongodb://ssfintech:MW5RP%26k5T567Gy%26Ma@217.145.69.24:27017/	sneh	12/25/2024	12/27/2024	root
+103	Active	techspiresolution-newalgo	software.techspiresolution.com	185.209.75.199	Oir?DV3#y$D23#u0	TES26122024	mongodb://techspiresolution:M5P%26k5T567Gy%26Maa@185.209.75.199:15497/	sneh	12/27/2024	12/27/2024	root
+104	Active	sarathiresearch-newalgo	software.sarathiresearch.com	185.209.75.90	0!^#PYr8_gTv5Ad3	SAR281282024	mongodb://sarathiresearch:AaMQ5RP%26kT567Gy%26Ma@185.209.75.90:15497/	sneh	12/27/2024	1/3/2025	root
+105	Active	levelxtechnologies-newalgo	software.levelxtechnologies.com	185.209.75.253	@Wc7r@9UVb!K55q#	LEV31122024	mongodb://levelxtechnologies:M5P%26k5T567GRy%26MT@185.209.75.253:15497/	sneh	12/27/2024	1/1/2025	root
+106	Active	itevolve	software.itevolve.in	185.209.75.61	mBr7s8@$2fI8	ITE02012025	mongodb://itevolve:ugh%265rK86%26Fv%26yn37A@185.209.75.61:15497/	sneh	12/30/2024	1/2/2025	root
+100	Active	finbytech-algo	auto.finbytech.com	217.145.69.39	PKjV#vs#6T_196q#	FIY13122024	mongodb://finbytech:p%26ol5Hd%26tr55ad%26i@217.145.69.39:15497/	sneh	12/16/2024	1/4/2025	root
+89	Active	growfuturetechnology-newalgo	software.growfuturetechnology.com	185.209.75.195	A3!eK%TRcx&457m_	GRF07102024	mongodb://growfuturetechnology:M5P%26k5T567Gy%26MT@185.209.75.195:15497/	sneh	10/5/2024	1/4/2025	root
+67	Active	mgautosoftware-newalgo	software.mgautosoftware.com	217.145.69.25	rF8%$d94%RdR0$fU	MAU20012025	mongodb://mgautosoftware:MWQ5RP%26k5T67Gy%26Ma@217.145.69.25:27017/	sneh			
+56	Active	allianceaiinfotech-newalgo	trade.allianceaiinfotech.com	217.145.69.72	7w1bzlO&&7F0	ALA21012025	mongodb://allianceaiinfotech:ks8B%267Gmg%26vn37A@217.145.69.72:15497/	sneh			
+Active	techntown-newalgo	software.techntown.com	217.145.69.37	Ni7!ty1M^k82	TTO23012025	mongodb://techntown:MWQ5RP%26k5T67Gy%26Ma@217.145.69.37:15497/	sneh			
+Active	infovatetechnocunsaltancy-newalgo	software.infovatetechnoconsultancy.com	217.145.69.77	b11gyOl4@9W#	INS23012025 	mongodb://infovatetechnoconsultancy:ks8B7Gmg%26vn37Aa@217.145.69.77:15497/	sneh			
+                        sneh			
+                        sneh			
+
+                        a	PORT	IP ADDRESSS	USER	PASS	PANEL KEY	DATABASE	PANEL STATUS																							
+                                                                                                                
+SMART ALGO		140.99.208.34		h-+72jH]\C63#5K!																										
+trade.startalgo.com	3095	217.145.69.51	root	V7jKGJ~2u$m`],-E	STA25112022	FmUr@Qz:'%/mL3$]		1																						
+software.beefortune.com	3126	185.209.75.25	root	2e6^tL32_%NzK#Pt	BEE03052023	Attahlh5Ertd5nup9		1																						
+software.goalgos.com	3047	217.145.69.37	root	ZF50aGDu*!r1n6_#	GAS1052022	~V73|b5S2%s=8oeeH		1																						
+software.adamassolution.com	3040	217.145.69.35	root	&o3z2u_I?p^N9EM6	ADS22072022	2O5^?3]5C:x.	NO one build	1	Alice Blue login admin redirect url logic manage																					
+                                                                                                                
+                                                                                                                
+trade.bizxsolution.com	3173	217.145.69.65	root	XxEa9$_18Mb5z^O%	BXS03082023	qutahlhocrebrid5nup0	NO one build	1																						
+trade.adonomist.com	3103	217.145.69.38	root	bR?4L7qv@4z$7PA@	AAM22072022	wrl2r8GothlwIf		1																						
+software.expertalgo.com	3015	217.145.69.57	root	cu9ojl6omotopimox2pr	EAS01052022	qutahlhocrebrid5nup0		1																						
+app.nextalgo.net	3010	217.145.69.72	root	#&Q!V0qEjxQ^65e4	NAS01052022	qutahlhocrebrid5nup0		1																						
+software.richway.tech	3065	217.145.69.77	root	Jot$j7M&N#1j#45C	RIC28092022	qutahlhocrebrid5nup0		1																						
+software.thinknextitsolution.com	3070	217.145.69.71	root	MRL&pB&5%_83jm5v	THI18102022	qutahlhocrebrid5nup0		1																						
+software.finvachi.com	3071	217.145.69.74	root	fe&g4?0*VC%Y4X1o	VAC18102022	qutahlhocrebrid5nup0		1																						
+software.o2softech.com	3078	217.145.69.75	root	1E5F%9ygK8?&Wxv_	O2S23112022	qutahlhocrebrid5nup0		1																						
+software.codingpandit.com	3183	217.145.69.63	root	4Tbl$X?WVg#9@9x4	CGP23082023	qutahlhocrebrid5nup0		1																						
+software.mavenalgo.com	3054	217.145.69.69	root	bWa2on2_H$2V_7O&	MVA25082022	qutahlhocrebrid5nup0		1																						
+software.simpletrade.in	3058	217.145.69.70	root	7AA5@t&2d2ME^#xo	SIM09092022	qutahlhocrebrid5nup0		1																						
+software.a1advanceinfotech.com	3027	217.145.69.61	root	fWAK6W%tro94%#0^	AAI16072022	qutahlhocrebrid5nup0		0																						
+software.algotrade360.com	3037	217.145.69.73	root	z?2HUDa8cz4_?Z*1	ALT22072022	qutahlhocrebrid5nup0		0																						
+software.fintechmechanics.com	3142	217.145.69.36	root	%83WPvW?&3F%qx5m	FMS01062023	S/W7PWH)7$MK9~A		0																						
+software.firstalgosolutions.com	3109	217.145.69.47	root	R3D#%Gq!7k@Ld6x5	FAI17022023	qutahlhocrebrid5nup0		0																						
+software.algobuzz.in	3021	217.145.69.62	root	IHt6Ce??5K%3r%9c	ABZ20062022	qutahlhocrebrid5nup0																								
+software.goproinfotech.com	3103	217.145.69.64	root	j21c^zbB*R2@5?AQ	IAS20072022	qutahlhocrebrid5nup0																								
+software.infinitetechsolution.in	3141	185.209.75.26	root	Ci#JR3#p9D%@k48g	ITS01062023	Yttahl2h5Ertd5nupM																								
+software.robotechpro.com	3127	185.209.75.18	root	4xTj@7%5^YJ&cZn6	RTP03052023	qutahlhocrebrid5nup9p																								
+software.skyiqinfotech.com	3012	185.209.75.19	root	D?%bAoCMtu45!81&	SII01052022	qutahlhocrebrid5nup0																								
+software.fortunetechnos.com	3179	185.209.75.20	root	Ptav*658N%%U@Pk1	FOR16082023	qutahlhocrebrid5nup																								
+software.amcomprotech.com		185.209.75.24	root	TRUr1M*e33d1t_^_		rtyta89hlh55brid5nup9p																								
+                                                                                                                
+                                                                                                                
+                                                                                                                
+                                                                                                                
+                                                                                                                
+                                                                                                                        
+id	url	port	key	ip_address	first_three	RUN pm2	chek	ISSUE	panel_on	singal_build	separate																	
+                                                                                                        
+                                                                                                        
+                                                                                                        
+                                                                                                        
+217	software.smarttradealgo.com	3218	SEA13122023	140.99.208.34	SEA		DONE		1	1	0																	
+                                                                                                        
+                                                                                                        
+5	software.kashialgo.com	3007	KSA01052022	140.99.208.34	KSA	RUN	DONE		1	1	0																	
+6	software.tradesofttechnology.com	3008	TST01052022	140.99.208.34	TST	RUN	DONE		1	1	0																	
+12	software.digitalalgotech.com	3014	DAT01052022	140.99.208.34	DAT		OFF		1	1	0																	
+23	software.etechalgo.com	3026	ETA07072022	140.99.208.34	ETA	RUN	DONE		1	1	0																	
+29	software.chartology.in	3033	TCL21072022	140.99.208.34	TCL	RUN	DONE		1	1	0																	
+30	client.betasoftinfotech.com	3034	BSI21072022	140.99.208.34	BSI	RUN	DONE		1	1	0																	
+31	software.adroitalgorithms.com	3035	ADA21072022	140.99.208.34	ADA		OFF		0	1	0																	
+32	software.skyalgo.in	3036	SKA22072022	140.99.208.34	SKA	RUN	DONE		1	1	0																	
+37	software.algoitech.com	3041	AIS22072022	140.99.208.34	AIS	RUN	DONE		1	1	0																	
+38	software.mtxacademy.com	3042	MTX22072022	140.99.208.34	MTX	RUN	DONE		1	1	0																	
+44	software.heshtech.co.in	3049	HST4082022	140.99.208.34	HST	RUN	DONE		1	1	0																	
+48	software.advancetechnos.com	3051	ADV13082022	140.99.208.34	ADV	RUN	DONE		1	1	0																	
+49	software.tradealpha.in	3052	TDA25082022	140.99.208.34	TDA	RUN	DONE		1	1	0																	
+58	client.roboticalgo.com	3060	ROB09092022	140.99.208.34	ROB	RUN	DONE		1	1	0																	
+63	software.brightextech.com	3062	BRI17092022	140.99.208.34	BRI	RUN	DONE		1	1	0																	
+64	software.myriadtechnology.in	3063	TCN22072022	140.99.208.34	TCN	RUN	DONE	issue panel-key	1	1	0																	
+67	software.svalgo.com	3066	SVA29092022	140.99.208.34	SVA	RUN	DONE		1	1	0																	
+74	software.arithmeticalsolutions.com	3073	ARI10112022	140.99.208.34	ARI	RUN	DONE		1	1	0																	
+83	software.shinesoftech.in	3083	SST06122022	140.99.208.34	SST	RUN	DONE		1	1	0																	
+87	software.adroitalgo.com	3089	AAS20122022	140.99.208.34	AAS	RUN	DONE		1	1	0																	
+92	software.stoplesstechnology.com	3093	SHT18062022	140.99.208.34	STO	RUN	DONE		1	1	0																	
+97	software.technoshree.com	3097	TEP11012023	140.99.208.34	TEP	RUN	DONE		1	1	0																	
+105	software.robotrustinfotech.com	3107	ROS06022023	140.99.208.34	ROS	RUN	DONE		1	1	0																	
+106	software.devineinfo.tech	3108	DEV14022023	140.99.208.34	DEV	RUN	DONE		1	1	0																	
+109	software.algovertex.com	3099	AVE19012023	140.99.208.34	AVE		DONE	OFF	0	1	0																	
+110	software.nextbrand.co.in	3110	NEX20022023	140.99.208.34	NEX	RUN	DONE		1	1	0																	
+113	software.honesttechnology.co.in	3113	HON04032023	140.99.208.34	HON	RUN	DONE		1	1	0																	
+114	software.implementnewtechnologies.com	3114	IMP04042023	140.99.208.34	IMP	RUN	DONE		1	1	0																	
+115	software.inalgoeai.com	3115	INL04042023	140.99.208.34	INL	RUN	DONE		1	1	0																	
+118	software.tradewala.com	3120	TDW24042023	140.99.208.34	TDW	RUN	DONE		1	1	0																	
+119	software.aandginfotech.com	3121	ANG25042023	140.99.208.34	ANG	RUN	DONE		1	1	0																	
+123	software.beefortune.com	3126	BEE03052023	140.99.208.34	BEE	RUN	DONE		1	1	0																	
+127	software.joyinfotech.co.in	3131	JOY10052023	140.99.208.34	JOY	RUN	DONE		1	1	0																	
+128	software.alpinealgo.com	3130	ALA10052023	140.99.208.34	ALA	RUN	DONE		1	1	0																	
+132	software.indexinfotech.in	3135	IDX22052023	140.99.208.34	IDX	RUN	DONE		1	1	0																	
+134	software.meghasoftech.com	3137	MGS23052023	140.99.208.34	MGS	RUN	DONE		1	1	0																	
+137	software.algovision.in	3140	AVN31052023	140.99.208.34	AVN	RUN	DONE		1	1	0																	
+141	software.techvisiontechnology.com	3144	TVT06062023	140.99.208.34	TVT	RUN	DONE		1	1	0																	
+144	software.growitsolution.com	3146	GWS17062023	140.99.208.34	GWS	RUN	DONE		1	1	0																	
+147	software.unitechalgo.com	3149	UTA29062023	140.99.208.34	UTA	RUN	DONE		1	1	0																	
+148	software.thegrowtechalgosoftware.com	3150	TGS29062023	140.99.208.34	TGS	RUN	DONE		1	1	0																	
+149	software.smartindiatechnology.com	3151	SIT30062023	140.99.208.34	SIT	RUN	DONE		1	1	0																	
+153	software.nextgdeveloper.com	3155	NGD05072023	140.99.208.34	NGD	RUN	DONE		1	1	0																	
+162	software.gainpaisa.com	3163	GAN22072023	140.99.208.34	GAN	RUN	DONE		1	1	0																	
+163	software.wininfotech.in	3164	WNN22072023	140.99.208.34	WNN	RUN	DONE		1	1	0																	
+167	software.tecknotic.com	3168	TEK31072023	140.99.208.34	TEK	RUN	DONE		1	1	0																	
+169	software.brightenvision.in	3170	BTV01082023	140.99.208.34	BTV	RUN	DONE		1	1	0																	
+170	software.globalstartinfotech.com	3171	GSI02082023	140.99.208.34	GSI	RUN	DONE		1	1	0																	
+175	software.smartsolutiontech.in	3176	SMT08082023	140.99.208.34	SMT	RUN	DONE		1	1	0																	
+176	software.aspirewebcode.com	3177	AWC09082023	140.99.208.34	AWC	RUN	DONE		1	1	0																	
+177	software.perfectalgo.org	3178	PER10082023	140.99.208.34	PER		OFF		1	1	0																	
+183	software.majesticalgo.com	3184	MJA29012023	140.99.208.34	MJA	RUN	DONE		1	1	0																	
+184	software.techhzap.com	3185	THZ01092023	140.99.208.34	THZ	RUN	DONE		1	1	0																	
+185	software.quantumarctechnology.com	3186	QAT09092023	140.99.208.34	QAT	RUN	DONE		1	1	0																	
+187	software.quickrobosolution.com	3188	QRS09092023	140.99.208.34	QRS	RUN	DONE		1	1	0																	
+191	software.stockmarketmaster.co.in	3192	SMM20092023	140.99.208.34	SMM	RUN	DONE		1	1	0																	
+193	software.rvsaxis.com	3194	RVS22092023	140.99.208.34	RVS		OFF		0	1	0																	
+194	software.primepulse.in	3195	PRI29092023	140.99.208.34	PRI	RUN	DONE		1	1	0																	
+195	software.clicktechnologysolutions.com	3196	CLI29092023	140.99.208.34	CLI	RUN	DONE		1	1	0																	
+196	software.capitalconnectsolution.com	3197	CTS04102023	140.99.208.34	CTS	RUN	DONE		1	1	0																	
+197	software.gennextsolutions.com	3198	GNS07102023	140.99.208.34	GNS	RUN	DONE		1	1	0																	
+198	software.profify.co.in	3199	PRO10102023	140.99.208.34	PRO	RUN	DONE		1	1	0																	
+199	software.symetricsit.in	3200	SYM11102023	140.99.208.34	SYM	RUN	DONE		1	1	0																	
+200	software.techiqsolution.in	3201	TIQ17102023	140.99.208.34	TIQ	RUN	DONE		1	1	0																	
+201	software.techgeniusit.com	3202	TGI20102023	140.99.208.34	TGI	RUN	DONE		1	1	0																	
+202	software.allianceaiinfotech.com	3203	AII24102023	140.99.208.34	AII	RUN	DONE		1	1	0																	
+203	software.dreamsboat.co.in	3204	DRB24102023	140.99.208.34	DRB	RUN	DONE		1	1	0																	
+204	software.shinefintech.com	3205	SFT24102023	140.99.208.34	SFT	RUN	DONE		1	1	0																	
+205	software.visionresearchandsolution.com	3209	VRS06112023	140.99.208.34	VRS	RUN	DONE		1	1	0																	
+206	software.3iresearch.in	3208	3IR06112023	140.99.208.34	3IR	RUN	DONE		1	1	0																	
+207	software.nildeepinfotech.com	3210	NDI07112023	140.99.208.34	NDI	RUN	DONE		1	1	0																	
+208	software.redalgo.co.in	3207	RED2112023	140.99.208.34	RED	RUN	DONE		1	1	0																	
+209	software.codingmuni.com	3206	CDM08112023	140.99.208.34	CDM	RUN	DONE		1	1	0																	
+210	software.xenriseinfotech.com	3211	XRI09112023	140.99.208.34	XRI	RUN	DONE		1	1	0																	
+211	software.shreenathinfotech.com	3212	SNI27112023	140.99.208.34	SNI	RUN	DONE		1	1	0																	
+213	software.thealgo.services	3214	TAO01122023	140.99.208.34	TAO	RUN	DONE		1	1	0																	
+214	software.iconicitsolution.com	3215	IOS02122023	140.99.208.34	IOS	RUN	DONE		1	1	0																	
+215	software.regalrich.in	3216	RGL05122023	140.99.208.34	RGL		OFF		1	1	0																	
+216	software.softmove.in	3217	STF09052023	140.99.208.34	STF	RUN	DONE		1	1	0																	
+218	software.amcomprotech.com	3219	AMC25122023	140.99.208.34	AMC	RUN	DONE		1	1	0																	
+219	software.thewebtechnology.in	3220	TWT25122023	140.99.208.34	TWT	RUN	DONE		1	1	0																	
+220	software.easylifestyle.in	3221	EAS2512023	140.99.208.34	EAS	RUN	DONE		1	1	0																	
+222	software.finwinalgo.com	3223	FIN2812023	140.99.208.34	FIN	RUN	DONE		1	1	0																	
+223	software.metasecurealgo.com	3224	MET02012024	140.99.208.34	MET	RUN	DONE		1	1	0																	
+224	software.growmorealgo.com	3225	GRO02012024	140.99.208.34	GRO	RUN	DONE		1	1	0																	
+225	software.gracetechsolution.com	3226	GTS09012024	140.99.208.34	GTS	RUN	DONE		1	1	0																	
+226	software.smartwingsstech.info	3227	SWS22012024	140.99.208.34	SWS	RUN	DONE		1	1	0																	
+227	software.smartinnovationtechnology.in	3228	SIN02022024	140.99.208.34	SIN	RUN	DONE		1	1	0																	
+228	software.theskytrident.com	3230	TSD06022024	140.99.208.34	TSD	RUN	DONE		1	1	0																	
+229	software.smartalgosoftware.com	3231	SAS06022024	140.99.208.34	SAS	RUN	DONE		1	1	0																	
+230	software.tradexinfotech.com	3229	TDX07022024	140.99.208.34	TDX	RUN	DONE		1	1	0																	
+software.fineinfotech.com	3234	FNT12022024	140.99.208.34	FNT	RUN	DONE																					
+software.sharpalgo.com	3128	SRP04052023	140.99.208.34	SRP	RUN	DONE																					
+software.algonetictechnos.in	3236	ATT13022024	140.99.208.34	ATT	RUN	DONE																					
+software.narayanfintechsolutions.com	3232	NFS12022024	140.99.208.34	NFS	RUN	DONE																					
+software.aspirewebcode.com	3177	AWC09082023	140.99.208.34	AWC	RUN	DONE																					
+software.fintrontech.com	3237	FTT14022024	140.99.208.34	FTT	RUN	DONE																					
+                                                                                                        
+                                                                                                        
+                                                                                                        
+                                    connect-box 		185.209.75.6 	root	^HOi89gl@57jVU__		mongodb://connectbox:p%26k5%26sR86%267Bv%26vn4%237A%26@185.209.75.6:27017/
+                
+thealgo-services-connect	connect.thealgo.services	185.209.75.188	root	Fo1d7r11^%I!*aMU	CTH07062024	mongodb://connectthealgo:T5wP%26k5RT56%267GsRy%26HR@185.209.75.188:27017/
+                
+connect.easytrades-penal	connect.easytrades.in	85.209.75.192		2wQ8c#L&7a&L&Kg9	EAY03102024	mongodb://connect:M5RP%26k5T567GRy%26MT@185.209.75.192:27017/
+                
+OutbookProject	outbooks.tradestreet.in	217.145.69.32	root	0E61uU&ln%Z$Ad^8	qutahlhocrebrid5nup0	
+                
+OFFLINE PANEL	offline.tradestreet.in	172.105.57.239	root	Jfdk)7%3)=$&^#nz0l*o1hL	H6mlkeBukefop	
+                
+offline-market	bear.bullsmarketexchange.com/	172.232.68.158	root	A,d8__tR;jtPrJI!b,}dHw	mlfR3cUBu6iwabrATr9Th	
+                
+                
+                
+185.209.75.198	root	k#!P4i!K3sL1@5Si		
+                
+                
+data-feed		185.209.75.59	root	5l7KQ7rA5e*C_n$#		
+                                                                                            
+                                                                                                        

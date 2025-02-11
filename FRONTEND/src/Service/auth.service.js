@@ -169,11 +169,32 @@ export async function GET_PANEL_INFORMATION(data, token) {
         if(res?.data?.status){
             localStorage.setItem("panel_name", res?.data?.data[0]?.panel_name)
 
+        }else{
+        localStorage.setItem("panel_name", "Demo")
+
         }
 
         return await res?.data;
     }
     catch (err) {
+        localStorage.setItem("theme", JSON.stringify(
+            {
+                "themeId": 8,
+                "theme_name": "NavyPearl",
+                "theme_version": "light",
+                "primary_col": "color_4",
+                "nav_head_col": "color_14",
+                "header_col": "color_1",
+                "sidebar_col": "color_4",
+                "layout": "vertical",
+                "sidebar": "full",
+                "header_position": "fixed",
+                "container": "full",
+                "body_font": "poppins",
+                "dashboard": "theme-3",
+                "sidebar_position": "fixed"
+              }));
+        localStorage.setItem("panel_name", "Demo")
         
         return err
 
