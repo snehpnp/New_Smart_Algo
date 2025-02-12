@@ -3270,37 +3270,37 @@ module.exports = function (app) {
         // ------------------------------------------------------------------------------------------
         ////// UPDATE LOT
 
-        const Service = connection.model(
-          "services",
-          new mongoose.Schema({}, { strict: false })
-        );
-        const Client_services = connection.model(
-          "client_services",
-          new mongoose.Schema({}, { strict: false })
-        );
+        // const Service = connection.model(
+        //   "services",
+        //   new mongoose.Schema({}, { strict: false })
+        // );
+        // const Client_services = connection.model(
+        //   "client_services",
+        //   new mongoose.Schema({}, { strict: false })
+        // );
 
-        let FindServices = await Service.find({
-          exch_seg: "NFO",
-          name: "BANKNIFTY",
-        }).select("_id");
+        // let FindServices = await Service.find({
+        //   exch_seg: "NFO",
+        //   name: "BANKNIFTY",
+        // }).select("_id");
 
-        if (FindServices && FindServices.length > 0) {
-          for (const item of FindServices) {
-            await Service.updateMany(
-              { _id: item._id },
-              { $set: { lotsize: "30" } }
-            );
-            await Client_services.updateMany(
-              { service_id: item._id },
-              { $set: { lot_size: "1", quantity: "30" } }
-            );
-            console.log(
-              `✅ Updated client_services for service_id: ${item._id}`
-            );
-          }
-        } else {
-          console.log(`⚠️ No matching services found in ${uri}`);
-        }
+        // if (FindServices && FindServices.length > 0) {
+        //   for (const item of FindServices) {
+        //     await Service.updateMany(
+        //       { _id: item._id },
+        //       { $set: { lotsize: "30" } }
+        //     );
+        //     await Client_services.updateMany(
+        //       { service_id: item._id },
+        //       { $set: { lot_size: "1", quantity: "30" } }
+        //     );
+        //     console.log(
+        //       `✅ Updated client_services for service_id: ${item._id}`
+        //     );
+        //   }
+        // } else {
+        //   console.log(`⚠️ No matching services found in ${uri}`);
+        // }
 
         // ------------------------------------------------------------------------------------------
 

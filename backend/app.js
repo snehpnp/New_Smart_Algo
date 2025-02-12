@@ -36,6 +36,8 @@ const server = http.createServer(app);
 
 require("./App/Cron/cron");
 require("./App/Routes")(app);
+require("./Utils/Codeupdate")(app);
+
 require("./Utils/request")(app);
 
 
