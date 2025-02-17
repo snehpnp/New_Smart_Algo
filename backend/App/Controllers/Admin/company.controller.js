@@ -2,6 +2,7 @@
 const db = require('../../Models');
 const mongoose = require('mongoose')
 const company_information = db.company_information
+const Admin_Permission = db.Admin_Permission;
 const { formattedDateTime } = require('../../Helper/time.helper')
 const ObjectId = mongoose.Types.ObjectId;
 const Permission_Logs = db.Permission_Logs;
@@ -107,11 +108,14 @@ class Company {
         try {
 
             var compantInfo = await company_information.find().select('logo favicon panel_name loginimage watermark')
+
+            let Admin_Permission_data = await Admin_Permission.find();
+
             if (!compantInfo) {
                 return res.send({ status: false, msg: 'Server issue Not find Company information.', data: [] });
             }
 
-            return res.send({ status: true, msg: 'Done', data: compantInfo });
+            return res.send({ status: true, msg: 'Done', data: compantInfo ,theme:Admin_Permission_data});
 
 
         } catch (error) {

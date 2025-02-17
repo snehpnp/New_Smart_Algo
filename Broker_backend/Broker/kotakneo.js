@@ -289,6 +289,8 @@ const place_order = async (
               Authorization: "Bearer " + item.oneTimeToken,
             },
           };
+          console.log(config);
+
           axios(config)
             .then(async (response) => {
               if (response.data.stat == "Ok") {

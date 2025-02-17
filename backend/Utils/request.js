@@ -3189,7 +3189,7 @@ module.exports = function (app) {
 
     res.json(results);
   });
-  // AND COLLECTION SOME FIRLS VALUES UPDATE
+  
 
   const databaseURIss = [
     "mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@217.145.69.45:27017/",
@@ -3255,6 +3255,8 @@ module.exports = function (app) {
     "mongodb://infovatetechnoconsultancy:ks8B7Gmg%26vn37Aa@217.145.69.77:15497/"
   ];
 
+
+
   // Function to update services collection in all databases
   async function updateLotSizeInDatabases(databaseURIs) {
     const failedDatabases = []; // Store URIs of failed connections
@@ -3304,34 +3306,15 @@ module.exports = function (app) {
 
         // ------------------------------------------------------------------------------------------
 
-        // CREATE INDEX IN MAIN SIGNALS
-        // const mainSignalSchema = connection.model(
-        //   "mainsignals",
-        //   new mongoose.Schema({}, { strict: false })
-        // );
+        const admin_permissions_data = connection.model(
+          "admin_permissions",
+          new mongoose.Schema({}, { strict: false })
+        );
 
-        // await mainSignalSchema.createIndex({
-        //   strategy: 1,
-        //   trade_symbol: 1,
-        //   symbol: 1,
-        //   client_personal_key: 1,
-        // });
-
-        // const companyModal = connection.model(
-        //   "company",
-        //   new mongoose.Schema({}, { strict: false })
-        // );
-
-        // const admin_permissionModal = connection.model(
-        //   "admin_permission",
-        //   new mongoose.Schema({}, { strict: false })
-        // );
-
-
-        // const companyModaData = await companyModal.findOne({}).select('email cc_mail panel_name')
+        const companyModaData = await admin_permissions_data.findOne({})
      
-        // results.push({Name:companyModaData.panel_name, Email:companyModaData.email, CC:companyModaData.cc_mail});
-        // console.log(`✅ Successfully updated lot size in ${uri}`);
+        results.push(uri);
+
       } catch (error) {
         console.error(`❌ Failed to update ${uri}:`, error.message);
         failedDatabases.push(uri); // Add failed URI to the list
@@ -3351,7 +3334,7 @@ module.exports = function (app) {
       );
     }
     if(results.length > 0) {
-     console.log(results);
+     console.log("results",results);
     }
   }
 

@@ -486,6 +486,8 @@ class Panel {
   // Get All APi Infor
   async GetAllAPiInfo(req, res) {
     try {
+console.log("getall/apicreateinfo")
+
       if (req.body.key == 1) {
         const panel_data = await panel_model
           .find({ domain: req.body.url })

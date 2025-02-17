@@ -115,6 +115,9 @@ class KotakNeo {
 
                 axios(config)
                   .then(function (response) {
+
+                    conosle.log("response =>",response.data.data.hsServerId)
+
                     var stepOneToken = response.data.data.token;
                     var stepOneSID = response.data.data.sid;
                     var stepHsServerId = response.data.data.hsServerId;

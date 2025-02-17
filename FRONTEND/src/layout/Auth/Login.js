@@ -280,6 +280,118 @@ const Login = () => {
             : $("<link rel='icon' type='image/x-icon' />");
           favicon.attr("href", response.data && response.data[0].favicon);
           $("head").append(favicon);
+
+          let themedata = {
+            _id: response?.theme[0].theme_id,
+            themeId: response?.theme[0].themeId,
+            theme_name: response?.theme[0].theme_name,
+            theme_version: response?.theme[0]?.theme_version,
+            primary_col: response?.theme[0]?.primary_col,
+            nav_head_col: response?.theme[0]?.nav_head_col,
+            header_col: response?.theme[0]?.header_col,
+            sidebar_col: response?.theme[0]?.sidebar_col,
+            layout: response?.theme[0]?.layout,
+            sidebar: response?.theme[0]?.sidebar,
+            header_position: response?.theme[0]?.header_position,
+            container: response?.theme[0]?.container,
+            body_font: response?.theme[0]?.body_font,
+            dashboard: response?.theme[0]?.dashboard,
+            image: response?.theme[0]?.image,
+            createdAt: response?.theme[0]?.createdAt,
+            sidebar_position: "fixed",
+          };
+          localStorage.setItem("theme", JSON.stringify(themedata));
+
+          if (themedata !== undefined) {
+            $("body").removeClass(
+              "theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8 theme-9 theme-10"
+            );
+            $("body").addClass(themedata.dashboard);
+
+            $("body").attr(
+              "data-dashboard",
+              `${themedata.dashboard}-dashboard`
+            );
+            $("body").attr("data-theme-version", themedata.theme_version);
+            $("body").attr("data-primary", themedata.primary_col);
+            $("body").attr("data-nav-headerbg", themedata.nav_head_col);
+            $("body").attr("data-headerbg", themedata.header_col);
+            $("body").attr("data-sibebarbg", themedata.sidebar_col);
+
+            if ($("body").attr("data-sidebar-style") === "overlay") {
+              $("body").attr("data-sidebar-style", "full");
+              $("body").attr("data-layout", themedata.layout);
+              return;
+            }
+            $("body").attr("data-layout", themedata.layout);
+            if ($("body").attr("data-layout") === "horizontal") {
+              if (themedata.sidebar === "overlay") {
+                alert("Sorry! Overlay is not possible in Horizontal layout.");
+                return;
+              }
+            }
+            if ($("body").attr("data-layout") === "vertical") {
+              if (
+                $("body").attr("data-container") === "boxed" &&
+                themedata.sidebar === "full"
+              ) {
+                alert(
+                  "Sorry! Full menu is not available in Vertical Boxed layout."
+                );
+                return;
+              }
+              if (
+                themedata.sidebar === "modern" &&
+                $("body").attr("data-sidebar-position") === "fixed"
+              ) {
+                alert(
+                  "Sorry! Modern sidebar layout is not available in the fixed position. Please change the sidebar position into Static."
+                );
+                return;
+              }
+            }
+            $("body").attr("data-sidebar-style", themedata.sidebar);
+            if ($("body").attr("data-sidebar-style") === "icon-hover") {
+              $(".deznav").on(
+                "hover",
+                function () {
+                  $("#main-wrapper").addClass("iconhover-toggle");
+                },
+                function () {
+                  $("#main-wrapper").removeClass("iconhover-toggle");
+                }
+              );
+            }
+
+            $("body").attr("data-header-position", themedata.header_position);
+            $("body").attr("data-sidebar-position", themedata.sidebar_position);
+            $("body").attr("data-typography", themedata.body_font);
+            if (themedata.container === "boxed") {
+              if (
+                $("body").attr("data-layout") === "vertical" &&
+                $("body").attr("data-sidebar-style") === "full"
+              ) {
+                $("body").attr("data-sidebar-style", "overlay");
+                $("body").attr("data-container", themedata.container);
+                setTimeout(function () {
+                  $(window).trigger("resize");
+                }, 200);
+                return;
+              }
+            }
+            $("body").attr("data-container", themedata.container);
+
+            $(window).on("resize", function () {
+              var windowWidth = $(this).width();
+              if (windowWidth > 1024) {
+                $("body").attr("data-sidebar-style", "full");
+              } else if (windowWidth > 769 && windowWidth <= 1024) {
+                $("body").attr("data-sidebar-style", "mini");
+              } else if (windowWidth <= 767) {
+                $("body").attr("data-sidebar-style", "overlay");
+              }
+            });
+          }
         }
       })
       .catch((error) => {
