@@ -95,8 +95,7 @@ const MultiStepForm = () => {
               {/* Step Title and Number Container */}
               <div className="flex flex-col items-center space-y-2">
                 {/* Step Number */}
-                <div
-                  className={`sap-cirlce flex items-center justify-center rounded-full font-semibold border-2 mb-2 transition-all duration-300 ease-in-out transform ${
+                <div className={`sap-cirlce flex items-center justify-center rounded-full font-semibold border-2 mb-2 transition-all duration-300 ease-in-out transform ${
                     step.number <= currentStep
                       ? "bg-blue-700 text-white border-blue-500 scale-105"
                       : "border-gray-300 text-gray-700"
