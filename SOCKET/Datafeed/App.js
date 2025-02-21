@@ -2,7 +2,7 @@
 require("dotenv").config();
 const {
   connectToMongoDB,
-} = require("../BACKEND/App/Connection/mongo_connection");
+} = require("../../BACKEND/App/Connection/mongo_connection");
 const express = require("express");
 const app = express();
 
@@ -16,7 +16,7 @@ const WebSocket = require("ws");
 var CryptoJS = require("crypto-js");
 
 // const db = require('./Models');
-const db = require("../BACKEND/App/Models");
+const db = require("../../BACKEND/App/Models");
 const live_price = db.live_price;
 
 // CONNECTION FILE IN MONGOODE DATA BASE
