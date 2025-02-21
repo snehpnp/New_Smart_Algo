@@ -6,6 +6,8 @@ import $ from "jquery";
 //  SHOW lIVE PRICE
 export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDetails, setSocketState, tradeHistoryData) => {
 
+console.log("tradeHistoryData--------");
+
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
 
@@ -164,9 +166,11 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                 };
                 await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
             } else {
-                // $(".UPL_").html("-");
-                // $(".show_rpl_").html("-");
-                // $(".TPL_").html("-");
+             
+            tradeHistoryData && tradeHistoryData.forEach((row, i) => {
+              const previousRow = i > 0 ? tradeHistoryData && tradeHistoryData[i - 1] : null;
+              calcultateRPL(row, null, previousRow);
+          });
             }
         }
     }

@@ -16,7 +16,19 @@ import DatePicker from "react-datepicker";
 import Loader from "../../../Utils/Loader";
 import "react-datepicker/dist/react-datepicker.css";
 import { GET_PNL_POSITION } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
-
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
+const NoDataIndication = () => (
+  <div className="text-center">
+    <img
+      src="../../../../assets/images/norecordfound.png"
+      alt="No Records Found"
+      className="mx-auto d-flex"
+      style={{ width: "150px", height: "auto" }}
+    />
+    <p className="mt-2 text-muted">No records found</p>
+  </div>
+);
 const TradeHistory = () => {
   const dispatch = useDispatch();
   const token = JSON.parse(localStorage.getItem("user_details")).token;
@@ -25,6 +37,10 @@ const TradeHistory = () => {
   const gotodashboard_Details = JSON.parse(
     localStorage.getItem("user_details_goTo")
   );
+  
+  const [page, setPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  const [paginatedData, setPaginatedData] = useState([]);
   const [showModal, setshowModal] = useState(false);
   const [SocketState, setSocketState] = useState("null");
   const [fromDate, setFromDate] = useState("");
@@ -270,7 +286,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     ShowLivePrice();
-  }, [tradeHistoryData.data, SocketState, UserDetails]);
+  }, [tradeHistoryData.data, SocketState, UserDetails,paginatedData]);
 
   // ========================================================================
   let total = 0;
@@ -300,6 +316,34 @@ const TradeHistory = () => {
         }
       }
     });
+
+
+  // **Handle Data Slicing when Page Changes**
+  useEffect(() => {
+    const startIndex = (page - 1) * sizePerPage;
+    const endIndex = startIndex + sizePerPage;
+    setPaginatedData(tradeHistoryData?.data?.slice(startIndex, endIndex) || []);
+  }, [page, sizePerPage, tradeHistoryData]);
+
+  const handleTableChange = (type, { page, sizePerPage }) => {
+    console.log(
+      `Table changed: Type=${type}, Page=${page}, Size=${sizePerPage}`
+    );
+
+    setPage(page);
+    setSizePerPage(sizePerPage);
+  };
+
+  const options = {
+    page,
+    sizePerPage,
+    totalSize: tradeHistoryData?.data?.length || 0,
+    hideSizePerPage: false,
+    showTotal: true,
+    alwaysShowAllBtns: true,
+    onPageChange: (newPage) => setPage(newPage),
+    onSizePerPageChange: (newSizePerPage) => setSizePerPage(newSizePerPage),
+  };
 
   return (
     <Content
@@ -475,14 +519,29 @@ const TradeHistory = () => {
               zIndex: 2,
             }}
           ></div>
-          <FullDataTable
+
+          {/* <FullDataTable
             TableColumns={columns}
             tableData={tradeHistoryData.data}
-          />
+            sizePerPage={10}
+          /> */}
+
+          <div className="table-container">
+            <div className="table-responsive">
+              <BootstrapTable
+                keyField="id"
+                data={paginatedData} // ✅ Only show sliced data
+                columns={columns}
+                pagination={paginationFactory(options)}
+                noDataIndication={() => <NoDataIndication />}
+                headerClasses="bg-primary text-primary text-center header-class"
+                remote={{ pagination: true }}
+                onTableChange={handleTableChange}
+              />
+            </div>
+          </div>
         </>
       )}
-
-
 
       {PnlStatus === "Bottom" && (
         <>

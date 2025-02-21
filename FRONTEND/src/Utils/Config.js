@@ -1,4 +1,6 @@
-export const react_domain = `${window.location.origin}`;
+// export const react_domain = `${window.location.origin}`;
+export const react_domain = `http://localhost:3000`;
+
 
 
 export const smartAlogUrl = `https://newpenal.pandpinfotech.com/backend/`;
