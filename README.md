@@ -1,7 +1,5 @@
 # 🌟 Smart Algo
 
-**Creator:** ----
-
 ## 📜 Project Summary
 
 Smart Algo is an advanced algorithmic trading software designed to automate trading strategies for optimal performance. With real-time data analysis and powerful algorithms, this platform empowers businesses to achieve their trading goals efficiently.
