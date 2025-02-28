@@ -120,23 +120,23 @@ export const admin_sidebar = [
             }
         ]
     },
-    // {
-    //     id: 6,
-    //     name: 'Open position',
-    //     Icon: 'Link2',
-    //     Data: [
-    //         {
-    //             id: 61,
-    //             name: 'Option Chain',
-    //             route: '/admin/optionchain',
-    //         },
-    //         {
-    //             id: 62,
-    //             name: 'Open Position',
-    //             route: '/admin/openposition',
-    //         }
-    //     ]
-    // },
+    {
+        id: 6,
+        name: 'Open position',
+        Icon: 'Link2',
+        Data: [
+            {
+                id: 61,
+                name: 'Option Chain',
+                route: '/admin/optionchain',
+            },
+            {
+                id: 62,
+                name: 'Open Position',
+                route: '/admin/openposition',
+            }
+        ]
+    },
     {
         id: 8,
         name: 'License',
