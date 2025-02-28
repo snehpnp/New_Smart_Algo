@@ -13,7 +13,7 @@ Smart Algo is an advanced algorithmic trading software designed to automate trad
 - 🔹 **Support for Multiple Roles**: Designed for sellers, researchers, and direct users.
 - 🔹 **Real-Time Data Analysis**: Get insights and make informed decisions.
 - 🔹 **Customizable Trading Strategies**: Tailor strategies to meet individual needs.
-
+cd       cd             cd 
 ## 🛠️ Installation Instructions
 
 1. **Clone the repository:**
