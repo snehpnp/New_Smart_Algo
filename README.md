@@ -19,4 +19,3 @@ Smart Algo is an advanced algorithmic trading software designed to automate trad
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/yourusername/smart-algo.git
-
