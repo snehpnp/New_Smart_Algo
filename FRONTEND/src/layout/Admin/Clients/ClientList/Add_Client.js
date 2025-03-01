@@ -261,8 +261,8 @@ const AddClient = () => {
         multiple_strategy_select:
           values.multiple_strategy_select === false ? "0" : "1",
         plan_id: selectedPlan,
-        Serivcecharge: values.Serivcecharge,
-        Received: values.Received
+        Serivcecharge: values?.Serivcecharge || 0,
+        Received: values?.Received || 0
       };
 
       await dispatch(Add_User({ req: req, token: user_details.token }))
@@ -897,6 +897,8 @@ const AddClient = () => {
               loading: false,
               data: response.data,
             });
+
+
           }
         });
     }
@@ -1083,3 +1085,4 @@ const AddClient = () => {
   );
 };
 export default AddClient;
+
