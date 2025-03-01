@@ -149,6 +149,8 @@ const AddClient = () => {
       parent_role: null,
       Strategy: false,
       multiple_strategy_select: false,
+      Serivcecharge: null,
+      Received: null
     },
     validate: (values) => {
       const errors = {};
@@ -195,6 +197,7 @@ const AddClient = () => {
       if (!values.groupservice && formik.touched.groupservice) {
         errors.groupservice = valid_err.GROUPSELECT_ERROR;
       }
+
       if (
         selectedStrategies.length === 0 &&
         formik.touched.selectedStrategies
@@ -258,6 +261,8 @@ const AddClient = () => {
         multiple_strategy_select:
           values.multiple_strategy_select === false ? "0" : "1",
         plan_id: selectedPlan,
+        Serivcecharge: values.Serivcecharge,
+        Received: values.Received
       };
 
       await dispatch(Add_User({ req: req, token: user_details.token }))
@@ -858,6 +863,22 @@ const AddClient = () => {
       name: "multiple_strategy_select",
       label: "Mutiple Selection Strategy",
       type: "checkbox",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "Serivcecharge",
+      label: "Serivce Charge",
+      type: "number",
+      label_size: 12,
+      col_size: 6,
+      disable: false,
+    },
+    {
+      name: "Received",
+      label: "Received",
+      type: "number",
       label_size: 12,
       col_size: 6,
       disable: false,

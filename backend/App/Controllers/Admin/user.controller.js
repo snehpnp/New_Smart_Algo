@@ -21,6 +21,8 @@ const strategy = db.strategy;
 const serviceGroupName = db.serviceGroupName;
 
 const { CommonEmail } = require("../../Helper/CommonEmail");
+const { SendInvoice } = require("../../Helper/SendInvoice");
+
 const { firstOptPass } = require("../../Helper/Email_formate/first_login");
 
 var dateTime = require("node-datetime");
@@ -54,6 +56,8 @@ class Employee {
         group_service,
         multiple_strategy_select,
         plan_id,
+        Serivcecharge,
+        Received
       } = req.body;
 
       var Role = "USER";
@@ -269,6 +273,8 @@ class Employee {
           service_given_month: service_given_month,
           multiple_strategy_select: multiple_strategy_select,
           plan_id: plan_id,
+          Serivcecharge: Serivcecharge || 0,
+          Received: Received || 0,
         },
         // Add more documents if needed
       ])
@@ -382,6 +388,7 @@ class Employee {
 
             var EmailData = await firstOptPass(email_data);
             CommonEmail(toEmail, subjectEmail, EmailData);
+            SendInvoice(toEmail);
 
             res.send({ status: true, msg: "successfully Add!", data: data[0] });
           }

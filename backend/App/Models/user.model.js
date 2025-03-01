@@ -250,7 +250,14 @@ const userModel = Schema({
         enum: [0, 1, 2], // 0 for all, 1 for Full Auto, 2 for Semi Auto
         default: 1,
       },
-
+      Serivcecharge : {
+        type: String,
+        default: null
+      },
+      Received : {
+        type: String,
+        default: null
+      },
 
 
 
